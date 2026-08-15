@@ -84,4 +84,66 @@ void main() {
     final decoration = container.decoration! as BoxDecoration;
     expect(decoration.color, theme.colors.containerPrimaryPress);
   });
+
+  testWidgets('supports the iOS custom primary color', (tester) async {
+    const custom = Color(0xFF8A2BE2);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalButton(
+          onPressed: () {},
+          primaryColor: custom,
+          variant: CharcoalButtonVariant.primary,
+          child: const Text('Custom'),
+        ),
+      ),
+    );
+
+    final container = tester.widget<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
+    expect((container.decoration! as BoxDecoration).color, custom);
+  });
+
+  testWidgets('grows vertically with accessibility text scaling', (
+    tester,
+  ) async {
+    final theme = CharcoalThemeData.light();
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+          child: CharcoalButton(
+            onPressed: _noop,
+            child: Text('Scaled action'),
+          ),
+        ),
+        theme: theme,
+      ),
+    );
+
+    expect(
+      tester.getSize(find.byType(AnimatedContainer)).height,
+      greaterThan(theme.components.button.medium.height),
+    );
+  });
+
+  testWidgets('switching button keeps the larger layout and selects a child', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const CharcoalSwitchingButton(
+          isOn: false,
+          offButton: SizedBox(width: 80, height: 32, child: Text('Off')),
+          onButton: SizedBox(width: 120, height: 40, child: Text('On')),
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byType(IndexedStack)), const Size(120, 40));
+    final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));
+    expect(stack.index, 1);
+  });
 }
+
+void _noop() {}

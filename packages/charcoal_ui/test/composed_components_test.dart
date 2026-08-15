@@ -88,6 +88,62 @@ void main() {
     expect(find.text('Delete illustration?'), findsNothing);
   });
 
+  testWidgets('bottom-sheet modal aligns to the bottom and exposes a close button', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        Builder(
+          builder: (context) => CharcoalButton(
+            onPressed: () => showCharcoalDialog<void>(
+              context: context,
+              style: CharcoalModalStyle.bottomSheet,
+              builder: (dialogContext) => CharcoalDialog(
+                onDismiss: () => Navigator.of(dialogContext).pop(),
+                showCloseButton: true,
+                style: CharcoalModalStyle.bottomSheet,
+                title: 'Bottom sheet',
+                child: const SizedBox(height: 80),
+              ),
+            ),
+            child: const Text('Open sheet'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open sheet'));
+    await tester.pumpAndSettle();
+    final dialogRect = tester.getRect(find.byType(CharcoalDialog));
+    expect(dialogRect.bottom, tester.view.physicalSize.height / tester.view.devicePixelRatio);
+    expect(find.bySemanticsLabel('Close'), findsOneWidget);
+  });
+
+  testWidgets('iOS typography family supports monospace and text scaling', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(1.5)),
+          child: CharcoalTypography(
+            monospace: true,
+            size: CharcoalTypographySize.size12,
+            child: Text('012345'),
+          ),
+        ),
+      ),
+    );
+
+    final typography = tester.widget<DefaultTextStyle>(
+      find.byType(DefaultTextStyle).last,
+    );
+    final style = typography.style;
+    expect(style.fontFamily, 'monospace');
+    expect(typography.maxLines, 1);
+    expect(MediaQuery.textScalerOf(tester.element(find.text('012345'))).scale(12), 18);
+  });
+
   testWidgets('text ellipsis configures the underlying Text', (tester) async {
     await tester.pumpWidget(
       charcoalTestApp(

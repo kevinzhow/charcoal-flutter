@@ -104,8 +104,6 @@ final class _SwitchContent extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        track,
-        SizedBox(width: labelTokens.gap),
         Flexible(
           child: DefaultTextStyle(
             style: TextStyle(
@@ -119,6 +117,8 @@ final class _SwitchContent extends StatelessWidget {
             child: label!,
           ),
         ),
+        SizedBox(width: labelTokens.gap),
+        track,
       ],
     );
   }

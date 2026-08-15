@@ -25,7 +25,7 @@ final class CharcoalFieldLabel extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: theme.textStyles.captionMediumBold.copyWith(
+          style: theme.textStyles.captionMedium.copyWith(
             color: theme.colors.textDefaultText1,
           ),
         ),

@@ -23,19 +23,21 @@ Public components currently include:
 - `CharcoalMotion` and `CharcoalPageRoute`
 - `CharcoalClickable`
 - `CharcoalNavigationItem`
-- `CharcoalButton` and `CharcoalIconButton`
+- `CharcoalButton`, `CharcoalLinkButton`, `CharcoalSwitchingButton`, and `CharcoalIconButton`
 - `CharcoalCheckbox`, `CharcoalMultiSelect`, `CharcoalRadio`, and `CharcoalSwitch`
 - `CharcoalFieldLabel`, `CharcoalTextField`, and `CharcoalTextArea`
 - `CharcoalDropdown`
 - `CharcoalSegmentedControl`, `CharcoalPagination`, and `CharcoalCarousel`
 - `CharcoalTagItem`
-- `CharcoalHintText`, `CharcoalTextEllipsis`, and `CharcoalLoadingSpinner`
-- `CharcoalTooltip`, `CharcoalBalloon`, `CharcoalToast`, and `showCharcoalToast`
-- `CharcoalDialog` and `showCharcoalDialog`
+- `CharcoalHintText`, `CharcoalTextEllipsis`, `CharcoalLoadingSpinner`, and `CharcoalSpinnerOverlay`
+- `CharcoalTooltip`, `CharcoalBalloon`, and `CharcoalAnchoredBalloon`
+- `CharcoalToast`, `CharcoalSnackBar`, `showCharcoalToast`, and `showCharcoalSnackBar`
+- `CharcoalDialog`, `showCharcoalDialog`, and `showCharcoalModal`
+- `CharcoalTypography` and `charcoalTypographyStyle`
 
 The API follows Flutter conventions instead of reproducing React's DOM shape. Icon-bearing controls
-accept a regular `Widget`; `charcoal_ui` uses the sibling `charcoal_icons` package for its default
-affordances, while applications can still pass any widget when a product-specific mark is needed.
+accept a regular `Widget`; the Showcase fills those slots from the sibling `charcoal_icons` package,
+while applications can still pass any widget when a product-specific mark is needed.
 
 ## Usage
 
@@ -153,6 +155,10 @@ visual catalog in the same `generate` transaction.
 
 See [V2 token pipeline](docs/token-pipeline.md) for the source-of-truth model, custom repository
 workflow, guarantees, and its relationship to `charcoal-ios` generation.
+
+See [Charcoal iOS component parity](docs/ios-component-parity.md) for the audited upstream
+baseline, exact visual contracts, complete public-family coverage, and intentional V2 Flutter
+extensions.
 
 ## Development and previews
 

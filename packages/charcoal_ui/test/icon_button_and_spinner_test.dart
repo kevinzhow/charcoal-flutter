@@ -57,5 +57,35 @@ void main() {
     );
     final animatedOpacity = tester.widgetList<Opacity>(find.byType(Opacity)).last;
     expect(animatedOpacity.opacity, inExclusiveRange(0, 1));
+
+    final decorations = tester
+        .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+        .map((widget) => widget.decoration)
+        .whereType<BoxDecoration>();
+    expect(
+      decorations.any((decoration) => decoration.shape == BoxShape.circle),
+      isTrue,
+    );
+  });
+
+  testWidgets('spinner overlay can block or pass through interaction', (
+    tester,
+  ) async {
+    var taps = 0;
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalSpinnerOverlay(
+          visible: true,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => taps++,
+            child: const SizedBox.square(dimension: 120),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tapAt(tester.getCenter(find.byType(CharcoalSpinnerOverlay)));
+    expect(taps, 0);
   });
 }

@@ -1,4 +1,5 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/src/components/field_ring.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -34,7 +35,7 @@ void main() {
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
     final expectedHeight =
         theme.components.textField.lineHeight * 4 +
-        theme.components.textField.gap +
+        theme.components.textField.verticalGap +
         theme.components.textField.paddingHorizontal * 2;
     expect(container.constraints!.maxHeight, expectedHeight);
   });
@@ -53,6 +54,14 @@ void main() {
 
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
     final decoration = container.decoration! as BoxDecoration;
-    expect(decoration.boxShadow!.single.color, theme.components.textField.invalidRingColor);
+    expect(decoration.boxShadow, isNull);
+    final ring = tester.widget<CustomPaint>(
+      find.byWidgetPredicate(
+        (widget) => widget is CustomPaint && widget.foregroundPainter is CharcoalFieldRingPainter,
+      ),
+    );
+    final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
+    expect(ringPainter.color, theme.components.textField.invalidRingColor);
+    expect(ringPainter.opacity, 1);
   });
 }

@@ -78,6 +78,10 @@ void main() {
 
     await tester.tap(find.text('Notifications'));
     expect(nextValue, isFalse);
+    expect(
+      tester.getCenter(find.text('Notifications')).dx,
+      lessThan(tester.getCenter(find.byType(AnimatedAlign)).dx),
+    );
   });
 
   testWidgets('checkbox pressed state uses generated recipe colors', (tester) async {

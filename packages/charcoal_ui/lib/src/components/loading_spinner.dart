@@ -1,9 +1,12 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 
-/// Charcoal's expanding-dot loading indicator.
+/// Charcoal's expanding-circle loading indicator.
+///
+/// The circle grows from the center while fading out over one second, matching
+/// the Charcoal iOS spinner. The surrounding surface is 16 logical pixels from
+/// the circle, has an 8-pixel radius, and can be made transparent.
 final class CharcoalLoadingSpinner extends StatefulWidget {
   const CharcoalLoadingSpinner({
     this.color,
@@ -24,6 +27,64 @@ final class CharcoalLoadingSpinner extends StatefulWidget {
 
   @override
   State<CharcoalLoadingSpinner> createState() => _CharcoalLoadingSpinnerState();
+}
+
+/// Centers a Charcoal spinner over [child] while [visible] is true.
+///
+/// By default the overlay intercepts input, matching the iOS modifier. Set
+/// [interactionPassthrough] when the underlying content should remain usable.
+final class CharcoalSpinnerOverlay extends StatelessWidget {
+  const CharcoalSpinnerOverlay({
+    required this.child,
+    required this.visible,
+    this.interactionPassthrough = false,
+    this.spinnerSize,
+    this.transparentBackground = false,
+    super.key,
+  });
+
+  final Widget child;
+  final bool interactionPassthrough;
+  final double? spinnerSize;
+  final bool transparentBackground;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return Stack(
+      children: <Widget>[
+        child,
+        Positioned.fill(
+          child: IgnorePointer(
+            ignoring: interactionPassthrough || !visible,
+            child: AnimatedSwitcher(
+              duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 250),
+              switchInCurve: Curves.easeOutBack,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, animation) => FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(scale: animation, child: child),
+              ),
+              child: visible
+                  ? Listener(
+                      key: const ValueKey<String>('charcoal-spinner-overlay'),
+                      behavior: HitTestBehavior.opaque,
+                      onPointerDown: (_) {},
+                      child: Center(
+                        child: CharcoalLoadingSpinner(
+                          size: spinnerSize,
+                          transparent: transparentBackground,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
@@ -76,7 +137,8 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
 
   @override
   Widget build(BuildContext context) {
-    final tokens = CharcoalTheme.of(context).components.loadingSpinner;
+    final theme = CharcoalTheme.of(context);
+    final tokens = theme.components.loadingSpinner;
     final size = widget.size ?? tokens.size;
     final padding = widget.padding ?? tokens.padding;
     return Semantics(
@@ -89,9 +151,17 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
           child: DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(tokens.radius),
-              color: widget.transparent
-                  ? CharcoalTheme.of(context).colors.containerDefaultA
-                  : tokens.backgroundColor,
+              boxShadow: widget.transparent
+                  ? const <BoxShadow>[]
+                  : <BoxShadow>[
+                      BoxShadow(
+                        blurRadius: tokens.shadowBlur,
+                        color: theme.colors.backgroundOverlay.withValues(
+                          alpha: tokens.shadowOpacity,
+                        ),
+                      ),
+                    ],
+              color: widget.transparent ? null : tokens.backgroundColor,
             ),
             child: Padding(
               padding: EdgeInsets.all(padding),
@@ -100,9 +170,7 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
                 child: AnimatedBuilder(
                   animation: _controller,
                   builder: (context, child) {
-                    final progress = CharcoalMotion.emphasizedCurve.transform(
-                      _controller.value,
-                    );
+                    final progress = Curves.easeOut.transform(_controller.value);
                     return Opacity(
                       opacity: 1 - progress,
                       child: Transform.scale(scale: progress, child: child),
@@ -110,8 +178,8 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(tokens.radius),
                       color: widget.color ?? tokens.foregroundColor,
+                      shape: BoxShape.circle,
                     ),
                   ),
                 ),

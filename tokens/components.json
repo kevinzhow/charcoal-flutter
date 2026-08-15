@@ -1,5 +1,31 @@
 {
   "$schema": "./components.schema.json",
+  "balloon": {
+    "action-background-color": "{color.container/on-img/default}",
+    "action-padding-horizontal": "{space.component/30}",
+    "action-padding-vertical": "3px",
+    "animation-duration-ms": 200,
+    "arrow-half-width": "7px",
+    "arrow-height": "4px",
+    "background-color": "{color.container/primary/default}",
+    "close-icon-size": "{space.component/30}",
+    "close-size": "22px",
+    "close-stroke-inset": "{space.component/10}",
+    "close-stroke-width": "1.5px",
+    "content-gap": "5px",
+    "font-size": "{text.font-size/caption/m}",
+    "font-weight": "{text.font-weight/bold}",
+    "foreground-color": "{color.text/on-primary/default}",
+    "gap": "{space.component/10}",
+    "line-height": "{text.line-height/caption/m}",
+    "max-width": "240px",
+    "padding-horizontal": "{space.component/30}",
+    "padding-vertical": "{space.component/25}",
+    "radius": "{radius.xl}",
+    "screen-inset": "{space.component/30}",
+    "stroke-color": "{color.icon/on-primary/default}",
+    "stroke-width": "{border-width.l}"
+  },
   "button": {
     "animation-duration-ms": 200,
     "disabled-opacity": 0.32,
@@ -267,10 +293,67 @@
     "animation-duration-ms": 1000,
     "background-color": "{color.background/default}",
     "foreground-color": "{color.icon/tertiary/default}",
-    "opacity": 0.84,
+    "opacity": 1,
     "padding": "{space.component/30}",
     "radius": "{radius.m}",
+    "shadow-blur": "{space.component/20}",
+    "shadow-opacity": 0.1,
     "size": "48px"
+  },
+  "hint": {
+    "action-gap": "{space.component/20}",
+    "background-color": "{color.container/secondary/default}",
+    "font-size": "{text.font-size/caption/m}",
+    "font-weight": "{text.font-weight/regular}",
+    "foreground-color": "{color.text/default}",
+    "gap": "{space.component/10}",
+    "icon-color": "{color.icon/default}",
+    "icon-size": "{space.component/30}",
+    "line-height": "{text.line-height/caption/m}",
+    "padding-horizontal": "{space.component/30}",
+    "padding-vertical": "{space.component/25}",
+    "radius": "{radius.m}"
+  },
+  "link-button": {
+    "animation-duration-ms": 200,
+    "disabled-opacity": 0.32,
+    "focus-ring-color": "{color.border/focus/legacy}",
+    "focus-ring-width": "{space.component/10}",
+    "font-size": "{text.font-size/caption/m}",
+    "font-weight": "{text.font-weight/bold}",
+    "foreground": {
+      "disabled": "{color.text/default}",
+      "hovered": "{color.text/hover}",
+      "normal": "{color.text/default}",
+      "pressed": "{color.text/tertiary/default}"
+    },
+    "height": "{space.target/m}",
+    "line-height": "{text.line-height/caption/m}",
+    "padding-horizontal": "{space.component/30}",
+    "radius": "{radius.s}"
+  },
+  "modal": {
+    "action-gap": "{space.component/20}",
+    "action-padding": "20px",
+    "animation-duration-ms": 250,
+    "background-color": "{color.background/default}",
+    "barrier-color": "{color.background/overlay}",
+    "barrier-opacity": 0.6,
+    "bottom-sheet-min-bottom-padding": "30px",
+    "center-edge-padding": "{space.component/40}",
+    "center-scale": 1.05,
+    "close-icon-size": "{space.target/xs}",
+    "close-size": "48px",
+    "close-stroke-inset": "6px",
+    "close-stroke-width": "{border-width.l}",
+    "default-max-width": "440px",
+    "min-width": "280px",
+    "radius": "32px",
+    "title-font-size": "20px",
+    "title-font-weight": "{text.font-weight/bold}",
+    "title-line-height": "28px",
+    "title-padding-horizontal": "48px",
+    "title-padding-vertical": "20px"
   },
   "multi-select": {
     "animation-duration-ms": 200,
@@ -352,6 +435,50 @@
       "pressed": "{color.container/press}"
     }
   },
+  "numeric-typography": {
+    "bold-font-weight": "{text.font-weight/bold}",
+    "regular-font-weight": "{text.font-weight/regular}",
+    "sizes": {
+      "size10": {
+        "font-size": "10px",
+        "line-height": "18px"
+      },
+      "size12": {
+        "font-size": "12px",
+        "line-height": "20px"
+      },
+      "size14": {
+        "font-size": "14px",
+        "line-height": "22px"
+      },
+      "size16": {
+        "font-size": "16px",
+        "line-height": "24px"
+      },
+      "size20": {
+        "font-size": "20px",
+        "line-height": "28px"
+      }
+    }
+  },
+  "snackbar": {
+    "animation-duration-ms": 250,
+    "background-color": "{color.background/default}",
+    "border-color": "{color.border/default}",
+    "border-width": "{border-width.m}",
+    "content-gap": "{space.component/30}",
+    "dismiss-duration-ms": 2000,
+    "font-size": "{text.font-size/caption/m}",
+    "font-weight": "{text.font-weight/bold}",
+    "foreground-color": "{color.text/default}",
+    "max-width": "312px",
+    "padding-horizontal": "{space.component/30}",
+    "padding-vertical": "{space.component/25}",
+    "radius": "32px",
+    "screen-edge-spacing": "120px",
+    "screen-horizontal-inset": "{space.component/30}",
+    "thumbnail-size": "64px"
+  },
   "switch": {
     "animation-duration-ms": 200,
     "border-width": "{border-width.l}",
@@ -364,7 +491,7 @@
     "disabled-opacity": 0.32,
     "focus-ring-color": "{color.border/focus/legacy}",
     "focus-ring-width": "{space.component/10}",
-    "height": "16px",
+    "height": "31px",
     "label-color": "{color.text/default}",
     "label-font-size": "{text.font-size/caption/m}",
     "label-font-weight": "{text.font-weight/regular}",
@@ -377,14 +504,14 @@
       "normal": "{color.icon/on-primary/default}",
       "pressed": "{color.icon/on-primary/press}"
     },
-    "thumb-size": "12px",
+    "thumb-size": "27px",
     "unchecked-background": {
       "disabled": "{color.container/neutral/default}",
       "hovered": "{color.container/neutral/hover}",
       "normal": "{color.container/neutral/default}",
       "pressed": "{color.container/neutral/press}"
     },
-    "width": "28px"
+    "width": "51px"
   },
   "tag-item": {
     "active-padding-left": "{space.component/30}",
@@ -432,11 +559,12 @@
     "background": {
       "disabled": "{color.container/secondary/default-a}",
       "focused": "{color.container/secondary/default-a}",
-      "hovered": "{color.container/secondary/hover-a}",
+      "hovered": "{color.container/secondary/default-a}",
       "normal": "{color.container/secondary/default-a}",
-      "pressed": "{color.container/secondary/press-a}"
+      "pressed": "{color.container/secondary/default-a}"
     },
     "counter-color": "{color.text/tertiary/default}",
+    "content-gap": "10px",
     "disabled-opacity": 0.32,
     "focus-ring-color": "{color.border/focus/legacy}",
     "focus-ring-width": "{space.component/10}",
@@ -450,6 +578,42 @@
     "line-height": "{text.line-height/caption/m}",
     "padding-horizontal": "{space.component/20}",
     "placeholder-color": "{color.text/placeholder/default}",
-    "radius": "{radius.s}"
+    "radius": "{radius.s}",
+    "vertical-gap": "{space.component/20}"
+  },
+  "toast": {
+    "animation-duration-ms": 250,
+    "border-color": "{color.background/default}",
+    "border-width": "{border-width.l}",
+    "dismiss-duration-ms": 2000,
+    "error-background-color": "{color.container/negative/default}",
+    "error-foreground-color": "{color.text/on-negative/default}",
+    "font-size": "{text.font-size/caption/m}",
+    "font-weight": "{text.font-weight/bold}",
+    "gap": "{space.component/20}",
+    "max-width": "312px",
+    "padding-horizontal": "{space.component/40}",
+    "padding-vertical": "{space.component/20}",
+    "radius": "32px",
+    "screen-edge-spacing": "96px",
+    "screen-horizontal-inset": "{space.component/30}",
+    "success-background-color": "{color.container/positive/default}",
+    "success-foreground-color": "{color.text/on-positive/default}"
+  },
+  "tooltip": {
+    "animation-duration-ms": 200,
+    "arrow-half-width": "5px",
+    "arrow-height": "3px",
+    "background-color": "{color.container/hud/default}",
+    "font-size": "{text.font-size/caption/s}",
+    "font-weight": "{text.font-weight/regular}",
+    "foreground-color": "{color.text/on-hud/default}",
+    "gap": "{space.component/10}",
+    "line-height": "{text.line-height/caption/s}",
+    "max-width": "184px",
+    "padding-horizontal": "{space.component/25}",
+    "padding-vertical": "{space.component/10}",
+    "radius": "{radius.s}",
+    "screen-inset": "{space.component/30}"
   }
 }

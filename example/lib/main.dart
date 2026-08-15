@@ -6,10 +6,6 @@ import 'package:flutter_skill/flutter_skill.dart';
 
 void main() {
   if (kDebugMode) {
-    FlutterSkillBinding.ensureInitialized();
-  }
-
-  if (kDebugMode) {
     FlutterSkillBinding.ensureInitialized(autoEnableIndicators: false);
   }
   runApp(const CharcoalShowcaseApp());
@@ -567,15 +563,21 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
       const SizedBox(height: 24),
       _CatalogGrid(
         children: <Widget>[
-          const _ShowcaseCard(
-            description:
-                'Section and page contexts with optional leading content.',
+          _ShowcaseCard(
+            description: 'iOS text, subtitle, info icon, visibility, alignment, and action slots.',
             eyebrow: 'HINT TEXT',
             title: 'HintText',
-            child: Column(
+            child: const Column(
               children: <Widget>[
                 CharcoalHintText(
+                  action: CharcoalButton(
+                    onPressed: _noop,
+                    size: CharcoalButtonSize.small,
+                    variant: CharcoalButtonVariant.primary,
+                    child: Text('Review'),
+                  ),
                   icon: CharcoalIcon(CharcoalIcons.infoCircle),
+                  subtitle: Text('You can change this later.'),
                   child: Text('Changes are saved automatically.'),
                 ),
                 SizedBox(height: 16),
@@ -587,7 +589,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
             ),
           ),
           _ShowcaseCard(
-            description: 'Hover, focus, or long-press each trigger to reveal its placement.',
+            description: 'Click, tap, hover, or focus a trigger. Automatic collision handling follows the anchor.',
             eyebrow: 'TOOLTIP',
             title: 'Tooltip positions',
             child: Wrap(
@@ -599,6 +601,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                     message: '${_displayTokenName(position.name)} tooltip',
                     position: position,
                     child: CharcoalButton(
+                      key: ValueKey<String>('tooltip-${position.name}'),
                       onPressed: _noop,
                       size: CharcoalButtonSize.small,
                       child: Text(_displayTokenName(position.name)),
@@ -608,8 +611,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
             ),
           ),
           _ShowcaseCard(
-            description:
-                'Persistent speech surfaces with all four tail directions.',
+            description: 'A continuous outlined path plus the interactive anchored iOS presentation.',
             eyebrow: 'BALLOON',
             title: 'Balloon directions',
             child: Wrap(
@@ -618,12 +620,28 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
               runSpacing: 12,
               children: <Widget>[
                 for (final position in CharcoalOverlayPosition.values)
-                  CharcoalBalloon(position: position, child: Text('Balloon')),
+                  CharcoalBalloon(
+                    key: ValueKey<String>('balloon-${position.name}'),
+                    position: position,
+                    child: Text('Balloon'),
+                  ),
+                CharcoalAnchoredBalloon(
+                  anchor: CharcoalButton(
+                    key: const ValueKey<String>('anchored-balloon-trigger'),
+                    onPressed: _noop,
+                    size: CharcoalButtonSize.small,
+                    child: const Text('Anchored balloon'),
+                  ),
+                  dismissIcon: const CharcoalIcon(CharcoalIcons20.x),
+                  message: 'A controlled Charcoal balloon',
+                  action: const Text('Learn more'),
+                ),
               ],
             ),
           ),
           _ShowcaseCard(
-            description: 'Default and negative live-region notifications with optional actions.',
+            description:
+                'Success and error capsules animate from either screen edge.',
             eyebrow: 'TOAST',
             title: 'Toasts',
             child: Wrap(
@@ -634,8 +652,8 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                   key: const ValueKey<String>('show-default-toast'),
                   onPressed: () => showCharcoalToast(
                     context: context,
-                    leading: const CharcoalIcon(CharcoalIcons.check),
                     message: 'Your changes were saved.',
+                    variant: CharcoalToastVariant.success,
                   ),
                   size: CharcoalButtonSize.small,
                   child: const Text('Default toast'),
@@ -644,9 +662,8 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                   key: const ValueKey<String>('show-negative-toast'),
                   onPressed: () => showCharcoalToast(
                     context: context,
-                    leading: const CharcoalIcon(CharcoalIcons.x),
                     message: 'The upload could not be completed.',
-                    variant: CharcoalToastVariant.negative,
+                    variant: CharcoalToastVariant.error,
                   ),
                   size: CharcoalButtonSize.small,
                   variant: CharcoalButtonVariant.danger,
@@ -655,9 +672,47 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
               ],
             ),
           ),
+          _ShowcaseCard(
+            description: 'Bordered messages support a 64px thumbnail, action, edge placement, and swipe-to-dismiss.',
+            eyebrow: 'SNACKBAR',
+            title: 'Snackbars',
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: <Widget>[
+                CharcoalButton(
+                  key: const ValueKey<String>('show-bottom-snackbar'),
+                  onPressed: () => showCharcoalSnackBar(
+                    context: context,
+                    message: 'Bookmarked',
+                    action: const CharcoalButton(
+                      onPressed: _noop,
+                      size: CharcoalButtonSize.small,
+                      child: Text('Edit'),
+                    ),
+                  ),
+                  size: CharcoalButtonSize.small,
+                  child: const Text('Bottom snackbar'),
+                ),
+                CharcoalButton(
+                  key: const ValueKey<String>('show-top-snackbar'),
+                  onPressed: () => showCharcoalSnackBar(
+                    context: context,
+                    edge: CharcoalPopupEdge.top,
+                    message: 'Preview generated',
+                    thumbnail: const ColoredBox(
+                      color: Color(0xFF0096FA),
+                      child: Center(child: CharcoalIcon(CharcoalIcons.image)),
+                    ),
+                  ),
+                  size: CharcoalButtonSize.small,
+                  child: const Text('Top with thumbnail'),
+                ),
+              ],
+            ),
+          ),
           const _ShowcaseCard(
-            description:
-                'Regular, large, transparent, and one-shot presentations.',
+            description: '48px expanding circles, custom sizes, transparent surfaces, and blocking overlays.',
             eyebrow: 'LOADING',
             title: 'LoadingSpinner',
             child: Wrap(
@@ -665,27 +720,51 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
               spacing: 18,
               runSpacing: 18,
               children: <Widget>[
-                CharcoalLoadingSpinner(),
-                CharcoalLoadingSpinner(size: 32, padding: 14),
-                CharcoalLoadingSpinner(transparent: true),
-                CharcoalLoadingSpinner(once: true),
+                CharcoalLoadingSpinner(
+                  key: ValueKey<String>('spinner-default'),
+                ),
+                CharcoalLoadingSpinner(
+                  key: ValueKey<String>('spinner-small'),
+                  size: 32,
+                  padding: 14,
+                ),
+                CharcoalLoadingSpinner(
+                  key: ValueKey<String>('spinner-transparent'),
+                  transparent: true,
+                ),
+                CharcoalLoadingSpinner(
+                  key: ValueKey<String>('spinner-large'),
+                  size: 64,
+                ),
+                SizedBox(
+                  width: 112,
+                  height: 96,
+                  child: CharcoalSpinnerOverlay(
+                    interactionPassthrough: true,
+                    visible: true,
+                    child: ColoredBox(
+                      color: Color(0x0C000000),
+                      child: Center(child: Text('Overlay')),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           _ShowcaseCard(
-            description:
-                'Small, medium, and large token-driven dialog surfaces.',
-            eyebrow: 'DIALOG',
-            title: 'Dialog',
+            description: 'Centered and bottom-sheet presentations with matching motion and close behavior.',
+            eyebrow: 'MODAL',
+            title: 'Modals',
             child: Wrap(
               spacing: 12,
               runSpacing: 12,
               children: <Widget>[
-                for (final size in CharcoalDialogSize.values)
+                for (final style in CharcoalModalStyle.values)
                   CharcoalButton(
-                    onPressed: () => _showDialog(context, size: size),
+                    key: ValueKey<String>('show-modal-${style.name}'),
+                    onPressed: () => _showDialog(context, style: style),
                     size: CharcoalButtonSize.small,
-                    child: Text(size.name),
+                    child: Text(_displayTokenName(style.name)),
                   ),
               ],
             ),
@@ -941,20 +1020,29 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   void _showDialog(
     BuildContext context, {
     CharcoalDialogSize size = CharcoalDialogSize.medium,
+    CharcoalModalStyle style = CharcoalModalStyle.center,
   }) {
     showCharcoalDialog<void>(
       context: context,
+      style: style,
       builder: (dialogContext) => CharcoalDialog(
+        closeIcon: const CharcoalIcon(CharcoalIcons.x),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+        onDismiss: () => Navigator.of(dialogContext).pop(),
+        showCloseButton: true,
         size: size,
+        style: style,
         title: 'Ready to publish?',
         actions: <Widget>[
           CharcoalButton(
+            key: const ValueKey<String>('modal-publish'),
             fullWidth: true,
             variant: CharcoalButtonVariant.primary,
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Publish'),
           ),
           CharcoalButton(
+            key: const ValueKey<String>('modal-cancel'),
             fullWidth: true,
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Cancel'),
@@ -1836,15 +1924,44 @@ final class _TypographyPage extends StatelessWidget {
                 ],
               ),
             ),
-            const _ShowcaseCard(
-              description: 'V2 uses semantic names instead of preserving the legacy iOS 10/12/14/16/20 API.',
-              eyebrow: 'V2 ONLY',
-              title: 'Semantic scale',
-              child: CharcoalHintText(
-                context: CharcoalHintContext.page,
-                child: Text(
-                  'Headings, body, paragraph, and captions are generated directly from Charcoal V2. No V1 aliases are included.',
-                ),
+            _ShowcaseCard(
+              description: 'The public iOS 10/12/14/16/20 family, including regular, bold, and monospaced styles.',
+              eyebrow: 'IOS PARITY',
+              title: 'Component type scale',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  for (final size in CharcoalTypographySize.values) ...<Widget>[
+                    Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 58,
+                          child: Text(
+                            size.name.replaceFirst('size', ''),
+                            style: theme.textStyles.captionSmall.copyWith(
+                              color: theme.colors.textTertiaryDefault,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: CharcoalTypography(
+                            size: size,
+                            child: const Text('Regular typography'),
+                          ),
+                        ),
+                        CharcoalTypography(
+                          monospace: true,
+                          size: size,
+                          weight: CharcoalTypographyWeight.bold,
+                          child: const Text('0123'),
+                        ),
+                      ],
+                    ),
+                    if (size != CharcoalTypographySize.values.last)
+                      const SizedBox(height: 8),
+                  ],
+                ],
               ),
             ),
           ],
@@ -2360,6 +2477,11 @@ final class _ButtonsPage extends StatelessWidget {
                   selected: true,
                   child: Text('Selected'),
                 ),
+                CharcoalLinkButton(
+                  onPressed: _noop,
+                  child: Text('Link button'),
+                ),
+                _SwitchingButtonSample(),
               ],
             ),
             SizedBox(height: 14),
@@ -2385,6 +2507,33 @@ final class _ButtonsPage extends StatelessWidget {
 }
 
 void _noop() {}
+
+final class _SwitchingButtonSample extends StatefulWidget {
+  const _SwitchingButtonSample();
+
+  @override
+  State<_SwitchingButtonSample> createState() => _SwitchingButtonSampleState();
+}
+
+final class _SwitchingButtonSampleState extends State<_SwitchingButtonSample> {
+  bool _following = false;
+
+  @override
+  Widget build(BuildContext context) => CharcoalSwitchingButton(
+    isOn: _following,
+    onButton: CharcoalButton(
+      key: const ValueKey<String>('switching-button-following'),
+      onPressed: () => setState(() => _following = false),
+      child: const Text('Following'),
+    ),
+    offButton: CharcoalButton(
+      key: const ValueKey<String>('switching-button-follow'),
+      onPressed: () => setState(() => _following = true),
+      variant: CharcoalButtonVariant.primary,
+      child: const Text('Follow'),
+    ),
+  );
+}
 
 final class _ButtonVariantCard extends StatelessWidget {
   const _ButtonVariantCard({required this.variant});

@@ -483,6 +483,7 @@ final class DartTokenGenerator {
       ..writeln('    required CharcoalDimensionTokens dimensions,')
       ..writeln('    required CharcoalTypographyTokens typography,')
       ..writeln('  }) => CharcoalComponentTokens(')
+      ..write(_renderBalloonRecipe(recipes))
       ..writeln('    button: CharcoalButtonTokens(')
       ..writeln(
         '      animationDuration: ${recipes.duration(<String>['button', 'animation-duration-ms'])},',
@@ -539,10 +540,15 @@ final class DartTokenGenerator {
       ..write(_renderCarouselRecipe(recipes))
       ..write(_renderCheckboxRecipe(recipes))
       ..write(_renderDropdownRecipe(recipes))
+      ..write(_renderHintRecipe(recipes))
       ..write(_renderIconButtonRecipe(recipes))
+      ..write(_renderLinkButtonRecipe(recipes))
       ..write(_renderLoadingSpinnerRecipe(recipes))
+      ..write(_renderModalRecipe(recipes))
       ..write(_renderMultiSelectRecipe(recipes))
+      ..write(_renderNumericTypographyRecipe(recipes))
       ..write(_renderRadioRecipe(recipes))
+      ..write(_renderSnackbarRecipe(recipes))
       ..write(_renderSwitchRecipe(recipes))
       ..write(_renderTagItemRecipe(recipes))
       ..writeln('    textField: CharcoalTextFieldTokens(')
@@ -563,6 +569,9 @@ final class DartTokenGenerator {
       ..writeln('      ),')
       ..writeln(
         '      counterColor: ${recipes.reference(<String>['text-field', 'counter-color'], _RecipeType.color)},',
+      )
+      ..writeln(
+        '      contentGap: ${recipes.dimension(<String>['text-field', 'content-gap'])},',
       )
       ..writeln(
         '      disabledOpacity: ${recipes.number(<String>['text-field', 'disabled-opacity'], min: 0, max: 1)},',
@@ -587,6 +596,7 @@ final class DartTokenGenerator {
       'line-height',
       'padding-horizontal',
       'radius',
+      'vertical-gap',
     ]) {
       output.writeln(
         '      ${tokenIdentifier(field)}: '
@@ -598,12 +608,209 @@ final class DartTokenGenerator {
         '      fontWeight: ${recipes.reference(<String>['text-field', 'font-weight'], _RecipeType.fontWeight)},',
       )
       ..writeln('    ),')
+      ..write(_renderToastRecipe(recipes))
+      ..write(_renderTooltipRecipe(recipes))
       ..writeln('  );')
       ..writeln('}')
       ..writeln();
     recipes.assertAllRecipesConsumed();
     return output.toString();
   }
+
+  String _renderBalloonRecipe(_RecipeReader recipes) =>
+      '''    balloon: CharcoalBalloonTokens(
+      actionBackgroundColor: ${recipes.reference(<String>['balloon', 'action-background-color'], _RecipeType.color)},
+      actionPaddingHorizontal: ${recipes.dimension(<String>['balloon', 'action-padding-horizontal'])},
+      actionPaddingVertical: ${recipes.dimension(<String>['balloon', 'action-padding-vertical'])},
+      animationDuration: ${recipes.duration(<String>['balloon', 'animation-duration-ms'])},
+      arrowHalfWidth: ${recipes.dimension(<String>['balloon', 'arrow-half-width'])},
+      arrowHeight: ${recipes.dimension(<String>['balloon', 'arrow-height'])},
+      backgroundColor: ${recipes.reference(<String>['balloon', 'background-color'], _RecipeType.color)},
+      closeIconSize: ${recipes.dimension(<String>['balloon', 'close-icon-size'])},
+      closeSize: ${recipes.dimension(<String>['balloon', 'close-size'])},
+      closeStrokeInset: ${recipes.dimension(<String>['balloon', 'close-stroke-inset'])},
+      closeStrokeWidth: ${recipes.dimension(<String>['balloon', 'close-stroke-width'])},
+      contentGap: ${recipes.dimension(<String>['balloon', 'content-gap'])},
+      fontSize: ${recipes.dimension(<String>['balloon', 'font-size'])},
+      fontWeight: ${recipes.reference(<String>['balloon', 'font-weight'], _RecipeType.fontWeight)},
+      foregroundColor: ${recipes.reference(<String>['balloon', 'foreground-color'], _RecipeType.color)},
+      gap: ${recipes.dimension(<String>['balloon', 'gap'])},
+      lineHeight: ${recipes.dimension(<String>['balloon', 'line-height'])},
+      maxWidth: ${recipes.dimension(<String>['balloon', 'max-width'])},
+      paddingHorizontal: ${recipes.dimension(<String>['balloon', 'padding-horizontal'])},
+      paddingVertical: ${recipes.dimension(<String>['balloon', 'padding-vertical'])},
+      radius: ${recipes.dimension(<String>['balloon', 'radius'])},
+      screenInset: ${recipes.dimension(<String>['balloon', 'screen-inset'])},
+      strokeColor: ${recipes.reference(<String>['balloon', 'stroke-color'], _RecipeType.color)},
+      strokeWidth: ${recipes.dimension(<String>['balloon', 'stroke-width'])},
+    ),
+''';
+
+  String _renderHintRecipe(_RecipeReader recipes) =>
+      '''    hint: CharcoalHintTokens(
+      actionGap: ${recipes.dimension(<String>['hint', 'action-gap'])},
+      backgroundColor: ${recipes.reference(<String>['hint', 'background-color'], _RecipeType.color)},
+      fontSize: ${recipes.dimension(<String>['hint', 'font-size'])},
+      fontWeight: ${recipes.reference(<String>['hint', 'font-weight'], _RecipeType.fontWeight)},
+      foregroundColor: ${recipes.reference(<String>['hint', 'foreground-color'], _RecipeType.color)},
+      gap: ${recipes.dimension(<String>['hint', 'gap'])},
+      iconColor: ${recipes.reference(<String>['hint', 'icon-color'], _RecipeType.color)},
+      iconSize: ${recipes.dimension(<String>['hint', 'icon-size'])},
+      lineHeight: ${recipes.dimension(<String>['hint', 'line-height'])},
+      paddingHorizontal: ${recipes.dimension(<String>['hint', 'padding-horizontal'])},
+      paddingVertical: ${recipes.dimension(<String>['hint', 'padding-vertical'])},
+      radius: ${recipes.dimension(<String>['hint', 'radius'])},
+    ),
+''';
+
+  String _renderLinkButtonRecipe(_RecipeReader recipes) {
+    final output = StringBuffer()
+      ..writeln('    linkButton: CharcoalLinkButtonTokens(')
+      ..writeln(
+        '      animationDuration: ${recipes.duration(<String>['link-button', 'animation-duration-ms'])},',
+      )
+      ..writeln(
+        '      disabledOpacity: ${recipes.number(<String>['link-button', 'disabled-opacity'], min: 0, max: 1)},',
+      )
+      ..writeln(
+        '      focusRingColor: ${recipes.reference(<String>['link-button', 'focus-ring-color'], _RecipeType.color)},',
+      )
+      ..writeln(
+        '      focusRingWidth: ${recipes.dimension(<String>['link-button', 'focus-ring-width'])},',
+      )
+      ..writeln(
+        '      fontSize: ${recipes.dimension(<String>['link-button', 'font-size'])},',
+      )
+      ..writeln(
+        '      fontWeight: ${recipes.reference(<String>['link-button', 'font-weight'], _RecipeType.fontWeight)},',
+      )
+      ..writeln('      foreground: CharcoalStateColors(');
+    _writeStateColors(output, recipes, <String>['link-button', 'foreground']);
+    output
+      ..writeln('      ),')
+      ..writeln('      height: ${recipes.dimension(<String>['link-button', 'height'])},')
+      ..writeln(
+        '      lineHeight: ${recipes.dimension(<String>['link-button', 'line-height'])},',
+      )
+      ..writeln(
+        '      paddingHorizontal: ${recipes.dimension(<String>['link-button', 'padding-horizontal'])},',
+      )
+      ..writeln('      radius: ${recipes.dimension(<String>['link-button', 'radius'])},')
+      ..writeln('    ),');
+    return output.toString();
+  }
+
+  String _renderModalRecipe(_RecipeReader recipes) =>
+      '''    modal: CharcoalModalTokens(
+      actionGap: ${recipes.dimension(<String>['modal', 'action-gap'])},
+      actionPadding: ${recipes.dimension(<String>['modal', 'action-padding'])},
+      animationDuration: ${recipes.duration(<String>['modal', 'animation-duration-ms'])},
+      backgroundColor: ${recipes.reference(<String>['modal', 'background-color'], _RecipeType.color)},
+      barrierColor: ${recipes.reference(<String>['modal', 'barrier-color'], _RecipeType.color)},
+      barrierOpacity: ${recipes.number(<String>['modal', 'barrier-opacity'], min: 0, max: 1)},
+      bottomSheetMinBottomPadding: ${recipes.dimension(<String>['modal', 'bottom-sheet-min-bottom-padding'])},
+      centerEdgePadding: ${recipes.dimension(<String>['modal', 'center-edge-padding'])},
+      centerScale: ${recipes.number(<String>['modal', 'center-scale'], min: 0, max: 10)},
+      closeIconSize: ${recipes.dimension(<String>['modal', 'close-icon-size'])},
+      closeSize: ${recipes.dimension(<String>['modal', 'close-size'])},
+      closeStrokeInset: ${recipes.dimension(<String>['modal', 'close-stroke-inset'])},
+      closeStrokeWidth: ${recipes.dimension(<String>['modal', 'close-stroke-width'])},
+      defaultMaxWidth: ${recipes.dimension(<String>['modal', 'default-max-width'])},
+      minWidth: ${recipes.dimension(<String>['modal', 'min-width'])},
+      radius: ${recipes.dimension(<String>['modal', 'radius'])},
+      titleFontSize: ${recipes.dimension(<String>['modal', 'title-font-size'])},
+      titleFontWeight: ${recipes.reference(<String>['modal', 'title-font-weight'], _RecipeType.fontWeight)},
+      titleLineHeight: ${recipes.dimension(<String>['modal', 'title-line-height'])},
+      titlePaddingHorizontal: ${recipes.dimension(<String>['modal', 'title-padding-horizontal'])},
+      titlePaddingVertical: ${recipes.dimension(<String>['modal', 'title-padding-vertical'])},
+    ),
+''';
+
+  String _renderNumericTypographyRecipe(_RecipeReader recipes) {
+    final output = StringBuffer()
+      ..writeln('    numericTypography: CharcoalNumericTypographyTokens(')
+      ..writeln(
+        '      boldFontWeight: ${recipes.reference(<String>['numeric-typography', 'bold-font-weight'], _RecipeType.fontWeight)},',
+      )
+      ..writeln(
+        '      regularFontWeight: ${recipes.reference(<String>['numeric-typography', 'regular-font-weight'], _RecipeType.fontWeight)},',
+      );
+    for (final size in <String>['size10', 'size12', 'size14', 'size16', 'size20']) {
+      output
+        ..writeln('      $size: CharcoalNumericTypographySizeTokens(')
+        ..writeln(
+          '        fontSize: ${recipes.dimension(<String>['numeric-typography', 'sizes', size, 'font-size'])},',
+        )
+        ..writeln(
+          '        lineHeight: ${recipes.dimension(<String>['numeric-typography', 'sizes', size, 'line-height'])},',
+        )
+        ..writeln('      ),');
+    }
+    output.writeln('    ),');
+    return output.toString();
+  }
+
+  String _renderSnackbarRecipe(_RecipeReader recipes) =>
+      '''    snackbar: CharcoalSnackbarTokens(
+      animationDuration: ${recipes.duration(<String>['snackbar', 'animation-duration-ms'])},
+      backgroundColor: ${recipes.reference(<String>['snackbar', 'background-color'], _RecipeType.color)},
+      borderColor: ${recipes.reference(<String>['snackbar', 'border-color'], _RecipeType.color)},
+      borderWidth: ${recipes.dimension(<String>['snackbar', 'border-width'])},
+      contentGap: ${recipes.dimension(<String>['snackbar', 'content-gap'])},
+      dismissDuration: ${recipes.duration(<String>['snackbar', 'dismiss-duration-ms'])},
+      fontSize: ${recipes.dimension(<String>['snackbar', 'font-size'])},
+      fontWeight: ${recipes.reference(<String>['snackbar', 'font-weight'], _RecipeType.fontWeight)},
+      foregroundColor: ${recipes.reference(<String>['snackbar', 'foreground-color'], _RecipeType.color)},
+      maxWidth: ${recipes.dimension(<String>['snackbar', 'max-width'])},
+      paddingHorizontal: ${recipes.dimension(<String>['snackbar', 'padding-horizontal'])},
+      paddingVertical: ${recipes.dimension(<String>['snackbar', 'padding-vertical'])},
+      radius: ${recipes.dimension(<String>['snackbar', 'radius'])},
+      screenEdgeSpacing: ${recipes.dimension(<String>['snackbar', 'screen-edge-spacing'])},
+      screenHorizontalInset: ${recipes.dimension(<String>['snackbar', 'screen-horizontal-inset'])},
+      thumbnailSize: ${recipes.dimension(<String>['snackbar', 'thumbnail-size'])},
+    ),
+''';
+
+  String _renderToastRecipe(_RecipeReader recipes) =>
+      '''    toast: CharcoalToastTokens(
+      animationDuration: ${recipes.duration(<String>['toast', 'animation-duration-ms'])},
+      borderColor: ${recipes.reference(<String>['toast', 'border-color'], _RecipeType.color)},
+      borderWidth: ${recipes.dimension(<String>['toast', 'border-width'])},
+      dismissDuration: ${recipes.duration(<String>['toast', 'dismiss-duration-ms'])},
+      errorBackgroundColor: ${recipes.reference(<String>['toast', 'error-background-color'], _RecipeType.color)},
+      errorForegroundColor: ${recipes.reference(<String>['toast', 'error-foreground-color'], _RecipeType.color)},
+      fontSize: ${recipes.dimension(<String>['toast', 'font-size'])},
+      fontWeight: ${recipes.reference(<String>['toast', 'font-weight'], _RecipeType.fontWeight)},
+      gap: ${recipes.dimension(<String>['toast', 'gap'])},
+      maxWidth: ${recipes.dimension(<String>['toast', 'max-width'])},
+      paddingHorizontal: ${recipes.dimension(<String>['toast', 'padding-horizontal'])},
+      paddingVertical: ${recipes.dimension(<String>['toast', 'padding-vertical'])},
+      radius: ${recipes.dimension(<String>['toast', 'radius'])},
+      screenEdgeSpacing: ${recipes.dimension(<String>['toast', 'screen-edge-spacing'])},
+      screenHorizontalInset: ${recipes.dimension(<String>['toast', 'screen-horizontal-inset'])},
+      successBackgroundColor: ${recipes.reference(<String>['toast', 'success-background-color'], _RecipeType.color)},
+      successForegroundColor: ${recipes.reference(<String>['toast', 'success-foreground-color'], _RecipeType.color)},
+    ),
+''';
+
+  String _renderTooltipRecipe(_RecipeReader recipes) =>
+      '''    tooltip: CharcoalTooltipTokens(
+      animationDuration: ${recipes.duration(<String>['tooltip', 'animation-duration-ms'])},
+      arrowHalfWidth: ${recipes.dimension(<String>['tooltip', 'arrow-half-width'])},
+      arrowHeight: ${recipes.dimension(<String>['tooltip', 'arrow-height'])},
+      backgroundColor: ${recipes.reference(<String>['tooltip', 'background-color'], _RecipeType.color)},
+      fontSize: ${recipes.dimension(<String>['tooltip', 'font-size'])},
+      fontWeight: ${recipes.reference(<String>['tooltip', 'font-weight'], _RecipeType.fontWeight)},
+      foregroundColor: ${recipes.reference(<String>['tooltip', 'foreground-color'], _RecipeType.color)},
+      gap: ${recipes.dimension(<String>['tooltip', 'gap'])},
+      lineHeight: ${recipes.dimension(<String>['tooltip', 'line-height'])},
+      maxWidth: ${recipes.dimension(<String>['tooltip', 'max-width'])},
+      paddingHorizontal: ${recipes.dimension(<String>['tooltip', 'padding-horizontal'])},
+      paddingVertical: ${recipes.dimension(<String>['tooltip', 'padding-vertical'])},
+      radius: ${recipes.dimension(<String>['tooltip', 'radius'])},
+      screenInset: ${recipes.dimension(<String>['tooltip', 'screen-inset'])},
+    ),
+''';
 
   String _renderCarouselRecipe(_RecipeReader recipes) {
     final output = StringBuffer()
@@ -884,6 +1091,8 @@ final class DartTokenGenerator {
       opacity: ${recipes.number(<String>['loading-spinner', 'opacity'], min: 0, max: 1)},
       padding: ${recipes.dimension(<String>['loading-spinner', 'padding'])},
       radius: ${recipes.dimension(<String>['loading-spinner', 'radius'])},
+      shadowBlur: ${recipes.dimension(<String>['loading-spinner', 'shadow-blur'])},
+      shadowOpacity: ${recipes.number(<String>['loading-spinner', 'shadow-opacity'], min: 0, max: 1)},
       size: ${recipes.dimension(<String>['loading-spinner', 'size'])},
     ),
 ''';
@@ -1179,17 +1388,25 @@ final class _RecipeReader {
     final unknown = root.keys.where(
       (key) => !<String>{
         r'$schema',
+        'balloon',
         'button',
         'carousel',
         'checkbox',
         'dropdown',
+        'hint',
         'icon-button',
+        'link-button',
         'loading-spinner',
+        'modal',
         'multi-select',
+        'numeric-typography',
         'radio',
+        'snackbar',
         'switch',
         'tag-item',
         'text-field',
+        'toast',
+        'tooltip',
       }.contains(key),
     );
     if (unknown.isNotEmpty) {

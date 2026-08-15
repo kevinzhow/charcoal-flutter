@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'field_label.dart';
+import 'field_ring.dart';
 
 /// A fixed-row, multiline Charcoal V2 text input.
 ///
@@ -143,8 +144,9 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
       height: tokens.lineHeight / tokens.fontSize,
       leadingDistribution: TextLeadingDistribution.even,
     );
-    final textHeight = tokens.lineHeight * widget.rows;
-    final counterHeight = widget.showCount ? tokens.lineHeight + tokens.gap : 0;
+    final scaledLineHeight = MediaQuery.textScalerOf(context).scale(tokens.lineHeight);
+    final textHeight = scaledLineHeight * widget.rows;
+    final counterHeight = widget.showCount ? scaledLineHeight + tokens.verticalGap : 0;
     final containerHeight = textHeight + counterHeight + tokens.paddingHorizontal * 2;
 
     final editable = EditableText(
@@ -174,54 +176,59 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.disabled ? null : _focusNode.requestFocus,
-        child: AnimatedContainer(
+        child: CharcoalFieldRing(
+          color: ringColor,
           duration: tokens.animationDuration,
-          curve: CharcoalMotion.standardCurve,
-          height: containerHeight,
-          padding: EdgeInsets.all(tokens.paddingHorizontal),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(tokens.radius),
-            boxShadow: focused || widget.invalid
-                ? <BoxShadow>[
-                    BoxShadow(color: ringColor, spreadRadius: tokens.focusRingWidth),
-                  ]
-                : const <BoxShadow>[],
-            color: tokens.background.resolve(states),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              SizedBox(
-                height: textHeight,
-                child: Stack(
-                  alignment: Alignment.topLeft,
-                  children: <Widget>[
-                    if (_controller.text.isEmpty && widget.placeholder != null)
-                      IgnorePointer(
-                        child: Text(
-                          widget.placeholder!,
-                          maxLines: widget.rows,
-                          overflow: TextOverflow.clip,
-                          style: textStyle.copyWith(color: tokens.placeholderColor),
+          radius: tokens.radius,
+          visible: focused || widget.invalid,
+          width: tokens.focusRingWidth,
+          child: AnimatedContainer(
+            duration: tokens.animationDuration,
+            curve: CharcoalMotion.standardCurve,
+            height: containerHeight,
+            padding: EdgeInsets.all(tokens.paddingHorizontal),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(tokens.radius),
+              color: tokens.background.resolve(states),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(
+                  height: textHeight,
+                  child: Stack(
+                    alignment: Alignment.topLeft,
+                    children: <Widget>[
+                      if (_controller.text.isEmpty && widget.placeholder != null)
+                        IgnorePointer(
+                          child: Text(
+                            widget.placeholder!,
+                            maxLines: widget.rows,
+                            overflow: TextOverflow.clip,
+                            style: textStyle.copyWith(color: tokens.placeholderColor),
+                          ),
                         ),
-                      ),
-                    editable,
-                  ],
-                ),
-              ),
-              if (widget.showCount) ...<Widget>[
-                SizedBox(height: tokens.gap),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    widget.maxLength == null
-                        ? '${_controller.text.runes.length}'
-                        : '${_controller.text.runes.length}/${widget.maxLength}',
-                    style: textStyle.copyWith(color: tokens.counterColor),
+                      editable,
+                    ],
                   ),
                 ),
+                if (widget.showCount) ...<Widget>[
+                  SizedBox(height: tokens.verticalGap),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      widget.maxLength == null
+                          ? '${_controller.text.runes.length}'
+                          : '${_controller.text.runes.length}/${widget.maxLength}',
+                      style: textStyle.copyWith(
+                        color: tokens.counterColor,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -248,14 +255,14 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
                 requiredText: widget.requiredText,
                 subLabel: widget.subLabel,
               ),
-              SizedBox(height: tokens.gap),
+              SizedBox(height: tokens.verticalGap),
             ],
             ExcludeFocus(
               excluding: widget.disabled,
               child: IgnorePointer(ignoring: widget.disabled, child: input),
             ),
             if (assistiveText != null && assistiveText.isNotEmpty) ...<Widget>[
-              SizedBox(height: tokens.gap),
+              SizedBox(height: tokens.verticalGap),
               Text(
                 assistiveText,
                 style: theme.textStyles.captionMedium.copyWith(

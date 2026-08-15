@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'field_label.dart';
+import 'field_ring.dart';
 
 /// A single-line Charcoal V2 text field built on [EditableText].
 final class CharcoalTextField extends StatefulWidget {
@@ -179,63 +180,73 @@ final class _CharcoalTextFieldState extends State<CharcoalTextField> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.disabled ? null : _focusNode.requestFocus,
-        child: AnimatedContainer(
+        child: CharcoalFieldRing(
+          color: ringColor,
           duration: tokens.animationDuration,
-          curve: CharcoalMotion.standardCurve,
-          height: tokens.height,
-          padding: EdgeInsets.symmetric(horizontal: tokens.paddingHorizontal),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(tokens.radius),
-            boxShadow: ringVisible
-                ? <BoxShadow>[
-                    BoxShadow(color: ringColor, spreadRadius: tokens.focusRingWidth),
-                  ]
-                : const <BoxShadow>[],
-            color: background,
-          ),
-          child: Row(
-            children: <Widget>[
-              if (widget.prefix != null) ...<Widget>[
-                IconTheme(
-                  data: IconThemeData(color: tokens.foregroundColor, size: tokens.fontSize),
-                  child: widget.prefix!,
-                ),
-                SizedBox(width: tokens.gap),
-              ],
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: <Widget>[
-                    if (_controller.text.isEmpty && widget.placeholder != null)
-                      IgnorePointer(
-                        child: Text(
-                          widget.placeholder!,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          style: textStyle.copyWith(color: tokens.placeholderColor),
-                        ),
-                      ),
-                    editable,
-                  ],
-                ),
-              ),
-              if (widget.suffix != null || widget.showCount) ...<Widget>[
-                SizedBox(width: tokens.gap),
-                if (widget.suffix != null)
+          radius: tokens.radius,
+          visible: ringVisible,
+          width: tokens.focusRingWidth,
+          child: AnimatedContainer(
+            duration: tokens.animationDuration,
+            curve: CharcoalMotion.standardCurve,
+            constraints: BoxConstraints(minHeight: tokens.height),
+            padding: EdgeInsets.symmetric(
+              horizontal: tokens.paddingHorizontal,
+              vertical: ((tokens.height - tokens.lineHeight) / 2)
+                  .clamp(0, double.infinity)
+                  .toDouble(),
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(tokens.radius),
+              color: background,
+            ),
+            child: Row(
+              children: <Widget>[
+                if (widget.prefix != null) ...<Widget>[
                   IconTheme(
                     data: IconThemeData(color: tokens.foregroundColor, size: tokens.fontSize),
-                    child: widget.suffix!,
+                    child: widget.prefix!,
                   ),
-                if (widget.suffix != null && widget.showCount) SizedBox(width: tokens.gap),
-                if (widget.showCount)
-                  Text(
-                    widget.maxLength == null
-                        ? '${_controller.text.runes.length}'
-                        : '${_controller.text.runes.length}/${widget.maxLength}',
-                    style: textStyle.copyWith(color: tokens.counterColor),
+                  SizedBox(width: tokens.contentGap),
+                ],
+                Expanded(
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: <Widget>[
+                      if (_controller.text.isEmpty && widget.placeholder != null)
+                        IgnorePointer(
+                          child: Text(
+                            widget.placeholder!,
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                            style: textStyle.copyWith(color: tokens.placeholderColor),
+                          ),
+                        ),
+                      editable,
+                    ],
                   ),
+                ),
+                if (widget.suffix != null || widget.showCount) ...<Widget>[
+                  SizedBox(width: tokens.contentGap),
+                  if (widget.suffix != null)
+                    IconTheme(
+                      data: IconThemeData(color: tokens.foregroundColor, size: tokens.fontSize),
+                      child: widget.suffix!,
+                    ),
+                  if (widget.suffix != null && widget.showCount) SizedBox(width: tokens.contentGap),
+                  if (widget.showCount)
+                    Text(
+                      widget.maxLength == null
+                          ? '${_controller.text.runes.length}'
+                          : '${_controller.text.runes.length}/${widget.maxLength}',
+                      style: textStyle.copyWith(
+                        color: tokens.counterColor,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -262,14 +273,14 @@ final class _CharcoalTextFieldState extends State<CharcoalTextField> {
                 requiredText: widget.requiredText,
                 subLabel: widget.subLabel,
               ),
-              SizedBox(height: tokens.gap),
+              SizedBox(height: tokens.verticalGap),
             ],
             ExcludeFocus(
               excluding: widget.disabled,
               child: IgnorePointer(ignoring: widget.disabled, child: input),
             ),
             if (assistiveText != null && assistiveText.isNotEmpty) ...<Widget>[
-              SizedBox(height: tokens.gap),
+              SizedBox(height: tokens.verticalGap),
               Text(
                 assistiveText,
                 style: theme.textStyles.captionMedium.copyWith(

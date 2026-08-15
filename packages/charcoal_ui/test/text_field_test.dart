@@ -1,4 +1,7 @@
+import 'dart:ui' show PointerDeviceKind;
+
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/src/components/field_ring.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -52,7 +55,15 @@ void main() {
 
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer).first);
     final decoration = container.decoration! as BoxDecoration;
-    expect(decoration.boxShadow!.single.color, theme.components.textField.invalidRingColor);
+    expect(decoration.boxShadow, isNull);
+    final ring = tester.widget<CustomPaint>(
+      find.byWidgetPredicate(
+        (widget) => widget is CustomPaint && widget.foregroundPainter is CharcoalFieldRingPainter,
+      ),
+    );
+    final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
+    expect(ringPainter.color, theme.components.textField.invalidRingColor);
+    expect(ringPainter.opacity, 1);
 
     final assistive = tester.widget<Text>(find.text('Required field'));
     expect(assistive.style!.color, theme.components.textField.invalidAssistiveTextColor);
@@ -74,5 +85,63 @@ void main() {
     await tester.pump();
 
     expect(controller.text, 'fixed');
+  });
+
+  testWidgets('focus changes only the border and preserves the background', (
+    tester,
+  ) async {
+    final theme = CharcoalThemeData.light();
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 320,
+          child: CharcoalTextField(label: 'Name'),
+        ),
+        theme: theme,
+      ),
+    );
+
+    BoxDecoration decoration() =>
+        tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration!
+            as BoxDecoration;
+    final initialColor = decoration().color;
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer(location: Offset.zero);
+    await mouse.moveTo(tester.getCenter(find.byType(EditableText)));
+    await tester.tap(find.byType(EditableText));
+    await tester.pumpAndSettle();
+
+    expect(initialColor, theme.components.textField.background.normal);
+    expect(decoration().color, initialColor);
+    expect(decoration().boxShadow, isNull);
+    final ring = tester.widget<CustomPaint>(
+      find.byWidgetPredicate(
+        (widget) => widget is CustomPaint && widget.foregroundPainter is CharcoalFieldRingPainter,
+      ),
+    );
+    final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
+    expect(ringPainter.color, theme.components.textField.focusRingColor);
+    expect(ringPainter.opacity, 1);
+  });
+
+  testWidgets('grows with accessibility text scaling', (tester) async {
+    final theme = CharcoalThemeData.light();
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 320,
+          child: MediaQuery(
+            data: MediaQueryData(textScaler: TextScaler.linear(2)),
+            child: CharcoalTextField(label: 'Name'),
+          ),
+        ),
+        theme: theme,
+      ),
+    );
+
+    expect(
+      tester.getSize(find.byType(AnimatedContainer)).height,
+      greaterThan(theme.components.textField.height),
+    );
   });
 }
