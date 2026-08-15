@@ -1,0 +1,16 @@
+
+# FVM version cache
+.fvm/
+
+# Dart and Flutter tooling
+.dart_tool/
+.flutter-plugins-dependencies
+.pub/
+build/
+coverage/
+**/.widget_preview/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+*.iml

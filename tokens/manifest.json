@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "generatorVersion": "0.1.0",
+  "upstream": {
+    "repository": "pixiv/charcoal",
+    "requestedRef": "main",
+    "commit": "08995fa5191fa918fc5afd2c5da08490ae307da7",
+    "files": {
+      "base.json": {
+        "path": "packages/theme/src/json/base.json",
+        "sha256": "67d8c3a7db17044ce26fec072c43c30e550eee1675b5c02db1f0b9172b05f858"
+      },
+      "pixiv-light.json": {
+        "path": "packages/theme/src/json/pixiv-light.json",
+        "sha256": "e2a99de197ecb284879536a0134d9ed1aa7791dfd23be395de596872295960cb"
+      },
+      "pixiv-dark.json": {
+        "path": "packages/theme/src/json/pixiv-dark.json",
+        "sha256": "e11d97e415da051e45663217f1e150a1b48872342c8c62cece4fac2d6a1331ed"
+      }
+    }
+  }
+}

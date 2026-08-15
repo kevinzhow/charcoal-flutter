@@ -1,0 +1,26 @@
+name: charcoal_ui_showcase
+description: Interactive macOS showcase for Charcoal UI V2.
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dependencies:
+  charcoal_icons:
+    path: ../packages/charcoal_icons
+  charcoal_ui:
+    path: ../packages/charcoal_ui
+  flutter:
+    sdk: flutter
+  flutter_skill: ^0.9.36
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: false

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Charcoal Flutter component recipes",
+  "type": "object",
+  "required": [
+    "button",
+    "carousel",
+    "checkbox",
+    "dropdown",
+    "icon-button",
+    "loading-spinner",
+    "multi-select",
+    "radio",
+    "switch",
+    "tag-item",
+    "text-field"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "button": { "type": "object" },
+    "carousel": { "type": "object" },
+    "checkbox": { "type": "object" },
+    "dropdown": { "type": "object" },
+    "icon-button": { "type": "object" },
+    "loading-spinner": { "type": "object" },
+    "multi-select": { "type": "object" },
+    "radio": { "type": "object" },
+    "switch": { "type": "object" },
+    "tag-item": { "type": "object" },
+    "text-field": { "type": "object" }
+  }
+}

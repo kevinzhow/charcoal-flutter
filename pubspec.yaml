@@ -1,0 +1,18 @@
+name: charcoal_flutter_workspace
+description: Development workspace and token compiler for Charcoal UI on Flutter.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.0
+
+workspace:
+  - example
+  - packages/charcoal_icons
+  - packages/charcoal_tokens
+  - packages/charcoal_ui
+
+dev_dependencies:
+  crypto: ^3.0.6
+  lints: ^6.0.0
+  test: ^1.26.0

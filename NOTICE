@@ -1,0 +1,16 @@
+Charcoal UI for Flutter
+Copyright 2026 charcoal-flutter contributors
+
+This product includes design tokens and behavior derived from Charcoal:
+
+  Charcoal
+  Copyright 2022 pixiv Inc.
+  https://github.com/pixiv/charcoal
+
+  Charcoal iOS
+  Copyright pixiv Inc.
+  https://github.com/pixiv/charcoal-ios
+
+The upstream works and this distribution are licensed under the Apache License,
+Version 2.0. Product names and trademarks remain the property of their respective
+owners.
