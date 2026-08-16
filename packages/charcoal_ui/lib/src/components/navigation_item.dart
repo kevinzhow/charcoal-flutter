@@ -93,6 +93,10 @@ final class CharcoalNavigationItem extends StatelessWidget {
           ),
           opacity: disabled ? charcoalDisabledOpacity : 1,
           child: AnimatedContainer(
+            // Persistent destination selection must switch atomically. Reset
+            // the implicit decoration tween when selection changes, while
+            // preserving hover and press motion within the same state.
+            key: ValueKey<bool>(selected),
             curve: CharcoalMotion.standardCurve,
             duration: CharcoalMotion.resolveDuration(
               context,
