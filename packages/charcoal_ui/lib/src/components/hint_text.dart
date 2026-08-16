@@ -6,7 +6,6 @@ import 'typography.dart';
 abstract final class _HintSpec {
   static const infoIconColor = Color(0xFF858585);
   static const iconSize = 16.0;
-  static const subtitleGap = 8.0;
 }
 
 final class _HintInfoIcon extends StatelessWidget {
@@ -88,10 +87,7 @@ final class CharcoalHintText extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           child,
-          if (subtitle case final subtitle?) ...<Widget>[
-            const SizedBox(height: _HintSpec.subtitleGap),
-            subtitle,
-          ],
+          ?subtitle,
         ],
       ),
     );

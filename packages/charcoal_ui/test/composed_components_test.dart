@@ -50,7 +50,7 @@ void main() {
     expect(nextValue, 'list');
   });
 
-  testWidgets('hint text uses the intrinsic SwiftUI geometry', (tester) async {
+  testWidgets('hint text lays out its subtitle as a compact text block', (tester) async {
     final theme = CharcoalThemeData.dark();
     await tester.pumpWidget(
       charcoalTestApp(
@@ -76,7 +76,7 @@ void main() {
     );
     final box = tester.widget<DecoratedBox>(decoratedBox);
     expect((box.decoration as BoxDecoration).color, theme.colors.containerSecondaryDefault);
-    expect(tester.getSize(decoratedBox).height, 76);
+    expect(tester.getSize(decoratedBox).height, 68);
     expect(tester.getSize(decoratedBox).width, lessThan(320));
 
     final padding = tester.widget<Padding>(
@@ -93,7 +93,7 @@ void main() {
 
     final primaryRect = tester.getRect(find.text('Helpful information'));
     final subtitleRect = tester.getRect(find.text('Subtitle'));
-    expect(subtitleRect.top - primaryRect.bottom, 8);
+    expect(subtitleRect.top - primaryRect.bottom, 0);
     expect(subtitleRect.center.dx, primaryRect.center.dx);
 
     final text = tester.widget<Text>(find.text('Helpful information'));
