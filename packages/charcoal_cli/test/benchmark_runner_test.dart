@@ -27,6 +27,51 @@ void main() {
 
   tearDown(() => temporary.deleteSync(recursive: true));
 
+  group('Flutter executable resolution', () {
+    test('prefers the SDK exposed through FLUTTER_ROOT', () {
+      final environmentSdk = Directory(p.join(temporary.path, 'environment-sdk'));
+      final environmentFlutter = _createFlutterExecutable(environmentSdk);
+      final workspaceFlutter = _createFlutterExecutable(
+        Directory(p.join(sourceWorkspace.path, '.fvm', 'flutter_sdk')),
+      );
+
+      expect(
+        resolveCharcoalFlutterExecutable(
+          workspaceRoot: sourceWorkspace,
+          environment: <String, String>{'FLUTTER_ROOT': environmentSdk.path},
+        ),
+        environmentFlutter.path,
+      );
+      expect(environmentFlutter.path, isNot(workspaceFlutter.path));
+    });
+
+    test('falls back from an unavailable FLUTTER_ROOT to workspace FVM', () {
+      final workspaceFlutter = _createFlutterExecutable(
+        Directory(p.join(sourceWorkspace.path, '.fvm', 'flutter_sdk')),
+      );
+
+      expect(
+        resolveCharcoalFlutterExecutable(
+          workspaceRoot: sourceWorkspace,
+          environment: <String, String>{
+            'FLUTTER_ROOT': p.join(temporary.path, 'missing-sdk'),
+          },
+        ),
+        workspaceFlutter.path,
+      );
+    });
+
+    test('uses the platform PATH command when no SDK path is available', () {
+      expect(
+        resolveCharcoalFlutterExecutable(
+          workspaceRoot: sourceWorkspace,
+          environment: const <String, String>{},
+        ),
+        Platform.isWindows ? 'flutter.bat' : 'flutter',
+      );
+    });
+  });
+
   test('runs an isolated candidate and emits independently graded v2 evidence', () async {
     final output = Directory(p.join(temporary.path, 'successful-run'));
     final execution = await CharcoalBenchmarkRunner(
@@ -151,6 +196,14 @@ Widget buildBenchmarkCandidate() => CharcoalDatePicker(child: ElevatedButton(onP
       );
     });
   });
+}
+
+File _createFlutterExecutable(Directory sdk) {
+  final file = File(
+    p.join(sdk.path, 'bin', Platform.isWindows ? 'flutter.bat' : 'flutter'),
+  );
+  file.parent.createSync(recursive: true);
+  return file..writeAsStringSync('fixture');
 }
 
 CharcoalBenchmarkRunOptions _options(

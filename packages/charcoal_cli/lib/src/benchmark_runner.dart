@@ -30,6 +30,28 @@ const Set<String> _platformControlIdentifiers = <String>{
   'ToggleButtons',
 };
 
+/// Resolves the Flutter executable used by benchmark subprocesses.
+///
+/// CI-installed SDKs expose [environment]'s `FLUTTER_ROOT`. Local contributors
+/// can instead rely on the workspace FVM SDK, with the platform command name as
+/// the final PATH-based fallback.
+String resolveCharcoalFlutterExecutable({
+  required Directory workspaceRoot,
+  Map<String, String>? environment,
+}) {
+  final executableName = Platform.isWindows ? 'flutter.bat' : 'flutter';
+  final flutterRoot = (environment ?? Platform.environment)['FLUTTER_ROOT']?.trim();
+  if (flutterRoot != null && flutterRoot.isNotEmpty) {
+    final installed = File(p.join(flutterRoot, 'bin', executableName));
+    if (installed.existsSync()) return installed.path;
+  }
+
+  final workspace = File(
+    p.join(workspaceRoot.path, '.fvm', 'flutter_sdk', 'bin', executableName),
+  );
+  return workspace.existsSync() ? workspace.path : executableName;
+}
+
 /// One subprocess invocation used by the benchmark harness.
 final class CharcoalBenchmarkInvocation {
   const CharcoalBenchmarkInvocation({

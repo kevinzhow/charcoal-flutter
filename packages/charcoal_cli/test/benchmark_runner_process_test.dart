@@ -16,7 +16,7 @@ void main() {
         File(p.join(root.path, 'agent', 'benchmarks', 'v1.json')).readAsStringSync(),
       ) as Map<String, Object?>;
       final dart = Platform.resolvedExecutable;
-      final flutter = File(p.join(root.path, '.fvm', 'flutter_sdk', 'bin', 'flutter')).path;
+      final flutter = resolveCharcoalFlutterExecutable(workspaceRoot: root);
       final fixtures = p.join(root.path, 'packages', 'charcoal_cli', 'test', 'fixtures');
 
       final execution = await const CharcoalBenchmarkRunner().run(

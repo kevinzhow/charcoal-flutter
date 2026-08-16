@@ -78,7 +78,8 @@ final class BenchmarkRunCommand extends CharcoalCommand {
       )
       ..addOption(
         'flutter',
-        help: 'Flutter executable path. Defaults to this workspace FVM SDK, then PATH.',
+        help:
+            'Flutter executable path. Defaults to FLUTTER_ROOT, this workspace FVM SDK, then PATH.',
       );
   }
 
@@ -122,7 +123,7 @@ final class BenchmarkRunCommand extends CharcoalCommand {
       final commands = _adapterCommands(workingRoot);
       final flutterOption = argResults!.option('flutter');
       final flutter = flutterOption == null
-          ? _workspaceFlutter(workingRoot)
+          ? resolveCharcoalFlutterExecutable(workspaceRoot: workingRoot)
           : _executable(flutterOption);
       final execution = await const CharcoalBenchmarkRunner().run(
         CharcoalBenchmarkRunOptions(
@@ -284,12 +285,6 @@ Directory _findWorkspaceRoot(Directory start) {
   throw const CharcoalBenchmarkRunException(
     'benchmark-run must be launched from the charcoal-flutter workspace.',
   );
-}
-
-String _workspaceFlutter(Directory root) {
-  final name = Platform.isWindows ? 'flutter.bat' : 'flutter';
-  final local = File(p.join(root.path, '.fvm', 'flutter_sdk', 'bin', name));
-  return local.existsSync() ? local.path : name;
 }
 
 String _slash(String path) => path.replaceAll('\\', '/');

@@ -30,6 +30,7 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
   final TextEditingController _bioController = TextEditingController(
     text: 'Illustrator, color collector, and quiet-world builder.',
   );
+  final List<_ProjectData> _projects = List<_ProjectData>.of(_allProjects);
 
   _ExampleDestination _destination = _ExampleDestination.studio;
   _ProjectFilter _projectFilter = _ProjectFilter.all;
@@ -38,13 +39,28 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
   AgentMobileApp? _selectedMobileApp;
   bool _asterSelected = false;
   bool _mobileNavigationOpen = false;
+  bool _newProjectOpen = false;
   bool _productUpdates = true;
   bool _settingsSaved = false;
   bool _weeklyDigest = true;
+  int _projectPage = 1;
+  String _newProjectName = '';
+  String? _projectStatus;
   String _projectSearch = '';
 
   @override
+  void initState() {
+    super.initState();
+    _displayNameController.addListener(_onProfileFieldChanged);
+    _emailController.addListener(_onProfileFieldChanged);
+    _bioController.addListener(_onProfileFieldChanged);
+  }
+
+  @override
   void dispose() {
+    _displayNameController.removeListener(_onProfileFieldChanged);
+    _emailController.removeListener(_onProfileFieldChanged);
+    _bioController.removeListener(_onProfileFieldChanged);
     _displayNameController.dispose();
     _emailController.dispose();
     _bioController.dispose();
@@ -54,7 +70,8 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final sectionGap = theme.dimensions.space.layout40;
+    final space = theme.dimensions.space;
+    final sectionGap = space.layout40;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -66,14 +83,14 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
             letterSpacing: 1,
           ),
         ),
-        SizedBox(height: theme.dimensions.space.component20),
+        SizedBox(height: space.component20),
         Text(
           'Agent Ready app examples',
           style: theme.textStyles.headingL.copyWith(
             color: theme.colors.textDefault,
           ),
         ),
-        SizedBox(height: theme.dimensions.space.component20),
+        SizedBox(height: space.component20),
         Text(
           'Every interface on this page was composed through the Agent Ready catalog, public Charcoal APIs, and semantic design tokens.',
           style: theme.textStyles.body.copyWith(
@@ -82,15 +99,22 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
         ),
         SizedBox(height: sectionGap),
         const _AgentReadyProductionBanner(),
-        SizedBox(height: theme.dimensions.space.layout50),
+        SizedBox(height: space.layout50),
         SizedBox(key: _exampleBodyKey, height: theme.dimensions.borderWidth.m),
+        _AppCatalogNavigation(
+          inSimulation: _hasSelectedApp,
+          onAllAppsPressed: _closeSelectedApp,
+        ),
+        SizedBox(height: space.layout40),
         AnimatedSwitcher(
           duration: CharcoalMotion.resolveDuration(
             context,
             CharcoalMotion.standard,
           ),
+          layoutBuilder: _singleLayerSwitcherLayout,
           switchInCurve: CharcoalMotion.emphasizedCurve,
           switchOutCurve: CharcoalMotion.standardCurve,
+          transitionBuilder: _routeTransition,
           child: _hasSelectedApp
               ? _buildSelectedApp(theme, sectionGap)
               : _buildAppCatalog(theme, sectionGap),
@@ -148,7 +172,6 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
         _SimulationHeader(
           description: description,
           interactionSummary: interactionSummary,
-          onBack: _closeSelectedApp,
           title: title,
           type: type,
         ),
@@ -198,6 +221,11 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
             onDestinationChanged: _selectDestination,
             onMobileNavigationToggle: () =>
                 setState(() => _mobileNavigationOpen = !_mobileNavigationOpen),
+            onNotifications: () => showCharcoalToast(
+              context: context,
+              message: 'You are caught up on Aster notifications.',
+            ),
+            onSearch: () => _selectDestination(_ExampleDestination.projects),
             page: _buildDestination(),
           ),
           SizedBox(height: theme.dimensions.space.component30),
@@ -259,13 +287,31 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
   Widget _buildDestination() => switch (_destination) {
     _ExampleDestination.studio => _StudioPage(
       key: const ValueKey<String>('agent-example-studio'),
-      onOpenProjects: () => _selectDestination(_ExampleDestination.projects),
+      onOpenProjects: _startCreating,
     ),
     _ExampleDestination.projects => _ProjectsPage(
       key: const ValueKey<String>('agent-example-projects'),
       filter: _projectFilter,
-      onFilterChanged: (value) => setState(() => _projectFilter = value),
-      onSearchChanged: (value) => setState(() => _projectSearch = value),
+      newProjectName: _newProjectName,
+      newProjectOpen: _newProjectOpen,
+      onCreateProject: _createProject,
+      onFilterChanged: (value) => setState(() {
+        _projectFilter = value;
+        _projectPage = 1;
+      }),
+      onNewProjectNameChanged: (value) =>
+          setState(() => _newProjectName = value),
+      onNewProjectToggle: () =>
+          setState(() => _newProjectOpen = !_newProjectOpen),
+      onPageChanged: (value) => setState(() => _projectPage = value),
+      onProjectArchiveToggle: _toggleProjectArchive,
+      onSearchChanged: (value) => setState(() {
+        _projectSearch = value;
+        _projectPage = 1;
+      }),
+      page: _projectPage,
+      projectStatus: _projectStatus,
+      projects: _projects,
       searchQuery: _projectSearch,
     ),
     _ExampleDestination.settings => _SettingsPage(
@@ -273,6 +319,10 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
       bioController: _bioController,
       displayNameController: _displayNameController,
       emailController: _emailController,
+      onChangePhoto: () => showCharcoalToast(
+        context: context,
+        message: 'Profile photo picker opened for this simulation.',
+      ),
       onProductUpdatesChanged: (value) => setState(() {
         _productUpdates = value;
         _settingsSaved = false;
@@ -300,74 +350,105 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
       _mobileNavigationOpen = false;
     });
   }
+
+  void _onProfileFieldChanged() {
+    if (!mounted) return;
+    setState(() => _settingsSaved = false);
+  }
+
+  void _startCreating() {
+    setState(() {
+      _destination = _ExampleDestination.projects;
+      _mobileNavigationOpen = false;
+      _newProjectOpen = true;
+      _projectStatus = 'Name your new project to create a working draft.';
+    });
+  }
+
+  void _createProject() {
+    final name = _newProjectName.trim();
+    if (name.isEmpty) return;
+    setState(() {
+      _projects.insert(
+        0,
+        _ProjectData(
+          archived: false,
+          details: 'Created just now · Empty canvas',
+          shared: false,
+          title: name,
+          tone: _projects.length % 4,
+        ),
+      );
+      _newProjectName = '';
+      _newProjectOpen = false;
+      _projectFilter = _ProjectFilter.all;
+      _projectPage = 1;
+      _projectSearch = '';
+      _projectStatus = '“$name” is ready to edit.';
+    });
+  }
+
+  void _toggleProjectArchive(_ProjectData project) {
+    final index = _projects.indexOf(project);
+    if (index < 0) return;
+    final archived = !project.archived;
+    setState(() {
+      _projects[index] = project.copyWith(archived: archived);
+      _projectStatus = archived
+          ? '“${project.title}” moved to the archive.'
+          : '“${project.title}” restored to current work.';
+    });
+  }
 }
 
 final class _SimulationHeader extends StatelessWidget {
   const _SimulationHeader({
     required this.description,
     required this.interactionSummary,
-    required this.onBack,
     required this.title,
     required this.type,
   });
 
   final String description;
   final String interactionSummary;
-  final VoidCallback onBack;
   final String title;
   final String type;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: theme.dimensions.space.component20,
-          runSpacing: theme.dimensions.space.component20,
-          children: <Widget>[
-            CharcoalButton(
-              key: const ValueKey<String>('agent-app-back'),
-              leading: const CharcoalIcon(CharcoalIcons.chevronLeft),
-              onPressed: onBack,
-              semanticLabel: 'Return to all Agent Ready apps',
-              size: CharcoalButtonSize.small,
-              child: const Text('All apps'),
-            ),
-            const _AgentReadyMiniBadge(),
-          ],
-        ),
-        SizedBox(height: theme.dimensions.space.layout40),
         Text(
           '$title · $type',
           style: theme.textStyles.headingL.copyWith(
             color: theme.colors.textDefault,
           ),
         ),
-        SizedBox(height: theme.dimensions.space.component20),
+        SizedBox(height: space.component20),
         Text(
           description,
           style: theme.textStyles.body.copyWith(
             color: theme.colors.textSecondaryDefault,
           ),
         ),
-        SizedBox(height: theme.dimensions.space.component30),
+        SizedBox(height: space.component30),
         DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
             color: theme.colors.containerSecondaryDefault,
           ),
           child: Padding(
-            padding: EdgeInsets.all(theme.dimensions.space.component30),
+            padding: EdgeInsets.all(space.component30),
             child: Row(
               children: <Widget>[
                 CharcoalIcon(
                   CharcoalIcons.click,
                   color: theme.colors.iconDefault,
                 ),
-                SizedBox(width: theme.dimensions.space.component20),
+                SizedBox(width: space.component20),
                 Expanded(
                   child: Text(
                     'LIVE SIMULATION · $interactionSummary',
@@ -386,6 +467,45 @@ final class _SimulationHeader extends StatelessWidget {
   }
 }
 
+final class _AppCatalogNavigation extends StatelessWidget {
+  const _AppCatalogNavigation({
+    required this.inSimulation,
+    required this.onAllAppsPressed,
+  });
+
+  final bool inSimulation;
+  final VoidCallback onAllAppsPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return SizedBox(
+      key: const ValueKey<String>('agent-app-persistent-navigation'),
+      width: double.infinity,
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: space.component20,
+        runSpacing: space.component20,
+        children: <Widget>[
+          CharcoalButton(
+            key: const ValueKey<String>('agent-app-back'),
+            leading: const CharcoalIcon(CharcoalIcons.chevronLeft),
+            onPressed: inSimulation ? onAllAppsPressed : null,
+            selected: !inSimulation,
+            semanticLabel: inSimulation
+                ? 'Return to all Agent Ready apps'
+                : 'All Agent Ready apps',
+            size: CharcoalButtonSize.small,
+            child: const Text('All apps'),
+          ),
+          const _AgentReadyMiniBadge(),
+        ],
+      ),
+    );
+  }
+}
+
 final class _AsterAppTile extends StatelessWidget {
   const _AsterAppTile({required this.onPressed});
 
@@ -394,6 +514,7 @@ final class _AsterAppTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
     return CharcoalClickable(
       key: const ValueKey<String>('agent-app-tile-aster'),
       onPressed: onPressed,
@@ -430,7 +551,7 @@ final class _AsterAppTile extends StatelessWidget {
                   child: ColoredBox(color: theme.colors.borderSecondary),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(theme.dimensions.space.component30),
+                  padding: EdgeInsets.all(space.component30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -445,7 +566,7 @@ final class _AsterAppTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: theme.dimensions.space.component20),
+                          SizedBox(width: space.component20),
                           Text(
                             '05',
                             style: theme.textStyles.captionSmall.copyWith(
@@ -455,7 +576,7 @@ final class _AsterAppTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: theme.dimensions.space.component20),
+                      SizedBox(height: space.component20),
                       Text(
                         'Aster · CREATIVE WORKSPACE',
                         maxLines: 1,
@@ -464,7 +585,7 @@ final class _AsterAppTile extends StatelessWidget {
                           color: theme.colors.textDefault,
                         ),
                       ),
-                      SizedBox(height: theme.dimensions.space.component10),
+                      SizedBox(height: space.component10),
                       Text(
                         'Responsive studio, projects, and profile settings',
                         maxLines: 2,
@@ -473,7 +594,7 @@ final class _AsterAppTile extends StatelessWidget {
                           color: theme.colors.textSecondaryDefault,
                         ),
                       ),
-                      SizedBox(height: theme.dimensions.space.component25),
+                      SizedBox(height: space.component25),
                       Row(
                         children: <Widget>[
                           Expanded(
@@ -770,6 +891,8 @@ final class _AppPreviewFrame extends StatelessWidget {
     required this.mobileNavigationOpen,
     required this.onDestinationChanged,
     required this.onMobileNavigationToggle,
+    required this.onNotifications,
+    required this.onSearch,
     required this.page,
   });
 
@@ -777,6 +900,8 @@ final class _AppPreviewFrame extends StatelessWidget {
   final bool mobileNavigationOpen;
   final ValueChanged<_ExampleDestination> onDestinationChanged;
   final VoidCallback onMobileNavigationToggle;
+  final VoidCallback onNotifications;
+  final VoidCallback onSearch;
   final Widget page;
 
   @override
@@ -853,7 +978,11 @@ final class _AppPreviewFrame extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          const _AppTopBar(compact: false),
+                          _AppTopBar(
+                            compact: false,
+                            onNotifications: onNotifications,
+                            onSearch: onSearch,
+                          ),
                           _AnimatedExamplePage(child: page),
                         ],
                       ),
@@ -891,29 +1020,46 @@ final class _AnimatedExamplePage extends StatelessWidget {
           context,
           CharcoalMotion.standard,
         ),
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: FractionalTranslation(
-            translation: Offset(0, 0.015 * (1 - animation.value)),
-            child: child,
-          ),
-        ),
+        layoutBuilder: _singleLayerSwitcherLayout,
+        switchInCurve: CharcoalMotion.emphasizedCurve,
+        transitionBuilder: _routeTransition,
         child: child,
       ),
     );
   }
 }
 
+Widget _singleLayerSwitcherLayout(
+  Widget? currentChild,
+  List<Widget> previousChildren,
+) => currentChild ?? const SizedBox.shrink();
+
+Widget _routeTransition(Widget child, Animation<double> animation) =>
+    FadeTransition(
+      opacity: animation,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.015),
+          end: Offset.zero,
+        ).animate(animation),
+        child: child,
+      ),
+    );
+
 final class _AppTopBar extends StatelessWidget {
   const _AppTopBar({
     required this.compact,
     this.menuOpen = false,
     this.onMenuPressed,
+    this.onNotifications,
+    this.onSearch,
   });
 
   final bool compact;
   final bool menuOpen;
   final VoidCallback? onMenuPressed;
+  final VoidCallback? onNotifications;
+  final VoidCallback? onSearch;
 
   @override
   Widget build(BuildContext context) {
@@ -964,14 +1110,14 @@ final class _AppTopBar extends StatelessWidget {
               ),
               CharcoalIconButton(
                 icon: const CharcoalIcon(CharcoalIcons.search),
-                onPressed: () {},
+                onPressed: onSearch,
                 semanticLabel: 'Search workspace',
                 size: CharcoalIconButtonSize.small,
               ),
               SizedBox(width: theme.dimensions.space.component20),
               CharcoalIconButton(
                 icon: const CharcoalIcon(CharcoalIcons.bell),
-                onPressed: () {},
+                onPressed: onNotifications,
                 semanticLabel: 'Notifications',
                 size: CharcoalIconButtonSize.small,
               ),
@@ -1177,9 +1323,8 @@ final class _StudioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final pagePadding = theme.dimensions.space.layout40;
-    return Padding(
-      padding: EdgeInsets.all(pagePadding),
+    final space = theme.dimensions.space;
+    return _ExamplePagePadding(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -1200,7 +1345,7 @@ final class _StudioPage extends StatelessWidget {
                       letterSpacing: 1,
                     ),
                   ),
-                  SizedBox(height: theme.dimensions.space.component25),
+                  SizedBox(height: space.component25),
                   Text(
                     'Make something only you could imagine.',
                     style:
@@ -1209,7 +1354,7 @@ final class _StudioPage extends StatelessWidget {
                                 : theme.textStyles.headingL)
                             .copyWith(color: theme.colors.textOnPrimaryDefault),
                   ),
-                  SizedBox(height: theme.dimensions.space.component20),
+                  SizedBox(height: space.component20),
                   Text(
                     'Your canvas is ready, and yesterday’s ideas are right where you left them.',
                     style: theme.textStyles.captionMedium.copyWith(
@@ -1218,7 +1363,7 @@ final class _StudioPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: theme.dimensions.space.component40),
+                  SizedBox(height: space.component40),
                   CharcoalButton(
                     fullWidth: compact,
                     leading: const CharcoalIcon(CharcoalIcons.penAdd),
@@ -1245,9 +1390,7 @@ final class _StudioPage extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(
-                    compact
-                        ? theme.dimensions.space.component30
-                        : theme.dimensions.space.layout40,
+                    compact ? space.component30 : space.layout40,
                   ),
                   child: compact
                       ? Column(
@@ -1263,7 +1406,7 @@ final class _StudioPage extends StatelessWidget {
                       : Row(
                           children: <Widget>[
                             Expanded(flex: 5, child: copy),
-                            SizedBox(width: theme.dimensions.space.layout40),
+                            SizedBox(width: space.layout40),
                             Expanded(flex: 4, child: art),
                           ],
                         ),
@@ -1271,14 +1414,14 @@ final class _StudioPage extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: theme.dimensions.space.layout40),
+          SizedBox(height: space.layout40),
           const _SectionHeading(
             eyebrow: 'AT A GLANCE',
             title: 'Your creative rhythm',
           ),
-          SizedBox(height: theme.dimensions.space.component30),
+          SizedBox(height: space.component30),
           const _MetricGrid(),
-          SizedBox(height: theme.dimensions.space.layout40),
+          SizedBox(height: space.layout40),
           _SectionHeading(
             action: CharcoalLinkButton(
               onPressed: onOpenProjects,
@@ -1287,7 +1430,7 @@ final class _StudioPage extends StatelessWidget {
             eyebrow: 'RECENT WORK',
             title: 'Pick up where you left off',
           ),
-          SizedBox(height: theme.dimensions.space.component30),
+          SizedBox(height: space.component30),
           const _ProjectGrid(projects: _recentProjects),
         ],
       ),
@@ -1517,21 +1660,42 @@ final class _MetricCard extends StatelessWidget {
 final class _ProjectsPage extends StatelessWidget {
   const _ProjectsPage({
     required this.filter,
+    required this.newProjectName,
+    required this.newProjectOpen,
+    required this.onCreateProject,
     required this.onFilterChanged,
+    required this.onNewProjectNameChanged,
+    required this.onNewProjectToggle,
+    required this.onPageChanged,
+    required this.onProjectArchiveToggle,
     required this.onSearchChanged,
+    required this.page,
+    required this.projectStatus,
+    required this.projects,
     required this.searchQuery,
     super.key,
   });
 
   final _ProjectFilter filter;
+  final String newProjectName;
+  final bool newProjectOpen;
+  final VoidCallback onCreateProject;
   final ValueChanged<_ProjectFilter> onFilterChanged;
+  final ValueChanged<String> onNewProjectNameChanged;
+  final VoidCallback onNewProjectToggle;
+  final ValueChanged<int> onPageChanged;
+  final ValueChanged<_ProjectData> onProjectArchiveToggle;
   final ValueChanged<String> onSearchChanged;
+  final int page;
+  final String? projectStatus;
+  final List<_ProjectData> projects;
   final String searchQuery;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final visibleProjects = _allProjects
+    final space = theme.dimensions.space;
+    final visibleProjects = projects
         .where((project) {
           final matchesQuery = project.title.toLowerCase().contains(
             searchQuery.trim().toLowerCase(),
@@ -1544,24 +1708,80 @@ final class _ProjectsPage extends StatelessWidget {
           return matchesQuery && matchesFilter;
         })
         .toList(growable: false);
+    const pageSize = 4;
+    final pageCount = ((visibleProjects.length + pageSize - 1) ~/ pageSize)
+        .clamp(1, 999);
+    final safePage = page.clamp(1, pageCount);
+    final pageProjects = visibleProjects
+        .skip((safePage - 1) * pageSize)
+        .take(pageSize)
+        .toList(growable: false);
     return Padding(
-      padding: EdgeInsets.all(theme.dimensions.space.layout40),
+      padding: EdgeInsets.all(space.layout40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           _AdaptivePageHeading(
             action: CharcoalButton(
-              leading: const CharcoalIcon(CharcoalIcons.add),
-              onPressed: () {},
+              key: const ValueKey<String>('agent-project-new'),
+              leading: CharcoalIcon(
+                newProjectOpen ? CharcoalIcons.x : CharcoalIcons.add,
+              ),
+              onPressed: onNewProjectToggle,
+              selected: newProjectOpen,
               variant: CharcoalButtonVariant.primary,
-              child: const Text('New project'),
+              child: Text(newProjectOpen ? 'Cancel' : 'New project'),
             ),
             description:
                 'Everything you are making, from first sketch to final export.',
             eyebrow: 'LIBRARY',
             title: 'Projects',
           ),
-          SizedBox(height: theme.dimensions.space.layout40),
+          if (newProjectOpen) ...<Widget>[
+            SizedBox(height: space.component30),
+            _Surface(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const _SectionHeading(
+                    eyebrow: 'NEW DRAFT',
+                    title: 'Name your next idea',
+                  ),
+                  SizedBox(height: space.component30),
+                  CharcoalTextField(
+                    key: const ValueKey<String>('agent-project-new-name'),
+                    autofocus: true,
+                    label: 'Project name',
+                    onChanged: onNewProjectNameChanged,
+                    onSubmitted: (_) => newProjectName.trim().isEmpty
+                        ? null
+                        : onCreateProject(),
+                    placeholder: 'e.g. August light studies',
+                    showLabel: true,
+                  ),
+                  SizedBox(height: space.component20),
+                  CharcoalButton(
+                    key: const ValueKey<String>('agent-project-create'),
+                    fullWidth: true,
+                    onPressed: newProjectName.trim().isEmpty
+                        ? null
+                        : onCreateProject,
+                    variant: CharcoalButtonVariant.primary,
+                    child: const Text('Create project'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          if (projectStatus != null) ...<Widget>[
+            SizedBox(height: space.component30),
+            CharcoalHintText(
+              alignment: Alignment.centerLeft,
+              icon: const CharcoalIcon(CharcoalIcons.checkCircle),
+              child: Text(projectStatus!),
+            ),
+          ],
+          SizedBox(height: space.layout40),
           LayoutBuilder(
             builder: (context, constraints) {
               final compact = constraints.maxWidth < 620;
@@ -1572,6 +1792,7 @@ final class _ProjectsPage extends StatelessWidget {
                 prefix: const CharcoalIcon(CharcoalIcons.search),
               );
               final filters = CharcoalSegmentedControl<_ProjectFilter>(
+                key: const ValueKey<String>('agent-project-filter'),
                 fullWidth: compact,
                 onChanged: onFilterChanged,
                 segments: const <CharcoalSegment<_ProjectFilter>>[
@@ -1596,7 +1817,7 @@ final class _ProjectsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     search,
-                    SizedBox(height: theme.dimensions.space.component30),
+                    SizedBox(height: space.component30),
                     filters,
                   ],
                 );
@@ -1604,13 +1825,13 @@ final class _ProjectsPage extends StatelessWidget {
               return Row(
                 children: <Widget>[
                   Expanded(child: search),
-                  SizedBox(width: theme.dimensions.space.component30),
+                  SizedBox(width: space.component30),
                   filters,
                 ],
               );
             },
           ),
-          SizedBox(height: theme.dimensions.space.layout40),
+          SizedBox(height: space.layout40),
           _SectionHeading(
             eyebrow: '${visibleProjects.length} ITEMS',
             title: switch (filter) {
@@ -1619,30 +1840,39 @@ final class _ProjectsPage extends StatelessWidget {
               _ProjectFilter.archived => 'Archive',
             },
           ),
-          SizedBox(height: theme.dimensions.space.component30),
+          SizedBox(height: space.component30),
           if (visibleProjects.isEmpty)
             _EmptyProjects(query: searchQuery)
           else
-            _ProjectGrid(projects: visibleProjects),
-          SizedBox(height: theme.dimensions.space.layout40),
-          LayoutBuilder(
-            builder: (context, constraints) => constraints.maxWidth < 520
-                ? CharcoalButton(
-                    fullWidth: true,
-                    onPressed: visibleProjects.isEmpty ? null : () {},
-                    child: const Text('Load more'),
-                  )
-                : Align(
-                    alignment: Alignment.centerRight,
-                    child: CharcoalPagination(
-                      currentPage: 1,
-                      onPageChanged: (_) {},
-                      pageCount: 4,
-                      semanticLabel: 'Project pages',
-                      size: CharcoalPaginationSize.small,
+            _ProjectGrid(
+              onArchiveToggle: onProjectArchiveToggle,
+              projects: pageProjects,
+            ),
+          if (pageCount > 1) ...<Widget>[
+            SizedBox(height: space.layout40),
+            LayoutBuilder(
+              builder: (context, constraints) => constraints.maxWidth < 520
+                  ? CharcoalButton(
+                      fullWidth: true,
+                      onPressed: safePage < pageCount
+                          ? () => onPageChanged(safePage + 1)
+                          : null,
+                      child: Text(
+                        safePage < pageCount ? 'Next page' : 'All loaded',
+                      ),
+                    )
+                  : Align(
+                      alignment: Alignment.centerRight,
+                      child: CharcoalPagination(
+                        currentPage: safePage,
+                        onPageChanged: onPageChanged,
+                        pageCount: pageCount,
+                        semanticLabel: 'Project pages',
+                        size: CharcoalPaginationSize.small,
+                      ),
                     ),
-                  ),
-          ),
+            ),
+          ],
         ],
       ),
     );
@@ -1654,6 +1884,7 @@ final class _SettingsPage extends StatelessWidget {
     required this.bioController,
     required this.displayNameController,
     required this.emailController,
+    required this.onChangePhoto,
     required this.onProductUpdatesChanged,
     required this.onSave,
     required this.onVisibilityChanged,
@@ -1668,6 +1899,7 @@ final class _SettingsPage extends StatelessWidget {
   final TextEditingController bioController;
   final TextEditingController displayNameController;
   final TextEditingController emailController;
+  final VoidCallback onChangePhoto;
   final ValueChanged<bool> onProductUpdatesChanged;
   final VoidCallback onSave;
   final ValueChanged<_WorkspaceVisibility?> onVisibilityChanged;
@@ -1680,8 +1912,8 @@ final class _SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    return Padding(
-      padding: EdgeInsets.all(theme.dimensions.space.layout40),
+    final space = theme.dimensions.space;
+    return _ExamplePagePadding(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -1700,7 +1932,7 @@ final class _SettingsPage extends StatelessWidget {
             eyebrow: 'ACCOUNT',
             title: 'Profile settings',
           ),
-          SizedBox(height: theme.dimensions.space.layout40),
+          SizedBox(height: space.layout40),
           _Surface(
             padding: EdgeInsets.zero,
             child: Column(
@@ -1717,7 +1949,9 @@ final class _SettingsPage extends StatelessWidget {
                             : CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Mina Aoki',
+                            displayNameController.text.trim().isEmpty
+                                ? 'Unnamed creator'
+                                : displayNameController.text.trim(),
                             textAlign: compact ? TextAlign.center : null,
                             style: theme.textStyles.headingXs.copyWith(
                               color: theme.colors.textDefault,
@@ -1725,7 +1959,9 @@ final class _SettingsPage extends StatelessWidget {
                           ),
                           SizedBox(height: theme.dimensions.space.component10),
                           Text(
-                            '@mina.draws · Tokyo, Japan',
+                            emailController.text.trim().isEmpty
+                                ? 'Add an email address'
+                                : emailController.text.trim(),
                             textAlign: compact ? TextAlign.center : null,
                             style: theme.textStyles.captionMedium.copyWith(
                               color: theme.colors.textSecondaryDefault,
@@ -1751,7 +1987,7 @@ final class _SettingsPage extends StatelessWidget {
                         ),
                       );
                       final changePhoto = CharcoalButton(
-                        onPressed: () {},
+                        onPressed: onChangePhoto,
                         size: CharcoalButtonSize.small,
                         child: const Text('Change photo'),
                       );
@@ -1792,7 +2028,7 @@ final class _SettingsPage extends StatelessWidget {
                         eyebrow: 'PUBLIC PROFILE',
                         title: 'About you',
                       ),
-                      SizedBox(height: theme.dimensions.space.component30),
+                      SizedBox(height: space.component30),
                       LayoutBuilder(
                         builder: (context, constraints) {
                           final compact = constraints.maxWidth < 560;
@@ -1815,9 +2051,7 @@ final class _SettingsPage extends StatelessWidget {
                             return Column(
                               children: <Widget>[
                                 name,
-                                SizedBox(
-                                  height: theme.dimensions.space.component30,
-                                ),
+                                SizedBox(height: space.component30),
                                 email,
                               ],
                             );
@@ -1826,15 +2060,13 @@ final class _SettingsPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Expanded(child: name),
-                              SizedBox(
-                                width: theme.dimensions.space.component30,
-                              ),
+                              SizedBox(width: space.component30),
                               Expanded(child: email),
                             ],
                           );
                         },
                       ),
-                      SizedBox(height: theme.dimensions.space.component30),
+                      SizedBox(height: space.component30),
                       CharcoalTextArea(
                         controller: bioController,
                         label: 'Bio',
@@ -1843,7 +2075,7 @@ final class _SettingsPage extends StatelessWidget {
                         showCount: true,
                         showLabel: true,
                       ),
-                      SizedBox(height: theme.dimensions.space.component30),
+                      SizedBox(height: space.component30),
                       CharcoalDropdown<_WorkspaceVisibility>(
                         label: 'Default project visibility',
                         onChanged: onVisibilityChanged,
@@ -1883,7 +2115,7 @@ final class _SettingsPage extends StatelessWidget {
                         eyebrow: 'NOTIFICATIONS',
                         title: 'Stay in the loop',
                       ),
-                      SizedBox(height: theme.dimensions.space.component30),
+                      SizedBox(height: space.component30),
                       _PreferenceRow(
                         description:
                             'A calm summary of views, saves, and comments.',
@@ -1891,7 +2123,7 @@ final class _SettingsPage extends StatelessWidget {
                         title: 'Weekly studio digest',
                         value: weeklyDigest,
                       ),
-                      SizedBox(height: theme.dimensions.space.component30),
+                      SizedBox(height: space.component30),
                       _PreferenceRow(
                         description:
                             'Occasional release notes and feature previews.',
@@ -1927,6 +2159,7 @@ final class _AdaptivePageHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
     final copy = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -1938,14 +2171,14 @@ final class _AdaptivePageHeading extends StatelessWidget {
             letterSpacing: 1,
           ),
         ),
-        SizedBox(height: theme.dimensions.space.component20),
+        SizedBox(height: space.component20),
         Text(
           title,
           style: theme.textStyles.headingM.copyWith(
             color: theme.colors.textDefault,
           ),
         ),
-        SizedBox(height: theme.dimensions.space.component20),
+        SizedBox(height: space.component20),
         Text(
           description,
           style: theme.textStyles.captionMedium.copyWith(
@@ -1962,7 +2195,7 @@ final class _AdaptivePageHeading extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               copy,
-              SizedBox(height: theme.dimensions.space.component30),
+              SizedBox(height: space.component30),
               action,
             ],
           );
@@ -1971,7 +2204,7 @@ final class _AdaptivePageHeading extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Expanded(child: copy),
-            SizedBox(width: theme.dimensions.space.layout40),
+            SizedBox(width: space.layout40),
             action,
           ],
         );
@@ -1994,6 +2227,7 @@ final class _SectionHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -2009,7 +2243,7 @@ final class _SectionHeading extends StatelessWidget {
                   letterSpacing: 0.9,
                 ),
               ),
-              SizedBox(height: theme.dimensions.space.component10),
+              SizedBox(height: space.component10),
               Text(
                 title,
                 style: theme.textStyles.headingXxs.copyWith(
@@ -2020,11 +2254,23 @@ final class _SectionHeading extends StatelessWidget {
           ),
         ),
         if (action != null) ...<Widget>[
-          SizedBox(width: theme.dimensions.space.component20),
+          SizedBox(width: space.component20),
           action!,
         ],
       ],
     );
+  }
+}
+
+final class _ExamplePagePadding extends StatelessWidget {
+  const _ExamplePagePadding({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final space = CharcoalTheme.of(context).dimensions.space;
+    return Padding(padding: EdgeInsets.all(space.layout40), child: child);
   }
 }
 
@@ -2079,6 +2325,7 @@ final class _PreferenceRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -2092,7 +2339,7 @@ final class _PreferenceRow extends StatelessWidget {
                   color: theme.colors.textDefault,
                 ),
               ),
-              SizedBox(height: theme.dimensions.space.component10),
+              SizedBox(height: space.component10),
               Text(
                 description,
                 style: theme.textStyles.captionSmall.copyWith(
@@ -2102,7 +2349,7 @@ final class _PreferenceRow extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(width: theme.dimensions.space.component20),
+        SizedBox(width: space.component20),
         CharcoalSwitch(
           onChanged: onChanged,
           semanticLabel: title,
@@ -2114,8 +2361,9 @@ final class _PreferenceRow extends StatelessWidget {
 }
 
 final class _ProjectGrid extends StatelessWidget {
-  const _ProjectGrid({required this.projects});
+  const _ProjectGrid({required this.projects, this.onArchiveToggle});
 
+  final ValueChanged<_ProjectData>? onArchiveToggle;
   final List<_ProjectData> projects;
 
   @override
@@ -2137,7 +2385,12 @@ final class _ProjectGrid extends StatelessWidget {
             for (final project in projects)
               SizedBox(
                 width: width,
-                child: _ProjectCard(project: project),
+                child: _ProjectCard(
+                  onArchiveToggle: onArchiveToggle == null
+                      ? null
+                      : () => onArchiveToggle!(project),
+                  project: project,
+                ),
               ),
           ],
         );
@@ -2147,13 +2400,15 @@ final class _ProjectGrid extends StatelessWidget {
 }
 
 final class _ProjectCard extends StatelessWidget {
-  const _ProjectCard({required this.project});
+  const _ProjectCard({required this.onArchiveToggle, required this.project});
 
+  final VoidCallback? onArchiveToggle;
   final _ProjectData project;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
     return _Surface(
       padding: EdgeInsets.zero,
       child: Column(
@@ -2161,7 +2416,7 @@ final class _ProjectCard extends StatelessWidget {
         children: <Widget>[
           _ProjectArtwork(tone: project.tone),
           Padding(
-            padding: EdgeInsets.all(theme.dimensions.space.component30),
+            padding: EdgeInsets.all(space.component30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -2177,22 +2432,26 @@ final class _ProjectCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    CharcoalIconButton(
-                      icon: const CharcoalIcon(CharcoalIcons.dotsHorizontal),
-                      onPressed: () {},
-                      semanticLabel: 'More actions for ${project.title}',
-                      size: CharcoalIconButtonSize.extraSmall,
-                    ),
+                    if (onArchiveToggle != null)
+                      CharcoalIconButton(
+                        icon: const CharcoalIcon(CharcoalIcons.archive),
+                        onPressed: onArchiveToggle,
+                        selected: project.archived,
+                        semanticLabel: project.archived
+                            ? 'Restore ${project.title}'
+                            : 'Archive ${project.title}',
+                        size: CharcoalIconButtonSize.extraSmall,
+                      ),
                   ],
                 ),
-                SizedBox(height: theme.dimensions.space.component10),
+                SizedBox(height: space.component10),
                 Text(
                   project.details,
                   style: theme.textStyles.captionSmall.copyWith(
                     color: theme.colors.textSecondaryDefault,
                   ),
                 ),
-                SizedBox(height: theme.dimensions.space.component25),
+                SizedBox(height: space.component25),
                 _StatusPill(
                   label: project.archived
                       ? 'Archived'
@@ -2476,6 +2735,14 @@ final class _ProjectData {
   final bool shared;
   final String title;
   final int tone;
+
+  _ProjectData copyWith({bool? archived}) => _ProjectData(
+    archived: archived ?? this.archived,
+    details: details,
+    shared: shared,
+    title: title,
+    tone: tone,
+  );
 }
 
 const _recentProjects = <_ProjectData>[

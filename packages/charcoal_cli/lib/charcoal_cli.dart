@@ -37,7 +37,8 @@ export 'src/benchmark_runner.dart'
         CharcoalBenchmarkRunException,
         CharcoalBenchmarkRunOptions,
         CharcoalBenchmarkRunner,
-        assessCharcoalBenchmarkCandidate;
+        assessCharcoalBenchmarkCandidate,
+        resolveCharcoalFlutterExecutable;
 export 'src/codex_benchmark_adapter.dart'
     show
         CharcoalCodexAdapterException,
