@@ -14,7 +14,10 @@ Explore the [Charcoal UI V2 Showcase](https://kevinzhow.github.io/charcoal-flutt
 - `packages/charcoal_tokens`: generated color, dimension, and typography foundations.
 - `packages/charcoal_icons`: the generated Charcoal Icons V2 SVG catalog and Flutter widget.
 - `packages/charcoal_ui`: independent Widgets-layer components, themes, and interaction primitives.
+- `packages/charcoal_catalog`: versioned component API, usage guidance, and executable examples.
+- `packages/charcoal_cli`: deterministic discovery, diagnostics, and agent-instruction setup.
 - `example`: the exhaustive Showcase used for visual development and regression checks.
+- `agent`: versioned agent-readiness benchmark prompts and scoring contract.
 - `tool/tokens.dart`: pinned token sync, validation, generation, semantic diff, and drift checking.
 - `tool/icons.dart`: pinned icon sync, validation, generation, and drift checking.
 - `tokens/upstream`: the original V2 token JSON pinned to an exact upstream commit.
@@ -128,6 +131,42 @@ final theme = CharcoalThemeData.light(
 CharcoalTheme(data: theme, child: const MyScreen());
 ```
 
+## Agent-ready tooling
+
+The catalog is generated from the real exported Dart API. Every discovered public Widget receives
+constructor data and source documentation; reviewed components additionally include use/avoid
+guidance, accessibility and responsive rules, token roles, related components, and source copied
+from a compiling example. `generated` and `curated` coverage are reported separately so tools never
+mistake partial guidance for a complete contract.
+
+The CLI exposes that same versioned catalog to people, scripts, and coding agents:
+
+```bash
+# Find a component from product intent.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart search "single choice"
+
+# Read the exact constructor, companion APIs, guidance, and executable source.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart component CharcoalSegmentedControl
+
+# Use stable JSON envelopes for automation.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart manifest --json
+
+# Inspect a project, then add or refresh only the managed instruction block.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor
+fvm dart run packages/charcoal_cli/bin/charcoal.dart init --agent codex
+```
+
+Regenerate after changing a public component API or a curated example:
+
+```bash
+fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart
+fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart --check
+```
+
+The CLI and a future MCP server are adapters over the Catalog, not separate documentation sources.
+Executable examples remain ordinary Flutter code; they are reference compositions rather than a
+runtime recipe layer. See [Agent readiness](agent/README.md) for the benchmark and rubric.
+
 ## Motion and navigation
 
 `CharcoalApp` uses `CharcoalPageRoute` as its default route factory. The transition remains opaque,
@@ -188,8 +227,11 @@ Token sync metadata lives in `tokens/manifest.json`; icon sync metadata lives in
 fvm flutter pub get
 fvm flutter analyze
 fvm dart test
+fvm dart test packages/charcoal_catalog
+fvm dart test packages/charcoal_cli
 fvm flutter test packages/charcoal_ui/test example/test
 fvm dart run tool/tokens.dart check
+fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart --check
 
 cd packages/charcoal_ui
 fvm flutter widget-preview start

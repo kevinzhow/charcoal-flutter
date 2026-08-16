@@ -1,0 +1,14 @@
+name: charcoal_catalog
+description: Machine-readable component catalog for Charcoal UI on Flutter.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dev_dependencies:
+  analyzer: ^13.3.0
+  path: ^1.9.1
+  test: ^1.26.0

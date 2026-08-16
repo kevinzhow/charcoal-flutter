@@ -64,4 +64,13 @@ void main() {
     expect(pubspec, contains('assets/fonts/CharcoalSans-Regular.ttf'));
     expect(pubspec, contains('assets/fonts/CharcoalSans-Bold.ttf'));
   });
+
+  test('agent tooling stays outside the charcoal_ui runtime dependency graph', () async {
+    final uiPubspec = await File('packages/charcoal_ui/pubspec.yaml').readAsString();
+    final catalogPubspec = await File('packages/charcoal_catalog/pubspec.yaml').readAsString();
+
+    expect(uiPubspec, isNot(contains('charcoal_catalog:')));
+    expect(uiPubspec, isNot(contains('charcoal_cli:')));
+    expect(catalogPubspec, isNot(contains('flutter:')));
+  });
 }

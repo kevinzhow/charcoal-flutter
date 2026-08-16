@@ -8,6 +8,8 @@ environment:
 
 workspace:
   - example
+  - packages/charcoal_catalog
+  - packages/charcoal_cli
   - packages/charcoal_icons
   - packages/charcoal_tokens
   - packages/charcoal_ui

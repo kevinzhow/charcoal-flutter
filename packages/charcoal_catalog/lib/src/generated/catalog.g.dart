@@ -1,0 +1,3604 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND.
+
+const String generatedCatalogJson = r'''{
+  "schemaVersion": 1,
+  "libraryName": "charcoal_ui",
+  "libraryVersion": "0.1.0",
+  "coverage": {
+    "publicComponents": 31,
+    "curatedComponents": 7,
+    "componentsWithExamples": 7
+  },
+  "components": [
+    {
+      "name": "CharcoalAnchoredBalloon",
+      "category": "Overlays",
+      "summary": "Attaches a controlled-or-uncontrolled balloon to [anchor].",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/balloon.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalanchoredballoon",
+        "anchored balloon"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalAnchoredBalloon",
+          "kind": "constructor",
+          "signature": "CharcoalAnchoredBalloon({required this.anchor, required this.message, this.action, this.dismissIcon, this.dismissAfter, this.dismissOnTapOutside = false, this.maxWidth, this.onVisibilityChanged, this.showOnTap = true, this.visible, super.key})",
+          "parameters": [
+            {
+              "name": "anchor",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dismissIcon",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dismissAfter",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dismissOnTapOutside",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onVisibilityChanged",
+              "type": "ValueChanged<bool>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "showOnTap",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "visible",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalApp",
+      "category": "Application",
+      "summary": "A Widgets-layer application shell with Charcoal theming and no Material/Cupertino dependency.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_app.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalapp",
+        "app"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalApp",
+          "kind": "constructor",
+          "signature": "CharcoalApp({required this.home, this.theme, this.darkTheme, this.themeMode = CharcoalThemeMode.system, this.title = '', this.debugShowCheckedModeBanner = false, this.pageRouteBuilder, super.key})",
+          "parameters": [
+            {
+              "name": "home",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "theme",
+              "type": "CharcoalThemeData?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "darkTheme",
+              "type": "CharcoalThemeData?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "themeMode",
+              "type": "CharcoalThemeMode",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalThemeMode.system"
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "''"
+            },
+            {
+              "name": "debugShowCheckedModeBanner",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "pageRouteBuilder",
+              "type": "PageRouteFactory?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalBalloon",
+      "category": "Overlays",
+      "summary": "A persistent speech surface with a directional tail.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/balloon.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalballoon",
+        "balloon"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBalloon",
+          "kind": "constructor",
+          "signature": "CharcoalBalloon({required this.child, this.action, this.arrowCenter, this.dismissIcon, this.maxWidth, this.onDismiss, this.position = CharcoalOverlayPosition.top, this.semanticLabel, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "arrowCenter",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dismissIcon",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onDismiss",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "position",
+              "type": "CharcoalOverlayPosition",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalOverlayPosition.top"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalButton",
+      "category": "Actions",
+      "summary": "Runs an action with Charcoal interaction states, sizing, and visual variants.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/button.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "action",
+        "button",
+        "call to action",
+        "cta",
+        "submit"
+      ],
+      "useWhen": [
+        "The user initiates an immediate action such as saving, continuing, or deleting.",
+        "A leading or trailing icon needs to remain aligned with a text label."
+      ],
+      "avoidWhen": [
+        "Navigation is better represented by CharcoalNavigationItem.",
+        "The action should look like inline text; use CharcoalLinkButton instead."
+      ],
+      "accessibility": [
+        "Pass semanticLabel when child content does not describe the action on its own.",
+        "A null onPressed value exposes the disabled state and removes interaction."
+      ],
+      "responsiveBehavior": [
+        "Set fullWidth on compact layouts when the action should fill its parent constraint.",
+        "Let the parent choose available width; do not hard-code the component height."
+      ],
+      "tokenRoles": [
+        "space.targetS",
+        "space.targetM",
+        "space.component10",
+        "space.component30",
+        "space.component40",
+        "radius.oval"
+      ],
+      "relatedComponents": [
+        "CharcoalIconButton",
+        "CharcoalLinkButton"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalButton",
+          "kind": "constructor",
+          "signature": "CharcoalButton({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.fullWidth = false, this.leading, this.primaryColor, this.semanticLabel, this.selected = false, this.size = CharcoalButtonSize.medium, this.statesController, this.trailing, this.variant = CharcoalButtonVariant.normal, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "fullWidth",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "leading",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "primaryColor",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalButtonSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalButtonSize.medium"
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "trailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "variant",
+              "type": "CharcoalButtonVariant",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalButtonVariant.normal"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalButtonVariant",
+          "kind": "enum",
+          "signature": "enum CharcoalButtonVariant { normal, primary, overlay, danger, navigation }",
+          "parameters": [],
+          "enumValues": [
+            "normal",
+            "primary",
+            "overlay",
+            "danger",
+            "navigation"
+          ]
+        },
+        {
+          "name": "CharcoalButtonSize",
+          "kind": "enum",
+          "signature": "enum CharcoalButtonSize { small, medium }",
+          "parameters": [],
+          "enumValues": [
+            "small",
+            "medium"
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "button-basic",
+          "title": "Primary and secondary actions",
+          "description": "A compact action row that becomes full-width when constrained.",
+          "sourcePath": "example/lib/agent_examples/button_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A responsive pair of primary and secondary actions.\nfinal class AgentButtonExample extends StatelessWidget {\n  const AgentButtonExample({\n    required this.onContinue,\n    required this.onCancel,\n    super.key,\n  });\n\n  final VoidCallback onContinue;\n  final VoidCallback onCancel;\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).dimensions.space.component20;\n    return LayoutBuilder(\n      builder: (context, constraints) {\n        final compact = constraints.maxWidth < 420;\n        final cancel = CharcoalButton(\n          fullWidth: compact,\n          onPressed: onCancel,\n          child: const Text('Cancel'),\n        );\n        final submit = CharcoalButton(\n          fullWidth: compact,\n          onPressed: onContinue,\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Continue'),\n        );\n        if (compact) {\n          return Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            mainAxisSize: MainAxisSize.min,\n            children: <Widget>[\n              submit,\n              SizedBox(height: gap),\n              cancel,\n            ],\n          );\n        }\n        return Row(\n          mainAxisSize: MainAxisSize.min,\n          children: <Widget>[\n            cancel,\n            SizedBox(width: gap),\n            submit,\n          ],\n        );\n      },\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalCarousel",
+      "category": "Navigation",
+      "summary": "A horizontally paged Charcoal V2 carousel.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/carousel.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalcarousel",
+        "carousel"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalCarousel",
+          "kind": "constructor",
+          "signature": "CharcoalCarousel({required this.children, this.allowImplicitScrolling = false, this.autofocus = false, this.controller, this.focusNode, this.gap, this.initialPage = 0, this.onPageChanged, this.physics, this.previousSemanticLabel = 'Previous', this.semanticLabel = 'Carousel', this.semanticLabelBuilder, this.showIndicators, this.showNavigationButtons, this.size = CharcoalCarouselSize.medium, this.nextSemanticLabel = 'Next', this.viewportFraction, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "allowImplicitScrolling",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "controller",
+              "type": "PageController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "gap",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "initialPage",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "0"
+            },
+            {
+              "name": "onPageChanged",
+              "type": "ValueChanged<int>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "physics",
+              "type": "ScrollPhysics?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "previousSemanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Previous'"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Carousel'"
+            },
+            {
+              "name": "semanticLabelBuilder",
+              "type": "CharcoalCarouselSemanticLabelBuilder?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "showIndicators",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "showNavigationButtons",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "size",
+              "type": "CharcoalCarouselSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalCarouselSize.medium"
+            },
+            {
+              "name": "nextSemanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Next'"
+            },
+            {
+              "name": "viewportFraction",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalCheckbox",
+      "category": "Forms",
+      "summary": "A controlled Charcoal V2 checkbox.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/checkbox.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalcheckbox",
+        "checkbox"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalCheckbox",
+          "kind": "constructor",
+          "signature": "CharcoalCheckbox({required this.value, required this.onChanged, this.autofocus = false, this.focusNode, this.invalid = false, this.label, this.rounded = false, this.semanticLabel, this.statesController, super.key})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<bool>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "label",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "rounded",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalClickable",
+      "category": "Actions",
+      "summary": "A Widgets-layer interaction primitive shared by all Charcoal controls.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/clickable.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalclickable",
+        "clickable"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalClickable",
+          "kind": "constructor",
+          "signature": "CharcoalClickable({required this.builder, required this.onPressed, this.autofocus = false, this.checked, this.expanded, this.focusNode, this.inMutuallyExclusiveGroup = false, this.keyboardActivationEnabled = true, this.onFocusChange, this.onKeyEvent, this.semanticButton = true, this.semanticHint, this.semanticLabel, this.semanticRole, this.semanticValue, this.selected = false, this.statesController, this.toggled, this.validationResult = SemanticsValidationResult.none, super.key})",
+          "parameters": [
+            {
+              "name": "builder",
+              "type": "CharcoalClickableBuilder",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "checked",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "expanded",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "inMutuallyExclusiveGroup",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "keyboardActivationEnabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "onFocusChange",
+              "type": "ValueChanged<bool>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onKeyEvent",
+              "type": "FocusOnKeyEventCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticButton",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "semanticHint",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticRole",
+              "type": "SemanticsRole?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticValue",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "toggled",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "validationResult",
+              "type": "SemanticsValidationResult",
+              "required": false,
+              "named": true,
+              "defaultValue": "SemanticsValidationResult.none"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalDialog",
+      "category": "Overlays",
+      "summary": "Presents focused content in a centered dialog or adaptive bottom-sheet surface.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/modal.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "bottom sheet",
+        "dialog",
+        "modal",
+        "overlay",
+        "prompt"
+      ],
+      "useWhen": [
+        "The user must complete or acknowledge a focused task before returning.",
+        "The same content needs centered and bottom-sheet presentation styles."
+      ],
+      "avoidWhen": [
+        "The message is transient and does not require focus; use CharcoalToast or CharcoalSnackBar.",
+        "A full page is needed for a long or deeply navigable workflow."
+      ],
+      "accessibility": [
+        "Use a concise title and a barrierLabel that describes dismissal.",
+        "Do not make a destructive or mandatory decision barrier-dismissible."
+      ],
+      "responsiveBehavior": [
+        "Use CharcoalModalStyle.bottomSheet for compact mobile presentation where appropriate.",
+        "Size constrains readable content width; maxWidth can narrow a specific workflow."
+      ],
+      "tokenRoles": [
+        "paragraphWidth.s",
+        "paragraphWidth.l",
+        "space.layout40",
+        "space.layout100",
+        "space.targetL"
+      ],
+      "relatedComponents": [
+        "CharcoalToast",
+        "CharcoalSnackBar"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalDialog",
+          "kind": "constructor",
+          "signature": "CharcoalDialog({required this.child, this.actions = const <Widget>[], this.closeIcon, this.contentPadding = EdgeInsets.zero, this.maxWidth, this.onDismiss, this.showCloseButton = false, this.size = CharcoalDialogSize.medium, this.style = CharcoalModalStyle.center, this.title, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "closeIcon",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "contentPadding",
+              "type": "EdgeInsetsGeometry",
+              "required": false,
+              "named": true,
+              "defaultValue": "EdgeInsets.zero"
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onDismiss",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "showCloseButton",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalDialogSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalDialogSize.medium"
+            },
+            {
+              "name": "style",
+              "type": "CharcoalModalStyle",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalModalStyle.center"
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "showCharcoalDialog",
+          "kind": "function",
+          "signature": "Future<T?> showCharcoalDialog<T>({required BuildContext context, required WidgetBuilder builder, bool barrierDismissible = true, String barrierLabel = 'Dismiss dialog', Duration? duration, CharcoalModalStyle style = CharcoalModalStyle.center})",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "BuildContext",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "builder",
+              "type": "WidgetBuilder",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "barrierDismissible",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "barrierLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Dismiss dialog'"
+            },
+            {
+              "name": "duration",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "style",
+              "type": "CharcoalModalStyle",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalModalStyle.center"
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "showCharcoalModal",
+          "kind": "function",
+          "signature": "Future<T?> showCharcoalModal<T>({required BuildContext context, required Widget child, List<Widget> actions = const <Widget>[], bool barrierDismissible = true, Widget? closeIcon, Duration? duration, double? maxWidth, CharcoalDialogSize size = CharcoalDialogSize.medium, CharcoalModalStyle style = CharcoalModalStyle.center, String? title})",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "BuildContext",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "barrierDismissible",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "closeIcon",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "duration",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "size",
+              "type": "CharcoalDialogSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalDialogSize.medium"
+            },
+            {
+              "name": "style",
+              "type": "CharcoalModalStyle",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalModalStyle.center"
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalDialogSize",
+          "kind": "enum",
+          "signature": "enum CharcoalDialogSize { small, medium, large }",
+          "parameters": [],
+          "enumValues": [
+            "small",
+            "medium",
+            "large"
+          ]
+        },
+        {
+          "name": "CharcoalModalStyle",
+          "kind": "enum",
+          "signature": "enum CharcoalModalStyle { center, bottomSheet }",
+          "parameters": [],
+          "enumValues": [
+            "center",
+            "bottomSheet"
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "dialog-launcher",
+          "title": "Open an adaptive modal",
+          "description": "Launches a dialog with Charcoal content and action widgets.",
+          "sourcePath": "example/lib/agent_examples/modal_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Opens the same modal task as a dialog or bottom sheet based on available width.\nfinal class AgentModalExample extends StatelessWidget {\n  const AgentModalExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalButton(\n      onPressed: () => _openModal(context),\n      variant: CharcoalButtonVariant.primary,\n      child: const Text('Review changes'),\n    );\n  }\n\n  Future<void> _openModal(BuildContext context) async {\n    final compact = MediaQuery.sizeOf(context).width < 600;\n    await showCharcoalModal<void>(\n      actions: <Widget>[\n        CharcoalButton(\n          onPressed: () => Navigator.of(context).pop(),\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Done'),\n        ),\n      ],\n      child: const CharcoalTypography(\n        child: Text(\n          'Your profile and visibility changes are ready to publish.',\n        ),\n      ),\n      context: context,\n      style: compact\n          ? CharcoalModalStyle.bottomSheet\n          : CharcoalModalStyle.center,\n      title: 'Review changes',\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalDropdown",
+      "category": "Forms",
+      "summary": "Selects one value from a controlled list using a Charcoal popup menu.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/dropdown.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "combobox",
+        "dropdown",
+        "menu",
+        "option",
+        "select"
+      ],
+      "useWhen": [
+        "The user must choose one item from a fixed list that is too long for segmented control.",
+        "Secondary option descriptions help distinguish similar choices."
+      ],
+      "avoidWhen": [
+        "Two to four short options benefit from direct visibility; use CharcoalSegmentedControl.",
+        "Multiple values may be selected; use CharcoalMultiSelect."
+      ],
+      "accessibility": [
+        "Supply a visible label for form use and keep option labels unique and descriptive.",
+        "Disabled options stay discoverable but cannot be selected."
+      ],
+      "responsiveBehavior": [
+        "The popup matches the trigger width and chooses the available vertical direction.",
+        "Let the parent constrain trigger width on small and large screens."
+      ],
+      "tokenRoles": [
+        "space.component10",
+        "space.layout30",
+        "radius.s",
+        "containerSecondaryDefaultA"
+      ],
+      "relatedComponents": [
+        "CharcoalMultiSelect",
+        "CharcoalSegmentedControl"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalDropdown",
+          "kind": "constructor",
+          "signature": "CharcoalDropdown({required this.options, required this.value, required this.onChanged, this.assistiveText, this.autofocus = false, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.placeholder, this.required = false, this.requiredText = '*Required', this.showLabel = false, this.subLabel, super.key})",
+          "parameters": [
+            {
+              "name": "options",
+              "type": "List<CharcoalDropdownOption<T>>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "T?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<T>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "assistiveText",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "disabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "''"
+            },
+            {
+              "name": "placeholder",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "required",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "requiredText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'*Required'"
+            },
+            {
+              "name": "showLabel",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "subLabel",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalDropdownOption",
+          "kind": "supportingType",
+          "signature": "CharcoalDropdownOption({required this.value, required this.label, this.enabled = true, this.secondary})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "enabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "secondary",
+              "type": "String?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "dropdown-controlled",
+          "title": "Controlled dropdown",
+          "description": "A labeled single-selection field whose state is owned by its parent.",
+          "sourcePath": "example/lib/agent_examples/dropdown_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Visibility { everyone, followers, private }\n\n/// A parent-owned single selection with descriptive options.\nfinal class AgentDropdownExample extends StatefulWidget {\n  const AgentDropdownExample({super.key});\n\n  @override\n  State<AgentDropdownExample> createState() => _AgentDropdownExampleState();\n}\n\nfinal class _AgentDropdownExampleState extends State<AgentDropdownExample> {\n  _Visibility? _value = _Visibility.everyone;\n\n  static const _options = <CharcoalDropdownOption<_Visibility>>[\n    CharcoalDropdownOption(\n      value: _Visibility.everyone,\n      label: 'Everyone',\n      secondary: 'Visible to anyone',\n    ),\n    CharcoalDropdownOption(\n      value: _Visibility.followers,\n      label: 'Followers',\n      secondary: 'Visible to your followers',\n    ),\n    CharcoalDropdownOption(\n      value: _Visibility.private,\n      label: 'Only me',\n      secondary: 'Keep this private',\n    ),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalDropdown<_Visibility>(\n      label: 'Visibility',\n      onChanged: (value) => setState(() => _value = value),\n      options: _options,\n      showLabel: true,\n      value: _value,\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalFieldLabel",
+      "category": "Utility",
+      "summary": "Label, required marker, and trailing content shared by Charcoal form fields.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/field_label.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalfieldlabel",
+        "field label"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalFieldLabel",
+          "kind": "constructor",
+          "signature": "CharcoalFieldLabel({required this.label, this.required = false, this.requiredText = '*Required', this.subLabel, this.weight = CharcoalTypographyWeight.bold, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "required",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "requiredText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'*Required'"
+            },
+            {
+              "name": "subLabel",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "weight",
+              "type": "CharcoalTypographyWeight",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTypographyWeight.bold"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalHintText",
+      "category": "Content",
+      "summary": "Informational copy on a semantic secondary container.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/hint_text.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalhinttext",
+        "hint text"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalHintText",
+          "kind": "constructor",
+          "signature": "CharcoalHintText({required this.child, this.action, this.alignment = Alignment.center, this.icon, this.maxWidth, this.subtitle, this.visible = true, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "alignment",
+              "type": "Alignment",
+              "required": false,
+              "named": true,
+              "defaultValue": "Alignment.center"
+            },
+            {
+              "name": "icon",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitle",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "visible",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalIconButton",
+      "category": "Actions",
+      "summary": "A circular Charcoal V2 button for an icon-only action.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/icon_button.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaliconbutton",
+        "icon button"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalIconButton",
+          "kind": "constructor",
+          "signature": "CharcoalIconButton({required this.icon, required this.onPressed, this.autofocus = false, this.focusNode, this.semanticLabel, this.selected = false, this.size = CharcoalIconButtonSize.medium, this.statesController, this.variant = CharcoalIconButtonVariant.normal, super.key})",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalIconButtonSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalIconButtonSize.medium"
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "variant",
+              "type": "CharcoalIconButtonVariant",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalIconButtonVariant.normal"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalLinkButton",
+      "category": "Actions",
+      "summary": "Charcoal's text-only link button.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/button.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoallinkbutton",
+        "link button"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalLinkButton",
+          "kind": "constructor",
+          "signature": "CharcoalLinkButton({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.semanticLabel, this.statesController, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalLoadingSpinner",
+      "category": "Utility",
+      "summary": "Charcoal's expanding-circle loading indicator.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/loading_spinner.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalloadingspinner",
+        "loading spinner"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalLoadingSpinner",
+          "kind": "constructor",
+          "signature": "CharcoalLoadingSpinner({this.color, this.once = false, this.padding, this.semanticLabel = 'Loading', this.size, this.transparent = false, super.key})",
+          "parameters": [
+            {
+              "name": "color",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "once",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "padding",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Loading'"
+            },
+            {
+              "name": "size",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "transparent",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalMultiSelect",
+      "category": "Forms",
+      "summary": "A controlled Charcoal V2 multi-selection control.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/multi_select.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalmultiselect",
+        "multi select"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalMultiSelect",
+          "kind": "constructor",
+          "signature": "CharcoalMultiSelect({required this.selected, required this.onChanged, this.autofocus = false, this.focusNode, this.invalid = false, this.label, this.semanticLabel, this.statesController, this.variant = CharcoalMultiSelectVariant.normal, super.key})",
+          "parameters": [
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<bool>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "label",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "variant",
+              "type": "CharcoalMultiSelectVariant",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalMultiSelectVariant.normal"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalNavigationItem",
+      "category": "Navigation",
+      "summary": "A full-width destination item for sidebars, drawers, and navigation lists.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation_item.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalnavigationitem",
+        "navigation item"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalNavigationItem",
+          "kind": "constructor",
+          "signature": "CharcoalNavigationItem({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.leading, this.selected = false, this.semanticLabel, this.statesController, this.trailing, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "leading",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "trailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalPagination",
+      "category": "Navigation",
+      "summary": "A one-indexed, controlled pagination component.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/pagination.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalpagination",
+        "pagination"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalPagination",
+          "kind": "constructor",
+          "signature": "CharcoalPagination({required this.currentPage, required this.pageCount, required this.onPageChanged, this.maxVisiblePages = 7, this.nextLabel = 'Next page', this.previousLabel = 'Previous page', this.semanticLabel = 'Pagination', this.size = CharcoalPaginationSize.medium, super.key})",
+          "parameters": [
+            {
+              "name": "currentPage",
+              "type": "int",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "pageCount",
+              "type": "int",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPageChanged",
+              "type": "ValueChanged<int>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "maxVisiblePages",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "7"
+            },
+            {
+              "name": "nextLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Next page'"
+            },
+            {
+              "name": "previousLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Previous page'"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Pagination'"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalPaginationSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPaginationSize.medium"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalRadio",
+      "category": "Forms",
+      "summary": "A controlled Charcoal V2 radio option.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/radio.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalradio",
+        "radio"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalRadio",
+          "kind": "constructor",
+          "signature": "CharcoalRadio({required this.value, required this.groupValue, required this.onChanged, this.autofocus = false, this.focusNode, this.invalid = false, this.label, this.semanticLabel, this.statesController, super.key})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "groupValue",
+              "type": "T?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<T>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "label",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSegmentedControl",
+      "category": "Selection",
+      "summary": "Switches between a small set of mutually exclusive values.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/segmented_control.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "filter",
+        "segmented",
+        "single selection",
+        "tabs",
+        "toggle"
+      ],
+      "useWhen": [
+        "Two to four short choices should remain visible and immediately selectable.",
+        "The choice changes a local view, filter, or compact setting."
+      ],
+      "avoidWhen": [
+        "The choices navigate between major destinations; use navigation components.",
+        "The option set is long or labels require descriptions; use CharcoalDropdown."
+      ],
+      "accessibility": [
+        "Provide semanticLabel for the group when surrounding text does not name it.",
+        "Each segment exposes checked state within a mutually exclusive group."
+      ],
+      "responsiveBehavior": [
+        "Use fullWidth when compact layouts need equal segments across available width.",
+        "Use uniformSegmentWidth for equal fixed segments without filling the parent."
+      ],
+      "tokenRoles": [
+        "space.targetS",
+        "space.component30",
+        "radius.xl",
+        "containerSecondaryDefaultA",
+        "containerPrimaryDefault"
+      ],
+      "relatedComponents": [
+        "CharcoalDropdown",
+        "CharcoalRadio"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalSegmentedControl",
+          "kind": "constructor",
+          "signature": "CharcoalSegmentedControl({required this.segments, required this.value, required this.onChanged, this.fullWidth = false, this.semanticLabel, this.uniformSegmentWidth = false, super.key})",
+          "parameters": [
+            {
+              "name": "segments",
+              "type": "List<CharcoalSegment<T>>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<T>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "fullWidth",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "uniformSegmentWidth",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalSegment",
+          "kind": "supportingType",
+          "signature": "CharcoalSegment({required this.value, required this.child, this.enabled = true})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "enabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "segmented-controlled",
+          "title": "Responsive segmented control",
+          "description": "A controlled view switcher that fills compact layouts.",
+          "sourcePath": "example/lib/agent_examples/segmented_control_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _FeedMode { recent, popular, saved }\n\n/// A responsive, parent-owned view switcher.\nfinal class AgentSegmentedControlExample extends StatefulWidget {\n  const AgentSegmentedControlExample({super.key});\n\n  @override\n  State<AgentSegmentedControlExample> createState() =>\n      _AgentSegmentedControlExampleState();\n}\n\nfinal class _AgentSegmentedControlExampleState\n    extends State<AgentSegmentedControlExample> {\n  _FeedMode _value = _FeedMode.recent;\n\n  @override\n  Widget build(BuildContext context) {\n    return LayoutBuilder(\n      builder: (context, constraints) => CharcoalSegmentedControl<_FeedMode>(\n        fullWidth: constraints.maxWidth < 480,\n        onChanged: (value) => setState(() => _value = value),\n        segments: const <CharcoalSegment<_FeedMode>>[\n          CharcoalSegment(value: _FeedMode.recent, child: Text('Recent')),\n          CharcoalSegment(value: _FeedMode.popular, child: Text('Popular')),\n          CharcoalSegment(value: _FeedMode.saved, child: Text('Saved')),\n        ],\n        semanticLabel: 'Feed order',\n        value: _value,\n      ),\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalSnackBar",
+      "category": "Feedback",
+      "summary": "Shows a bordered, optionally illustrated transient notification.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/toast.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "alert",
+        "feedback",
+        "notification",
+        "snackbar",
+        "thumbnail"
+      ],
+      "useWhen": [
+        "Transient feedback needs a neutral bordered surface, action, or thumbnail.",
+        "The notification may be dismissed with a drag gesture."
+      ],
+      "avoidWhen": [
+        "Success or error feedback should be visually compact; use CharcoalToast.",
+        "The user must make a decision before continuing; use CharcoalDialog."
+      ],
+      "accessibility": [
+        "The message is exposed as a live region; keep it short and self-contained.",
+        "Any action widget needs its own accessible label and adequate target size."
+      ],
+      "responsiveBehavior": [
+        "The overlay respects horizontal screen insets and a configurable maximum width.",
+        "The thumbnail keeps its component-defined size while message content flexes."
+      ],
+      "tokenRoles": [
+        "borderDefault",
+        "borderWidth.m",
+        "space.component25",
+        "space.component30",
+        "space.layout60"
+      ],
+      "relatedComponents": [
+        "CharcoalToast",
+        "CharcoalDialog"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalSnackBar",
+          "kind": "constructor",
+          "signature": "CharcoalSnackBar({required this.message, this.action, this.maxWidth, this.semanticLabel, this.thumbnail, super.key})",
+          "parameters": [
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "thumbnail",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "showCharcoalSnackBar",
+          "kind": "function",
+          "signature": "CharcoalToastController showCharcoalSnackBar({required BuildContext context, required String message, Widget? action, CharcoalToastAnimationConfiguration animationConfiguration = CharcoalToastAnimationConfiguration.defaultConfiguration, Duration? duration, CharcoalPopupEdge edge = CharcoalPopupEdge.bottom, double? maxWidth, String? semanticLabel, double? screenEdgeSpacing, Widget? thumbnail})",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "BuildContext",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "animationConfiguration",
+              "type": "CharcoalToastAnimationConfiguration",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalToastAnimationConfiguration.defaultConfiguration"
+            },
+            {
+              "name": "duration",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "edge",
+              "type": "CharcoalPopupEdge",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPopupEdge.bottom"
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "screenEdgeSpacing",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "thumbnail",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalToastController",
+          "kind": "supportingType",
+          "signature": "class CharcoalToastController",
+          "parameters": [],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalPopupEdge",
+          "kind": "enum",
+          "signature": "enum CharcoalPopupEdge { top, bottom }",
+          "parameters": [],
+          "enumValues": [
+            "top",
+            "bottom"
+          ]
+        },
+        {
+          "name": "CharcoalToastAnimationConfiguration",
+          "kind": "supportingType",
+          "signature": "CharcoalToastAnimationConfiguration({this.enablePositionAnimation = true, this.opacityCurve = Curves.easeInOut, this.positionCurve = Curves.easeOutBack})",
+          "parameters": [
+            {
+              "name": "enablePositionAnimation",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "opacityCurve",
+              "type": "Curve",
+              "required": false,
+              "named": true,
+              "defaultValue": "Curves.easeInOut"
+            },
+            {
+              "name": "positionCurve",
+              "type": "Curve",
+              "required": false,
+              "named": true,
+              "defaultValue": "Curves.easeOutBack"
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "toast-and-snackbar",
+          "title": "Transient feedback",
+          "description": "Shows toast and snackbar overlays from a context with an Overlay.",
+          "sourcePath": "example/lib/agent_examples/feedback_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Launches transient feedback from a context that owns an Overlay.\nfinal class AgentFeedbackExample extends StatelessWidget {\n  const AgentFeedbackExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).dimensions.space.component20;\n    return Wrap(\n      spacing: gap,\n      runSpacing: gap,\n      children: <Widget>[\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalToast(context: context, message: 'Changes saved'),\n          child: const Text('Show toast'),\n        ),\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalSnackBar(context: context, message: 'Draft restored'),\n          child: const Text('Show snackbar'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalSpinnerOverlay",
+      "category": "Utility",
+      "summary": "Centers a Charcoal spinner over [child] while [visible] is true.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/loading_spinner.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalspinneroverlay",
+        "spinner overlay"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSpinnerOverlay",
+          "kind": "constructor",
+          "signature": "CharcoalSpinnerOverlay({required this.child, required this.visible, this.interactionPassthrough = false, this.spinnerSize, this.transparentBackground = false, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "visible",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "interactionPassthrough",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "spinnerSize",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "transparentBackground",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSwitch",
+      "category": "Forms",
+      "summary": "A controlled Charcoal V2 switch.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/switch.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalswitch",
+        "switch"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSwitch",
+          "kind": "constructor",
+          "signature": "CharcoalSwitch({required this.value, required this.onChanged, this.autofocus = false, this.focusNode, this.label, this.semanticLabel, this.statesController, super.key})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<bool>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSwitchingButton",
+      "category": "Actions",
+      "summary": "Shows one of two registered buttons without changing the layout size.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/button.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalswitchingbutton",
+        "switching button"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSwitchingButton",
+          "kind": "constructor",
+          "signature": "CharcoalSwitchingButton({required this.isOn, required this.offButton, required this.onButton, super.key})",
+          "parameters": [
+            {
+              "name": "isOn",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "offButton",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onButton",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalTagItem",
+      "category": "Utility",
+      "summary": "A compact Charcoal V2 tag action with optional translated text or artwork.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/tag_item.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltagitem",
+        "tag item"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTagItem",
+          "kind": "constructor",
+          "signature": "CharcoalTagItem({required this.label, required this.onPressed, this.autofocus = false, this.backgroundColor, this.backgroundImage, this.focusNode, this.imageFit = BoxFit.cover, this.semanticLabel, this.size = CharcoalTagItemSize.medium, this.statesController, this.status = CharcoalTagItemStatus.normal, this.translatedLabel, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "backgroundColor",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "backgroundImage",
+              "type": "ImageProvider<Object>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "imageFit",
+              "type": "BoxFit",
+              "required": false,
+              "named": true,
+              "defaultValue": "BoxFit.cover"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "size",
+              "type": "CharcoalTagItemSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTagItemSize.medium"
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "status",
+              "type": "CharcoalTagItemStatus",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTagItemStatus.normal"
+            },
+            {
+              "name": "translatedLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalTextArea",
+      "category": "Forms",
+      "summary": "A fixed-row, multiline Charcoal V2 text input.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text_area.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltextarea",
+        "text area"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTextArea",
+          "kind": "constructor",
+          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows = 4, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
+          "parameters": [
+            {
+              "name": "assistiveText",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "controller",
+              "type": "TextEditingController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "disabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "''"
+            },
+            {
+              "name": "maxLength",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "placeholder",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "readOnly",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "required",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "requiredText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'*Required'"
+            },
+            {
+              "name": "rows",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "4"
+            },
+            {
+              "name": "showCount",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "showLabel",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "subLabel",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalTextEllipsis",
+      "category": "Content",
+      "summary": "A small explicit wrapper for Charcoal's text truncation behavior.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text_ellipsis.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltextellipsis",
+        "text ellipsis"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTextEllipsis",
+          "kind": "constructor",
+          "signature": "CharcoalTextEllipsis(this.data, {this.maxLines = 1, this.semanticLabel, this.style, this.textAlign, super.key})",
+          "parameters": [
+            {
+              "name": "data",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "maxLines",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "1"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "style",
+              "type": "TextStyle?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "textAlign",
+              "type": "TextAlign?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalTextField",
+      "category": "Forms",
+      "summary": "Collects a single line of text with Charcoal labels, validation, and assistive text.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text_field.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "field",
+        "form",
+        "input",
+        "text entry",
+        "validation"
+      ],
+      "useWhen": [
+        "A form needs a single-line text value.",
+        "The field needs a visible label, validation state, or assistive message."
+      ],
+      "avoidWhen": [
+        "The value spans multiple lines; use CharcoalTextArea.",
+        "The value comes from a fixed option set; use CharcoalDropdown."
+      ],
+      "accessibility": [
+        "Use a meaningful label and keep it visible for forms that need persistent context.",
+        "Pair invalid with assistiveText that explains how to correct the value."
+      ],
+      "responsiveBehavior": [
+        "The field expands to the width supplied by its parent.",
+        "Constrain forms to a readable width on desktop instead of sizing the field directly."
+      ],
+      "tokenRoles": [
+        "space.component20",
+        "radius.s",
+        "containerSecondaryDefaultA",
+        "borderFocusLegacy",
+        "borderNegative"
+      ],
+      "relatedComponents": [
+        "CharcoalTextArea",
+        "CharcoalFieldLabel",
+        "CharcoalHintText"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalTextField",
+          "kind": "constructor",
+          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
+          "parameters": [
+            {
+              "name": "assistiveText",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "controller",
+              "type": "TextEditingController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "disabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "keyboardType",
+              "type": "TextInputType?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "''"
+            },
+            {
+              "name": "maxLength",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "obscureText",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onSubmitted",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "placeholder",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "prefix",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "readOnly",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "required",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "requiredText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'*Required'"
+            },
+            {
+              "name": "showCount",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "showLabel",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "subLabel",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "suffix",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "textInputAction",
+              "type": "TextInputAction?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "text-field-validation",
+          "title": "Labeled text field",
+          "description": "A controlled account-name field with validation guidance.",
+          "sourcePath": "example/lib/agent_examples/text_field_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/services.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A controlled field that exposes validation without replacing Charcoal internals.\nfinal class AgentTextFieldExample extends StatefulWidget {\n  const AgentTextFieldExample({super.key});\n\n  @override\n  State<AgentTextFieldExample> createState() => _AgentTextFieldExampleState();\n}\n\nfinal class _AgentTextFieldExampleState extends State<AgentTextFieldExample> {\n  String _value = '';\n\n  @override\n  Widget build(BuildContext context) {\n    final invalid = _value.isNotEmpty && _value.length < 3;\n    return CharcoalTextField(\n      assistiveText: invalid\n          ? 'Use at least 3 characters.'\n          : 'This appears on your profile.',\n      invalid: invalid,\n      label: 'Display name',\n      onChanged: (value) => setState(() => _value = value),\n      placeholder: 'Enter a name',\n      required: true,\n      showLabel: true,\n      textInputAction: TextInputAction.done,\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalTheme",
+      "category": "Foundation",
+      "summary": "Injects [CharcoalThemeData] without depending on Material or Cupertino.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/theme/charcoal_theme.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltheme",
+        "theme"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTheme",
+          "kind": "constructor",
+          "signature": "CharcoalTheme({required this.data, required super.child, super.key})",
+          "parameters": [
+            {
+              "name": "data",
+              "type": "CharcoalThemeData",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "dynamic",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalToast",
+      "category": "Feedback",
+      "summary": "Shows a compact positive or negative live-region notification.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/toast.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "alert",
+        "feedback",
+        "notification",
+        "success",
+        "toast"
+      ],
+      "useWhen": [
+        "A completed action needs brief success or error feedback.",
+        "The feedback can disappear automatically without blocking the workflow."
+      ],
+      "avoidWhen": [
+        "The message needs a thumbnail or neutral bordered surface; use CharcoalSnackBar.",
+        "The user must make a decision before continuing; use CharcoalDialog."
+      ],
+      "accessibility": [
+        "The message is exposed as a live region; use semanticLabel only when it needs clarification.",
+        "Do not rely on success or error color as the only meaning in custom leading content."
+      ],
+      "responsiveBehavior": [
+        "The overlay respects horizontal screen insets and a configurable maximum width.",
+        "Choose CharcoalPopupEdge based on nearby persistent navigation and safe areas."
+      ],
+      "tokenRoles": [
+        "containerPositiveDefault",
+        "containerNegativeDefault",
+        "space.component20",
+        "space.component40",
+        "borderWidth.l"
+      ],
+      "relatedComponents": [
+        "CharcoalSnackBar",
+        "CharcoalDialog"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalToast",
+          "kind": "constructor",
+          "signature": "CharcoalToast({required this.message, this.action, this.leading, this.maxWidth, this.semanticLabel, this.variant = CharcoalToastVariant.success, super.key})",
+          "parameters": [
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "leading",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "variant",
+              "type": "CharcoalToastVariant",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalToastVariant.success"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "showCharcoalToast",
+          "kind": "function",
+          "signature": "CharcoalToastController showCharcoalToast({required BuildContext context, required String message, Widget? action, CharcoalToastAnimationConfiguration animationConfiguration = CharcoalToastAnimationConfiguration.defaultConfiguration, Duration? duration, CharcoalPopupEdge edge = CharcoalPopupEdge.bottom, Widget? leading, double? maxWidth, String? semanticLabel, double? screenEdgeSpacing, CharcoalToastVariant variant = CharcoalToastVariant.success})",
+          "parameters": [
+            {
+              "name": "context",
+              "type": "BuildContext",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "animationConfiguration",
+              "type": "CharcoalToastAnimationConfiguration",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalToastAnimationConfiguration.defaultConfiguration"
+            },
+            {
+              "name": "duration",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "edge",
+              "type": "CharcoalPopupEdge",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPopupEdge.bottom"
+            },
+            {
+              "name": "leading",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "screenEdgeSpacing",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "variant",
+              "type": "CharcoalToastVariant",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalToastVariant.success"
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalToastController",
+          "kind": "supportingType",
+          "signature": "class CharcoalToastController",
+          "parameters": [],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalToastVariant",
+          "kind": "enum",
+          "signature": "enum CharcoalToastVariant { success, error }",
+          "parameters": [],
+          "enumValues": [
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "CharcoalPopupEdge",
+          "kind": "enum",
+          "signature": "enum CharcoalPopupEdge { top, bottom }",
+          "parameters": [],
+          "enumValues": [
+            "top",
+            "bottom"
+          ]
+        },
+        {
+          "name": "CharcoalToastAnimationConfiguration",
+          "kind": "supportingType",
+          "signature": "CharcoalToastAnimationConfiguration({this.enablePositionAnimation = true, this.opacityCurve = Curves.easeInOut, this.positionCurve = Curves.easeOutBack})",
+          "parameters": [
+            {
+              "name": "enablePositionAnimation",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "opacityCurve",
+              "type": "Curve",
+              "required": false,
+              "named": true,
+              "defaultValue": "Curves.easeInOut"
+            },
+            {
+              "name": "positionCurve",
+              "type": "Curve",
+              "required": false,
+              "named": true,
+              "defaultValue": "Curves.easeOutBack"
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "toast-and-snackbar",
+          "title": "Transient feedback",
+          "description": "Shows toast and snackbar overlays from a context with an Overlay.",
+          "sourcePath": "example/lib/agent_examples/feedback_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Launches transient feedback from a context that owns an Overlay.\nfinal class AgentFeedbackExample extends StatelessWidget {\n  const AgentFeedbackExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).dimensions.space.component20;\n    return Wrap(\n      spacing: gap,\n      runSpacing: gap,\n      children: <Widget>[\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalToast(context: context, message: 'Changes saved'),\n          child: const Text('Show toast'),\n        ),\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalSnackBar(context: context, message: 'Draft restored'),\n          child: const Text('Show snackbar'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalTooltip",
+      "category": "Overlays",
+      "summary": "An anchored Charcoal tooltip that supports pointer, keyboard, and touch.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/tooltip.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltooltip",
+        "tooltip"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTooltip",
+          "kind": "constructor",
+          "signature": "CharcoalTooltip({required this.child, required this.message, this.dismissAfter, this.dismissOnTapOutside = true, this.maxWidth, this.onVisibilityChanged, this.position, this.showOnFocus = true, this.showOnHover = true, this.showOnTap = true, this.visible, this.waitDuration = _TooltipSpec.defaultWaitDuration, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "dismissAfter",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dismissOnTapOutside",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "maxWidth",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onVisibilityChanged",
+              "type": "ValueChanged<bool>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "position",
+              "type": "CharcoalOverlayPosition?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "showOnFocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "showOnHover",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "showOnTap",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "visible",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "waitDuration",
+              "type": "Duration",
+              "required": false,
+              "named": true,
+              "defaultValue": "_TooltipSpec.defaultWaitDuration"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalTypography",
+      "category": "Content",
+      "summary": "The numeric typography scale used by Charcoal components.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/typography.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltypography",
+        "typography"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTypography",
+          "kind": "constructor",
+          "signature": "CharcoalTypography({required this.child, this.color, this.monospace = false, this.singleLine = false, this.size = CharcoalTypographySize.size14, this.textAlign, this.weight = CharcoalTypographyWeight.regular, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "color",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "monospace",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "singleLine",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalTypographySize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTypographySize.size14"
+            },
+            {
+              "name": "textAlign",
+              "type": "TextAlign?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "weight",
+              "type": "CharcoalTypographyWeight",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTypographyWeight.regular"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    }
+  ]
+}''';

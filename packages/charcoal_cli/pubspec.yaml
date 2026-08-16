@@ -1,0 +1,22 @@
+name: charcoal_cli
+description: Agent-friendly discovery, diagnostics, and setup commands for Charcoal UI.
+publish_to: none
+version: 0.1.0
+
+executables:
+  charcoal:
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dependencies:
+  args: ^2.7.0
+  charcoal_catalog:
+    path: ../charcoal_catalog
+  io: ^1.0.5
+  path: ^1.9.1
+
+dev_dependencies:
+  test: ^1.26.0

@@ -8,3 +8,6 @@ The public theme contains generated foundations only. Each widget maps semantic 
 to a private component specification and keeps source-specific geometry beside its implementation.
 See the workspace [README](../../README.md) for architecture, source contracts, setup, previews,
 and testing.
+
+Machine consumers should use `charcoal_catalog` or `charcoal_cli`. Those packages document this
+public API without adding a tooling or recipe dependency to the `charcoal_ui` runtime package.
