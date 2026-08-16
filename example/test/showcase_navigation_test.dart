@@ -11,7 +11,7 @@ void main() {
 
     await tester.pumpWidget(const CharcoalShowcaseApp());
 
-    expect(find.textContaining('A V2-first design system'), findsOneWidget);
+    expect(find.textContaining('Source-backed components'), findsOneWidget);
 
     const destinations = <String, String>{
       'Colors': 'Color catalog',

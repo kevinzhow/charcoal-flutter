@@ -5,11 +5,19 @@ import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'field_label.dart';
 import 'field_ring.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+abstract final class _TextAreaSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const horizontalInset = 9.0;
+  static const counterBottomInset = 9.0;
+  static const lineHeight = 22.0;
+  static const verticalChrome = 18.0;
+  static const focusRingWidth = 4.0;
+}
 
 /// A fixed-row, multiline Charcoal V2 text input.
-///
-/// It intentionally shares the generated TextField recipe so single-line and
-/// multiline fields cannot drift when foundation tokens are updated.
 final class CharcoalTextArea extends StatefulWidget {
   const CharcoalTextArea({
     this.assistiveText,
@@ -129,25 +137,40 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
     }
   }
 
+  void _updateState(WidgetState state, bool value) {
+    _statesController.update(state, value);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.textField;
     final states = Set<WidgetState>.unmodifiable(_statesController.value);
     final focused = states.contains(WidgetState.focused);
-    final ringColor = widget.invalid ? tokens.invalidRingColor : tokens.focusRingColor;
-    final textStyle = TextStyle(
-      color: tokens.foregroundColor,
-      fontFamily: theme.typography.fontFamily.sans,
-      fontSize: tokens.fontSize,
-      fontWeight: tokens.fontWeight,
-      height: tokens.lineHeight / tokens.fontSize,
-      leadingDistribution: TextLeadingDistribution.even,
+    final ringColor = widget.invalid ? theme.colors.borderNegative : theme.colors.borderFocusLegacy;
+    final textStyle = charcoalTypographyStyle(
+      context,
+      color: theme.colors.textSecondaryDefault,
+      size: CharcoalTypographySize.size14,
     );
-    final scaledLineHeight = MediaQuery.textScalerOf(context).scale(tokens.lineHeight);
+    final scaledLineHeight = MediaQuery.textScalerOf(
+      context,
+    ).scale(_TextAreaSpec.lineHeight);
     final textHeight = scaledLineHeight * widget.rows;
-    final counterHeight = widget.showCount ? scaledLineHeight + tokens.verticalGap : 0;
-    final containerHeight = textHeight + counterHeight + tokens.paddingHorizontal * 2;
+    final containerHeight =
+        scaledLineHeight * (widget.rows + (widget.showCount ? 1 : 0)) +
+        _TextAreaSpec.verticalChrome;
+    final fieldGap = theme.dimensions.space.component10;
+    final topInset = theme.dimensions.space.component20;
+    final radius = theme.dimensions.radius.s;
+    final background = resolveCharcoalStateColor(
+      states,
+      normal: theme.colors.containerSecondaryDefaultA,
+      hovered: theme.colors.containerSecondaryHoverA,
+      pressed: theme.colors.containerSecondaryPressA,
+    );
 
     final editable = EditableText(
       autofocus: widget.autofocus,
@@ -164,37 +187,47 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
       minLines: widget.rows,
       onChanged: widget.onChanged,
       readOnly: widget.readOnly || widget.disabled,
-      selectionColor: tokens.focusRingColor,
+      selectionColor: theme.colors.borderFocusLegacy,
       style: textStyle,
       textInputAction: TextInputAction.newline,
     );
 
     final input = MouseRegion(
       cursor: widget.disabled ? SystemMouseCursors.basic : SystemMouseCursors.text,
-      onEnter: (_) => _statesController.update(WidgetState.hovered, !widget.disabled),
-      onExit: (_) => _statesController.update(WidgetState.hovered, false),
+      onEnter: (_) => _updateState(WidgetState.hovered, !widget.disabled),
+      onExit: (_) => _updateState(WidgetState.hovered, false),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.disabled ? null : _focusNode.requestFocus,
+        onTapCancel: widget.disabled ? null : () => _updateState(WidgetState.pressed, false),
+        onTapDown: widget.disabled ? null : (_) => _updateState(WidgetState.pressed, true),
+        onTapUp: widget.disabled ? null : (_) => _updateState(WidgetState.pressed, false),
         child: CharcoalFieldRing(
           color: ringColor,
-          duration: tokens.animationDuration,
-          radius: tokens.radius,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _TextAreaSpec.animationDuration,
+          ),
+          radius: radius,
           visible: focused || widget.invalid,
-          width: tokens.focusRingWidth,
+          width: _TextAreaSpec.focusRingWidth,
           child: AnimatedContainer(
-            duration: tokens.animationDuration,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _TextAreaSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
             height: containerHeight,
-            padding: EdgeInsets.all(tokens.paddingHorizontal),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(tokens.radius),
-              color: tokens.background.resolve(states),
+              borderRadius: BorderRadius.circular(radius),
+              color: background,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: Stack(
               children: <Widget>[
-                SizedBox(
+                Positioned(
+                  left: _TextAreaSpec.horizontalInset,
+                  right: _TextAreaSpec.horizontalInset,
+                  top: topInset,
                   height: textHeight,
                   child: Stack(
                     alignment: Alignment.topLeft,
@@ -205,28 +238,28 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
                             widget.placeholder!,
                             maxLines: widget.rows,
                             overflow: TextOverflow.clip,
-                            style: textStyle.copyWith(color: tokens.placeholderColor),
+                            style: textStyle.copyWith(
+                              color: theme.colors.textPlaceholderDefault,
+                            ),
                           ),
                         ),
                       editable,
                     ],
                   ),
                 ),
-                if (widget.showCount) ...<Widget>[
-                  SizedBox(height: tokens.verticalGap),
-                  Align(
-                    alignment: Alignment.centerRight,
+                if (widget.showCount)
+                  Positioned(
+                    right: topInset,
+                    bottom: _TextAreaSpec.counterBottomInset,
                     child: Text(
                       widget.maxLength == null
                           ? '${_controller.text.runes.length}'
                           : '${_controller.text.runes.length}/${widget.maxLength}',
                       style: textStyle.copyWith(
-                        color: tokens.counterColor,
-                        fontFamily: 'monospace',
+                        color: theme.colors.textTertiaryDefault,
                       ),
                     ),
                   ),
-                ],
               ],
             ),
           ),
@@ -242,8 +275,11 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
       textField: true,
       child: AnimatedOpacity(
         curve: CharcoalMotion.standardCurve,
-        duration: tokens.animationDuration,
-        opacity: widget.disabled ? tokens.disabledOpacity : 1,
+        duration: CharcoalMotion.resolveDuration(
+          context,
+          _TextAreaSpec.animationDuration,
+        ),
+        opacity: widget.disabled ? charcoalDisabledOpacity : 1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
@@ -255,20 +291,22 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
                 requiredText: widget.requiredText,
                 subLabel: widget.subLabel,
               ),
-              SizedBox(height: tokens.verticalGap),
+              SizedBox(height: fieldGap),
             ],
             ExcludeFocus(
               excluding: widget.disabled,
               child: IgnorePointer(ignoring: widget.disabled, child: input),
             ),
             if (assistiveText != null && assistiveText.isNotEmpty) ...<Widget>[
-              SizedBox(height: tokens.verticalGap),
+              SizedBox(height: fieldGap),
               Text(
                 assistiveText,
-                style: theme.textStyles.captionMedium.copyWith(
+                style: charcoalTypographyStyle(
+                  context,
                   color: widget.invalid
-                      ? tokens.invalidAssistiveTextColor
-                      : tokens.assistiveTextColor,
+                      ? theme.colors.textNegativeDefault
+                      : theme.colors.textSecondaryDefault,
+                  size: CharcoalTypographySize.size14,
                 ),
               ),
             ],

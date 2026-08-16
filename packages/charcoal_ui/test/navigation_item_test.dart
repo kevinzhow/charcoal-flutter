@@ -29,7 +29,7 @@ void main() {
     expect(decoration.color, theme.colors.containerSecondaryDefault);
   });
 
-  testWidgets('uses generated hover and press token families', (tester) async {
+  testWidgets('uses semantic hover and press token families', (tester) async {
     final states = WidgetStatesController();
     await tester.pumpWidget(
       charcoalTestApp(

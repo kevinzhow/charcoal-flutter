@@ -4,13 +4,24 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+
+abstract final class _MultiSelectSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const controlSize = 20.0;
+  static const outerOffset = 2.0;
+  static const checkSize = 16.0;
+  static const focusRingWidth = 4.0;
+  static const labelFontSize = 14.0;
+  static const labelLineHeight = 22.0;
+}
 
 enum CharcoalMultiSelectVariant { normal, overlay }
 
 /// A controlled Charcoal V2 multi-selection control.
 ///
-/// Unlike `CharcoalCheckbox`, this component uses the circular, borderless
-/// indicator from Charcoal's `MultiSelect` recipe. Use one instance per option
+/// Unlike `CharcoalCheckbox`, this component uses a circular, borderless
+/// indicator. Use one instance per option
 /// and keep the selected set in the parent widget.
 final class CharcoalMultiSelect extends StatelessWidget {
   const CharcoalMultiSelect({
@@ -39,7 +50,6 @@ final class CharcoalMultiSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.multiSelect;
     return MergeSemantics(
       child: CharcoalClickable(
         autofocus: autofocus,
@@ -52,49 +62,105 @@ final class CharcoalMultiSelect extends StatelessWidget {
         builder: (context, states) {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);
-          final uncheckedBackground = switch (variant) {
-            CharcoalMultiSelectVariant.normal => tokens.uncheckedBackground,
-            CharcoalMultiSelectVariant.overlay => tokens.overlayUncheckedBackground,
-          };
           final background = selected
-              ? tokens.checkedBackground.resolve(states)
-              : uncheckedBackground.resolve(states);
-          final ringColor = invalid ? tokens.invalidRingColor : tokens.focusRingColor;
-          final indicator = AnimatedContainer(
-            duration: tokens.animationDuration,
-            curve: CharcoalMotion.standardCurve,
-            width: tokens.size,
-            height: tokens.size,
-            decoration: BoxDecoration(
-              border: variant == CharcoalMultiSelectVariant.overlay
-                  ? Border.all(
-                      color: tokens.overlayBorderColor,
-                      width: tokens.overlayBorderWidth,
-                    )
-                  : null,
-              borderRadius: BorderRadius.circular(tokens.radius),
-              boxShadow: focused || invalid
-                  ? <BoxShadow>[
-                      BoxShadow(color: ringColor, spreadRadius: tokens.focusRingWidth),
-                    ]
-                  : const <BoxShadow>[],
-              color: background,
-            ),
-            child: selected
-                ? Center(
-                    child: CharcoalIcon(
-                      CharcoalIcons.check,
-                      color: tokens.checkColor.resolve(states),
-                      size: tokens.size * 0.72,
+              ? resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerPrimaryDefault,
+                  hovered: theme.colors.containerPrimaryHover,
+                  pressed: theme.colors.containerPrimaryPress,
+                )
+              : switch (variant) {
+                  CharcoalMultiSelectVariant.normal => resolveCharcoalStateColor(
+                    states,
+                    normal: theme.colors.containerNeutralDefault,
+                    hovered: theme.colors.containerNeutralHover,
+                    pressed: theme.colors.containerNeutralPress,
+                  ),
+                  CharcoalMultiSelectVariant.overlay => resolveCharcoalStateColor(
+                    states,
+                    normal: theme.colors.containerOnImgDefault,
+                    hovered: theme.colors.containerNeutralHover,
+                    pressed: theme.colors.containerNeutralPress,
+                  ),
+                };
+          final overlay = variant == CharcoalMultiSelectVariant.overlay;
+          final indicator = SizedBox.square(
+            dimension: _MultiSelectSpec.controlSize,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                AnimatedContainer(
+                  duration: CharcoalMotion.resolveDuration(
+                    context,
+                    _MultiSelectSpec.animationDuration,
+                  ),
+                  curve: CharcoalMotion.standardCurve,
+                  width: _MultiSelectSpec.controlSize,
+                  height: _MultiSelectSpec.controlSize,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      theme.dimensions.radius.oval,
                     ),
-                  )
-                : null,
+                    boxShadow: focused || (invalid && !overlay)
+                        ? <BoxShadow>[
+                            BoxShadow(
+                              color: invalid
+                                  ? theme.colors.borderNegative
+                                  : theme.colors.borderFocusLegacy,
+                              spreadRadius: _MultiSelectSpec.focusRingWidth,
+                            ),
+                          ]
+                        : const <BoxShadow>[],
+                    color: background,
+                  ),
+                ),
+                Positioned(
+                  left: -_MultiSelectSpec.outerOffset,
+                  top: -_MultiSelectSpec.outerOffset,
+                  child: IgnorePointer(
+                    child: Container(
+                      width: theme.dimensions.space.targetXs,
+                      height: theme.dimensions.space.targetXs,
+                      decoration: BoxDecoration(
+                        border: overlay
+                            ? Border.all(
+                                color: theme.colors.borderHud,
+                                width: theme.dimensions.borderWidth.l,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.circular(
+                          theme.dimensions.radius.oval,
+                        ),
+                        boxShadow: invalid && overlay
+                            ? <BoxShadow>[
+                                BoxShadow(
+                                  color: theme.colors.borderNegative,
+                                  spreadRadius: _MultiSelectSpec.focusRingWidth,
+                                ),
+                              ]
+                            : const <BoxShadow>[],
+                      ),
+                      child: Center(
+                        child: CharcoalIcon(
+                          CharcoalIcons.check,
+                          color: theme.colors.iconOnPrimaryDefault,
+                          size: _MultiSelectSpec.checkSize,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
 
           return AnimatedOpacity(
             curve: CharcoalMotion.standardCurve,
-            duration: tokens.animationDuration,
-            opacity: disabled ? tokens.disabledOpacity : 1,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _MultiSelectSpec.animationDuration,
+            ),
+            opacity: disabled ? charcoalDisabledOpacity : 1,
             child: _MultiSelectContent(indicator: indicator, label: label),
           );
         },
@@ -112,7 +178,6 @@ final class _MultiSelectContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final labelTokens = theme.components.multiSelect.label;
     if (label == null) {
       return indicator;
     }
@@ -120,15 +185,15 @@ final class _MultiSelectContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         indicator,
-        SizedBox(width: labelTokens.gap),
+        SizedBox(width: theme.dimensions.space.component10),
         Flexible(
           child: DefaultTextStyle(
             style: TextStyle(
-              color: labelTokens.color,
+              color: theme.colors.textDefault,
               fontFamily: theme.typography.fontFamily.sans,
-              fontSize: labelTokens.fontSize,
-              fontWeight: labelTokens.fontWeight,
-              height: labelTokens.lineHeight / labelTokens.fontSize,
+              fontSize: _MultiSelectSpec.labelFontSize,
+              fontWeight: theme.typography.fontWeight.regular,
+              height: _MultiSelectSpec.labelLineHeight / _MultiSelectSpec.labelFontSize,
               leadingDistribution: TextLeadingDistribution.even,
             ),
             child: label!,

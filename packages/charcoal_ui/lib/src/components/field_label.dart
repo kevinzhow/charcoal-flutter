@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
+import 'typography.dart';
 
 /// Label, required marker, and trailing content shared by Charcoal form fields.
 final class CharcoalFieldLabel extends StatelessWidget {
@@ -9,6 +10,7 @@ final class CharcoalFieldLabel extends StatelessWidget {
     this.required = false,
     this.requiredText = '*Required',
     this.subLabel,
+    this.weight = CharcoalTypographyWeight.bold,
     super.key,
   });
 
@@ -16,33 +18,40 @@ final class CharcoalFieldLabel extends StatelessWidget {
   final bool required;
   final String requiredText;
   final Widget? subLabel;
+  final CharcoalTypographyWeight weight;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final gap = theme.components.textField.gap;
     return Row(
       children: <Widget>[
         Text(
           label,
-          style: theme.textStyles.captionMedium.copyWith(
+          style: charcoalTypographyStyle(
+            context,
             color: theme.colors.textDefaultText1,
+            size: CharcoalTypographySize.size14,
+            weight: weight,
           ),
         ),
         if (required) ...<Widget>[
-          SizedBox(width: gap),
+          SizedBox(width: theme.dimensions.space.component10),
           Text(
             requiredText,
-            style: theme.textStyles.captionMedium.copyWith(
+            style: charcoalTypographyStyle(
+              context,
               color: theme.colors.textSecondaryDefault,
+              size: CharcoalTypographySize.size14,
             ),
           ),
         ],
         if (subLabel != null) ...<Widget>[
           const Spacer(),
           DefaultTextStyle(
-            style: theme.textStyles.captionMedium.copyWith(
+            style: charcoalTypographyStyle(
+              context,
               color: theme.colors.textTertiaryDefault,
+              size: CharcoalTypographySize.size14,
             ),
             child: subLabel!,
           ),

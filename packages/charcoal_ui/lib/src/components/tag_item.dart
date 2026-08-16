@@ -3,10 +3,22 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
-import '../theme/component_tokens.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
 
 enum CharcoalTagItemStatus { normal, active, inactive }
+
+enum CharcoalTagItemSize { small, medium }
+
+abstract final class _TagItemSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const defaultBackground = Color(0xFF7ACCB1);
+  static const maxLabelWidth = 152.0;
+  static const iconSize = 16.0;
+  static const focusRingWidth = 4.0;
+  static const translatedLabelLineHeight = 1.4;
+}
 
 /// A compact Charcoal V2 tag action with optional translated text or artwork.
 final class CharcoalTagItem extends StatelessWidget {
@@ -44,23 +56,38 @@ final class CharcoalTagItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.tagItem;
-    final sizeTokens = tokens.size(_hasTranslation ? CharcoalTagItemSize.medium : size);
+    final effectiveSize = _hasTranslation ? CharcoalTagItemSize.medium : size;
+    final sizeSpec = switch (effectiveSize) {
+      CharcoalTagItemSize.small => (
+        height: theme.dimensions.space.targetS,
+        padding: theme.dimensions.space.component30,
+      ),
+      CharcoalTagItemSize.medium => (
+        height: theme.dimensions.space.targetM,
+        padding: theme.dimensions.space.component40,
+      ),
+    };
     final hasImage = backgroundImage != null && status != CharcoalTagItemStatus.inactive;
     final foreground = switch (status) {
-      CharcoalTagItemStatus.inactive => tokens.inactiveForegroundColor,
-      _ when hasImage => tokens.imageForegroundColor,
-      _ => tokens.foregroundColor,
+      CharcoalTagItemStatus.inactive => theme.colors.textSecondaryDefault,
+      _ when hasImage => theme.colors.textOnOnImgDefault,
+      _ => theme.colors.textOnPrimaryDefault,
     };
-    final iconColor = hasImage ? tokens.imageIconColor : tokens.iconColor;
+    final iconColor = hasImage
+        ? theme.colors.iconOnOnImgDefault
+        : theme.colors.iconOnPrimaryDefault;
     final background = switch (status) {
-      CharcoalTagItemStatus.inactive => tokens.inactiveBackgroundColor,
-      _ when hasImage => tokens.imageBackgroundColor,
-      _ => backgroundColor ?? tokens.backgroundColor,
+      CharcoalTagItemStatus.inactive => theme.colors.containerSecondaryDefault,
+      _ when hasImage => theme.colors.containerOnImgDefault,
+      _ => backgroundColor ?? _TagItemSpec.defaultBackground,
     };
     final horizontalPadding = status == CharcoalTagItemStatus.active
-        ? (left: tokens.activePaddingLeft, right: tokens.activePaddingRight)
-        : (left: sizeTokens.paddingHorizontal, right: sizeTokens.paddingHorizontal);
+        ? (
+            left: theme.dimensions.space.component30,
+            right: theme.dimensions.space.component20,
+          )
+        : (left: sizeSpec.padding, right: sizeSpec.padding);
+    final activeGap = theme.dimensions.space.component20;
     final effectiveSemanticLabel =
         semanticLabel ?? (_hasTranslation ? '${translatedLabel!}, $label' : label);
 
@@ -76,23 +103,32 @@ final class CharcoalTagItem extends StatelessWidget {
         final focused = states.contains(WidgetState.focused);
         return AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: tokens.animationDuration,
-          opacity: disabled ? tokens.disabledOpacity : 1,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _TagItemSpec.animationDuration,
+          ),
+          opacity: disabled ? charcoalDisabledOpacity : 1,
           child: AnimatedContainer(
             clipBehavior: Clip.antiAlias,
-            duration: tokens.animationDuration,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _TagItemSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
-            height: sizeTokens.height,
+            height: sizeSpec.height,
             padding: EdgeInsetsDirectional.only(
               start: horizontalPadding.left,
               end: horizontalPadding.right,
             ),
             decoration: BoxDecoration(
               backgroundBlendMode: hasImage ? BlendMode.overlay : null,
-              borderRadius: BorderRadius.circular(tokens.radius),
+              borderRadius: BorderRadius.circular(theme.dimensions.radius.s),
               boxShadow: focused
                   ? <BoxShadow>[
-                      BoxShadow(color: tokens.focusRingColor, spreadRadius: tokens.focusRingWidth),
+                      BoxShadow(
+                        color: theme.colors.borderFocusLegacy,
+                        spreadRadius: _TagItemSpec.focusRingWidth,
+                      ),
                     ]
                   : const <BoxShadow>[],
               color: background,
@@ -102,7 +138,9 @@ final class CharcoalTagItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: tokens.maxLabelWidth),
+                  constraints: const BoxConstraints(
+                    maxWidth: _TagItemSpec.maxLabelWidth,
+                  ),
                   child: _TagLabels(
                     foreground: foreground,
                     label: label,
@@ -110,11 +148,11 @@ final class CharcoalTagItem extends StatelessWidget {
                   ),
                 ),
                 if (status == CharcoalTagItemStatus.active) ...<Widget>[
-                  SizedBox(width: tokens.gap),
+                  SizedBox(width: activeGap),
                   CharcoalIcon(
                     CharcoalIcons.x,
                     color: iconColor,
-                    size: tokens.iconSize,
+                    size: _TagItemSpec.iconSize,
                   ),
                 ],
               ],
@@ -139,21 +177,17 @@ final class _TagLabels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.tagItem;
     final translation = translatedLabel;
     if (translation == null || translation.isEmpty) {
       return Text(
         label,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
+        style: charcoalTypographyStyle(
+          context,
           color: foreground,
-          fontFamily: theme.typography.fontFamily.sans,
-          fontSize: tokens.labelFontSize,
-          fontWeight: tokens.labelFontWeight,
-          height: tokens.labelLineHeight / tokens.labelFontSize,
-          leadingDistribution: TextLeadingDistribution.even,
+          size: CharcoalTypographySize.size14,
+          weight: CharcoalTypographyWeight.bold,
         ),
       );
     }
@@ -165,27 +199,22 @@ final class _TagLabels extends StatelessWidget {
           translation,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: charcoalTypographyStyle(
+            context,
             color: foreground,
-            fontFamily: theme.typography.fontFamily.sans,
-            fontSize: tokens.translatedFontSize,
-            fontWeight: tokens.translatedFontWeight,
-            height: tokens.translatedLineHeight / tokens.translatedFontSize,
-            leadingDistribution: TextLeadingDistribution.even,
+            size: CharcoalTypographySize.size12,
+            weight: CharcoalTypographyWeight.bold,
           ),
         ),
         Text(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: charcoalTypographyStyle(
+            context,
             color: foreground,
-            fontFamily: theme.typography.fontFamily.sans,
-            fontSize: tokens.translatedLabelFontSize,
-            fontWeight: tokens.translatedLabelFontWeight,
-            height: tokens.translatedLabelLineHeight / tokens.translatedLabelFontSize,
-            leadingDistribution: TextLeadingDistribution.even,
-          ),
+            size: CharcoalTypographySize.size10,
+          ).copyWith(height: _TagItemSpec.translatedLabelLineHeight),
         ),
       ],
     );

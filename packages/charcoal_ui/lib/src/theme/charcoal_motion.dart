@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 
 /// Shared motion values for Charcoal interactions.
 ///
-/// Component recipes still own their generated durations. These curves and
-/// route timings provide one motion language for composition-level behavior.
+/// Component implementations own their source-backed durations. These curves
+/// and route timings provide one motion language for composition behavior.
 abstract final class CharcoalMotion {
   static const Duration fast = Duration(milliseconds: 120);
   static const Duration standard = Duration(milliseconds: 200);

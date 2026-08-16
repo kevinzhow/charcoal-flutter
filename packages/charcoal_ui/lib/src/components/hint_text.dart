@@ -1,8 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
+import 'typography.dart';
 
 enum CharcoalHintContext { section, page }
+
+abstract final class _HintSpec {
+  static const iconSize = 16.0;
+  static const pageHorizontalPadding = 32.0;
+}
 
 /// Informational copy on a semantic secondary container.
 final class CharcoalHintText extends StatelessWidget {
@@ -31,23 +37,24 @@ final class CharcoalHintText extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!visible) return const SizedBox.shrink();
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.hint;
     final horizontalPadding = switch (this.context) {
-      CharcoalHintContext.section => tokens.paddingHorizontal,
-      CharcoalHintContext.page => theme.dimensions.space.component50,
+      CharcoalHintContext.section => theme.dimensions.space.component30,
+      CharcoalHintContext.page => _HintSpec.pageHorizontalPadding,
     };
     final verticalPadding = switch (this.context) {
-      CharcoalHintContext.section => tokens.paddingVertical,
+      CharcoalHintContext.section => theme.dimensions.space.component25,
       CharcoalHintContext.page => theme.dimensions.space.component30,
     };
+    final contentGap = theme.dimensions.space.component10;
+    final actionGap = theme.dimensions.space.component20;
     return Align(
       alignment: alignment,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(tokens.radius),
-            color: tokens.backgroundColor,
+            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+            color: theme.colors.containerSecondaryDefault,
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
@@ -63,22 +70,19 @@ final class CharcoalHintText extends StatelessWidget {
                 if (icon != null) ...<Widget>[
                   IconTheme(
                     data: IconThemeData(
-                      color: tokens.iconColor,
-                      size: tokens.iconSize,
+                      color: theme.colors.iconDefault,
+                      size: _HintSpec.iconSize,
                     ),
                     child: icon!,
                   ),
-                  SizedBox(width: tokens.gap),
+                  SizedBox(width: contentGap),
                 ],
                 Flexible(
                   child: DefaultTextStyle(
-                    style: TextStyle(
-                      color: tokens.foregroundColor,
-                      fontFamily: theme.typography.fontFamily.sans,
-                      fontSize: tokens.fontSize,
-                      fontWeight: tokens.fontWeight,
-                      height: tokens.lineHeight / tokens.fontSize,
-                      leadingDistribution: TextLeadingDistribution.even,
+                    style: charcoalTypographyStyle(
+                      context,
+                      color: theme.colors.textDefault,
+                      size: CharcoalTypographySize.size14,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +95,7 @@ final class CharcoalHintText extends StatelessWidget {
                   ),
                 ),
                 if (action case final action?) ...<Widget>[
-                  SizedBox(width: tokens.actionGap),
+                  SizedBox(width: actionGap),
                   action,
                 ],
               ],

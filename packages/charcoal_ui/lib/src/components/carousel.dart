@@ -6,9 +6,18 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
-import '../theme/component_tokens.dart';
 import 'clickable.dart';
 import 'icon_button.dart';
+import 'interaction_state.dart';
+
+abstract final class _CarouselSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const navigationFadeDuration = Duration(milliseconds: 400);
+  static const scrollDuration = Duration(milliseconds: 300);
+  static const mediumViewportFraction = 0.75;
+  static const navigationZoneWidth = 72.0;
+  static const focusRingWidth = 4.0;
+}
 
 enum CharcoalCarouselSize { small, medium }
 
@@ -70,6 +79,7 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
   late FocusNode _focusNode;
   late int _currentPage;
   bool _focusVisible = false;
+  bool _hovered = false;
 
   bool get _ownsFocusNode => widget.focusNode == null;
   int get _lastPage => widget.children.isEmpty ? 0 : widget.children.length - 1;
@@ -151,10 +161,12 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
         page >= widget.children.length) {
       return;
     }
-    final tokens = CharcoalTheme.of(context).components.carousel;
     await _controller.animateToPage(
       page,
-      duration: tokens.scrollDuration,
+      duration: CharcoalMotion.resolveDuration(
+        context,
+        _CarouselSpec.scrollDuration,
+      ),
       curve: CharcoalMotion.emphasizedCurve,
     );
   }
@@ -191,7 +203,6 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.carousel;
     if (widget.children.isEmpty) {
       return Semantics(
         container: true,
@@ -201,9 +212,9 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
     }
     final viewportFraction =
         widget.viewportFraction ??
-        (widget.size == CharcoalCarouselSize.small ? 1 : tokens.mediumViewportFraction);
+        (widget.size == CharcoalCarouselSize.small ? 1 : _CarouselSpec.mediumViewportFraction);
     _ensureInternalController(viewportFraction);
-    final gap = widget.gap ?? tokens.defaultGap;
+    final gap = widget.gap ?? 0;
     final showIndicators = widget.showIndicators ?? widget.size == CharcoalCarouselSize.small;
     final showNavigation =
         widget.showNavigationButtons ?? widget.size == CharcoalCarouselSize.medium;
@@ -212,11 +223,17 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
 
     final viewport = AnimatedContainer(
       curve: CharcoalMotion.standardCurve,
-      duration: tokens.animationDuration,
+      duration: CharcoalMotion.resolveDuration(
+        context,
+        _CarouselSpec.animationDuration,
+      ),
       decoration: BoxDecoration(
         boxShadow: _focusVisible
             ? <BoxShadow>[
-                BoxShadow(color: tokens.focusRingColor, spreadRadius: tokens.focusRingWidth),
+                BoxShadow(
+                  color: theme.colors.borderFocusLegacy,
+                  spreadRadius: _CarouselSpec.focusRingWidth,
+                ),
               ]
             : const <BoxShadow>[],
       ),
@@ -241,29 +258,29 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
           ),
           if (showNavigation) ...<Widget>[
             PositionedDirectional(
-              start: tokens.navigationInset,
+              start: 0,
               top: 0,
               bottom: 0,
-              child: Center(
-                child: _CarouselNavigationButton(
-                  backwards: true,
-                  enabled: canPrevious,
-                  onPressed: () => _animateTo(_currentPage - 1),
-                  semanticLabel: widget.previousSemanticLabel,
-                ),
+              width: _CarouselSpec.navigationZoneWidth,
+              child: _CarouselNavigationButton(
+                backwards: true,
+                enabled: canPrevious,
+                onPressed: () => _animateTo(_currentPage - 1),
+                semanticLabel: widget.previousSemanticLabel,
+                visible: _hovered || _focusVisible,
               ),
             ),
             PositionedDirectional(
-              end: tokens.navigationInset,
+              end: 0,
               top: 0,
               bottom: 0,
-              child: Center(
-                child: _CarouselNavigationButton(
-                  backwards: false,
-                  enabled: canNext,
-                  onPressed: () => _animateTo(_currentPage + 1),
-                  semanticLabel: widget.nextSemanticLabel,
-                ),
+              width: _CarouselSpec.navigationZoneWidth,
+              child: _CarouselNavigationButton(
+                backwards: false,
+                enabled: canNext,
+                onPressed: () => _animateTo(_currentPage + 1),
+                semanticLabel: widget.nextSemanticLabel,
+                visible: _hovered || _focusVisible,
               ),
             ),
           ],
@@ -282,30 +299,40 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
           autofocus: widget.autofocus,
           focusNode: _focusNode,
           onShowFocusHighlight: (visible) => setState(() => _focusVisible = visible),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Expanded(child: viewport),
-              if (showIndicators)
-                SizedBox(
-                  height: tokens.indicatorHeight,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      for (var index = 0; index < widget.children.length; index++) ...<Widget>[
-                        if (index > 0) SizedBox(width: tokens.indicatorGap),
-                        _CarouselIndicator(
-                          active: index == _currentPage,
-                          onPressed: () => _animateTo(index),
-                          semanticLabel:
-                              widget.semanticLabelBuilder?.call(index, widget.children.length) ??
-                              '${index + 1}/${widget.children.length}',
-                        ),
+          child: MouseRegion(
+            onEnter: (_) => setState(() => _hovered = true),
+            onExit: (_) => setState(() => _hovered = false),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(child: viewport),
+                if (showIndicators)
+                  SizedBox(
+                    height: theme.dimensions.space.targetM,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (var index = 0; index < widget.children.length; index++) ...<Widget>[
+                          if (index > 0)
+                            SizedBox(
+                              width: theme.dimensions.space.component20,
+                            ),
+                          _CarouselIndicator(
+                            active: index == _currentPage,
+                            onPressed: () => _animateTo(index),
+                            semanticLabel:
+                                widget.semanticLabelBuilder?.call(
+                                  index,
+                                  widget.children.length,
+                                ) ??
+                                '${index + 1}/${widget.children.length}',
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -319,33 +346,40 @@ final class _CarouselNavigationButton extends StatelessWidget {
     required this.enabled,
     required this.onPressed,
     required this.semanticLabel,
+    required this.visible,
   });
 
   final bool backwards;
   final bool enabled;
   final VoidCallback onPressed;
   final String semanticLabel;
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {
     final direction = Directionality.of(context);
     final pointsLeft = backwards == (direction == TextDirection.ltr);
     return ExcludeSemantics(
-      excluding: !enabled,
+      excluding: !enabled || !visible,
       child: IgnorePointer(
-        ignoring: !enabled,
+        ignoring: !enabled || !visible,
         child: AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: CharcoalTheme.of(context).components.carousel.animationDuration,
-          opacity: enabled ? 1 : 0,
-          child: CharcoalIconButton(
-            icon: CharcoalIcon(
-              pointsLeft ? CharcoalIcons16.chevronLeft : CharcoalIcons16.chevronRight,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _CarouselSpec.navigationFadeDuration,
+          ),
+          opacity: enabled && visible ? 1 : 0,
+          child: Center(
+            child: CharcoalIconButton(
+              icon: CharcoalIcon(
+                pointsLeft ? CharcoalIcons16.chevronLeft : CharcoalIcons16.chevronRight,
+              ),
+              onPressed: enabled ? onPressed : null,
+              semanticLabel: semanticLabel,
+              size: CharcoalIconButtonSize.small,
+              variant: CharcoalIconButtonVariant.overlay,
             ),
-            onPressed: enabled ? onPressed : null,
-            semanticLabel: semanticLabel,
-            size: CharcoalIconButtonSize.small,
-            variant: CharcoalIconButtonVariant.overlay,
           ),
         ),
       ),
@@ -366,26 +400,72 @@ final class _CarouselIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = CharcoalTheme.of(context).components.carousel;
+    final theme = CharcoalTheme.of(context);
     return CharcoalClickable(
       onPressed: onPressed,
       semanticLabel: semanticLabel,
       selected: active,
       builder: (context, states) {
         final focused = states.contains(WidgetState.focused);
-        return AnimatedContainer(
-          curve: CharcoalMotion.standardCurve,
-          duration: tokens.animationDuration,
-          width: tokens.indicatorSize,
-          height: tokens.indicatorSize,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(tokens.indicatorRadius),
-            boxShadow: focused
-                ? <BoxShadow>[
-                    BoxShadow(color: tokens.focusRingColor, spreadRadius: tokens.focusRingWidth),
-                  ]
-                : const <BoxShadow>[],
-            color: active ? tokens.indicatorActiveColor : tokens.indicatorColor.resolve(states),
+        final dotSize = theme.dimensions.space.component20;
+        final outlineWidth = theme.dimensions.borderWidth.l;
+        final outlineOffset = theme.dimensions.borderWidth.l;
+        final outlineExtent = outlineWidth + outlineOffset;
+        return SizedBox.square(
+          dimension: dotSize,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              AnimatedContainer(
+                curve: CharcoalMotion.standardCurve,
+                duration: CharcoalMotion.resolveDuration(
+                  context,
+                  _CarouselSpec.animationDuration,
+                ),
+                width: dotSize,
+                height: dotSize,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    theme.dimensions.radius.oval,
+                  ),
+                  color: active
+                      ? theme.colors.textDefault
+                      : resolveCharcoalStateColor(
+                          states,
+                          normal: theme.colors.textTertiaryDefault,
+                          hovered: theme.colors.textSecondaryDefault,
+                          pressed: theme.colors.textDefault,
+                          disabled: theme.colors.textTertiaryDefault,
+                        ),
+                ),
+              ),
+              Positioned(
+                left: -outlineExtent,
+                top: -outlineExtent,
+                child: IgnorePointer(
+                  child: AnimatedOpacity(
+                    duration: CharcoalMotion.resolveDuration(
+                      context,
+                      _CarouselSpec.animationDuration,
+                    ),
+                    opacity: focused ? 1 : 0,
+                    child: Container(
+                      width: dotSize + outlineExtent * 2,
+                      height: dotSize + outlineExtent * 2,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: theme.colors.borderFocus1,
+                          width: outlineWidth,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          theme.dimensions.radius.oval,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

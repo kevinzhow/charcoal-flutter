@@ -6,7 +6,7 @@ enum CharcoalTypographySize { size10, size12, size14, size16, size20 }
 
 enum CharcoalTypographyWeight { regular, bold }
 
-/// The typography scale exposed by Charcoal iOS.
+/// The numeric typography scale used by Charcoal components.
 ///
 /// Flutter's ambient [MediaQuery.textScalerOf] is intentionally left intact,
 /// so these styles participate in Dynamic Type/accessibility text scaling.
@@ -46,7 +46,7 @@ final class CharcoalTypography extends StatelessWidget {
   );
 }
 
-/// Resolves an iOS-compatible Charcoal typography style.
+/// Resolves a numeric Charcoal typography style.
 TextStyle charcoalTypographyStyle(
   BuildContext context, {
   Color? color,
@@ -55,23 +55,23 @@ TextStyle charcoalTypographyStyle(
   CharcoalTypographyWeight weight = CharcoalTypographyWeight.regular,
 }) {
   final theme = CharcoalTheme.of(context);
-  final tokens = theme.components.numericTypography;
-  final sizeTokens = switch (size) {
-    CharcoalTypographySize.size10 => tokens.size10,
-    CharcoalTypographySize.size12 => tokens.size12,
-    CharcoalTypographySize.size14 => tokens.size14,
-    CharcoalTypographySize.size16 => tokens.size16,
-    CharcoalTypographySize.size20 => tokens.size20,
+  final (fontSize, lineHeight) = switch (size) {
+    // charcoal-ios/Sources/CharcoalSwiftUI/Components/Typographies
+    CharcoalTypographySize.size10 => (10.0, 18.0),
+    CharcoalTypographySize.size12 => (12.0, 20.0),
+    CharcoalTypographySize.size14 => (14.0, 22.0),
+    CharcoalTypographySize.size16 => (16.0, 24.0),
+    CharcoalTypographySize.size20 => (20.0, 28.0),
   };
   return TextStyle(
     color: color ?? theme.colors.textDefaultText1,
     fontFamily: monospace ? 'monospace' : theme.typography.fontFamily.sans,
-    fontSize: sizeTokens.fontSize,
+    fontSize: fontSize,
     fontWeight: switch (weight) {
-      CharcoalTypographyWeight.regular => tokens.regularFontWeight,
-      CharcoalTypographyWeight.bold => tokens.boldFontWeight,
+      CharcoalTypographyWeight.regular => theme.typography.fontWeight.regular,
+      CharcoalTypographyWeight.bold => theme.typography.fontWeight.bold,
     },
-    height: monospace ? null : sizeTokens.lineHeight / sizeTokens.fontSize,
+    height: monospace ? null : lineHeight / fontSize,
     leadingDistribution: monospace ? null : TextLeadingDistribution.even,
   );
 }

@@ -34,4 +34,3 @@ export 'src/theme/charcoal_motion.dart';
 export 'src/theme/charcoal_text_styles.dart';
 export 'src/theme/charcoal_theme.dart';
 export 'src/theme/charcoal_theme_data.dart';
-export 'src/theme/component_tokens.dart';

@@ -27,8 +27,7 @@ void main() {
     expect(presses, 1);
   });
 
-  testWidgets('active status uses generated asymmetric padding and remove icon', (tester) async {
-    final theme = CharcoalThemeData.light();
+  testWidgets('active status uses asymmetric padding and remove icon', (tester) async {
     await tester.pumpWidget(
       charcoalTestApp(
         CharcoalTagItem(
@@ -36,15 +35,30 @@ void main() {
           onPressed: () {},
           status: CharcoalTagItemStatus.active,
         ),
-        theme: theme,
       ),
     );
 
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
     final padding = container.padding! as EdgeInsetsDirectional;
-    expect(padding.start, theme.components.tagItem.activePaddingLeft);
-    expect(padding.end, theme.components.tagItem.activePaddingRight);
+    expect(padding.start, 16);
+    expect(padding.end, 8);
     expect(find.byType(CustomPaint), findsAtLeastNWidgets(1));
+  });
+
+  testWidgets('normal status keeps the component source color', (tester) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalTagItem(label: '#landscape', onPressed: () {}),
+      ),
+    );
+
+    final container = tester.widget<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
+    expect(
+      (container.decoration! as BoxDecoration).color,
+      const Color(0xFF7ACCB1),
+    );
   });
 
   testWidgets('inactive status uses semantic secondary colors', (tester) async {
@@ -69,8 +83,7 @@ void main() {
     );
   });
 
-  testWidgets('translated labels force the medium recipe', (tester) async {
-    final theme = CharcoalThemeData.light();
+  testWidgets('translated labels force the medium size', (tester) async {
     await tester.pumpWidget(
       charcoalTestApp(
         CharcoalTagItem(
@@ -79,11 +92,10 @@ void main() {
           size: CharcoalTagItemSize.small,
           translatedLabel: 'girl',
         ),
-        theme: theme,
       ),
     );
 
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    expect(container.constraints!.maxHeight, theme.components.tagItem.medium.height);
+    expect(container.constraints!.maxHeight, 40);
   });
 }

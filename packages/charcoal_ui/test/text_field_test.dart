@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_helpers.dart';
 
 void main() {
-  testWidgets('accepts input and renders the generated count', (tester) async {
+  testWidgets('accepts input and updates the count', (tester) async {
     String? changedValue;
     await tester.pumpWidget(
       charcoalTestApp(
@@ -29,6 +29,18 @@ void main() {
     expect(find.text('Display name'), findsOneWidget);
     expect(find.text('0/10'), findsOneWidget);
 
+    final container = tester.widget<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
+    expect(
+      container.padding,
+      const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+    );
+    expect(
+      (container.decoration! as BoxDecoration).borderRadius,
+      BorderRadius.circular(4),
+    );
+
     await tester.enterText(find.byType(EditableText), 'pixiv');
     await tester.pump();
 
@@ -37,7 +49,7 @@ void main() {
     expect(find.text('5/10'), findsOneWidget);
   });
 
-  testWidgets('uses invalid tokens for ring and assistive text', (tester) async {
+  testWidgets('uses semantic invalid colors for ring and assistive text', (tester) async {
     final theme = CharcoalThemeData.light();
     await tester.pumpWidget(
       charcoalTestApp(
@@ -62,11 +74,11 @@ void main() {
       ),
     );
     final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
-    expect(ringPainter.color, theme.components.textField.invalidRingColor);
+    expect(ringPainter.color, theme.colors.borderNegative);
     expect(ringPainter.opacity, 1);
 
     final assistive = tester.widget<Text>(find.text('Required field'));
-    expect(assistive.style!.color, theme.components.textField.invalidAssistiveTextColor);
+    expect(assistive.style!.color, theme.colors.textNegativeDefault);
   });
 
   testWidgets('disabled field ignores text input', (tester) async {
@@ -111,7 +123,7 @@ void main() {
     await tester.tap(find.byType(EditableText));
     await tester.pumpAndSettle();
 
-    expect(initialColor, theme.components.textField.background.normal);
+    expect(initialColor, theme.colors.containerSecondaryDefaultA);
     expect(decoration().color, initialColor);
     expect(decoration().boxShadow, isNull);
     final ring = tester.widget<CustomPaint>(
@@ -120,7 +132,7 @@ void main() {
       ),
     );
     final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
-    expect(ringPainter.color, theme.components.textField.focusRingColor);
+    expect(ringPainter.color, theme.colors.borderFocusLegacy);
     expect(ringPainter.opacity, 1);
   });
 
@@ -141,7 +153,7 @@ void main() {
 
     expect(
       tester.getSize(find.byType(AnimatedContainer)).height,
-      greaterThan(theme.components.textField.height),
+      greaterThan(42),
     );
   });
 }

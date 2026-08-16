@@ -3,6 +3,19 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+abstract final class _SwitchSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+
+  // UISwitch geometry used by Charcoal's SwiftUI wrapper.
+  static const trackWidth = 51.0;
+  static const trackHeight = 31.0;
+  static const trackInset = 2.0;
+  static const thumbSize = 27.0;
+  static const focusRingWidth = 4.0;
+}
 
 /// A controlled Charcoal V2 switch.
 final class CharcoalSwitch extends StatelessWidget {
@@ -28,7 +41,9 @@ final class CharcoalSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.switchControl;
+    final horizontalTrackPadding = theme.dimensions.space.component10;
+    final labelGap = theme.dimensions.space.component20;
+    final radius = theme.dimensions.radius.oval;
     return MergeSemantics(
       child: CharcoalClickable(
         autofocus: autofocus,
@@ -42,20 +57,41 @@ final class CharcoalSwitch extends StatelessWidget {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);
           final background = value
-              ? tokens.checkedBackground.resolve(states)
-              : tokens.uncheckedBackground.resolve(states);
-          final thumbColor = tokens.thumbColor.resolve(states);
-          final track = AnimatedContainer(
-            duration: tokens.animationDuration,
+              ? resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerPrimaryDefault,
+                  hovered: theme.colors.containerPrimaryHover,
+                  pressed: theme.colors.containerPrimaryPress,
+                )
+              : resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerNeutralDefault,
+                  hovered: theme.colors.containerNeutralHover,
+                  pressed: theme.colors.containerNeutralPress,
+                );
+          final thumbColor = resolveCharcoalStateColor(
+            states,
+            normal: theme.colors.iconOnPrimaryDefault,
+            hovered: theme.colors.iconOnPrimaryHover,
+            pressed: theme.colors.iconOnPrimaryPress,
+          );
+          final trackSurface = AnimatedContainer(
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _SwitchSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
-            width: tokens.width,
-            height: tokens.height,
-            padding: EdgeInsets.all(tokens.borderWidth),
+            width: _SwitchSpec.trackWidth,
+            height: _SwitchSpec.trackHeight,
+            padding: const EdgeInsets.all(_SwitchSpec.trackInset),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(tokens.radius),
+              borderRadius: BorderRadius.circular(radius),
               boxShadow: focused
                   ? <BoxShadow>[
-                      BoxShadow(color: tokens.focusRingColor, spreadRadius: tokens.focusRingWidth),
+                      BoxShadow(
+                        color: theme.colors.borderFocusLegacy,
+                        spreadRadius: _SwitchSpec.focusRingWidth,
+                      ),
                     ]
                   : const <BoxShadow>[],
               color: background,
@@ -63,24 +99,38 @@ final class CharcoalSwitch extends StatelessWidget {
             child: AnimatedAlign(
               alignment: value ? Alignment.centerRight : Alignment.centerLeft,
               curve: CharcoalMotion.emphasizedCurve,
-              duration: tokens.animationDuration,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _SwitchSpec.animationDuration,
+              ),
               child: SizedBox(
-                width: tokens.thumbSize,
-                height: tokens.thumbSize,
+                width: _SwitchSpec.thumbSize,
+                height: _SwitchSpec.thumbSize,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(tokens.radius),
+                    borderRadius: BorderRadius.circular(radius),
                     color: thumbColor,
                   ),
                 ),
               ),
             ),
           );
-          return AnimatedOpacity(
-            curve: CharcoalMotion.standardCurve,
-            duration: tokens.animationDuration,
-            opacity: disabled ? tokens.disabledOpacity : 1,
-            child: _SwitchContent(track: track, label: label),
+          final track = Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalTrackPadding),
+            child: AnimatedOpacity(
+              curve: CharcoalMotion.standardCurve,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _SwitchSpec.animationDuration,
+              ),
+              opacity: disabled ? charcoalDisabledOpacity : 1,
+              child: trackSurface,
+            ),
+          );
+          return _SwitchContent(
+            label: label,
+            labelGap: labelGap,
+            track: track,
           );
         },
       ),
@@ -89,15 +139,19 @@ final class CharcoalSwitch extends StatelessWidget {
 }
 
 final class _SwitchContent extends StatelessWidget {
-  const _SwitchContent({required this.track, required this.label});
+  const _SwitchContent({
+    required this.label,
+    required this.labelGap,
+    required this.track,
+  });
 
-  final Widget track;
   final Widget? label;
+  final double labelGap;
+  final Widget track;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final labelTokens = theme.components.switchControl.label;
     if (label == null) {
       return track;
     }
@@ -106,18 +160,15 @@ final class _SwitchContent extends StatelessWidget {
       children: <Widget>[
         Flexible(
           child: DefaultTextStyle(
-            style: TextStyle(
-              color: labelTokens.color,
-              fontFamily: theme.typography.fontFamily.sans,
-              fontSize: labelTokens.fontSize,
-              fontWeight: labelTokens.fontWeight,
-              height: labelTokens.lineHeight / labelTokens.fontSize,
-              leadingDistribution: TextLeadingDistribution.even,
+            style: charcoalTypographyStyle(
+              context,
+              color: theme.colors.textDefault,
+              size: CharcoalTypographySize.size14,
             ),
             child: label!,
           ),
         ),
-        SizedBox(width: labelTokens.gap),
+        SizedBox(width: labelGap),
         track,
       ],
     );

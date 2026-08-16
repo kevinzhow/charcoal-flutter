@@ -3,8 +3,21 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import '../theme/charcoal_theme_data.dart';
-import '../theme/component_tokens.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+enum CharcoalButtonVariant { normal, primary, overlay, danger, navigation }
+
+enum CharcoalButtonSize { small, medium }
+
+abstract final class _ButtonSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const focusRingWidth = 4.0;
+  static const iconSize = 16.0;
+  static const smallVerticalPadding = 5.0;
+  static const mediumVerticalPadding = 9.0;
+}
 
 /// A Charcoal V2 button implemented entirely with Flutter Widgets.
 final class CharcoalButton extends StatelessWidget {
@@ -42,9 +55,23 @@ final class CharcoalButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final buttonTokens = theme.components.button;
-    final sizeTokens = buttonTokens.size(size);
-    final variantTokens = buttonTokens.variant(variant);
+    final sizeSpec = switch (size) {
+      // CharcoalButtonSizes+Extension.swift and the explicit disabled frames in
+      // CharcoalNavigationButton.swift. These component values resolve through
+      // the semantic target and component spacing foundations.
+      CharcoalButtonSize.small => (
+        height: theme.dimensions.space.targetS,
+        horizontalPadding: theme.dimensions.space.component30,
+        verticalPadding: _ButtonSpec.smallVerticalPadding,
+      ),
+      CharcoalButtonSize.medium => (
+        height: theme.dimensions.space.targetM,
+        horizontalPadding: theme.dimensions.space.component40,
+        verticalPadding: _ButtonSpec.mediumVerticalPadding,
+      ),
+    };
+    final iconGap = theme.dimensions.space.component10;
+    final palette = _buttonPalette(theme, variant);
 
     return CharcoalClickable(
       autofocus: autofocus,
@@ -61,17 +88,27 @@ final class CharcoalButton extends StatelessWidget {
                 visualStates,
                 theme,
               )
-            : variantTokens.background.resolve(visualStates);
-        final foreground = variantTokens.foreground.resolve(visualStates);
+            : resolveCharcoalStateColor(
+                visualStates,
+                normal: palette.normalBackground,
+                hovered: palette.hoveredBackground,
+                pressed: palette.pressedBackground,
+                disabled: palette.normalBackground,
+              );
+        final foreground = resolveCharcoalStateColor(
+          visualStates,
+          normal: palette.normalForeground,
+          hovered: palette.hoveredForeground,
+          pressed: palette.pressedForeground,
+          disabled: palette.normalForeground,
+        );
         final isDisabled = states.contains(WidgetState.disabled);
         final isFocused = states.contains(WidgetState.focused);
-        final textStyle = TextStyle(
+        final textStyle = charcoalTypographyStyle(
+          context,
           color: foreground,
-          fontFamily: theme.typography.fontFamily.sans,
-          fontSize: sizeTokens.fontSize,
-          fontWeight: sizeTokens.fontWeight,
-          height: sizeTokens.lineHeight / sizeTokens.fontSize,
-          leadingDistribution: TextLeadingDistribution.even,
+          size: CharcoalTypographySize.size14,
+          weight: CharcoalTypographyWeight.bold,
         );
 
         Widget content = Row(
@@ -80,18 +117,22 @@ final class CharcoalButton extends StatelessWidget {
           children: <Widget>[
             if (leading != null) ...<Widget>[
               IconTheme(
-                data: IconThemeData(color: foreground, size: sizeTokens.iconSize),
+                data: const IconThemeData(
+                  size: _ButtonSpec.iconSize,
+                ).copyWith(color: foreground),
                 child: leading!,
               ),
-              SizedBox(width: sizeTokens.gap),
+              SizedBox(width: iconGap),
             ],
             Flexible(
               child: DefaultTextStyle(style: textStyle, child: child),
             ),
             if (trailing != null) ...<Widget>[
-              SizedBox(width: sizeTokens.gap),
+              SizedBox(width: iconGap),
               IconTheme(
-                data: IconThemeData(color: foreground, size: sizeTokens.iconSize),
+                data: const IconThemeData(
+                  size: _ButtonSpec.iconSize,
+                ).copyWith(color: foreground),
                 child: trailing!,
               ),
             ],
@@ -99,22 +140,23 @@ final class CharcoalButton extends StatelessWidget {
         );
 
         content = AnimatedContainer(
-          duration: buttonTokens.animationDuration,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _ButtonSpec.animationDuration,
+          ),
           curve: CharcoalMotion.standardCurve,
-          constraints: BoxConstraints(minHeight: sizeTokens.height),
+          constraints: BoxConstraints(minHeight: sizeSpec.height),
           padding: EdgeInsets.symmetric(
-            horizontal: sizeTokens.paddingHorizontal,
-            vertical: ((sizeTokens.height - sizeTokens.lineHeight) / 2)
-                .clamp(0, double.infinity)
-                .toDouble(),
+            horizontal: sizeSpec.horizontalPadding,
+            vertical: sizeSpec.verticalPadding,
           ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(sizeTokens.radius),
+            borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
             boxShadow: isFocused
                 ? <BoxShadow>[
                     BoxShadow(
-                      color: buttonTokens.focusRingColor,
-                      spreadRadius: buttonTokens.focusRingWidth,
+                      color: theme.colors.borderFocusLegacy,
+                      spreadRadius: _ButtonSpec.focusRingWidth,
                     ),
                   ]
                 : const <BoxShadow>[],
@@ -128,11 +170,14 @@ final class CharcoalButton extends StatelessWidget {
         }
         return AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: buttonTokens.animationDuration,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _ButtonSpec.animationDuration,
+          ),
           opacity: isDisabled
               ? variant == CharcoalButtonVariant.navigation
                     ? 0
-                    : buttonTokens.disabledOpacity
+                    : charcoalDisabledOpacity
               : 1,
           child: content,
         );
@@ -179,7 +224,12 @@ final class CharcoalLinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.linkButton;
+    final spec = (
+      height: theme.dimensions.space.targetM,
+      horizontalPadding: theme.dimensions.space.component30,
+      verticalPadding: _ButtonSpec.mediumVerticalPadding,
+      radius: theme.dimensions.radius.s,
+    );
     return CharcoalClickable(
       autofocus: autofocus,
       focusNode: focusNode,
@@ -189,41 +239,49 @@ final class CharcoalLinkButton extends StatelessWidget {
       builder: (context, states) {
         final disabled = states.contains(WidgetState.disabled);
         final focused = states.contains(WidgetState.focused);
-        final color = tokens.foreground.resolve(states);
+        final color = resolveCharcoalStateColor(
+          states,
+          normal: theme.colors.textDefault,
+          hovered: theme.colors.textHover,
+          pressed: theme.colors.textTertiaryDefault,
+          disabled: theme.colors.textDefault,
+        );
         return AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: tokens.animationDuration,
-          opacity: disabled ? tokens.disabledOpacity : 1,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _ButtonSpec.animationDuration,
+          ),
+          opacity: disabled ? charcoalDisabledOpacity : 1,
           child: AnimatedContainer(
-            duration: tokens.animationDuration,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _ButtonSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
-            constraints: BoxConstraints(minHeight: tokens.height),
+            constraints: BoxConstraints(minHeight: spec.height),
             padding: EdgeInsets.symmetric(
-              horizontal: tokens.paddingHorizontal,
-              vertical: ((tokens.height - tokens.lineHeight) / 2)
-                  .clamp(0, double.infinity)
-                  .toDouble(),
+              horizontal: spec.horizontalPadding,
+              vertical: spec.verticalPadding,
             ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(tokens.radius),
+              borderRadius: BorderRadius.circular(spec.radius),
               boxShadow: focused
                   ? <BoxShadow>[
                       BoxShadow(
-                        color: tokens.focusRingColor,
-                        spreadRadius: tokens.focusRingWidth,
+                        color: theme.colors.borderFocusLegacy,
+                        spreadRadius: _ButtonSpec.focusRingWidth,
                       ),
                     ]
                   : const <BoxShadow>[],
             ),
             child: Center(
               child: DefaultTextStyle(
-                style: TextStyle(
+                style: charcoalTypographyStyle(
+                  context,
                   color: color,
-                  fontFamily: theme.typography.fontFamily.sans,
-                  fontSize: tokens.fontSize,
-                  fontWeight: tokens.fontWeight,
-                  height: tokens.lineHeight / tokens.fontSize,
-                  leadingDistribution: TextLeadingDistribution.even,
+                  size: CharcoalTypographySize.size14,
+                  weight: CharcoalTypographyWeight.bold,
                 ),
                 child: child,
               ),
@@ -234,6 +292,59 @@ final class CharcoalLinkButton extends StatelessWidget {
     );
   }
 }
+
+typedef _ButtonPalette = ({
+  Color normalBackground,
+  Color hoveredBackground,
+  Color pressedBackground,
+  Color normalForeground,
+  Color hoveredForeground,
+  Color pressedForeground,
+});
+
+_ButtonPalette _buttonPalette(CharcoalThemeData theme, CharcoalButtonVariant variant) =>
+    switch (variant) {
+      CharcoalButtonVariant.normal => (
+        normalBackground: theme.colors.containerSecondaryDefaultA,
+        hoveredBackground: theme.colors.containerSecondaryHoverA,
+        pressedBackground: theme.colors.containerSecondaryPressA,
+        normalForeground: theme.colors.textSecondaryDefault,
+        hoveredForeground: theme.colors.textSecondaryHover,
+        pressedForeground: theme.colors.textSecondaryPress,
+      ),
+      CharcoalButtonVariant.primary => (
+        normalBackground: theme.colors.containerPrimaryDefault,
+        hoveredBackground: theme.colors.containerPrimaryHover,
+        pressedBackground: theme.colors.containerPrimaryPress,
+        normalForeground: theme.colors.textOnPrimaryDefault,
+        hoveredForeground: theme.colors.textOnPrimaryHover,
+        pressedForeground: theme.colors.textOnPrimaryPress,
+      ),
+      CharcoalButtonVariant.overlay => (
+        normalBackground: theme.colors.containerOnImgDefault,
+        hoveredBackground: theme.colors.containerOnImgHover,
+        pressedBackground: theme.colors.containerOnImgPress,
+        normalForeground: theme.colors.textOnOnImgDefault,
+        hoveredForeground: theme.colors.textOnOnImgHover,
+        pressedForeground: theme.colors.textOnOnImgPress,
+      ),
+      CharcoalButtonVariant.danger => (
+        normalBackground: theme.colors.containerNegativeDefault,
+        hoveredBackground: theme.colors.containerNegativeHover,
+        pressedBackground: theme.colors.containerNegativePress,
+        normalForeground: theme.colors.textOnNegativeDefault,
+        hoveredForeground: theme.colors.textOnNegativeHover,
+        pressedForeground: theme.colors.textOnNegativePress,
+      ),
+      CharcoalButtonVariant.navigation => (
+        normalBackground: theme.colors.containerHudDefault,
+        hoveredBackground: theme.colors.containerHudHover,
+        pressedBackground: theme.colors.containerHudPress,
+        normalForeground: theme.colors.textOnHudDefault,
+        hoveredForeground: theme.colors.textOnHudHover,
+        pressedForeground: theme.colors.textOnHudPress,
+      ),
+    };
 
 /// Shows one of two registered buttons without changing the layout size.
 ///

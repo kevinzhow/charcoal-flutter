@@ -401,6 +401,18 @@ final class CharcoalDimensionTokens {
   final CharcoalParagraphWidthTokens paragraphWidth;
   final CharcoalRadiusTokens radius;
   final CharcoalSpaceTokens space;
+
+  CharcoalDimensionTokens copyWith({
+    CharcoalBorderWidthTokens? borderWidth,
+    CharcoalParagraphWidthTokens? paragraphWidth,
+    CharcoalRadiusTokens? radius,
+    CharcoalSpaceTokens? space,
+  }) => CharcoalDimensionTokens(
+    borderWidth: borderWidth ?? this.borderWidth,
+    paragraphWidth: paragraphWidth ?? this.paragraphWidth,
+    radius: radius ?? this.radius,
+    space: space ?? this.space,
+  );
 }
 
 /// Generated light and dark dimensions. Do not edit by hand.

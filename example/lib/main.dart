@@ -105,7 +105,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                   child: AnimatedSwitcher(
                     duration: CharcoalMotion.resolveDuration(
                       context,
-                      theme.components.button.animationDuration,
+                      CharcoalMotion.standard,
                     ),
                     layoutBuilder: (currentChild, previousChildren) => Stack(
                       clipBehavior: Clip.hardEdge,
@@ -153,10 +153,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
       _scrollController = nextController;
     });
     _retiredScrollControllers.add(outgoingController);
-    final transitionDuration = CharcoalTheme.of(context)
-        .components
-        .button
-        .animationDuration;
+    const transitionDuration = CharcoalMotion.standard;
     Future<void>.delayed(
       transitionDuration + const Duration(milliseconds: 50),
       () {
@@ -387,8 +384,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
             ),
           ),
           const _ShowcaseCard(
-            description:
-                'Multiline editing shares the generated TextField recipe.',
+            description: 'Multiline editing follows the source row, label, and counter metrics.',
             eyebrow: 'TEXT AREA',
             title: 'TextArea',
             child: Column(
@@ -782,7 +778,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
       const _PageIntro(
         eyebrow: 'COMPONENTS',
         title: 'Composable V2 widgets',
-        description: 'Every control below is implemented directly on Flutter Widgets and consumes generated component recipes.',
+        description: 'Every control below is implemented directly on Flutter Widgets from pinned Charcoal source references.',
       ),
       const SizedBox(height: 24),
       LayoutBuilder(
@@ -813,7 +809,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   Widget _buildButtonsCard() => _ShowcaseCard(
     eyebrow: 'ACTIONS',
     title: 'Buttons',
-    description: 'Variants, sizing, hover, focus, and disabled states come from V2 recipes.',
+    description: 'Variants and sizing follow the source component; semantic colors come from V2 foundations.',
     child: Wrap(
       spacing: 12,
       runSpacing: 12,
@@ -1106,7 +1102,7 @@ final class _ShowcasePageViewport extends StatelessWidget {
         child: RawScrollbar(
           controller: controller,
           crossAxisMargin: 4,
-          fadeDuration: theme.components.button.animationDuration,
+          fadeDuration: CharcoalMotion.standard,
           interactive: true,
           radius: Radius.circular(theme.dimensions.radius.oval),
           thickness: 6,
@@ -1560,7 +1556,7 @@ final class _OverviewLink extends StatelessWidget {
             curve: CharcoalMotion.standardCurve,
             duration: CharcoalMotion.resolveDuration(
               context,
-              theme.components.button.animationDuration,
+              CharcoalMotion.standard,
             ),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -1897,7 +1893,7 @@ final class _TypographyPage extends StatelessWidget {
         _CatalogGrid(
           children: <Widget>[
             _ShowcaseCard(
-              description: 'Generated family and weight primitives used by every text recipe.',
+              description: 'Generated family and weight primitives used by component typography.',
               eyebrow: 'TYPE PRIMITIVES',
               title: 'Font contract',
               child: Column(
@@ -2662,7 +2658,7 @@ final class _ClickableCard extends StatelessWidget {
               ? 'Hovered'
               : 'Interactive surface';
           return AnimatedContainer(
-            duration: theme.components.button.animationDuration,
+            duration: CharcoalMotion.standard,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(color: theme.colors.borderDefault),
@@ -3160,7 +3156,7 @@ final class _TokenPipelinePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         const _PageIntro(
-          description: 'A deterministic script transaction turns upstream Charcoal JSON into typed Flutter tokens and component recipes.',
+          description: 'A deterministic script transaction turns upstream Charcoal JSON into typed Flutter foundation tokens.',
           eyebrow: 'AUTOMATION',
           title: 'V2 token pipeline',
         ),
@@ -3181,7 +3177,7 @@ final class _TokenPipelinePage extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'tokens/upstream/*.json  +  tokens/components.json',
+                  'tokens/upstream/*.json',
                   style: theme.textStyles.captionMedium.copyWith(
                     color: theme.colors.textDefault,
                     fontFamily: 'monospace',
@@ -3193,7 +3189,7 @@ final class _TokenPipelinePage extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         const _ShowcaseCard(
-          description: 'Run one update command for upstream changes, or generate after editing component mappings.',
+          description: 'Run one update command when the pinned upstream foundation changes.',
           eyebrow: 'FLOW',
           title: 'From source to Flutter',
           child: Column(
@@ -3206,7 +3202,7 @@ final class _TokenPipelinePage extends StatelessWidget {
               ),
               _PipelineStep(
                 command: 'fvm dart run tool/tokens.dart generate',
-                description: 'Emit typed light/dark foundations, recipes, snapshots, and the semantic diff.',
+                description: 'Emit typed light/dark foundations, snapshots, and the semantic diff.',
                 number: '2',
                 title: 'Generate Dart artifacts',
               ),
@@ -3360,7 +3356,7 @@ final class _Hero extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'A V2-first design system,\ngenerated from shared tokens.',
+                    'Source-backed components,\npowered by shared foundations.',
                     style: theme.textStyles.headingM.copyWith(
                       color: theme.colors.textOnPrimaryDefault,
                     ),
@@ -3380,7 +3376,7 @@ final class _Hero extends StatelessWidget {
                     runSpacing: 10,
                     children: <Widget>[
                       _HeroPill(label: 'V2 only'),
-                      _HeroPill(label: 'Generated tokens'),
+                      _HeroPill(label: 'Pinned sources'),
                       _HeroPill(label: 'Light + dark'),
                     ],
                   ),

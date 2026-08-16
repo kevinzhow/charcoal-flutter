@@ -2,8 +2,20 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
-import '../theme/component_tokens.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+
+enum CharcoalIconButtonVariant { normal, overlay }
+
+enum CharcoalIconButtonSize { extraSmall, small, medium }
+
+abstract final class _IconButtonSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const extraSmallSize = 20.0;
+  static const smallIconSize = 16.0;
+  static const regularIconSize = 24.0;
+  static const focusRingWidth = 4.0;
+}
 
 /// A circular Charcoal V2 button for an icon-only action.
 final class CharcoalIconButton extends StatelessWidget {
@@ -33,9 +45,20 @@ final class CharcoalIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.iconButton;
-    final sizeTokens = tokens.size(size);
-    final variantTokens = tokens.variant(variant);
+    final sizeSpec = switch (size) {
+      CharcoalIconButtonSize.extraSmall => (
+        button: _IconButtonSpec.extraSmallSize,
+        icon: _IconButtonSpec.smallIconSize,
+      ),
+      CharcoalIconButtonSize.small => (
+        button: theme.dimensions.space.targetS,
+        icon: _IconButtonSpec.regularIconSize,
+      ),
+      CharcoalIconButtonSize.medium => (
+        button: theme.dimensions.space.targetM,
+        icon: _IconButtonSpec.regularIconSize,
+      ),
+    };
     return CharcoalClickable(
       autofocus: autofocus,
       focusNode: focusNode,
@@ -47,29 +70,66 @@ final class CharcoalIconButton extends StatelessWidget {
         final visualStates = selected ? <WidgetState>{...states, WidgetState.pressed} : states;
         final disabled = states.contains(WidgetState.disabled);
         final focused = states.contains(WidgetState.focused);
-        final background = variantTokens.background.resolve(visualStates);
-        final foreground = variantTokens.foreground.resolve(visualStates);
+        final background = switch (variant) {
+          CharcoalIconButtonVariant.normal => resolveCharcoalStateColor(
+            visualStates,
+            normal: theme.colors.containerDefaultA,
+            hovered: theme.colors.containerHoverA,
+            pressed: theme.colors.containerPressA,
+          ),
+          CharcoalIconButtonVariant.overlay => resolveCharcoalStateColor(
+            visualStates,
+            normal: theme.colors.containerOnImgDefault,
+            hovered: theme.colors.containerOnImgHover,
+            pressed: theme.colors.containerOnImgPress,
+          ),
+        };
+        final foreground = switch (variant) {
+          CharcoalIconButtonVariant.normal => resolveCharcoalStateColor(
+            visualStates,
+            normal: theme.colors.iconTertiaryDefault,
+            hovered: theme.colors.iconTertiaryHover,
+            pressed: theme.colors.iconTertiaryPress,
+          ),
+          CharcoalIconButtonVariant.overlay => resolveCharcoalStateColor(
+            visualStates,
+            normal: theme.colors.iconOnOnImgDefault,
+            hovered: theme.colors.iconOnOnImgHover,
+            pressed: theme.colors.iconOnOnImgPress,
+          ),
+        };
         return AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: tokens.animationDuration,
-          opacity: disabled ? tokens.disabledOpacity : 1,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _IconButtonSpec.animationDuration,
+          ),
+          opacity: disabled ? charcoalDisabledOpacity : 1,
           child: AnimatedContainer(
-            duration: tokens.animationDuration,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _IconButtonSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
-            width: sizeTokens.size,
-            height: sizeTokens.size,
+            width: sizeSpec.button,
+            height: sizeSpec.button,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(tokens.radius),
+              borderRadius: BorderRadius.circular(
+                theme.dimensions.radius.oval,
+              ),
               boxShadow: focused
                   ? <BoxShadow>[
-                      BoxShadow(color: tokens.focusRingColor, spreadRadius: tokens.focusRingWidth),
+                      BoxShadow(
+                        color: theme.colors.borderFocusLegacy,
+                        spreadRadius: _IconButtonSpec.focusRingWidth,
+                      ),
                     ]
                   : const <BoxShadow>[],
               color: background,
             ),
             child: Center(
               child: IconTheme(
-                data: IconThemeData(color: foreground, size: sizeTokens.iconSize),
+                data: IconThemeData(color: foreground, size: sizeSpec.icon),
                 child: icon,
               ),
             ),

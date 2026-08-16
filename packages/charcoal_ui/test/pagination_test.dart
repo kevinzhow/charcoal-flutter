@@ -27,21 +27,14 @@ void main() {
     expect(nextPage, 51);
   });
 
-  testWidgets('disables previous navigation on the first page', (tester) async {
+  testWidgets('hides previous navigation on the first page', (tester) async {
     await tester.pumpWidget(
       charcoalTestApp(
         CharcoalPagination(currentPage: 1, pageCount: 10, onPageChanged: (_) {}),
       ),
     );
 
-    expect(
-      tester.getSemantics(find.bySemanticsLabel('Previous page')),
-      matchesSemantics(
-        label: 'Previous page',
-        isButton: true,
-        hasEnabledState: true,
-        isEnabled: false,
-      ),
-    );
+    expect(find.bySemanticsLabel('Previous page'), findsNothing);
+    expect(find.bySemanticsLabel('Next page'), findsOneWidget);
   });
 }

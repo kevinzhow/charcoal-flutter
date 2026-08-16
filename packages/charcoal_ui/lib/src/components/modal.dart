@@ -4,6 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
+import 'typography.dart';
+
+abstract final class _ModalSpec {
+  static const animationDuration = Duration(milliseconds: 250);
+  static const barrierColor = Color(0x99000000);
+  static const initialScale = 1.05;
+  static const minWidth = 280.0;
+  static const cornerRadius = 32.0;
+  static const titleHorizontalPadding = 48.0;
+  static const actionPadding = 20.0;
+  static const bottomSheetMinimumBottomPadding = 30.0;
+  static const closeIconSize = 24.0;
+  static const closeIconInset = 6.0;
+  static const closeIconStrokeWidth = 2.0;
+}
 
 enum CharcoalDialogSize { small, medium, large }
 
@@ -19,9 +34,8 @@ Future<T?> showCharcoalDialog<T>({
 }) {
   assert(duration == null || !duration.isNegative);
   final theme = CharcoalTheme.of(context);
-  final tokens = theme.components.modal;
   return showGeneralDialog<T>(
-    barrierColor: tokens.barrierColor.withValues(alpha: tokens.barrierOpacity),
+    barrierColor: _ModalSpec.barrierColor,
     barrierDismissible: barrierDismissible,
     barrierLabel: barrierLabel,
     context: context,
@@ -57,7 +71,7 @@ Future<T?> showCharcoalDialog<T>({
           opacity: curved,
           child: ScaleTransition(
             scale: Tween<double>(
-              begin: tokens.centerScale,
+              begin: _ModalSpec.initialScale,
               end: 1,
             ).animate(curved),
             child: child,
@@ -75,7 +89,7 @@ Future<T?> showCharcoalDialog<T>({
         ),
       };
     },
-    transitionDuration: duration ?? tokens.animationDuration,
+    transitionDuration: duration ?? _ModalSpec.animationDuration,
   );
 }
 
@@ -139,22 +153,24 @@ final class CharcoalDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.modal;
     final media = MediaQuery.of(context);
     final resolvedMaxWidth =
         maxWidth ??
         switch (size) {
           CharcoalDialogSize.small => theme.dimensions.paragraphWidth.s,
-          CharcoalDialogSize.medium => tokens.defaultMaxWidth,
+          CharcoalDialogSize.medium => theme.dimensions.space.layout100,
           CharcoalDialogSize.large => theme.dimensions.paragraphWidth.l,
         };
     final bottomActionPadding = style == CharcoalModalStyle.center
-        ? tokens.actionPadding
+        ? _ModalSpec.actionPadding
         : math.max(
             media.padding.bottom,
-            tokens.bottomSheetMinBottomPadding,
+            _ModalSpec.bottomSheetMinimumBottomPadding,
           );
-    final radius = Radius.circular(tokens.radius);
+    const radius = Radius.circular(_ModalSpec.cornerRadius);
+    final actionGap = theme.dimensions.space.component20;
+    final centerPadding = theme.dimensions.space.layout40;
+    final closeTargetSize = theme.dimensions.space.targetL;
     final borderRadius = switch (style) {
       CharcoalModalStyle.center => BorderRadius.all(radius),
       CharcoalModalStyle.bottomSheet => BorderRadius.only(
@@ -164,13 +180,13 @@ final class CharcoalDialog extends StatelessWidget {
     };
     final surface = ConstrainedBox(
       constraints: BoxConstraints(
-        minWidth: tokens.minWidth,
+        minWidth: _ModalSpec.minWidth,
         maxWidth: resolvedMaxWidth,
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: borderRadius,
-          color: tokens.backgroundColor,
+          color: theme.colors.backgroundDefault,
         ),
         child: ClipRRect(
           borderRadius: borderRadius,
@@ -184,19 +200,19 @@ final class CharcoalDialog extends StatelessWidget {
                   if (title case final title?)
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: tokens.titlePaddingHorizontal,
-                        vertical: tokens.titlePaddingVertical,
+                        horizontal: _ModalSpec.titleHorizontalPadding,
+                        vertical: _ModalSpec.actionPadding,
                       ),
                       child: Text(
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: theme.textStyles.headingXxxs.copyWith(
+                        style: charcoalTypographyStyle(
+                          context,
                           color: theme.colors.textDefaultText1,
-                          fontSize: tokens.titleFontSize,
-                          fontWeight: tokens.titleFontWeight,
-                          height: tokens.titleLineHeight / tokens.titleFontSize,
+                          size: CharcoalTypographySize.size20,
+                          weight: CharcoalTypographyWeight.bold,
                         ),
                       ),
                     ),
@@ -204,16 +220,16 @@ final class CharcoalDialog extends StatelessWidget {
                   if (actions.isNotEmpty)
                     Padding(
                       padding: EdgeInsets.fromLTRB(
-                        tokens.actionPadding,
-                        tokens.actionPadding,
-                        tokens.actionPadding,
+                        _ModalSpec.actionPadding,
+                        _ModalSpec.actionPadding,
+                        _ModalSpec.actionPadding,
                         bottomActionPadding,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           for (var index = 0; index < actions.length; index++) ...<Widget>[
-                            if (index > 0) SizedBox(height: tokens.actionGap),
+                            if (index > 0) SizedBox(height: actionGap),
                             actions[index],
                           ],
                         ],
@@ -231,22 +247,24 @@ final class CharcoalDialog extends StatelessWidget {
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: SizedBox.square(
-                        dimension: tokens.closeSize,
+                        dimension: closeTargetSize,
                         child: Center(
                           child: IconTheme(
                             data: IconThemeData(
                               color: theme.colors.iconDefault,
-                              size: tokens.closeIconSize,
+                              size: _ModalSpec.closeIconSize,
                             ),
                             child:
                                 closeIcon ??
                                 CustomPaint(
                                   painter: _ClosePainter(
                                     color: theme.colors.iconDefault,
-                                    inset: tokens.closeStrokeInset,
-                                    strokeWidth: tokens.closeStrokeWidth,
+                                    inset: _ModalSpec.closeIconInset,
+                                    strokeWidth: _ModalSpec.closeIconStrokeWidth,
                                   ),
-                                  size: Size.square(tokens.closeIconSize),
+                                  size: const Size.square(
+                                    _ModalSpec.closeIconSize,
+                                  ),
                                 ),
                           ),
                         ),
@@ -269,7 +287,7 @@ final class CharcoalDialog extends StatelessWidget {
         alignment: style == CharcoalModalStyle.center ? Alignment.center : Alignment.bottomCenter,
         child: Padding(
           padding: style == CharcoalModalStyle.center
-              ? EdgeInsets.all(tokens.centerEdgePadding)
+              ? EdgeInsets.all(centerPadding)
               : EdgeInsets.zero,
           child: surface,
         ),

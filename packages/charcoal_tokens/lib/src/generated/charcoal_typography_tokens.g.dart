@@ -292,6 +292,18 @@ final class CharcoalTypographyTokens {
   final CharcoalFontSizeTokens fontSize;
   final CharcoalFontWeightTokens fontWeight;
   final CharcoalLineHeightTokens lineHeight;
+
+  CharcoalTypographyTokens copyWith({
+    CharcoalFontFamilyTokens? fontFamily,
+    CharcoalFontSizeTokens? fontSize,
+    CharcoalFontWeightTokens? fontWeight,
+    CharcoalLineHeightTokens? lineHeight,
+  }) => CharcoalTypographyTokens(
+    fontFamily: fontFamily ?? this.fontFamily,
+    fontSize: fontSize ?? this.fontSize,
+    fontWeight: fontWeight ?? this.fontWeight,
+    lineHeight: lineHeight ?? this.lineHeight,
+  );
 }
 
 /// Generated light and dark typography. Do not edit by hand.

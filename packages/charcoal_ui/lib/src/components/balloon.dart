@@ -7,6 +7,21 @@ import '../theme/charcoal_theme.dart';
 import 'overlay_anchor_tracker.dart';
 import 'overlay_position.dart';
 import 'popup_shape.dart';
+import 'typography.dart';
+
+abstract final class _BalloonSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const defaultMaxWidth = 240.0;
+  static const arrowHeight = 4.0;
+  static const arrowHalfWidth = 7.0;
+  static const strokeWidth = 2.0;
+  static const closeGap = 5.0;
+  static const closeVisualSize = 22.0;
+  static const closeIconSize = 16.0;
+  static const closeIconInset = 4.0;
+  static const closeIconStrokeWidth = 1.5;
+  static const actionVerticalPadding = 3.0;
+}
 
 /// A persistent speech surface with a directional tail.
 final class CharcoalBalloon extends StatelessWidget {
@@ -34,60 +49,60 @@ final class CharcoalBalloon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.balloon;
-    final tail = tokens.arrowHeight;
+    final horizontalPadding = theme.dimensions.space.component30;
+    final verticalPadding = theme.dimensions.space.component25;
     final padding = switch (position) {
       CharcoalOverlayPosition.top => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal,
-        tokens.paddingVertical + tail,
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
+        horizontalPadding,
+        verticalPadding + _BalloonSpec.arrowHeight,
+        horizontalPadding,
+        verticalPadding,
       ),
       CharcoalOverlayPosition.right => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
-        tokens.paddingHorizontal + tail,
-        tokens.paddingVertical,
+        horizontalPadding,
+        verticalPadding,
+        horizontalPadding + _BalloonSpec.arrowHeight,
+        verticalPadding,
       ),
       CharcoalOverlayPosition.bottom => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
-        tokens.paddingHorizontal,
-        tokens.paddingVertical + tail,
+        horizontalPadding,
+        verticalPadding,
+        horizontalPadding,
+        verticalPadding + _BalloonSpec.arrowHeight,
       ),
       CharcoalOverlayPosition.left => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal + tail,
-        tokens.paddingVertical,
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
+        horizontalPadding + _BalloonSpec.arrowHeight,
+        verticalPadding,
+        horizontalPadding,
+        verticalPadding,
       ),
     };
     return Semantics(
       container: true,
       label: semanticLabel,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? tokens.maxWidth),
+        constraints: BoxConstraints(
+          maxWidth: maxWidth ?? _BalloonSpec.defaultMaxWidth,
+        ),
         child: CustomPaint(
           painter: CharcoalPopupShapePainter(
             arrowCenter: arrowCenter,
-            arrowHalfWidth: tokens.arrowHalfWidth,
-            arrowHeight: tail,
-            color: tokens.backgroundColor,
+            arrowHalfWidth: _BalloonSpec.arrowHalfWidth,
+            arrowHeight: _BalloonSpec.arrowHeight,
+            color: theme.colors.containerPrimaryDefault,
             position: position,
-            radius: tokens.radius,
-            strokeColor: tokens.strokeColor,
-            strokeWidth: tokens.strokeWidth,
+            radius: theme.dimensions.radius.xl,
+            strokeColor: theme.colors.iconOnPrimaryDefault,
+            strokeWidth: _BalloonSpec.strokeWidth,
           ),
           child: Padding(
             padding: padding,
             child: DefaultTextStyle(
-              style: TextStyle(
-                color: tokens.foregroundColor,
-                fontFamily: theme.typography.fontFamily.sans,
-                fontSize: tokens.fontSize,
-                fontWeight: tokens.fontWeight,
-                height: tokens.lineHeight / tokens.fontSize,
-                leadingDistribution: TextLeadingDistribution.even,
+              style: charcoalTypographyStyle(
+                context,
+                color: theme.colors.textOnPrimaryDefault,
+                size: CharcoalTypographySize.size14,
+                weight: CharcoalTypographyWeight.bold,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -98,7 +113,7 @@ final class CharcoalBalloon extends StatelessWidget {
                     children: <Widget>[
                       Flexible(child: child),
                       if (onDismiss != null) ...<Widget>[
-                        SizedBox(width: tokens.contentGap),
+                        const SizedBox(width: _BalloonSpec.closeGap),
                         _BalloonCloseButton(
                           icon: dismissIcon,
                           onPressed: onDismiss!,
@@ -107,18 +122,20 @@ final class CharcoalBalloon extends StatelessWidget {
                     ],
                   ),
                   if (action case final action?) ...<Widget>[
-                    SizedBox(height: tokens.gap),
+                    SizedBox(
+                      height: theme.dimensions.space.component10,
+                    ),
                     DecoratedBox(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
                           theme.dimensions.radius.oval,
                         ),
-                        color: tokens.actionBackgroundColor,
+                        color: theme.colors.containerOnImgDefault,
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: tokens.actionPaddingHorizontal,
-                          vertical: tokens.actionPaddingVertical,
+                          horizontal: horizontalPadding,
+                          vertical: _BalloonSpec.actionVerticalPadding,
                         ),
                         child: action,
                       ),
@@ -142,7 +159,8 @@ final class _BalloonCloseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = CharcoalTheme.of(context).components.balloon;
+    final theme = CharcoalTheme.of(context);
+    final colors = theme.colors;
     return Semantics(
       button: true,
       label: 'Close',
@@ -153,26 +171,26 @@ final class _BalloonCloseButton extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: tokens.actionBackgroundColor,
+              color: colors.containerOnImgDefault,
               shape: BoxShape.circle,
             ),
             child: SizedBox.square(
-              dimension: tokens.closeSize,
+              dimension: _BalloonSpec.closeVisualSize,
               child: Center(
                 child: IconTheme(
                   data: IconThemeData(
-                    color: tokens.foregroundColor,
-                    size: tokens.closeIconSize,
+                    color: colors.textOnPrimaryDefault,
+                    size: _BalloonSpec.closeIconSize,
                   ),
                   child:
                       icon ??
                       CustomPaint(
                         painter: _BalloonClosePainter(
-                          color: tokens.foregroundColor,
-                          inset: tokens.closeStrokeInset,
-                          strokeWidth: tokens.closeStrokeWidth,
+                          color: colors.textOnPrimaryDefault,
+                          inset: _BalloonSpec.closeIconInset,
+                          strokeWidth: _BalloonSpec.closeIconStrokeWidth,
                         ),
-                        size: Size.square(tokens.closeIconSize),
+                        size: const Size.square(_BalloonSpec.closeIconSize),
                       ),
                 ),
               ),
@@ -221,9 +239,9 @@ final class _BalloonClosePainter extends CustomPainter {
       oldDelegate.strokeWidth != strokeWidth;
 }
 
-/// Attaches an iOS-style, controlled-or-uncontrolled balloon to [anchor].
+/// Attaches a controlled-or-uncontrolled balloon to [anchor].
 ///
-/// Placement follows the Charcoal iOS priority: below, above, right, then
+/// Placement follows the Charcoal priority: below, above, right, then
 /// left. The balloon can be toggled by tapping the anchor and always exposes a
 /// close affordance.
 final class CharcoalAnchoredBalloon extends StatefulWidget {
@@ -281,10 +299,9 @@ final class _CharcoalAnchoredBalloonState extends State<CharcoalAnchoredBalloon>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final duration = CharcoalTheme.of(context).components.balloon.animationDuration;
     _animation
-      ..duration = duration
-      ..reverseDuration = duration;
+      ..duration = _BalloonSpec.animationDuration
+      ..reverseDuration = _BalloonSpec.animationDuration;
     _entry?.markNeedsBuild();
   }
 
@@ -360,7 +377,7 @@ final class _CharcoalAnchoredBalloonState extends State<CharcoalAnchoredBalloon>
     }
     final origin = anchorBox.localToGlobal(Offset.zero);
     final theme = CharcoalTheme.of(context);
-    final maxWidth = widget.maxWidth ?? theme.components.balloon.maxWidth;
+    final maxWidth = widget.maxWidth ?? _BalloonSpec.defaultMaxWidth;
     return CharcoalTheme(
       data: theme,
       child: _BalloonOverlay(
@@ -447,11 +464,11 @@ final class _BalloonOverlayState extends State<_BalloonOverlay> {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
+    final theme = CharcoalTheme.of(context);
     final viewport = Offset.zero & media.size;
-    final tokens = CharcoalTheme.of(context).components.balloon;
     final placement = _placement(viewport);
-    final gap = tokens.gap;
-    final inset = tokens.screenInset;
+    final gap = theme.dimensions.space.component10;
+    final inset = theme.dimensions.space.layout30;
     var origin = switch (placement) {
       CharcoalOverlayPosition.top => Offset(
         widget.targetRect.center.dx - _surfaceSize.width / 2,
@@ -531,9 +548,9 @@ final class _BalloonOverlayState extends State<_BalloonOverlay> {
   }
 
   CharcoalOverlayPosition _placement(Rect viewport) {
-    final tokens = CharcoalTheme.of(context).components.balloon;
-    final arrowAndGap = tokens.arrowHeight + tokens.gap;
-    final inset = tokens.screenInset;
+    final theme = CharcoalTheme.of(context);
+    final inset = theme.dimensions.space.layout30;
+    final arrowAndGap = _BalloonSpec.arrowHeight + theme.dimensions.space.component10;
     final bottomSpace = viewport.bottom - widget.targetRect.bottom - inset;
     final topSpace = widget.targetRect.top - viewport.top - inset;
     final rightSpace = viewport.right - widget.targetRect.right - inset;

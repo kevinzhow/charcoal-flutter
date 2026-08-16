@@ -1,3 +1,5 @@
+import 'dart:ui' show PointerDeviceKind;
+
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -26,6 +28,21 @@ void main() {
     );
 
     expect(find.byType(CharcoalIconButton), findsNWidgets(2));
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer(location: Offset.zero);
+    await mouse.moveTo(tester.getCenter(find.byType(CharcoalCarousel)));
+    await tester.pump(const Duration(milliseconds: 401));
+
+    final navigationOpacity = tester
+        .widgetList<AnimatedOpacity>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is AnimatedOpacity && widget.duration == const Duration(milliseconds: 400),
+          ),
+        )
+        .map((widget) => widget.opacity)
+        .toList();
+    expect(navigationOpacity, <double>[0, 1]);
     await tester.tap(find.byType(CharcoalIconButton).last);
     await tester.pumpAndSettle();
     expect(page, 1);

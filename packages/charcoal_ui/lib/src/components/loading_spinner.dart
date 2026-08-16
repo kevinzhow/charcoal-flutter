@@ -2,6 +2,12 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
 
+abstract final class _LoadingSpinnerSpec {
+  static const animationDuration = Duration(seconds: 1);
+  static const shadowBlur = 8.0;
+  static const overlayDuration = Duration(milliseconds: 250);
+}
+
 /// Charcoal's expanding-circle loading indicator.
 ///
 /// The circle grows from the center while fading out over one second, matching
@@ -59,7 +65,7 @@ final class CharcoalSpinnerOverlay extends StatelessWidget {
           child: IgnorePointer(
             ignoring: interactionPassthrough || !visible,
             child: AnimatedSwitcher(
-              duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 250),
+              duration: reduceMotion ? Duration.zero : _LoadingSpinnerSpec.overlayDuration,
               switchInCurve: Curves.easeOutBack,
               switchOutCurve: Curves.easeIn,
               transitionBuilder: (child, animation) => FadeTransition(
@@ -118,8 +124,7 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
   }
 
   void _syncAnimation({bool restart = false}) {
-    final tokens = CharcoalTheme.of(context).components.loadingSpinner;
-    _controller.duration = tokens.animationDuration;
+    _controller.duration = _LoadingSpinnerSpec.animationDuration;
     if (MediaQuery.disableAnimationsOf(context)) {
       _controller
         ..stop()
@@ -138,49 +143,41 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.loadingSpinner;
-    final size = widget.size ?? tokens.size;
-    final padding = widget.padding ?? tokens.padding;
+    final size = widget.size ?? theme.dimensions.space.targetL;
+    final padding = widget.padding ?? theme.dimensions.space.component30;
     return Semantics(
       container: true,
       label: widget.semanticLabel,
       liveRegion: true,
       child: ExcludeSemantics(
-        child: Opacity(
-          opacity: tokens.opacity,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(tokens.radius),
-              boxShadow: widget.transparent
-                  ? const <BoxShadow>[]
-                  : <BoxShadow>[
-                      BoxShadow(
-                        blurRadius: tokens.shadowBlur,
-                        color: theme.colors.backgroundOverlay.withValues(
-                          alpha: tokens.shadowOpacity,
-                        ),
-                      ),
-                    ],
-              color: widget.transparent ? null : tokens.backgroundColor,
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: SizedBox.square(
-                dimension: size,
-                child: AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, child) {
-                    final progress = Curves.easeOut.transform(_controller.value);
-                    return Opacity(
-                      opacity: 1 - progress,
-                      child: Transform.scale(scale: progress, child: child),
-                    );
-                  },
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: widget.color ?? tokens.foregroundColor,
-                      shape: BoxShape.circle,
-                    ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+            boxShadow: const <BoxShadow>[
+              BoxShadow(
+                blurRadius: _LoadingSpinnerSpec.shadowBlur,
+                color: Color(0x1A000000),
+              ),
+            ],
+            color: widget.transparent ? null : theme.colors.backgroundDefault,
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(padding),
+            child: SizedBox.square(
+              dimension: size,
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  final progress = Curves.easeOut.transform(_controller.value);
+                  return Opacity(
+                    opacity: 1 - progress,
+                    child: Transform.scale(scale: progress, child: child),
+                  );
+                },
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: widget.color ?? theme.colors.iconTertiaryDefault,
+                    shape: BoxShape.circle,
                   ),
                 ),
               ),

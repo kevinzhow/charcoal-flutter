@@ -3,6 +3,15 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+abstract final class _NavigationItemSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const focusRingWidth = 4.0;
+  static const leadingIconSize = 24.0;
+  static const trailingIconSize = 16.0;
+}
 
 /// A full-width destination item for sidebars, drawers, and navigation lists.
 ///
@@ -36,8 +45,6 @@ final class CharcoalNavigationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final dimensions = theme.dimensions;
-    final buttonTokens = theme.components.button;
     return CharcoalClickable(
       autofocus: autofocus,
       focusNode: focusNode,
@@ -71,24 +78,39 @@ final class CharcoalNavigationItem extends StatelessWidget {
             : hovered
             ? theme.colors.iconHover
             : theme.colors.iconSecondaryDefault;
-        final textStyle = theme.textStyles.captionMediumBold.copyWith(color: foreground);
+        final textStyle = charcoalTypographyStyle(
+          context,
+          color: foreground,
+          size: CharcoalTypographySize.size14,
+          weight: CharcoalTypographyWeight.bold,
+        );
 
         return AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
-          opacity: disabled ? buttonTokens.disabledOpacity : 1,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _NavigationItemSpec.animationDuration,
+          ),
+          opacity: disabled ? charcoalDisabledOpacity : 1,
           child: AnimatedContainer(
             curve: CharcoalMotion.standardCurve,
-            duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
-            constraints: BoxConstraints(minHeight: dimensions.space.targetM),
-            padding: EdgeInsets.symmetric(horizontal: dimensions.space.component25),
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _NavigationItemSpec.animationDuration,
+            ),
+            constraints: BoxConstraints(
+              minHeight: theme.dimensions.space.targetM,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: theme.dimensions.space.component25,
+            ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(dimensions.radius.m),
+              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
               boxShadow: focused
                   ? <BoxShadow>[
                       BoxShadow(
-                        color: buttonTokens.focusRingColor,
-                        spreadRadius: buttonTokens.focusRingWidth,
+                        color: theme.colors.borderFocusLegacy,
+                        spreadRadius: _NavigationItemSpec.focusRingWidth,
                       ),
                     ]
                   : const <BoxShadow>[],
@@ -98,18 +120,18 @@ final class CharcoalNavigationItem extends StatelessWidget {
               children: <Widget>[
                 if (leading != null) ...<Widget>[
                   SizedBox.square(
-                    dimension: dimensions.space.component40,
+                    dimension: theme.dimensions.space.targetXs,
                     child: Center(
                       child: IconTheme(
                         data: IconThemeData(
                           color: iconColor,
-                          size: dimensions.space.component40,
+                          size: _NavigationItemSpec.leadingIconSize,
                         ),
                         child: leading!,
                       ),
                     ),
                   ),
-                  SizedBox(width: dimensions.space.component20),
+                  SizedBox(width: theme.dimensions.space.component20),
                 ],
                 Expanded(
                   child: DefaultTextStyle(
@@ -120,9 +142,12 @@ final class CharcoalNavigationItem extends StatelessWidget {
                   ),
                 ),
                 if (trailing != null) ...<Widget>[
-                  SizedBox(width: dimensions.space.component20),
+                  SizedBox(width: theme.dimensions.space.component20),
                   IconTheme(
-                    data: IconThemeData(color: iconColor, size: dimensions.space.component30),
+                    data: IconThemeData(
+                      color: iconColor,
+                      size: _NavigationItemSpec.trailingIconSize,
+                    ),
                     child: trailing!,
                   ),
                 ],

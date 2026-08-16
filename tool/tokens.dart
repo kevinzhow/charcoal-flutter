@@ -112,7 +112,7 @@ Usage:
 
 Commands:
   sync      Download and validate pinned upstream V2 JSON files.
-  generate  Generate strongly typed foundation and component tokens.
+  generate  Generate strongly typed foundation tokens.
   update    Sync, generate, and write tokens/diff.md for an update PR.
   check     Fail when sources, hashes, snapshots, or generated Dart drift.
   diff      Compare current sources with the committed token snapshot.

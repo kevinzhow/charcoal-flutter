@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_helpers.dart';
 
 void main() {
-  testWidgets('icon button resolves size and pressed recipe tokens', (tester) async {
+  testWidgets('icon button resolves its size and pressed semantic colors', (tester) async {
     final states = WidgetStatesController(<WidgetState>{WidgetState.pressed});
     addTearDown(states.dispose);
     final theme = CharcoalThemeData.light();
@@ -24,17 +24,17 @@ void main() {
 
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
     final decoration = container.decoration! as BoxDecoration;
-    expect(container.constraints!.maxWidth, theme.components.iconButton.small.size);
+    expect(container.constraints!.maxWidth, 32);
     expect(decoration.color, theme.colors.containerPressA);
 
     final iconTheme = tester.widget<IconTheme>(
       find.ancestor(of: find.byKey(const Key('icon')), matching: find.byType(IconTheme)).first,
     );
-    expect(iconTheme.data.size, theme.components.iconButton.small.iconSize);
+    expect(iconTheme.data.size, 24);
     expect(iconTheme.data.color, theme.colors.iconTertiaryPress);
   });
 
-  testWidgets('loading spinner uses recipe defaults and exposes a live-region label', (
+  testWidgets('loading spinner uses source defaults and exposes a live-region label', (
     tester,
   ) async {
     final theme = CharcoalThemeData.light();
@@ -46,15 +46,11 @@ void main() {
     final square = tester
         .widgetList<SizedBox>(find.byType(SizedBox))
         .firstWhere(
-          (widget) => widget.width == theme.components.loadingSpinner.size,
+          (widget) => widget.width == 48,
         );
-    expect(square.height, theme.components.loadingSpinner.size);
+    expect(square.height, 48);
 
-    await tester.pump(
-      Duration(
-        microseconds: theme.components.loadingSpinner.animationDuration.inMicroseconds ~/ 2,
-      ),
-    );
+    await tester.pump(const Duration(milliseconds: 500));
     final animatedOpacity = tester.widgetList<Opacity>(find.byType(Opacity)).last;
     expect(animatedOpacity.opacity, inExclusiveRange(0, 1));
 
@@ -66,6 +62,24 @@ void main() {
       decorations.any((decoration) => decoration.shape == BoxShape.circle),
       isTrue,
     );
+  });
+
+  testWidgets('transparent spinner keeps the source shadow', (tester) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const CharcoalLoadingSpinner(once: true, transparent: true),
+      ),
+    );
+
+    final surface = tester
+        .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+        .map((widget) => widget.decoration)
+        .whereType<BoxDecoration>()
+        .singleWhere((decoration) => decoration.boxShadow?.isNotEmpty ?? false);
+    expect(surface.color, isNull);
+    expect(surface.borderRadius, BorderRadius.circular(8));
+    expect(surface.boxShadow!.single.blurRadius, 8);
+    expect(surface.boxShadow!.single.color, const Color(0x1A000000));
   });
 
   testWidgets('spinner overlay can block or pass through interaction', (

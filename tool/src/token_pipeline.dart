@@ -21,7 +21,6 @@ final class TokenPipeline {
   Directory get _sourceDirectory => Directory('${root.path}/tokens/upstream');
   File get _manifestFile => File('${root.path}/tokens/manifest.json');
   File get _snapshotFile => File('${root.path}/tokens/snapshot.json');
-  File get _componentFile => File('${root.path}/tokens/components.json');
   File get _diffFile => File('${root.path}/tokens/diff.md');
 
   Future<void> sync({required String repository, required String ref}) async {
@@ -179,13 +178,8 @@ final class TokenPipeline {
     );
   }
 
-  Future<List<GeneratedArtifact>> _renderArtifacts(TokenBundle bundle) async {
-    if (!await _componentFile.exists()) {
-      throw const TokenGenerationException('Missing tokens/components.json.');
-    }
-    final recipes = decodeComponentRecipes(await _componentFile.readAsString());
-    return DartTokenGenerator(bundle: bundle, componentRecipes: recipes).render();
-  }
+  Future<List<GeneratedArtifact>> _renderArtifacts(TokenBundle bundle) async =>
+      DartTokenGenerator(bundle: bundle).render();
 
   Future<List<String>> _checkManifestHashes() async {
     if (!await _manifestFile.exists()) {

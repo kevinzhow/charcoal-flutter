@@ -1,45 +1,78 @@
 # Charcoal UI for Flutter
 
-A Charcoal V2 UI library implemented directly on Flutter's Widgets layer. It does not depend on
-`material_ui` or `cupertino_ui`. Upstream token synchronization, Dart code generation, component
-recipes, light and dark themes, and drift detection form one reproducible pipeline.
+An independent Charcoal V2 UI library implemented directly on Flutter's Widgets layer. It does not
+depend on Material or Cupertino. The package combines generated Charcoal foundations with
+source-backed Flutter components, light and dark themes, accessibility behavior, and reproducible
+drift checks.
 
-This project is V2-only. It intentionally contains no Charcoal V1 tokens, remapping, or compatibility
-API.
+This project is V2-only. It intentionally contains no Charcoal V1 aliases or compatibility API.
 
 Explore the [Charcoal UI V2 Showcase](https://kevinzhow.github.io/charcoal-flutter/) in a browser.
 
 ## Packages
 
-- `packages/charcoal_icons`: the complete generated Charcoal Icons V2 SVG catalog and Flutter widget.
-- `packages/charcoal_tokens`: strongly typed foundation tokens generated from Charcoal V2 JSON.
-- `packages/charcoal_ui`: themes, interaction primitives, and Widgets-layer components.
-- `tool/icons.dart`: the pinned icon sync, validation, generation, and drift-check entry point.
-- `tool/tokens.dart`: the sync, validation, generation, diff, and CI entry point.
-- `tokens/upstream`: original V2 JSON pinned to an exact upstream commit.
-- `tokens/components.json`: mappings from Flutter component properties to semantic tokens.
+- `packages/charcoal_tokens`: generated color, dimension, and typography foundations.
+- `packages/charcoal_icons`: the generated Charcoal Icons V2 SVG catalog and Flutter widget.
+- `packages/charcoal_ui`: independent Widgets-layer components, themes, and interaction primitives.
+- `example`: the exhaustive Showcase used for visual development and regression checks.
+- `tool/tokens.dart`: pinned token sync, validation, generation, semantic diff, and drift checking.
+- `tool/icons.dart`: pinned icon sync, validation, generation, and drift checking.
+- `tokens/upstream`: the original V2 token JSON pinned to an exact upstream commit.
 
-Public components currently include:
+Public components include:
 
-- `CharcoalApp`, `CharcoalTheme`, and `CharcoalThemeData`
-- `CharcoalMotion` and `CharcoalPageRoute`
-- `CharcoalClickable`
-- `CharcoalNavigationItem`
+- `CharcoalApp`, `CharcoalTheme`, `CharcoalThemeData`, `CharcoalMotion`, and `CharcoalPageRoute`
 - `CharcoalButton`, `CharcoalLinkButton`, `CharcoalSwitchingButton`, and `CharcoalIconButton`
 - `CharcoalCheckbox`, `CharcoalMultiSelect`, `CharcoalRadio`, and `CharcoalSwitch`
-- `CharcoalFieldLabel`, `CharcoalTextField`, and `CharcoalTextArea`
-- `CharcoalDropdown`
-- `CharcoalSegmentedControl`, `CharcoalPagination`, and `CharcoalCarousel`
-- `CharcoalTagItem`
-- `CharcoalHintText`, `CharcoalTextEllipsis`, `CharcoalLoadingSpinner`, and `CharcoalSpinnerOverlay`
-- `CharcoalTooltip`, `CharcoalBalloon`, and `CharcoalAnchoredBalloon`
-- `CharcoalToast`, `CharcoalSnackBar`, `showCharcoalToast`, and `showCharcoalSnackBar`
-- `CharcoalDialog`, `showCharcoalDialog`, and `showCharcoalModal`
-- `CharcoalTypography` and `charcoalTypographyStyle`
+- `CharcoalFieldLabel`, `CharcoalTextField`, `CharcoalTextArea`, and `CharcoalDropdown`
+- `CharcoalSegmentedControl`, `CharcoalPagination`, `CharcoalCarousel`, and `CharcoalNavigationItem`
+- `CharcoalTagItem`, `CharcoalHintText`, `CharcoalTextEllipsis`, and loading surfaces
+- tooltip, balloon, toast, snackbar, and modal surfaces and presentation APIs
+- `CharcoalTypography`, `charcoalTypographyStyle`, and `CharcoalTextStyles`
 
-The API follows Flutter conventions instead of reproducing React's DOM shape. Icon-bearing controls
-accept a regular `Widget`; the Showcase fills those slots from the sibling `charcoal_icons` package,
-while applications can still pass any widget when a product-specific mark is needed.
+The API follows Flutter conventions instead of reproducing another platform's view hierarchy.
+Icon-bearing controls accept regular widgets; applications can use `charcoal_icons` or inject
+product-specific artwork without coupling the two packages.
+
+## Architecture
+
+Component layout follows a four-stage relationship:
+
+```text
+Primitive JSON
+  space.10 = 4, space.20 = 8, space.25 = 12, space.30 = 16
+        ↓ reference resolution
+Semantic foundation
+  space.component/10, space.component/20, space.layout/30, space.target/s
+        ↓ component-owned mapping
+Private component specification
+  button.iconGap, textArea.fieldGap, dialog.pageInset
+        ↓
+Flutter Widgets implementation
+```
+
+Colors, font families and weights, standard spacing, target sizes, radii, and border widths use the
+generated semantic foundation when an exact role exists. Measurements specific to one upstream
+implementation—such as the 51 × 31 switch track, 9 px text-area inset, or 3 px tooltip arrow—remain
+private constants beside that component. Values are never forced onto a nearby token merely to
+remove a literal.
+
+`CharcoalThemeData` contains only foundations: brightness, colors, dimensions, and typography.
+Component geometry and behavior are not a public theme surface or a generated configuration file.
+
+Component behavior is audited against two pinned sources:
+
+1. A public SwiftUI implementation is the primary reference when one exists:
+   [`pixiv/charcoal-ios@8d96f2c`](https://github.com/pixiv/charcoal-ios/tree/8d96f2cef5be9e7983898e13cf45e0222f1aadda/Sources/CharcoalSwiftUI/Components).
+2. Otherwise the corresponding Charcoal implementation is used:
+   [`pixiv/charcoal@08995fa`](https://github.com/pixiv/charcoal/tree/08995fa5191fa918fc5afd2c5da08490ae307da7/packages/react/src/components).
+3. Flutter adds keyboard, pointer, semantics, text-scaling, reduced-motion, and viewport adaptations.
+
+Source provenance is an implementation concern. Public component names remain platform-neutral so
+components can mature without API renaming.
+
+See [Component source contracts](docs/component-sources.md) for the complete source matrix and
+verified measurements.
 
 ## Usage
 
@@ -74,28 +107,32 @@ CharcoalIconButton(
 );
 ```
 
-Component recipes are resolved again when semantic foundation tokens are overridden. An override
-therefore propagates to every component that references the token:
+Semantic overrides propagate through every component that consumes that foundation role:
 
 ```dart
-final colors = CharcoalGeneratedColorTokens.light.copyWith(
-  containerPrimaryDefault: const Color(0xFF9C27B0),
+final baseColors = CharcoalGeneratedColorTokens.light;
+final baseDimensions = CharcoalGeneratedDimensionTokens.light;
+
+final theme = CharcoalThemeData.light(
+  colors: baseColors.copyWith(
+    containerPrimaryDefault: const Color(0xFF9C27B0),
+  ),
+  dimensions: baseDimensions.copyWith(
+    space: baseDimensions.space.copyWith(
+      targetS: 36,
+      component30: 20,
+    ),
+  ),
 );
 
-final theme = CharcoalThemeData.light(colors: colors);
-
-CharcoalTheme(
-  data: theme,
-  child: const MyScreen(),
-);
+CharcoalTheme(data: theme, child: const MyScreen());
 ```
 
 ## Motion and navigation
 
-`CharcoalApp` uses `CharcoalPageRoute` as its default route factory. The transition uses a short
-shared-axis movement, remains opaque for its entire lifetime, disables route snapshotting, and
-honors the platform's reduced-motion preference. Push an explicit route when using imperative
-navigation:
+`CharcoalApp` uses `CharcoalPageRoute` as its default route factory. The transition remains opaque,
+disables route snapshotting, and honors reduced motion. Push an explicit route when using
+imperative navigation:
 
 ```dart
 Navigator.of(context).push<void>(
@@ -103,92 +140,67 @@ Navigator.of(context).push<void>(
 );
 ```
 
-`CharcoalMotion` exposes the common composition-level curves and timings. Generated component
-recipes continue to own component-specific durations.
+`CharcoalMotion` exposes shared composition curves. Component-specific durations stay beside the
+component whose source contract defines them.
 
 ## Updating V2 tokens
 
 ```bash
-# Resolve a tag, branch, or commit to an exact SHA, then download and validate the V2 JSON.
+# Resolve a tag, branch, or commit to an exact SHA, then download and validate V2 JSON.
 fvm dart run tool/tokens.dart sync --ref main
 
-# Generate strongly typed foundation tokens and component recipes without network access.
+# Generate strongly typed color, dimension, and typography foundations offline.
 fvm dart run tool/tokens.dart generate
 
-# Run sync and generate, then write tokens/diff.md for the update pull request.
+# Sync, generate, and write tokens/diff.md for an update pull request.
 fvm dart run tool/tokens.dart update --ref main
 
-# Check source hashes, the resolved snapshot, and every generated artifact in CI.
+# Check source hashes, the resolved snapshot, and all generated artifacts.
 fvm dart run tool/tokens.dart check
 
-# Compare the current sources with the committed snapshot.
+# Compare current sources with the committed semantic snapshot.
 fvm dart run tool/tokens.dart diff
 ```
+
+Generation fails for missing or circular references, mismatched light/dark keys, invalid values,
+identifier collisions, manifest drift, or non-reproducible output. Component-only changes are made
+in component source and verified by component tests; they do not run through token generation.
+
+Do not edit generated Dart files. Move the pinned upstream revision with `sync` or `update`, then
+regenerate. Generated foundation groups expose typed `entries` catalogs so documentation and the
+Showcase never maintain a second token inventory.
+
+See [V2 token pipeline](docs/token-pipeline.md) for the full source-of-truth and CI model.
 
 ## Updating V2 icons
 
 ```bash
-# Resolve and pin the upstream ref, copy only the V2 SVG source, and regenerate Dart.
 fvm dart run tool/icons.dart update --ref main
-
-# Reproduce the catalog and fail on asset, manifest, or generated-code drift.
 fvm dart run tool/icons.dart check
 ```
 
-Token sync metadata is stored in `tokens/manifest.json`, including the requested ref, resolved
-commit, and SHA-256 of every source file. Icon sync records its resolved commit, group counts, and
-aggregate asset hash in `icons/manifest.json`. Generation fails when:
-
-- a token reference is missing or circular;
-- light and dark applied token keys differ;
-- a category, color, unit, or font weight is invalid;
-- two token names produce the same Dart identifier;
-- a component recipe references a primitive color instead of a semantic color; or
-- a component recipe value is not consumed by the generator.
-
-Do not edit generated Dart files. Change visual mappings in `tokens/components.json`, or run
-`update` to move to another upstream revision. The scheduled CI workflow creates a source update
-pull request with a token diff and regenerated icon catalog.
-
-Generated foundation objects also expose typed `entries` catalogs for colors, typography, and
-dimensions. Documentation and the Showcase iterate those catalogs instead of maintaining a second
-hard-coded token list. Adding, removing, or changing a V2 foundation token therefore updates the
-visual catalog in the same `generate` transaction.
-
-See [V2 token pipeline](docs/token-pipeline.md) for the source-of-truth model, custom repository
-workflow, guarantees, and its relationship to `charcoal-ios` generation.
-
-See [Charcoal iOS component parity](docs/ios-component-parity.md) for the audited upstream
-baseline, exact visual contracts, complete public-family coverage, and intentional V2 Flutter
-extensions.
+Token sync metadata lives in `tokens/manifest.json`; icon sync metadata lives in
+`icons/manifest.json`. Both record exact upstream commits and source hashes.
 
 ## Development and previews
 
 ```bash
 fvm flutter pub get
-fvm dart analyze --fatal-infos
+fvm flutter analyze
 fvm dart test
-
-(cd packages/charcoal_icons && fvm flutter test)
-(cd packages/charcoal_ui && fvm flutter test)
-(cd example && fvm flutter test)
+fvm flutter test packages/charcoal_ui/test example/test
+fvm dart run tool/tokens.dart check
 
 cd packages/charcoal_ui
 fvm flutter widget-preview start
 ```
 
-Every push to `main` also builds `example` for the `/charcoal-flutter/` base path and deploys the
-result to GitHub Pages. The workflow can be run manually from the Actions tab as well.
-
-Widget Preview contains light and dark configurations for the component set. In Flutter 3.47, the
-generated preview scaffold does not inherit its parent pub workspace. During development,
-`charcoal_ui` therefore uses local path dependencies and is marked `publish_to: none`. A release
-workflow must replace those paths with published `charcoal_icons` and `charcoal_tokens` version
-constraints.
+Every push to `main` builds the Showcase for the `/charcoal-flutter/` base path and deploys it to
+GitHub Pages. The package uses local workspace dependencies and is currently `publish_to: none`.
 
 ## Origin and license
 
-Foundation tokens and visual semantics come from pixiv's
+Foundation tokens and component behavior come from pixiv's
 [charcoal](https://github.com/pixiv/charcoal) and
 [charcoal-ios](https://github.com/pixiv/charcoal-ios). This project and both upstream projects use
 Apache-2.0. See `NOTICE` for attribution.

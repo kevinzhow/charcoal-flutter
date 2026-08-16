@@ -17,14 +17,30 @@ void main() {
     CharcoalDropdownOption<String>(value: 'novel', label: 'Novel'),
   ];
 
-  test('semantic token overrides flow into the dropdown recipe', () {
+  testWidgets('semantic color overrides flow into the dropdown surface', (tester) async {
     const replacement = Color(0xFF9C27B0);
     final colors = CharcoalGeneratedColorTokens.light.copyWith(
       containerSecondaryDefaultA: replacement,
     );
     final theme = CharcoalThemeData.light(colors: colors);
 
-    expect(theme.components.dropdown.background.normal, replacement);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 320,
+          child: CharcoalDropdown<String>(
+            onChanged: _ignoreString,
+            options: options,
+            placeholder: 'Choose a type',
+            value: null,
+          ),
+        ),
+        theme: theme,
+      ),
+    );
+
+    final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
+    expect((container.decoration! as BoxDecoration).color, replacement);
   });
 
   testWidgets('opens an anchored menu and selects a value', (tester) async {

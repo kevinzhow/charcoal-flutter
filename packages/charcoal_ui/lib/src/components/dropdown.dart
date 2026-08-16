@@ -7,9 +7,19 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
-import '../theme/component_tokens.dart';
 import 'clickable.dart';
 import 'field_label.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+abstract final class _DropdownSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const menuMaxHeight = 280.0;
+  static const focusRingWidth = 4.0;
+  static const iconSize = 16.0;
+  static const labelFontSize = 14.0;
+  static const labelLineHeight = 22.0;
+}
 
 /// One selectable value in a [CharcoalDropdown].
 final class CharcoalDropdownOption<T> {
@@ -154,26 +164,32 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
   void _open() {
     final renderObject = _triggerKey.currentContext?.findRenderObject();
     if (renderObject is RenderBox && renderObject.hasSize) {
-      final theme = CharcoalTheme.of(context);
-      final tokens = theme.components.dropdown;
+      final dimensions = CharcoalTheme.of(context).dimensions;
+      final menuGap = dimensions.space.component10;
+      final viewportMargin = dimensions.space.layout30;
       final origin = renderObject.localToGlobal(Offset.zero);
       final viewport = MediaQuery.maybeSizeOf(context);
       _menuWidth = renderObject.size.width;
-      _menuMaxHeight = tokens.menuMaxHeight;
+      _menuMaxHeight = _DropdownSpec.menuMaxHeight;
       _openAbove = false;
       if (viewport != null) {
-        final viewportMargin = tokens.optionPaddingHorizontal;
         final below = math.max(
           0.0,
-          viewport.height - origin.dy - renderObject.size.height - tokens.menuGap - viewportMargin,
+          viewport.height - origin.dy - renderObject.size.height - menuGap - viewportMargin,
         );
-        final above = math.max(0.0, origin.dy - tokens.menuGap - viewportMargin);
+        final above = math.max(
+          0.0,
+          origin.dy - menuGap - viewportMargin,
+        );
         final estimatedHeight = math.min(
-          tokens.menuMaxHeight,
-          widget.options.length * tokens.optionMinHeight + tokens.menuPaddingVertical * 2,
+          _DropdownSpec.menuMaxHeight,
+          widget.options.length * dimensions.space.targetM + dimensions.space.component30,
         );
         _openAbove = below < estimatedHeight && above > below;
-        _menuMaxHeight = math.min(tokens.menuMaxHeight, _openAbove ? above : below);
+        _menuMaxHeight = math.min(
+          _DropdownSpec.menuMaxHeight,
+          _openAbove ? above : below,
+        );
       }
     }
 
@@ -294,7 +310,10 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
         Scrollable.ensureVisible(
           activeContext,
           alignment: 0.5,
-          duration: CharcoalTheme.of(context).components.dropdown.animationDuration,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _DropdownSpec.animationDuration,
+          ),
           curve: CharcoalMotion.emphasizedCurve,
         );
       }
@@ -304,12 +323,12 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.dropdown;
     final selectedIndex = _selectedIndex;
     final selectedOption = selectedIndex == null ? null : widget.options[selectedIndex];
     final isPlaceholder = selectedOption == null;
     final visibleText = selectedOption?.label ?? widget.placeholder ?? '';
     final assistiveText = widget.assistiveText;
+    final fieldGap = theme.dimensions.space.component10;
 
     final dropdown = OverlayPortal(
       controller: _overlayController,
@@ -343,20 +362,36 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
                   : SemanticsValidationResult.none,
               builder: (context, states) {
                 final focused = states.contains(WidgetState.focused);
-                final background = tokens.background.resolve(states);
-                final ringColor = widget.invalid ? tokens.invalidRingColor : tokens.focusRingColor;
+                final background = resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerSecondaryDefaultA,
+                  hovered: theme.colors.containerSecondaryHoverA,
+                  pressed: theme.colors.containerSecondaryPressA,
+                  focused: theme.colors.containerSecondaryDefaultA,
+                  selected: theme.colors.containerSecondaryPressA,
+                );
+                final ringColor = widget.invalid
+                    ? theme.colors.borderNegative
+                    : theme.colors.borderFocusLegacy;
                 return AnimatedContainer(
-                  duration: tokens.animationDuration,
+                  duration: CharcoalMotion.resolveDuration(
+                    context,
+                    _DropdownSpec.animationDuration,
+                  ),
                   curve: CharcoalMotion.standardCurve,
-                  height: tokens.height,
-                  padding: EdgeInsets.symmetric(horizontal: tokens.paddingHorizontal),
+                  height: theme.dimensions.space.targetM,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: theme.dimensions.space.component20,
+                  ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(tokens.radius),
+                    borderRadius: BorderRadius.circular(
+                      theme.dimensions.radius.s,
+                    ),
                     boxShadow: focused || widget.invalid
                         ? <BoxShadow>[
                             BoxShadow(
                               color: ringColor,
-                              spreadRadius: tokens.focusRingWidth,
+                              spreadRadius: _DropdownSpec.focusRingWidth,
                             ),
                           ]
                         : const <BoxShadow>[],
@@ -370,20 +405,22 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: isPlaceholder ? tokens.placeholderColor : tokens.foregroundColor,
+                            color: isPlaceholder
+                                ? theme.colors.textPlaceholderDefault
+                                : theme.colors.textDefault,
                             fontFamily: theme.typography.fontFamily.sans,
-                            fontSize: tokens.fontSize,
-                            fontWeight: tokens.fontWeight,
-                            height: tokens.lineHeight / tokens.fontSize,
+                            fontSize: _DropdownSpec.labelFontSize,
+                            fontWeight: theme.typography.fontWeight.regular,
+                            height: _DropdownSpec.labelLineHeight / _DropdownSpec.labelFontSize,
                             leadingDistribution: TextLeadingDistribution.even,
                           ),
                         ),
                       ),
-                      SizedBox(width: tokens.gap),
+                      SizedBox(width: fieldGap),
                       CharcoalIcon(
                         CharcoalIcons16.chevronDown,
-                        color: tokens.iconColor,
-                        size: tokens.iconSize,
+                        color: theme.colors.iconSecondaryDefault,
+                        size: _DropdownSpec.iconSize,
                       ),
                     ],
                   ),
@@ -397,8 +434,11 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
 
     return AnimatedOpacity(
       curve: CharcoalMotion.standardCurve,
-      duration: tokens.animationDuration,
-      opacity: _enabled ? 1 : tokens.disabledOpacity,
+      duration: CharcoalMotion.resolveDuration(
+        context,
+        _DropdownSpec.animationDuration,
+      ),
+      opacity: _enabled ? 1 : charcoalDisabledOpacity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -410,17 +450,19 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
               requiredText: widget.requiredText,
               subLabel: widget.subLabel,
             ),
-            SizedBox(height: tokens.gap),
+            SizedBox(height: fieldGap),
           ],
           dropdown,
           if (assistiveText != null && assistiveText.isNotEmpty) ...<Widget>[
-            SizedBox(height: tokens.gap),
+            SizedBox(height: fieldGap),
             Text(
               assistiveText,
-              style: theme.textStyles.captionMedium.copyWith(
+              style: charcoalTypographyStyle(
+                context,
                 color: widget.invalid
-                    ? tokens.invalidAssistiveTextColor
-                    : tokens.assistiveTextColor,
+                    ? theme.colors.textNegativeDefault
+                    : theme.colors.textSecondaryDefault,
+                size: CharcoalTypographySize.size14,
               ),
             ),
           ],
@@ -430,19 +472,21 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
   }
 
   Widget _buildOverlay(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
     final direction = Directionality.of(context);
     final start = direction == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight;
     final targetAnchor = _openAbove ? Alignment(start.x, -1) : Alignment(start.x, 1);
     final followerAnchor = _openAbove ? Alignment(start.x, 1) : Alignment(start.x, -1);
-    final tokens = CharcoalTheme.of(context).components.dropdown;
     final width = _menuWidth > 0
         ? _menuWidth
-        : MediaQuery.maybeSizeOf(context)?.width ?? tokens.menuMaxHeight;
+        : MediaQuery.maybeSizeOf(context)?.width ?? _DropdownSpec.menuMaxHeight;
+    final menuGap = theme.dimensions.space.component10;
+    final menuRadius = theme.dimensions.radius.m;
 
     return CompositedTransformFollower(
       followerAnchor: followerAnchor,
       link: _layerLink,
-      offset: Offset(0, _openAbove ? -tokens.menuGap : tokens.menuGap),
+      offset: Offset(0, _openAbove ? -menuGap : menuGap),
       showWhenUnlinked: false,
       targetAnchor: targetAnchor,
       child: TapRegion(
@@ -452,29 +496,31 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
           child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(
-                color: tokens.menuBorderColor,
-                width: tokens.menuBorderWidth,
+                color: theme.colors.borderSecondary,
+                width: theme.dimensions.borderWidth.m,
               ),
-              borderRadius: BorderRadius.circular(tokens.menuRadius),
-              color: tokens.menuBackgroundColor,
+              borderRadius: BorderRadius.circular(menuRadius),
+              color: theme.colors.backgroundDefault,
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(tokens.menuRadius),
+              borderRadius: BorderRadius.circular(menuRadius),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: _menuMaxHeight > 0 ? _menuMaxHeight : tokens.menuMaxHeight,
+                  maxHeight: _menuMaxHeight > 0 ? _menuMaxHeight : _DropdownSpec.menuMaxHeight,
                 ),
                 child: Semantics(
                   container: true,
                   explicitChildNodes: true,
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(vertical: tokens.menuPaddingVertical),
+                    padding: EdgeInsets.symmetric(
+                      vertical: theme.dimensions.space.component20,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         for (var index = 0; index < widget.options.length; index++)
-                          _buildOption(context, index, tokens),
+                          _buildOption(context, index),
                       ],
                     ),
                   ),
@@ -487,7 +533,7 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
     );
   }
 
-  Widget _buildOption(BuildContext context, int index, CharcoalDropdownTokens tokens) {
+  Widget _buildOption(BuildContext context, int index) {
     final theme = CharcoalTheme.of(context);
     final option = widget.options[index];
     final selected = index == _selectedIndex;
@@ -509,30 +555,47 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
           final disabled = effectiveStates.contains(WidgetState.disabled);
           return AnimatedOpacity(
             curve: CharcoalMotion.standardCurve,
-            duration: tokens.animationDuration,
-            opacity: disabled ? tokens.optionDisabledOpacity : 1,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _DropdownSpec.animationDuration,
+            ),
+            opacity: disabled ? charcoalDisabledOpacity : 1,
             child: AnimatedContainer(
-              duration: tokens.animationDuration,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _DropdownSpec.animationDuration,
+              ),
               curve: CharcoalMotion.standardCurve,
-              constraints: BoxConstraints(minHeight: tokens.optionMinHeight),
-              padding: EdgeInsets.symmetric(horizontal: tokens.optionPaddingHorizontal),
-              color: tokens.optionBackground.resolve(effectiveStates),
+              constraints: BoxConstraints(
+                minHeight: theme.dimensions.space.targetM,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: theme.dimensions.space.component30,
+              ),
+              color: resolveCharcoalStateColor(
+                effectiveStates,
+                normal: theme.colors.backgroundDefault,
+                hovered: theme.colors.containerSecondaryDefault,
+                pressed: theme.colors.containerSecondaryPress,
+              ),
               child: Row(
                 children: <Widget>[
                   SizedBox.square(
-                    dimension: tokens.iconSize,
+                    dimension: _DropdownSpec.iconSize,
                     child: selected
                         ? CharcoalIcon(
                             CharcoalIcons.check,
-                            color: tokens.optionCheckColor,
-                            size: tokens.iconSize,
+                            color: theme.colors.iconSecondaryDefault,
+                            size: _DropdownSpec.iconSize,
                           )
                         : null,
                   ),
-                  SizedBox(width: tokens.optionGap),
+                  SizedBox(width: theme.dimensions.space.component10),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: tokens.menuPaddingVertical),
+                      padding: EdgeInsets.symmetric(
+                        vertical: theme.dimensions.space.component20,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -541,13 +604,10 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
                             option.label,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: tokens.optionPrimaryColor,
-                              fontFamily: theme.typography.fontFamily.sans,
-                              fontSize: tokens.fontSize,
-                              fontWeight: tokens.fontWeight,
-                              height: tokens.lineHeight / tokens.fontSize,
-                              leadingDistribution: TextLeadingDistribution.even,
+                            style: charcoalTypographyStyle(
+                              context,
+                              color: theme.colors.textSecondaryDefault,
+                              size: CharcoalTypographySize.size14,
                             ),
                           ),
                           if (option.secondary case final secondary?) ...<Widget>[
@@ -555,15 +615,10 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
                               secondary,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: tokens.optionSecondaryColor,
-                                fontFamily: theme.typography.fontFamily.sans,
-                                fontSize: tokens.optionSecondaryFontSize,
-                                fontWeight: tokens.fontWeight,
-                                height:
-                                    tokens.optionSecondaryLineHeight /
-                                    tokens.optionSecondaryFontSize,
-                                leadingDistribution: TextLeadingDistribution.even,
+                              style: charcoalTypographyStyle(
+                                context,
+                                color: theme.colors.textTertiaryDefault,
+                                size: CharcoalTypographySize.size12,
                               ),
                             ),
                           ],

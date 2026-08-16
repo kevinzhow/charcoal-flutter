@@ -1,8 +1,13 @@
 import 'package:flutter/widgets.dart';
 
-import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+abstract final class _SegmentedControlSpec {
+  static const uniformSegmentMinWidth = 80.0;
+}
 
 final class CharcoalSegment<T> {
   const CharcoalSegment({required this.value, required this.child, this.enabled = true});
@@ -20,6 +25,7 @@ final class CharcoalSegmentedControl<T> extends StatelessWidget {
     required this.onChanged,
     this.fullWidth = false,
     this.semanticLabel,
+    this.uniformSegmentWidth = false,
     super.key,
   }) : assert(segments.length > 1);
 
@@ -28,16 +34,27 @@ final class CharcoalSegmentedControl<T> extends StatelessWidget {
   final ValueChanged<T>? onChanged;
   final bool fullWidth;
   final String? semanticLabel;
+  final bool uniformSegmentWidth;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final buttonTokens = theme.components.button;
-    final size = buttonTokens.small;
     final children = <Widget>[
       for (final segment in segments)
         if (fullWidth)
-          Expanded(child: _buildSegment(context, segment))
+          Expanded(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: _SegmentedControlSpec.uniformSegmentMinWidth,
+              ),
+              child: _buildSegment(context, segment),
+            ),
+          )
+        else if (uniformSegmentWidth)
+          SizedBox(
+            width: _SegmentedControlSpec.uniformSegmentMinWidth,
+            child: _buildSegment(context, segment),
+          )
         else
           _buildSegment(context, segment),
     ];
@@ -47,7 +64,7 @@ final class CharcoalSegmentedControl<T> extends StatelessWidget {
       label: semanticLabel,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size.radius),
+          borderRadius: BorderRadius.circular(theme.dimensions.radius.xl),
           color: theme.colors.containerSecondaryDefaultA,
         ),
         child: Row(
@@ -60,43 +77,37 @@ final class CharcoalSegmentedControl<T> extends StatelessWidget {
 
   Widget _buildSegment(BuildContext context, CharcoalSegment<T> segment) {
     final theme = CharcoalTheme.of(context);
-    final buttonTokens = theme.components.button;
-    final size = buttonTokens.small;
     final selected = segment.value == value;
     final enabled = segment.enabled && onChanged != null;
-    final colors = selected ? buttonTokens.primary : buttonTokens.normal;
     return CharcoalClickable(
       checked: selected,
       inMutuallyExclusiveGroup: true,
       onPressed: enabled ? () => onChanged!(segment.value) : null,
       semanticButton: false,
       builder: (context, states) {
-        final background = colors.background.resolve(states);
-        final foreground = colors.foreground.resolve(states);
-        return AnimatedOpacity(
-          curve: CharcoalMotion.standardCurve,
-          duration: buttonTokens.animationDuration,
-          opacity: enabled ? 1 : buttonTokens.disabledOpacity,
-          child: AnimatedContainer(
-            duration: buttonTokens.animationDuration,
-            curve: CharcoalMotion.standardCurve,
-            height: size.height,
-            padding: EdgeInsets.symmetric(horizontal: size.paddingHorizontal),
+        return Opacity(
+          opacity: enabled ? 1 : charcoalDisabledOpacity,
+          child: Container(
+            height: theme.dimensions.space.targetS,
+            padding: EdgeInsets.symmetric(
+              horizontal: theme.dimensions.space.component30,
+            ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(size.radius),
-              color: background,
+              borderRadius: BorderRadius.circular(
+                theme.dimensions.radius.xl,
+              ),
+              color: selected ? theme.colors.containerPrimaryDefault : null,
             ),
             alignment: Alignment.center,
             child: DefaultTextStyle(
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: foreground,
-                fontFamily: theme.typography.fontFamily.sans,
-                fontSize: size.fontSize,
-                fontWeight: theme.typography.fontWeight.regular,
-                height: size.lineHeight / size.fontSize,
-                leadingDistribution: TextLeadingDistribution.even,
+              style: charcoalTypographyStyle(
+                context,
+                color: selected
+                    ? theme.colors.textOnPrimaryDefault
+                    : theme.colors.textSecondaryDefault,
+                size: CharcoalTypographySize.size14,
               ),
               child: segment.child,
             ),

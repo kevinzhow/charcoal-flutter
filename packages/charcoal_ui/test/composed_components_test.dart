@@ -24,13 +24,27 @@ void main() {
       ),
     );
 
-    final selectedContainer = tester.widget<AnimatedContainer>(
-      find.ancestor(of: find.text('Grid'), matching: find.byType(AnimatedContainer)).first,
+    final selectedContainer = tester.widget<Container>(
+      find.ancestor(of: find.text('Grid'), matching: find.byType(Container)).first,
     );
     expect(
       (selectedContainer.decoration! as BoxDecoration).color,
       theme.colors.containerPrimaryDefault,
     );
+    expect(selectedContainer.constraints!.maxHeight, 32);
+    expect(selectedContainer.padding, const EdgeInsets.symmetric(horizontal: 16));
+    final selectedTextStyle = tester
+        .widget<DefaultTextStyle>(
+          find
+              .ancestor(
+                of: find.text('Grid'),
+                matching: find.byType(DefaultTextStyle),
+              )
+              .first,
+        )
+        .style;
+    expect(selectedTextStyle.fontSize, 14);
+    expect(selectedTextStyle.height, 22 / 14);
 
     await tester.tap(find.text('List'));
     expect(nextValue, 'list');

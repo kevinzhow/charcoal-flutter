@@ -23,16 +23,25 @@ void main() {
     expect(violations, isEmpty, reason: violations.join('\n'));
   });
 
-  test('hand-written component sources contain no raw color literals', () async {
-    final violations = <String>[];
+  test('raw component colors are limited to audited source constants', () async {
+    const allowed = <String, Set<String>>{
+      'checkbox.dart': <String>{'0x00000000', '0xFFFFFFFF'},
+      'loading_spinner.dart': <String>{'0x1A000000'},
+      'modal.dart': <String>{'0x99000000'},
+      'tag_item.dart': <String>{'0xFF7ACCB1'},
+    };
+    final actual = <String, Set<String>>{};
     for (final file in libraryFiles.where(
       (file) => file.path.contains('/src/components/') && !file.path.endsWith('.g.dart'),
     )) {
       final source = await file.readAsString();
-      if (RegExp(r'\bColor\s*\(\s*0x').hasMatch(source)) {
-        violations.add(file.path);
+      final values = RegExp(
+        r'\bColor\s*\(\s*(0x[0-9A-Fa-f]{8})',
+      ).allMatches(source).map((match) => match.group(1)!).toSet();
+      if (values.isNotEmpty) {
+        actual[file.uri.pathSegments.last] = values;
       }
     }
-    expect(violations, isEmpty, reason: violations.join('\n'));
+    expect(actual, allowed);
   });
 }

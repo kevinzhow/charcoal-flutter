@@ -11,20 +11,16 @@ void main() {
     expect(problems, isEmpty, reason: problems.join('\n'));
   });
 
-  test('component recipe additions cannot be silently ignored', () async {
+  test('generator emits only foundation token artifacts', () async {
     final pipeline = TokenPipeline(Directory.current);
     final bundle = await pipeline.loadBundle();
-    final recipes = decodeComponentRecipes(await File('tokens/components.json').readAsString());
-    final button = recipes['button']! as Map<String, dynamic>;
-    button['misspelled-new-value'] = '4px';
-
     expect(
-      () => DartTokenGenerator(bundle: bundle, componentRecipes: recipes).render(),
-      throwsA(
-        predicate<Object>(
-          (error) => error.toString().contains('button.misspelled-new-value'),
-        ),
-      ),
+      DartTokenGenerator(bundle: bundle).render().map((artifact) => artifact.relativePath),
+      <String>[
+        'packages/charcoal_tokens/lib/src/generated/charcoal_color_tokens.g.dart',
+        'packages/charcoal_tokens/lib/src/generated/charcoal_dimension_tokens.g.dart',
+        'packages/charcoal_tokens/lib/src/generated/charcoal_typography_tokens.g.dart',
+      ],
     );
   });
 }

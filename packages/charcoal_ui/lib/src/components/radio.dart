@@ -3,6 +3,16 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+
+abstract final class _RadioSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const controlSize = 20.0;
+  static const dotSize = 8.0;
+  static const focusRingWidth = 4.0;
+  static const labelFontSize = 14.0;
+  static const labelLineHeight = 22.0;
+}
 
 /// A controlled Charcoal V2 radio option.
 final class CharcoalRadio<T> extends StatelessWidget {
@@ -34,7 +44,6 @@ final class CharcoalRadio<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.radio;
     return MergeSemantics(
       child: CharcoalClickable(
         autofocus: autofocus,
@@ -49,41 +58,76 @@ final class CharcoalRadio<T> extends StatelessWidget {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);
           final background = _selected
-              ? tokens.checkedBackground.resolve(states)
-              : tokens.uncheckedBackground.resolve(states);
-          final borderColor = tokens.borderColor.resolve(states);
-          final ringColor = invalid ? tokens.invalidRingColor : tokens.focusRingColor;
+              ? resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerPrimaryDefault,
+                  hovered: theme.colors.containerPrimaryHover,
+                  pressed: theme.colors.containerPrimaryPress,
+                )
+              : resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerDefault,
+                  hovered: theme.colors.containerHover,
+                  pressed: theme.colors.containerPress,
+                );
+          final ringColor = invalid ? theme.colors.borderNegative : theme.colors.borderFocusLegacy;
           final indicator = AnimatedContainer(
-            duration: tokens.animationDuration,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _RadioSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
-            width: tokens.size,
-            height: tokens.size,
+            width: _RadioSpec.controlSize,
+            height: _RadioSpec.controlSize,
             decoration: BoxDecoration(
-              border: _selected ? null : Border.all(color: borderColor, width: tokens.borderWidth),
-              borderRadius: BorderRadius.circular(tokens.radius),
+              border: _selected
+                  ? null
+                  : Border.all(
+                      color: theme.colors.borderDefault,
+                      width: theme.dimensions.borderWidth.l,
+                    ),
+              borderRadius: BorderRadius.circular(
+                theme.dimensions.radius.oval,
+              ),
               boxShadow: focused || invalid
                   ? <BoxShadow>[
-                      BoxShadow(color: ringColor, spreadRadius: tokens.focusRingWidth),
+                      BoxShadow(
+                        color: ringColor,
+                        spreadRadius: _RadioSpec.focusRingWidth,
+                      ),
                     ]
                   : const <BoxShadow>[],
               color: background,
             ),
             child: Center(
               child: AnimatedContainer(
-                duration: tokens.animationDuration,
-                width: _selected ? tokens.dotSize : 0,
-                height: _selected ? tokens.dotSize : 0,
+                duration: CharcoalMotion.resolveDuration(
+                  context,
+                  _RadioSpec.animationDuration,
+                ),
+                width: _selected ? _RadioSpec.dotSize : 0,
+                height: _selected ? _RadioSpec.dotSize : 0,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(tokens.radius),
-                  color: tokens.dotColor.resolve(states),
+                  borderRadius: BorderRadius.circular(
+                    theme.dimensions.radius.oval,
+                  ),
+                  color: resolveCharcoalStateColor(
+                    states,
+                    normal: theme.colors.iconOnPrimaryDefault,
+                    hovered: theme.colors.iconOnPrimaryHover,
+                    pressed: theme.colors.iconOnPrimaryPress,
+                  ),
                 ),
               ),
             ),
           );
           return AnimatedOpacity(
             curve: CharcoalMotion.standardCurve,
-            duration: tokens.animationDuration,
-            opacity: disabled ? tokens.disabledOpacity : 1,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _RadioSpec.animationDuration,
+            ),
+            opacity: disabled ? charcoalDisabledOpacity : 1,
             child: _RadioContent(indicator: indicator, label: label),
           );
         },
@@ -101,7 +145,6 @@ final class _RadioContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final labelTokens = theme.components.radio.label;
     if (label == null) {
       return indicator;
     }
@@ -109,15 +152,15 @@ final class _RadioContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         indicator,
-        SizedBox(width: labelTokens.gap),
+        SizedBox(width: theme.dimensions.space.component10),
         Flexible(
           child: DefaultTextStyle(
             style: TextStyle(
-              color: labelTokens.color,
+              color: theme.colors.textDefault,
               fontFamily: theme.typography.fontFamily.sans,
-              fontSize: labelTokens.fontSize,
-              fontWeight: labelTokens.fontWeight,
-              height: labelTokens.lineHeight / labelTokens.fontSize,
+              fontSize: _RadioSpec.labelFontSize,
+              fontWeight: theme.typography.fontWeight.regular,
+              height: _RadioSpec.labelLineHeight / _RadioSpec.labelFontSize,
               leadingDistribution: TextLeadingDistribution.even,
             ),
             child: label!,

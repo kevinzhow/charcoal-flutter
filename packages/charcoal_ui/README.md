@@ -1,5 +1,10 @@
 # charcoal_ui
 
 Charcoal V2 components implemented directly on Flutter Widgets. The package includes controls,
-form fields, dropdowns, overlays, navigation components, themes, and interaction primitives. See
-the workspace [README](../../README.md) for setup, token generation, theming, previews, and testing.
+form fields, dropdowns, overlays, navigation components, themes, and interaction primitives. It is
+an independent package with no Material or Cupertino dependency.
+
+The public theme contains generated foundations only. Each widget maps semantic foundation values
+to a private component specification and keeps source-specific geometry beside its implementation.
+See the workspace [README](../../README.md) for architecture, source contracts, setup, previews,
+and testing.

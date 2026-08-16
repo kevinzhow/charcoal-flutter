@@ -7,12 +7,21 @@ import '../theme/charcoal_theme.dart';
 import 'overlay_anchor_tracker.dart';
 import 'overlay_position.dart';
 import 'popup_shape.dart';
+import 'typography.dart';
+
+abstract final class _TooltipSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const defaultWaitDuration = Duration(milliseconds: 500);
+  static const defaultMaxWidth = 184.0;
+  static const arrowHeight = 3.0;
+  static const arrowHalfWidth = 5.0;
+}
 
 /// An anchored Charcoal tooltip that supports pointer, keyboard, and touch.
 ///
-/// With no explicit [position], placement is automatic and follows the iOS
-/// priority of below, above, right, then left. Supplying [visible] makes the
-/// tooltip controlled; otherwise it manages its own visibility.
+/// With no explicit [position], placement is automatic and follows Charcoal's
+/// below-then-above priority. Supplying [visible] makes
+/// the tooltip controlled; otherwise it manages its own visibility.
 final class CharcoalTooltip extends StatefulWidget {
   const CharcoalTooltip({
     required this.child,
@@ -26,7 +35,7 @@ final class CharcoalTooltip extends StatefulWidget {
     this.showOnHover = true,
     this.showOnTap = true,
     this.visible,
-    this.waitDuration = const Duration(milliseconds: 500),
+    this.waitDuration = _TooltipSpec.defaultWaitDuration,
     super.key,
   }) : assert(maxWidth == null || maxWidth > 0);
 
@@ -80,10 +89,9 @@ final class _CharcoalTooltipState extends State<CharcoalTooltip>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final duration = CharcoalTheme.of(context).components.tooltip.animationDuration;
     _animation
-      ..duration = duration
-      ..reverseDuration = duration;
+      ..duration = _TooltipSpec.animationDuration
+      ..reverseDuration = _TooltipSpec.animationDuration;
     _entry?.markNeedsBuild();
   }
 
@@ -187,7 +195,7 @@ final class _CharcoalTooltipState extends State<CharcoalTooltip>
     final targetOrigin = targetBox.localToGlobal(Offset.zero);
     final targetRect = _targetRect ?? (targetOrigin & targetBox.size);
     final theme = CharcoalTheme.of(context);
-    final maxWidth = widget.maxWidth ?? theme.components.tooltip.maxWidth;
+    final maxWidth = widget.maxWidth ?? _TooltipSpec.defaultMaxWidth;
     return CharcoalTheme(
       data: theme,
       child: _TooltipOverlay(
@@ -262,16 +270,16 @@ final class _TooltipOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.tooltip;
     final media = MediaQuery.of(context);
     final viewport = Offset.zero & media.size;
-    final textStyle = TextStyle(
-      color: tokens.foregroundColor,
-      fontFamily: theme.typography.fontFamily.sans,
-      fontSize: tokens.fontSize,
-      fontWeight: tokens.fontWeight,
-      height: tokens.lineHeight / tokens.fontSize,
-      leadingDistribution: TextLeadingDistribution.even,
+    final horizontalPadding = theme.dimensions.space.component25;
+    final verticalPadding = theme.dimensions.space.component10;
+    final targetGap = theme.dimensions.space.component10;
+    final screenInset = theme.dimensions.space.layout30;
+    final textStyle = charcoalTypographyStyle(
+      context,
+      color: theme.colors.textOnHudDefault,
+      size: CharcoalTypographySize.size12,
     );
     final painter =
         TextPainter(
@@ -281,47 +289,48 @@ final class _TooltipOverlay extends StatelessWidget {
           textDirection: Directionality.of(context),
           textScaler: media.textScaler,
         )..layout(
-          maxWidth: (maxWidth - tokens.paddingHorizontal * 2).clamp(0, double.infinity).toDouble(),
+          maxWidth: (maxWidth - horizontalPadding * 2).clamp(0, double.infinity).toDouble(),
         );
     final bodySize = Size(
-      (painter.width + tokens.paddingHorizontal * 2).clamp(0, maxWidth).toDouble(),
-      painter.height + tokens.paddingVertical * 2,
+      (painter.width + horizontalPadding * 2).clamp(0, maxWidth).toDouble(),
+      painter.height + verticalPadding * 2,
     );
     final placement =
         preferredPosition ??
         _automaticPlacement(
           viewport,
           bodySize,
-          arrow: tokens.arrowHeight,
-          gap: tokens.gap,
-          inset: tokens.screenInset,
+          arrow: _TooltipSpec.arrowHeight,
+          gap: targetGap,
+          inset: screenInset,
         );
     final tailPosition = _opposite(placement);
-    final arrowHeight = tokens.arrowHeight;
-    final gap = tokens.gap;
-    final screenInset = tokens.screenInset;
     final popupSize = switch (tailPosition) {
-      CharcoalOverlayPosition.top ||
-      CharcoalOverlayPosition.bottom => Size(bodySize.width, bodySize.height + arrowHeight),
-      CharcoalOverlayPosition.right ||
-      CharcoalOverlayPosition.left => Size(bodySize.width + arrowHeight, bodySize.height),
+      CharcoalOverlayPosition.top || CharcoalOverlayPosition.bottom => Size(
+        bodySize.width,
+        bodySize.height + _TooltipSpec.arrowHeight,
+      ),
+      CharcoalOverlayPosition.right || CharcoalOverlayPosition.left => Size(
+        bodySize.width + _TooltipSpec.arrowHeight,
+        bodySize.height,
+      ),
     };
 
     var origin = switch (placement) {
       CharcoalOverlayPosition.top => Offset(
         targetRect.center.dx - popupSize.width / 2,
-        targetRect.top - gap - popupSize.height,
+        targetRect.top - targetGap - popupSize.height,
       ),
       CharcoalOverlayPosition.right => Offset(
-        targetRect.right + gap,
+        targetRect.right + targetGap,
         targetRect.center.dy - popupSize.height / 2,
       ),
       CharcoalOverlayPosition.bottom => Offset(
         targetRect.center.dx - popupSize.width / 2,
-        targetRect.bottom + gap,
+        targetRect.bottom + targetGap,
       ),
       CharcoalOverlayPosition.left => Offset(
-        targetRect.left - gap - popupSize.width,
+        targetRect.left - targetGap - popupSize.width,
         targetRect.center.dy - popupSize.height / 2,
       ),
     };
@@ -391,26 +400,15 @@ final class _TooltipOverlay extends StatelessWidget {
     required double inset,
   }) {
     final needsVertical = bodySize.height + arrow + gap;
-    final needsHorizontal = bodySize.width + arrow + gap;
     if (viewport.bottom - targetRect.bottom - inset >= needsVertical) {
       return CharcoalOverlayPosition.bottom;
     }
     if (targetRect.top - viewport.top - inset >= needsVertical) {
       return CharcoalOverlayPosition.top;
     }
-    if (viewport.right - targetRect.right - inset >= needsHorizontal) {
-      return CharcoalOverlayPosition.right;
-    }
-    if (targetRect.left - viewport.left - inset >= needsHorizontal) {
-      return CharcoalOverlayPosition.left;
-    }
-    final spaces = <CharcoalOverlayPosition, double>{
-      CharcoalOverlayPosition.bottom: viewport.bottom - targetRect.bottom,
-      CharcoalOverlayPosition.top: targetRect.top - viewport.top,
-      CharcoalOverlayPosition.right: viewport.right - targetRect.right,
-      CharcoalOverlayPosition.left: targetRect.left - viewport.left,
-    };
-    return spaces.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
+    final below = viewport.bottom - targetRect.bottom;
+    final above = targetRect.top - viewport.top;
+    return below >= above ? CharcoalOverlayPosition.bottom : CharcoalOverlayPosition.top;
   }
 }
 
@@ -439,31 +437,32 @@ final class _TooltipSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.tooltip;
+    final horizontalPadding = theme.dimensions.space.component25;
+    final verticalPadding = theme.dimensions.space.component10;
     final padding = switch (position) {
       CharcoalOverlayPosition.top => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal,
-        tokens.paddingVertical + tokens.arrowHeight,
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
+        horizontalPadding,
+        verticalPadding + _TooltipSpec.arrowHeight,
+        horizontalPadding,
+        verticalPadding,
       ),
       CharcoalOverlayPosition.right => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
-        tokens.paddingHorizontal + tokens.arrowHeight,
-        tokens.paddingVertical,
+        horizontalPadding,
+        verticalPadding,
+        horizontalPadding + _TooltipSpec.arrowHeight,
+        verticalPadding,
       ),
       CharcoalOverlayPosition.bottom => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
-        tokens.paddingHorizontal,
-        tokens.paddingVertical + tokens.arrowHeight,
+        horizontalPadding,
+        verticalPadding,
+        horizontalPadding,
+        verticalPadding + _TooltipSpec.arrowHeight,
       ),
       CharcoalOverlayPosition.left => EdgeInsets.fromLTRB(
-        tokens.paddingHorizontal + tokens.arrowHeight,
-        tokens.paddingVertical,
-        tokens.paddingHorizontal,
-        tokens.paddingVertical,
+        horizontalPadding + _TooltipSpec.arrowHeight,
+        verticalPadding,
+        horizontalPadding,
+        verticalPadding,
       ),
     };
     return SizedBox.fromSize(
@@ -471,11 +470,11 @@ final class _TooltipSurface extends StatelessWidget {
       child: CustomPaint(
         painter: CharcoalPopupShapePainter(
           arrowCenter: arrowCenter,
-          arrowHalfWidth: tokens.arrowHalfWidth,
-          arrowHeight: tokens.arrowHeight,
-          color: tokens.backgroundColor,
+          arrowHalfWidth: _TooltipSpec.arrowHalfWidth,
+          arrowHeight: _TooltipSpec.arrowHeight,
+          color: theme.colors.containerHudDefault,
           position: position,
-          radius: tokens.radius,
+          radius: theme.dimensions.radius.s,
         ),
         child: Padding(
           padding: padding,

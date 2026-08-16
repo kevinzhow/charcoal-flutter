@@ -4,6 +4,19 @@ import 'package:flutter/widgets.dart';
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
+import 'interaction_state.dart';
+
+abstract final class _CheckboxSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const controlSize = 20.0;
+  static const roundedRadius = 10.0;
+  static const checkSize = 16.0;
+  static const focusRingWidth = 4.0;
+  static const roundedFocusRingWidth = 6.0;
+  static const outerOffset = 2.0;
+  static const labelFontSize = 14.0;
+  static const labelLineHeight = 20.0;
+}
 
 /// A controlled Charcoal V2 checkbox.
 final class CharcoalCheckbox extends StatelessWidget {
@@ -33,7 +46,6 @@ final class CharcoalCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.checkbox;
     return MergeSemantics(
       child: CharcoalClickable(
         autofocus: autofocus,
@@ -47,22 +59,58 @@ final class CharcoalCheckbox extends StatelessWidget {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);
           final background = value
-              ? tokens.checkedBackground.resolve(states)
-              : tokens.uncheckedBackground.resolve(states);
-          final borderColor = tokens.borderColor.resolve(states);
-          final checkColor = tokens.checkColor.resolve(states);
-          final ringColor = invalid ? tokens.invalidRingColor : tokens.focusRingColor;
-          final indicator = AnimatedContainer(
-            duration: tokens.animationDuration,
+              ? resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerPrimaryDefault,
+                  hovered: theme.colors.containerPrimaryHover,
+                  pressed: theme.colors.containerPrimaryPress,
+                )
+              : rounded
+              ? resolveCharcoalStateColor(
+                  states,
+                  normal: theme.colors.containerSecondaryDefault,
+                  hovered: theme.colors.containerSecondaryHover,
+                  pressed: theme.colors.containerSecondaryPress,
+                )
+              : theme.colors.containerDefaultA;
+          final checkColor = resolveCharcoalStateColor(
+            states,
+            normal: theme.colors.iconOnPrimaryDefault,
+            hovered: theme.colors.iconOnPrimaryHover,
+            pressed: theme.colors.iconOnPrimaryPress,
+          );
+          final ringColor = invalid ? theme.colors.borderNegative : theme.colors.borderFocusLegacy;
+          final control = AnimatedContainer(
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _CheckboxSpec.animationDuration,
+            ),
             curve: CharcoalMotion.standardCurve,
-            width: tokens.size,
-            height: tokens.size,
+            width: _CheckboxSpec.controlSize,
+            height: _CheckboxSpec.controlSize,
             decoration: BoxDecoration(
-              border: value ? null : Border.all(color: borderColor, width: tokens.borderWidth),
-              borderRadius: BorderRadius.circular(rounded ? tokens.roundedRadius : tokens.radius),
+              border: rounded
+                  ? Border.all(
+                      color: const Color(0x00000000),
+                      width: theme.dimensions.borderWidth.l,
+                    )
+                  : value
+                  ? null
+                  : Border.all(
+                      color: theme.colors.borderDefault,
+                      width: theme.dimensions.borderWidth.l,
+                    ),
+              borderRadius: BorderRadius.circular(
+                rounded ? _CheckboxSpec.roundedRadius : theme.dimensions.radius.s,
+              ),
               boxShadow: focused || invalid
                   ? <BoxShadow>[
-                      BoxShadow(color: ringColor, spreadRadius: tokens.focusRingWidth),
+                      BoxShadow(
+                        color: ringColor,
+                        spreadRadius: rounded
+                            ? _CheckboxSpec.roundedFocusRingWidth
+                            : _CheckboxSpec.focusRingWidth,
+                      ),
                     ]
                   : const <BoxShadow>[],
               color: background,
@@ -72,16 +120,49 @@ final class CharcoalCheckbox extends StatelessWidget {
                     child: CharcoalIcon(
                       CharcoalIcons.check,
                       color: checkColor,
-                      size: tokens.size * 0.72,
+                      size: _CheckboxSpec.checkSize,
                     ),
                   )
                 : null,
           );
+          final indicator = rounded
+              ? SizedBox.square(
+                  dimension: _CheckboxSpec.controlSize,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      control,
+                      Positioned(
+                        left: -_CheckboxSpec.outerOffset,
+                        top: -_CheckboxSpec.outerOffset,
+                        child: IgnorePointer(
+                          child: Container(
+                            width: theme.dimensions.space.targetXs,
+                            height: theme.dimensions.space.targetXs,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color(0xFFFFFFFF),
+                                width: theme.dimensions.borderWidth.l,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                theme.dimensions.radius.l,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : control;
 
           return AnimatedOpacity(
             curve: CharcoalMotion.standardCurve,
-            duration: tokens.animationDuration,
-            opacity: disabled ? tokens.disabledOpacity : 1,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _CheckboxSpec.animationDuration,
+            ),
+            opacity: disabled ? charcoalDisabledOpacity : 1,
             child: _CheckboxContent(indicator: indicator, label: label),
           );
         },
@@ -99,7 +180,6 @@ final class _CheckboxContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final labelTokens = theme.components.checkbox.label;
     if (label == null) {
       return indicator;
     }
@@ -108,15 +188,15 @@ final class _CheckboxContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         indicator,
-        SizedBox(width: labelTokens.gap),
+        SizedBox(width: theme.dimensions.space.component10),
         Flexible(
           child: DefaultTextStyle(
             style: TextStyle(
-              color: labelTokens.color,
+              color: theme.colors.textDefault,
               fontFamily: theme.typography.fontFamily.sans,
-              fontSize: labelTokens.fontSize,
-              fontWeight: labelTokens.fontWeight,
-              height: labelTokens.lineHeight / labelTokens.fontSize,
+              fontSize: _CheckboxSpec.labelFontSize,
+              fontWeight: theme.typography.fontWeight.regular,
+              height: _CheckboxSpec.labelLineHeight / _CheckboxSpec.labelFontSize,
               leadingDistribution: TextLeadingDistribution.even,
             ),
             child: label!,

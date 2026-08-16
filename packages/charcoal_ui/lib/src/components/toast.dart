@@ -3,19 +3,24 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
+import 'typography.dart';
 
-enum CharcoalToastVariant {
-  success,
-  error,
-
-  /// Backwards-compatible alias for [success].
-  normal,
-
-  /// Backwards-compatible alias for [error].
-  negative,
-}
+enum CharcoalToastVariant { success, error }
 
 enum CharcoalPopupEdge { top, bottom }
+
+abstract final class _ToastSpec {
+  static const maxWidth = 312.0;
+  static const cornerRadius = 32.0;
+  static const iconSize = 16.0;
+  static const toastScreenEdgeSpacing = 96.0;
+  static const snackBarScreenEdgeSpacing = 120.0;
+  static const dismissDuration = Duration(seconds: 2);
+  static const transitionDuration = Duration(milliseconds: 250);
+  static const dragDismissDistance = 50.0;
+  static const dragDismissVelocity = 100.0;
+  static const rubberBandLimit = 60.0;
+}
 
 /// Controls the edge movement used when a toast or snackbar is presented.
 final class CharcoalToastAnimationConfiguration {
@@ -32,7 +37,7 @@ final class CharcoalToastAnimationConfiguration {
   static const defaultConfiguration = CharcoalToastAnimationConfiguration();
 }
 
-/// The compact, colored Charcoal iOS notification surface.
+/// A compact, colored Charcoal notification surface.
 final class CharcoalToast extends StatelessWidget {
   const CharcoalToast({
     required this.message,
@@ -51,34 +56,37 @@ final class CharcoalToast extends StatelessWidget {
   final String? semanticLabel;
   final CharcoalToastVariant variant;
 
-  bool get _isError =>
-      variant == CharcoalToastVariant.error || variant == CharcoalToastVariant.negative;
+  bool get _isError => variant == CharcoalToastVariant.error;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.toast;
-    final background = _isError ? tokens.errorBackgroundColor : tokens.successBackgroundColor;
-    final foreground = _isError ? tokens.errorForegroundColor : tokens.successForegroundColor;
+    final background = _isError
+        ? theme.colors.containerNegativeDefault
+        : theme.colors.containerPositiveDefault;
+    final foreground = _isError
+        ? theme.colors.textOnNegativeDefault
+        : theme.colors.textOnPositiveDefault;
+    final contentGap = theme.dimensions.space.component20;
     return Semantics(
       container: true,
       label: semanticLabel ?? message,
       liveRegion: true,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? tokens.maxWidth),
+        constraints: BoxConstraints(maxWidth: maxWidth ?? _ToastSpec.maxWidth),
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
-              color: tokens.borderColor,
-              width: tokens.borderWidth,
+              color: theme.colors.backgroundDefault,
+              width: theme.dimensions.borderWidth.l,
             ),
-            borderRadius: BorderRadius.circular(tokens.radius),
+            borderRadius: BorderRadius.circular(_ToastSpec.cornerRadius),
             color: background,
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: tokens.paddingHorizontal,
-              vertical: tokens.paddingVertical,
+              horizontal: theme.dimensions.space.component40,
+              vertical: theme.dimensions.space.component20,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -87,42 +95,38 @@ final class CharcoalToast extends StatelessWidget {
                   IconTheme(
                     data: IconThemeData(
                       color: foreground,
-                      size: theme.dimensions.space.component30,
+                      size: _ToastSpec.iconSize,
                     ),
                     child: leading,
                   ),
-                  SizedBox(width: tokens.gap),
+                  SizedBox(width: contentGap),
                 ],
                 Flexible(
                   child: Text(
                     message,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: charcoalTypographyStyle(
+                      context,
                       color: foreground,
-                      fontFamily: theme.typography.fontFamily.sans,
-                      fontSize: tokens.fontSize,
-                      fontWeight: tokens.fontWeight,
-                      height: theme.typography.lineHeight.captionM / tokens.fontSize,
-                      leadingDistribution: TextLeadingDistribution.even,
+                      size: CharcoalTypographySize.size14,
+                      weight: CharcoalTypographyWeight.bold,
                     ),
                   ),
                 ),
                 if (action case final action?) ...<Widget>[
-                  SizedBox(width: tokens.gap),
+                  SizedBox(width: contentGap),
                   IconTheme(
                     data: IconThemeData(
                       color: foreground,
-                      size: theme.dimensions.space.component30,
+                      size: _ToastSpec.iconSize,
                     ),
                     child: DefaultTextStyle(
-                      style: TextStyle(
+                      style: charcoalTypographyStyle(
+                        context,
                         color: foreground,
-                        fontFamily: theme.typography.fontFamily.sans,
-                        fontSize: tokens.fontSize,
-                        fontWeight: tokens.fontWeight,
-                        height: theme.typography.lineHeight.captionM / tokens.fontSize,
-                        leadingDistribution: TextLeadingDistribution.even,
+                        size: CharcoalTypographySize.size14,
+                        weight: CharcoalTypographyWeight.bold,
                       ),
                       child: action,
                     ),
@@ -137,7 +141,7 @@ final class CharcoalToast extends StatelessWidget {
   }
 }
 
-/// The bordered Charcoal iOS snackbar, optionally with a 64-pixel thumbnail.
+/// A bordered Charcoal snackbar, optionally with a 64-pixel thumbnail.
 final class CharcoalSnackBar extends StatelessWidget {
   const CharcoalSnackBar({
     required this.message,
@@ -157,37 +161,37 @@ final class CharcoalSnackBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final tokens = theme.components.snackbar;
+    final radius = BorderRadius.circular(_ToastSpec.cornerRadius);
     return Semantics(
       container: true,
       label: semanticLabel ?? message,
       liveRegion: true,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth ?? tokens.maxWidth),
+        constraints: BoxConstraints(maxWidth: maxWidth ?? _ToastSpec.maxWidth),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(tokens.radius),
+          borderRadius: radius,
           child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(
-                color: tokens.borderColor,
-                width: tokens.borderWidth,
+                color: theme.colors.borderDefault,
+                width: theme.dimensions.borderWidth.m,
               ),
-              borderRadius: BorderRadius.circular(tokens.radius),
-              color: tokens.backgroundColor,
+              borderRadius: radius,
+              color: theme.colors.backgroundDefault,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (thumbnail case final thumbnail?)
                   SizedBox.square(
-                    dimension: tokens.thumbnailSize,
+                    dimension: theme.dimensions.space.layout60,
                     child: FittedBox(fit: BoxFit.cover, child: thumbnail),
                   ),
                 Flexible(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: tokens.paddingHorizontal,
-                      vertical: tokens.paddingVertical,
+                      horizontal: theme.dimensions.space.component30,
+                      vertical: theme.dimensions.space.component25,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -197,18 +201,18 @@ final class CharcoalSnackBar extends StatelessWidget {
                             message,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: tokens.foregroundColor,
-                              fontFamily: theme.typography.fontFamily.sans,
-                              fontSize: tokens.fontSize,
-                              fontWeight: tokens.fontWeight,
-                              height: theme.typography.lineHeight.captionM / tokens.fontSize,
-                              leadingDistribution: TextLeadingDistribution.even,
+                            style: charcoalTypographyStyle(
+                              context,
+                              color: theme.colors.textDefault,
+                              size: CharcoalTypographySize.size14,
+                              weight: CharcoalTypographyWeight.bold,
                             ),
                           ),
                         ),
                         if (action case final action?) ...<Widget>[
-                          SizedBox(width: tokens.contentGap),
+                          SizedBox(
+                            width: theme.dimensions.space.component30,
+                          ),
                           action,
                         ],
                       ],
@@ -249,7 +253,7 @@ final class CharcoalToastController {
   }
 }
 
-/// Inserts an iOS-compatible [CharcoalToast] into the root overlay.
+/// Inserts a [CharcoalToast] into the root overlay.
 CharcoalToastController showCharcoalToast({
   required BuildContext context,
   required String message,
@@ -264,16 +268,17 @@ CharcoalToastController showCharcoalToast({
   double? screenEdgeSpacing,
   CharcoalToastVariant variant = CharcoalToastVariant.success,
 }) {
-  final tokens = CharcoalTheme.of(context).components.toast;
   return _showCharcoalPopup(
     animationConfiguration: animationConfiguration,
     context: context,
     draggable: false,
-    duration: duration ?? tokens.dismissDuration,
+    duration: duration ?? _ToastSpec.dismissDuration,
     edge: edge,
-    screenEdgeSpacing: screenEdgeSpacing ?? tokens.screenEdgeSpacing,
-    screenHorizontalInset: tokens.screenHorizontalInset,
-    transitionDuration: tokens.animationDuration,
+    screenEdgeSpacing: screenEdgeSpacing ?? _ToastSpec.toastScreenEdgeSpacing,
+    screenHorizontalInset: CharcoalTheme.of(
+      context,
+    ).dimensions.space.layout30,
+    transitionDuration: _ToastSpec.transitionDuration,
     child: CharcoalToast(
       action: action,
       leading: leading,
@@ -285,7 +290,7 @@ CharcoalToastController showCharcoalToast({
   );
 }
 
-/// Inserts a draggable iOS-compatible [CharcoalSnackBar] into the root overlay.
+/// Inserts a draggable [CharcoalSnackBar] into the root overlay.
 CharcoalToastController showCharcoalSnackBar({
   required BuildContext context,
   required String message,
@@ -299,16 +304,17 @@ CharcoalToastController showCharcoalSnackBar({
   double? screenEdgeSpacing,
   Widget? thumbnail,
 }) {
-  final tokens = CharcoalTheme.of(context).components.snackbar;
   return _showCharcoalPopup(
     animationConfiguration: animationConfiguration,
     context: context,
     draggable: true,
-    duration: duration ?? tokens.dismissDuration,
+    duration: duration ?? _ToastSpec.dismissDuration,
     edge: edge,
-    screenEdgeSpacing: screenEdgeSpacing ?? tokens.screenEdgeSpacing,
-    screenHorizontalInset: tokens.screenHorizontalInset,
-    transitionDuration: tokens.animationDuration,
+    screenEdgeSpacing: screenEdgeSpacing ?? _ToastSpec.snackBarScreenEdgeSpacing,
+    screenHorizontalInset: CharcoalTheme.of(
+      context,
+    ).dimensions.space.layout30,
+    transitionDuration: _ToastSpec.transitionDuration,
     child: CharcoalSnackBar(
       action: action,
       maxWidth: maxWidth,
@@ -389,6 +395,9 @@ final class _CharcoalPopupPresentationState extends State<_CharcoalPopupPresenta
     with SingleTickerProviderStateMixin {
   late final AnimationController _animation;
   Timer? _timer;
+  double _dragOffset = 0;
+  double _rawDragOffset = 0;
+  bool _dragging = false;
   bool _dismissing = false;
 
   @override
@@ -406,9 +415,7 @@ final class _CharcoalPopupPresentationState extends State<_CharcoalPopupPresenta
       } else {
         _animation.forward();
       }
-      if (widget.duration > Duration.zero) {
-        _timer = Timer(widget.duration, dismiss);
-      }
+      _scheduleDismiss();
     });
   }
 
@@ -427,6 +434,59 @@ final class _CharcoalPopupPresentationState extends State<_CharcoalPopupPresenta
       await _animation.reverse();
     }
     if (mounted) widget.onDismissed();
+  }
+
+  void _scheduleDismiss() {
+    _timer?.cancel();
+    if (widget.duration > Duration.zero) {
+      _timer = Timer(widget.duration, dismiss);
+    }
+  }
+
+  double get _edgeDirection => widget.edge == CharcoalPopupEdge.top ? 1 : -1;
+
+  void _handleDragStart(DragStartDetails details) {
+    _timer?.cancel();
+    setState(() {
+      _dragging = true;
+      _dragOffset = 0;
+      _rawDragOffset = 0;
+    });
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    _rawDragOffset += details.delta.dy;
+    final translationInDirection = _rawDragOffset * _edgeDirection;
+    final nextOffset = translationInDirection < 0
+        ? _rawDragOffset
+        : _rawDragOffset / (_rawDragOffset.abs() / _ToastSpec.rubberBandLimit + 1);
+    setState(() => _dragOffset = nextOffset);
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    final velocityInDirection = (details.primaryVelocity ?? 0) * _edgeDirection;
+    final offsetInDirection = _dragOffset * _edgeDirection;
+    if (offsetInDirection < -_ToastSpec.dragDismissDistance ||
+        velocityInDirection < -_ToastSpec.dragDismissVelocity) {
+      _dragging = false;
+      dismiss();
+      return;
+    }
+    setState(() {
+      _dragging = false;
+      _dragOffset = 0;
+      _rawDragOffset = 0;
+    });
+    _scheduleDismiss();
+  }
+
+  void _handleDragCancel() {
+    setState(() {
+      _dragging = false;
+      _dragOffset = 0;
+      _rawDragOffset = 0;
+    });
+    _scheduleDismiss();
   }
 
   @override
@@ -452,16 +512,18 @@ final class _CharcoalPopupPresentationState extends State<_CharcoalPopupPresenta
       ),
     );
     if (widget.draggable) {
-      content = Dismissible(
-        key: ObjectKey(this),
-        direction: widget.edge == CharcoalPopupEdge.top
-            ? DismissDirection.up
-            : DismissDirection.down,
-        onDismissed: (_) {
-          _timer?.cancel();
-          widget.onDismissed();
-        },
-        child: content,
+      content = GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onVerticalDragCancel: _handleDragCancel,
+        onVerticalDragEnd: _handleDragEnd,
+        onVerticalDragStart: _handleDragStart,
+        onVerticalDragUpdate: _handleDragUpdate,
+        child: AnimatedContainer(
+          duration: _dragging ? Duration.zero : _ToastSpec.transitionDuration,
+          curve: Curves.easeOutBack,
+          transform: Matrix4.translationValues(0, _dragOffset, 0),
+          child: content,
+        ),
       );
     }
     return Positioned(

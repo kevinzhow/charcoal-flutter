@@ -230,7 +230,7 @@ void main() {
       context: toastContext,
       duration: const Duration(milliseconds: 100),
       message: 'Temporary',
-      variant: CharcoalToastVariant.negative,
+      variant: CharcoalToastVariant.error,
     );
     await tester.pump();
     expect(find.text('Temporary'), findsOneWidget);
@@ -267,5 +267,36 @@ void main() {
     controller.dismiss();
     await tester.pumpAndSettle();
     expect(find.text('Bookmarked'), findsNothing);
+  });
+
+  testWidgets('snackbar rubber-bands inward and dismisses outward', (
+    tester,
+  ) async {
+    late BuildContext popupContext;
+    await tester.pumpWidget(
+      charcoalTestApp(
+        Builder(
+          builder: (context) {
+            popupContext = context;
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+
+    final controller = showCharcoalSnackBar(
+      context: popupContext,
+      duration: Duration.zero,
+      message: 'Drag me',
+    );
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.text('Drag me'), const Offset(0, -120));
+    await tester.pumpAndSettle();
+    expect(controller.isShowing, isTrue);
+
+    await tester.drag(find.text('Drag me'), const Offset(0, 60));
+    await tester.pumpAndSettle();
+    expect(controller.isShowing, isFalse);
   });
 }

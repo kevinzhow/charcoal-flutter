@@ -33,14 +33,11 @@ void main() {
     expect(changedValue, 'one\ntwo');
     expect(find.text('7/20'), findsOneWidget);
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    final expectedHeight =
-        theme.components.textField.lineHeight * 4 +
-        theme.components.textField.verticalGap +
-        theme.components.textField.paddingHorizontal * 2;
+    const expectedHeight = 22 * 4 + 18;
     expect(container.constraints!.maxHeight, expectedHeight);
   });
 
-  testWidgets('renders invalid ring from the shared field recipe', (tester) async {
+  testWidgets('renders the iOS invalid field ring', (tester) async {
     final theme = CharcoalThemeData.dark();
     await tester.pumpWidget(
       charcoalTestApp(
@@ -61,7 +58,32 @@ void main() {
       ),
     );
     final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
-    expect(ringPainter.color, theme.components.textField.invalidRingColor);
+    expect(ringPainter.color, theme.colors.borderNegative);
     expect(ringPainter.opacity, 1);
+  });
+
+  testWidgets('invalid state does not recolor the character count', (
+    tester,
+  ) async {
+    final theme = CharcoalThemeData.light();
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 320,
+          child: CharcoalTextArea(
+            invalid: true,
+            maxLength: 20,
+            rows: 2,
+            showCount: true,
+          ),
+        ),
+        theme: theme,
+      ),
+    );
+
+    expect(
+      tester.widget<Text>(find.text('0/20')).style!.color,
+      theme.colors.textTertiaryDefault,
+    );
   });
 }

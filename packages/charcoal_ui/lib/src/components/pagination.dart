@@ -3,9 +3,16 @@ import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
-import '../theme/component_tokens.dart';
 import 'clickable.dart';
 import 'icon_button.dart';
+import 'interaction_state.dart';
+import 'typography.dart';
+
+abstract final class _PaginationSpec {
+  static const animationDuration = Duration(milliseconds: 200);
+  static const cornerRadius = 20.0;
+  static const focusRingWidth = 4.0;
+}
 
 enum CharcoalPaginationSize { small, medium }
 
@@ -49,13 +56,12 @@ final class CharcoalPagination extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          CharcoalIconButton(
-            icon: const CharcoalIcon(CharcoalIcons16.chevronLeft),
-            onPressed: currentPage == 1 || onPageChanged == null
-                ? null
-                : () => onPageChanged!(currentPage - 1),
+          _PaginationNavigationButton(
+            backwards: true,
+            onPressed: onPageChanged == null ? null : () => onPageChanged!(currentPage - 1),
             semanticLabel: previousLabel,
             size: iconSize,
+            visible: currentPage > 1,
           ),
           for (final item in items)
             if (item == null)
@@ -67,13 +73,12 @@ final class CharcoalPagination extends StatelessWidget {
                 page: item,
                 size: size,
               ),
-          CharcoalIconButton(
-            icon: const CharcoalIcon(CharcoalIcons16.chevronRight),
-            onPressed: currentPage == pageCount || onPageChanged == null
-                ? null
-                : () => onPageChanged!(currentPage + 1),
+          _PaginationNavigationButton(
+            backwards: false,
+            onPressed: onPageChanged == null ? null : () => onPageChanged!(currentPage + 1),
             semanticLabel: nextLabel,
             size: iconSize,
+            visible: currentPage < pageCount,
           ),
         ],
       ),
@@ -101,7 +106,11 @@ final class _PaginationPage extends StatelessWidget {
       CharcoalPaginationSize.small => theme.dimensions.space.targetS,
       CharcoalPaginationSize.medium => theme.dimensions.space.targetM,
     };
-    final textStyle = theme.textStyles.captionMediumBold;
+    final textStyle = charcoalTypographyStyle(
+      context,
+      size: CharcoalTypographySize.size14,
+      weight: CharcoalTypographyWeight.bold,
+    );
     if (current) {
       return Semantics(
         label: 'Page $page',
@@ -110,7 +119,9 @@ final class _PaginationPage extends StatelessWidget {
           dimension: dimension,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+              borderRadius: BorderRadius.circular(
+                _PaginationSpec.cornerRadius,
+              ),
               color: theme.colors.containerHudDefault,
             ),
             child: Center(
@@ -142,20 +153,28 @@ final class _PaginationPage extends StatelessWidget {
             : theme.colors.textTertiaryDefault;
         return AnimatedOpacity(
           curve: CharcoalMotion.standardCurve,
-          duration: theme.components.button.animationDuration,
-          opacity: disabled ? theme.components.button.disabledOpacity : 1,
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _PaginationSpec.animationDuration,
+          ),
+          opacity: disabled ? charcoalDisabledOpacity : 1,
           child: AnimatedContainer(
             curve: CharcoalMotion.standardCurve,
-            duration: theme.components.button.animationDuration,
+            duration: CharcoalMotion.resolveDuration(
+              context,
+              _PaginationSpec.animationDuration,
+            ),
             width: dimension,
             height: dimension,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+              borderRadius: BorderRadius.circular(
+                _PaginationSpec.cornerRadius,
+              ),
               boxShadow: focused
                   ? <BoxShadow>[
                       BoxShadow(
-                        color: theme.components.button.focusRingColor,
-                        spreadRadius: theme.components.button.focusRingWidth,
+                        color: theme.colors.borderFocusLegacy,
+                        spreadRadius: _PaginationSpec.focusRingWidth,
                       ),
                     ]
                   : const <BoxShadow>[],
@@ -189,14 +208,56 @@ final class _PaginationEllipsis extends StatelessWidget {
         child: Center(
           child: Text(
             '…',
-            style: theme.textStyles.captionMediumBold.copyWith(
+            style: charcoalTypographyStyle(
+              context,
               color: theme.colors.textTertiaryDefault,
+              size: CharcoalTypographySize.size14,
+              weight: CharcoalTypographyWeight.bold,
             ),
           ),
         ),
       ),
     );
   }
+}
+
+final class _PaginationNavigationButton extends StatelessWidget {
+  const _PaginationNavigationButton({
+    required this.backwards,
+    required this.onPressed,
+    required this.semanticLabel,
+    required this.size,
+    required this.visible,
+  });
+
+  final bool backwards;
+  final VoidCallback? onPressed;
+  final String semanticLabel;
+  final CharcoalIconButtonSize size;
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    excluding: !visible,
+    child: IgnorePointer(
+      ignoring: !visible,
+      child: AnimatedOpacity(
+        duration: CharcoalMotion.resolveDuration(
+          context,
+          _PaginationSpec.animationDuration,
+        ),
+        opacity: visible ? 1 : 0,
+        child: CharcoalIconButton(
+          icon: CharcoalIcon(
+            backwards ? CharcoalIcons16.chevronLeft : CharcoalIcons16.chevronRight,
+          ),
+          onPressed: onPressed,
+          semanticLabel: semanticLabel,
+          size: size,
+        ),
+      ),
+    ),
+  );
 }
 
 List<int?> _visibleItems(int current, int total, int maxVisible) {

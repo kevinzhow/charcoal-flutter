@@ -34,7 +34,7 @@ void main() {
     expect(nextValue, isTrue);
   });
 
-  testWidgets('uses generated interaction colors', (tester) async {
+  testWidgets('uses semantic interaction colors', (tester) async {
     final states = WidgetStatesController(<WidgetState>{WidgetState.pressed});
     addTearDown(states.dispose);
     final theme = CharcoalThemeData.dark();
@@ -54,7 +54,7 @@ void main() {
     expect(decoration.color, theme.colors.containerNeutralPress);
   });
 
-  testWidgets('overlay variant uses the HUD border recipe', (tester) async {
+  testWidgets('overlay variant uses the HUD border treatment', (tester) async {
     final theme = CharcoalThemeData.light();
     await tester.pumpWidget(
       charcoalTestApp(
@@ -67,8 +67,12 @@ void main() {
       ),
     );
 
-    final indicator = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer).first);
-    final decoration = indicator.decoration! as BoxDecoration;
+    final overlay = tester
+        .widgetList<Container>(find.byType(Container))
+        .singleWhere((container) => (container.decoration as BoxDecoration?)?.border != null);
+    expect(overlay.constraints!.maxWidth, 24);
+    expect(overlay.constraints!.maxHeight, 24);
+    final decoration = overlay.decoration! as BoxDecoration;
     final border = decoration.border! as Border;
     expect(border.top.color, theme.colors.borderHud);
     expect(border.top.width, theme.dimensions.borderWidth.l);

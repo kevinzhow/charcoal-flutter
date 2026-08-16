@@ -1,75 +1,88 @@
 # V2 token pipeline
 
-This repository treats generated Dart as build output, not as a design source of truth. It follows
-the same basic model as `charcoal-ios`: acquire design-token JSON, validate and transform it, then
-generate platform-native types. The Flutter implementation consumes Charcoal V2 only; it has no V1
-compatibility layer or V1 remapping step.
+Generated Dart is build output, not the component design source of truth. The pipeline acquires
+Charcoal V2 JSON, validates and resolves its references, then emits platform-native foundation
+types. The Flutter project has no V1 remapping step.
 
-## Sources of truth
+## Source model
 
-The pipeline has two inputs:
+The only token inputs are the pinned files under `tokens/upstream`:
 
-1. `tokens/upstream/*.json` contains the pinned V2 foundation tokens: primitives plus the light and
-   dark applied themes.
-2. `tokens/components.json` maps component properties and interaction states to semantic foundation
-   tokens. This is the Flutter component recipe layer.
+- `base.json`: primitive values such as palette colors and spacing scales;
+- `pixiv-light.json`: light semantic aliases and applied values; and
+- `pixiv-dark.json`: dark semantic aliases and applied values.
 
-The resulting artifacts are:
+`tokens/manifest.json` records the repository, requested ref, resolved commit, upstream paths, and
+SHA-256 hashes. The current snapshot is pinned to
+[`pixiv/charcoal@08995fa`](https://github.com/pixiv/charcoal/tree/08995fa5191fa918fc5afd2c5da08490ae307da7/packages/theme/src/json).
 
-- strongly typed light and dark color, dimension, and typography objects in `charcoal_tokens`;
-- typed token-entry catalogs used by documentation, inspection tooling, and the Showcase;
-- strongly typed component recipes in `charcoal_ui`;
-- `tokens/snapshot.json`, used for semantic diffs; and
-- `tokens/diff.md`, used as the body of an automated token update pull request.
+Reference resolution creates this dependency chain:
 
-Components never read JSON at runtime. A theme override is resolved through the generated recipe,
-so changing a semantic foundation token also changes every component that references it.
+```text
+base primitive → applied semantic token → private component mapping → Flutter layout
+```
 
-Each generated foundation group exposes an `entries` getter containing its source path and typed
-value. This is deliberately generated alongside the named Dart fields: consumers can build token
-browsers without reflection, and a token update cannot leave the browser's inventory stale.
+For example, the primitive `space.30 = 16px` resolves into `space.component/30`; a button then maps
+that semantic value to its small horizontal padding. A source-specific value with no exact semantic
+role stays in the component's private specification instead.
+
+## Generated artifacts
+
+One generation transaction writes:
+
+- `charcoal_color_tokens.g.dart`;
+- `charcoal_dimension_tokens.g.dart`;
+- `charcoal_typography_tokens.g.dart`;
+- `tokens/snapshot.json` for semantic diffs; and
+- `tokens/diff.md` for upstream update reviews.
+
+Each generated foundation group exposes typed fields, `copyWith` support, and typed `entries`
+catalogs. Components never parse JSON at runtime. `CharcoalThemeData` carries only brightness,
+colors, dimensions, and typography.
+
+Component layout, state mapping, and motion are ordinary reviewed Dart source. This keeps exact
+source behavior close to the widget, avoids pretending every platform measurement is a universal
+token, and prevents application themes from replacing a component's structural contract.
 
 ## Updating tokens
 
-Use the FVM-pinned Flutter 3.47 toolchain from the workspace root:
+Use the FVM-pinned toolchain from the workspace root:
 
 ```bash
-# Pull V2 JSON from a Charcoal-compatible repository and pin the resolved commit.
+# Download and pin compatible V2 JSON.
 fvm dart run tool/tokens.dart sync --repository pixiv/charcoal --ref main
 
-# Regenerate Dart, the resolved snapshot, and the token diff without network access.
+# Regenerate foundations, snapshot, and semantic diff without network access.
 fvm dart run tool/tokens.dart generate
 
-# Perform both operations as one update transaction.
+# Sync and generate as one update transaction.
 fvm dart run tool/tokens.dart update --repository pixiv/charcoal --ref main
 
 # Reproduce every generated file and fail on drift.
 fvm dart run tool/tokens.dart check
+
+# Print the semantic difference from the committed snapshot.
+fvm dart run tool/tokens.dart diff
 ```
 
-For an organization-specific theme, keep the same V2 JSON paths in a fork and pass its
-`owner/repository` name to `sync` or `update`. Component-only changes belong in
-`tokens/components.json` and require only `generate`.
+For an organization-specific theme, preserve the same V2 JSON shape in a fork and pass its
+`owner/repository` to `sync` or `update`. Component changes do not belong in token JSON; edit the
+component implementation and its source-contract tests directly.
 
-`sync` resolves a branch or tag to an exact commit before downloading anything. It validates the
-three files together in a temporary directory and replaces the checked-in sources only after the
-whole token bundle succeeds. The manifest records the repository, requested ref, resolved commit,
-source paths, and SHA-256 hashes. When `GITHUB_TOKEN` is present, the downloader uses it for GitHub
-API and source requests, which also supports private forks that the token is authorized to read.
+`sync` validates all three files in a temporary directory before replacing checked-in sources.
+When `GITHUB_TOKEN` is present, requests can also access an authorized private fork.
 
 ## Failure conditions
 
-Generation or CI fails when it detects any of the following:
+Generation or CI fails on:
 
 - a missing or circular token reference;
-- mismatched light and dark applied-token keys;
+- different light and dark applied-token keys;
 - an unsupported category, value type, color format, unit, or font weight;
-- two token names that collide after conversion to Dart identifiers;
-- a component color mapped to a primitive token instead of a semantic token;
-- an unknown or unconsumed component recipe value;
-- a source file that no longer matches its manifest hash; or
-- a snapshot or generated Dart file that cannot be reproduced exactly.
+- Dart identifier collisions;
+- a source file that differs from its manifest hash; or
+- a snapshot or generated artifact that cannot be reproduced exactly.
 
-This makes an upstream token change visible as a reviewed source, generated-code, and semantic-diff
-change in one pull request. The scheduled `update-tokens.yml` workflow performs that transaction;
-`tokens.yml` independently detects manual edits and stale generation.
+The scheduled update workflow creates one reviewable change containing pinned sources, generated
+foundations, and the semantic diff. The independent token check detects manual edits and stale
+generation.

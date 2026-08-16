@@ -36,7 +36,7 @@ void main() {
     );
   });
 
-  testWidgets('semantic color overrides propagate into generated component recipes', (
+  testWidgets('semantic color overrides propagate into component surfaces', (
     tester,
   ) async {
     const replacement = Color(0xFF9C27B0);
@@ -59,6 +59,36 @@ void main() {
     final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
     final decoration = container.decoration! as BoxDecoration;
     expect(decoration.color, replacement);
+  });
+
+  testWidgets('semantic dimension overrides resolve into component layout', (
+    tester,
+  ) async {
+    final base = CharcoalGeneratedDimensionTokens.light;
+    final dimensions = base.copyWith(
+      space: base.space.copyWith(component30: 20, targetS: 36),
+    );
+    final theme = CharcoalThemeData.light(dimensions: dimensions);
+
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalButton(
+          onPressed: () {},
+          size: CharcoalButtonSize.small,
+          child: const Text('Small'),
+        ),
+        theme: theme,
+      ),
+    );
+
+    final container = tester.widget<AnimatedContainer>(
+      find.byType(AnimatedContainer),
+    );
+    expect(container.constraints!.minHeight, 36);
+    expect(
+      container.padding,
+      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+    );
   });
 
   testWidgets('resolves pressed colors from WidgetStatesController', (tester) async {
@@ -123,7 +153,7 @@ void main() {
 
     expect(
       tester.getSize(find.byType(AnimatedContainer)).height,
-      greaterThan(theme.components.button.medium.height),
+      greaterThan(40),
     );
   });
 
