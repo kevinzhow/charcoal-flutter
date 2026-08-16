@@ -1,12 +1,12 @@
 {
-    "name": "charcoal_ui_showcase",
-    "short_name": "charcoal_ui_showcase",
+    "name": "Charcoal UI V2 Showcase",
+    "short_name": "Charcoal UI V2",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#FFFFFF",
+    "theme_color": "#0096FA",
+    "description": "Interactive component showcase for the Charcoal UI V2 Flutter design system.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

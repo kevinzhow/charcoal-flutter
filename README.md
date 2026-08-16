@@ -7,6 +7,8 @@ recipes, light and dark themes, and drift detection form one reproducible pipeli
 This project is V2-only. It intentionally contains no Charcoal V1 tokens, remapping, or compatibility
 API.
 
+Explore the [Charcoal UI V2 Showcase](https://kevinzhow.github.io/charcoal-flutter/) in a browser.
+
 ## Packages
 
 - `packages/charcoal_icons`: the complete generated Charcoal Icons V2 SVG catalog and Flutter widget.
@@ -174,6 +176,9 @@ fvm dart test
 cd packages/charcoal_ui
 fvm flutter widget-preview start
 ```
+
+Every push to `main` also builds `example` for the `/charcoal-flutter/` base path and deploys the
+result to GitHub Pages. The workflow can be run manually from the Actions tab as well.
 
 Widget Preview contains light and dark configurations for the component set. In Flutter 3.47, the
 generated preview scaffold does not inherit its parent pub workspace. During development,
