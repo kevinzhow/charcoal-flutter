@@ -83,7 +83,7 @@ final class CharcoalHintText extends StatelessWidget {
         size: CharcoalTypographySize.size14,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           child,

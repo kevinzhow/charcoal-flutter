@@ -94,7 +94,7 @@ void main() {
     final primaryRect = tester.getRect(find.text('Helpful information'));
     final subtitleRect = tester.getRect(find.text('Subtitle'));
     expect(subtitleRect.top - primaryRect.bottom, 0);
-    expect(subtitleRect.center.dx, primaryRect.center.dx);
+    expect(subtitleRect.left, primaryRect.left);
 
     final text = tester.widget<Text>(find.text('Helpful information'));
     expect(text.style, isNull, reason: 'The semantic style is inherited through DefaultTextStyle.');

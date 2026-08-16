@@ -25,7 +25,7 @@ jobs:
           cache: true
       - run: flutter pub get
       - name: Build Flutter Web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: flutter build web --release --wasm --base-href "/${{ github.event.repository.name }}/"
         working-directory: example
       - name: Add GitHub Pages fallback
         run: |
