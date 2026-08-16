@@ -43,6 +43,53 @@ void main() {
       expect(response['suggestions'], contains('CharcoalButton'));
     });
 
+    test('token search defaults to semantic roles and exposes exact accessors', () async {
+      final output = StringBuffer();
+
+      final code = await runCharcoalCli(
+        <String>['token', 'layout spacing', '--kind', 'dimension', '--limit', '3', '--json'],
+        output: output,
+      );
+      final response = jsonDecode(output.toString()) as Map<String, Object?>;
+      final data = response['data']! as Map<String, Object?>;
+      final results = (data['results']! as List<Object?>).cast<Map<String, Object?>>();
+
+      expect(code, 0);
+      expect(response['type'], 'tokenResults');
+      expect(data['tier'], 'semantic');
+      expect(results, isNotEmpty);
+      expect(results.every((token) => token['tier'] == 'semantic'), isTrue);
+      expect(results.every((token) => token['kind'] == 'dimension'), isTrue);
+      expect(results.first['dartAccessor'], startsWith('theme.dimensions.'));
+    });
+
+    test('primitive token search requires explicit tier selection', () async {
+      final semanticOutput = StringBuffer();
+      final primitiveOutput = StringBuffer();
+
+      await runCharcoalCli(
+        <String>['token', 'blue 50', '--kind', 'color', '--json'],
+        output: semanticOutput,
+      );
+      await runCharcoalCli(
+        <String>[
+          'token',
+          'blue 50',
+          '--kind',
+          'color',
+          '--tier',
+          'primitive',
+          '--json',
+        ],
+        output: primitiveOutput,
+      );
+      final semantic = jsonDecode(semanticOutput.toString()) as Map<String, Object?>;
+      final primitive = jsonDecode(primitiveOutput.toString()) as Map<String, Object?>;
+
+      expect((semantic['data']! as Map<String, Object?>)['count'], 0);
+      expect((primitive['data']! as Map<String, Object?>)['count'], greaterThan(0));
+    });
+
     test('manifest declares mutations and response types', () async {
       final output = StringBuffer();
 
@@ -53,10 +100,15 @@ void main() {
       final response = jsonDecode(output.toString()) as Map<String, Object?>;
       final data = response['data']! as Map<String, Object?>;
       final commands = data['commands']! as List<Object?>;
-      final init = commands.cast<Map<String, Object?>>().firstWhere(
+      final commandRecords = commands.cast<Map<String, Object?>>();
+      final init = commandRecords.firstWhere(
         (command) => command['name'] == 'init',
       );
       expect(init['mutatesFiles'], isTrue);
+      expect(
+        commandRecords.map((command) => command['name']),
+        containsAll(<String>['search', 'component', 'token', 'benchmark', 'doctor', 'manifest']),
+      );
     });
   });
 
@@ -183,6 +235,34 @@ environment:
       expect(code, 1);
       expect(data['healthy'], isFalse);
       expect(output.toString(), contains('does not match installed charcoal_ui'));
+    });
+
+    test('doctor rejects stale managed instructions', () async {
+      await runCharcoalCli(
+        <String>['init'],
+        workingDirectory: project,
+        output: StringBuffer(),
+      );
+      final instructions = File(p.join(project.path, 'AGENTS.md'));
+      instructions.writeAsStringSync(
+        instructions.readAsStringSync().replaceFirst(
+          RegExp(r'version=[^\s]+'),
+          'version=0.0.0',
+        ),
+      );
+      final output = StringBuffer();
+
+      final code = await runCharcoalCli(
+        <String>['doctor', '--json'],
+        workingDirectory: project,
+        output: output,
+      );
+      final response = jsonDecode(output.toString()) as Map<String, Object?>;
+      final data = response['data']! as Map<String, Object?>;
+
+      expect(code, 1);
+      expect(data['healthy'], isFalse);
+      expect(output.toString(), contains('Run charcoal init'));
     });
   });
 }

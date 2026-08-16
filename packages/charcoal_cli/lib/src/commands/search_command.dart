@@ -1,7 +1,6 @@
 import 'package:charcoal_catalog/charcoal_catalog.dart';
 import 'package:io/io.dart';
 
-import '../catalog_search.dart';
 import '../environment.dart';
 import '../runner.dart';
 

@@ -3,6 +3,7 @@
 
 - Discover components before coding: `fvm dart run packages/charcoal_cli/bin/charcoal.dart search <intent>`.
 - Read exact installed APIs and examples: `fvm dart run packages/charcoal_cli/bin/charcoal.dart component <name>`.
+- Find exact semantic token accessors by role: `fvm dart run packages/charcoal_cli/bin/charcoal.dart token <intent>`; use `--tier primitive` only for audited foundation work.
 - Import `package:charcoal_ui/charcoal_ui.dart` and use Charcoal components where available.
 - Compose layouts with Flutter primitives such as `Row`, `Column`, `Padding`, and `LayoutBuilder`.
 - Do not substitute Material or Cupertino controls for an existing Charcoal component.
@@ -12,5 +13,6 @@
 - `charcoal_ui` remains an independent Widgets-layer package without Material/Cupertino dependencies.
 - Public component APIs are platform-neutral; upstream provenance belongs in maintainer source contracts.
 - After a public API or curated example changes, regenerate the catalog and run its `--check` mode.
+- Score recorded Agent Ready evidence with `fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark --results <path>`; complete comparisons may not use `--allow-partial`.
 - Do not add runtime recipe abstractions. Catalog patterns and examples are documentation, not rendering code.
 <!-- charcoal-agent:end -->

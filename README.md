@@ -16,6 +16,7 @@ Explore the [Charcoal UI V2 Showcase](https://kevinzhow.github.io/charcoal-flutt
 - `packages/charcoal_ui`: independent Widgets-layer components, themes, and interaction primitives.
 - `packages/charcoal_catalog`: versioned component API, usage guidance, and executable examples.
 - `packages/charcoal_cli`: deterministic discovery, diagnostics, and agent-instruction setup.
+- `packages/charcoal_mcp`: read-only MCP adapter over the same component and token Catalog.
 - `example`: the exhaustive Showcase used for visual development and regression checks.
 - `agent`: versioned agent-readiness benchmark prompts and scoring contract.
 - `tool/tokens.dart`: pinned token sync, validation, generation, semantic diff, and drift checking.
@@ -133,11 +134,12 @@ CharcoalTheme(data: theme, child: const MyScreen());
 
 ## Agent-ready tooling
 
-The catalog is generated from the real exported Dart API. Every discovered public Widget receives
-constructor data and source documentation; reviewed components additionally include use/avoid
-guidance, accessibility and responsive rules, token roles, related components, and source copied
-from a compiling example. `generated` and `curated` coverage are reported separately so tools never
-mistake partial guidance for a complete contract.
+The catalog is generated from the real exported Dart API and generated token sources. Every
+discovered public Widget receives constructor data and source documentation; reviewed components
+additionally include use/avoid guidance, accessibility and responsive rules, token roles, related
+components, and source copied from a compiling example. Semantic and primitive tokens are labeled
+separately and include their exact Dart accessors and resolved light/dark values. Coverage is
+reported explicitly so tools never mistake partial guidance for a complete contract.
 
 The CLI exposes that same versioned catalog to people, scripts, and coding agents:
 
@@ -148,12 +150,25 @@ fvm dart run packages/charcoal_cli/bin/charcoal.dart search "single choice"
 # Read the exact constructor, companion APIs, guidance, and executable source.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart component CharcoalSegmentedControl
 
+# Find an exact semantic accessor; primitive lookup requires --tier primitive.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart token "layout spacing" --kind dimension
+
 # Use stable JSON envelopes for automation.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart manifest --json
 
 # Inspect a project, then add or refresh only the managed instruction block.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor
 fvm dart run packages/charcoal_cli/bin/charcoal.dart init --agent codex
+
+# Validate and score a complete Agent Ready evidence record.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark --results path/to/results.json
+```
+
+For protocol clients, `charcoal_mcp` exposes the same search, component, token, example, and status
+data through a read-only stdio server:
+
+```bash
+fvm dart run packages/charcoal_mcp/bin/charcoal_mcp.dart
 ```
 
 Regenerate after changing a public component API or a curated example:
@@ -163,9 +178,10 @@ fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart
 fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart --check
 ```
 
-The CLI and a future MCP server are adapters over the Catalog, not separate documentation sources.
+The CLI and MCP server are adapters over the Catalog, not separate documentation sources.
 Executable examples remain ordinary Flutter code; they are reference compositions rather than a
-runtime recipe layer. See [Agent readiness](agent/README.md) for the benchmark and rubric.
+runtime recipe layer. See [Agent readiness](agent/README.md) for the benchmark, evidence schema,
+and rubric.
 
 ## Motion and navigation
 
@@ -229,6 +245,7 @@ fvm flutter analyze
 fvm dart test
 fvm dart test packages/charcoal_catalog
 fvm dart test packages/charcoal_cli
+fvm dart test packages/charcoal_mcp
 fvm flutter test packages/charcoal_ui/test example/test
 fvm dart run tool/tokens.dart check
 fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart --check

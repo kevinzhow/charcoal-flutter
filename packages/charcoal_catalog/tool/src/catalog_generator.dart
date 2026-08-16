@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:charcoal_catalog/charcoal_catalog.dart';
+import 'package:charcoal_catalog/src/model.dart';
 import 'package:path/path.dart' as p;
 
 import 'metadata.dart';
@@ -121,21 +121,25 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
     );
   }
   components.sort((left, right) => left.name.compareTo(right.name));
+  final tokens = _buildTokens(workspaceRoot);
 
   final curatedCount = components
       .where((component) => component.documentationLevel == CharcoalDocumentationLevel.curated)
       .length;
   final exampleCount = components.where((component) => component.examples.isNotEmpty).length;
   final catalog = CharcoalCatalog(
-    schemaVersion: 1,
+    schemaVersion: 2,
     libraryName: 'charcoal_ui',
     libraryVersion: _packageVersion(File(p.join(uiRoot.path, 'pubspec.yaml'))),
     coverage: CharcoalCatalogCoverage(
       publicComponents: components.length,
       curatedComponents: curatedCount,
       componentsWithExamples: exampleCount,
+      publicTokens: tokens.length,
+      semanticTokens: tokens.where((token) => token.tier == CharcoalTokenTier.semantic).length,
     ),
     components: components,
+    tokens: tokens,
   );
   final json = const JsonEncoder.withIndent('  ').convert(catalog.toJson());
   if (json.contains("'''")) {
@@ -166,6 +170,147 @@ String catalogJsonPath(Directory root) =>
 
 String catalogDartPath(Directory root) =>
     p.join(root.path, 'packages', 'charcoal_catalog', 'lib', 'src', 'generated', 'catalog.g.dart');
+
+List<CharcoalTokenDoc> _buildTokens(Directory workspaceRoot) {
+  final snapshotFile = File(p.join(workspaceRoot.path, 'tokens', 'snapshot.json'));
+  final snapshot = jsonDecode(snapshotFile.readAsStringSync()) as Map<String, Object?>;
+  final light = (snapshot['light']! as Map<String, Object?>).cast<String, Object?>();
+  final dark = (snapshot['dark']! as Map<String, Object?>).cast<String, Object?>();
+  final generatedRoot = p.join(
+    workspaceRoot.path,
+    'packages',
+    'charcoal_tokens',
+    'lib',
+    'src',
+    'generated',
+  );
+  final sources = <CharcoalTokenKind, String>{
+    CharcoalTokenKind.color: File(
+      p.join(generatedRoot, 'charcoal_color_tokens.g.dart'),
+    ).readAsStringSync(),
+    CharcoalTokenKind.dimension: File(
+      p.join(generatedRoot, 'charcoal_dimension_tokens.g.dart'),
+    ).readAsStringSync(),
+    CharcoalTokenKind.typography: File(
+      p.join(generatedRoot, 'charcoal_typography_tokens.g.dart'),
+    ).readAsStringSync(),
+  };
+  final entryPattern = RegExp(
+    r"Charcoal(?:Color|Dimension|Typography)TokenEntry(?:<[^>]+>)?\(\s*"
+    r"path:\s*'([^']+)',\s*value:\s*([A-Za-z0-9_]+),?\s*\)",
+    dotAll: true,
+  );
+  final tokens = <CharcoalTokenDoc>[];
+  for (final source in sources.entries) {
+    for (final match in entryPattern.allMatches(source.value)) {
+      final path = match.group(1)!;
+      final field = match.group(2)!;
+      final lightValue = light[path];
+      final darkValue = dark[path];
+      if (lightValue == null || darkValue == null) {
+        throw StateError('Generated token $path is missing from tokens/snapshot.json.');
+      }
+      final tier = _tokenTier(path, source.key);
+      tokens.add(
+        CharcoalTokenDoc(
+          path: path,
+          dartAccessor: _tokenAccessor(path, field, source.key, tier),
+          kind: source.key,
+          tier: tier,
+          valueType: _tokenValueType(path, source.key),
+          lightValue: lightValue.toString(),
+          darkValue: darkValue.toString(),
+          guidance: _tokenGuidance(path, source.key, tier),
+        ),
+      );
+    }
+  }
+  tokens.sort((left, right) => left.path.compareTo(right.path));
+  final paths = tokens.map((token) => token.path).toSet();
+  if (paths.length != tokens.length) throw StateError('Generated token paths are not unique.');
+  return tokens;
+}
+
+CharcoalTokenTier _tokenTier(String path, CharcoalTokenKind kind) {
+  if (kind != CharcoalTokenKind.color) return CharcoalTokenTier.semantic;
+  const semanticPrefixes = <String>[
+    'color.background/',
+    'color.border/',
+    'color.container/',
+    'color.icon/',
+    'color.text/',
+  ];
+  return semanticPrefixes.any(path.startsWith)
+      ? CharcoalTokenTier.semantic
+      : CharcoalTokenTier.primitive;
+}
+
+String _tokenAccessor(
+  String path,
+  String field,
+  CharcoalTokenKind kind,
+  CharcoalTokenTier tier,
+) {
+  return switch (kind) {
+    CharcoalTokenKind.color when tier == CharcoalTokenTier.semantic => 'theme.colors.$field',
+    CharcoalTokenKind.color when path.startsWith('brand-color.') => 'CharcoalBrandColors.$field',
+    CharcoalTokenKind.color => 'CharcoalPrimitiveColors.$field',
+    CharcoalTokenKind.dimension => 'theme.dimensions.${_dimensionGroup(path)}.$field',
+    CharcoalTokenKind.typography => 'theme.typography.${_typographyGroup(path)}.$field',
+  };
+}
+
+String _dimensionGroup(String path) {
+  if (path.startsWith('border-width.')) return 'borderWidth';
+  if (path.startsWith('paragraph-width.')) return 'paragraphWidth';
+  if (path.startsWith('radius.')) return 'radius';
+  if (path.startsWith('space.')) return 'space';
+  throw StateError('Unknown dimension token group: $path');
+}
+
+String _typographyGroup(String path) {
+  if (path.startsWith('text.font-family/')) return 'fontFamily';
+  if (path.startsWith('text.font-size/')) return 'fontSize';
+  if (path.startsWith('text.font-weight/')) return 'fontWeight';
+  if (path.startsWith('text.line-height/')) return 'lineHeight';
+  throw StateError('Unknown typography token group: $path');
+}
+
+String _tokenValueType(String path, CharcoalTokenKind kind) {
+  return switch (kind) {
+    CharcoalTokenKind.color => 'Color',
+    CharcoalTokenKind.dimension => 'logicalPixels',
+    CharcoalTokenKind.typography when path.startsWith('text.font-family/') => 'String',
+    CharcoalTokenKind.typography when path.startsWith('text.font-weight/') => 'FontWeight',
+    CharcoalTokenKind.typography => 'logicalPixels',
+  };
+}
+
+String _tokenGuidance(String path, CharcoalTokenKind kind, CharcoalTokenTier tier) {
+  if (tier == CharcoalTokenTier.primitive) {
+    return 'Palette primitive. Prefer a semantic theme role; use directly only for audited '
+        'foundation work that cannot be expressed semantically.';
+  }
+  if (path.startsWith('space.layout/')) {
+    return 'Layout spacing for page, section, and responsive composition outside component internals.';
+  }
+  if (path.startsWith('space.component/')) {
+    return 'Component-scale spacing. Use for custom compositions; existing Charcoal components own '
+        'their internal gaps.';
+  }
+  if (path.startsWith('space.target/')) {
+    return 'Standard interaction target measurement. Do not force it onto a component with its own size API.';
+  }
+  if (path.startsWith('paragraph-width.')) {
+    return 'Readable content-width constraint selected by layout density and available space.';
+  }
+  if (path.startsWith('radius.')) return 'Semantic corner radius for authored Charcoal surfaces.';
+  if (path.startsWith('border-width.')) return 'Semantic border or focus-ring width.';
+  if (kind == CharcoalTokenKind.typography) {
+    return 'Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text.';
+  }
+  return 'Semantic color role. Select by UI meaning and state, not by its resolved light/dark value.';
+}
 
 List<CharcoalApiDoc> _companionApis(
   String name,

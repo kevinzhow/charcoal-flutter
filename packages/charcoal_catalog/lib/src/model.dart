@@ -7,6 +7,12 @@ enum CharcoalDocumentationLevel {
   curated,
 }
 
+/// Whether a token expresses a design role or an implementation palette primitive.
+enum CharcoalTokenTier { semantic, primitive }
+
+/// The public foundation group that owns a token.
+enum CharcoalTokenKind { color, dimension, typography }
+
 /// A stable snapshot of the public Charcoal UI component surface.
 final class CharcoalCatalog {
   const CharcoalCatalog({
@@ -14,6 +20,7 @@ final class CharcoalCatalog {
     required this.libraryName,
     required this.libraryVersion,
     required this.components,
+    required this.tokens,
     required this.coverage,
   });
 
@@ -25,6 +32,9 @@ final class CharcoalCatalog {
       components: (json['components'] as List<Object?>)
           .map((value) => CharcoalComponentDoc.fromJson(value as Map<String, Object?>))
           .toList(growable: false),
+      tokens: (json['tokens'] as List<Object?>)
+          .map((value) => CharcoalTokenDoc.fromJson(value as Map<String, Object?>))
+          .toList(growable: false),
       coverage: CharcoalCatalogCoverage.fromJson(json['coverage'] as Map<String, Object?>),
     );
   }
@@ -33,6 +43,7 @@ final class CharcoalCatalog {
   final String libraryName;
   final String libraryVersion;
   final List<CharcoalComponentDoc> components;
+  final List<CharcoalTokenDoc> tokens;
   final CharcoalCatalogCoverage coverage;
 
   CharcoalComponentDoc? componentNamed(String name) {
@@ -49,6 +60,7 @@ final class CharcoalCatalog {
     'libraryVersion': libraryVersion,
     'coverage': coverage.toJson(),
     'components': components.map((component) => component.toJson()).toList(growable: false),
+    'tokens': tokens.map((token) => token.toJson()).toList(growable: false),
   };
 }
 
@@ -58,6 +70,8 @@ final class CharcoalCatalogCoverage {
     required this.publicComponents,
     required this.curatedComponents,
     required this.componentsWithExamples,
+    required this.publicTokens,
+    required this.semanticTokens,
   });
 
   factory CharcoalCatalogCoverage.fromJson(Map<String, Object?> json) {
@@ -65,17 +79,70 @@ final class CharcoalCatalogCoverage {
       publicComponents: json['publicComponents'] as int,
       curatedComponents: json['curatedComponents'] as int,
       componentsWithExamples: json['componentsWithExamples'] as int,
+      publicTokens: json['publicTokens'] as int,
+      semanticTokens: json['semanticTokens'] as int,
     );
   }
 
   final int publicComponents;
   final int curatedComponents;
   final int componentsWithExamples;
+  final int publicTokens;
+  final int semanticTokens;
 
   Map<String, Object?> toJson() => <String, Object?>{
     'publicComponents': publicComponents,
     'curatedComponents': curatedComponents,
     'componentsWithExamples': componentsWithExamples,
+    'publicTokens': publicTokens,
+    'semanticTokens': semanticTokens,
+  };
+}
+
+/// One generated foundation token with its exact Flutter accessor and resolved values.
+final class CharcoalTokenDoc {
+  const CharcoalTokenDoc({
+    required this.path,
+    required this.dartAccessor,
+    required this.kind,
+    required this.tier,
+    required this.valueType,
+    required this.lightValue,
+    required this.darkValue,
+    required this.guidance,
+  });
+
+  factory CharcoalTokenDoc.fromJson(Map<String, Object?> json) {
+    return CharcoalTokenDoc(
+      path: json['path'] as String,
+      dartAccessor: json['dartAccessor'] as String,
+      kind: CharcoalTokenKind.values.byName(json['kind'] as String),
+      tier: CharcoalTokenTier.values.byName(json['tier'] as String),
+      valueType: json['valueType'] as String,
+      lightValue: json['lightValue'] as String,
+      darkValue: json['darkValue'] as String,
+      guidance: json['guidance'] as String,
+    );
+  }
+
+  final String path;
+  final String dartAccessor;
+  final CharcoalTokenKind kind;
+  final CharcoalTokenTier tier;
+  final String valueType;
+  final String lightValue;
+  final String darkValue;
+  final String guidance;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'path': path,
+    'dartAccessor': dartAccessor,
+    'kind': kind.name,
+    'tier': tier.name,
+    'valueType': valueType,
+    'lightValue': lightValue,
+    'darkValue': darkValue,
+    'guidance': guidance,
   };
 }
 

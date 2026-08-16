@@ -18,6 +18,7 @@ final class ManifestCommand extends CharcoalCommand {
       'apiVersion': 1,
       'cliVersion': charcoalCliVersion,
       'catalogSchemaVersion': charcoalCatalog.schemaVersion,
+      'catalogCoverage': charcoalCatalog.coverage.toJson(),
       'libraryName': charcoalCatalog.libraryName,
       'libraryVersion': charcoalCatalog.libraryVersion,
       'commands': <Map<String, Object?>>[
@@ -31,6 +32,20 @@ final class ManifestCommand extends CharcoalCommand {
           'name': 'component',
           'usage': 'charcoal component <name> [--json]',
           'responseType': 'component',
+          'mutatesFiles': false,
+        },
+        <String, Object?>{
+          'name': 'token',
+          'usage':
+              'charcoal token <query> [--kind color|dimension|typography] '
+              '[--tier semantic|primitive] [--limit 20] [--json]',
+          'responseType': 'tokenResults',
+          'mutatesFiles': false,
+        },
+        <String, Object?>{
+          'name': 'benchmark',
+          'usage': 'charcoal benchmark --results <path> [--suite <path>] [--allow-partial]',
+          'responseType': 'benchmark',
           'mutatesFiles': false,
         },
         <String, Object?>{
@@ -54,6 +69,8 @@ final class ManifestCommand extends CharcoalCommand {
       ],
       'errors': <String>[
         'ERR_INVALID_ARGUMENT',
+        'ERR_BENCHMARK_INVALID',
+        'ERR_INPUT_NOT_FOUND',
         'ERR_UNKNOWN_COMPONENT',
         'ERR_UNSAFE_PATH',
       ],
@@ -64,7 +81,7 @@ final class ManifestCommand extends CharcoalCommand {
       text:
           'Charcoal CLI $charcoalCliVersion for ${charcoalCatalog.libraryName} '
           '${charcoalCatalog.libraryVersion}\n'
-          'Commands: search, component, doctor, init, manifest',
+          'Commands: search, component, token, benchmark, doctor, init, manifest',
     );
     return ExitCode.success.code;
   }

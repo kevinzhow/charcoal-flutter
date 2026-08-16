@@ -1,0 +1,19 @@
+name: charcoal_mcp
+description: MCP adapter for the versioned Charcoal UI component and token catalog.
+publish_to: none
+version: 0.1.0
+
+executables:
+  charcoal-mcp: charcoal_mcp
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dependencies:
+  charcoal_catalog:
+    path: ../charcoal_catalog
+
+dev_dependencies:
+  test: ^1.26.0

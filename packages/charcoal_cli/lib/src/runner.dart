@@ -2,11 +2,13 @@ import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:io/io.dart';
 
+import 'commands/benchmark_command.dart';
 import 'commands/component_command.dart';
 import 'commands/doctor_command.dart';
 import 'commands/init_command.dart';
 import 'commands/manifest_command.dart';
 import 'commands/search_command.dart';
+import 'commands/token_command.dart';
 import 'environment.dart';
 
 export 'environment.dart' show CharcoalCliEnvironment;
@@ -25,6 +27,8 @@ final class CharcoalCommandRunner extends CommandRunner<int> {
       ..addFlag('version', help: 'Print the CLI version.', negatable: false);
     addCommand(SearchCommand(environment));
     addCommand(ComponentCommand(environment));
+    addCommand(TokenCommand(environment));
+    addCommand(BenchmarkCommand(environment));
     addCommand(ManifestCommand(environment));
     addCommand(DoctorCommand(environment));
     addCommand(InitCommand(environment));

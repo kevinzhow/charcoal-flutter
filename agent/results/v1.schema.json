@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://charcoal-flutter.dev/schemas/agent-benchmark-result-v1.json",
+  "title": "Charcoal Agent Ready benchmark result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "suite",
+    "catalogSchemaVersion",
+    "libraryVersion",
+    "configuration",
+    "model",
+    "runs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "suite": { "type": "string", "minLength": 1 },
+    "catalogSchemaVersion": { "type": "integer", "minimum": 1 },
+    "libraryVersion": { "type": "string", "minLength": 1 },
+    "configuration": {
+      "enum": ["baseline", "instructions", "cli", "protocol"]
+    },
+    "model": { "type": "string", "minLength": 1 },
+    "runs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/run" }
+    }
+  },
+  "$defs": {
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caseId", "scores", "hardFailures", "artifacts"],
+      "properties": {
+        "caseId": { "type": "string", "minLength": 1 },
+        "scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compileAndTests",
+            "apiAccuracy",
+            "charcoalComposition",
+            "tokenAndLayout",
+            "accessibility",
+            "responsiveness",
+            "verification"
+          ],
+          "properties": {
+            "compileAndTests": { "type": "number", "minimum": 0, "maximum": 30 },
+            "apiAccuracy": { "type": "number", "minimum": 0, "maximum": 20 },
+            "charcoalComposition": { "type": "number", "minimum": 0, "maximum": 15 },
+            "tokenAndLayout": { "type": "number", "minimum": 0, "maximum": 10 },
+            "accessibility": { "type": "number", "minimum": 0, "maximum": 10 },
+            "responsiveness": { "type": "number", "minimum": 0, "maximum": 10 },
+            "verification": { "type": "number", "minimum": 0, "maximum": 5 }
+          }
+        },
+        "hardFailures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "compile_error",
+              "fabricated_charcoal_api",
+              "silent_platform_substitution",
+              "unsafe_file_mutation"
+            ]
+          }
+        },
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "toolTranscript", "analysisOutput", "testOutput"],
+          "properties": {
+            "source": { "type": "string", "minLength": 1 },
+            "toolTranscript": { "type": "string", "minLength": 1 },
+            "analysisOutput": { "type": "string", "minLength": 1 },
+            "testOutput": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

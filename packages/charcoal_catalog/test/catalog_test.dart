@@ -9,7 +9,7 @@ void main() {
       final names = charcoalCatalog.components.map((component) => component.name).toList();
       final sortedNames = names.toList()..sort();
 
-      expect(charcoalCatalog.schemaVersion, 1);
+      expect(charcoalCatalog.schemaVersion, 2);
       expect(charcoalCatalog.coverage.publicComponents, names.length);
       expect(names, sortedNames);
       expect(names.toSet(), hasLength(names.length));
@@ -52,6 +52,32 @@ void main() {
       expect(roundTripped.components.length, charcoalCatalog.components.length);
       expect(roundTripped.componentNamed('button')?.name, isNull);
       expect(roundTripped.componentNamed('CharcoalButton')?.examples, isNotEmpty);
+    });
+
+    test('indexes public tokens with semantic ownership guidance', () {
+      final search = CharcoalCatalogSearch(charcoalCatalog);
+      final spacing = search.exactToken('theme.dimensions.space.component20')!;
+      final semanticResults = search.searchTokens(
+        'primary container',
+        kind: CharcoalTokenKind.color,
+      );
+      final primitiveResults = search.searchTokens(
+        'blue 50',
+        kind: CharcoalTokenKind.color,
+        tier: CharcoalTokenTier.primitive,
+      );
+
+      expect(charcoalCatalog.coverage.publicTokens, charcoalCatalog.tokens.length);
+      expect(charcoalCatalog.coverage.semanticTokens, greaterThan(100));
+      expect(spacing.path, 'space.component/20');
+      expect(spacing.lightValue, '8px');
+      expect(spacing.guidance, contains('internal gaps'));
+      expect(semanticResults, isNotEmpty);
+      expect(
+        semanticResults.every((result) => result.token.tier == CharcoalTokenTier.semantic),
+        isTrue,
+      );
+      expect(primitiveResults, isNotEmpty);
     });
   });
 }

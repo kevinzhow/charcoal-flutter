@@ -68,9 +68,18 @@ void main() {
   test('agent tooling stays outside the charcoal_ui runtime dependency graph', () async {
     final uiPubspec = await File('packages/charcoal_ui/pubspec.yaml').readAsString();
     final catalogPubspec = await File('packages/charcoal_catalog/pubspec.yaml').readAsString();
+    final cliPubspec = await File('packages/charcoal_cli/pubspec.yaml').readAsString();
+    final mcpPubspec = await File('packages/charcoal_mcp/pubspec.yaml').readAsString();
 
     expect(uiPubspec, isNot(contains('charcoal_catalog:')));
     expect(uiPubspec, isNot(contains('charcoal_cli:')));
+    expect(uiPubspec, isNot(contains('charcoal_mcp:')));
     expect(catalogPubspec, isNot(contains('flutter:')));
+    expect(cliPubspec, isNot(contains('flutter:')));
+    expect(mcpPubspec, isNot(contains('flutter:')));
+    expect(cliPubspec, contains('charcoal_catalog:'));
+    expect(mcpPubspec, contains('charcoal_catalog:'));
+    expect(cliPubspec, isNot(contains('charcoal_ui:')));
+    expect(mcpPubspec, isNot(contains('charcoal_ui:')));
   });
 }

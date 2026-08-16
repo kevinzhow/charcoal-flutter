@@ -1,4 +1,4 @@
-import 'package:charcoal_catalog/charcoal_catalog.dart';
+import 'model.dart';
 
 final class CharcoalSearchResult {
   const CharcoalSearchResult({required this.component, required this.score});
@@ -7,7 +7,14 @@ final class CharcoalSearchResult {
   final int score;
 }
 
-/// Deterministic search shared by the CLI and future protocol adapters.
+final class CharcoalTokenSearchResult {
+  const CharcoalTokenSearchResult({required this.token, required this.score});
+
+  final CharcoalTokenDoc token;
+  final int score;
+}
+
+/// Deterministic component and token search shared by every agent adapter.
 final class CharcoalCatalogSearch {
   const CharcoalCatalogSearch(this.catalog);
 
@@ -19,12 +26,34 @@ final class CharcoalCatalogSearch {
     final terms = normalizedQuery.split(' ').where((term) => term.isNotEmpty).toList();
     final results = <CharcoalSearchResult>[];
     for (final component in catalog.components) {
-      final score = _score(component, normalizedQuery, terms);
+      final score = _componentScore(component, normalizedQuery, terms);
       if (score > 0) results.add(CharcoalSearchResult(component: component, score: score));
     }
     results.sort((left, right) {
       final scoreOrder = right.score.compareTo(left.score);
       return scoreOrder != 0 ? scoreOrder : left.component.name.compareTo(right.component.name);
+    });
+    return results.take(limit).toList(growable: false);
+  }
+
+  List<CharcoalTokenSearchResult> searchTokens(
+    String query, {
+    int limit = 20,
+    CharcoalTokenKind? kind,
+    CharcoalTokenTier tier = CharcoalTokenTier.semantic,
+  }) {
+    final normalizedQuery = _normalize(query);
+    if (normalizedQuery.isEmpty || limit <= 0) return const <CharcoalTokenSearchResult>[];
+    final terms = normalizedQuery.split(' ').where((term) => term.isNotEmpty).toList();
+    final results = <CharcoalTokenSearchResult>[];
+    for (final token in catalog.tokens) {
+      if (token.tier != tier || (kind != null && token.kind != kind)) continue;
+      final score = _tokenScore(token, normalizedQuery, terms);
+      if (score > 0) results.add(CharcoalTokenSearchResult(token: token, score: score));
+    }
+    results.sort((left, right) {
+      final scoreOrder = right.score.compareTo(left.score);
+      return scoreOrder != 0 ? scoreOrder : left.token.path.compareTo(right.token.path);
     });
     return results.take(limit).toList(growable: false);
   }
@@ -40,6 +69,17 @@ final class CharcoalCatalogSearch {
           compactQuery == name.replaceAll(' ', '') ||
           compactQuery == shortName.replaceAll(' ', '')) {
         return component;
+      }
+    }
+    return null;
+  }
+
+  CharcoalTokenDoc? exactToken(String query) {
+    final normalizedQuery = _normalize(query);
+    for (final token in catalog.tokens) {
+      if (_normalize(token.path) == normalizedQuery ||
+          _normalize(token.dartAccessor) == normalizedQuery) {
+        return token;
       }
     }
     return null;
@@ -64,7 +104,7 @@ final class CharcoalCatalogSearch {
     return ranked.take(limit).map((entry) => entry.$1).toList(growable: false);
   }
 
-  int _score(CharcoalComponentDoc component, String query, List<String> terms) {
+  int _componentScore(CharcoalComponentDoc component, String query, List<String> terms) {
     final name = _normalize(component.name);
     final shortName = _normalize(component.name.replaceFirst('Charcoal', ''));
     final keywords = component.keywords.map(_normalize).toList(growable: false);
@@ -87,6 +127,22 @@ final class CharcoalCatalogSearch {
     if (descriptive.contains(query)) score += 300;
     for (final term in terms) {
       if (highSignal.contains(term)) score += 80;
+      if (descriptive.contains(term)) score += 30;
+    }
+    return score;
+  }
+
+  int _tokenScore(CharcoalTokenDoc token, String query, List<String> terms) {
+    final path = _normalize(token.path);
+    final accessor = _normalize(token.dartAccessor);
+    if (query == path || query == accessor) return 1000;
+    if (path.startsWith(query) || accessor.startsWith(query)) return 900;
+    final descriptive = _normalize('${token.kind.name} ${token.guidance}');
+    var score = 0;
+    if (path.contains(query) || accessor.contains(query)) score += 600;
+    if (descriptive.contains(query)) score += 300;
+    for (final term in terms) {
+      if (path.contains(term) || accessor.contains(term)) score += 80;
       if (descriptive.contains(term)) score += 30;
     }
     return score;

@@ -1,13 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND.
 
 const String generatedCatalogJson = r'''{
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
     "publicComponents": 31,
     "curatedComponents": 7,
-    "componentsWithExamples": 7
+    "componentsWithExamples": 7,
+    "publicTokens": 502,
+    "semanticTokens": 226
   },
   "components": [
     {
@@ -3599,6 +3601,5028 @@ const String generatedCatalogJson = r'''{
         }
       ],
       "examples": []
+    }
+  ],
+  "tokens": [
+    {
+      "path": "border-width.focus/1",
+      "dartAccessor": "theme.dimensions.borderWidth.focus1",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "1px",
+      "darkValue": "1px",
+      "guidance": "Semantic border or focus-ring width."
+    },
+    {
+      "path": "border-width.focus/2",
+      "dartAccessor": "theme.dimensions.borderWidth.focus2",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "2px",
+      "darkValue": "2px",
+      "guidance": "Semantic border or focus-ring width."
+    },
+    {
+      "path": "border-width.l",
+      "dartAccessor": "theme.dimensions.borderWidth.l",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "2px",
+      "darkValue": "2px",
+      "guidance": "Semantic border or focus-ring width."
+    },
+    {
+      "path": "border-width.m",
+      "dartAccessor": "theme.dimensions.borderWidth.m",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "1px",
+      "darkValue": "1px",
+      "guidance": "Semantic border or focus-ring width."
+    },
+    {
+      "path": "brand-color.booth",
+      "dartAccessor": "CharcoalBrandColors.booth",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 77, 80, 1)",
+      "darkValue": "rgba(252, 77, 80, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "brand-color.comic",
+      "dartAccessor": "CharcoalBrandColors.comic",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 196, 0, 1)",
+      "darkValue": "rgba(255, 196, 0, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "brand-color.factory",
+      "dartAccessor": "CharcoalBrandColors.factoryValue",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 184, 205, 1)",
+      "darkValue": "rgba(0, 184, 205, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "brand-color.pixiv",
+      "dartAccessor": "CharcoalBrandColors.pixiv",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 150, 250, 1)",
+      "darkValue": "rgba(0, 150, 250, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "brand-color.premium",
+      "dartAccessor": "CharcoalBrandColors.premium",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 158, 22, 1)",
+      "darkValue": "rgba(253, 158, 22, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Cyan/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightCyan50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(1, 162, 187, 1)",
+      "darkValue": "rgba(1, 162, 187, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(193, 247, 230, 1)",
+      "darkValue": "rgba(193, 247, 230, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(138, 234, 206, 1)",
+      "darkValue": "rgba(138, 234, 206, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(88, 211, 179, 1)",
+      "darkValue": "rgba(88, 211, 179, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(61, 189, 157, 1)",
+      "darkValue": "rgba(61, 189, 157, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(229, 251, 244, 1)",
+      "darkValue": "rgba(229, 251, 244, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(22, 165, 135, 1)",
+      "darkValue": "rgba(22, 165, 135, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(20, 131, 107, 1)",
+      "darkValue": "rgba(20, 131, 107, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(13, 89, 72, 1)",
+      "darkValue": "rgba(13, 89, 72, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(5, 62, 49, 1)",
+      "darkValue": "rgba(5, 62, 49, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.Light/Emerald/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightEmerald90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(1, 38, 29, 1)",
+      "darkValue": "rgba(1, 38, 29, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.background/default",
+      "dartAccessor": "theme.colors.backgroundDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.background/overlay",
+      "dartAccessor": "theme.colors.backgroundOverlay",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.325)",
+      "darkValue": "rgba(0, 0, 0, 0.32)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.background/secondary",
+      "dartAccessor": "theme.colors.backgroundSecondary",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(243, 243, 243, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.background/tertiary",
+      "dartAccessor": "theme.colors.backgroundTertiary",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/default",
+      "dartAccessor": "theme.colors.borderDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.42)",
+      "darkValue": "rgba(255, 255, 255, 0.36)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/default-text3",
+      "dartAccessor": "theme.colors.borderDefaultText3",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.42)",
+      "darkValue": "rgba(255, 255, 255, 0.36)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/disable",
+      "dartAccessor": "theme.colors.borderDisable",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.09)",
+      "darkValue": "rgba(255, 255, 255, 0.045)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/focus/1",
+      "dartAccessor": "theme.colors.borderFocus1",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 117, 188, 1)",
+      "darkValue": "rgba(114, 181, 245, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/focus/2",
+      "dartAccessor": "theme.colors.borderFocus2",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(188, 222, 252, 1)",
+      "darkValue": "rgba(39, 84, 126, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/focus/legacy",
+      "dartAccessor": "theme.colors.borderFocusLegacy",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 150, 250, 0.32)",
+      "darkValue": "rgba(0, 150, 250, 0.32)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/hover",
+      "dartAccessor": "theme.colors.borderHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.555)",
+      "darkValue": "rgba(255, 255, 255, 0.44)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/hover-text3",
+      "dartAccessor": "theme.colors.borderHoverText3",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.555)",
+      "darkValue": "rgba(255, 255, 255, 0.44)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/hud",
+      "dartAccessor": "theme.colors.borderHud",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/negative",
+      "dartAccessor": "theme.colors.borderNegative",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 206, 199, 1)",
+      "darkValue": "rgba(136, 54, 46, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/press",
+      "dartAccessor": "theme.colors.borderPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.683)",
+      "darkValue": "rgba(255, 255, 255, 0.535)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/press-text3",
+      "dartAccessor": "theme.colors.borderPressText3",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.683)",
+      "darkValue": "rgba(255, 255, 255, 0.535)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/secondary",
+      "dartAccessor": "theme.colors.borderSecondary",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.09)",
+      "darkValue": "rgba(255, 255, 255, 0.09)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.border/selected",
+      "dartAccessor": "theme.colors.borderSelected",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 150, 250, 1)",
+      "darkValue": "rgba(8, 114, 190, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/default",
+      "dartAccessor": "theme.colors.containerDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/default-a",
+      "dartAccessor": "theme.colors.containerDefaultA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0)",
+      "darkValue": "rgba(255, 255, 255, 0)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/disable",
+      "dartAccessor": "theme.colors.containerDisable",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(51, 51, 51, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/discovery/default",
+      "dartAccessor": "theme.colors.containerDiscoveryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 91, 78, 1)",
+      "darkValue": "rgba(197, 60, 51, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/discovery/hover",
+      "dartAccessor": "theme.colors.containerDiscoveryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(206, 54, 46, 1)",
+      "darkValue": "rgba(217, 88, 76, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/discovery/press",
+      "dartAccessor": "theme.colors.containerDiscoveryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(147, 33, 28, 1)",
+      "darkValue": "rgba(233, 114, 102, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/hover",
+      "dartAccessor": "theme.colors.containerHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(243, 243, 243, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/hover-a",
+      "dartAccessor": "theme.colors.containerHoverA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.047)",
+      "darkValue": "rgba(255, 255, 255, 0.045)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/hud/default",
+      "dartAccessor": "theme.colors.containerHudDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/hud/hover",
+      "dartAccessor": "theme.colors.containerHudHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(202, 202, 202, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/hud/press",
+      "dartAccessor": "theme.colors.containerHudPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(113, 113, 113, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/negative/default",
+      "dartAccessor": "theme.colors.containerNegativeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 91, 78, 1)",
+      "darkValue": "rgba(197, 60, 51, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/negative/hover",
+      "dartAccessor": "theme.colors.containerNegativeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(206, 54, 46, 1)",
+      "darkValue": "rgba(217, 88, 76, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/negative/press",
+      "dartAccessor": "theme.colors.containerNegativePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(147, 33, 28, 1)",
+      "darkValue": "rgba(233, 114, 102, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/neutral/default",
+      "dartAccessor": "theme.colors.containerNeutralDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(148, 148, 148, 1)",
+      "darkValue": "rgba(112, 112, 112, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/neutral/hover",
+      "dartAccessor": "theme.colors.containerNeutralHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(113, 113, 113, 1)",
+      "darkValue": "rgba(130, 130, 130, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/neutral/press",
+      "dartAccessor": "theme.colors.containerNeutralPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(151, 151, 151, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/notice/default",
+      "dartAccessor": "theme.colors.containerNoticeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(254, 214, 61, 1)",
+      "darkValue": "rgba(235, 178, 19, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/notice/hover",
+      "dartAccessor": "theme.colors.containerNoticeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(245, 183, 17, 1)",
+      "darkValue": "rgba(238, 195, 92, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/notice/press",
+      "dartAccessor": "theme.colors.containerNoticePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(231, 157, 20, 1)",
+      "darkValue": "rgba(252, 225, 167, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/on-img/default",
+      "dartAccessor": "theme.colors.containerOnImgDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.325)",
+      "darkValue": "rgba(0, 0, 0, 0.325)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/on-img/hover",
+      "dartAccessor": "theme.colors.containerOnImgHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.42)",
+      "darkValue": "rgba(0, 0, 0, 0.42)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/on-img/press",
+      "dartAccessor": "theme.colors.containerOnImgPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.555)",
+      "darkValue": "rgba(0, 0, 0, 0.555)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/positive/default",
+      "dartAccessor": "theme.colors.containerPositiveDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(37, 170, 28, 1)",
+      "darkValue": "rgba(13, 129, 5, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/positive/hover",
+      "dartAccessor": "theme.colors.containerPositiveHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(17, 131, 8, 1)",
+      "darkValue": "rgba(58, 150, 52, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/positive/press",
+      "dartAccessor": "theme.colors.containerPositivePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(4, 93, 0, 1)",
+      "darkValue": "rgba(86, 169, 79, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/press",
+      "dartAccessor": "theme.colors.containerPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(51, 51, 51, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/press-a",
+      "dartAccessor": "theme.colors.containerPressA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.09)",
+      "darkValue": "rgba(255, 255, 255, 0.09)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/primary/default",
+      "dartAccessor": "theme.colors.containerPrimaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 150, 250, 1)",
+      "darkValue": "rgba(8, 114, 190, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/primary/hover",
+      "dartAccessor": "theme.colors.containerPrimaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 117, 188, 1)",
+      "darkValue": "rgba(55, 136, 208, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/primary/press",
+      "dartAccessor": "theme.colors.containerPrimaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(24, 81, 130, 1)",
+      "darkValue": "rgba(83, 156, 224, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/secondary/default",
+      "dartAccessor": "theme.colors.containerSecondaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(243, 243, 243, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/secondary/default-a",
+      "dartAccessor": "theme.colors.containerSecondaryDefaultA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.047)",
+      "darkValue": "rgba(255, 255, 255, 0.045)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/secondary/hover",
+      "dartAccessor": "theme.colors.containerSecondaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(51, 51, 51, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/secondary/hover-a",
+      "dartAccessor": "theme.colors.containerSecondaryHoverA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.09)",
+      "darkValue": "rgba(255, 255, 255, 0.09)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/secondary/press",
+      "dartAccessor": "theme.colors.containerSecondaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(217, 217, 217, 1)",
+      "darkValue": "rgba(81, 81, 81, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/secondary/press-a",
+      "dartAccessor": "theme.colors.containerSecondaryPressA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.15)",
+      "darkValue": "rgba(255, 255, 255, 0.225)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/skeleton",
+      "dartAccessor": "theme.colors.containerSkeleton",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.047)",
+      "darkValue": "rgba(255, 255, 255, 0.045)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/subtle",
+      "dartAccessor": "theme.colors.containerSubtle",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 0.02)",
+      "darkValue": "rgba(228, 228, 228, 0.02)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/tertiary/default",
+      "dartAccessor": "theme.colors.containerTertiaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(51, 51, 51, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/tertiary/default-a",
+      "dartAccessor": "theme.colors.containerTertiaryDefaultA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.09)",
+      "darkValue": "rgba(255, 255, 255, 0.09)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/tertiary/hover",
+      "dartAccessor": "theme.colors.containerTertiaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(217, 217, 217, 1)",
+      "darkValue": "rgba(81, 81, 81, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/tertiary/hover-a",
+      "dartAccessor": "theme.colors.containerTertiaryHoverA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.15)",
+      "darkValue": "rgba(255, 255, 255, 0.225)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/tertiary/press",
+      "dartAccessor": "theme.colors.containerTertiaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(194, 194, 194, 1)",
+      "darkValue": "rgba(112, 112, 112, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.container/tertiary/press-a",
+      "dartAccessor": "theme.colors.containerTertiaryPressA",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.24)",
+      "darkValue": "rgba(255, 255, 255, 0.36)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.dark/blue/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlueMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlueMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(36, 55, 73, 1)",
+      "darkValue": "rgba(36, 55, 73, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(39, 84, 126, 1)",
+      "darkValue": "rgba(39, 84, 126, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(8, 114, 190, 1)",
+      "darkValue": "rgba(8, 114, 190, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(55, 136, 208, 1)",
+      "darkValue": "rgba(55, 136, 208, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(33, 41, 50, 1)",
+      "darkValue": "rgba(33, 41, 50, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(83, 156, 224, 1)",
+      "darkValue": "rgba(83, 156, 224, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(114, 181, 245, 1)",
+      "darkValue": "rgba(114, 181, 245, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(139, 193, 248, 1)",
+      "darkValue": "rgba(139, 193, 248, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(166, 205, 245, 1)",
+      "darkValue": "rgba(166, 205, 245, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/blue/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkBlue90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(207, 230, 253, 1)",
+      "darkValue": "rgba(207, 230, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreenMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreenMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(41, 59, 40, 1)",
+      "darkValue": "rgba(41, 59, 40, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(39, 92, 35, 1)",
+      "darkValue": "rgba(39, 92, 35, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(13, 129, 5, 1)",
+      "darkValue": "rgba(13, 129, 5, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(58, 150, 52, 1)",
+      "darkValue": "rgba(58, 150, 52, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(37, 43, 37, 1)",
+      "darkValue": "rgba(37, 43, 37, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(86, 169, 79, 1)",
+      "darkValue": "rgba(86, 169, 79, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(120, 194, 113, 1)",
+      "darkValue": "rgba(120, 194, 113, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(141, 204, 135, 1)",
+      "darkValue": "rgba(141, 204, 135, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(161, 215, 155, 1)",
+      "darkValue": "rgba(161, 215, 155, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/green/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkGreen90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(191, 241, 186, 1)",
+      "darkValue": "rgba(191, 241, 186, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigoMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigoMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(48, 51, 74, 1)",
+      "darkValue": "rgba(48, 51, 74, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(72, 76, 134, 1)",
+      "darkValue": "rgba(72, 76, 134, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(96, 100, 199, 1)",
+      "darkValue": "rgba(96, 100, 199, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(115, 123, 219, 1)",
+      "darkValue": "rgba(115, 123, 219, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(39, 40, 46, 1)",
+      "darkValue": "rgba(39, 40, 46, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(135, 143, 231, 1)",
+      "darkValue": "rgba(135, 143, 231, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(160, 170, 249, 1)",
+      "darkValue": "rgba(160, 170, 249, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(175, 184, 254, 1)",
+      "darkValue": "rgba(175, 184, 254, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(192, 199, 248, 1)",
+      "darkValue": "rgba(192, 199, 248, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/indigo/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkIndigo90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(222, 227, 255, 1)",
+      "darkValue": "rgba(222, 227, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagentaMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagentaMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(69, 44, 56, 1)",
+      "darkValue": "rgba(69, 44, 56, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(124, 58, 91, 1)",
+      "darkValue": "rgba(124, 58, 91, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(185, 64, 130, 1)",
+      "darkValue": "rgba(185, 64, 130, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(202, 91, 149, 1)",
+      "darkValue": "rgba(202, 91, 149, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(48, 36, 42, 1)",
+      "darkValue": "rgba(48, 36, 42, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(220, 114, 168, 1)",
+      "darkValue": "rgba(220, 114, 168, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(240, 146, 191, 1)",
+      "darkValue": "rgba(240, 146, 191, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(243, 163, 200, 1)",
+      "darkValue": "rgba(243, 163, 200, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(247, 184, 213, 1)",
+      "darkValue": "rgba(247, 184, 213, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/magenta/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkMagenta90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 217, 233, 1)",
+      "darkValue": "rgba(253, 217, 233, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralAMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.8)",
+      "darkValue": "rgba(0, 0, 0, 0.8)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralAMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.32)",
+      "darkValue": "rgba(0, 0, 0, 0.32)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0)",
+      "darkValue": "rgba(255, 255, 255, 0)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.09)",
+      "darkValue": "rgba(255, 255, 255, 0.09)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.225)",
+      "darkValue": "rgba(255, 255, 255, 0.225)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.36)",
+      "darkValue": "rgba(255, 255, 255, 0.36)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.44)",
+      "darkValue": "rgba(255, 255, 255, 0.44)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.045)",
+      "darkValue": "rgba(255, 255, 255, 0.045)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.535)",
+      "darkValue": "rgba(255, 255, 255, 0.535)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.645)",
+      "darkValue": "rgba(255, 255, 255, 0.645)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.7)",
+      "darkValue": "rgba(255, 255, 255, 0.7)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.765)",
+      "darkValue": "rgba(255, 255, 255, 0.765)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral-a/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralA90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 0.88)",
+      "darkValue": "rgba(255, 255, 255, 0.88)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutralMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(51, 51, 51, 1)",
+      "darkValue": "rgba(51, 51, 51, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(81, 81, 81, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(112, 112, 112, 1)",
+      "darkValue": "rgba(112, 112, 112, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(130, 130, 130, 1)",
+      "darkValue": "rgba(130, 130, 130, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(41, 41, 41, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(151, 151, 151, 1)",
+      "darkValue": "rgba(151, 151, 151, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(175, 175, 175, 1)",
+      "darkValue": "rgba(175, 175, 175, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(188, 188, 188, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(202, 202, 202, 1)",
+      "darkValue": "rgba(202, 202, 202, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/neutral/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkNeutral90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(228, 228, 228, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrangeMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrangeMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(72, 48, 38, 1)",
+      "darkValue": "rgba(72, 48, 38, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(134, 58, 22, 1)",
+      "darkValue": "rgba(134, 58, 22, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(188, 74, 14, 1)",
+      "darkValue": "rgba(188, 74, 14, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(212, 97, 41, 1)",
+      "darkValue": "rgba(212, 97, 41, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(48, 39, 34, 1)",
+      "darkValue": "rgba(48, 39, 34, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(229, 121, 68, 1)",
+      "darkValue": "rgba(229, 121, 68, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(246, 151, 107, 1)",
+      "darkValue": "rgba(246, 151, 107, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(248, 170, 135, 1)",
+      "darkValue": "rgba(248, 170, 135, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(245, 188, 163, 1)",
+      "darkValue": "rgba(245, 188, 163, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/orange/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkOrange90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 221, 207, 1)",
+      "darkValue": "rgba(252, 221, 207, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurpleMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurpleMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 48, 71, 1)",
+      "darkValue": "rgba(56, 48, 71, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(93, 68, 132, 1)",
+      "darkValue": "rgba(93, 68, 132, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(131, 88, 194, 1)",
+      "darkValue": "rgba(131, 88, 194, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(149, 110, 210, 1)",
+      "darkValue": "rgba(149, 110, 210, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(42, 38, 49, 1)",
+      "darkValue": "rgba(42, 38, 49, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(169, 133, 229, 1)",
+      "darkValue": "rgba(169, 133, 229, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(191, 160, 246, 1)",
+      "darkValue": "rgba(191, 160, 246, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(201, 176, 249, 1)",
+      "darkValue": "rgba(201, 176, 249, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(210, 192, 245, 1)",
+      "darkValue": "rgba(210, 192, 245, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/purple/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkPurple90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(233, 223, 255, 1)",
+      "darkValue": "rgba(233, 223, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRedMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRedMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(73, 47, 43, 1)",
+      "darkValue": "rgba(73, 47, 43, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(136, 54, 46, 1)",
+      "darkValue": "rgba(136, 54, 46, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(197, 60, 51, 1)",
+      "darkValue": "rgba(197, 60, 51, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(217, 88, 76, 1)",
+      "darkValue": "rgba(217, 88, 76, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(47, 39, 38, 1)",
+      "darkValue": "rgba(47, 39, 38, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(233, 114, 102, 1)",
+      "darkValue": "rgba(233, 114, 102, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 147, 134, 1)",
+      "darkValue": "rgba(252, 147, 134, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(254, 167, 155, 1)",
+      "darkValue": "rgba(254, 167, 155, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(249, 186, 177, 1)",
+      "darkValue": "rgba(249, 186, 177, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/red/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkRed90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(254, 219, 214, 1)",
+      "darkValue": "rgba(254, 219, 214, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoiseMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoiseMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(26, 60, 58, 1)",
+      "darkValue": "rgba(26, 60, 58, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 91, 88, 1)",
+      "darkValue": "rgba(0, 91, 88, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 123, 118, 1)",
+      "darkValue": "rgba(0, 123, 118, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 147, 142, 1)",
+      "darkValue": "rgba(0, 147, 142, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(35, 42, 41, 1)",
+      "darkValue": "rgba(35, 42, 41, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(32, 170, 164, 1)",
+      "darkValue": "rgba(32, 170, 164, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(84, 193, 186, 1)",
+      "darkValue": "rgba(84, 193, 186, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(118, 205, 199, 1)",
+      "darkValue": "rgba(118, 205, 199, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(144, 213, 207, 1)",
+      "darkValue": "rgba(144, 213, 207, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/turquoise/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkTurquoise90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(180, 239, 234, 1)",
+      "darkValue": "rgba(180, 239, 234, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/-10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellowMinus10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(6, 6, 6, 1)",
+      "darkValue": "rgba(6, 6, 6, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/-5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellowMinus5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(21, 21, 21, 1)",
+      "darkValue": "rgba(21, 21, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/0",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/10",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(66, 51, 30, 1)",
+      "darkValue": "rgba(66, 51, 30, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/20",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(109, 75, 31, 1)",
+      "darkValue": "rgba(109, 75, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/30",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(153, 99, 8, 1)",
+      "darkValue": "rgba(153, 99, 8, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/40",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(174, 121, 14, 1)",
+      "darkValue": "rgba(174, 121, 14, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/5",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(44, 40, 35, 1)",
+      "darkValue": "rgba(44, 40, 35, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/50",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(199, 140, 10, 1)",
+      "darkValue": "rgba(199, 140, 10, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/60",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(222, 167, 29, 1)",
+      "darkValue": "rgba(222, 167, 29, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/70",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(235, 178, 19, 1)",
+      "darkValue": "rgba(235, 178, 19, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/80",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(238, 195, 92, 1)",
+      "darkValue": "rgba(238, 195, 92, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.dark/yellow/90",
+      "dartAccessor": "CharcoalPrimitiveColors.darkYellow90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 225, 167, 1)",
+      "darkValue": "rgba(252, 225, 167, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.icon/default",
+      "dartAccessor": "theme.colors.iconDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/disable",
+      "dartAccessor": "theme.colors.iconDisable",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(194, 194, 194, 1)",
+      "darkValue": "rgba(130, 130, 130, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/hover",
+      "dartAccessor": "theme.colors.iconHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(202, 202, 202, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/negative/default",
+      "dartAccessor": "theme.colors.iconNegativeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(206, 54, 46, 1)",
+      "darkValue": "rgba(252, 147, 134, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/negative/hover",
+      "dartAccessor": "theme.colors.iconNegativeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(147, 33, 28, 1)",
+      "darkValue": "rgba(249, 186, 177, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/negative/press",
+      "dartAccessor": "theme.colors.iconNegativePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(103, 22, 17, 1)",
+      "darkValue": "rgba(254, 219, 214, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/notice/default",
+      "dartAccessor": "theme.colors.iconNoticeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(161, 99, 9, 1)",
+      "darkValue": "rgba(222, 167, 29, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/notice/hover",
+      "dartAccessor": "theme.colors.iconNoticeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(110, 72, 5, 1)",
+      "darkValue": "rgba(238, 195, 92, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/notice/press",
+      "dartAccessor": "theme.colors.iconNoticePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(74, 51, 7, 1)",
+      "darkValue": "rgba(252, 225, 167, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-negative/default",
+      "dartAccessor": "theme.colors.iconOnNegativeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-negative/hover",
+      "dartAccessor": "theme.colors.iconOnNegativeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-negative/press",
+      "dartAccessor": "theme.colors.iconOnNegativePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-neutral/default",
+      "dartAccessor": "theme.colors.iconOnNeutralDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-neutral/hover",
+      "dartAccessor": "theme.colors.iconOnNeutralHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(243, 243, 243, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-neutral/press",
+      "dartAccessor": "theme.colors.iconOnNeutralPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-notice/default",
+      "dartAccessor": "theme.colors.iconOnNoticeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-notice/hover",
+      "dartAccessor": "theme.colors.iconOnNoticeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-notice/press",
+      "dartAccessor": "theme.colors.iconOnNoticePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-on-img/default",
+      "dartAccessor": "theme.colors.iconOnOnImgDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-on-img/hover",
+      "dartAccessor": "theme.colors.iconOnOnImgHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-on-img/press",
+      "dartAccessor": "theme.colors.iconOnOnImgPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-positive/default",
+      "dartAccessor": "theme.colors.iconOnPositiveDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-positive/hover",
+      "dartAccessor": "theme.colors.iconOnPositiveHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-positive/press",
+      "dartAccessor": "theme.colors.iconOnPositivePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-primary/default",
+      "dartAccessor": "theme.colors.iconOnPrimaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-primary/hover",
+      "dartAccessor": "theme.colors.iconOnPrimaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/on-primary/press",
+      "dartAccessor": "theme.colors.iconOnPrimaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/positive/default",
+      "dartAccessor": "theme.colors.iconPositiveDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(17, 131, 8, 1)",
+      "darkValue": "rgba(120, 194, 113, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/positive/hover",
+      "dartAccessor": "theme.colors.iconPositiveHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(4, 93, 0, 1)",
+      "darkValue": "rgba(161, 215, 155, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/positive/press",
+      "dartAccessor": "theme.colors.iconPositivePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(4, 93, 0, 1)",
+      "darkValue": "rgba(191, 241, 186, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/press",
+      "dartAccessor": "theme.colors.iconPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/secondary/default",
+      "dartAccessor": "theme.colors.iconSecondaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(175, 175, 175, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/secondary/hover",
+      "dartAccessor": "theme.colors.iconSecondaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/secondary/press",
+      "dartAccessor": "theme.colors.iconSecondaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(202, 202, 202, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/tertiary/default",
+      "dartAccessor": "theme.colors.iconTertiaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(113, 113, 113, 1)",
+      "darkValue": "rgba(130, 130, 130, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/tertiary/hover",
+      "dartAccessor": "theme.colors.iconTertiaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(175, 175, 175, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.icon/tertiary/press",
+      "dartAccessor": "theme.colors.iconTertiaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.light/blue/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(255, 255, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(216, 235, 251, 1)",
+      "darkValue": "rgba(216, 235, 251, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(188, 222, 252, 1)",
+      "darkValue": "rgba(188, 222, 252, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(137, 200, 253, 1)",
+      "darkValue": "rgba(137, 200, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(85, 178, 253, 1)",
+      "darkValue": "rgba(85, 178, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(236, 244, 253, 1)",
+      "darkValue": "rgba(236, 244, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 150, 250, 1)",
+      "darkValue": "rgba(0, 150, 250, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 117, 188, 1)",
+      "darkValue": "rgba(31, 117, 188, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(24, 81, 130, 1)",
+      "darkValue": "rgba(24, 81, 130, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(19, 58, 93, 1)",
+      "darkValue": "rgba(19, 58, 93, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/blue/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightBlue90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(3, 35, 63, 1)",
+      "darkValue": "rgba(3, 35, 63, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(255, 255, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(204, 243, 200, 1)",
+      "darkValue": "rgba(204, 243, 200, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(164, 234, 157, 1)",
+      "darkValue": "rgba(164, 234, 157, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(121, 214, 112, 1)",
+      "darkValue": "rgba(121, 214, 112, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(80, 192, 72, 1)",
+      "darkValue": "rgba(80, 192, 72, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(234, 248, 232, 1)",
+      "darkValue": "rgba(234, 248, 232, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(37, 170, 28, 1)",
+      "darkValue": "rgba(37, 170, 28, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(17, 131, 8, 1)",
+      "darkValue": "rgba(17, 131, 8, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(4, 93, 0, 1)",
+      "darkValue": "rgba(4, 93, 0, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(7, 64, 4, 1)",
+      "darkValue": "rgba(7, 64, 4, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/green/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightGreen90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(1, 40, 0, 1)",
+      "darkValue": "rgba(1, 40, 0, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(226, 231, 253, 1)",
+      "darkValue": "rgba(226, 231, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(210, 216, 252, 1)",
+      "darkValue": "rgba(210, 216, 252, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(181, 189, 253, 1)",
+      "darkValue": "rgba(181, 189, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(156, 165, 252, 1)",
+      "darkValue": "rgba(156, 165, 252, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(241, 242, 253, 1)",
+      "darkValue": "rgba(241, 242, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(129, 136, 253, 1)",
+      "darkValue": "rgba(129, 136, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(95, 97, 222, 1)",
+      "darkValue": "rgba(95, 97, 222, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(68, 70, 155, 1)",
+      "darkValue": "rgba(68, 70, 155, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(45, 47, 109, 1)",
+      "darkValue": "rgba(45, 47, 109, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/indigo/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightIndigo90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(24, 24, 70, 1)",
+      "darkValue": "rgba(24, 24, 70, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(251, 226, 237, 1)",
+      "darkValue": "rgba(251, 226, 237, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 204, 226, 1)",
+      "darkValue": "rgba(255, 204, 226, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(245, 173, 206, 1)",
+      "darkValue": "rgba(245, 173, 206, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(250, 131, 192, 1)",
+      "darkValue": "rgba(250, 131, 192, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 239, 244, 1)",
+      "darkValue": "rgba(252, 239, 244, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(235, 95, 170, 1)",
+      "darkValue": "rgba(235, 95, 170, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(196, 53, 135, 1)",
+      "darkValue": "rgba(196, 53, 135, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(141, 33, 96, 1)",
+      "darkValue": "rgba(141, 33, 96, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(98, 27, 67, 1)",
+      "darkValue": "rgba(98, 27, 67, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/magenta/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightMagenta90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(59, 5, 37, 1)",
+      "darkValue": "rgba(59, 5, 37, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0)",
+      "darkValue": "rgba(0, 0, 0, 0)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.09)",
+      "darkValue": "rgba(0, 0, 0, 0.09)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.15)",
+      "darkValue": "rgba(0, 0, 0, 0.15)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.24)",
+      "darkValue": "rgba(0, 0, 0, 0.24)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.325)",
+      "darkValue": "rgba(0, 0, 0, 0.325)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.047)",
+      "darkValue": "rgba(0, 0, 0, 0.047)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.42)",
+      "darkValue": "rgba(0, 0, 0, 0.42)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.555)",
+      "darkValue": "rgba(0, 0, 0, 0.555)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.683)",
+      "darkValue": "rgba(0, 0, 0, 0.683)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.78)",
+      "darkValue": "rgba(0, 0, 0, 0.78)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral-a/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutralA90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(0, 0, 0, 0.88)",
+      "darkValue": "rgba(0, 0, 0, 0.88)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(255, 255, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(232, 232, 232, 1)",
+      "darkValue": "rgba(232, 232, 232, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(217, 217, 217, 1)",
+      "darkValue": "rgba(217, 217, 217, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(194, 194, 194, 1)",
+      "darkValue": "rgba(194, 194, 194, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(172, 172, 172, 1)",
+      "darkValue": "rgba(172, 172, 172, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(243, 243, 243, 1)",
+      "darkValue": "rgba(243, 243, 243, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(148, 148, 148, 1)",
+      "darkValue": "rgba(148, 148, 148, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(113, 113, 113, 1)",
+      "darkValue": "rgba(113, 113, 113, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(81, 81, 81, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(56, 56, 56, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/neutral/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightNeutral90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 229, 211, 1)",
+      "darkValue": "rgba(252, 229, 211, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 209, 177, 1)",
+      "darkValue": "rgba(253, 209, 177, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(254, 176, 121, 1)",
+      "darkValue": "rgba(254, 176, 121, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 143, 53, 1)",
+      "darkValue": "rgba(253, 143, 53, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 241, 229, 1)",
+      "darkValue": "rgba(253, 241, 229, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(242, 105, 21, 1)",
+      "darkValue": "rgba(242, 105, 21, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(190, 79, 4, 1)",
+      "darkValue": "rgba(190, 79, 4, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(132, 54, 7, 1)",
+      "darkValue": "rgba(132, 54, 7, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(91, 38, 13, 1)",
+      "darkValue": "rgba(91, 38, 13, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/orange/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightOrange90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(55, 18, 2, 1)",
+      "darkValue": "rgba(55, 18, 2, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(236, 229, 251, 1)",
+      "darkValue": "rgba(236, 229, 251, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(224, 210, 253, 1)",
+      "darkValue": "rgba(224, 210, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(207, 183, 253, 1)",
+      "darkValue": "rgba(207, 183, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(190, 153, 253, 1)",
+      "darkValue": "rgba(190, 153, 253, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(244, 241, 252, 1)",
+      "darkValue": "rgba(244, 241, 252, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(173, 120, 252, 1)",
+      "darkValue": "rgba(173, 120, 252, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(143, 77, 225, 1)",
+      "darkValue": "rgba(143, 77, 225, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(103, 39, 171, 1)",
+      "darkValue": "rgba(103, 39, 171, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(70, 32, 115, 1)",
+      "darkValue": "rgba(70, 32, 115, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/purple/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightPurple90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(40, 16, 70, 1)",
+      "darkValue": "rgba(40, 16, 70, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(255, 255, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(250, 228, 225, 1)",
+      "darkValue": "rgba(250, 228, 225, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 206, 199, 1)",
+      "darkValue": "rgba(253, 206, 199, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 174, 163, 1)",
+      "darkValue": "rgba(253, 174, 163, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(252, 138, 124, 1)",
+      "darkValue": "rgba(252, 138, 124, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 240, 237, 1)",
+      "darkValue": "rgba(253, 240, 237, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(253, 91, 78, 1)",
+      "darkValue": "rgba(253, 91, 78, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(206, 54, 46, 1)",
+      "darkValue": "rgba(206, 54, 46, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(147, 33, 28, 1)",
+      "darkValue": "rgba(147, 33, 28, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(103, 22, 17, 1)",
+      "darkValue": "rgba(103, 22, 17, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/red/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightRed90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(66, 0, 1, 1)",
+      "darkValue": "rgba(66, 0, 1, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(255, 255, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(196, 240, 241, 1)",
+      "darkValue": "rgba(196, 240, 241, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(152, 228, 229, 1)",
+      "darkValue": "rgba(152, 228, 229, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(109, 204, 205, 1)",
+      "darkValue": "rgba(109, 204, 205, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(63, 184, 186, 1)",
+      "darkValue": "rgba(63, 184, 186, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(225, 249, 249, 1)",
+      "darkValue": "rgba(225, 249, 249, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(27, 161, 163, 1)",
+      "darkValue": "rgba(27, 161, 163, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(11, 126, 128, 1)",
+      "darkValue": "rgba(11, 126, 128, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(3, 87, 89, 1)",
+      "darkValue": "rgba(3, 87, 89, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(1, 61, 62, 1)",
+      "darkValue": "rgba(1, 61, 62, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/turquoise/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightTurquoise90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(1, 37, 37, 1)",
+      "darkValue": "rgba(1, 37, 37, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/0",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow0",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(255, 255, 255, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/10",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow10",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(246, 232, 176, 1)",
+      "darkValue": "rgba(246, 232, 176, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/20",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow20",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(254, 214, 61, 1)",
+      "darkValue": "rgba(254, 214, 61, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/30",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow30",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(245, 183, 17, 1)",
+      "darkValue": "rgba(245, 183, 17, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/40",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow40",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(231, 157, 20, 1)",
+      "darkValue": "rgba(231, 157, 20, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/5",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow5",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(250, 243, 221, 1)",
+      "darkValue": "rgba(250, 243, 221, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/50",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow50",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(205, 131, 2, 1)",
+      "darkValue": "rgba(205, 131, 2, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/60",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow60",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(161, 99, 9, 1)",
+      "darkValue": "rgba(161, 99, 9, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/70",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow70",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(110, 72, 5, 1)",
+      "darkValue": "rgba(110, 72, 5, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/80",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow80",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(74, 51, 7, 1)",
+      "darkValue": "rgba(74, 51, 7, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.light/yellow/90",
+      "dartAccessor": "CharcoalPrimitiveColors.lightYellow90",
+      "kind": "color",
+      "tier": "primitive",
+      "valueType": "Color",
+      "lightValue": "rgba(44, 28, 0, 1)",
+      "darkValue": "rgba(44, 28, 0, 1)",
+      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+    },
+    {
+      "path": "color.text/default",
+      "dartAccessor": "theme.colors.textDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/default-text1",
+      "dartAccessor": "theme.colors.textDefaultText1",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/disable",
+      "dartAccessor": "theme.colors.textDisable",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(194, 194, 194, 1)",
+      "darkValue": "rgba(130, 130, 130, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/hover",
+      "dartAccessor": "theme.colors.textHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(202, 202, 202, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/hover-text1",
+      "dartAccessor": "theme.colors.textHoverText1",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/info/default",
+      "dartAccessor": "theme.colors.textInfoDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 117, 188, 1)",
+      "darkValue": "rgba(114, 181, 245, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/info/hover",
+      "dartAccessor": "theme.colors.textInfoHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(24, 81, 130, 1)",
+      "darkValue": "rgba(166, 205, 245, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/info/press",
+      "dartAccessor": "theme.colors.textInfoPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(19, 58, 93, 1)",
+      "darkValue": "rgba(207, 230, 253, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/negative/default",
+      "dartAccessor": "theme.colors.textNegativeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(206, 54, 46, 1)",
+      "darkValue": "rgba(252, 147, 134, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/negative/hover",
+      "dartAccessor": "theme.colors.textNegativeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(147, 33, 28, 1)",
+      "darkValue": "rgba(249, 186, 177, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/negative/press",
+      "dartAccessor": "theme.colors.textNegativePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(103, 22, 17, 1)",
+      "darkValue": "rgba(254, 219, 214, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/notice/default",
+      "dartAccessor": "theme.colors.textNoticeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(161, 99, 9, 1)",
+      "darkValue": "rgba(222, 167, 29, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/notice/hover",
+      "dartAccessor": "theme.colors.textNoticeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(110, 72, 5, 1)",
+      "darkValue": "rgba(238, 195, 92, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/notice/press",
+      "dartAccessor": "theme.colors.textNoticePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(74, 51, 7, 1)",
+      "darkValue": "rgba(252, 225, 167, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-discovery/default",
+      "dartAccessor": "theme.colors.textOnDiscoveryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-discovery/hover",
+      "dartAccessor": "theme.colors.textOnDiscoveryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-discovery/press",
+      "dartAccessor": "theme.colors.textOnDiscoveryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-hud/default",
+      "dartAccessor": "theme.colors.textOnHudDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(228, 228, 228, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-hud/hover",
+      "dartAccessor": "theme.colors.textOnHudHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(228, 228, 228, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-hud/press",
+      "dartAccessor": "theme.colors.textOnHudPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(228, 228, 228, 1)",
+      "darkValue": "rgba(31, 31, 31, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-negative/default",
+      "dartAccessor": "theme.colors.textOnNegativeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-negative/hover",
+      "dartAccessor": "theme.colors.textOnNegativeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-negative/press",
+      "dartAccessor": "theme.colors.textOnNegativePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-notice/default",
+      "dartAccessor": "theme.colors.textOnNoticeDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-notice/hover",
+      "dartAccessor": "theme.colors.textOnNoticeHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-notice/press",
+      "dartAccessor": "theme.colors.textOnNoticePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(41, 41, 41, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-on-img/default",
+      "dartAccessor": "theme.colors.textOnOnImgDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-on-img/hover",
+      "dartAccessor": "theme.colors.textOnOnImgHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-on-img/press",
+      "dartAccessor": "theme.colors.textOnOnImgPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-positive/default",
+      "dartAccessor": "theme.colors.textOnPositiveDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-positive/hover",
+      "dartAccessor": "theme.colors.textOnPositiveHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-positive/press",
+      "dartAccessor": "theme.colors.textOnPositivePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-primary/default",
+      "dartAccessor": "theme.colors.textOnPrimaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-primary/hover",
+      "dartAccessor": "theme.colors.textOnPrimaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/on-primary/press",
+      "dartAccessor": "theme.colors.textOnPrimaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(255, 255, 255, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/placeholder/default",
+      "dartAccessor": "theme.colors.textPlaceholderDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(148, 148, 148, 1)",
+      "darkValue": "rgba(112, 112, 112, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/placeholder/hover",
+      "dartAccessor": "theme.colors.textPlaceholderHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(148, 148, 148, 1)",
+      "darkValue": "rgba(112, 112, 112, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/placeholder/press",
+      "dartAccessor": "theme.colors.textPlaceholderPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(148, 148, 148, 1)",
+      "darkValue": "rgba(112, 112, 112, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/positive/default",
+      "dartAccessor": "theme.colors.textPositiveDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(17, 131, 8, 1)",
+      "darkValue": "rgba(120, 194, 113, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/positive/hover",
+      "dartAccessor": "theme.colors.textPositiveHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(4, 93, 0, 1)",
+      "darkValue": "rgba(161, 215, 155, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/positive/press",
+      "dartAccessor": "theme.colors.textPositivePress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(7, 64, 4, 1)",
+      "darkValue": "rgba(191, 241, 186, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/press",
+      "dartAccessor": "theme.colors.textPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/press-text1",
+      "dartAccessor": "theme.colors.textPressText1",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(228, 228, 228, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/secondary/default",
+      "dartAccessor": "theme.colors.textSecondaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(175, 175, 175, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/secondary/hover",
+      "dartAccessor": "theme.colors.textSecondaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/secondary/press",
+      "dartAccessor": "theme.colors.textSecondaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(31, 31, 31, 1)",
+      "darkValue": "rgba(202, 202, 202, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/tertiary/default",
+      "dartAccessor": "theme.colors.textTertiaryDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(113, 113, 113, 1)",
+      "darkValue": "rgba(130, 130, 130, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/tertiary/hover",
+      "dartAccessor": "theme.colors.textTertiaryHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(81, 81, 81, 1)",
+      "darkValue": "rgba(175, 175, 175, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/tertiary/press",
+      "dartAccessor": "theme.colors.textTertiaryPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(56, 56, 56, 1)",
+      "darkValue": "rgba(188, 188, 188, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/visited/default",
+      "dartAccessor": "theme.colors.textVisitedDefault",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(103, 39, 171, 1)",
+      "darkValue": "rgba(191, 160, 246, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/visited/hover",
+      "dartAccessor": "theme.colors.textVisitedHover",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(70, 32, 115, 1)",
+      "darkValue": "rgba(210, 192, 245, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "color.text/visited/press",
+      "dartAccessor": "theme.colors.textVisitedPress",
+      "kind": "color",
+      "tier": "semantic",
+      "valueType": "Color",
+      "lightValue": "rgba(40, 16, 70, 1)",
+      "darkValue": "rgba(233, 223, 255, 1)",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "paragraph-width.l",
+      "dartAccessor": "theme.dimensions.paragraphWidth.l",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "672px",
+      "darkValue": "672px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.l-compact",
+      "dartAccessor": "theme.dimensions.paragraphWidth.lCompact",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "588px",
+      "darkValue": "588px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.l-cozy",
+      "dartAccessor": "theme.dimensions.paragraphWidth.lCozy",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "924px",
+      "darkValue": "924px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.m",
+      "dartAccessor": "theme.dimensions.paragraphWidth.m",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "448px",
+      "darkValue": "448px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.m-compact",
+      "dartAccessor": "theme.dimensions.paragraphWidth.mCompact",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "392px",
+      "darkValue": "392px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.m-cozy",
+      "dartAccessor": "theme.dimensions.paragraphWidth.mCozy",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "616px",
+      "darkValue": "616px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.s",
+      "dartAccessor": "theme.dimensions.paragraphWidth.s",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "320px",
+      "darkValue": "320px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.s-compact",
+      "dartAccessor": "theme.dimensions.paragraphWidth.sCompact",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "280px",
+      "darkValue": "280px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "paragraph-width.s-cozy",
+      "dartAccessor": "theme.dimensions.paragraphWidth.sCozy",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "588px",
+      "darkValue": "588px",
+      "guidance": "Readable content-width constraint selected by layout density and available space."
+    },
+    {
+      "path": "radius.0",
+      "dartAccessor": "theme.dimensions.radius.value0",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "0px",
+      "darkValue": "0px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.l",
+      "dartAccessor": "theme.dimensions.radius.l",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "12px",
+      "darkValue": "12px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.m",
+      "dartAccessor": "theme.dimensions.radius.m",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "8px",
+      "darkValue": "8px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.oval",
+      "dartAccessor": "theme.dimensions.radius.oval",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "999999px",
+      "darkValue": "999999px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.s",
+      "dartAccessor": "theme.dimensions.radius.s",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "4px",
+      "darkValue": "4px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.xl",
+      "dartAccessor": "theme.dimensions.radius.xl",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "16px",
+      "darkValue": "16px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.xs",
+      "dartAccessor": "theme.dimensions.radius.xs",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "2px",
+      "darkValue": "2px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "radius.xxl",
+      "dartAccessor": "theme.dimensions.radius.xxl",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+    },
+    {
+      "path": "space.component/0",
+      "dartAccessor": "theme.dimensions.space.component0",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "0px",
+      "darkValue": "0px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.component/10",
+      "dartAccessor": "theme.dimensions.space.component10",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "4px",
+      "darkValue": "4px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.component/20",
+      "dartAccessor": "theme.dimensions.space.component20",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "8px",
+      "darkValue": "8px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.component/25",
+      "dartAccessor": "theme.dimensions.space.component25",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "12px",
+      "darkValue": "12px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.component/30",
+      "dartAccessor": "theme.dimensions.space.component30",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "16px",
+      "darkValue": "16px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.component/40",
+      "dartAccessor": "theme.dimensions.space.component40",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.component/50",
+      "dartAccessor": "theme.dimensions.space.component50",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "40px",
+      "darkValue": "40px",
+      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+    },
+    {
+      "path": "space.layout/0",
+      "dartAccessor": "theme.dimensions.space.layout0",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "0px",
+      "darkValue": "0px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/10",
+      "dartAccessor": "theme.dimensions.space.layout10",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "4px",
+      "darkValue": "4px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/100",
+      "dartAccessor": "theme.dimensions.space.layout100",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "440px",
+      "darkValue": "440px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/20",
+      "dartAccessor": "theme.dimensions.space.layout20",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "8px",
+      "darkValue": "8px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/25",
+      "dartAccessor": "theme.dimensions.space.layout25",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "12px",
+      "darkValue": "12px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/30",
+      "dartAccessor": "theme.dimensions.space.layout30",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "16px",
+      "darkValue": "16px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/40",
+      "dartAccessor": "theme.dimensions.space.layout40",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/50",
+      "dartAccessor": "theme.dimensions.space.layout50",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "40px",
+      "darkValue": "40px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/60",
+      "dartAccessor": "theme.dimensions.space.layout60",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "64px",
+      "darkValue": "64px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/70",
+      "dartAccessor": "theme.dimensions.space.layout70",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "104px",
+      "darkValue": "104px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/80",
+      "dartAccessor": "theme.dimensions.space.layout80",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "168px",
+      "darkValue": "168px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.layout/90",
+      "dartAccessor": "theme.dimensions.space.layout90",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "272px",
+      "darkValue": "272px",
+      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+    },
+    {
+      "path": "space.padding/padding-card",
+      "dartAccessor": "theme.dimensions.space.paddingPaddingCard",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+    },
+    {
+      "path": "space.target/l",
+      "dartAccessor": "theme.dimensions.space.targetL",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "48px",
+      "darkValue": "48px",
+      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+    },
+    {
+      "path": "space.target/m",
+      "dartAccessor": "theme.dimensions.space.targetM",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "40px",
+      "darkValue": "40px",
+      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+    },
+    {
+      "path": "space.target/s",
+      "dartAccessor": "theme.dimensions.space.targetS",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "32px",
+      "darkValue": "32px",
+      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+    },
+    {
+      "path": "space.target/xs",
+      "dartAccessor": "theme.dimensions.space.targetXs",
+      "kind": "dimension",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+    },
+    {
+      "path": "text.font-family/sans",
+      "dartAccessor": "theme.typography.fontFamily.sans",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "String",
+      "lightValue": "Sarasa UI J",
+      "darkValue": "Sarasa UI J",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/body",
+      "dartAccessor": "theme.typography.fontSize.body",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "16px",
+      "darkValue": "16px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/caption/m",
+      "dartAccessor": "theme.typography.fontSize.captionM",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "14px",
+      "darkValue": "14px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/caption/s",
+      "dartAccessor": "theme.typography.fontSize.captionS",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "12px",
+      "darkValue": "12px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/l",
+      "dartAccessor": "theme.typography.fontSize.headingL",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "28px",
+      "darkValue": "28px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/m",
+      "dartAccessor": "theme.typography.fontSize.headingM",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "25px",
+      "darkValue": "25px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/s",
+      "dartAccessor": "theme.typography.fontSize.headingS",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "22px",
+      "darkValue": "22px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/xl",
+      "dartAccessor": "theme.typography.fontSize.headingXl",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "32px",
+      "darkValue": "32px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/xs",
+      "dartAccessor": "theme.typography.fontSize.headingXs",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "20px",
+      "darkValue": "20px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/xxl",
+      "dartAccessor": "theme.typography.fontSize.headingXxl",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "36px",
+      "darkValue": "36px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/xxs",
+      "dartAccessor": "theme.typography.fontSize.headingXxs",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "18px",
+      "darkValue": "18px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/xxxl",
+      "dartAccessor": "theme.typography.fontSize.headingXxxl",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "40px",
+      "darkValue": "40px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/heading/xxxs",
+      "dartAccessor": "theme.typography.fontSize.headingXxxs",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "14px",
+      "darkValue": "14px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-size/paragraph",
+      "dartAccessor": "theme.typography.fontSize.paragraph",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "16px",
+      "darkValue": "16px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-weight/bold",
+      "dartAccessor": "theme.typography.fontWeight.bold",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "FontWeight",
+      "lightValue": "700",
+      "darkValue": "700",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.font-weight/regular",
+      "dartAccessor": "theme.typography.fontWeight.regular",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "FontWeight",
+      "lightValue": "400",
+      "darkValue": "400",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/body",
+      "dartAccessor": "theme.typography.lineHeight.body",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/caption/m",
+      "dartAccessor": "theme.typography.lineHeight.captionM",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "20px",
+      "darkValue": "20px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/caption/s",
+      "dartAccessor": "theme.typography.lineHeight.captionS",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "18px",
+      "darkValue": "18px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/l",
+      "dartAccessor": "theme.typography.lineHeight.headingL",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "36px",
+      "darkValue": "36px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/m",
+      "dartAccessor": "theme.typography.lineHeight.headingM",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "32px",
+      "darkValue": "32px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/s",
+      "dartAccessor": "theme.typography.lineHeight.headingS",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "28px",
+      "darkValue": "28px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/xl",
+      "dartAccessor": "theme.typography.lineHeight.headingXl",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "40px",
+      "darkValue": "40px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/xs",
+      "dartAccessor": "theme.typography.lineHeight.headingXs",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "28px",
+      "darkValue": "28px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/xxl",
+      "dartAccessor": "theme.typography.lineHeight.headingXxl",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "44px",
+      "darkValue": "44px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/xxs",
+      "dartAccessor": "theme.typography.lineHeight.headingXxs",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "24px",
+      "darkValue": "24px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/xxxl",
+      "dartAccessor": "theme.typography.lineHeight.headingXxxl",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "52px",
+      "darkValue": "52px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/heading/xxxs",
+      "dartAccessor": "theme.typography.lineHeight.headingXxxs",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "20px",
+      "darkValue": "20px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+    },
+    {
+      "path": "text.line-height/paragraph",
+      "dartAccessor": "theme.typography.lineHeight.paragraph",
+      "kind": "typography",
+      "tier": "semantic",
+      "valueType": "logicalPixels",
+      "lightValue": "28px",
+      "darkValue": "28px",
+      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
     }
   ]
 }''';

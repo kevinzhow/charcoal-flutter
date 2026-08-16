@@ -34,6 +34,11 @@ final class DoctorCommand extends CharcoalCommand {
     final managedFile = agentFiles.where((file) {
       return file.existsSync() && file.readAsStringSync().contains('<!-- charcoal-agent:start');
     }).firstOrNull;
+    final managedVersion = managedFile == null
+        ? null
+        : RegExp(
+            r'<!-- charcoal-agent:start\s+version=([^\s]+)',
+          ).firstMatch(managedFile.readAsStringSync())?.group(1);
     final checks = <Map<String, Object?>>[
       <String, Object?>{
         'id': 'pubspec',
@@ -51,10 +56,19 @@ final class DoctorCommand extends CharcoalCommand {
       },
       <String, Object?>{
         'id': 'agent-instructions',
-        'status': managedFile == null ? 'warn' : 'pass',
+        'status': managedFile == null
+            ? 'warn'
+            : managedVersion == charcoalCatalog.libraryVersion
+            ? 'pass'
+            : 'fail',
         'message': managedFile == null
             ? 'No managed Charcoal agent block. Run charcoal init.'
-            : 'Found managed instructions in ${p.relative(managedFile.path, from: root.path)}.',
+            : managedVersion == charcoalCatalog.libraryVersion
+            ? 'Found current managed instructions in '
+                  '${p.relative(managedFile.path, from: root.path)}.'
+            : 'Managed instructions in ${p.relative(managedFile.path, from: root.path)} '
+                  'target ${managedVersion ?? 'an unknown version'}, not '
+                  '${charcoalCatalog.libraryVersion}. Run charcoal init.',
       },
       <String, Object?>{
         'id': 'catalog-version',
@@ -72,10 +86,14 @@ final class DoctorCommand extends CharcoalCommand {
       },
       <String, Object?>{
         'id': 'catalog',
-        'status': charcoalCatalog.components.isEmpty ? 'fail' : 'pass',
+        'status': charcoalCatalog.components.isEmpty || charcoalCatalog.tokens.isEmpty
+            ? 'fail'
+            : 'pass',
         'message':
             '${charcoalCatalog.components.length} components available for '
-            'charcoal_ui ${charcoalCatalog.libraryVersion}.',
+            'charcoal_ui ${charcoalCatalog.libraryVersion}; '
+            '${charcoalCatalog.coverage.semanticTokens} semantic tokens and '
+            '${charcoalCatalog.coverage.publicTokens} total public tokens indexed.',
       },
     ];
     final failureCount = checks.where((check) => check['status'] == 'fail').length;

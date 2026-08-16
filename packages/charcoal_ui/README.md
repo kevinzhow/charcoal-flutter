@@ -9,5 +9,6 @@ to a private component specification and keeps source-specific geometry beside i
 See the workspace [README](../../README.md) for architecture, source contracts, setup, previews,
 and testing.
 
-Machine consumers should use `charcoal_catalog` or `charcoal_cli`. Those packages document this
-public API without adding a tooling or recipe dependency to the `charcoal_ui` runtime package.
+Machine consumers should use `charcoal_catalog`, `charcoal_cli`, or the read-only `charcoal_mcp`
+adapter. Those packages document this public API without adding a tooling or recipe dependency to
+the `charcoal_ui` runtime package.

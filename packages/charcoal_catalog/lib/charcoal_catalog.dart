@@ -7,8 +7,9 @@ import 'src/generated/catalog.g.dart';
 import 'src/model.dart';
 
 export 'src/model.dart';
+export 'src/search.dart';
 
-/// The catalog generated from the public API of the matching Charcoal UI version.
+/// The component and token catalog generated for the matching Charcoal UI version.
 final CharcoalCatalog charcoalCatalog = CharcoalCatalog.fromJson(
   jsonDecode(generatedCatalogJson) as Map<String, Object?>,
 );

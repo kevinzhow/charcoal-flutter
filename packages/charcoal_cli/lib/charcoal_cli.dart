@@ -5,7 +5,18 @@ import 'dart:io';
 
 import 'src/runner.dart';
 
-export 'src/catalog_search.dart' show CharcoalCatalogSearch, CharcoalSearchResult;
+export 'package:charcoal_catalog/charcoal_catalog.dart'
+    show CharcoalCatalogSearch, CharcoalSearchResult, CharcoalTokenSearchResult;
+
+export 'src/benchmark.dart'
+    show
+        CharcoalBenchmarkFormatException,
+        CharcoalBenchmarkReport,
+        charcoalBenchmarkArtifactKeys,
+        charcoalBenchmarkConfigurations,
+        charcoalBenchmarkHardFailures,
+        charcoalBenchmarkScoreLimits,
+        evaluateCharcoalBenchmark;
 
 /// Runs the Charcoal CLI without terminating the host process.
 ///
