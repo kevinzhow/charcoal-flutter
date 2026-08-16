@@ -1,13 +1,34 @@
 import 'package:charcoal_catalog/charcoal_catalog.dart';
 
-const Map<String, int> charcoalBenchmarkScoreLimits = <String, int>{
-  'compileAndTests': 30,
+const Map<String, int> charcoalBenchmarkGraderScoreLimits = <String, int>{
   'apiAccuracy': 20,
   'charcoalComposition': 15,
   'tokenAndLayout': 10,
   'accessibility': 10,
   'responsiveness': 10,
   'verification': 5,
+};
+
+const Map<String, int> charcoalBenchmarkScoreLimits = <String, int>{
+  'compileAndTests': 30,
+  ...charcoalBenchmarkGraderScoreLimits,
+};
+
+const Map<String, String> charcoalBenchmarkGraderScoreGuidance = <String, String>{
+  'apiAccuracy': 'exact installed public API, appropriate component choice, no guessed parameters',
+  'charcoalComposition':
+      'uses existing Charcoal controls instead of substitutes; for a genuinely missing component, '
+      'an explicit no-substitution product decision can earn full credit',
+  'tokenAndLayout':
+      'Flutter primitives and semantic token roles respect ownership; no external recreation of '
+      'component internals',
+  'accessibility':
+      'labels, semantics, focus/keyboard behavior, disabled behavior, and text scaling relevant to '
+      'the case',
+  'responsiveness': 'requested compact and desktop behavior is actually constraint-driven',
+  'verification':
+      'the candidate agent itself ran proportionate checks and reported them accurately; harness '
+      'checks alone earn no credit here',
 };
 
 const Set<String> charcoalBenchmarkConfigurations = <String>{
@@ -22,8 +43,16 @@ const Set<String> charcoalBenchmarkHardFailures = <String>{
   'fabricated_charcoal_api',
   'silent_platform_substitution',
   'unsafe_file_mutation',
+  'agent_execution_error',
 };
 
+/// Hard failures the subjective grader may add after structural verification.
+const Set<String> charcoalBenchmarkGraderHardFailures = <String>{
+  'fabricated_charcoal_api',
+  'silent_platform_substitution',
+};
+
+/// Artifact keys required by manually recorded v1 results.
 const Set<String> charcoalBenchmarkArtifactKeys = <String>{
   'source',
   'toolTranscript',
@@ -31,11 +60,18 @@ const Set<String> charcoalBenchmarkArtifactKeys = <String>{
   'testOutput',
 };
 
+/// Artifact keys required by harness-generated v2 results.
+const Set<String> charcoalBenchmarkV2ArtifactKeys = <String>{
+  ...charcoalBenchmarkArtifactKeys,
+  'evaluationOutput',
+};
+
 final class CharcoalBenchmarkReport {
   const CharcoalBenchmarkReport({
     required this.suite,
     required this.configuration,
     required this.model,
+    required this.grader,
     required this.totalCases,
     required this.evaluatedCases,
     required this.passedCases,
@@ -48,6 +84,7 @@ final class CharcoalBenchmarkReport {
   final String suite;
   final String configuration;
   final String model;
+  final String grader;
   final int totalCases;
   final int evaluatedCases;
   final int passedCases;
@@ -60,6 +97,7 @@ final class CharcoalBenchmarkReport {
     'suite': suite,
     'configuration': configuration,
     'model': model,
+    'grader': grader,
     'totalCases': totalCases,
     'evaluatedCases': evaluatedCases,
     'passedCases': passedCases,
@@ -86,7 +124,12 @@ CharcoalBenchmarkReport evaluateCharcoalBenchmark(
   bool allowPartial = false,
 }) {
   _expectValue(suite, 'schemaVersion', 1, context: 'suite');
-  _expectValue(results, 'schemaVersion', 1, context: 'results');
+  final resultSchemaVersion = results['schemaVersion'];
+  if (resultSchemaVersion != 1 && resultSchemaVersion != 2) {
+    throw const CharcoalBenchmarkFormatException(
+      'results.schemaVersion must equal 1 or 2.',
+    );
+  }
   final suiteName = _requiredString(suite, 'suite', context: 'suite');
   _expectValue(results, 'suite', suiteName, context: 'results');
   _expectValue(
@@ -121,6 +164,9 @@ CharcoalBenchmarkReport evaluateCharcoalBenchmark(
     );
   }
   final model = _requiredString(results, 'model', context: 'results');
+  final grader = resultSchemaVersion == 2
+      ? _requiredString(results, 'grader', context: 'results')
+      : 'manual-v1';
   final suiteCases = _objectList(suite, 'cases', context: 'suite');
   if (suiteCases.isEmpty) {
     throw const CharcoalBenchmarkFormatException('suite.cases must not be empty.');
@@ -172,24 +218,28 @@ CharcoalBenchmarkReport evaluateCharcoalBenchmark(
         'hardFailures for $caseId must not contain duplicates.',
       );
     }
-    final unknownFailures = failures.where(
-      (failure) => !charcoalBenchmarkHardFailures.contains(failure),
-    );
+    final allowedFailures = resultSchemaVersion == 1
+        ? charcoalBenchmarkHardFailures.difference(const <String>{'agent_execution_error'})
+        : charcoalBenchmarkHardFailures;
+    final unknownFailures = failures.where((failure) => !allowedFailures.contains(failure));
     if (unknownFailures.isNotEmpty) {
       throw CharcoalBenchmarkFormatException(
         'Unknown hard failure in $caseId: ${unknownFailures.join(', ')}.',
       );
     }
     final artifacts = _requiredObject(run, 'artifacts', context: 'benchmark run $caseId');
+    final artifactKeys = resultSchemaVersion == 1
+        ? charcoalBenchmarkArtifactKeys
+        : charcoalBenchmarkV2ArtifactKeys;
     final unknownArtifacts = artifacts.keys.where(
-      (key) => !charcoalBenchmarkArtifactKeys.contains(key),
+      (key) => !artifactKeys.contains(key),
     );
     if (unknownArtifacts.isNotEmpty) {
       throw CharcoalBenchmarkFormatException(
         'Unknown artifact in $caseId: ${unknownArtifacts.join(', ')}.',
       );
     }
-    for (final key in charcoalBenchmarkArtifactKeys) {
+    for (final key in artifactKeys) {
       final artifact = artifacts[key];
       if (artifact is! String || artifact.trim().isEmpty) {
         throw CharcoalBenchmarkFormatException(
@@ -225,6 +275,7 @@ CharcoalBenchmarkReport evaluateCharcoalBenchmark(
     suite: suiteName,
     configuration: configuration,
     model: model,
+    grader: grader,
     totalCases: caseIds.length,
     evaluatedCases: evaluated,
     passedCases: passed,

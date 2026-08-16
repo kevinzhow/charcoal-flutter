@@ -13,6 +13,7 @@
 - `charcoal_ui` remains an independent Widgets-layer package without Material/Cupertino dependencies.
 - Public component APIs are platform-neutral; upstream provenance belongs in maintainer source contracts.
 - After a public API or curated example changes, regenerate the catalog and run its `--check` mode.
+- Generate isolated candidate/grader evidence with `fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark-run`; never repair candidates manually.
 - Score recorded Agent Ready evidence with `fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark --results <path>`; complete comparisons may not use `--allow-partial`.
 - Do not add runtime recipe abstractions. Catalog patterns and examples are documentation, not rendering code.
 <!-- charcoal-agent:end -->

@@ -3,6 +3,7 @@ import 'package:args/command_runner.dart';
 import 'package:io/io.dart';
 
 import 'commands/benchmark_command.dart';
+import 'commands/benchmark_run_command.dart';
 import 'commands/component_command.dart';
 import 'commands/doctor_command.dart';
 import 'commands/init_command.dart';
@@ -29,6 +30,7 @@ final class CharcoalCommandRunner extends CommandRunner<int> {
     addCommand(ComponentCommand(environment));
     addCommand(TokenCommand(environment));
     addCommand(BenchmarkCommand(environment));
+    addCommand(BenchmarkRunCommand(environment));
     addCommand(ManifestCommand(environment));
     addCommand(DoctorCommand(environment));
     addCommand(InitCommand(environment));

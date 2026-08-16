@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
+import 'dart_source.dart';
+
 const _upstreamIconPath = 'packages/icon-files/v2/svg';
 const _assetRoot = 'packages/charcoal_icons/assets/v2';
 const _catalogPath = 'packages/charcoal_icons/lib/src/generated/charcoal_icons.g.dart';
@@ -328,8 +330,8 @@ String _renderCatalog(List<_IconSource> icons) {
       output
         ..writeln('  /// `${icon.name}` from the upstream ${entry.key} catalog.')
         ..writeln('  static const ${_identifier(icon.name)} = CharcoalIconData(')
-        ..writeln("    assetName: '${icon.assetName}',")
-        ..writeln("    name: '${icon.name}',")
+        ..writeln('    assetName: ${dartStringLiteral(icon.assetName)},')
+        ..writeln('    name: ${dartStringLiteral(icon.name)},')
         ..writeln('    nativeSize: ${icon.size},')
         ..writeln('    style: CharcoalIconStyle.${icon.style},')
         ..writeln('  );');
@@ -397,7 +399,10 @@ Future<String> _formatDart(String source) async {
   try {
     final file = File('${temporary.path}/catalog.dart');
     await file.writeAsString(source);
-    final result = await Process.run(Platform.resolvedExecutable, <String>['format', file.path]);
+    final result = await Process.run(
+      Platform.resolvedExecutable,
+      dartFormatArguments(<String>[file.path]),
+    );
     if (result.exitCode != 0) {
       throw IconPipelineException('dart format failed: ${result.stderr}');
     }

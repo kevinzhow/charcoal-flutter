@@ -17,7 +17,7 @@ fvm dart run packages/charcoal_mcp/bin/charcoal_mcp.dart
 Or, when consumed as a package executable:
 
 ```sh
-dart run charcoal_mcp:charcoal-mcp
+dart run charcoal_mcp:charcoal_mcp
 ```
 
 Available read-only tools:

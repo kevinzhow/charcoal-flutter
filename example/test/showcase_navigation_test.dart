@@ -140,6 +140,7 @@ void main() {
 
     await tester.pumpWidget(const CharcoalShowcaseApp());
     const destinations = <String, String>{
+      'Agent Ready apps': 'Agent Ready app examples',
       'Colors': 'Color catalog',
       'Typography': 'Typography catalog',
       'Dimensions': 'Dimension catalog',
@@ -200,6 +201,7 @@ void main() {
     );
 
     const destinations = <String, String>{
+      'Agent Ready apps': 'Agent Ready app examples',
       'Colors': 'Color catalog',
       'Typography': 'Typography catalog',
       'Dimensions': 'Dimension catalog',

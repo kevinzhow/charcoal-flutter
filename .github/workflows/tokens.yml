@@ -20,7 +20,7 @@ jobs:
       - run: flutter pub get
       - run: dart run tool/tokens.dart check
       - run: dart run tool/icons.dart check
-      - run: dart run packages/charcoal_catalog/tool/generate_catalog.dart --check
+      - run: dart run tool/agent_ready.dart check
       - run: dart analyze --fatal-infos
       - run: dart test
       - run: dart test packages/charcoal_catalog

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:test/test.dart';
 
+import '../tool/src/dart_source.dart';
 import '../tool/src/dart_token_generator.dart';
 import '../tool/src/token_diff.dart';
 import '../tool/src/token_model.dart';
@@ -116,6 +117,25 @@ void main() {
       expect(tokenIdentifier('container/on-img/default-a'), 'containerOnImgDefaultA');
       expect(tokenIdentifier('dark/blue/-10'), 'darkBlueMinus10');
       expect(tokenIdentifier('0'), 'value0');
+    });
+
+    test('escapes generated Dart string literals', () {
+      expect(
+        dartStringLiteral("O'Brien \\\$family\nnext"),
+        r"'O\'Brien \\\$family\nnext'",
+      );
+      expect(
+        dartFormatArguments(<String>['generated.dart']),
+        containsAllInOrder(<String>[
+          '--language-version',
+          '3.13',
+          '--page-width',
+          '100',
+          '--trailing-commas',
+          'preserve',
+          'generated.dart',
+        ]),
+      );
     });
   });
 

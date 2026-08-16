@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://charcoal-flutter.dev/schemas/agent-grader-request-v1.json",
+  "title": "Charcoal benchmark grader request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "suite",
+    "configuration",
+    "candidateModel",
+    "grader",
+    "case",
+    "evidence",
+    "lockedScores",
+    "lockedHardFailures",
+    "responsePath"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "suite": { "type": "string", "minLength": 1 },
+    "configuration": { "type": "string", "minLength": 1 },
+    "candidateModel": { "type": "string", "minLength": 1 },
+    "grader": { "type": "string", "minLength": 1 },
+    "case": { "$ref": "../benchmarks/v1.schema.json#/$defs/case" },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "toolTranscript", "analysisOutput", "testOutput"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "toolTranscript": { "type": "string", "minLength": 1 },
+        "analysisOutput": { "type": "string", "minLength": 1 },
+        "testOutput": { "type": "string", "minLength": 1 }
+      }
+    },
+    "lockedScores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compileAndTests"],
+      "properties": {
+        "compileAndTests": { "type": "number", "minimum": 0, "maximum": 30 }
+      }
+    },
+    "lockedHardFailures": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "responsePath": { "type": "string", "minLength": 1 }
+  }
+}

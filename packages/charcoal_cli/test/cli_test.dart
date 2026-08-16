@@ -107,8 +107,66 @@ void main() {
       expect(init['mutatesFiles'], isTrue);
       expect(
         commandRecords.map((command) => command['name']),
-        containsAll(<String>['search', 'component', 'token', 'benchmark', 'doctor', 'manifest']),
+        containsAll(<String>[
+          'search',
+          'component',
+          'token',
+          'benchmark',
+          'benchmark-run',
+          'doctor',
+          'manifest',
+        ]),
       );
+      final benchmarkRun = commandRecords.firstWhere(
+        (command) => command['name'] == 'benchmark-run',
+      );
+      expect(benchmarkRun['mutatesFiles'], isTrue);
+    });
+
+    test('benchmark-run reports all missing run inputs', () async {
+      final errors = StringBuffer();
+
+      final code = await runCharcoalCli(
+        <String>['benchmark-run', '--json'],
+        output: StringBuffer(),
+        errorOutput: errors,
+      );
+      final response = jsonDecode(errors.toString()) as Map<String, Object?>;
+
+      expect(code, 64);
+      expect(response['code'], 'ERR_INVALID_ARGUMENT');
+      expect(response['error'], contains('--configuration'));
+      expect(response['error'], contains('--output'));
+      expect(response['error'], isNot(contains('--grader-command')));
+    });
+
+    test('benchmark-run custom adapter requires both commands', () async {
+      final errors = StringBuffer();
+
+      final code = await runCharcoalCli(
+        <String>[
+          'benchmark-run',
+          '--adapter',
+          'custom',
+          '--configuration',
+          'baseline',
+          '--model',
+          'candidate',
+          '--grader',
+          'grader',
+          '--output',
+          'out',
+          '--json',
+        ],
+        output: StringBuffer(),
+        errorOutput: errors,
+      );
+      final response = jsonDecode(errors.toString()) as Map<String, Object?>;
+
+      expect(code, 64);
+      expect(response['code'], 'ERR_INVALID_ARGUMENT');
+      expect(response['error'], contains('--executor'));
+      expect(response['error'], contains('--grader-command'));
     });
   });
 

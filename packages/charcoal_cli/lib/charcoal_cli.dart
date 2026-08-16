@@ -8,15 +8,48 @@ import 'src/runner.dart';
 export 'package:charcoal_catalog/charcoal_catalog.dart'
     show CharcoalCatalogSearch, CharcoalSearchResult, CharcoalTokenSearchResult;
 
+export 'src/agent_instructions.dart'
+    show
+        buildCharcoalManagedBlock,
+        charcoalAgentEndMarker,
+        charcoalAgentStartMarker,
+        charcoalManagedBlockPattern;
 export 'src/benchmark.dart'
     show
         CharcoalBenchmarkFormatException,
         CharcoalBenchmarkReport,
         charcoalBenchmarkArtifactKeys,
         charcoalBenchmarkConfigurations,
+        charcoalBenchmarkGraderHardFailures,
+        charcoalBenchmarkGraderScoreGuidance,
+        charcoalBenchmarkGraderScoreLimits,
         charcoalBenchmarkHardFailures,
         charcoalBenchmarkScoreLimits,
+        charcoalBenchmarkV2ArtifactKeys,
         evaluateCharcoalBenchmark;
+export 'src/benchmark_runner.dart'
+    show
+        CharcoalAutomatedAssessment,
+        CharcoalBenchmarkExecution,
+        CharcoalBenchmarkInvocation,
+        CharcoalBenchmarkProcessResult,
+        CharcoalBenchmarkProcessRunner,
+        CharcoalBenchmarkRunException,
+        CharcoalBenchmarkRunOptions,
+        CharcoalBenchmarkRunner,
+        assessCharcoalBenchmarkCandidate;
+export 'src/codex_benchmark_adapter.dart'
+    show
+        CharcoalCodexAdapterException,
+        CharcoalCodexAdapterOptions,
+        CharcoalCodexProcessInvocation,
+        buildCharcoalCodexExecutorInvocation,
+        buildCharcoalCodexGraderInvocation,
+        charcoalCodexAdapterVersion,
+        charcoalCodexReasoningEfforts,
+        parseCharcoalCodexAdapterArguments,
+        readCharcoalCodexRequest,
+        runCharcoalCodexProcess;
 
 /// Runs the Charcoal CLI without terminating the host process.
 ///

@@ -118,7 +118,10 @@ void _verifyArtifactFiles(Map<String, Object?> results, {required Directory rela
 
 String _reportText(CharcoalBenchmarkReport report) {
   final buffer = StringBuffer()
-    ..writeln('${report.suite} — ${report.configuration} / ${report.model}')
+    ..writeln(
+      '${report.suite} — ${report.configuration} / ${report.model} '
+      '(grader: ${report.grader})',
+    )
     ..writeln(
       '${report.passedCases}/${report.evaluatedCases} passed; '
       'average ${report.averageScore.toStringAsFixed(2)}/100',

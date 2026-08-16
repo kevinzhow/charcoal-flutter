@@ -8,6 +8,7 @@
 .pub/
 build/
 coverage/
+.artifacts/
 **/.widget_preview/
 
 # Editors and operating systems

@@ -28,6 +28,7 @@ jobs:
         run: |
           dart run tool/tokens.dart update --ref "${{ inputs.ref || 'main' }}"
           dart run tool/icons.dart update --ref "${{ inputs.ref || 'main' }}"
+          dart run tool/agent_ready.dart generate
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - run: dart format --output=none --set-exit-if-changed .

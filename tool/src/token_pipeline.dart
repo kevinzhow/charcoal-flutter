@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 
+import 'dart_source.dart';
 import 'dart_token_generator.dart';
 import 'token_diff.dart';
 import 'token_model.dart';
@@ -289,16 +290,10 @@ Future<void> _formatDartFiles(List<String> paths) async {
   if (paths.isEmpty) {
     return;
   }
-  final result = await Process.run(Platform.resolvedExecutable, <String>[
-    'format',
-    '--language-version',
-    '3.13',
-    '--page-width',
-    '100',
-    '--trailing-commas',
-    'preserve',
-    ...paths,
-  ]);
+  final result = await Process.run(
+    Platform.resolvedExecutable,
+    dartFormatArguments(paths),
+  );
   if (result.exitCode != 0) {
     throw TokenGenerationException('dart format failed:\n${result.stdout}\n${result.stderr}');
   }

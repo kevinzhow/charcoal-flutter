@@ -16,6 +16,9 @@ workspace:
   - packages/charcoal_ui
 
 dev_dependencies:
+  charcoal_cli:
+    path: packages/charcoal_cli
   crypto: ^3.0.6
   lints: ^6.0.0
+  path: ^1.9.1
   test: ^1.26.0

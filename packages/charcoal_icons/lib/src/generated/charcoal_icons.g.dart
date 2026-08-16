@@ -4672,7 +4672,9 @@ abstract final class CharcoalColorIcons {
   );
 
   /// Every icon in this catalog, ordered by upstream name.
-  static const values = <CharcoalIconData>[colorMixture];
+  static const values = <CharcoalIconData>[
+    colorMixture,
+  ];
 }
 
 /// Charcoal V2 20/regular icons.
@@ -4686,7 +4688,9 @@ abstract final class CharcoalIcons20 {
   );
 
   /// Every icon in this catalog, ordered by upstream name.
-  static const values = <CharcoalIconData>[x];
+  static const values = <CharcoalIconData>[
+    x,
+  ];
 }
 
 /// Charcoal V2 20/solid icons.
@@ -4700,7 +4704,9 @@ abstract final class CharcoalSolidIcons20 {
   );
 
   /// Every icon in this catalog, ordered by upstream name.
-  static const values = <CharcoalIconData>[x];
+  static const values = <CharcoalIconData>[
+    x,
+  ];
 }
 
 /// Charcoal V2 16/regular icons.

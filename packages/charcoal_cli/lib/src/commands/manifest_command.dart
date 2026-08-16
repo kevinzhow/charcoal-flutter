@@ -49,6 +49,14 @@ final class ManifestCommand extends CharcoalCommand {
           'mutatesFiles': false,
         },
         <String, Object?>{
+          'name': 'benchmark-run',
+          'usage':
+              'charcoal benchmark-run --configuration <name> --model <id> --grader <id> '
+              '--output <new-directory> [--adapter codex|custom]',
+          'responseType': 'benchmarkRun',
+          'mutatesFiles': true,
+        },
+        <String, Object?>{
           'name': 'doctor',
           'usage': 'charcoal doctor [--json]',
           'responseType': 'doctor',
@@ -70,6 +78,7 @@ final class ManifestCommand extends CharcoalCommand {
       'errors': <String>[
         'ERR_INVALID_ARGUMENT',
         'ERR_BENCHMARK_INVALID',
+        'ERR_BENCHMARK_RUN_FAILED',
         'ERR_INPUT_NOT_FOUND',
         'ERR_UNKNOWN_COMPONENT',
         'ERR_UNSAFE_PATH',
@@ -81,7 +90,7 @@ final class ManifestCommand extends CharcoalCommand {
       text:
           'Charcoal CLI $charcoalCliVersion for ${charcoalCatalog.libraryName} '
           '${charcoalCatalog.libraryVersion}\n'
-          'Commands: search, component, token, benchmark, doctor, init, manifest',
+          'Commands: search, component, token, benchmark, benchmark-run, doctor, init, manifest',
     );
     return ExitCode.success.code;
   }

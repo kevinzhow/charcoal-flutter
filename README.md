@@ -162,6 +162,11 @@ fvm dart run packages/charcoal_cli/bin/charcoal.dart init --agent codex
 
 # Validate and score a complete Agent Ready evidence record.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark --results path/to/results.json
+
+# Or execute an isolated candidate + independent grader pilot with the bundled Codex adapter.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark-run \
+  --configuration protocol --model gpt-5.6-sol --grader gpt-5.6-sol \
+  --case exact-version-api --output .artifacts/agent-ready/protocol-pilot
 ```
 
 For protocol clients, `charcoal_mcp` exposes the same search, component, token, example, and status
@@ -174,11 +179,13 @@ fvm dart run packages/charcoal_mcp/bin/charcoal_mcp.dart
 Regenerate after changing a public component API or a curated example:
 
 ```bash
-fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart
-fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart --check
+fvm dart run tool/agent_ready.dart generate
+fvm dart run tool/agent_ready.dart check
 ```
 
-The CLI and MCP server are adapters over the Catalog, not separate documentation sources.
+This single pipeline regenerates the Catalog and synchronizes the benchmark version, managed
+contributor instructions, and Codex grader schema. The CLI and MCP server are adapters over the
+Catalog, not separate documentation sources.
 Executable examples remain ordinary Flutter code; they are reference compositions rather than a
 runtime recipe layer. See [Agent readiness](agent/README.md) for the benchmark, evidence schema,
 and rubric.
@@ -237,6 +244,11 @@ fvm dart run tool/icons.dart check
 Token sync metadata lives in `tokens/manifest.json`; icon sync metadata lives in
 `icons/manifest.json`. Both record exact upstream commits and source hashes.
 
+The token and icon compilers are standalone deterministic generators because their inputs are
+pinned external JSON/SVG assets rather than annotations on consumer Dart libraries. Generated
+values pass through a shared Dart-literal encoder and a pinned `dart format` contract; drift checks
+regenerate into temporary files and compare exact bytes before CI accepts a change.
+
 ## Development and previews
 
 ```bash
@@ -248,7 +260,7 @@ fvm dart test packages/charcoal_cli
 fvm dart test packages/charcoal_mcp
 fvm flutter test packages/charcoal_ui/test example/test
 fvm dart run tool/tokens.dart check
-fvm dart run packages/charcoal_catalog/tool/generate_catalog.dart --check
+fvm dart run tool/agent_ready.dart check
 
 cd packages/charcoal_ui
 fvm flutter widget-preview start

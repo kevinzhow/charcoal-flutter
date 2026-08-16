@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://charcoal-flutter.dev/schemas/agent-executor-request-v1.json",
+  "title": "Charcoal benchmark executor request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "suite",
+    "configuration",
+    "model",
+    "case",
+    "project",
+    "tools"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "suite": { "type": "string", "minLength": 1 },
+    "configuration": {
+      "enum": ["baseline", "instructions", "cli", "protocol"]
+    },
+    "model": { "type": "string", "minLength": 1 },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "prompt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "prompt": { "type": "string", "minLength": 1 }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root", "candidatePath", "allowedWritePaths", "verificationCommands"],
+      "properties": {
+        "root": { "type": "string", "minLength": 1 },
+        "candidatePath": { "type": "string", "minLength": 1 },
+        "instructionsPath": { "type": ["string", "null"] },
+        "allowedWritePaths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "verificationCommands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cli": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "mcp": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

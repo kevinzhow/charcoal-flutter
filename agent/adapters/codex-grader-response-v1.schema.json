@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Charcoal Codex grader structured output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "caseId", "scores", "hardFailures", "rationale"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "caseId": { "type": "string" },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apiAccuracy",
+        "charcoalComposition",
+        "tokenAndLayout",
+        "accessibility",
+        "responsiveness",
+        "verification"
+      ],
+      "properties": {
+        "apiAccuracy": { "type": "number", "minimum": 0, "maximum": 20 },
+        "charcoalComposition": { "type": "number", "minimum": 0, "maximum": 15 },
+        "tokenAndLayout": { "type": "number", "minimum": 0, "maximum": 10 },
+        "accessibility": { "type": "number", "minimum": 0, "maximum": 10 },
+        "responsiveness": { "type": "number", "minimum": 0, "maximum": 10 },
+        "verification": { "type": "number", "minimum": 0, "maximum": 5 }
+      }
+    },
+    "hardFailures": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["fabricated_charcoal_api", "silent_platform_substitution"]
+      }
+    },
+    "rationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apiAccuracy",
+        "charcoalComposition",
+        "tokenAndLayout",
+        "accessibility",
+        "responsiveness",
+        "verification"
+      ],
+      "properties": {
+        "apiAccuracy": { "type": "string" },
+        "charcoalComposition": { "type": "string" },
+        "tokenAndLayout": { "type": "string" },
+        "accessibility": { "type": "string" },
+        "responsiveness": { "type": "string" },
+        "verification": { "type": "string" }
+      }
+    }
+  }
+}

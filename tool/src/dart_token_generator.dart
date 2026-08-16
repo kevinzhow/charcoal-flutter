@@ -1,3 +1,4 @@
+import 'dart_source.dart';
 import 'token_model.dart';
 
 final class GeneratedArtifact {
@@ -82,7 +83,8 @@ final class DartTokenGenerator {
       ..writeln('  List<CharcoalColorTokenEntry> get entries => <CharcoalColorTokenEntry>[');
     for (final key in semanticKeys) {
       output.writeln(
-        "    CharcoalColorTokenEntry(path: 'color.$key', value: ${tokenIdentifier(key)}),",
+        '    CharcoalColorTokenEntry('
+        'path: ${dartStringLiteral('color.$key')}, value: ${tokenIdentifier(key)}),',
       );
     }
     output
@@ -117,7 +119,8 @@ final class DartTokenGenerator {
     );
     for (final key in primitiveKeys) {
       output.writeln(
-        "    CharcoalColorTokenEntry(path: 'color.$key', value: ${tokenIdentifier(key)}),",
+        '    CharcoalColorTokenEntry('
+        'path: ${dartStringLiteral('color.$key')}, value: ${tokenIdentifier(key)}),',
       );
     }
     output
@@ -139,7 +142,8 @@ final class DartTokenGenerator {
     );
     for (final key in brandKeys) {
       output.writeln(
-        "    CharcoalColorTokenEntry(path: 'brand-color.$key', value: ${tokenIdentifier(key)}),",
+        '    CharcoalColorTokenEntry('
+        'path: ${dartStringLiteral('brand-color.$key')}, value: ${tokenIdentifier(key)}),',
       );
     }
     output
@@ -272,7 +276,8 @@ final class DartTokenGenerator {
       );
     for (final key in keys) {
       output.writeln(
-        "    CharcoalDimensionTokenEntry(path: '$category.$key', value: ${tokenIdentifier(key)}),",
+        '    CharcoalDimensionTokenEntry('
+        'path: ${dartStringLiteral('$category.$key')}, value: ${tokenIdentifier(key)}),',
       );
     }
     output
@@ -443,7 +448,9 @@ final class DartTokenGenerator {
       );
     for (final key in keys) {
       output.writeln(
-        "    CharcoalTypographyTokenEntry<$dartType>(path: 'text.$category/$key', value: ${tokenIdentifier(key)}),",
+        '    CharcoalTypographyTokenEntry<$dartType>('
+        'path: ${dartStringLiteral('text.$category/$key')}, '
+        'value: ${tokenIdentifier(key)}),',
       );
     }
     output
@@ -558,7 +565,7 @@ String _stringExpression(Object value, {required String path}) {
   if (value is! String) {
     throw TokenGenerationException('$path must be a string.');
   }
-  return "'${value.replaceAll(r'\', r'\\').replaceAll("'", r"\'")}'";
+  return dartStringLiteral(value);
 }
 
 const _generatedHeader = '''// GENERATED CODE - DO NOT MODIFY BY HAND.

@@ -25,6 +25,7 @@ void main() {
     expect(report.passedCases, 16);
     expect(report.averageScore, 100);
     expect(report.missingCases, isEmpty);
+    expect(report.grader, 'manual-v1');
   });
 
   test('hard failures override an otherwise passing score', () {
@@ -38,6 +39,21 @@ void main() {
     expect(report.failedCases, 1);
     expect(report.cases.first['score'], 100);
     expect(report.cases.first['passed'], isFalse);
+  });
+
+  test('accepts automated v2 records with grader identity and evaluation evidence', () {
+    final results = _results(suite)
+      ..['schemaVersion'] = 2
+      ..['grader'] = 'independent-grader-1';
+    for (final run in (results['runs']! as List<Object?>).cast<Map<String, Object?>>()) {
+      final artifacts = run['artifacts']! as Map<String, Object?>;
+      artifacts['evaluationOutput'] = 'evaluation.json';
+    }
+
+    final report = evaluateCharcoalBenchmark(suite, results);
+
+    expect(report.grader, 'independent-grader-1');
+    expect(report.passedCases, 16);
   });
 
   test('partial records require explicit permission', () {

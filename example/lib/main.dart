@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'agent_examples/app_examples_page.dart';
+
 void main() => runCharcoalShowcase();
 
 void runCharcoalShowcase() => runApp(const CharcoalShowcaseApp());
@@ -46,6 +48,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   static const _desktopLayoutMinWidth = 1024.0;
   static const _navigationOrder = <String>[
     'Overview',
+    'Agent Ready apps',
     'Colors',
     'Typography',
     'Dimensions',
@@ -274,6 +277,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   }
 
   Widget _buildSelectedPage() => switch (_navItem) {
+    'Agent Ready apps' => const AgentAppExamplesPage(),
     'Colors' => const _ColorsPage(),
     'Typography' => const _TypographyPage(),
     'Dimensions' => const _DimensionsPage(),
@@ -1500,7 +1504,13 @@ final class _Sidebar extends StatelessWidget {
   const _Sidebar({required this.selected, required this.onSelected});
 
   static const _sections = <(String, List<(String, CharcoalIconData)>)>[
-    ('', <(String, CharcoalIconData)>[('Overview', CharcoalIcons.home)]),
+    (
+      '',
+      <(String, CharcoalIconData)>[
+        ('Overview', CharcoalIcons.home),
+        ('Agent Ready apps', CharcoalIcons.layout),
+      ],
+    ),
     (
       'FOUNDATION',
       <(String, CharcoalIconData)>[
