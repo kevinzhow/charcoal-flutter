@@ -68,11 +68,11 @@ void main() {
       tester,
       find.descendant(
         of: find.byKey(const ValueKey<String>('agent-social-feed-control')),
-        matching: find.text('Discover'),
+        matching: find.text('For you'),
       ),
     );
     expect(
-      find.byKey(const ValueKey<String>('agent-social-feed-discover')),
+      find.byKey(const ValueKey<String>('agent-social-feed-forYou')),
       findsOneWidget,
     );
     expect(find.text('Noa Watanabe'), findsOneWidget);

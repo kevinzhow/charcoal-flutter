@@ -101,7 +101,7 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
         const _AgentReadyProductionBanner(),
         SizedBox(height: space.layout50),
         SizedBox(key: _exampleBodyKey, height: theme.dimensions.borderWidth.m),
-        _AppCatalogNavigation(
+        _GalleryContextControls(
           inSimulation: _hasSelectedApp,
           onAllAppsPressed: _closeSelectedApp,
         ),
@@ -153,14 +153,6 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
 
   Widget _buildSelectedApp(CharcoalThemeData theme, double sectionGap) {
     final mobileApp = _selectedMobileApp;
-    final title = _asterSelected ? 'Aster' : mobileApp!.title;
-    final type = _asterSelected ? 'CREATIVE WORKSPACE' : mobileApp!.type;
-    final description = _asterSelected
-        ? 'A responsive creative workspace with studio, project, and account flows.'
-        : mobileApp!.description;
-    final interactionSummary = _asterSelected
-        ? 'Navigate pages, search projects, edit profile fields, and save settings.'
-        : mobileApp!.interactionSummary;
     return Column(
       key: ValueKey<String>(
         _asterSelected
@@ -169,13 +161,6 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
       ),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        _SimulationHeader(
-          description: description,
-          interactionSummary: interactionSummary,
-          title: title,
-          type: type,
-        ),
-        SizedBox(height: sectionGap),
         if (_asterSelected)
           _buildAsterSimulation(theme, sectionGap)
         else
@@ -401,74 +386,8 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
   }
 }
 
-final class _SimulationHeader extends StatelessWidget {
-  const _SimulationHeader({
-    required this.description,
-    required this.interactionSummary,
-    required this.title,
-    required this.type,
-  });
-
-  final String description;
-  final String interactionSummary;
-  final String title;
-  final String type;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          '$title · $type',
-          style: theme.textStyles.headingL.copyWith(
-            color: theme.colors.textDefault,
-          ),
-        ),
-        SizedBox(height: space.component20),
-        Text(
-          description,
-          style: theme.textStyles.body.copyWith(
-            color: theme.colors.textSecondaryDefault,
-          ),
-        ),
-        SizedBox(height: space.component30),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-            color: theme.colors.containerSecondaryDefault,
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(space.component30),
-            child: Row(
-              children: <Widget>[
-                CharcoalIcon(
-                  CharcoalIcons.click,
-                  color: theme.colors.iconDefault,
-                ),
-                SizedBox(width: space.component20),
-                Expanded(
-                  child: Text(
-                    'LIVE SIMULATION · $interactionSummary',
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-final class _AppCatalogNavigation extends StatelessWidget {
-  const _AppCatalogNavigation({
+final class _GalleryContextControls extends StatelessWidget {
+  const _GalleryContextControls({
     required this.inSimulation,
     required this.onAllAppsPressed,
   });

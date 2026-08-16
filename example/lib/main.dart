@@ -587,13 +587,49 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: <Widget>[
       const _PageIntro(
-        description: 'Segmented selection, small and medium pagination, and both carousel presentation modes.',
+        description: 'Page-level navigation, segmented selection, pagination, and both carousel presentation modes.',
         eyebrow: 'COMPONENTS · NAVIGATION',
         title: 'Navigation and paging',
       ),
       const SizedBox(height: 24),
       _CatalogGrid(
         children: <Widget>[
+          _ShowcaseCard(
+            description: 'A centered page title with balanced back and contextual action slots.',
+            eyebrow: 'NAVIGATION BAR',
+            title: 'NavigationBar',
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: CharcoalTheme.of(context).colors.borderSecondary,
+                ),
+                borderRadius: BorderRadius.circular(
+                  CharcoalTheme.of(context).dimensions.radius.m,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(
+                  CharcoalTheme.of(context).dimensions.radius.m,
+                ),
+                child: CharcoalNavigationBar(
+                  leading: const CharcoalIconButton(
+                    icon: CharcoalIcon(CharcoalIcons.chevronLeft),
+                    onPressed: _noop,
+                    semanticLabel: 'Back to messages',
+                    size: CharcoalIconButtonSize.small,
+                  ),
+                  semanticLabel: 'Conversation navigation example',
+                  title: const Text('Aki Kondo'),
+                  trailing: const CharcoalIconButton(
+                    icon: CharcoalIcon(CharcoalIcons.dotsHorizontal),
+                    onPressed: _noop,
+                    semanticLabel: 'Conversation actions',
+                    size: CharcoalIconButtonSize.small,
+                  ),
+                ),
+              ),
+            ),
+          ),
           _ShowcaseCard(
             description: 'Intrinsic and full-width arrangements with a disabled segment.',
             eyebrow: 'SEGMENTED CONTROL',

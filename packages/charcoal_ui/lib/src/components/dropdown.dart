@@ -153,7 +153,7 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
       return;
     }
     if (_isOpen) {
-      _close(restoreFocus: true);
+      _close();
     } else {
       _open();
     }
@@ -211,16 +211,18 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
     });
     if (restoreFocus && _enabled) {
       _focusNode.requestFocus();
+    } else if (_focusNode.hasFocus) {
+      _focusNode.unfocus();
     }
   }
 
-  void _select(int index) {
+  void _select(int index, {bool restoreFocus = false}) {
     final option = widget.options[index];
     if (!_enabled || !option.enabled) {
       return;
     }
     widget.onChanged!(option.value);
-    _close(restoreFocus: true);
+    _close(restoreFocus: restoreFocus);
   }
 
   void _moveActive(int delta) {
@@ -284,7 +286,7 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
       if (_isOpen) {
         final activeIndex = _activeIndex;
         if (activeIndex != null) {
-          _select(activeIndex);
+          _select(activeIndex, restoreFocus: true);
         }
       } else {
         _open();
@@ -372,6 +374,10 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
                     ? theme.colors.borderNegative
                     : theme.colors.borderFocusLegacy;
                 return AnimatedContainer(
+                  // Expanded state is persistent UI state, not a transient
+                  // hover tween. Switch it atomically when the menu opens or
+                  // closes so the pressed surface cannot linger.
+                  key: ValueKey<bool>(_isOpen),
                   duration: CharcoalMotion.resolveDuration(
                     context,
                     _DropdownSpec.animationDuration,

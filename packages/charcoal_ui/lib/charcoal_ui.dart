@@ -17,6 +17,7 @@ export 'src/components/icon_button.dart';
 export 'src/components/loading_spinner.dart';
 export 'src/components/modal.dart';
 export 'src/components/multi_select.dart';
+export 'src/components/navigation_bar.dart';
 export 'src/components/navigation_item.dart';
 export 'src/components/overlay_position.dart';
 export 'src/components/pagination.dart';

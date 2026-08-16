@@ -1,5 +1,6 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 enum AgentMobileApp { social, commerce, wallet, habits }
@@ -17,13 +18,6 @@ extension AgentMobileAppMetadata on AgentMobileApp {
     AgentMobileApp.commerce => '02',
     AgentMobileApp.wallet => '03',
     AgentMobileApp.habits => '04',
-  };
-
-  String get interactionSummary => switch (this) {
-    AgentMobileApp.social => 'Switch feeds, like posts, and save content.',
-    AgentMobileApp.commerce => 'Search, change categories, and save products.',
-    AgentMobileApp.wallet => 'Hide balances and explore finance shortcuts.',
-    AgentMobileApp.habits => 'Complete habits and update daily progress.',
   };
 
   String get keyName => switch (this) {
@@ -326,7 +320,11 @@ final class _AgentReadyBadge extends StatelessWidget {
   }
 }
 
-enum _SocialFeed { following, discover }
+enum _SocialFeed { following, forYou }
+
+enum _BloomAudience { circle, everyone }
+
+enum _BloomProfileTab { posts, saved }
 
 final class _SocialPostData {
   const _SocialPostData({
@@ -358,7 +356,7 @@ const _socialPosts = <_SocialFeed, _SocialPostData>{
     meta: '12 min · Kamakura',
     tone: 0,
   ),
-  _SocialFeed.discover: _SocialPostData(
+  _SocialFeed.forYou: _SocialPostData(
     author: 'Noa Watanabe',
     comments: 41,
     copy: 'A tiny paper city built from yesterday’s train tickets.',
@@ -369,6 +367,43 @@ const _socialPosts = <_SocialFeed, _SocialPostData>{
   ),
 };
 
+const _bloomTopics = <({String description, String label})>[
+  (label: 'Quiet color', description: 'Soft palettes and slow observations'),
+  (label: 'Paper worlds', description: 'Collage, models, and tactile studies'),
+  (label: 'Tiny gardens', description: 'Small spaces growing with care'),
+];
+
+const _bloomCreators =
+    <({String handle, String initials, String name, int tone})>[
+      (name: 'Noa Watanabe', handle: '@noa.paper', initials: 'NO', tone: 2),
+      (name: 'Emi Sato', handle: '@emi.grows', initials: 'EM', tone: 3),
+    ];
+
+const _bloomConversations =
+    <({String initials, String name, String preview, String time, int tone})>[
+      (
+        name: 'Aki Kondo',
+        initials: 'AK',
+        preview: 'That rain-cloud palette is beautiful.',
+        time: '12m',
+        tone: 1,
+      ),
+      (
+        name: 'Noa Watanabe',
+        initials: 'NO',
+        preview: 'I left the folding notes in the shared folder.',
+        time: 'Tue',
+        tone: 2,
+      ),
+      (
+        name: 'Emi Sato',
+        initials: 'EM',
+        preview: 'The balcony mint finally has new leaves.',
+        time: 'Sun',
+        tone: 3,
+      ),
+    ];
+
 final class _SocialPhoneDemo extends StatefulWidget {
   const _SocialPhoneDemo();
 
@@ -377,17 +412,55 @@ final class _SocialPhoneDemo extends StatefulWidget {
 }
 
 final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
+  final TextEditingController _commentController = TextEditingController();
+  final TextEditingController _discoverController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+  final TextEditingController _postController = TextEditingController();
+  final TextEditingController _profileBioController = TextEditingController();
+  final TextEditingController _profileNameController = TextEditingController();
+  final TextEditingController _storyReplyController = TextEditingController();
   _SocialFeed _feed = _SocialFeed.following;
   final Set<_SocialFeed> _likedFeeds = <_SocialFeed>{};
+  final Set<_SocialFeed> _mutedFeeds = <_SocialFeed>{};
   final Set<_SocialFeed> _savedFeeds = <_SocialFeed>{};
+  final Set<String> _followedCreators = <String>{};
+  final Map<String, List<String>> _sentMessages = <String, List<String>>{};
+  final Set<String> _unreadConversations = <String>{'Aki Kondo'};
+  _BloomAudience _audience = _BloomAudience.circle;
+  _BloomProfileTab _profileTab = _BloomProfileTab.posts;
+  String? _activeStory;
   String _commentDraft = '';
   String? _conversation;
-  String? _sentMessage;
+  String _discoverQuery = '';
+  String _messageDraft = '';
+  String _profileBio = 'Collecting overlooked color in everyday places.';
+  String _profileName = 'Mina Aoki';
+  String? _publishedPost;
   String? _status;
+  String _storyReplyDraft = '';
   int _commentDelta = 0;
+  int _profileDraftTone = 2;
+  int _profileTone = 2;
   int _selectedBottomIndex = 0;
   bool _commentComposerOpen = false;
+  bool _composerOpen = false;
+  bool _editProfileOpen = false;
+  bool _notificationsOpen = false;
+  bool _notificationsUnread = true;
   bool _postActionsOpen = false;
+  bool _publishAttempted = false;
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    _discoverController.dispose();
+    _messageController.dispose();
+    _postController.dispose();
+    _profileBioController.dispose();
+    _profileNameController.dispose();
+    _storyReplyController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -408,27 +481,207 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
       content: _buildSelectedPage(theme),
       onBottomItemSelected: (index) => setState(() {
         _selectedBottomIndex = index;
+        _closeNestedRoute();
         _status = null;
       }),
       selectedBottomIndex: _selectedBottomIndex,
-      trailing: CharcoalIconButton(
-        icon: const CharcoalIcon(CharcoalIcons.bell),
-        onPressed: () => setState(
-          () => _status = 'You are all caught up. No new notifications.',
-        ),
-        semanticLabel: 'Bloom notifications',
-        size: CharcoalIconButtonSize.small,
-      ),
+      navigationBar: _buildNavigationBar(theme),
+      trailing: const SizedBox.shrink(),
     );
   }
 
-  Widget _buildSelectedPage(CharcoalThemeData theme) =>
-      switch (_selectedBottomIndex) {
-        0 => _buildFeed(theme),
-        1 => _buildDiscover(theme),
-        2 => _buildMessages(theme),
-        _ => _buildProfile(theme),
-      };
+  void _closeNestedRoute() {
+    _activeStory = null;
+    _commentComposerOpen = false;
+    _composerOpen = false;
+    _conversation = null;
+    _editProfileOpen = false;
+    _notificationsOpen = false;
+    _postActionsOpen = false;
+    _publishAttempted = false;
+  }
+
+  void _openComposer() {
+    setState(() {
+      _closeNestedRoute();
+      _composerOpen = true;
+      _postController.clear();
+      _publishAttempted = false;
+      _audience = _BloomAudience.circle;
+      _status = null;
+    });
+  }
+
+  void _openProfileEditor() {
+    setState(() {
+      _closeNestedRoute();
+      _editProfileOpen = true;
+      _profileNameController.text = _profileName;
+      _profileBioController.text = _profileBio;
+      _profileDraftTone = _profileTone;
+      _status = null;
+    });
+  }
+
+  void _publishPost() {
+    final copy = _postController.text.trim();
+    setState(() {
+      _publishAttempted = true;
+      if (copy.isEmpty) return;
+      _publishedPost = copy;
+      _composerOpen = false;
+      _selectedBottomIndex = 0;
+      _feed = _SocialFeed.following;
+      _status = _audience == _BloomAudience.circle
+          ? 'Shared with your circle.'
+          : 'Published for everyone.';
+      _postController.clear();
+    });
+  }
+
+  void _saveProfile() {
+    final name = _profileNameController.text.trim();
+    final bio = _profileBioController.text.trim();
+    setState(() {
+      if (name.isEmpty) return;
+      _profileName = name;
+      _profileBio = bio;
+      _profileTone = _profileDraftTone;
+      _editProfileOpen = false;
+      _status = 'Your profile changes are live.';
+    });
+  }
+
+  Widget _buildNavigationBar(CharcoalThemeData theme) {
+    if (_activeStory != null) {
+      return CharcoalNavigationBar(
+        leading: _backButton('Return to home'),
+        semanticLabel: 'Story navigation',
+        title: Text(_activeStory!),
+      );
+    }
+    if (_conversation != null) {
+      return CharcoalNavigationBar(
+        leading: _backButton('Return to messages'),
+        semanticLabel: 'Conversation navigation',
+        title: Text(_conversation!),
+      );
+    }
+    if (_notificationsOpen) {
+      return CharcoalNavigationBar(
+        leading: _backButton('Return to home'),
+        semanticLabel: 'Notifications navigation',
+        title: const Text('Notifications'),
+        trailing: CharcoalIconButton(
+          icon: const CharcoalIcon(CharcoalIcons.check),
+          onPressed: _notificationsUnread
+              ? () => setState(() {
+                  _notificationsUnread = false;
+                  _status = 'All notifications marked as read.';
+                })
+              : null,
+          semanticLabel: 'Mark all notifications as read',
+          size: CharcoalIconButtonSize.small,
+        ),
+      );
+    }
+    if (_composerOpen) {
+      return CharcoalNavigationBar(
+        leading: _backButton('Discard new post'),
+        semanticLabel: 'New post navigation',
+        title: const Text('New post'),
+        trailing: CharcoalButton(
+          key: const ValueKey<String>('agent-social-publish-post'),
+          onPressed: _publishPost,
+          size: CharcoalButtonSize.small,
+          variant: CharcoalButtonVariant.primary,
+          child: const Text('Post'),
+        ),
+      );
+    }
+    if (_editProfileOpen) {
+      return CharcoalNavigationBar(
+        leading: _backButton('Cancel editing profile'),
+        semanticLabel: 'Edit profile navigation',
+        title: const Text('Edit profile'),
+        trailing: CharcoalButton(
+          key: const ValueKey<String>('agent-social-save-profile'),
+          onPressed: _saveProfile,
+          size: CharcoalButtonSize.small,
+          variant: CharcoalButtonVariant.primary,
+          child: const Text('Save'),
+        ),
+      );
+    }
+
+    final title = switch (_selectedBottomIndex) {
+      0 => 'Bloom',
+      1 => 'Discover',
+      2 => 'Messages',
+      _ => 'Profile',
+    };
+    return CharcoalNavigationBar(
+      leading: _selectedBottomIndex == 0 ? const _BloomBrandMark() : null,
+      semanticLabel: '$title navigation',
+      title: Text(title),
+      trailing: switch (_selectedBottomIndex) {
+        0 => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CharcoalIconButton(
+              key: const ValueKey<String>('agent-social-new-post'),
+              icon: const CharcoalIcon(CharcoalIcons.penAdd),
+              onPressed: _openComposer,
+              semanticLabel: 'Create a post',
+              size: CharcoalIconButtonSize.small,
+            ),
+            SizedBox(width: theme.dimensions.space.component10),
+            _BloomNotificationButton(
+              onPressed: () => setState(() {
+                _closeNestedRoute();
+                _notificationsOpen = true;
+                _status = null;
+              }),
+              unread: _notificationsUnread,
+            ),
+          ],
+        ),
+        3 => CharcoalIconButton(
+          key: const ValueKey<String>('agent-social-edit-profile'),
+          icon: const CharcoalIcon(CharcoalIcons.penText),
+          onPressed: _openProfileEditor,
+          semanticLabel: 'Edit profile',
+          size: CharcoalIconButtonSize.small,
+        ),
+        _ => null,
+      },
+    );
+  }
+
+  Widget _backButton(String semanticLabel) => CharcoalIconButton(
+    key: const ValueKey<String>('agent-social-page-back'),
+    icon: const CharcoalIcon(CharcoalIcons.chevronLeft),
+    onPressed: () => setState(() {
+      _closeNestedRoute();
+      _status = null;
+    }),
+    semanticLabel: semanticLabel,
+    size: CharcoalIconButtonSize.small,
+  );
+
+  Widget _buildSelectedPage(CharcoalThemeData theme) {
+    if (_activeStory != null) return _buildStory(theme);
+    if (_conversation != null) return _buildConversation(theme);
+    if (_notificationsOpen) return _buildNotifications(theme);
+    if (_composerOpen) return _buildComposer(theme);
+    if (_editProfileOpen) return _buildProfileEditor(theme);
+    return switch (_selectedBottomIndex) {
+      0 => _buildFeed(theme),
+      1 => _buildDiscover(theme),
+      2 => _buildMessages(theme),
+      _ => _buildProfile(theme),
+    };
+  }
 
   Widget _pagePadding(CharcoalThemeData theme, Widget child) => Padding(
     padding: EdgeInsets.fromLTRB(
@@ -444,6 +697,7 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
     final space = theme.dimensions.space;
     final post = _socialPosts[_feed]!;
     final liked = _likedFeeds.contains(_feed);
+    final muted = _mutedFeeds.contains(_feed);
     final saved = _savedFeeds.contains(_feed);
     return _pagePadding(
       theme,
@@ -451,10 +705,67 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
         key: ValueKey<String>('agent-social-feed-${_feed.name}'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          Text(
+            'Good afternoon, Mina',
+            style: theme.textStyles.headingXxs.copyWith(
+              color: theme.colors.textDefault,
+            ),
+          ),
+          SizedBox(height: space.component10),
+          Text(
+            'Catch up without needing to catch everything.',
+            style: theme.textStyles.captionSmall.copyWith(
+              color: theme.colors.textSecondaryDefault,
+            ),
+          ),
+          SizedBox(height: space.component30),
           if (_status != null) ...<Widget>[
-            _SimulationStatus(message: _status!),
-            SizedBox(height: space.component25),
+            _BloomInlineNotice(message: _status!),
+            SizedBox(height: space.component30),
           ],
+          Row(
+            children: <Widget>[
+              const Expanded(child: _PhoneSectionTitle(title: 'Your circle')),
+              Text(
+                '4 new',
+                style: theme.textStyles.captionSmall.copyWith(
+                  color: theme.colors.textSecondaryDefault,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: space.component20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _BloomStory(
+                initials: '+',
+                label: 'New post',
+                onPressed: _openComposer,
+                semanticLabel: 'Create a post',
+                tone: 0,
+              ),
+              _BloomStory(
+                initials: 'AK',
+                label: 'Aki',
+                onPressed: () => setState(() => _activeStory = 'Aki Kondo'),
+                tone: 1,
+              ),
+              _BloomStory(
+                initials: 'NO',
+                label: 'Noa',
+                onPressed: () => setState(() => _activeStory = 'Noa Watanabe'),
+                tone: 2,
+              ),
+              _BloomStory(
+                initials: 'EM',
+                label: 'Emi',
+                onPressed: () => setState(() => _activeStory = 'Emi Sato'),
+                tone: 3,
+              ),
+            ],
+          ),
+          SizedBox(height: space.component30),
           CharcoalSegmentedControl<_SocialFeed>(
             key: const ValueKey<String>('agent-social-feed-control'),
             fullWidth: true,
@@ -462,9 +773,7 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
               _feed = value;
               _commentComposerOpen = false;
               _postActionsOpen = false;
-              _status = value == _SocialFeed.following
-                  ? 'Showing creators you follow.'
-                  : 'Showing a fresh discovery feed.';
+              _status = null;
             }),
             segments: const <CharcoalSegment<_SocialFeed>>[
               CharcoalSegment(
@@ -472,164 +781,192 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
                 child: Text('Following'),
               ),
               CharcoalSegment(
-                value: _SocialFeed.discover,
-                child: Text('Discover'),
+                value: _SocialFeed.forYou,
+                child: Text('For you'),
               ),
             ],
             semanticLabel: 'Bloom feed',
             value: _feed,
           ),
-          SizedBox(height: space.component25),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _Story(initials: 'YO', label: 'Your story', tone: 0),
-              _Story(initials: 'AK', label: 'Aki', tone: 1),
-              _Story(initials: 'NO', label: 'Noa', tone: 2),
-              _Story(initials: 'EM', label: 'Emi', tone: 3),
-            ],
-          ),
-          SizedBox(height: space.component25),
-          _PhoneSurface(
-            padding: EdgeInsets.zero,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(space.component25),
-                  child: Row(
-                    children: <Widget>[
-                      _DemoAvatar(
-                        initials: post.initials,
-                        tone: post.tone,
-                        size: 38,
-                      ),
-                      SizedBox(width: space.component20),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              post.author,
-                              style: theme.textStyles.captionMediumBold
-                                  .copyWith(color: theme.colors.textDefault),
-                            ),
-                            Text(
-                              post.meta,
-                              style: theme.textStyles.captionSmall.copyWith(
-                                color: theme.colors.textSecondaryDefault,
+          SizedBox(height: space.component30),
+          if (_publishedPost != null &&
+              _feed == _SocialFeed.following) ...<Widget>[
+            _BloomPublishedPost(copy: _publishedPost!),
+            SizedBox(height: space.component30),
+          ],
+          if (muted) ...<Widget>[
+            _BloomInlineNotice(
+              actionLabel: 'Undo',
+              message: '${post.author} is hidden from this feed.',
+              onAction: () => setState(() {
+                _mutedFeeds.remove(_feed);
+                _status = '${post.author} is back in your feed.';
+              }),
+            ),
+            SizedBox(height: space.component20),
+            const _SimulationEmptyState(
+              description: 'You have seen everything else here. Try the other feed or undo the change.',
+              title: 'You are caught up',
+            ),
+          ] else
+            _PhoneSurface(
+              padding: EdgeInsets.zero,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(space.component25),
+                    child: Row(
+                      children: <Widget>[
+                        _DemoAvatar(
+                          initials: post.initials,
+                          tone: post.tone,
+                          size: 38,
+                        ),
+                        SizedBox(width: space.component20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                post.author,
+                                style: theme.textStyles.captionMediumBold
+                                    .copyWith(color: theme.colors.textDefault),
                               ),
+                              Text(
+                                post.meta,
+                                style: theme.textStyles.captionSmall.copyWith(
+                                  color: theme.colors.textSecondaryDefault,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (_feed == _SocialFeed.forYou) ...<Widget>[
+                          CharcoalButton(
+                            key: const ValueKey<String>(
+                              'agent-social-follow-author',
                             ),
-                          ],
+                            onPressed: () => _toggleCreator(post.author),
+                            selected: _followedCreators.contains(post.author),
+                            size: CharcoalButtonSize.small,
+                            child: Text(
+                              _followedCreators.contains(post.author)
+                                  ? 'Following'
+                                  : 'Follow',
+                            ),
+                          ),
+                          SizedBox(width: space.component10),
+                        ],
+                        CharcoalIconButton(
+                          key: const ValueKey<String>(
+                            'agent-social-post-actions',
+                          ),
+                          icon: const CharcoalIcon(
+                            CharcoalIcons.dotsHorizontal,
+                          ),
+                          onPressed: () => setState(
+                            () => _postActionsOpen = !_postActionsOpen,
+                          ),
+                          selected: _postActionsOpen,
+                          semanticLabel: 'More post actions',
+                          size: CharcoalIconButtonSize.small,
                         ),
-                      ),
-                      CharcoalIconButton(
-                        key: const ValueKey<String>(
-                          'agent-social-post-actions',
-                        ),
-                        icon: const CharcoalIcon(CharcoalIcons.dotsHorizontal),
-                        onPressed: () => setState(
-                          () => _postActionsOpen = !_postActionsOpen,
-                        ),
-                        selected: _postActionsOpen,
-                        semanticLabel: 'More post actions',
-                        size: CharcoalIconButtonSize.small,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: space.component25),
-                  child: Text(
-                    post.copy,
-                    style: theme.textStyles.captionMedium.copyWith(
-                      color: theme.colors.textDefault,
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(height: space.component20),
-                _DemoArtwork(height: 174, tone: post.tone),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: space.component20,
-                    vertical: space.component10,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: space.component25,
+                    ),
+                    child: Text(
+                      post.copy,
+                      style: theme.textStyles.captionMedium.copyWith(
+                        color: theme.colors.textDefault,
+                      ),
+                    ),
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      CharcoalIconButton(
-                        key: const ValueKey<String>('agent-social-like'),
-                        icon: const CharcoalIcon(CharcoalIcons.heart),
-                        onPressed: () => setState(() {
-                          liked
-                              ? _likedFeeds.remove(_feed)
-                              : _likedFeeds.add(_feed);
-                          _status = liked
-                              ? 'Like removed.'
-                              : 'You liked ${post.author}’s post.';
-                        }),
-                        selected: liked,
-                        semanticLabel: liked ? 'Unlike post' : 'Like post',
-                        size: CharcoalIconButtonSize.small,
-                      ),
-                      Text(
-                        '${post.likes + (liked ? 1 : 0)}',
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                          fontWeight: FontWeight.w700,
+                  SizedBox(height: space.component20),
+                  _DemoArtwork(height: 174, tone: post.tone),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: space.component20,
+                      vertical: space.component10,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        CharcoalIconButton(
+                          key: const ValueKey<String>('agent-social-like'),
+                          icon: const CharcoalIcon(CharcoalIcons.heart),
+                          onPressed: () => setState(() {
+                            liked
+                                ? _likedFeeds.remove(_feed)
+                                : _likedFeeds.add(_feed);
+                            _status = null;
+                          }),
+                          selected: liked,
+                          semanticLabel: liked ? 'Unlike post' : 'Like post',
+                          size: CharcoalIconButtonSize.small,
                         ),
-                      ),
-                      SizedBox(width: space.component20),
-                      CharcoalIconButton(
-                        key: const ValueKey<String>('agent-social-comment'),
-                        icon: const CharcoalIcon(CharcoalIcons.message),
-                        onPressed: () => setState(
-                          () => _commentComposerOpen = !_commentComposerOpen,
+                        Text(
+                          '${post.likes + (liked ? 1 : 0)}',
+                          style: theme.textStyles.captionSmall.copyWith(
+                            color: theme.colors.textSecondaryDefault,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        selected: _commentComposerOpen,
-                        semanticLabel: 'Comment on post',
-                        size: CharcoalIconButtonSize.small,
-                      ),
-                      Text(
-                        '${post.comments + _commentDelta}',
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                          fontWeight: FontWeight.w700,
+                        SizedBox(width: space.component20),
+                        CharcoalIconButton(
+                          key: const ValueKey<String>('agent-social-comment'),
+                          icon: const CharcoalIcon(CharcoalIcons.message),
+                          onPressed: () => setState(
+                            () => _commentComposerOpen = !_commentComposerOpen,
+                          ),
+                          selected: _commentComposerOpen,
+                          semanticLabel: 'Comment on post',
+                          size: CharcoalIconButtonSize.small,
                         ),
-                      ),
-                      const Spacer(),
-                      CharcoalIconButton(
-                        key: const ValueKey<String>('agent-social-save'),
-                        icon: const CharcoalIcon(CharcoalIcons.bookmark),
-                        onPressed: () => setState(() {
-                          saved
-                              ? _savedFeeds.remove(_feed)
-                              : _savedFeeds.add(_feed);
-                          _status = saved
-                              ? 'Removed from your saved collection.'
-                              : 'Saved to your Bloom collection.';
-                        }),
-                        selected: saved,
-                        semanticLabel: saved
-                            ? 'Remove bookmark'
-                            : 'Bookmark post',
-                        size: CharcoalIconButtonSize.small,
-                      ),
-                    ],
+                        Text(
+                          '${post.comments + _commentDelta}',
+                          style: theme.textStyles.captionSmall.copyWith(
+                            color: theme.colors.textSecondaryDefault,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const Spacer(),
+                        CharcoalIconButton(
+                          key: const ValueKey<String>('agent-social-save'),
+                          icon: const CharcoalIcon(CharcoalIcons.bookmark),
+                          onPressed: () => setState(() {
+                            saved
+                                ? _savedFeeds.remove(_feed)
+                                : _savedFeeds.add(_feed);
+                            _status = null;
+                          }),
+                          selected: saved,
+                          semanticLabel: saved
+                              ? 'Remove bookmark'
+                              : 'Bookmark post',
+                          size: CharcoalIconButtonSize.small,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           if (_postActionsOpen) ...<Widget>[
             SizedBox(height: space.component20),
             _SimulationActionPanel(
-              actionLabel: 'Mute for 30 days',
-              description: 'Tune what appears in this feed.',
+              actionLabel: 'Hide this creator',
+              description:
+                  'Their posts leave your feed. You can undo this immediately.',
               onAction: () => setState(() {
                 _postActionsOpen = false;
-                _status = '${post.author} is muted for 30 days.';
+                _mutedFeeds.add(_feed);
+                _status = null;
               }),
-              title: 'Post actions',
+              title: 'Tune your feed',
             ),
           ],
           if (_commentComposerOpen) ...<Widget>[
@@ -641,12 +978,14 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
               onAction: () => setState(() {
                 _commentDelta += 1;
                 _commentDraft = '';
+                _commentController.clear();
                 _commentComposerOpen = false;
                 _status = 'Your comment was posted.';
               }),
               title: 'Add a comment',
               child: CharcoalTextField(
                 key: const ValueKey<String>('agent-social-comment-field'),
+                controller: _commentController,
                 label: 'Comment',
                 onChanged: (value) => setState(() => _commentDraft = value),
                 placeholder: 'Write something kind',
@@ -661,43 +1000,169 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
 
   Widget _buildDiscover(CharcoalThemeData theme) {
     final space = theme.dimensions.space;
+    final query = _discoverQuery.trim().toLowerCase();
+    final matchingTopics = _bloomTopics
+        .where(
+          (topic) =>
+              topic.label.toLowerCase().contains(query) ||
+              topic.description.toLowerCase().contains(query),
+        )
+        .toList(growable: false);
+    final matchingCreators = _bloomCreators
+        .where(
+          (creator) =>
+              creator.name.toLowerCase().contains(query) ||
+              creator.handle.toLowerCase().contains(query),
+        )
+        .toList(growable: false);
     return _pagePadding(
       theme,
       Column(
         key: const ValueKey<String>('agent-social-discover-page'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          const _PhonePageHeading(
-            eyebrow: 'DISCOVER',
-            title: 'Find a new creative corner',
+          Text(
+            'Find ideas worth slowing down for.',
+            style: theme.textStyles.captionMedium.copyWith(
+              color: theme.colors.textSecondaryDefault,
+            ),
           ),
           SizedBox(height: space.component25),
           CharcoalTextField(
             key: const ValueKey<String>('agent-social-discover-search'),
-            onSubmitted: (value) => setState(
-              () => _status = value.trim().isEmpty
-                  ? 'Try a subject, place, or creator.'
-                  : 'Showing discoveries for “${value.trim()}”.',
-            ),
+            controller: _discoverController,
+            onChanged: (value) => setState(() => _discoverQuery = value),
             placeholder: 'Search creators and ideas',
             prefix: const CharcoalIcon(CharcoalIcons.search),
           ),
           SizedBox(height: space.component30),
-          const _PhoneSectionTitle(title: 'Trending now'),
-          SizedBox(height: space.component20),
-          for (final topic in const <String>[
-            'Quiet color studies',
-            'Paper architecture',
-            'Tiny garden journals',
-          ]) ...<Widget>[
-            CharcoalNavigationItem(
+          if (query.isEmpty) ...<Widget>[
+            const _PhoneSectionTitle(title: 'Browse by mood'),
+            SizedBox(height: space.component20),
+            for (final topic in _bloomTopics) ...<Widget>[
+              _BloomTopicTile(
+                description: topic.description,
+                label: topic.label,
+                onPressed: () => _openTopic(topic.label),
+              ),
+              SizedBox(height: space.component20),
+            ],
+            SizedBox(height: space.component20),
+            const _PhoneSectionTitle(title: 'Creators to know'),
+            SizedBox(height: space.component20),
+            for (final creator in _bloomCreators) ...<Widget>[
+              _BloomCreatorTile(
+                followed: _followedCreators.contains(creator.name),
+                handle: creator.handle,
+                initials: creator.initials,
+                name: creator.name,
+                onFollow: () => _toggleCreator(creator.name),
+                tone: creator.tone,
+              ),
+              SizedBox(height: space.component20),
+            ],
+          ] else if (matchingTopics.isEmpty &&
+              matchingCreators.isEmpty) ...<Widget>[
+            _SimulationEmptyState(
+              description:
+                  'No creators or ideas match “${_discoverQuery.trim()}”. Try a broader word.',
+              title: 'Nothing found yet',
+            ),
+            SizedBox(height: space.component20),
+            CharcoalButton(
+              fullWidth: true,
               onPressed: () => setState(() {
-                _feed = _SocialFeed.discover;
-                _selectedBottomIndex = 0;
-                _status = 'Opened the $topic discovery feed.';
+                _discoverController.clear();
+                _discoverQuery = '';
               }),
-              trailing: const CharcoalIcon(CharcoalIcons.chevronRight),
-              child: Text(topic),
+              child: const Text('Clear search'),
+            ),
+          ] else ...<Widget>[
+            Text(
+              '${matchingTopics.length + matchingCreators.length} results for “${_discoverQuery.trim()}”',
+              style: theme.textStyles.captionSmall.copyWith(
+                color: theme.colors.textSecondaryDefault,
+              ),
+            ),
+            SizedBox(height: space.component20),
+            for (final topic in matchingTopics) ...<Widget>[
+              _BloomTopicTile(
+                description: topic.description,
+                label: topic.label,
+                onPressed: () => _openTopic(topic.label),
+              ),
+              SizedBox(height: space.component20),
+            ],
+            for (final creator in matchingCreators) ...<Widget>[
+              _BloomCreatorTile(
+                followed: _followedCreators.contains(creator.name),
+                handle: creator.handle,
+                initials: creator.initials,
+                name: creator.name,
+                onFollow: () => _toggleCreator(creator.name),
+                tone: creator.tone,
+              ),
+              SizedBox(height: space.component20),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  void _openTopic(String topic) {
+    setState(() {
+      _feed = _SocialFeed.forYou;
+      _selectedBottomIndex = 0;
+      _status = 'The $topic collection is now shaping your feed.';
+    });
+  }
+
+  void _toggleCreator(String name) {
+    final followed = _followedCreators.contains(name);
+    setState(() {
+      followed ? _followedCreators.remove(name) : _followedCreators.add(name);
+    });
+  }
+
+  Widget _buildMessages(CharcoalThemeData theme) {
+    final space = theme.dimensions.space;
+    return _pagePadding(
+      theme,
+      Column(
+        key: const ValueKey<String>('agent-social-messages-page'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'A small inbox for people you know.',
+                  style: theme.textStyles.captionMedium.copyWith(
+                    color: theme.colors.textSecondaryDefault,
+                  ),
+                ),
+              ),
+              if (_unreadConversations.isNotEmpty)
+                _BloomCountBadge(count: _unreadConversations.length),
+            ],
+          ),
+          SizedBox(height: space.component30),
+          for (final conversation in _bloomConversations) ...<Widget>[
+            _BloomConversationTile(
+              initials: conversation.initials,
+              name: conversation.name,
+              onPressed: () => setState(() {
+                _conversation = conversation.name;
+                _unreadConversations.remove(conversation.name);
+                _messageController.clear();
+                _messageDraft = '';
+                _status = null;
+              }),
+              preview: conversation.preview,
+              time: conversation.time,
+              tone: conversation.tone,
+              unread: _unreadConversations.contains(conversation.name),
             ),
             SizedBox(height: space.component20),
           ],
@@ -706,81 +1171,73 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
     );
   }
 
-  Widget _buildMessages(CharcoalThemeData theme) {
+  Widget _buildConversation(CharcoalThemeData theme) {
     final space = theme.dimensions.space;
-    if (_conversation != null) {
-      return _pagePadding(
-        theme,
-        Column(
-          key: const ValueKey<String>('agent-social-conversation'),
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            CharcoalButton(
-              leading: const CharcoalIcon(CharcoalIcons.chevronLeft),
-              onPressed: () => setState(() => _conversation = null),
-              size: CharcoalButtonSize.small,
-              child: const Text('Messages'),
-            ),
-            SizedBox(height: space.component25),
-            _PhonePageHeading(eyebrow: 'CONVERSATION', title: _conversation!),
-            SizedBox(height: space.component25),
-            const _SimulationStatus(
-              message: 'Aki: That rain-cloud palette is beautiful.',
-            ),
-            if (_sentMessage != null) ...<Widget>[
-              SizedBox(height: space.component20),
-              _SimulationStatus(message: 'You: $_sentMessage'),
-            ],
-            SizedBox(height: space.component25),
-            CharcoalTextField(
-              key: const ValueKey<String>('agent-social-message-field'),
-              label: 'Message',
-              onChanged: (value) => setState(() => _commentDraft = value),
-              placeholder: 'Write a reply',
-              showLabel: true,
-            ),
-            SizedBox(height: space.component20),
-            CharcoalButton(
-              key: const ValueKey<String>('agent-social-send-message'),
-              fullWidth: true,
-              onPressed: _commentDraft.trim().isEmpty
-                  ? null
-                  : () => setState(() {
-                      _sentMessage = _commentDraft.trim();
-                      _commentDraft = '';
-                    }),
-              variant: CharcoalButtonVariant.primary,
-              child: const Text('Send message'),
-            ),
-          ],
-        ),
-      );
-    }
+    final conversation = _bloomConversations.firstWhere(
+      (item) => item.name == _conversation,
+    );
+    final sent = _sentMessages[conversation.name] ?? const <String>[];
     return _pagePadding(
       theme,
       Column(
-        key: const ValueKey<String>('agent-social-messages-page'),
+        key: const ValueKey<String>('agent-social-conversation'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          const _PhonePageHeading(
-            eyebrow: 'MESSAGES',
-            title: 'Continue the conversation',
-          ),
-          SizedBox(height: space.component25),
-          for (final person in const <String>[
-            'Aki Kondo',
-            'Noa Watanabe',
-          ]) ...<Widget>[
-            CharcoalNavigationItem(
-              onPressed: () => setState(() => _conversation = person),
-              trailing: const CharcoalIcon(CharcoalIcons.chevronRight),
-              child: Text(person),
+          Center(
+            child: Text(
+              'Today · Take your time',
+              style: theme.textStyles.captionSmall.copyWith(
+                color: theme.colors.textTertiaryDefault,
+              ),
             ),
+          ),
+          SizedBox(height: space.component30),
+          _BloomMessageBubble(
+            message: conversation.preview,
+            sender: conversation.name.split(' ').first,
+          ),
+          for (final message in sent) ...<Widget>[
             SizedBox(height: space.component20),
+            _BloomMessageBubble(message: message, own: true, sender: 'You'),
           ],
+          if (_status != null) ...<Widget>[
+            SizedBox(height: space.component25),
+            _BloomInlineNotice(message: _status!),
+          ],
+          SizedBox(height: space.component30),
+          CharcoalTextField(
+            key: const ValueKey<String>('agent-social-message-field'),
+            controller: _messageController,
+            label: 'Reply',
+            onChanged: (value) => setState(() => _messageDraft = value),
+            onSubmitted: (_) => _sendMessage(),
+            placeholder: 'Write a thoughtful reply',
+            showLabel: true,
+            textInputAction: TextInputAction.send,
+          ),
+          SizedBox(height: space.component20),
+          CharcoalButton(
+            key: const ValueKey<String>('agent-social-send-message'),
+            fullWidth: true,
+            leading: const CharcoalIcon(CharcoalIcons.send),
+            onPressed: _messageDraft.trim().isEmpty ? null : _sendMessage,
+            variant: CharcoalButtonVariant.primary,
+            child: const Text('Send message'),
+          ),
         ],
       ),
     );
+  }
+
+  void _sendMessage() {
+    final message = _messageDraft.trim();
+    if (message.isEmpty || _conversation == null) return;
+    setState(() {
+      _sentMessages.putIfAbsent(_conversation!, () => <String>[]).add(message);
+      _messageDraft = '';
+      _messageController.clear();
+      _status = 'Sent. They usually reply later in the day.';
+    });
   }
 
   Widget _buildProfile(CharcoalThemeData theme) {
@@ -791,10 +1248,12 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
         key: const ValueKey<String>('agent-social-profile-page'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          const Center(child: _DemoAvatar(initials: 'MA', tone: 2, size: 72)),
+          Center(
+            child: _DemoAvatar(initials: 'MA', tone: _profileTone, size: 72),
+          ),
           SizedBox(height: space.component25),
           Text(
-            'Mina Aoki',
+            _profileName,
             textAlign: TextAlign.center,
             style: theme.textStyles.headingXxs.copyWith(
               color: theme.colors.textDefault,
@@ -802,9 +1261,17 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
           ),
           SizedBox(height: space.component10),
           Text(
-            'Color collector · Tokyo',
+            '@mina.color · Tokyo',
             textAlign: TextAlign.center,
             style: theme.textStyles.captionSmall.copyWith(
+              color: theme.colors.textSecondaryDefault,
+            ),
+          ),
+          SizedBox(height: space.component30),
+          Text(
+            _profileBio.isEmpty ? 'No bio yet.' : _profileBio,
+            textAlign: TextAlign.center,
+            style: theme.textStyles.captionMedium.copyWith(
               color: theme.colors.textSecondaryDefault,
             ),
           ),
@@ -819,8 +1286,881 @@ final class _SocialPhoneDemoState extends State<_SocialPhoneDemo> {
               ],
             ),
           ),
+          SizedBox(height: space.component30),
+          CharcoalSegmentedControl<_BloomProfileTab>(
+            fullWidth: true,
+            onChanged: (value) => setState(() => _profileTab = value),
+            segments: const <CharcoalSegment<_BloomProfileTab>>[
+              CharcoalSegment(
+                value: _BloomProfileTab.posts,
+                child: Text('Posts'),
+              ),
+              CharcoalSegment(
+                value: _BloomProfileTab.saved,
+                child: Text('Saved'),
+              ),
+            ],
+            semanticLabel: 'Profile content',
+            value: _profileTab,
+          ),
+          SizedBox(height: space.component25),
+          if (_profileTab == _BloomProfileTab.posts)
+            const _BloomArtworkGrid(tones: <int>[0, 3, 1, 2])
+          else if (_savedFeeds.isEmpty) ...<Widget>[
+            const _SimulationEmptyState(
+              description:
+                  'Bookmark a post and it will stay here for a quieter return.',
+              title: 'Nothing saved yet',
+            ),
+            SizedBox(height: space.component20),
+            CharcoalButton(
+              fullWidth: true,
+              onPressed: () => setState(() {
+                _selectedBottomIndex = 1;
+                _profileTab = _BloomProfileTab.posts;
+              }),
+              child: const Text('Explore ideas'),
+            ),
+          ] else
+            _BloomArtworkGrid(
+              tones: _savedFeeds.map((feed) => feed.index + 1).toList(),
+            ),
         ],
       ),
+    );
+  }
+
+  Widget _buildComposer(CharcoalThemeData theme) {
+    final space = theme.dimensions.space;
+    final invalid = _publishAttempted && _postController.text.trim().isEmpty;
+    return _pagePadding(
+      theme,
+      Column(
+        key: const ValueKey<String>('agent-social-composer-page'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const _DemoAvatar(initials: 'MA', tone: 2, size: 42),
+              SizedBox(width: space.component20),
+              Expanded(
+                child: Text(
+                  'Share one thing you noticed. It does not need to be finished.',
+                  style: theme.textStyles.captionMedium.copyWith(
+                    color: theme.colors.textSecondaryDefault,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: space.component30),
+          CharcoalTextArea(
+            key: const ValueKey<String>('agent-social-post-field'),
+            assistiveText: invalid
+                ? 'Write something before posting.'
+                : 'Up to 140 characters.',
+            controller: _postController,
+            invalid: invalid,
+            label: 'Your thought',
+            maxLength: 140,
+            onChanged: (_) => setState(() => _publishAttempted = false),
+            placeholder: 'What caught your eye today?',
+            required: true,
+            rows: 4,
+            showCount: true,
+            showLabel: true,
+          ),
+          SizedBox(height: space.component30),
+          const _PhoneSectionTitle(title: 'Who can see this?'),
+          SizedBox(height: space.component20),
+          CharcoalSegmentedControl<_BloomAudience>(
+            fullWidth: true,
+            onChanged: (value) => setState(() => _audience = value),
+            segments: const <CharcoalSegment<_BloomAudience>>[
+              CharcoalSegment(
+                value: _BloomAudience.circle,
+                child: Text('My circle'),
+              ),
+              CharcoalSegment(
+                value: _BloomAudience.everyone,
+                child: Text('Everyone'),
+              ),
+            ],
+            semanticLabel: 'Post audience',
+            value: _audience,
+          ),
+          SizedBox(height: space.component30),
+          _PhoneSurface(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CharcoalIcon(
+                  CharcoalIcons.infoCircle,
+                  color: theme.colors.iconSecondaryDefault,
+                  size: 18,
+                ),
+                SizedBox(width: space.component20),
+                Expanded(
+                  child: Text(
+                    _audience == _BloomAudience.circle
+                        ? 'Only people you follow can see and reply.'
+                        : 'Anyone on Bloom can discover and reply.',
+                    style: theme.textStyles.captionSmall.copyWith(
+                      color: theme.colors.textSecondaryDefault,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotifications(CharcoalThemeData theme) {
+    final space = theme.dimensions.space;
+    return _pagePadding(
+      theme,
+      Column(
+        key: const ValueKey<String>('agent-social-notifications-page'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          if (_status != null) ...<Widget>[
+            _BloomInlineNotice(message: _status!),
+            SizedBox(height: space.component30),
+          ],
+          _BloomNotificationTile(
+            description: 'Aki Kondo liked your color study.',
+            onPressed: () => setState(() {
+              _notificationsUnread = false;
+              _notificationsOpen = false;
+              _selectedBottomIndex = 0;
+              _feed = _SocialFeed.following;
+              _status = 'Opened the post Aki liked.';
+            }),
+            time: '8 min',
+            unread: _notificationsUnread,
+          ),
+          SizedBox(height: space.component20),
+          _BloomNotificationTile(
+            description: 'Noa Watanabe started following you.',
+            onPressed: () => setState(() {
+              _notificationsUnread = false;
+              _notificationsOpen = false;
+              _selectedBottomIndex = 1;
+              _discoverController.text = 'Noa';
+              _discoverQuery = 'Noa';
+            }),
+            time: 'Yesterday',
+            unread: false,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileEditor(CharcoalThemeData theme) {
+    final space = theme.dimensions.space;
+    final invalid = _profileNameController.text.trim().isEmpty;
+    return _pagePadding(
+      theme,
+      Column(
+        key: const ValueKey<String>('agent-social-profile-editor'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Center(
+            child: _DemoAvatar(
+              initials: 'MA',
+              tone: _profileDraftTone,
+              size: 72,
+            ),
+          ),
+          SizedBox(height: space.component20),
+          Center(
+            child: CharcoalButton(
+              onPressed: () => setState(() {
+                _profileDraftTone = (_profileDraftTone + 1) % 4;
+                _status = 'New profile color selected. Save to keep it.';
+              }),
+              size: CharcoalButtonSize.small,
+              child: const Text('Change photo'),
+            ),
+          ),
+          SizedBox(height: space.component30),
+          CharcoalTextField(
+            controller: _profileNameController,
+            invalid: invalid,
+            label: 'Display name',
+            maxLength: 30,
+            onChanged: (_) => setState(() {}),
+            required: true,
+            showCount: true,
+            showLabel: true,
+          ),
+          SizedBox(height: space.component25),
+          CharcoalTextArea(
+            assistiveText: 'Tell people what you notice or make.',
+            controller: _profileBioController,
+            label: 'Bio',
+            maxLength: 80,
+            onChanged: (_) => setState(() {}),
+            placeholder: 'A short introduction',
+            rows: 3,
+            showCount: true,
+            showLabel: true,
+          ),
+          if (_status != null) ...<Widget>[
+            SizedBox(height: space.component25),
+            _BloomInlineNotice(message: _status!),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStory(CharcoalThemeData theme) {
+    final space = theme.dimensions.space;
+    final story = _activeStory!;
+    final tone = story.startsWith('Aki')
+        ? 1
+        : story.startsWith('Noa')
+        ? 2
+        : 3;
+    return _pagePadding(
+      theme,
+      Column(
+        key: const ValueKey<String>('agent-social-story-page'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+            child: SizedBox(
+              height: theme.dimensions.borderWidth.l,
+              child: ColoredBox(color: theme.colors.containerPrimaryDefault),
+            ),
+          ),
+          SizedBox(height: space.component20),
+          Text(
+            'A small moment from today',
+            style: theme.textStyles.captionSmall.copyWith(
+              color: theme.colors.textSecondaryDefault,
+            ),
+          ),
+          SizedBox(height: space.component20),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+            child: _DemoArtwork(height: 300, tone: tone),
+          ),
+          SizedBox(height: space.component25),
+          CharcoalTextField(
+            controller: _storyReplyController,
+            onChanged: (value) => setState(() => _storyReplyDraft = value),
+            placeholder: 'Reply to $story',
+            prefix: const CharcoalIcon(CharcoalIcons.message),
+            textInputAction: TextInputAction.send,
+          ),
+          SizedBox(height: space.component20),
+          CharcoalButton(
+            fullWidth: true,
+            onPressed: _storyReplyDraft.trim().isEmpty
+                ? null
+                : () => setState(() {
+                    _conversation = story;
+                    _activeStory = null;
+                    _sentMessages
+                        .putIfAbsent(story, () => <String>[])
+                        .add(_storyReplyDraft.trim());
+                    _storyReplyDraft = '';
+                    _storyReplyController.clear();
+                    _status = 'Your story reply was sent.';
+                  }),
+            variant: CharcoalButtonVariant.primary,
+            child: const Text('Send reply'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+final class _BloomBrandMark extends StatelessWidget {
+  const _BloomBrandMark();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+        color: theme.colors.containerDiscoveryDefault,
+      ),
+      child: SizedBox.square(
+        dimension: theme.dimensions.space.targetS,
+        child: Center(
+          child: Text(
+            'B',
+            style: theme.textStyles.captionMediumBold.copyWith(
+              color: theme.colors.textOnDiscoveryDefault,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomNotificationButton extends StatelessWidget {
+  const _BloomNotificationButton({
+    required this.onPressed,
+    required this.unread,
+  });
+
+  final VoidCallback onPressed;
+  final bool unread;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return Stack(
+      clipBehavior: Clip.none,
+      children: <Widget>[
+        CharcoalIconButton(
+          icon: const CharcoalIcon(CharcoalIcons.bell),
+          onPressed: onPressed,
+          semanticLabel: unread
+              ? 'Notifications, new activity'
+              : 'Notifications',
+          size: CharcoalIconButtonSize.small,
+        ),
+        if (unread)
+          PositionedDirectional(
+            end: 2,
+            top: 2,
+            child: ExcludeSemantics(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    theme.dimensions.radius.oval,
+                  ),
+                  color: theme.colors.containerNegativeDefault,
+                ),
+                child: const SizedBox.square(dimension: 7),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+final class _BloomStory extends StatelessWidget {
+  const _BloomStory({
+    required this.initials,
+    required this.label,
+    required this.onPressed,
+    required this.tone,
+    this.semanticLabel,
+  });
+
+  final String initials;
+  final String label;
+  final VoidCallback onPressed;
+  final String? semanticLabel;
+  final int tone;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return CharcoalClickable(
+      onPressed: onPressed,
+      semanticLabel: semanticLabel ?? 'View $label story',
+      builder: (context, states) => AnimatedOpacity(
+        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
+        opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
+        child: SizedBox(
+          width: 66,
+          child: Column(
+            children: <Widget>[
+              _DemoAvatar(initials: initials, tone: tone, size: 46),
+              SizedBox(height: theme.dimensions.space.component10),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textStyles.captionSmall.copyWith(
+                  color: theme.colors.textSecondaryDefault,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomInlineNotice extends StatelessWidget {
+  const _BloomInlineNotice({
+    required this.message,
+    this.actionLabel,
+    this.onAction,
+  });
+
+  final String? actionLabel;
+  final String message;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+        color: theme.colors.containerSecondaryDefault,
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(space.component20),
+        child: Row(
+          children: <Widget>[
+            CharcoalIcon(
+              CharcoalIcons.checkCircle,
+              color: theme.colors.iconSecondaryDefault,
+              size: 18,
+            ),
+            SizedBox(width: space.component20),
+            Expanded(
+              child: Text(
+                message,
+                style: theme.textStyles.captionSmall.copyWith(
+                  color: theme.colors.textSecondaryDefault,
+                ),
+              ),
+            ),
+            if (actionLabel != null && onAction != null) ...<Widget>[
+              SizedBox(width: space.component20),
+              CharcoalButton(
+                onPressed: onAction,
+                size: CharcoalButtonSize.small,
+                child: Text(actionLabel!),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomPublishedPost extends StatelessWidget {
+  const _BloomPublishedPost({required this.copy});
+
+  final String copy;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return _PhoneSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              const _DemoAvatar(initials: 'MA', tone: 2, size: 36),
+              SizedBox(width: space.component20),
+              Expanded(
+                child: Text(
+                  'Mina Aoki · Just now',
+                  style: theme.textStyles.captionSmall.copyWith(
+                    color: theme.colors.textSecondaryDefault,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: space.component20),
+          Text(
+            copy,
+            style: theme.textStyles.captionMedium.copyWith(
+              color: theme.colors.textDefault,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+final class _BloomTopicTile extends StatelessWidget {
+  const _BloomTopicTile({
+    required this.description,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final String description;
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return CharcoalClickable(
+      onPressed: onPressed,
+      semanticLabel: 'Open $label collection',
+      builder: (context, states) => AnimatedContainer(
+        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
+        padding: EdgeInsets.all(space.component25),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: states.contains(WidgetState.hovered)
+                ? theme.colors.borderDefault
+                : theme.colors.borderSecondary,
+          ),
+          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+          color: states.contains(WidgetState.pressed)
+              ? theme.colors.containerSecondaryPressA
+              : theme.colors.backgroundDefault,
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    label,
+                    style: theme.textStyles.captionMediumBold.copyWith(
+                      color: theme.colors.textDefault,
+                    ),
+                  ),
+                  SizedBox(height: space.component10),
+                  Text(
+                    description,
+                    style: theme.textStyles.captionSmall.copyWith(
+                      color: theme.colors.textSecondaryDefault,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: space.component20),
+            CharcoalIcon(
+              CharcoalIcons.chevronRight,
+              color: theme.colors.iconSecondaryDefault,
+              size: 16,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomCreatorTile extends StatelessWidget {
+  const _BloomCreatorTile({
+    required this.followed,
+    required this.handle,
+    required this.initials,
+    required this.name,
+    required this.onFollow,
+    required this.tone,
+  });
+
+  final bool followed;
+  final String handle;
+  final String initials;
+  final String name;
+  final VoidCallback onFollow;
+  final int tone;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return _PhoneSurface(
+      child: Row(
+        children: <Widget>[
+          _DemoAvatar(initials: initials, tone: tone, size: 42),
+          SizedBox(width: space.component20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textStyles.captionMediumBold.copyWith(
+                    color: theme.colors.textDefault,
+                  ),
+                ),
+                Text(
+                  handle,
+                  style: theme.textStyles.captionSmall.copyWith(
+                    color: theme.colors.textSecondaryDefault,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: space.component20),
+          CharcoalButton(
+            onPressed: onFollow,
+            selected: followed,
+            size: CharcoalButtonSize.small,
+            child: Text(followed ? 'Following' : 'Follow'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+final class _BloomCountBadge extends StatelessWidget {
+  const _BloomCountBadge({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+        color: theme.colors.containerPrimaryDefault,
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: theme.dimensions.space.component20,
+          vertical: theme.dimensions.space.component10,
+        ),
+        child: Text(
+          '$count unread',
+          style: theme.textStyles.captionSmall.copyWith(
+            color: theme.colors.textOnPrimaryDefault,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomConversationTile extends StatelessWidget {
+  const _BloomConversationTile({
+    required this.initials,
+    required this.name,
+    required this.onPressed,
+    required this.preview,
+    required this.time,
+    required this.tone,
+    required this.unread,
+  });
+
+  final String initials;
+  final String name;
+  final VoidCallback onPressed;
+  final String preview;
+  final String time;
+  final int tone;
+  final bool unread;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return CharcoalClickable(
+      onPressed: onPressed,
+      semanticLabel: '$name, ${unread ? 'unread, ' : ''}$preview',
+      builder: (context, states) => AnimatedContainer(
+        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
+        padding: EdgeInsets.all(space.component25),
+        decoration: BoxDecoration(
+          border: Border.all(color: theme.colors.borderSecondary),
+          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+          color: states.contains(WidgetState.pressed)
+              ? theme.colors.containerSecondaryPressA
+              : unread
+              ? theme.colors.containerSecondaryDefault
+              : theme.colors.backgroundDefault,
+        ),
+        child: Row(
+          children: <Widget>[
+            _DemoAvatar(initials: initials, tone: tone, size: 44),
+            SizedBox(width: space.component20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textStyles.captionMediumBold.copyWith(
+                            color: theme.colors.textDefault,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        time,
+                        style: theme.textStyles.captionSmall.copyWith(
+                          color: theme.colors.textTertiaryDefault,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: space.component10),
+                  Text(
+                    preview,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textStyles.captionSmall.copyWith(
+                      color: theme.colors.textSecondaryDefault,
+                      fontWeight: unread ? FontWeight.w700 : FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomMessageBubble extends StatelessWidget {
+  const _BloomMessageBubble({
+    required this.message,
+    required this.sender,
+    this.own = false,
+  });
+
+  final String message;
+  final bool own;
+  final String sender;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return Align(
+      alignment: own
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 260),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+            color: own
+                ? theme.colors.containerPrimaryDefault
+                : theme.colors.backgroundDefault,
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(space.component20),
+            child: Text(
+              '$sender: $message',
+              style: theme.textStyles.captionMedium.copyWith(
+                color: own
+                    ? theme.colors.textOnPrimaryDefault
+                    : theme.colors.textDefault,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _BloomNotificationTile extends StatelessWidget {
+  const _BloomNotificationTile({
+    required this.description,
+    required this.onPressed,
+    required this.time,
+    required this.unread,
+  });
+
+  final String description;
+  final VoidCallback onPressed;
+  final String time;
+  final bool unread;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return CharcoalNavigationItem(
+      leading: CharcoalIcon(
+        unread ? CharcoalIcons.heart : CharcoalIcons.personCircle,
+      ),
+      onPressed: onPressed,
+      trailing: Text(
+        time,
+        style: theme.textStyles.captionSmall.copyWith(
+          color: theme.colors.textTertiaryDefault,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: space.component20),
+        child: Text(description, maxLines: 2),
+      ),
+    );
+  }
+}
+
+final class _BloomArtworkGrid extends StatelessWidget {
+  const _BloomArtworkGrid({required this.tones});
+
+  final List<int> tones;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final gap = theme.dimensions.space.component20;
+    return Column(
+      children: <Widget>[
+        for (var index = 0; index < tones.length; index += 2) ...<Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    theme.dimensions.radius.m,
+                  ),
+                  child: _DemoArtwork(height: 126, tone: tones[index]),
+                ),
+              ),
+              SizedBox(width: gap),
+              Expanded(
+                child: index + 1 < tones.length
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          theme.dimensions.radius.m,
+                        ),
+                        child: _DemoArtwork(
+                          height: 126,
+                          tone: tones[index + 1],
+                        ),
+                      )
+                    : const SizedBox(height: 126),
+              ),
+            ],
+          ),
+          if (index + 2 < tones.length) SizedBox(height: gap),
+        ],
+      ],
     );
   }
 }
@@ -2180,6 +3520,7 @@ final class _PhoneDemoShell extends StatelessWidget {
     required this.onBottomItemSelected,
     required this.selectedBottomIndex,
     required this.trailing,
+    this.navigationBar,
   });
 
   final String appKey;
@@ -2193,6 +3534,7 @@ final class _PhoneDemoShell extends StatelessWidget {
   final ValueChanged<int> onBottomItemSelected;
   final int selectedBottomIndex;
   final Widget trailing;
+  final Widget? navigationBar;
 
   @override
   Widget build(BuildContext context) {
@@ -2207,55 +3549,58 @@ final class _PhoneDemoShell extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: theme.colors.borderSecondary),
-                ),
-                color: theme.colors.backgroundDefault,
-              ),
-              child: SizedBox(
-                height: 64,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: space.component30,
-                    vertical: space.component25,
+            if (navigationBar != null)
+              navigationBar!
+            else
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: theme.colors.borderSecondary),
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            theme.dimensions.radius.m,
+                  color: theme.colors.backgroundDefault,
+                ),
+                child: SizedBox(
+                  height: 64,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: space.component30,
+                      vertical: space.component25,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              theme.dimensions.radius.m,
+                            ),
+                            color: brandColor,
                           ),
-                          color: brandColor,
-                        ),
-                        child: SizedBox.square(
-                          dimension: 36,
-                          child: Center(
-                            child: Text(
-                              brandMark,
-                              style: theme.textStyles.captionMediumBold
-                                  .copyWith(color: brandForeground),
+                          child: SizedBox.square(
+                            dimension: 36,
+                            child: Center(
+                              child: Text(
+                                brandMark,
+                                style: theme.textStyles.captionMediumBold
+                                    .copyWith(color: brandForeground),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: space.component20),
-                      Expanded(
-                        child: Text(
-                          brand,
-                          style: theme.textStyles.bodyBold.copyWith(
-                            color: theme.colors.textDefault,
+                        SizedBox(width: space.component20),
+                        Expanded(
+                          child: Text(
+                            brand,
+                            style: theme.textStyles.bodyBold.copyWith(
+                              color: theme.colors.textDefault,
+                            ),
                           ),
                         ),
-                      ),
-                      trailing,
-                    ],
+                        trailing,
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 key: ValueKey<String>('agent-$appKey-scroll'),
@@ -2609,41 +3954,6 @@ final class _ProfileMetric extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-final class _Story extends StatelessWidget {
-  const _Story({
-    required this.initials,
-    required this.label,
-    required this.tone,
-  });
-
-  final String initials;
-  final String label;
-  final int tone;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return SizedBox(
-      width: 66,
-      child: Column(
-        children: <Widget>[
-          _DemoAvatar(initials: initials, tone: tone, size: 46),
-          SizedBox(height: theme.dimensions.space.component10),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textSecondaryDefault,
-              fontSize: 10,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

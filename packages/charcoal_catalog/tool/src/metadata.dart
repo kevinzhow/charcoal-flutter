@@ -193,6 +193,53 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       ),
     ],
   ),
+  'CharcoalNavigationBar': ComponentMetadata(
+    category: 'Navigation',
+    summary:
+        'Provides page-level title context with balanced leading and trailing navigation slots.',
+    keywords: <String>[
+      'app bar',
+      'back navigation',
+      'header',
+      'navigation bar',
+      'toolbar',
+    ],
+    useWhen: <String>[
+      'A page needs a stable title plus back, close, or contextual actions.',
+      'A hierarchical mobile flow needs its current destination to remain visible.',
+    ],
+    avoidWhen: <String>[
+      'The control switches between top-level destinations; use a tab bar or navigation items.',
+      'The content only needs a section heading inside the page body.',
+    ],
+    accessibility: <String>[
+      'Keep the title concise; it is exposed as a semantic header.',
+      'Give icon-only leading and trailing controls explicit semantic labels.',
+    ],
+    responsiveBehavior: <String>[
+      'The title remains geometrically centered while edge slots contract on narrow widths.',
+      'Keep edge actions compact and place system safe-area padding outside the component.',
+    ],
+    tokenRoles: <String>[
+      'space.targetL',
+      'space.component30',
+      'borderSecondary',
+      'backgroundDefault',
+    ],
+    relatedComponents: <String>[
+      'CharcoalIconButton',
+      'CharcoalNavigationItem',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'navigation-bar-detail',
+        title: 'Detail navigation bar',
+        description: 'A centered destination title with back navigation and one contextual action.',
+        sourcePath: 'example/lib/agent_examples/navigation_bar_example.dart',
+      ),
+    ],
+  ),
   'CharcoalDialog': ComponentMetadata(
     category: 'Overlays',
     summary: 'Presents focused content in a centered dialog or adaptive bottom-sheet surface.',

@@ -3,9 +3,9 @@
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 31,
-    "curatedComponents": 7,
-    "componentsWithExamples": 7,
+    "publicComponents": 32,
+    "curatedComponents": 8,
+    "componentsWithExamples": 8,
     "publicTokens": 502,
     "semanticTokens": 226
   },
@@ -1775,6 +1775,103 @@
         }
       ],
       "examples": []
+    },
+    {
+      "name": "CharcoalNavigationBar",
+      "category": "Navigation",
+      "summary": "Provides page-level title context with balanced leading and trailing navigation slots.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation_bar.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "app bar",
+        "back navigation",
+        "header",
+        "navigation bar",
+        "toolbar"
+      ],
+      "useWhen": [
+        "A page needs a stable title plus back, close, or contextual actions.",
+        "A hierarchical mobile flow needs its current destination to remain visible."
+      ],
+      "avoidWhen": [
+        "The control switches between top-level destinations; use a tab bar or navigation items.",
+        "The content only needs a section heading inside the page body."
+      ],
+      "accessibility": [
+        "Keep the title concise; it is exposed as a semantic header.",
+        "Give icon-only leading and trailing controls explicit semantic labels."
+      ],
+      "responsiveBehavior": [
+        "The title remains geometrically centered while edge slots contract on narrow widths.",
+        "Keep edge actions compact and place system safe-area padding outside the component."
+      ],
+      "tokenRoles": [
+        "space.targetL",
+        "space.component30",
+        "borderSecondary",
+        "backgroundDefault"
+      ],
+      "relatedComponents": [
+        "CharcoalIconButton",
+        "CharcoalNavigationItem"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalNavigationBar",
+          "kind": "constructor",
+          "signature": "CharcoalNavigationBar({required this.title, this.leading, this.semanticLabel, this.showDivider = true, this.trailing, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "leading",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "showDivider",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "trailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "navigation-bar-detail",
+          "title": "Detail navigation bar",
+          "description": "A centered destination title with back navigation and one contextual action.",
+          "sourcePath": "example/lib/agent_examples/navigation_bar_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A page-level bar with hierarchical back navigation and one trailing action.\nfinal class AgentNavigationBarExample extends StatelessWidget {\n  const AgentNavigationBarExample({\n    required this.onBack,\n    required this.onMore,\n    super.key,\n  });\n\n  final VoidCallback onBack;\n  final VoidCallback onMore;\n\n  @override\n  Widget build(BuildContext context) => CharcoalNavigationBar(\n    leading: CharcoalIconButton(\n      icon: const CharcoalIcon(CharcoalIcons.chevronLeft),\n      onPressed: onBack,\n      semanticLabel: 'Back to messages',\n      size: CharcoalIconButtonSize.small,\n    ),\n    semanticLabel: 'Conversation navigation',\n    title: const Text('Aki Kondo'),\n    trailing: CharcoalIconButton(\n      icon: const CharcoalIcon(CharcoalIcons.dotsHorizontal),\n      onPressed: onMore,\n      semanticLabel: 'Conversation actions',\n      size: CharcoalIconButtonSize.small,\n    ),\n  );\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalNavigationItem",
