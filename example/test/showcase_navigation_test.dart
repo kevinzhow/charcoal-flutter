@@ -1,4 +1,8 @@
+import 'dart:ui' as ui;
+
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/main.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -115,4 +119,82 @@ void main() {
       expect(find.byKey(const ValueKey<String>('page-Colors')), findsOneWidget);
     },
   );
+
+  testWidgets('page transitions never paint over the sidebar divider', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1180, 820));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final surfaceKey = GlobalKey();
+    await tester.pumpWidget(
+      RepaintBoundary(key: surfaceKey, child: const CharcoalShowcaseApp()),
+    );
+
+    final divider = find.byKey(
+      const ValueKey<String>('showcase-sidebar-divider'),
+    );
+    final initialRenderObject = tester.renderObject(divider);
+    final dividerColor = tester.widget<ColoredBox>(
+      find.descendant(of: divider, matching: find.byType(ColoredBox)),
+    );
+    final theme = CharcoalThemeData.light();
+
+    expect(tester.getSize(divider).width, 1);
+    expect(dividerColor.color, theme.colors.borderSecondary);
+
+    final feedback = find.byKey(const ValueKey<String>('nav-Feedback'));
+    await tester.ensureVisible(feedback);
+    await tester.pump(const Duration(milliseconds: 300));
+    final stablePixel = await tester.runAsync(
+      () => _pixelAt(surfaceKey, x: 247, y: 400),
+    );
+    await tester.tap(feedback);
+
+    expect(
+      tester.renderObject(divider),
+      same(initialRenderObject),
+      reason: 'page transitions must not replace the divider render object',
+    );
+    var elapsed = Duration.zero;
+    for (final frameDelta in <Duration>[
+      const Duration(milliseconds: 16),
+      const Duration(milliseconds: 32),
+      const Duration(milliseconds: 50),
+      const Duration(milliseconds: 75),
+      const Duration(milliseconds: 100),
+    ]) {
+      await tester.pump(frameDelta);
+      elapsed += frameDelta;
+      expect(
+        await tester.runAsync(() => _pixelAt(surfaceKey, x: 247, y: 400)),
+        stablePixel,
+        reason:
+            'the main page viewport painted over the divider after '
+            '${elapsed.inMilliseconds} ms',
+      );
+    }
+
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byKey(const ValueKey<String>('page-Overview')), findsNothing);
+  });
+}
+
+Future<int> _pixelAt(
+  GlobalKey boundaryKey, {
+  required int x,
+  required int y,
+}) async {
+  final boundary =
+      boundaryKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+  final image = await boundary.toImage();
+  final width = image.width;
+  final bytes = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  image.dispose();
+  final offset = ((y * width) + x) * 4;
+  final data = bytes!.buffer.asUint8List();
+  return data[offset] << 24 |
+      data[offset + 1] << 16 |
+      data[offset + 2] << 8 |
+      data[offset + 3];
 }

@@ -239,6 +239,45 @@ void main() {
     expect(find.text('Temporary'), findsNothing);
   });
 
+  testWidgets('toast and snackbar preserve the iOS outline and elevation contract', (
+    tester,
+  ) async {
+    final theme = CharcoalThemeData.light();
+
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CharcoalToast(message: 'Saved'),
+            CharcoalSnackBar(message: 'Bookmarked'),
+          ],
+        ),
+        theme: theme,
+      ),
+    );
+
+    BoxDecoration surfaceDecoration(Finder surface) => tester
+        .widgetList<DecoratedBox>(
+          find.descendant(of: surface, matching: find.byType(DecoratedBox)),
+        )
+        .map((widget) => widget.decoration)
+        .whereType<BoxDecoration>()
+        .singleWhere((decoration) => decoration.border != null);
+
+    final toast = surfaceDecoration(find.byType(CharcoalToast));
+    final toastBorder = toast.border! as Border;
+    expect(toastBorder.top.color, theme.colors.backgroundDefault);
+    expect(toastBorder.top.width, theme.dimensions.borderWidth.l);
+    expect(toast.boxShadow, isNull);
+
+    final snackBar = surfaceDecoration(find.byType(CharcoalSnackBar));
+    final snackBarBorder = snackBar.border! as Border;
+    expect(snackBarBorder.top.color, theme.colors.borderDefault);
+    expect(snackBarBorder.top.width, theme.dimensions.borderWidth.m);
+    expect(snackBar.boxShadow, isNull);
+  });
+
   testWidgets('snackbar renders a thumbnail and dismisses through its handle', (
     tester,
   ) async {

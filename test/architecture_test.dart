@@ -26,6 +26,8 @@ void main() {
   test('raw component colors are limited to audited source constants', () async {
     const allowed = <String, Set<String>>{
       'checkbox.dart': <String>{'0x00000000', '0xFFFFFFFF'},
+      // Authored fill from Charcoal iOS 16/Info.pdf.
+      'hint_text.dart': <String>{'0xFF858585'},
       'loading_spinner.dart': <String>{'0x1A000000'},
       'modal.dart': <String>{'0x99000000'},
       'tag_item.dart': <String>{'0xFF7ACCB1'},

@@ -50,22 +50,120 @@ void main() {
     expect(nextValue, 'list');
   });
 
-  testWidgets('hint text consumes semantic container and text tokens', (tester) async {
+  testWidgets('hint text uses the intrinsic SwiftUI geometry', (tester) async {
     final theme = CharcoalThemeData.dark();
     await tester.pumpWidget(
       charcoalTestApp(
         const SizedBox(
           width: 320,
-          child: CharcoalHintText(child: Text('Helpful information')),
+          child: CharcoalHintText(
+            icon: ColoredBox(
+              key: ValueKey<String>('hint-icon'),
+              color: Color(0xFFFFFFFF),
+            ),
+            subtitle: Text('Subtitle'),
+            child: Text('Helpful information'),
+          ),
         ),
         theme: theme,
       ),
     );
 
-    final box = tester.widget<DecoratedBox>(find.byType(DecoratedBox).first);
+    final hint = find.byType(CharcoalHintText);
+    final decoratedBox = find.descendant(
+      of: hint,
+      matching: find.byType(DecoratedBox),
+    );
+    final box = tester.widget<DecoratedBox>(decoratedBox);
     expect((box.decoration as BoxDecoration).color, theme.colors.containerSecondaryDefault);
+    expect(tester.getSize(decoratedBox).height, 76);
+    expect(tester.getSize(decoratedBox).width, lessThan(320));
+
+    final padding = tester.widget<Padding>(
+      find.descendant(of: hint, matching: find.byType(Padding)).first,
+    );
+    expect(
+      padding.padding,
+      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    );
+    expect(
+      tester.getSize(find.byKey(const ValueKey<String>('hint-icon'))),
+      const Size.square(16),
+    );
+
+    final primaryRect = tester.getRect(find.text('Helpful information'));
+    final subtitleRect = tester.getRect(find.text('Subtitle'));
+    expect(subtitleRect.top - primaryRect.bottom, 8);
+    expect(subtitleRect.center.dx, primaryRect.center.dx);
+
     final text = tester.widget<Text>(find.text('Helpful information'));
     expect(text.style, isNull, reason: 'The semantic style is inherited through DefaultTextStyle.');
+  });
+
+  testWidgets('hint action expands and stays against the trailing inset', (tester) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 320,
+          child: CharcoalHintText(
+            action: SizedBox(
+              key: ValueKey<String>('hint-action'),
+              width: 64,
+              height: 32,
+            ),
+            icon: SizedBox(key: ValueKey<String>('hint-icon')),
+            child: Text('Hint'),
+          ),
+        ),
+      ),
+    );
+
+    final decoratedBox = find.descendant(
+      of: find.byType(CharcoalHintText),
+      matching: find.byType(DecoratedBox),
+    );
+    final boxRect = tester.getRect(decoratedBox);
+    final actionRect = tester.getRect(
+      find.byKey(const ValueKey<String>('hint-action')),
+    );
+    final iconRect = tester.getRect(find.byKey(const ValueKey<String>('hint-icon')));
+
+    expect(boxRect.size, const Size(320, 56));
+    expect(actionRect.right, boxRect.right - 16);
+    expect(iconRect.left, boxRect.left + 16);
+    expect(actionRect.center.dy, boxRect.center.dy);
+    expect(iconRect.center.dy, boxRect.center.dy);
+  });
+
+  testWidgets('infinite hint width fills its frame and aligns content', (tester) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 320,
+          child: CharcoalHintText(
+            alignment: Alignment.centerLeft,
+            maxWidth: double.infinity,
+            child: Text('Page hint'),
+          ),
+        ),
+      ),
+    );
+
+    final decoratedBox = find.descendant(
+      of: find.byType(CharcoalHintText),
+      matching: find.byType(DecoratedBox),
+    );
+    final boxRect = tester.getRect(decoratedBox);
+    final textRect = tester.getRect(find.text('Page hint'));
+    final defaultIcon = find.descendant(
+      of: find.byType(CharcoalHintText),
+      matching: find.byType(CustomPaint),
+    );
+
+    expect(boxRect.size, const Size(320, 46));
+    expect(defaultIcon, findsOneWidget);
+    expect(tester.getSize(defaultIcon), const Size.square(16));
+    expect(textRect.left, boxRect.left + 36);
   });
 
   testWidgets('showCharcoalDialog presents and dismisses a token-driven route', (tester) async {

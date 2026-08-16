@@ -45,6 +45,7 @@ void main() {
 
   testWidgets('opens an anchored menu and selects a value', (tester) async {
     String? selected;
+    final theme = CharcoalThemeData.light();
     await tester.pumpWidget(
       charcoalTestApp(
         StatefulBuilder(
@@ -59,6 +60,7 @@ void main() {
             ),
           ),
         ),
+        theme: theme,
       ),
     );
 
@@ -66,6 +68,16 @@ void main() {
     await tester.pump();
     expect(find.text('Illustration'), findsOneWidget);
     expect(find.text('Multiple pages'), findsOneWidget);
+    final menuDecoration = tester
+        .widgetList<DecoratedBox>(find.byType(DecoratedBox))
+        .map((widget) => widget.decoration)
+        .whereType<BoxDecoration>()
+        .singleWhere((decoration) {
+          final border = decoration.border;
+          return border is Border && border.top.color == theme.colors.borderSecondary;
+        });
+    final menuBorder = menuDecoration.border! as Border;
+    expect(menuBorder.top.width, theme.dimensions.borderWidth.m);
 
     await tester.tap(find.text('Manga'));
     await tester.pump();

@@ -193,4 +193,30 @@ void main() {
     expect(containers.last.constraints!.maxWidth, 8);
     expect(containers.last.constraints!.maxHeight, 8);
   });
+
+  testWidgets('unselected radio uses the source default border', (
+    tester,
+  ) async {
+    final theme = CharcoalThemeData.light();
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalRadio<String>(
+          value: 'public',
+          groupValue: 'private',
+          onChanged: (_) {},
+        ),
+        theme: theme,
+      ),
+    );
+
+    final indicator = tester
+        .widgetList<AnimatedContainer>(
+          find.byType(AnimatedContainer),
+        )
+        .first;
+    final decoration = indicator.decoration! as BoxDecoration;
+    final border = decoration.border! as Border;
+    expect(border.top.color, theme.colors.borderDefault);
+    expect(border.top.width, theme.dimensions.borderWidth.l);
+  });
 }

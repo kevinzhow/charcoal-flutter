@@ -52,7 +52,7 @@ regular `charcoal_ui` components and can graduate without API churn.
 | Text area | `22 × rows + 18` px without a count and `22 × (rows + 1) + 18` px with one; 9 px horizontal inset, 8 px top inset, 4 px field gaps, and a 4 px external ring. |
 | Switch | 51 × 31 px track, 27 px thumb, 4 px horizontal control wrapper padding, regular 14/22 label, and disabled opacity applied to the control rather than its label. |
 | Spinner | One-second ease-out expansion/fade, 48 px default circle, 16 px padding, 8 px radius, and a 10% black shadow with blur 8. Transparent mode removes the surface fill while retaining the source shadow. |
-| Hint | 8 px radius, 16/12 px padding, 4 px icon gap, 16 px icon, and regular 14/22 text. |
+| Hint | 8 px radius, 16/12 px padding, 4 px icon gap, the exact iOS `16/Info.pdf` icon geometry and authored `#858585` fill, and regular 14/22 text. The default surface is intrinsic-width; an action or infinite maximum width expands it and keeps the action trailing. |
 | Tooltip | 184 px maximum width, 4 px radius, 12/4 px padding, 3 px arrow height, 5 px arrow half-width, 4 px target gap, 16 px screen inset, regular centered 12/20 text, and 200 ms fade. Automatic placement tries below then above. |
 | Balloon | 240 px maximum width, 16 px radius, 16/12 px padding, 4 px arrow height, 7 px arrow half-width, 2 px light outline, bold 14/22 text, close affordance, and capsule action. Placement priority is below, above, right, then left. |
 | Toast | 312 px maximum width, 32 px radius, 2 px outline, 24/8 px padding, 8 px gap, bold single-line 14/22 text, 96 px edge spacing, and two-second default timeout. |
@@ -66,6 +66,18 @@ regular `charcoal_ui` components and can graduate without API churn.
 | Carousel | Zero default gap, 72 px navigation zones, hover/focus navigation reveal, 40 px indicator area, 8 px dot/gap, and 200 ms indicator transition. |
 | Pagination | 32/40 px sizes, bold 14/22 text, 20 px radius, 4 px focus ring, and hidden navigation at page boundaries. |
 | Tag item | 32/40 px sizes, 16/24 px horizontal padding, active 16/8 px asymmetric padding, 8 px gap, 4 px radius, 152 px label maximum, and 16 px remove icon. |
+
+## Outline and elevation contracts
+
+Borders are selected from the component source contract, not from a global preference for one
+border token. Checkbox and radio use `borderDefault` for their unselected indicators, matching
+Charcoal Web. The dropdown popover uses `borderSecondary`. SwiftUI Snackbar uses the legacy
+`border` color, mapped to `borderDefault`; SwiftUI Toast instead uses a 2 px `background1` outline.
+
+Toast, Snackbar, Tooltip, Balloon, Hint, and Modal do not add a drop shadow. Balloon has its authored
+2 px light outline. Spinner is the deliberate exception: it retains the source 10% black, blur-8
+shadow, including on its transparent presentation. Showcase-only cards and structural separators
+use `borderSecondary` and do not define component behavior.
 
 ## Foundation and component boundary
 

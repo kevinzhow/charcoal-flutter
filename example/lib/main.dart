@@ -93,6 +93,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
       child: Row(
         children: <Widget>[
           _Sidebar(selected: _navItem, onSelected: _selectNavigation),
+          const _SidebarDivider(),
           Expanded(
             child: Column(
               children: <Widget>[
@@ -102,27 +103,29 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                   title: _navItem,
                 ),
                 Expanded(
-                  child: AnimatedSwitcher(
-                    duration: CharcoalMotion.resolveDuration(
-                      context,
-                      CharcoalMotion.standard,
-                    ),
-                    layoutBuilder: (currentChild, previousChildren) => Stack(
-                      clipBehavior: Clip.hardEdge,
-                      fit: StackFit.expand,
-                      children: <Widget>[...previousChildren, ?currentChild],
-                    ),
-                    transitionBuilder: (child, animation) =>
-                        _DirectionalPageTransition(
-                          animation: animation,
-                          direction: _pageTransitionDirection,
-                          child: child,
-                        ),
-                    child: _ShowcasePageViewport(
-                      key: ValueKey<String>('page-$_navItem'),
-                      controller: _scrollController,
-                      page: _navItem,
-                      child: _buildSelectedPage(),
+                  child: ClipRect(
+                    key: const ValueKey<String>('showcase-page-viewport-clip'),
+                    child: AnimatedSwitcher(
+                      duration: CharcoalMotion.resolveDuration(
+                        context,
+                        CharcoalMotion.standard,
+                      ),
+                      layoutBuilder: (currentChild, previousChildren) => Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[...previousChildren, ?currentChild],
+                      ),
+                      transitionBuilder: (child, animation) =>
+                          _DirectionalPageTransition(
+                            animation: animation,
+                            direction: _pageTransitionDirection,
+                            child: child,
+                          ),
+                      child: _ShowcasePageViewport(
+                        key: ValueKey<String>('page-$_navItem'),
+                        controller: _scrollController,
+                        page: _navItem,
+                        child: _buildSelectedPage(),
+                      ),
                     ),
                   ),
                 ),
@@ -560,7 +563,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
       _CatalogGrid(
         children: <Widget>[
           _ShowcaseCard(
-            description: 'iOS text, subtitle, info icon, visibility, alignment, and action slots.',
+            description: 'Text, subtitle, info icon, visibility, alignment, and action slots.',
             eyebrow: 'HINT TEXT',
             title: 'HintText',
             child: const Column(
@@ -572,13 +575,13 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                     variant: CharcoalButtonVariant.primary,
                     child: Text('Review'),
                   ),
-                  icon: CharcoalIcon(CharcoalIcons.infoCircle),
                   subtitle: Text('You can change this later.'),
                   child: Text('Changes are saved automatically.'),
                 ),
                 SizedBox(height: 16),
                 CharcoalHintText(
-                  context: CharcoalHintContext.page,
+                  alignment: Alignment.centerLeft,
+                  maxWidth: double.infinity,
                   child: Text('This message applies to the whole page.'),
                 ),
               ],
@@ -1140,7 +1143,7 @@ final class _Header extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colors.borderDefault)),
+        border: Border(bottom: BorderSide(color: theme.colors.borderSecondary)),
         color: theme.colors.backgroundDefault,
       ),
       child: SizedBox(
@@ -1227,12 +1230,9 @@ final class _Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     return SizedBox(
-      width: 248,
+      width: 247,
       child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border(right: BorderSide(color: theme.colors.borderDefault)),
-          color: theme.colors.backgroundDefault,
-        ),
+        decoration: BoxDecoration(color: theme.colors.backgroundDefault),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18, 22, 18, 20),
           child: Column(
@@ -1369,6 +1369,23 @@ final class _Sidebar extends StatelessWidget {
   }
 }
 
+final class _SidebarDivider extends StatelessWidget {
+  const _SidebarDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return RepaintBoundary(
+      key: const ValueKey<String>('showcase-sidebar-divider'),
+      child: SizedBox(
+        width: 1,
+        height: double.infinity,
+        child: ColoredBox(color: theme.colors.borderSecondary),
+      ),
+    );
+  }
+}
+
 final class _OverviewPage extends StatelessWidget {
   const _OverviewPage({required this.onSelected});
 
@@ -1478,7 +1495,7 @@ final class _OverviewMetric extends StatelessWidget {
       width: width,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderDefault),
+          border: Border.all(color: theme.colors.borderSecondary),
           borderRadius: BorderRadius.circular(16),
           color: theme.colors.backgroundDefault,
         ),
@@ -1622,7 +1639,7 @@ final class _PageIntro extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderDefault),
+        border: Border.all(color: theme.colors.borderSecondary),
         borderRadius: BorderRadius.circular(18),
         color: theme.colors.backgroundDefault,
       ),
@@ -1808,7 +1825,7 @@ final class _ColorTokenTile extends StatelessWidget {
         width: 180,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(color: theme.colors.borderDefault),
+            border: Border.all(color: theme.colors.borderSecondary),
             borderRadius: BorderRadius.circular(10),
             color: theme.colors.backgroundDefault,
           ),
@@ -1818,7 +1835,7 @@ final class _ColorTokenTile extends StatelessWidget {
               children: <Widget>[
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    border: Border.all(color: theme.colors.borderDefault),
+                    border: Border.all(color: theme.colors.borderSecondary),
                     borderRadius: BorderRadius.circular(8),
                     color: entry.value,
                   ),
@@ -2193,7 +2210,7 @@ final class _DimensionTokenTile extends StatelessWidget {
       width: 180,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderDefault),
+          border: Border.all(color: theme.colors.borderSecondary),
           borderRadius: BorderRadius.circular(10),
           color: theme.colors.backgroundDefault,
         ),
@@ -2380,7 +2397,7 @@ final class _IconCatalogTile extends StatelessWidget {
       width: 156,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderDefault),
+          border: Border.all(color: theme.colors.borderSecondary),
           borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
           color: theme.colors.backgroundDefault,
         ),
@@ -2661,7 +2678,7 @@ final class _ClickableCard extends StatelessWidget {
             duration: CharcoalMotion.standard,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              border: Border.all(color: theme.colors.borderDefault),
+              border: Border.all(color: theme.colors.borderSecondary),
               borderRadius: BorderRadius.circular(12),
               color: pressed
                   ? theme.colors.containerSecondaryPress
@@ -3028,7 +3045,7 @@ final class _ColorSwatch extends StatelessWidget {
         children: <Widget>[
           DecoratedBox(
             decoration: BoxDecoration(
-              border: Border.all(color: theme.colors.borderDefault),
+              border: Border.all(color: theme.colors.borderSecondary),
               borderRadius: BorderRadius.circular(10),
               color: color,
             ),
@@ -3224,7 +3241,8 @@ final class _TokenPipelinePage extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         const CharcoalHintText(
-          context: CharcoalHintContext.page,
+          alignment: Alignment.centerLeft,
+          maxWidth: double.infinity,
           child: Text(
             'Use “update” to run sync + generate and produce tokens/diff.md in one transaction.',
           ),
@@ -3458,7 +3476,7 @@ final class _ShowcaseCard extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderDefault),
+        border: Border.all(color: theme.colors.borderSecondary),
         borderRadius: BorderRadius.circular(16),
         color: theme.colors.backgroundDefault,
       ),
