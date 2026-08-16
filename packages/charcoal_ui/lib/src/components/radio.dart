@@ -4,14 +4,13 @@ import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
 import 'interaction_state.dart';
+import 'typography.dart';
 
 abstract final class _RadioSpec {
   static const animationDuration = Duration(milliseconds: 200);
   static const controlSize = 20.0;
   static const dotSize = 8.0;
   static const focusRingWidth = 4.0;
-  static const labelFontSize = 14.0;
-  static const labelLineHeight = 22.0;
 }
 
 /// A controlled Charcoal V2 radio option.
@@ -155,13 +154,10 @@ final class _RadioContent extends StatelessWidget {
         SizedBox(width: theme.dimensions.space.component10),
         Flexible(
           child: DefaultTextStyle(
-            style: TextStyle(
+            style: charcoalTypographyStyle(
+              context,
               color: theme.colors.textDefault,
-              fontFamily: theme.typography.fontFamily.sans,
-              fontSize: _RadioSpec.labelFontSize,
-              fontWeight: theme.typography.fontWeight.regular,
-              height: _RadioSpec.labelLineHeight / _RadioSpec.labelFontSize,
-              leadingDistribution: TextLeadingDistribution.even,
+              size: CharcoalTypographySize.size14,
             ),
             child: label!,
           ),

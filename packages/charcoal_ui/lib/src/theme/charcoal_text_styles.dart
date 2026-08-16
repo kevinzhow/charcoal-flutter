@@ -1,6 +1,8 @@
 import 'package:charcoal_tokens/charcoal_tokens.dart';
 import 'package:flutter/widgets.dart';
 
+import 'charcoal_font_family.dart';
+
 /// Precomposed text styles backed entirely by generated V2 typography tokens.
 final class CharcoalTextStyles {
   const CharcoalTextStyles(this.tokens);
@@ -63,11 +65,15 @@ final class CharcoalTextStyles {
     required double fontSize,
     required double lineHeight,
     required FontWeight fontWeight,
-  }) => TextStyle(
-    fontFamily: tokens.fontFamily.sans,
-    fontSize: fontSize,
-    fontWeight: fontWeight,
-    height: lineHeight / fontSize,
-    leadingDistribution: TextLeadingDistribution.even,
-  );
+  }) {
+    final font = resolveCharcoalSansFont(tokens, fontSize: fontSize);
+    return TextStyle(
+      fontFamily: font.family,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: lineHeight / fontSize,
+      leadingDistribution: TextLeadingDistribution.even,
+      package: font.fontPackage,
+    );
+  }
 }

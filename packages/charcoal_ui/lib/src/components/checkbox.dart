@@ -5,6 +5,7 @@ import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
 import 'interaction_state.dart';
+import 'typography.dart';
 
 abstract final class _CheckboxSpec {
   static const animationDuration = Duration(milliseconds: 200);
@@ -191,14 +192,14 @@ final class _CheckboxContent extends StatelessWidget {
         SizedBox(width: theme.dimensions.space.component10),
         Flexible(
           child: DefaultTextStyle(
-            style: TextStyle(
-              color: theme.colors.textDefault,
-              fontFamily: theme.typography.fontFamily.sans,
-              fontSize: _CheckboxSpec.labelFontSize,
-              fontWeight: theme.typography.fontWeight.regular,
-              height: _CheckboxSpec.labelLineHeight / _CheckboxSpec.labelFontSize,
-              leadingDistribution: TextLeadingDistribution.even,
-            ),
+            style:
+                charcoalTypographyStyle(
+                  context,
+                  color: theme.colors.textDefault,
+                  size: CharcoalTypographySize.size14,
+                ).copyWith(
+                  height: _CheckboxSpec.labelLineHeight / _CheckboxSpec.labelFontSize,
+                ),
             child: label!,
           ),
         ),

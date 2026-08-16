@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../theme/charcoal_font_family.dart';
 import '../theme/charcoal_theme.dart';
 
 enum CharcoalTypographySize { size10, size12, size14, size16, size20 }
@@ -63,9 +64,13 @@ TextStyle charcoalTypographyStyle(
     CharcoalTypographySize.size16 => (16.0, 24.0),
     CharcoalTypographySize.size20 => (20.0, 28.0),
   };
+  final font = resolveCharcoalSansFont(
+    theme.typography,
+    fontSize: fontSize,
+  );
   return TextStyle(
     color: color ?? theme.colors.textDefaultText1,
-    fontFamily: monospace ? 'monospace' : theme.typography.fontFamily.sans,
+    fontFamily: monospace ? 'monospace' : font.family,
     fontSize: fontSize,
     fontWeight: switch (weight) {
       CharcoalTypographyWeight.regular => theme.typography.fontWeight.regular,
@@ -73,5 +78,6 @@ TextStyle charcoalTypographyStyle(
     },
     height: monospace ? null : lineHeight / fontSize,
     leadingDistribution: monospace ? null : TextLeadingDistribution.even,
+    package: monospace ? null : font.fontPackage,
   );
 }

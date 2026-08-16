@@ -89,6 +89,15 @@ This deliberately means not every number is a token. Promoting a value to a sema
 appropriate only when multiple consumers share a stable meaning; numerical coincidence alone is
 not sufficient.
 
+### Runtime font mapping
+
+The generated `text.font-family/sans` token preserves Charcoal Web's `Sarasa UI J` source value.
+Runtime availability is an implementation concern: Apple native targets use the system text/display
+families used by Charcoal SwiftUI, while Web and non-Apple targets use the package's Regular/Bold
+`CharcoalSans` assets. The assets are compact Sarasa UI J subsets, so a release build never depends
+on a font installed on the developer's computer or on renderer-specific missing-font behavior.
+Explicit application typography overrides bypass this mapping.
+
 ## Icon dependency boundary
 
 `charcoal_ui` and `charcoal_icons` are sibling packages. UI controls accept regular widget slots so

@@ -17,8 +17,6 @@ abstract final class _DropdownSpec {
   static const menuMaxHeight = 280.0;
   static const focusRingWidth = 4.0;
   static const iconSize = 16.0;
-  static const labelFontSize = 14.0;
-  static const labelLineHeight = 22.0;
 }
 
 /// One selectable value in a [CharcoalDropdown].
@@ -404,15 +402,12 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
                           visibleText,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: charcoalTypographyStyle(
+                            context,
                             color: isPlaceholder
                                 ? theme.colors.textPlaceholderDefault
                                 : theme.colors.textDefault,
-                            fontFamily: theme.typography.fontFamily.sans,
-                            fontSize: _DropdownSpec.labelFontSize,
-                            fontWeight: theme.typography.fontWeight.regular,
-                            height: _DropdownSpec.labelLineHeight / _DropdownSpec.labelFontSize,
-                            leadingDistribution: TextLeadingDistribution.even,
+                            size: CharcoalTypographySize.size14,
                           ),
                         ),
                       ),

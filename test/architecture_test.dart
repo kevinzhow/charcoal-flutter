@@ -46,4 +46,22 @@ void main() {
     }
     expect(actual, allowed);
   });
+
+  test('runtime sans fonts are checked in and declared by charcoal_ui', () async {
+    const fontDirectory = 'packages/charcoal_ui/assets/fonts';
+    final regular = File('$fontDirectory/CharcoalSans-Regular.ttf');
+    final bold = File('$fontDirectory/CharcoalSans-Bold.ttf');
+    final license = File('$fontDirectory/OFL.txt');
+    final pubspec = await File('packages/charcoal_ui/pubspec.yaml').readAsString();
+
+    expect(regular.existsSync(), isTrue);
+    expect(bold.existsSync(), isTrue);
+    expect(license.existsSync(), isTrue);
+    expect(regular.lengthSync(), inInclusiveRange(100000, 250000));
+    expect(bold.lengthSync(), inInclusiveRange(100000, 250000));
+    expect(pubspec, contains('family: CharcoalSans'));
+    expect(pubspec, contains('- assets/fonts/OFL.txt'));
+    expect(pubspec, contains('assets/fonts/CharcoalSans-Regular.ttf'));
+    expect(pubspec, contains('assets/fonts/CharcoalSans-Bold.ttf'));
+  });
 }

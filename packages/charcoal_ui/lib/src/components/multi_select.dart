@@ -5,6 +5,7 @@ import '../theme/charcoal_motion.dart';
 import '../theme/charcoal_theme.dart';
 import 'clickable.dart';
 import 'interaction_state.dart';
+import 'typography.dart';
 
 abstract final class _MultiSelectSpec {
   static const animationDuration = Duration(milliseconds: 200);
@@ -12,8 +13,6 @@ abstract final class _MultiSelectSpec {
   static const outerOffset = 2.0;
   static const checkSize = 16.0;
   static const focusRingWidth = 4.0;
-  static const labelFontSize = 14.0;
-  static const labelLineHeight = 22.0;
 }
 
 enum CharcoalMultiSelectVariant { normal, overlay }
@@ -188,13 +187,10 @@ final class _MultiSelectContent extends StatelessWidget {
         SizedBox(width: theme.dimensions.space.component10),
         Flexible(
           child: DefaultTextStyle(
-            style: TextStyle(
+            style: charcoalTypographyStyle(
+              context,
               color: theme.colors.textDefault,
-              fontFamily: theme.typography.fontFamily.sans,
-              fontSize: _MultiSelectSpec.labelFontSize,
-              fontWeight: theme.typography.fontWeight.regular,
-              height: _MultiSelectSpec.labelLineHeight / _MultiSelectSpec.labelFontSize,
-              leadingDistribution: TextLeadingDistribution.even,
+              size: CharcoalTypographySize.size14,
             ),
             child: label!,
           ),
