@@ -8,6 +8,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_helpers.dart';
 
 void main() {
+  testWidgets('field metadata adapts to a narrow mobile width', (tester) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const SizedBox(
+          width: 318,
+          child: CharcoalFieldLabel(
+            label: 'Description with a deliberately long label',
+            required: true,
+            subLabel: Text('0/500'),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('*Required'), findsOneWidget);
+    expect(find.text('0/500'), findsOneWidget);
+  });
+
   testWidgets('accepts input and updates the count', (tester) async {
     String? changedValue;
     await tester.pumpWidget(

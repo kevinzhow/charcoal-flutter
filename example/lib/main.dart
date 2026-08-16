@@ -1,15 +1,11 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_skill/flutter_skill.dart';
 
-void main() {
-  if (kDebugMode) {
-    FlutterSkillBinding.ensureInitialized(autoEnableIndicators: false);
-  }
-  runApp(const CharcoalShowcaseApp());
-}
+void main() => runCharcoalShowcase();
+
+void runCharcoalShowcase() => runApp(const CharcoalShowcaseApp());
 
 final class CharcoalShowcaseApp extends StatefulWidget {
   const CharcoalShowcaseApp({super.key});
@@ -46,6 +42,7 @@ final class _ShowcasePage extends StatefulWidget {
 }
 
 final class _ShowcasePageState extends State<_ShowcasePage> {
+  static const _desktopLayoutMinWidth = 1024.0;
   static const _navigationOrder = <String>[
     'Overview',
     'Colors',
@@ -70,6 +67,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   bool _showNotifications = true;
   int _currentPage = 3;
   String _layout = 'grid';
+  bool _mobileNavigationOpen = false;
   String _navItem = 'Overview';
   double _pageTransitionDirection = 1;
   String _privacy = 'public';
@@ -88,57 +86,163 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    return ColoredBox(
-      color: theme.colors.backgroundSecondary,
-      child: Row(
-        children: <Widget>[
-          _Sidebar(selected: _navItem, onSelected: _selectNavigation),
-          const _SidebarDivider(),
-          Expanded(
+    final systemOverlayStyle =
+        (theme.brightness == Brightness.dark
+                ? SystemUiOverlayStyle.light
+                : SystemUiOverlayStyle.dark)
+            .copyWith(
+              statusBarColor: theme.colors.backgroundDefault,
+              systemNavigationBarColor: theme.colors.backgroundDefault,
+              systemNavigationBarDividerColor: theme.colors.borderSecondary,
+            );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: systemOverlayStyle,
+      child: ColoredBox(
+        color: theme.colors.backgroundDefault,
+        child: LayoutBuilder(
+          builder: (context, constraints) =>
+              constraints.maxWidth >= _desktopLayoutMinWidth
+              ? _buildDesktopShell(context, theme)
+              : _buildMobileShell(context, theme),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDesktopShell(BuildContext context, CharcoalThemeData theme) =>
+      ColoredBox(
+        key: const ValueKey<String>('showcase-desktop-shell'),
+        color: theme.colors.backgroundSecondary,
+        child: Row(
+          children: <Widget>[
+            _Sidebar(selected: _navItem, onSelected: _selectNavigation),
+            const _SidebarDivider(),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  _Header(
+                    darkMode: widget.darkMode,
+                    onDarkModeChanged: widget.onDarkModeChanged,
+                    title: _navItem,
+                  ),
+                  Expanded(child: _buildPageSwitcher(context, compact: false)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildMobileShell(BuildContext context, CharcoalThemeData theme) =>
+      PopScope<void>(
+        canPop: !_mobileNavigationOpen,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop && _mobileNavigationOpen) {
+            setState(() => _mobileNavigationOpen = false);
+          }
+        },
+        child: SafeArea(
+          child: ColoredBox(
+            key: const ValueKey<String>('showcase-mobile-shell'),
+            color: theme.colors.backgroundSecondary,
             child: Column(
               children: <Widget>[
-                _Header(
+                _MobileHeader(
                   darkMode: widget.darkMode,
+                  navigationOpen: _mobileNavigationOpen,
                   onDarkModeChanged: widget.onDarkModeChanged,
+                  onNavigationToggle: () => setState(
+                    () => _mobileNavigationOpen = !_mobileNavigationOpen,
+                  ),
                   title: _navItem,
                 ),
                 Expanded(
-                  child: ClipRect(
-                    key: const ValueKey<String>('showcase-page-viewport-clip'),
-                    child: AnimatedSwitcher(
-                      duration: CharcoalMotion.resolveDuration(
-                        context,
-                        CharcoalMotion.standard,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      ExcludeSemantics(
+                        excluding: _mobileNavigationOpen,
+                        child: IgnorePointer(
+                          ignoring: _mobileNavigationOpen,
+                          child: _buildPageSwitcher(context, compact: true),
+                        ),
                       ),
-                      layoutBuilder: (currentChild, previousChildren) => Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[...previousChildren, ?currentChild],
-                      ),
-                      transitionBuilder: (child, animation) =>
-                          _DirectionalPageTransition(
-                            animation: animation,
-                            direction: _pageTransitionDirection,
+                      AnimatedSwitcher(
+                        duration: CharcoalMotion.resolveDuration(
+                          context,
+                          CharcoalMotion.standard,
+                        ),
+                        transitionBuilder: (child, animation) => FadeTransition(
+                          opacity: animation,
+                          child: SlideTransition(
+                            position:
+                                Tween<Offset>(
+                                  begin: const Offset(-0.04, 0),
+                                  end: Offset.zero,
+                                ).animate(
+                                  CurvedAnimation(
+                                    parent: animation,
+                                    curve: CharcoalMotion.emphasizedCurve,
+                                  ),
+                                ),
                             child: child,
                           ),
-                      child: _ShowcasePageViewport(
-                        key: ValueKey<String>('page-$_navItem'),
-                        controller: _scrollController,
-                        page: _navItem,
-                        child: _buildSelectedPage(),
+                        ),
+                        child: _mobileNavigationOpen
+                            ? _MobileNavigationPanel(
+                                key: const ValueKey<String>(
+                                  'showcase-mobile-navigation',
+                                ),
+                                onSelected: _selectNavigation,
+                                selected: _navItem,
+                              )
+                            : const SizedBox.shrink(
+                                key: ValueKey<String>(
+                                  'showcase-mobile-navigation-closed',
+                                ),
+                              ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      );
+
+  Widget _buildPageSwitcher(BuildContext context, {required bool compact}) =>
+      ClipRect(
+        key: const ValueKey<String>('showcase-page-viewport-clip'),
+        child: AnimatedSwitcher(
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            CharcoalMotion.standard,
+          ),
+          layoutBuilder: (currentChild, previousChildren) => Stack(
+            fit: StackFit.expand,
+            children: <Widget>[...previousChildren, ?currentChild],
+          ),
+          transitionBuilder: (child, animation) => _DirectionalPageTransition(
+            animation: animation,
+            direction: _pageTransitionDirection,
+            child: child,
+          ),
+          child: _ShowcasePageViewport(
+            key: ValueKey<String>('page-$_navItem'),
+            compact: compact,
+            controller: _scrollController,
+            page: _navItem,
+            child: _buildSelectedPage(),
+          ),
+        ),
+      );
 
   void _selectNavigation(String value) {
     if (value == _navItem) {
+      if (_mobileNavigationOpen) {
+        setState(() => _mobileNavigationOpen = false);
+      }
       return;
     }
     if (_scrollController.hasClients) {
@@ -151,6 +255,7 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
       initialScrollOffset: _scrollOffsets[value] ?? 0,
     );
     setState(() {
+      _mobileNavigationOpen = false;
       _navItem = value;
       _pageTransitionDirection = nextIndex >= previousIndex ? 1 : -1;
       _scrollController = nextController;
@@ -522,26 +627,31 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
                 'Page windows, ellipsis behavior, and disabled edge actions.',
             eyebrow: 'PAGINATION',
             title: 'Pagination',
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CharcoalPagination(
-                  currentPage: _currentPage,
-                  maxVisiblePages: 5,
-                  onPageChanged: (value) =>
-                      setState(() => _currentPage = value),
-                  pageCount: 12,
-                  size: CharcoalPaginationSize.small,
-                ),
-                const SizedBox(height: 20),
-                CharcoalPagination(
-                  currentPage: _currentPage,
-                  maxVisiblePages: 5,
-                  onPageChanged: (value) =>
-                      setState(() => _currentPage = value),
-                  pageCount: 12,
-                ),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxVisiblePages = constraints.maxWidth < 300 ? 3 : 5;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    CharcoalPagination(
+                      currentPage: _currentPage,
+                      maxVisiblePages: maxVisiblePages,
+                      onPageChanged: (value) =>
+                          setState(() => _currentPage = value),
+                      pageCount: 12,
+                      size: CharcoalPaginationSize.small,
+                    ),
+                    const SizedBox(height: 20),
+                    CharcoalPagination(
+                      currentPage: _currentPage,
+                      maxVisiblePages: maxVisiblePages,
+                      onPageChanged: (value) =>
+                          setState(() => _currentPage = value),
+                      pageCount: 12,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -1087,12 +1197,14 @@ final class _DirectionalPageTransition extends StatelessWidget {
 final class _ShowcasePageViewport extends StatelessWidget {
   const _ShowcasePageViewport({
     required this.child,
+    required this.compact,
     required this.controller,
     required this.page,
     super.key,
   });
 
   final Widget child;
+  final bool compact;
   final ScrollController controller;
   final String page;
 
@@ -1104,16 +1216,18 @@ final class _ShowcasePageViewport extends StatelessWidget {
         color: theme.colors.backgroundSecondary,
         child: RawScrollbar(
           controller: controller,
-          crossAxisMargin: 4,
+          crossAxisMargin: compact ? 2 : 4,
           fadeDuration: CharcoalMotion.standard,
-          interactive: true,
+          interactive: !compact,
           radius: Radius.circular(theme.dimensions.radius.oval),
-          thickness: 6,
+          thickness: compact ? 3 : 6,
           thumbColor: theme.colors.containerTertiaryDefault,
           child: SingleChildScrollView(
             key: ValueKey<String>('page-scroll-$page'),
             controller: controller,
-            padding: const EdgeInsets.fromLTRB(32, 30, 32, 48),
+            padding: compact
+                ? const EdgeInsets.fromLTRB(16, 20, 16, 32)
+                : const EdgeInsets.fromLTRB(32, 30, 32, 48),
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1080),
@@ -1181,6 +1295,223 @@ final class _Header extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _MobileHeader extends StatelessWidget {
+  const _MobileHeader({
+    required this.darkMode,
+    required this.navigationOpen,
+    required this.onDarkModeChanged,
+    required this.onNavigationToggle,
+    required this.title,
+  });
+
+  final bool darkMode;
+  final bool navigationOpen;
+  final ValueChanged<bool> onDarkModeChanged;
+  final VoidCallback onNavigationToggle;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: theme.colors.borderSecondary)),
+        color: theme.colors.backgroundDefault,
+      ),
+      child: SizedBox(
+        height: 64,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: <Widget>[
+              SizedBox.square(
+                dimension: 48,
+                child: CharcoalIconButton(
+                  key: const ValueKey<String>(
+                    'showcase-mobile-navigation-toggle',
+                  ),
+                  icon: CharcoalIcon(
+                    navigationOpen ? CharcoalIcons.x : CharcoalIcons.list,
+                  ),
+                  onPressed: onNavigationToggle,
+                  selected: navigationOpen,
+                  semanticLabel: navigationOpen
+                      ? 'Close navigation'
+                      : 'Open navigation',
+                  size: CharcoalIconButtonSize.medium,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  key: const ValueKey<String>('showcase-mobile-title'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textStyles.bodyBold.copyWith(
+                    color: theme.colors.textDefault,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              SizedBox.square(
+                dimension: 48,
+                child: CharcoalIconButton(
+                  key: const ValueKey<String>('showcase-mobile-dark-mode'),
+                  icon: const CharcoalIcon(CharcoalIcons.sun),
+                  onPressed: () => onDarkModeChanged(!darkMode),
+                  selected: darkMode,
+                  semanticLabel: darkMode ? 'Use light mode' : 'Use dark mode',
+                  size: CharcoalIconButtonSize.medium,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+final class _MobileNavigationPanel extends StatelessWidget {
+  const _MobileNavigationPanel({
+    required this.onSelected,
+    required this.selected,
+    super.key,
+  });
+
+  final ValueChanged<String> onSelected;
+  final String selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return Semantics(
+      container: true,
+      explicitChildNodes: true,
+      label: 'Showcase navigation',
+      child: ColoredBox(
+        color: theme.colors.backgroundDefault,
+        child: SingleChildScrollView(
+          key: const ValueKey<String>('showcase-mobile-navigation-scroll'),
+          padding: const EdgeInsets.fromLTRB(16, 18, 16, 28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: <Widget>[
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: theme.colors.containerPrimaryDefault,
+                      ),
+                      child: SizedBox.square(
+                        dimension: 40,
+                        child: Center(
+                          child: Text(
+                            'C',
+                            style: theme.textStyles.headingXxs.copyWith(
+                              color: theme.colors.textOnPrimaryDefault,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Charcoal UI',
+                            style: theme.textStyles.bodyBold.copyWith(
+                              color: theme.colors.textDefault,
+                            ),
+                          ),
+                          Text(
+                            'Flutter · V2 Showcase',
+                            style: theme.textStyles.captionSmall.copyWith(
+                              color: theme.colors.textTertiaryDefault,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              for (final section in _Sidebar._sections) ...<Widget>[
+                if (section.$1.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 15, 12, 7),
+                    child: Text(
+                      section.$1,
+                      style: theme.textStyles.captionSmall.copyWith(
+                        color: theme.colors.textTertiaryDefault,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                for (final item in section.$2) ...<Widget>[
+                  SizedBox(
+                    height: 48,
+                    child: CharcoalNavigationItem(
+                      key: ValueKey<String>('nav-${item.$1}'),
+                      leading: CharcoalIcon(item.$2),
+                      onPressed: () => onSelected(item.$1),
+                      selected: selected == item.$1,
+                      semanticLabel: item.$1,
+                      trailing: selected == item.$1
+                          ? const CharcoalIcon(CharcoalIcons.check)
+                          : null,
+                      child: Text(item.$1),
+                    ),
+                  ),
+                  SizedBox(height: theme.dimensions.space.component10),
+                ],
+              ],
+              const SizedBox(height: 14),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: theme.colors.containerSecondaryDefault,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
+                    children: <Widget>[
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(999),
+                          color: theme.colors.containerPositiveDefault,
+                        ),
+                        child: const SizedBox.square(dimension: 8),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Tokens synchronized from Charcoal V2',
+                          style: theme.textStyles.captionMediumBold.copyWith(
+                            color: theme.colors.textDefault,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -1637,66 +1968,93 @@ final class _PageIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSecondary),
-        borderRadius: BorderRadius.circular(18),
-        color: theme.colors.backgroundDefault,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(28),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    eyebrow,
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textInfoDefault,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 9),
-                  Text(
-                    title,
-                    style: theme.textStyles.headingM.copyWith(
-                      color: theme.colors.textDefault,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    description,
-                    style: theme.textStyles.body.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                    ),
-                  ),
-                ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 520;
+        final eyebrowText = Text(
+          eyebrow,
+          style: theme.textStyles.captionMediumBold.copyWith(
+            color: theme.colors.textInfoDefault,
+            letterSpacing: 1.2,
+          ),
+        );
+        final badge = DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            color: theme.colors.containerDiscoveryDefault,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: Text(
+              'V2',
+              style: theme.textStyles.captionMediumBold.copyWith(
+                color: theme.colors.textOnDiscoveryDefault,
               ),
             ),
-            const SizedBox(width: 24),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(999),
-                color: theme.colors.containerDiscoveryDefault,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 8,
-                ),
-                child: Text(
-                  'V2',
-                  style: theme.textStyles.captionMediumBold.copyWith(
-                    color: theme.colors.textOnDiscoveryDefault,
-                  ),
-                ),
+          ),
+        );
+        final titleAndDescription = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              title,
+              style:
+                  (compact
+                          ? theme.textStyles.headingS
+                          : theme.textStyles.headingM)
+                      .copyWith(color: theme.colors.textDefault),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              description,
+              style: theme.textStyles.body.copyWith(
+                color: theme.colors.textSecondaryDefault,
               ),
             ),
           ],
-        ),
-      ),
+        );
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: theme.colors.borderSecondary),
+            borderRadius: BorderRadius.circular(18),
+            color: theme.colors.backgroundDefault,
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(compact ? 20 : 28),
+            child: compact
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(child: eyebrowText),
+                          const SizedBox(width: 12),
+                          badge,
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      titleAndDescription,
+                    ],
+                  )
+                : Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            eyebrowText,
+                            const SizedBox(height: 9),
+                            titleAndDescription,
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+                      badge,
+                    ],
+                  ),
+          ),
+        );
+      },
     );
   }
 }
@@ -1753,20 +2111,26 @@ final class _ColorsPageState extends State<_ColorsPage> {
           title: 'Color catalog',
         ),
         const SizedBox(height: 24),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: CharcoalSegmentedControl<String>(
-            onChanged: (value) => setState(() => _catalog = value),
-            segments: const <CharcoalSegment<String>>[
-              CharcoalSegment<String>(child: Text('Applied'), value: 'applied'),
-              CharcoalSegment<String>(
-                child: Text('Primitive'),
-                value: 'primitive',
-              ),
-              CharcoalSegment<String>(child: Text('Brand'), value: 'brand'),
-            ],
-            semanticLabel: 'Color catalog kind',
-            value: _catalog,
+        LayoutBuilder(
+          builder: (context, constraints) => Align(
+            alignment: Alignment.centerLeft,
+            child: CharcoalSegmentedControl<String>(
+              fullWidth: constraints.maxWidth < 420,
+              onChanged: (value) => setState(() => _catalog = value),
+              segments: const <CharcoalSegment<String>>[
+                CharcoalSegment<String>(
+                  child: Text('Applied'),
+                  value: 'applied',
+                ),
+                CharcoalSegment<String>(
+                  child: Text('Primitive'),
+                  value: 'primitive',
+                ),
+                CharcoalSegment<String>(child: Text('Brand'), value: 'brand'),
+              ],
+              semanticLabel: 'Color catalog kind',
+              value: _catalog,
+            ),
           ),
         ),
         const SizedBox(height: 20),
@@ -2327,43 +2691,54 @@ final class _IconsPageState extends State<_IconsPage> {
           title: 'Icon catalog',
         ),
         SizedBox(height: theme.dimensions.space.layout40),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: CharcoalSegmentedControl<_IconCatalogKind>(
-            onChanged: (value) => setState(() => _kind = value),
-            semanticLabel: 'Icon catalog style',
-            value: _kind,
-            segments: const <CharcoalSegment<_IconCatalogKind>>[
-              CharcoalSegment(
-                value: _IconCatalogKind.regular,
-                child: Text(
-                  'Regular 24',
-                  key: ValueKey<String>('icon-catalog-regular'),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final canFitFourUniformSegments = constraints.maxWidth >= 320;
+            final useUniformMobileLayout =
+                canFitFourUniformSegments && constraints.maxWidth < 620;
+            final control = CharcoalSegmentedControl<_IconCatalogKind>(
+              fullWidth: useUniformMobileLayout,
+              onChanged: (value) => setState(() => _kind = value),
+              semanticLabel: 'Icon catalog style',
+              value: _kind,
+              segments: const <CharcoalSegment<_IconCatalogKind>>[
+                CharcoalSegment(
+                  value: _IconCatalogKind.regular,
+                  child: Text(
+                    'Regular 24',
+                    key: ValueKey<String>('icon-catalog-regular'),
+                  ),
                 ),
-              ),
-              CharcoalSegment(
-                value: _IconCatalogKind.solid,
-                child: Text(
-                  'Solid 24',
-                  key: ValueKey<String>('icon-catalog-solid'),
+                CharcoalSegment(
+                  value: _IconCatalogKind.solid,
+                  child: Text(
+                    'Solid 24',
+                    key: ValueKey<String>('icon-catalog-solid'),
+                  ),
                 ),
-              ),
-              CharcoalSegment(
-                value: _IconCatalogKind.compact,
-                child: Text(
-                  '16 + 20',
-                  key: ValueKey<String>('icon-catalog-compact'),
+                CharcoalSegment(
+                  value: _IconCatalogKind.compact,
+                  child: Text(
+                    '16 + 20',
+                    key: ValueKey<String>('icon-catalog-compact'),
+                  ),
                 ),
-              ),
-              CharcoalSegment(
-                value: _IconCatalogKind.color,
-                child: Text(
-                  'Color',
-                  key: ValueKey<String>('icon-catalog-color'),
+                CharcoalSegment(
+                  value: _IconCatalogKind.color,
+                  child: Text(
+                    'Color',
+                    key: ValueKey<String>('icon-catalog-color'),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+            return canFitFourUniformSegments
+                ? Align(alignment: Alignment.centerLeft, child: control)
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: control,
+                  );
+          },
         ),
         SizedBox(height: theme.dimensions.space.layout30),
         Text(
@@ -3345,88 +3720,95 @@ final class _Hero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            theme.colors.containerPrimaryDefault,
-            theme.colors.containerDiscoveryDefault,
-          ],
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 640;
+        final content = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'CHARCOAL UI · FLUTTER',
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textOnPrimaryDefault,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Source-backed components,\npowered by shared foundations.',
-                    style: theme.textStyles.headingM.copyWith(
-                      color: theme.colors.textOnPrimaryDefault,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Pure Flutter Widgets. No Material or Cupertino dependency.',
-                    style: theme.textStyles.body.copyWith(
-                      color: theme.colors.textOnPrimaryDefault.withValues(
-                        alpha: 0.82,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                  const Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
+            Text(
+              'CHARCOAL UI · FLUTTER',
+              style: theme.textStyles.captionMediumBold.copyWith(
+                color: theme.colors.textOnPrimaryDefault,
+                letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Source-backed components,\npowered by shared foundations.',
+              style:
+                  (compact
+                          ? theme.textStyles.headingS
+                          : theme.textStyles.headingM)
+                      .copyWith(color: theme.colors.textOnPrimaryDefault),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Pure Flutter Widgets. No Material or Cupertino dependency.',
+              style: theme.textStyles.body.copyWith(
+                color: theme.colors.textOnPrimaryDefault.withValues(
+                  alpha: 0.82,
+                ),
+              ),
+            ),
+            const SizedBox(height: 22),
+            const Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: <Widget>[
+                _HeroPill(label: 'V2 only'),
+                _HeroPill(label: 'Pinned sources'),
+                _HeroPill(label: 'Light + dark'),
+              ],
+            ),
+          ],
+        );
+        final mark = DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.2),
+            ),
+            borderRadius: BorderRadius.circular(20),
+            color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.1),
+          ),
+          child: SizedBox.square(
+            dimension: 130,
+            child: Center(
+              child: Text(
+                'V2',
+                style: theme.textStyles.headingXxl.copyWith(
+                  color: theme.colors.textOnPrimaryDefault,
+                ),
+              ),
+            ),
+          ),
+        );
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                theme.colors.containerPrimaryDefault,
+                theme.colors.containerDiscoveryDefault,
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(compact ? 20 : 30),
+            child: compact
+                ? content
+                : Row(
                     children: <Widget>[
-                      _HeroPill(label: 'V2 only'),
-                      _HeroPill(label: 'Pinned sources'),
-                      _HeroPill(label: 'Light + dark'),
+                      Expanded(child: content),
+                      const SizedBox(width: 24),
+                      mark,
                     ],
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 24),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: theme.colors.textOnPrimaryDefault.withValues(
-                    alpha: 0.2,
-                  ),
-                ),
-                borderRadius: BorderRadius.circular(20),
-                color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.1),
-              ),
-              child: SizedBox.square(
-                dimension: 130,
-                child: Center(
-                  child: Text(
-                    'V2',
-                    style: theme.textStyles.headingXxl.copyWith(
-                      color: theme.colors.textOnPrimaryDefault,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -3474,42 +3856,44 @@ final class _ShowcaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSecondary),
-        borderRadius: BorderRadius.circular(16),
-        color: theme.colors.backgroundDefault,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              eyebrow,
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textInfoDefault,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1,
+    return LayoutBuilder(
+      builder: (context, constraints) => DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(color: theme.colors.borderSecondary),
+          borderRadius: BorderRadius.circular(16),
+          color: theme.colors.backgroundDefault,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(constraints.maxWidth < 420 ? 20 : 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                eyebrow,
+                style: theme.textStyles.captionSmall.copyWith(
+                  color: theme.colors.textInfoDefault,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1,
+                ),
               ),
-            ),
-            const SizedBox(height: 7),
-            Text(
-              title,
-              style: theme.textStyles.headingXs.copyWith(
-                color: theme.colors.textDefault,
+              const SizedBox(height: 7),
+              Text(
+                title,
+                style: theme.textStyles.headingXs.copyWith(
+                  color: theme.colors.textDefault,
+                ),
               ),
-            ),
-            const SizedBox(height: 7),
-            Text(
-              description,
-              style: theme.textStyles.captionMedium.copyWith(
-                color: theme.colors.textSecondaryDefault,
+              const SizedBox(height: 7),
+              Text(
+                description,
+                style: theme.textStyles.captionMedium.copyWith(
+                  color: theme.colors.textSecondaryDefault,
+                ),
               ),
-            ),
-            const SizedBox(height: 22),
-            child,
-          ],
+              const SizedBox(height: 22),
+              child,
+            ],
+          ),
         ),
       ),
     );

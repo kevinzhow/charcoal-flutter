@@ -1,9 +1,32 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_helpers.dart';
 
 void main() {
+  testWidgets('supports a compact three-page mobile window', (tester) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        SizedBox(
+          width: 200,
+          child: CharcoalPagination(
+            currentPage: 50,
+            maxVisiblePages: 3,
+            pageCount: 100,
+            onPageChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('50'), findsOneWidget);
+    expect(find.text('100'), findsOneWidget);
+    expect(find.text('…'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('shows a centered page window and reports navigation', (tester) async {
     int? nextPage;
     await tester.pumpWidget(

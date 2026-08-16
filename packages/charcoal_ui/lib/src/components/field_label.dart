@@ -23,40 +23,60 @@ final class CharcoalFieldLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    return Row(
-      children: <Widget>[
-        Text(
-          label,
-          style: charcoalTypographyStyle(
-            context,
-            color: theme.colors.textDefaultText1,
-            size: CharcoalTypographySize.size14,
-            weight: weight,
-          ),
-        ),
-        if (required) ...<Widget>[
-          SizedBox(width: theme.dimensions.space.component10),
-          Text(
-            requiredText,
-            style: charcoalTypographyStyle(
-              context,
-              color: theme.colors.textSecondaryDefault,
-              size: CharcoalTypographySize.size14,
+    return LayoutBuilder(
+      builder: (context, constraints) => Row(
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: charcoalTypographyStyle(
+                      context,
+                      color: theme.colors.textDefaultText1,
+                      size: CharcoalTypographySize.size14,
+                      weight: weight,
+                    ),
+                  ),
+                ),
+                if (required) ...<Widget>[
+                  SizedBox(width: theme.dimensions.space.component10),
+                  Text(
+                    requiredText,
+                    maxLines: 1,
+                    style: charcoalTypographyStyle(
+                      context,
+                      color: theme.colors.textSecondaryDefault,
+                      size: CharcoalTypographySize.size14,
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
-        ],
-        if (subLabel != null) ...<Widget>[
-          const Spacer(),
-          DefaultTextStyle(
-            style: charcoalTypographyStyle(
-              context,
-              color: theme.colors.textTertiaryDefault,
-              size: CharcoalTypographySize.size14,
+          if (subLabel != null) ...<Widget>[
+            SizedBox(width: theme.dimensions.space.component20),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: constraints.maxWidth * 0.4,
+              ),
+              child: DefaultTextStyle(
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: charcoalTypographyStyle(
+                  context,
+                  color: theme.colors.textTertiaryDefault,
+                  size: CharcoalTypographySize.size14,
+                ),
+                child: subLabel!,
+              ),
             ),
-            child: subLabel!,
-          ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

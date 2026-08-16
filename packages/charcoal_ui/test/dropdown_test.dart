@@ -180,6 +180,46 @@ void main() {
     await tester.pump();
     expect(find.text('Illustration'), findsNothing);
   });
+
+  testWidgets('keeps an upward-opening menu compact and visible on mobile', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      charcoalTestApp(
+        const Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 24),
+            child: SizedBox(
+              width: 320,
+              child: CharcoalDropdown<String>(
+                label: 'Work type',
+                onChanged: _ignoreString,
+                options: options,
+                placeholder: 'Choose',
+                value: null,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Choose'));
+    await tester.pumpAndSettle();
+
+    final menuRect = tester.getRect(find.byType(SingleChildScrollView));
+    expect(menuRect.width, 320);
+    expect(menuRect.height, lessThanOrEqualTo(280));
+    expect(menuRect.top, greaterThanOrEqualTo(0));
+    expect(menuRect.bottom, lessThan(820));
+    for (final label in <String>['Illustration', 'Manga', 'Novel']) {
+      expect(tester.getRect(find.text(label)).overlaps(menuRect), isTrue);
+    }
+  });
 }
 
 void _ignoreString(String value) {}

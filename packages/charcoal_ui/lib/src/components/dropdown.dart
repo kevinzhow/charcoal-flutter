@@ -478,16 +478,19 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
     final menuGap = theme.dimensions.space.component10;
     final menuRadius = theme.dimensions.radius.m;
 
-    return CompositedTransformFollower(
-      followerAnchor: followerAnchor,
-      link: _layerLink,
-      offset: Offset(0, _openAbove ? -menuGap : menuGap),
-      showWhenUnlinked: false,
-      targetAnchor: targetAnchor,
-      child: TapRegion(
-        groupId: _tapRegionGroup,
-        child: SizedBox(
-          width: width,
+    // OverlayPortal lays an unpositioned child out with the overlay's tight
+    // constraints. Give the follower an explicit width and a loose height so
+    // the menu can shrink-wrap instead of becoming a full-screen surface.
+    return Positioned(
+      width: width,
+      child: CompositedTransformFollower(
+        followerAnchor: followerAnchor,
+        link: _layerLink,
+        offset: Offset(0, _openAbove ? -menuGap : menuGap),
+        showWhenUnlinked: false,
+        targetAnchor: targetAnchor,
+        child: TapRegion(
+          groupId: _tapRegionGroup,
           child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(

@@ -7,6 +7,170 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('mobile shell exposes touch navigation and preserves its page', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const CharcoalShowcaseApp());
+
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-shell')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('showcase-desktop-shell')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('showcase-sidebar-divider')),
+      findsNothing,
+    );
+    expect(find.textContaining('Source-backed components'), findsOneWidget);
+
+    final menuButton = find.byKey(
+      const ValueKey<String>('showcase-mobile-navigation-toggle'),
+    );
+    expect(tester.getSize(menuButton), const Size(48, 48));
+    expect(find.byKey(const ValueKey<String>('nav-Colors')), findsNothing);
+
+    await tester.tap(menuButton);
+    await tester.pump(const Duration(milliseconds: 250));
+
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-navigation')),
+      findsOneWidget,
+    );
+    final colorsDestination = find.byKey(const ValueKey<String>('nav-Colors'));
+    expect(tester.getSize(colorsDestination).height, 48);
+    await tester.tap(colorsDestination);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-navigation')),
+      findsNothing,
+    );
+    expect(find.text('Color catalog'), findsOneWidget);
+    expect(
+      tester
+          .widget<Text>(
+            find.byKey(const ValueKey<String>('showcase-mobile-title')),
+          )
+          .data,
+      'Colors',
+    );
+
+    await tester.tap(
+      find.byKey(const ValueKey<String>('showcase-mobile-dark-mode')),
+    );
+    await tester.pump(const Duration(milliseconds: 250));
+    expect(
+      tester
+          .widget<CharcoalIconButton>(
+            find.byKey(const ValueKey<String>('showcase-mobile-dark-mode')),
+          )
+          .selected,
+      isTrue,
+    );
+
+    await tester.binding.setSurfaceSize(const Size(1180, 820));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      find.byKey(const ValueKey<String>('showcase-desktop-shell')),
+      findsOneWidget,
+    );
+    expect(find.text('Color catalog'), findsOneWidget);
+
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-shell')),
+      findsOneWidget,
+    );
+    expect(find.text('Color catalog'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('mobile system back closes navigation before leaving the app', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const CharcoalShowcaseApp());
+    await tester.tap(
+      find.byKey(const ValueKey<String>('showcase-mobile-navigation-toggle')),
+    );
+    await tester.pump(const Duration(milliseconds: 250));
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-navigation')),
+      findsOneWidget,
+    );
+
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-navigation')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('showcase-mobile-shell')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('all mobile destinations render without layout exceptions', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(320, 700));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const CharcoalShowcaseApp());
+    const destinations = <String, String>{
+      'Colors': 'Color catalog',
+      'Typography': 'Typography catalog',
+      'Dimensions': 'Dimension catalog',
+      'Icons': 'Icon catalog',
+      'Buttons': 'Content slots',
+      'Selection': 'Selection controls',
+      'Fields': 'Fields and menus',
+      'Navigation': 'Navigation and paging',
+      'Content': 'Content presentation',
+      'Feedback': 'Feedback and overlays',
+      'Token pipeline': 'From source to Flutter',
+    };
+
+    for (final destination in destinations.entries) {
+      await tester.tap(
+        find.byKey(const ValueKey<String>('showcase-mobile-navigation-toggle')),
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      final navigationItem = find.byKey(
+        ValueKey<String>('nav-${destination.key}'),
+      );
+      await tester.ensureVisible(navigationItem);
+      await tester.pump();
+      await tester.tap(navigationItem);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        find.text(destination.value),
+        findsOneWidget,
+        reason: '${destination.key} should render in the mobile shell',
+      );
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: '${destination.key} should fit a 320 px mobile viewport',
+      );
+    }
+  });
+
   testWidgets('sidebar destinations replace the showcase content', (
     tester,
   ) async {

@@ -9,15 +9,22 @@ Run it from the repository root:
 
 ```sh
 fvm flutter run -d macos -t example/lib/main.dart
+fvm flutter run -d <android-device-id> -t example/lib/main.dart
+fvm flutter run -d <ios-device-id> -t example/lib/main.dart
 ```
 
-The Showcase includes a debug-only Flutter Skill bridge for fast E2E inspection. Run the Web target
-with the workspace's pinned toolchain, then connect Flutter Skill to the VM Service URI printed by
-Flutter:
+The shell switches from a persistent desktop sidebar to a touch-oriented mobile navigation panel
+when the available window width is below 1024 logical pixels. The mobile layout honors system safe
+areas and supports both portrait and landscape without locking orientation.
+
+The Showcase includes a separate, debug-only Flutter Skill entrypoint for fast E2E inspection.
+Keeping the bridge out of the default entrypoint avoids opening its local automation server during
+a normal Showcase run. Start the bridge entrypoint, then connect Flutter Skill to the VM Service URI
+printed by Flutter:
 
 ```sh
 cd example
-fvm flutter run -d chrome -t lib/main.dart --vm-service-port=50000
+fvm flutter run -d chrome -t lib/main_flutter_skill.dart --vm-service-port=50000
 flutter-skill inspect 'ws://127.0.0.1:50000/<session>/ws'
 ```
 

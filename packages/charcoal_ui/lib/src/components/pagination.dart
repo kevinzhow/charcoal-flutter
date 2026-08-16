@@ -30,11 +30,13 @@ final class CharcoalPagination extends StatelessWidget {
     super.key,
   }) : assert(pageCount > 0),
        assert(currentPage > 0 && currentPage <= pageCount),
-       assert(maxVisiblePages >= 5);
+       assert(maxVisiblePages >= 3 && maxVisiblePages % 2 == 1);
 
   final int currentPage;
   final int pageCount;
   final ValueChanged<int>? onPageChanged;
+
+  /// Maximum number of numbered page buttons, as an odd value of at least 3.
   final int maxVisiblePages;
   final String nextLabel;
   final String previousLabel;
@@ -263,6 +265,15 @@ final class _PaginationNavigationButton extends StatelessWidget {
 List<int?> _visibleItems(int current, int total, int maxVisible) {
   if (total <= maxVisible) {
     return <int?>[for (var page = 1; page <= total; page++) page];
+  }
+  if (maxVisible == 3) {
+    if (current <= 2) {
+      return <int?>[1, 2, total];
+    }
+    if (current >= total - 1) {
+      return <int?>[1, total - 1, total];
+    }
+    return <int?>[1, current, total];
   }
   final edgeWindow = maxVisible - 2;
   if (current <= edgeWindow - 1) {
