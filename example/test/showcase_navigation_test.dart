@@ -42,6 +42,15 @@ void main() {
       find.byKey(const ValueKey<String>('showcase-mobile-navigation')),
       findsOneWidget,
     );
+    expect(find.text('Rendering backend'), findsOneWidget);
+    expect(
+      tester
+          .widget<Text>(
+            find.byKey(const ValueKey<String>('showcase-rendering-backend')),
+          )
+          .data,
+      'Native',
+    );
     final colorsDestination = find.byKey(const ValueKey<String>('nav-Colors'));
     expect(tester.getSize(colorsDestination).height, 48);
     await tester.tap(colorsDestination);
@@ -180,6 +189,15 @@ void main() {
     await tester.pumpWidget(const CharcoalShowcaseApp());
 
     expect(find.textContaining('Source-backed components'), findsOneWidget);
+    expect(find.text('Rendering backend'), findsOneWidget);
+    expect(
+      tester
+          .widget<Text>(
+            find.byKey(const ValueKey<String>('showcase-rendering-backend')),
+          )
+          .data,
+      'Native',
+    );
 
     const destinations = <String, String>{
       'Colors': 'Color catalog',

@@ -1,5 +1,6 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -1486,35 +1487,7 @@ final class _MobileNavigationPanel extends StatelessWidget {
                 ],
               ],
               const SizedBox(height: 14),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: theme.colors.containerSecondaryDefault,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Row(
-                    children: <Widget>[
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(999),
-                          color: theme.colors.containerPositiveDefault,
-                        ),
-                        child: const SizedBox.square(dimension: 8),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Tokens synchronized from Charcoal V2',
-                          style: theme.textStyles.captionMediumBold.copyWith(
-                            color: theme.colors.textDefault,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              const _SidebarStatusCard(),
             ],
           ),
         ),
@@ -1650,50 +1623,83 @@ final class _Sidebar extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: theme.colors.containerSecondaryDefault,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(999),
-                              color: theme.colors.containerPositiveDefault,
-                            ),
-                            child: const SizedBox.square(dimension: 8),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'Tokens synchronized',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textStyles.captionMediumBold
-                                  .copyWith(color: theme.colors.textDefault),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Generated from Charcoal V2 source files.',
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              const _SidebarStatusCard(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+String get _renderingBackendName {
+  if (!kIsWeb) {
+    return 'Native';
+  }
+  if (isSkwasm) {
+    return 'skwasm';
+  }
+  if (isCanvasKit) {
+    return 'CanvasKit';
+  }
+  return 'Unknown web renderer';
+}
+
+final class _SidebarStatusCard extends StatelessWidget {
+  const _SidebarStatusCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final renderingBackend = _renderingBackendName;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: theme.colors.containerSecondaryDefault,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    color: theme.colors.containerPositiveDefault,
+                  ),
+                  child: const SizedBox.square(dimension: 8),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Tokens synchronized',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textStyles.captionMediumBold.copyWith(
+                      color: theme.colors.textDefault,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Rendering backend',
+              style: theme.textStyles.captionSmall.copyWith(
+                color: theme.colors.textSecondaryDefault,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              renderingBackend,
+              key: const ValueKey<String>('showcase-rendering-backend'),
+              style: theme.textStyles.captionMediumBold.copyWith(
+                color: theme.colors.textDefault,
+              ),
+            ),
+          ],
         ),
       ),
     );
