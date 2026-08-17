@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 3,
+  "libraryVersion": "0.1.0",
+  "page": {
+    "id": "nook-core-flow",
+    "title": "Nook product discovery and checkout",
+    "userContext": "A design-conscious mobile shopper wants to find a suitable home object, compare its essential details, and purchase it without losing search or saved state.",
+    "platforms": ["compact"],
+    "assumptions": [
+      "The simulation uses a small local collection, so search results update immediately without a loading state.",
+      "Payment and delivery are represented by a review step because the example contains no external payment service."
+    ],
+    "intents": [
+      {
+        "id": "discover-product",
+        "priority": "primary",
+        "goal": "Find a product that matches the shopper's current need or taste.",
+        "successSignal": "The shopper opens a product detail from a relevant category or query result."
+      },
+      {
+        "id": "evaluate-product",
+        "priority": "secondary",
+        "goal": "Understand the product, price, and purchase options before committing.",
+        "successSignal": "The detail view keeps product context visible beside save and add-to-bag actions."
+      },
+      {
+        "id": "complete-purchase",
+        "priority": "secondary",
+        "goal": "Review the bag and finish a simulated order with confidence.",
+        "successSignal": "A persistent order confirmation replaces the checkout action and the bag is cleared."
+      },
+      {
+        "id": "recover-discovery",
+        "priority": "recovery",
+        "goal": "Recover from an empty search or collection state without losing orientation.",
+        "successSignal": "The shopper can clear the query or return to the full collection from the empty state."
+      }
+    ],
+    "information": [
+      {
+        "id": "discovery-context",
+        "intentIds": ["discover-product", "recover-discovery"],
+        "content": "Current category or query, result count, product name, image, and price.",
+        "placement": "Search and filter precede results; result context sits immediately above the grid.",
+        "visibility": "Visible while browsing, searching, or recovering from empty results."
+      },
+      {
+        "id": "product-decision",
+        "intentIds": ["evaluate-product"],
+        "content": "Product name, material description, price, saved state, and bag state.",
+        "placement": "Grouped in the detail body with the primary add-to-bag action following the decision information.",
+        "visibility": "Visible for the selected product until the shopper returns to results."
+      },
+      {
+        "id": "checkout-summary",
+        "intentIds": ["complete-purchase"],
+        "content": "Bag items, item count, total, delivery note, and final order result.",
+        "placement": "Bag contents precede checkout; checkout review keeps total next to confirmation.",
+        "visibility": "Visible in bag, review, and confirmation states."
+      }
+    ],
+    "reuse": [
+      {
+        "need": "Search, category filters, result context, and empty-result recovery.",
+        "resolution": "pattern",
+        "references": ["searchable-collection"],
+        "rationale": "The pattern owns the same discovery states while Nook supplies product-specific cards and copy."
+      },
+      {
+        "need": "Stable destinations plus product, bag, review, and confirmation detail states.",
+        "resolution": "pattern",
+        "references": ["adaptive-app-shell"],
+        "rationale": "Navigation selection remains stable while page-specific details use explicit back behavior."
+      },
+      {
+        "need": "No search results or no saved products.",
+        "resolution": "pattern",
+        "references": ["empty-state-recovery"],
+        "rationale": "Both states need cause-specific copy and one nearby recovery action rather than a decorative empty card."
+      }
+    ],
+    "interactions": [
+      {
+        "id": "filter-products",
+        "intentId": "discover-product",
+        "trigger": "The shopper enters a query or selects a visible category.",
+        "states": ["browsing", "results", "empty-results"],
+        "transitions": [
+          { "from": "browsing", "event": "Query or category changes", "to": "results" },
+          { "from": "results", "event": "No products match", "to": "empty-results" },
+          { "from": "empty-results", "event": "Query is cleared", "to": "browsing" }
+        ]
+      },
+      {
+        "id": "save-product",
+        "intentId": "evaluate-product",
+        "trigger": "The shopper toggles save from a card or product detail.",
+        "states": ["unsaved", "saved"],
+        "transitions": [
+          { "from": "unsaved", "event": "Save is pressed", "to": "saved" },
+          { "from": "saved", "event": "Remove save is pressed", "to": "unsaved" }
+        ]
+      },
+      {
+        "id": "checkout-order",
+        "intentId": "complete-purchase",
+        "trigger": "The shopper reviews a non-empty bag and confirms the simulated order.",
+        "states": ["bag", "review", "confirmed"],
+        "transitions": [
+          { "from": "bag", "event": "Continue to checkout is pressed", "to": "review" },
+          { "from": "review", "event": "Place order is pressed", "to": "confirmed" }
+        ]
+      }
+    ],
+    "feedback": [
+      {
+        "interactionId": "filter-products",
+        "state": "results or empty-results",
+        "immediate": "Result count and cards update with the controlled query or category.",
+        "persistent": "The active query or category remains visible above the collection.",
+        "recovery": "The empty state offers Clear search or Browse all without discarding unrelated state.",
+        "announcement": "The labeled field and filter group expose their controlled values; result content follows in reading order."
+      },
+      {
+        "interactionId": "save-product",
+        "state": "saved or unsaved",
+        "immediate": "The public selected state and label change immediately.",
+        "persistent": "Saved products appear in the Saved destination.",
+        "recovery": "The same control removes the item without affecting the bag.",
+        "announcement": "The icon action semantic label changes between Save and Remove saved product."
+      },
+      {
+        "interactionId": "checkout-order",
+        "state": "review or confirmed",
+        "immediate": "The page moves to an explicit review and then confirmation state.",
+        "persistent": "Confirmation displays an order number and the bag becomes empty.",
+        "recovery": "Back from review returns to the intact bag; confirmation offers Continue shopping.",
+        "announcement": "The confirmation heading and order summary appear in the page reading order."
+      }
+    ],
+    "bestPractices": [
+      {
+        "area": "intent hierarchy",
+        "decision": "Discovery leads the shop page; promotional content is subordinate and checkout only becomes primary inside the bag flow.",
+        "evidence": "Nook page previews render Collection, No-result recovery, Checkout review, and Order receipt at 390x844 and 320x700; widget interactions verify the complete path."
+      },
+      {
+        "area": "navigation and recovery",
+        "decision": "Product and checkout are explicit detail states with back actions; top-level Saved remains stable.",
+        "evidence": "The interactive page previews keep the real NookViewModel, while widget interactions return from review without losing bag or saved state."
+      }
+    ],
+    "verification": [
+      {
+        "scenario": "Discovery to confirmed order",
+        "viewport": "compact 320x760",
+        "steps": ["Select Home", "Search for lamp", "Open Paper lamp", "Save and add it", "Review the bag", "Place the order"],
+        "expected": ["Only matching products remain", "Saved state persists", "Review shows the correct total", "Confirmation clears the bag"]
+      },
+      {
+        "scenario": "Empty search recovery",
+        "viewport": "compact 390x844",
+        "steps": ["Enter a query with no matches", "Use Clear search"],
+        "expected": ["The query remains visible in the empty explanation", "The full collection returns without navigation loss"]
+      }
+    ]
+  }
+}

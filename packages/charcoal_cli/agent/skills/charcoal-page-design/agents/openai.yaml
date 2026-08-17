@@ -1,0 +1,4 @@
+interface:
+  display_name: "Charcoal Page Design"
+  short_description: "Design and verify complete Charcoal UI pages"
+  default_prompt: "Use $charcoal-page-design to redesign this page around user intent, reusable patterns, complete interaction states, and verified feedback."

@@ -2,12 +2,16 @@ import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:io/io.dart';
 
+import 'commands/agent_command.dart';
 import 'commands/benchmark_command.dart';
 import 'commands/benchmark_run_command.dart';
 import 'commands/component_command.dart';
+import 'commands/design_rules_command.dart';
 import 'commands/doctor_command.dart';
 import 'commands/init_command.dart';
 import 'commands/manifest_command.dart';
+import 'commands/page_spec_command.dart';
+import 'commands/pattern_command.dart';
 import 'commands/search_command.dart';
 import 'commands/token_command.dart';
 import 'environment.dart';
@@ -27,6 +31,9 @@ final class CharcoalCommandRunner extends CommandRunner<int> {
       )
       ..addFlag('version', help: 'Print the CLI version.', negatable: false);
     addCommand(SearchCommand(environment));
+    addCommand(PatternCommand(environment));
+    addCommand(DesignRulesCommand(environment));
+    addCommand(PageSpecCommand(environment));
     addCommand(ComponentCommand(environment));
     addCommand(TokenCommand(environment));
     addCommand(BenchmarkCommand(environment));
@@ -34,6 +41,7 @@ final class CharcoalCommandRunner extends CommandRunner<int> {
     addCommand(ManifestCommand(environment));
     addCommand(DoctorCommand(environment));
     addCommand(InitCommand(environment));
+    addCommand(AgentCommand(environment));
   }
 
   final CharcoalCliEnvironment environment;

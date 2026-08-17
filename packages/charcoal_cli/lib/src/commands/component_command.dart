@@ -89,6 +89,22 @@ String _componentText(CharcoalComponentDoc component) {
       buffer.writeln('- $item');
     }
   }
+  if (component.interactionStates.isNotEmpty) {
+    buffer
+      ..writeln()
+      ..writeln('Interaction states:');
+    for (final item in component.interactionStates) {
+      buffer.writeln('- $item');
+    }
+  }
+  if (component.feedbackResponsibilities.isNotEmpty) {
+    buffer
+      ..writeln()
+      ..writeln('Feedback ownership:');
+    for (final item in component.feedbackResponsibilities) {
+      buffer.writeln('- $item');
+    }
+  }
   for (final example in component.examples) {
     buffer
       ..writeln()

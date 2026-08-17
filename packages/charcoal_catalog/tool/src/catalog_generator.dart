@@ -6,6 +6,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:charcoal_catalog/src/model.dart';
 import 'package:path/path.dart' as p;
 
+import 'design_guidance.dart';
 import 'metadata.dart';
 
 const Set<String> _widgetBaseTypes = <String>{
@@ -113,6 +114,8 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
         avoidWhen: metadata?.avoidWhen ?? const <String>[],
         accessibility: metadata?.accessibility ?? const <String>[],
         responsiveBehavior: metadata?.responsiveBehavior ?? const <String>[],
+        interactionStates: metadata?.interactionStates ?? const <String>[],
+        feedbackResponsibilities: metadata?.feedbackResponsibilities ?? const <String>[],
         tokenRoles: metadata?.tokenRoles ?? const <String>[],
         relatedComponents: metadata?.relatedComponents ?? const <String>[],
         apis: apis,
@@ -121,6 +124,13 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
     );
   }
   components.sort((left, right) => left.name.compareTo(right.name));
+  final componentNames = components.map((component) => component.name).toSet();
+  for (final pattern in componentPatterns) {
+    final unknown = pattern.components.where((name) => !componentNames.contains(name));
+    if (unknown.isNotEmpty) {
+      throw StateError('${pattern.id} references unknown components: ${unknown.join(', ')}.');
+    }
+  }
   final tokens = _buildTokens(workspaceRoot);
 
   final curatedCount = components
@@ -128,13 +138,16 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
       .length;
   final exampleCount = components.where((component) => component.examples.isNotEmpty).length;
   final catalog = CharcoalCatalog(
-    schemaVersion: 2,
+    schemaVersion: 3,
     libraryName: 'charcoal_ui',
     libraryVersion: _packageVersion(File(p.join(uiRoot.path, 'pubspec.yaml'))),
+    designRules: pageDesignRules,
+    patterns: componentPatterns,
     coverage: CharcoalCatalogCoverage(
       publicComponents: components.length,
       curatedComponents: curatedCount,
       componentsWithExamples: exampleCount,
+      curatedPatterns: componentPatterns.length,
       publicTokens: tokens.length,
       semanticTokens: tokens.where((token) => token.tier == CharcoalTokenTier.semantic).length,
     ),

@@ -59,6 +59,9 @@ void main() {
       expect(
         tools.map((tool) => tool['name']),
         <String>[
+          'charcoal.get_design_rules',
+          'charcoal.search_patterns',
+          'charcoal.get_pattern',
           'charcoal.search_components',
           'charcoal.get_component',
           'charcoal.search_tokens',
@@ -95,6 +98,25 @@ void main() {
       final matches = (structured['results']! as List<Object?>).cast<Map<String, Object?>>();
       expect(matches.first['name'], 'CharcoalSegmentedControl');
       expect(jsonDecode(content['text']! as String), structured);
+    });
+
+    test('exposes page-design rules and reusable patterns', () {
+      final rules = _call(server, 'charcoal.get_design_rules', const <String, Object?>{});
+      final matches = _call(
+        server,
+        'charcoal.search_patterns',
+        <String, Object?>{'query': 'daily habits'},
+      );
+      final pattern = _call(
+        server,
+        'charcoal.get_pattern',
+        <String, Object?>{'name': 'daily-checklist'},
+      );
+
+      expect((rules['rules']! as List<Object?>), hasLength(7));
+      expect((matches['results']! as List<Object?>), isNotEmpty);
+      expect(pattern['components'], contains('CharcoalCheckbox'));
+      expect(pattern['feedback'], isNotEmpty);
     });
 
     test('keeps component details compact until source is requested', () {

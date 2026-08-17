@@ -15,6 +15,7 @@ dependencies:
   args: ^2.7.0
   charcoal_catalog:
     path: ../charcoal_catalog
+  crypto: ^3.0.6
   io: ^1.0.5
   path: ^1.9.1
 

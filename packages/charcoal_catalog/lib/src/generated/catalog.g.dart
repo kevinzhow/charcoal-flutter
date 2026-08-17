@@ -1,16 +1,333 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND.
 
 const String generatedCatalogJson = r'''{
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
     "publicComponents": 32,
     "curatedComponents": 8,
     "componentsWithExamples": 8,
+    "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 226
   },
+  "designRules": [
+    {
+      "id": "user-intent",
+      "order": 1,
+      "question": "What intentions does the user have on the current page?",
+      "requiredOutput": "An intent inventory with user context, goal, and success signal.",
+      "validation": "Every visible section supports a stated intent or necessary system constraint."
+    },
+    {
+      "id": "intent-priority",
+      "order": 2,
+      "question": "How should those intentions be prioritized?",
+      "requiredOutput": "Primary, secondary, support, and recovery priorities.",
+      "validation": "The primary outcome is identifiable without reading every control."
+    },
+    {
+      "id": "information-placement",
+      "order": 3,
+      "question": "Does the page provide and place the information needed for each intention?",
+      "requiredOutput": "A map from information and actions to intent, placement, and visibility.",
+      "validation": "Decision and recovery information appears where it is needed."
+    },
+    {
+      "id": "necessary-reuse",
+      "order": 4,
+      "question": "Are components and compositions reused at the correct level?",
+      "requiredOutput": "A reviewed reuse decision backed by component and pattern searches.",
+      "validation": "No cataloged component or pattern is silently duplicated."
+    },
+    {
+      "id": "interaction-states",
+      "order": 5,
+      "question": "Which interactions and state transitions can occur?",
+      "requiredOutput": "Triggers, preconditions, states, transitions, and escape or retry paths.",
+      "validation": "No supported action leaves the interface unexplained or unrecoverable."
+    },
+    {
+      "id": "interaction-feedback",
+      "order": 6,
+      "question": "Does every interaction receive proportionate feedback?",
+      "requiredOutput": "Immediate, persistent, failure, recovery, and announcement feedback.",
+      "validation": "Every interaction has feedback for each applicable terminal or error state."
+    },
+    {
+      "id": "experience-expectations",
+      "order": 7,
+      "question": "Does the design follow page and platform best practices and user expectations?",
+      "requiredOutput": "Page-specific decisions with responsive, accessibility, and runtime evidence.",
+      "validation": "Primary, boundary, and supported layout scenarios are exercised at runtime."
+    }
+  ],
+  "patterns": [
+    {
+      "id": "adaptive-app-shell",
+      "category": "Navigation",
+      "summary": "Keeps page identity, top-level destinations, and contextual actions stable across an app flow.",
+      "keywords": [
+        "app shell",
+        "bottom navigation",
+        "page header",
+        "responsive navigation"
+      ],
+      "useWhen": [
+        "An application has stable top-level destinations and page-specific content.",
+        "Compact and large layouts must preserve the same destination state."
+      ],
+      "avoidWhen": [
+        "A gallery or section only needs a heading rather than application navigation."
+      ],
+      "components": [
+        "CharcoalNavigationBar",
+        "CharcoalNavigationItem",
+        "CharcoalIconButton"
+      ],
+      "composition": [
+        "Keep destination selection in one state owner above the page body.",
+        "Place contextual actions in the current page; do not change top-level destination selection.",
+        "Use available width to choose navigation placement without resetting page state."
+      ],
+      "interactionStates": [
+        "destination selected",
+        "detail open",
+        "transient task open"
+      ],
+      "feedback": [
+        "Selection is persistent and exposed semantically.",
+        "Back or close returns to the prior destination without clearing unrelated state."
+      ],
+      "accessibility": [
+        "Expose one selected destination and explicit labels for icon-only actions."
+      ],
+      "responsiveBehavior": [
+        "Switch navigation placement from constraints, not device or orientation checks."
+      ]
+    },
+    {
+      "id": "searchable-collection",
+      "category": "Discovery",
+      "summary": "Combines search, optional filtering, result context, and recoverable empty results.",
+      "keywords": [
+        "catalog",
+        "filter",
+        "product discovery",
+        "search results"
+      ],
+      "useWhen": [
+        "Users browse a collection and may narrow it by query or a small set of filters."
+      ],
+      "avoidWhen": [
+        "The collection is short and fully visible without search or filtering."
+      ],
+      "components": [
+        "CharcoalTextField",
+        "CharcoalSegmentedControl",
+        "CharcoalClickable",
+        "CharcoalIconButton"
+      ],
+      "composition": [
+        "Keep query and filter state in the collection owner.",
+        "Place result count or category context immediately before the results.",
+        "Preserve the query in an empty state and offer a nearby clear or alternate-filter recovery."
+      ],
+      "interactionStates": [
+        "browsing",
+        "filtering",
+        "results",
+        "empty results",
+        "detail"
+      ],
+      "feedback": [
+        "Update result context with the query or selected filter.",
+        "Empty results explain what was retained and how to recover."
+      ],
+      "accessibility": [
+        "Name the search field and filter group; expose saved state on result actions."
+      ],
+      "responsiveBehavior": [
+        "Adjust result columns from available width while keeping readable card widths."
+      ]
+    },
+    {
+      "id": "contextual-composer",
+      "category": "Communication",
+      "summary": "Keeps reply or message context visible while sharing input, validation, send, and retry behavior.",
+      "keywords": [
+        "comment",
+        "composer",
+        "message",
+        "reply",
+        "send"
+      ],
+      "useWhen": [
+        "A user writes a message or reply whose destination and surrounding context matter."
+      ],
+      "avoidWhen": [
+        "The task is a long standalone document or a generic single-value form field."
+      ],
+      "components": [
+        "CharcoalTextArea",
+        "CharcoalIconButton",
+        "CharcoalButton"
+      ],
+      "composition": [
+        "Share the input and action skeleton while injecting conversation-specific context and send behavior.",
+        "Retain authored text when sending fails and keep retry next to the error."
+      ],
+      "interactionStates": [
+        "empty",
+        "editing",
+        "disabled",
+        "sending",
+        "sent",
+        "failed"
+      ],
+      "feedback": [
+        "Disable send for invalid input, acknowledge progress, and retain text on failure."
+      ],
+      "accessibility": [
+        "Label the destination, input, and send action; announce non-focus-moving send results."
+      ],
+      "responsiveBehavior": [
+        "Keep primary context visible and move the action without shrinking the input below readability."
+      ]
+    },
+    {
+      "id": "financial-action-flow",
+      "category": "Transactions",
+      "summary": "Separates selecting a financial action, entering trusted details, reviewing, and confirming the result.",
+      "keywords": [
+        "money transfer",
+        "payment",
+        "send money",
+        "top up",
+        "transaction"
+      ],
+      "useWhen": [
+        "An action changes a balance or creates a durable financial transaction."
+      ],
+      "avoidWhen": [
+        "The action is reversible, low-risk, and contains no amount or recipient decision."
+      ],
+      "components": [
+        "CharcoalTextField",
+        "CharcoalButton",
+        "CharcoalSegmentedControl",
+        "CharcoalDialog"
+      ],
+      "composition": [
+        "Collect recipient and amount before presenting a clear review step.",
+        "Keep balance impact and destination visible at confirmation.",
+        "Record the successful result in persistent activity, not only transient feedback."
+      ],
+      "interactionStates": [
+        "ready",
+        "editing",
+        "invalid",
+        "review",
+        "submitting",
+        "success",
+        "failed"
+      ],
+      "feedback": [
+        "Explain invalid input inline and show a durable receipt after success.",
+        "Retain entered values and offer retry when submission fails."
+      ],
+      "accessibility": [
+        "Keep field labels visible and announce the confirmed amount and recipient."
+      ],
+      "responsiveBehavior": [
+        "Use a focused compact flow and a constrained review surface on large widths."
+      ]
+    },
+    {
+      "id": "daily-checklist",
+      "category": "Progress",
+      "summary": "Presents a breathable set of daily commitments with progress, completion, undo, and next-step feedback.",
+      "keywords": [
+        "checklist",
+        "daily habits",
+        "progress",
+        "tasks",
+        "todo"
+      ],
+      "useWhen": [
+        "Users complete a small, meaningful set of items during the current day or session."
+      ],
+      "avoidWhen": [
+        "Items are a dense backlog requiring sorting, bulk selection, or complex metadata."
+      ],
+      "components": [
+        "CharcoalCheckbox",
+        "CharcoalButton",
+        "CharcoalTypography"
+      ],
+      "composition": [
+        "Give each item enough vertical separation to scan label, supporting context, and completion state.",
+        "Keep progress near the list and reveal the next action only when it becomes relevant.",
+        "Allow a completed item to be unchecked without losing other progress."
+      ],
+      "interactionStates": [
+        "incomplete",
+        "partially complete",
+        "complete",
+        "reopened"
+      ],
+      "feedback": [
+        "Update progress immediately and provide completion feedback without blocking continued review."
+      ],
+      "accessibility": [
+        "Expose each item label and checked state; do not rely on decoration alone."
+      ],
+      "responsiveBehavior": [
+        "Constrain the checklist for reading on large widths and preserve touch targets on compact widths."
+      ]
+    },
+    {
+      "id": "empty-state-recovery",
+      "category": "Feedback",
+      "summary": "Explains why content is absent and provides the most useful recovery or creation action.",
+      "keywords": [
+        "empty",
+        "no results",
+        "no saved items",
+        "recovery",
+        "zero state"
+      ],
+      "useWhen": [
+        "A collection or result can legitimately contain no content."
+      ],
+      "avoidWhen": [
+        "Content is merely loading or failed to load; preserve those distinct states."
+      ],
+      "components": [
+        "CharcoalTypography",
+        "CharcoalButton"
+      ],
+      "composition": [
+        "State what is empty, why when known, and one relevant next action.",
+        "Keep query or filter context visible when it explains the empty result."
+      ],
+      "interactionStates": [
+        "empty",
+        "recovering",
+        "content"
+      ],
+      "feedback": [
+        "Recovery updates the same content region so cause and result remain connected."
+      ],
+      "accessibility": [
+        "Use a meaningful heading and make the recovery action reachable in reading order."
+      ],
+      "responsiveBehavior": [
+        "Keep copy readable and action width appropriate to the available constraint."
+      ]
+    }
+  ],
   "components": [
     {
       "name": "CharcoalAnchoredBalloon",
@@ -27,6 +344,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -124,6 +443,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -204,6 +525,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -302,6 +625,18 @@ const String generatedCatalogJson = r'''{
       "responsiveBehavior": [
         "Set fullWidth on compact layouts when the action should fill its parent constraint.",
         "Let the parent choose available width; do not hard-code the component height."
+      ],
+      "interactionStates": [
+        "idle",
+        "hovered",
+        "focused",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns pointer, focus, pressed, selected, and disabled presentation.",
+        "The caller owns progress, success, failure, recovery, and the durable action result."
       ],
       "tokenRoles": [
         "space.targetS",
@@ -462,6 +797,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -606,6 +943,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -698,6 +1037,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -870,6 +1211,16 @@ const String generatedCatalogJson = r'''{
         "Use CharcoalModalStyle.bottomSheet for compact mobile presentation where appropriate.",
         "Size constrains readable content width; maxWidth can narrow a specific workflow.",
         "showCharcoalModal targets the root Navigator by default; set useRootNavigator to false only from a context under the intended nested Navigator."
+      ],
+      "interactionStates": [
+        "presenting",
+        "open",
+        "dismissing",
+        "dismissed"
+      ],
+      "feedbackResponsibilities": [
+        "Owns modal focus containment, presentation, dismissal, and surface semantics.",
+        "The caller owns task validation, progress, success, failure, and returned result."
       ],
       "tokenRoles": [
         "paragraphWidth.s",
@@ -1157,6 +1508,17 @@ const String generatedCatalogJson = r'''{
         "The popup matches the trigger width and chooses the available vertical direction.",
         "Let the parent constrain trigger width on small and large screens."
       ],
+      "interactionStates": [
+        "closed",
+        "open",
+        "focused",
+        "selected",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns popup visibility, option interaction, focus, and disabled option presentation.",
+        "The caller owns selected-value persistence and downstream results or validation."
+      ],
       "tokenRoles": [
         "space.component10",
         "space.layout30",
@@ -1332,6 +1694,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1400,6 +1764,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1479,6 +1845,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1572,6 +1940,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1644,6 +2014,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1718,6 +2090,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1825,6 +2199,15 @@ const String generatedCatalogJson = r'''{
         "The title remains geometrically centered while edge slots contract on narrow widths.",
         "Keep edge actions compact and place system safe-area padding outside the component."
       ],
+      "interactionStates": [
+        "page context",
+        "leading action",
+        "trailing action"
+      ],
+      "feedbackResponsibilities": [
+        "Owns title geometry and layout slots but not navigation state.",
+        "The caller owns back, close, destination, and contextual-action outcomes."
+      ],
       "tokenRoles": [
         "space.targetL",
         "space.component30",
@@ -1907,6 +2290,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -1998,6 +2383,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2086,6 +2473,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2191,6 +2580,16 @@ const String generatedCatalogJson = r'''{
       "responsiveBehavior": [
         "Use fullWidth when compact layouts need equal segments across available width.",
         "Use uniformSegmentWidth for equal fixed segments without filling the parent."
+      ],
+      "interactionStates": [
+        "selected",
+        "unselected",
+        "focused",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns group selection and focus presentation for the controlled value.",
+        "The caller owns loading, empty results, and persistence caused by selection."
       ],
       "tokenRoles": [
         "space.targetS",
@@ -2324,6 +2723,16 @@ const String generatedCatalogJson = r'''{
         "The overlay respects horizontal screen insets and a configurable maximum width.",
         "The thumbnail keeps its component-defined size while message content flexes.",
         "Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay."
+      ],
+      "interactionStates": [
+        "appearing",
+        "visible",
+        "action invoked",
+        "dismissed"
+      ],
+      "feedbackResponsibilities": [
+        "Owns transient message, optional action, dismissal, and overlay presentation.",
+        "The caller owns the action outcome and information that must remain after dismissal."
       ],
       "tokenRoles": [
         "borderDefault",
@@ -2530,6 +2939,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2597,6 +3008,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2675,6 +3088,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2728,6 +3143,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2839,6 +3256,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -2986,6 +3405,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -3066,6 +3487,17 @@ const String generatedCatalogJson = r'''{
       "responsiveBehavior": [
         "The field expands to the width supplied by its parent.",
         "Constrain forms to a readable width on desktop instead of sizing the field directly."
+      ],
+      "interactionStates": [
+        "empty",
+        "editing",
+        "focused",
+        "invalid",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns focus, invalid, assistive-text, and disabled presentation exposed by its API.",
+        "The caller owns validation timing, submission progress, persistence, and recovery."
       ],
       "tokenRoles": [
         "space.component20",
@@ -3262,6 +3694,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -3324,6 +3758,15 @@ const String generatedCatalogJson = r'''{
         "The overlay respects horizontal screen insets and a configurable maximum width.",
         "Choose CharcoalPopupEdge based on nearby persistent navigation and safe areas.",
         "Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay."
+      ],
+      "interactionStates": [
+        "appearing",
+        "visible",
+        "dismissing"
+      ],
+      "feedbackResponsibilities": [
+        "Owns transient presentation and success or error visual semantics.",
+        "The caller must keep durable or corrective information in the page rather than only in a toast."
       ],
       "tokenRoles": [
         "containerPositiveDefault",
@@ -3554,6 +3997,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [
@@ -3666,6 +4111,8 @@ const String generatedCatalogJson = r'''{
       "avoidWhen": [],
       "accessibility": [],
       "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
       "tokenRoles": [],
       "relatedComponents": [],
       "apis": [

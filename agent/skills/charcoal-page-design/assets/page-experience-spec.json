@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 3,
+  "libraryVersion": "0.1.0",
+  "page": {
+    "id": "replace-with-stable-page-id",
+    "title": "Replace with page title",
+    "userContext": "Describe who is here, what brought them here, and relevant constraints.",
+    "platforms": ["compact", "large"],
+    "assumptions": ["Replace with an evidence-backed assumption or remove it."],
+    "intents": [
+      {
+        "id": "primary-outcome",
+        "priority": "primary",
+        "goal": "Describe the user's outcome without naming a control.",
+        "successSignal": "Describe the visible or persistent evidence of success."
+      }
+    ],
+    "information": [
+      {
+        "id": "primary-context",
+        "intentIds": ["primary-outcome"],
+        "content": "Describe the information needed to make the primary decision.",
+        "placement": "Describe where it appears relative to the action.",
+        "visibility": "Describe the states in which it is visible."
+      }
+    ],
+    "reuse": [
+      {
+        "need": "Describe the UI or behavior being composed.",
+        "resolution": "local-composition",
+        "references": ["CharcoalTypography"],
+        "rationale": "Record Catalog searches and explain why this reuse level is correct."
+      }
+    ],
+    "interactions": [
+      {
+        "id": "complete-primary-outcome",
+        "intentId": "primary-outcome",
+        "trigger": "Describe the user action and precondition.",
+        "states": ["ready", "complete"],
+        "transitions": [
+          {
+            "from": "ready",
+            "event": "User completes the primary action",
+            "to": "complete"
+          }
+        ]
+      }
+    ],
+    "feedback": [
+      {
+        "interactionId": "complete-primary-outcome",
+        "state": "complete",
+        "immediate": "Describe immediate acknowledgement.",
+        "persistent": "Describe where the result remains visible.",
+        "recovery": "State N/A with a reason or describe recovery.",
+        "announcement": "Describe semantic announcement or state N/A with a reason."
+      }
+    ],
+    "bestPractices": [
+      {
+        "area": "hierarchy and navigation",
+        "decision": "Describe the page-specific design decision.",
+        "evidence": "Describe repository or runtime evidence."
+      }
+    ],
+    "verification": [
+      {
+        "scenario": "Primary outcome",
+        "viewport": "compact 390x844",
+        "steps": ["Describe the first interaction step."],
+        "expected": ["Describe the observable result." ]
+      }
+    ]
+  }
+}

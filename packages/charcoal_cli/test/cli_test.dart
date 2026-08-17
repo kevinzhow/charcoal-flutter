@@ -90,6 +90,29 @@ void main() {
       expect((primitive['data']! as Map<String, Object?>)['count'], greaterThan(0));
     });
 
+    test('pattern and design-rules expose page-level guidance', () async {
+      final patternOutput = StringBuffer();
+      final rulesOutput = StringBuffer();
+
+      expect(
+        await runCharcoalCli(
+          <String>['pattern', 'daily checklist', '--json'],
+          output: patternOutput,
+        ),
+        0,
+      );
+      expect(
+        await runCharcoalCli(<String>['design-rules', '--json'], output: rulesOutput),
+        0,
+      );
+      final pattern = jsonDecode(patternOutput.toString()) as Map<String, Object?>;
+      final rules = jsonDecode(rulesOutput.toString()) as Map<String, Object?>;
+
+      expect(pattern['type'], 'pattern');
+      expect((pattern['data']! as Map<String, Object?>)['id'], 'daily-checklist');
+      expect(((rules['data']! as Map<String, Object?>)['rules']! as List<Object?>), hasLength(7));
+    });
+
     test('manifest declares mutations and response types', () async {
       final output = StringBuffer();
 
@@ -109,11 +132,15 @@ void main() {
         commandRecords.map((command) => command['name']),
         containsAll(<String>[
           'search',
+          'pattern',
+          'design-rules',
+          'page-spec',
           'component',
           'token',
           'benchmark',
           'benchmark-run',
           'doctor',
+          'agent',
           'manifest',
         ]),
       );
@@ -240,7 +267,7 @@ environment:
 
     test('doctor recognizes dependency and managed instructions', () async {
       await runCharcoalCli(
-        <String>['init'],
+        <String>['agent', 'install'],
         workingDirectory: project,
         output: StringBuffer(),
       );
@@ -257,6 +284,106 @@ environment:
       expect(code, 0);
       expect(data['healthy'], isTrue);
       expect(data['warnings'], 0);
+    });
+
+    test('agent install and sync own a versioned project skill', () async {
+      final output = StringBuffer();
+      expect(
+        await runCharcoalCli(
+          <String>['agent', 'install', '--agent', 'all', '--json'],
+          workingDirectory: project,
+          output: output,
+        ),
+        0,
+      );
+      final standardSkill = Directory(
+        p.join(project.path, '.agents', 'skills', charcoalPageDesignSkillName),
+      );
+      final claudeSkill = Directory(
+        p.join(project.path, '.claude', 'skills', charcoalPageDesignSkillName),
+      );
+      final cursorSkill = Directory(
+        p.join(project.path, '.cursor', 'skills', charcoalPageDesignSkillName),
+      );
+      expect(File(p.join(standardSkill.path, 'SKILL.md')).existsSync(), isTrue);
+      expect(File(p.join(claudeSkill.path, 'SKILL.md')).existsSync(), isTrue);
+      expect(File(p.join(cursorSkill.path, 'SKILL.md')).existsSync(), isTrue);
+      expect(File(p.join(project.path, 'AGENTS.md')).existsSync(), isTrue);
+      expect(File(p.join(project.path, 'CLAUDE.md')).existsSync(), isTrue);
+      expect(File(p.join(project.path, '.cursor', 'rules', 'charcoal.mdc')).existsSync(), isTrue);
+
+      File(p.join(standardSkill.path, 'SKILL.md'))
+          .writeAsStringSync('\nmodified', mode: FileMode.append);
+      final staleFile = File(p.join(standardSkill.path, 'references', 'removed-upstream.md'))
+        ..writeAsStringSync('stale');
+      final doctorOutput = StringBuffer();
+      expect(
+        await runCharcoalCli(
+          <String>['doctor', '--json'],
+          workingDirectory: project,
+          output: doctorOutput,
+        ),
+        1,
+      );
+      expect(doctorOutput.toString(), contains('stale or modified'));
+
+      expect(
+        await runCharcoalCli(
+          <String>['agent', 'sync', '--agent', 'all'],
+          workingDirectory: project,
+          output: StringBuffer(),
+        ),
+        0,
+      );
+      expect(staleFile.existsSync(), isFalse);
+      final healthyOutput = StringBuffer();
+      expect(
+        await runCharcoalCli(
+          <String>['doctor', '--json'],
+          workingDirectory: project,
+          output: healthyOutput,
+        ),
+        0,
+      );
+      final verifiedOutput = StringBuffer();
+      expect(
+        await runCharcoalCli(
+          <String>['agent', 'sync', '--agent', 'all'],
+          workingDirectory: project,
+          output: verifiedOutput,
+        ),
+        0,
+      );
+      expect(verifiedOutput.toString(), contains('Verified'));
+    });
+
+    test('agent install preflights unmanaged skill directories before writing', () async {
+      final unmanaged = File(
+        p.join(
+          project.path,
+          '.agents',
+          'skills',
+          charcoalPageDesignSkillName,
+          'SKILL.md',
+        ),
+      )..parent.createSync(recursive: true);
+      unmanaged.writeAsStringSync('hand-written');
+      final errors = StringBuffer();
+
+      expect(
+        await runCharcoalCli(
+          <String>['agent', 'install', '--agent', 'all', '--json'],
+          workingDirectory: project,
+          output: StringBuffer(),
+          errorOutput: errors,
+        ),
+        1,
+      );
+      expect(errors.toString(), contains('ERR_SKILL_INSTALL'));
+      expect(unmanaged.readAsStringSync(), 'hand-written');
+      expect(File(p.join(project.path, 'AGENTS.md')).existsSync(), isFalse);
+      expect(File(p.join(project.path, 'CLAUDE.md')).existsSync(), isFalse);
+      expect(Directory(p.join(project.path, '.cursor')).existsSync(), isFalse);
     });
 
     test('rejects paths outside the project', () async {

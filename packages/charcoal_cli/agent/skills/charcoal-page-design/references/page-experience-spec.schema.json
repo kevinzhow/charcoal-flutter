@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://charcoal-flutter.dev/schemas/page-experience-spec-v1.json",
+  "title": "Charcoal Page Experience Spec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogSchemaVersion", "libraryVersion", "page"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "catalogSchemaVersion": { "type": "integer", "minimum": 1 },
+    "libraryVersion": { "type": "string", "minLength": 1 },
+    "page": { "$ref": "#/$defs/page" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "stringList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "userContext",
+        "platforms",
+        "assumptions",
+        "intents",
+        "information",
+        "reuse",
+        "interactions",
+        "feedback",
+        "bestPractices",
+        "verification"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "userContext": { "$ref": "#/$defs/nonEmptyString" },
+        "platforms": { "$ref": "#/$defs/stringList" },
+        "assumptions": { "$ref": "#/$defs/stringList" },
+        "intents": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/intent" }
+        },
+        "information": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/information" }
+        },
+        "reuse": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/reuse" }
+        },
+        "interactions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/interaction" }
+        },
+        "feedback": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/feedback" }
+        },
+        "bestPractices": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/bestPractice" }
+        },
+        "verification": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/verification" }
+        }
+      }
+    },
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "priority", "goal", "successSignal"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "priority": {
+          "type": "string",
+          "enum": ["primary", "secondary", "support", "recovery"]
+        },
+        "goal": { "$ref": "#/$defs/nonEmptyString" },
+        "successSignal": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "information": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "intentIds", "content", "placement", "visibility"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "intentIds": { "$ref": "#/$defs/stringList" },
+        "content": { "$ref": "#/$defs/nonEmptyString" },
+        "placement": { "$ref": "#/$defs/nonEmptyString" },
+        "visibility": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "reuse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["need", "resolution", "references", "rationale"],
+      "properties": {
+        "need": { "$ref": "#/$defs/nonEmptyString" },
+        "resolution": {
+          "type": "string",
+          "enum": [
+            "component",
+            "pattern",
+            "shared-composition",
+            "local-composition",
+            "new-component"
+          ]
+        },
+        "references": { "$ref": "#/$defs/stringList" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "event", "to"],
+      "properties": {
+        "from": { "$ref": "#/$defs/nonEmptyString" },
+        "event": { "$ref": "#/$defs/nonEmptyString" },
+        "to": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "interaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "intentId", "trigger", "states", "transitions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "intentId": { "$ref": "#/$defs/nonEmptyString" },
+        "trigger": { "$ref": "#/$defs/nonEmptyString" },
+        "states": { "$ref": "#/$defs/stringList" },
+        "transitions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/transition" }
+        }
+      }
+    },
+    "feedback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interactionId",
+        "state",
+        "immediate",
+        "persistent",
+        "recovery",
+        "announcement"
+      ],
+      "properties": {
+        "interactionId": { "$ref": "#/$defs/nonEmptyString" },
+        "state": { "$ref": "#/$defs/nonEmptyString" },
+        "immediate": { "$ref": "#/$defs/nonEmptyString" },
+        "persistent": { "$ref": "#/$defs/nonEmptyString" },
+        "recovery": { "$ref": "#/$defs/nonEmptyString" },
+        "announcement": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "bestPractice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["area", "decision", "evidence"],
+      "properties": {
+        "area": { "$ref": "#/$defs/nonEmptyString" },
+        "decision": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario", "viewport", "steps", "expected"],
+      "properties": {
+        "scenario": { "$ref": "#/$defs/nonEmptyString" },
+        "viewport": { "$ref": "#/$defs/nonEmptyString" },
+        "steps": { "$ref": "#/$defs/stringList" },
+        "expected": { "$ref": "#/$defs/stringList" }
+      }
+    }
+  }
+}

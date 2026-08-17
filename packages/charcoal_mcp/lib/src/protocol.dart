@@ -16,7 +16,8 @@ const Map<String, Object?> charcoalMcpServerInfo = <String, Object?>{
 };
 
 const String charcoalMcpInstructions =
-    'Search before selecting a component. Read the exact component API, then fetch an example only '
+    'For page work, read the design rules and search reusable patterns before selecting components. '
+    'Read the exact component API, then fetch an example only '
     'when implementation source is useful. Search semantic tokens by role; primitive tokens are '
     'excluded unless explicitly requested. Existing Charcoal components own their internal geometry.';
 

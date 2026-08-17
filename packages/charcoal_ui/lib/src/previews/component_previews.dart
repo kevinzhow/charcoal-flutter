@@ -1,42 +1,10 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../charcoal_ui.dart';
+import 'preview_support.dart';
 
-Widget charcoalPreviewWrapper(Widget child) => Directionality(
-  textDirection: TextDirection.ltr,
-  child: Builder(
-    builder: (context) {
-      final brightness = MediaQuery.platformBrightnessOf(context);
-      final theme = brightness == Brightness.dark
-          ? CharcoalThemeData.dark()
-          : CharcoalThemeData.light();
-      return CharcoalTheme(
-        data: theme,
-        child: ColoredBox(
-          color: theme.colors.backgroundDefault,
-          child: Padding(padding: const EdgeInsets.all(24), child: child),
-        ),
-      );
-    },
-  ),
-);
-
-@Preview(
-  name: 'Buttons — Light',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Buttons — Dark',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Buttons', size: Size(420, 360))
 Widget charcoalButtonGalleryPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,
@@ -52,20 +20,7 @@ Widget charcoalButtonGalleryPreview() => Column(
   ],
 );
 
-@Preview(
-  name: 'Text fields — Light',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Text fields — Dark',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Text fields', size: Size(420, 360))
 Widget charcoalTextFieldGalleryPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -88,20 +43,7 @@ Widget charcoalTextFieldGalleryPreview() => const Column(
   ],
 );
 
-@Preview(
-  name: 'Text area — Light',
-  group: 'Charcoal V2',
-  size: Size(420, 300),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Text area — Dark',
-  group: 'Charcoal V2',
-  size: Size(420, 300),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Text area', size: Size(420, 300))
 Widget charcoalTextAreaPreview() => const CharcoalTextArea(
   assistiveText: 'Markdown is supported',
   label: 'Description',
@@ -113,20 +55,7 @@ Widget charcoalTextAreaPreview() => const CharcoalTextArea(
   showLabel: true,
 );
 
-@Preview(
-  name: 'Dropdown — Light',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Dropdown — Dark',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Dropdown', size: Size(420, 360))
 Widget charcoalDropdownPreview() => const _DropdownPreview();
 
 final class _DropdownPreview extends StatefulWidget {
@@ -160,19 +89,9 @@ final class _DropdownPreviewState extends State<_DropdownPreview> {
   );
 }
 
-@Preview(
-  name: 'Selection controls — Light',
-  group: 'Charcoal V2',
+@CharcoalComponentPreview(
+  name: 'Selection controls',
   size: Size(420, 360),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Selection controls — Dark',
-  group: 'Charcoal V2',
-  size: Size(420, 360),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
 )
 Widget charcoalSelectionControlsPreview() => const _SelectionControlsPreview();
 
@@ -183,20 +102,7 @@ final class _SelectionControlsPreview extends StatefulWidget {
   State<_SelectionControlsPreview> createState() => _SelectionControlsPreviewState();
 }
 
-@Preview(
-  name: 'Icon actions — Light',
-  group: 'Charcoal V2',
-  size: Size(420, 180),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Icon actions — Dark',
-  group: 'Charcoal V2',
-  size: Size(420, 180),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Icon actions', size: Size(420, 180))
 Widget charcoalIconActionsPreview() => Row(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -213,20 +119,7 @@ Widget charcoalIconActionsPreview() => Row(
   ],
 );
 
-@Preview(
-  name: 'Tag items — Light',
-  group: 'Charcoal V2',
-  size: Size(520, 220),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Tag items — Dark',
-  group: 'Charcoal V2',
-  size: Size(520, 220),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Tag items', size: Size(520, 220))
 Widget charcoalTagItemsPreview() => Wrap(
   spacing: 12,
   runSpacing: 12,
@@ -251,20 +144,7 @@ Widget charcoalTagItemsPreview() => Wrap(
   ],
 );
 
-@Preview(
-  name: 'Composed UI — Light',
-  group: 'Charcoal V2',
-  size: Size(520, 360),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Composed UI — Dark',
-  group: 'Charcoal V2',
-  size: Size(520, 360),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Composed UI', size: Size(520, 360))
 Widget charcoalComposedUiPreview() => const _ComposedUiPreview();
 
 final class _ComposedUiPreview extends StatefulWidget {
@@ -274,20 +154,7 @@ final class _ComposedUiPreview extends StatefulWidget {
   State<_ComposedUiPreview> createState() => _ComposedUiPreviewState();
 }
 
-@Preview(
-  name: 'Carousel — Light',
-  group: 'Charcoal V2',
-  size: Size(620, 320),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Carousel — Dark',
-  group: 'Charcoal V2',
-  size: Size(620, 320),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Carousel', size: Size(620, 320))
 Widget charcoalCarouselPreview() => const _CarouselPreview();
 
 final class _CarouselPreview extends StatelessWidget {
@@ -327,20 +194,7 @@ final class _CarouselPreview extends StatelessWidget {
   }
 }
 
-@Preview(
-  name: 'Pagination — Light',
-  group: 'Charcoal V2',
-  size: Size(640, 140),
-  brightness: Brightness.light,
-  wrapper: charcoalPreviewWrapper,
-)
-@Preview(
-  name: 'Pagination — Dark',
-  group: 'Charcoal V2',
-  size: Size(640, 140),
-  brightness: Brightness.dark,
-  wrapper: charcoalPreviewWrapper,
-)
+@CharcoalComponentPreview(name: 'Pagination', size: Size(640, 140))
 Widget charcoalPaginationPreview() => const _PaginationPreview();
 
 final class _PaginationPreview extends StatefulWidget {

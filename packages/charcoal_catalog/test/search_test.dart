@@ -45,4 +45,12 @@ void main() {
       );
     });
   });
+
+  group('pattern search', () {
+    test('resolves exact IDs and intent language', () {
+      expect(search.exactPattern('daily checklist')?.id, 'daily-checklist');
+      final results = search.searchPatterns('send money safely');
+      expect(results.first.pattern.id, 'financial-action-flow');
+    });
+  });
 }

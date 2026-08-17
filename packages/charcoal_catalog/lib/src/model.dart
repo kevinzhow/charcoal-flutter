@@ -19,6 +19,8 @@ final class CharcoalCatalog {
     required this.schemaVersion,
     required this.libraryName,
     required this.libraryVersion,
+    required this.designRules,
+    required this.patterns,
     required this.components,
     required this.tokens,
     required this.coverage,
@@ -29,6 +31,12 @@ final class CharcoalCatalog {
       schemaVersion: json['schemaVersion'] as int,
       libraryName: json['libraryName'] as String,
       libraryVersion: json['libraryVersion'] as String,
+      designRules: (json['designRules'] as List<Object?>)
+          .map((value) => CharcoalDesignRuleDoc.fromJson(value as Map<String, Object?>))
+          .toList(growable: false),
+      patterns: (json['patterns'] as List<Object?>)
+          .map((value) => CharcoalPatternDoc.fromJson(value as Map<String, Object?>))
+          .toList(growable: false),
       components: (json['components'] as List<Object?>)
           .map((value) => CharcoalComponentDoc.fromJson(value as Map<String, Object?>))
           .toList(growable: false),
@@ -42,6 +50,8 @@ final class CharcoalCatalog {
   final int schemaVersion;
   final String libraryName;
   final String libraryVersion;
+  final List<CharcoalDesignRuleDoc> designRules;
+  final List<CharcoalPatternDoc> patterns;
   final List<CharcoalComponentDoc> components;
   final List<CharcoalTokenDoc> tokens;
   final CharcoalCatalogCoverage coverage;
@@ -54,11 +64,21 @@ final class CharcoalCatalog {
     return null;
   }
 
+  CharcoalPatternDoc? patternNamed(String id) {
+    final normalized = id.toLowerCase();
+    for (final pattern in patterns) {
+      if (pattern.id.toLowerCase() == normalized) return pattern;
+    }
+    return null;
+  }
+
   Map<String, Object?> toJson() => <String, Object?>{
     'schemaVersion': schemaVersion,
     'libraryName': libraryName,
     'libraryVersion': libraryVersion,
     'coverage': coverage.toJson(),
+    'designRules': designRules.map((rule) => rule.toJson()).toList(growable: false),
+    'patterns': patterns.map((pattern) => pattern.toJson()).toList(growable: false),
     'components': components.map((component) => component.toJson()).toList(growable: false),
     'tokens': tokens.map((token) => token.toJson()).toList(growable: false),
   };
@@ -70,6 +90,7 @@ final class CharcoalCatalogCoverage {
     required this.publicComponents,
     required this.curatedComponents,
     required this.componentsWithExamples,
+    required this.curatedPatterns,
     required this.publicTokens,
     required this.semanticTokens,
   });
@@ -79,6 +100,7 @@ final class CharcoalCatalogCoverage {
       publicComponents: json['publicComponents'] as int,
       curatedComponents: json['curatedComponents'] as int,
       componentsWithExamples: json['componentsWithExamples'] as int,
+      curatedPatterns: json['curatedPatterns'] as int,
       publicTokens: json['publicTokens'] as int,
       semanticTokens: json['semanticTokens'] as int,
     );
@@ -87,6 +109,7 @@ final class CharcoalCatalogCoverage {
   final int publicComponents;
   final int curatedComponents;
   final int componentsWithExamples;
+  final int curatedPatterns;
   final int publicTokens;
   final int semanticTokens;
 
@@ -94,8 +117,109 @@ final class CharcoalCatalogCoverage {
     'publicComponents': publicComponents,
     'curatedComponents': curatedComponents,
     'componentsWithExamples': componentsWithExamples,
+    'curatedPatterns': curatedPatterns,
     'publicTokens': publicTokens,
     'semanticTokens': semanticTokens,
+  };
+}
+
+/// One page-level design question with the output and evidence required from an agent.
+final class CharcoalDesignRuleDoc {
+  const CharcoalDesignRuleDoc({
+    required this.id,
+    required this.order,
+    required this.question,
+    required this.requiredOutput,
+    required this.validation,
+  });
+
+  factory CharcoalDesignRuleDoc.fromJson(Map<String, Object?> json) {
+    return CharcoalDesignRuleDoc(
+      id: json['id'] as String,
+      order: json['order'] as int,
+      question: json['question'] as String,
+      requiredOutput: json['requiredOutput'] as String,
+      validation: json['validation'] as String,
+    );
+  }
+
+  final String id;
+  final int order;
+  final String question;
+  final String requiredOutput;
+  final String validation;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'id': id,
+    'order': order,
+    'question': question,
+    'requiredOutput': requiredOutput,
+    'validation': validation,
+  };
+}
+
+/// A reviewed, reusable multi-component composition contract.
+///
+/// Patterns document page-level composition and state ownership; they are not runtime recipes.
+final class CharcoalPatternDoc {
+  const CharcoalPatternDoc({
+    required this.id,
+    required this.category,
+    required this.summary,
+    required this.keywords,
+    required this.useWhen,
+    required this.avoidWhen,
+    required this.components,
+    required this.composition,
+    required this.interactionStates,
+    required this.feedback,
+    required this.accessibility,
+    required this.responsiveBehavior,
+  });
+
+  factory CharcoalPatternDoc.fromJson(Map<String, Object?> json) {
+    return CharcoalPatternDoc(
+      id: json['id'] as String,
+      category: json['category'] as String,
+      summary: json['summary'] as String,
+      keywords: _strings(json['keywords']),
+      useWhen: _strings(json['useWhen']),
+      avoidWhen: _strings(json['avoidWhen']),
+      components: _strings(json['components']),
+      composition: _strings(json['composition']),
+      interactionStates: _strings(json['interactionStates']),
+      feedback: _strings(json['feedback']),
+      accessibility: _strings(json['accessibility']),
+      responsiveBehavior: _strings(json['responsiveBehavior']),
+    );
+  }
+
+  final String id;
+  final String category;
+  final String summary;
+  final List<String> keywords;
+  final List<String> useWhen;
+  final List<String> avoidWhen;
+  final List<String> components;
+  final List<String> composition;
+  final List<String> interactionStates;
+  final List<String> feedback;
+  final List<String> accessibility;
+  final List<String> responsiveBehavior;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'id': id,
+    'category': category,
+    'summary': summary,
+    'keywords': keywords,
+    'useWhen': useWhen,
+    'avoidWhen': avoidWhen,
+    'components': components,
+    'composition': composition,
+    'interactionStates': interactionStates,
+    'feedback': feedback,
+    'accessibility': accessibility,
+    'responsiveBehavior': responsiveBehavior,
   };
 }
 
@@ -160,6 +284,8 @@ final class CharcoalComponentDoc {
     required this.avoidWhen,
     required this.accessibility,
     required this.responsiveBehavior,
+    required this.interactionStates,
+    required this.feedbackResponsibilities,
     required this.tokenRoles,
     required this.relatedComponents,
     required this.apis,
@@ -181,6 +307,8 @@ final class CharcoalComponentDoc {
       avoidWhen: _strings(json['avoidWhen']),
       accessibility: _strings(json['accessibility']),
       responsiveBehavior: _strings(json['responsiveBehavior']),
+      interactionStates: _strings(json['interactionStates']),
+      feedbackResponsibilities: _strings(json['feedbackResponsibilities']),
       tokenRoles: _strings(json['tokenRoles']),
       relatedComponents: _strings(json['relatedComponents']),
       apis: (json['apis'] as List<Object?>)
@@ -203,6 +331,8 @@ final class CharcoalComponentDoc {
   final List<String> avoidWhen;
   final List<String> accessibility;
   final List<String> responsiveBehavior;
+  final List<String> interactionStates;
+  final List<String> feedbackResponsibilities;
   final List<String> tokenRoles;
   final List<String> relatedComponents;
   final List<CharcoalApiDoc> apis;
@@ -220,6 +350,8 @@ final class CharcoalComponentDoc {
     'avoidWhen': avoidWhen,
     'accessibility': accessibility,
     'responsiveBehavior': responsiveBehavior,
+    'interactionStates': interactionStates,
+    'feedbackResponsibilities': feedbackResponsibilities,
     'tokenRoles': tokenRoles,
     'relatedComponents': relatedComponents,
     'apis': apis.map((api) => api.toJson()).toList(growable: false),

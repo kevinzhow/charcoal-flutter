@@ -116,6 +116,12 @@ void main() {
       expect(find.text('Paper lamp'), findsOneWidget);
       expect(find.text('Ripple cup'), findsNothing);
 
+      await tester.enterText(search, 'moon');
+      await tester.pump();
+      expect(find.text('No matching products'), findsOneWidget);
+      await _tapVisible(tester, find.text('Clear search'));
+      expect(find.text('Paper lamp'), findsOneWidget);
+
       await tester.enterText(search, 'lamp');
       await tester.pump();
       expect(find.text('Paper lamp'), findsOneWidget);
@@ -136,12 +142,6 @@ void main() {
 
       await _tapVisible(
         tester,
-        find.byKey(const ValueKey<String>('agent-commerce-nav-saved')),
-      );
-      expect(find.text('Paper lamp'), findsOneWidget);
-
-      await _tapVisible(
-        tester,
         find.byKey(const ValueKey<String>('agent-commerce-bag')),
       );
       expect(
@@ -152,7 +152,31 @@ void main() {
         tester,
         find.byKey(const ValueKey<String>('agent-commerce-checkout')),
       );
-      expect(find.text('Checkout is ready for 1 item.'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-checkout-review')),
+        findsOneWidget,
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey<String>('agent-commerce-place-order')),
+      );
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-order-confirmed')),
+        findsOneWidget,
+      );
+      expect(find.text('Your order is confirmed'), findsOneWidget);
+
+      await _tapVisible(tester, find.text('Continue shopping'));
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey<String>('agent-commerce-nav-saved')),
+      );
+      expect(find.text('Paper lamp'), findsOneWidget);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey<String>('agent-commerce-nav-profile')),
+      );
+      expect(find.textContaining('NK-817'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -173,6 +197,7 @@ void main() {
       find.byKey(const ValueKey<String>('agent-wallet-action-topUp')),
     );
     await _tapVisible(tester, find.text('Add ¥ 10,000'));
+    await _tapVisible(tester, find.text('Done'));
     await _tapVisible(tester, visibility);
     expect(find.text('¥ 1,294,600'), findsOneWidget);
 
@@ -192,18 +217,36 @@ void main() {
         of: find.byKey(const ValueKey<String>('agent-wallet-amount')),
         matching: find.byType(EditableText),
       ),
+      '99999999',
+    );
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-wallet-review-transfer')),
+    );
+    expect(find.text('This exceeds your available balance.'), findsOneWidget);
+
+    await tester.enterText(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('agent-wallet-amount')),
+        matching: find.byType(EditableText),
+      ),
       '8000',
     );
     await _tapVisible(
       tester,
-      find.widgetWithText(CharcoalButton, 'Send money').last,
+      find.byKey(const ValueKey<String>('agent-wallet-review-transfer')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-send-review')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-wallet-confirm-transfer')),
     );
     expect(find.text('¥ 8,000 was sent to Hana.'), findsOneWidget);
 
-    await _tapVisible(
-      tester,
-      find.byKey(const ValueKey<String>('agent-wallet-nav-activity')),
-    );
+    await _tapVisible(tester, find.text('View activity'));
     expect(find.text('To Hana'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
@@ -230,12 +273,35 @@ void main() {
     expect(find.text('3/3'), findsOneWidget);
     expect(find.text('Everything is complete.'), findsOneWidget);
 
+    await _tapVisible(tester, walkCheckbox);
+    expect(find.text('2/3'), findsOneWidget);
+    expect(find.text('Plan tomorrow'), findsNothing);
+    await _tapVisible(tester, walkCheckbox);
+
     await _tapVisible(tester, find.text('Plan tomorrow'));
+    expect(
+      find.byKey(const ValueKey<String>('agent-habits-tomorrow-plan-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-habits-save-tomorrow')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-habits-plan-saved-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-habits-continue-journey')),
+    );
     expect(
       find.byKey(const ValueKey<String>('agent-habits-journey-page')),
       findsOneWidget,
     );
     expect(find.text('Monday'), findsOneWidget);
+    expect(find.text('Tuesday'), findsOneWidget);
+    expect(find.text('Planned · 3 habits'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

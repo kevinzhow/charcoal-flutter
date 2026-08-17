@@ -9,11 +9,24 @@ void main() {
       final names = charcoalCatalog.components.map((component) => component.name).toList();
       final sortedNames = names.toList()..sort();
 
-      expect(charcoalCatalog.schemaVersion, 2);
+      expect(charcoalCatalog.schemaVersion, 3);
       expect(charcoalCatalog.coverage.publicComponents, names.length);
       expect(names, sortedNames);
       expect(names.toSet(), hasLength(names.length));
       expect(names, containsAll(<String>['CharcoalButton', 'CharcoalTextField', 'CharcoalDialog']));
+    });
+
+    test('exposes page-design rules and reviewed composition patterns', () {
+      expect(charcoalCatalog.designRules, hasLength(7));
+      expect(
+        charcoalCatalog.designRules.map((rule) => rule.order),
+        orderedEquals(<int>[1, 2, 3, 4, 5, 6, 7]),
+      );
+      expect(charcoalCatalog.coverage.curatedPatterns, charcoalCatalog.patterns.length);
+      final checklist = charcoalCatalog.patternNamed('daily-checklist')!;
+      expect(checklist.components, contains('CharcoalCheckbox'));
+      expect(checklist.interactionStates, contains('complete'));
+      expect(checklist.feedback, isNotEmpty);
     });
 
     test('exposes curated guidance and source-derived API data', () {
@@ -26,6 +39,8 @@ void main() {
       expect(button.documentationLevel, CharcoalDocumentationLevel.curated);
       expect(button.useWhen, isNotEmpty);
       expect(button.accessibility, isNotEmpty);
+      expect(button.interactionStates, contains('disabled'));
+      expect(button.feedbackResponsibilities, isNotEmpty);
       expect(button.examples.single.source, contains('CharcoalButtonVariant.primary'));
       expect(fullWidth.type, 'bool');
       expect(fullWidth.defaultValue, 'false');

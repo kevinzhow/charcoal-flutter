@@ -4,6 +4,61 @@ Agent readiness means an agent can discover, understand, compose, and verify the
 Charcoal UI version without guessing component names, constructor parameters, token roles, or
 responsive behavior.
 
+For complete pages, readiness has five synchronized layers:
+
+1. `skills/charcoal-page-design` is the canonical source for the intent → information → reuse →
+   state → feedback → best-practice → verification workflow. The repository exposes that same
+   source at `.agents/skills/charcoal-page-design` for local Codex discovery.
+2. The generated Catalog publishes the seven rules, reviewed composition patterns, component
+   interaction states, and feedback ownership.
+3. CLI and MCP adapters expose those contracts without maintaining separate prose inventories.
+4. A versioned Page Experience Spec records page-specific decisions and validates exact component
+   and pattern references before implementation handoff.
+5. Real Flutter flows and the page-experience benchmark verify that the resulting UI behaves at
+   the required constraints.
+
+## Install into an agent
+
+From a consuming Flutter project that has `charcoal_cli` available as a dev dependency:
+
+```sh
+dart run charcoal_cli:charcoal agent install --agent auto
+dart run charcoal_cli:charcoal doctor
+```
+
+Project scope is the default. Codex uses `.agents/skills/charcoal-page-design`, Claude uses
+`.claude/skills/charcoal-page-design`, and Cursor uses `.cursor/skills/charcoal-page-design`.
+`--agent all` installs every target and `--scope user` installs a personal copy. The installer also
+adds a versioned managed block to the corresponding project instruction file without replacing
+unrelated user content.
+
+After updating Charcoal UI and `charcoal_cli`, run:
+
+```sh
+dart run charcoal_cli:charcoal agent sync --agent auto
+dart run charcoal_cli:charcoal doctor
+```
+
+The install manifest stores the library version, Catalog schema, Skill version, and source hash.
+Sync replaces only an installer-owned Skill directory, including removing files that no longer
+exist upstream. `doctor` fails for modified or stale content.
+
+## Page Experience Specs
+
+Use a persisted spec for new pages, substantial redesigns, task-bearing modals/sheets, and
+multi-state flows. Small visual fixes use the compact audit in the Skill instead.
+
+```sh
+dart run charcoal_cli:charcoal page-spec \
+  --output design/account-transfer.json \
+  --page-id account-transfer \
+  --title "Account transfer"
+dart run charcoal_cli:charcoal page-spec --validate design/account-transfer.json
+```
+
+The canonical JSON Schema and template live in `contracts/`. Checked-in reference specs for Nook,
+Lumen, and Daylight live in `page-specs/` and are validated by the synchronization pipeline.
+
 ## Evaluation matrix
 
 Run every case in `benchmarks/v1.json` (defined by `benchmarks/v1.schema.json`) in a clean Flutter
@@ -75,6 +130,25 @@ The benchmark is deliberately independent from Showcase screenshots. Visual pari
 another verifier, while this suite measures whether an agent can make a correct implementation from
 the package's public contract.
 
+The component/API suite remains `benchmarks/v1.json`. The separate
+`benchmarks/page-experience-v1.json` suite evaluates complete stateful page decisions modeled after
+Nook, Lumen, and Daylight:
+
+```sh
+fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark-run \
+  --suite agent/benchmarks/page-experience-v1.json \
+  --configuration cli \
+  --model gpt-5.6-sol \
+  --grader gpt-5.6-sol \
+  --candidate-reasoning high \
+  --grader-reasoning high \
+  --output .artifacts/agent-ready/page-experience-cli
+```
+
+Run the page suite separately under the configurations being compared. Its hidden assertions cover
+intent hierarchy, information placement, reuse, explicit state transitions, immediate and durable
+feedback, recovery, accessibility, and compact layout—not visual imitation of the Showcase apps.
+
 ## Synchronization
 
 After a public API, curated example, package version, managed instruction, or canonical grader
@@ -84,8 +158,9 @@ schema changes, refresh all derivable Agent Ready artifacts through one command:
 fvm dart run tool/agent_ready.dart generate
 ```
 
-CI runs the corresponding `check` command. The pipeline regenerates the Catalog, updates benchmark
-Catalog/UI version pins, refreshes the managed contributor block, and derives the Codex-compatible
-grader schema from the canonical schema. Benchmark prompts and their semantic assertions remain
-reviewed source: they cannot be inferred safely from an API signature, so the checker validates
-their IDs and component references instead of silently rewriting their intent.
+CI runs the corresponding `check` command. The pipeline regenerates the Catalog, derives the CLI
+Skill bundle from the canonical Skill, validates every checked-in Page Experience Spec, updates all
+benchmark Catalog/UI version pins, refreshes the managed contributor block, and derives the
+Codex-compatible grader schema from the canonical schema. Skill instructions, page specs, benchmark
+prompts, and semantic assertions remain reviewed source: they cannot be inferred safely from an API
+signature, so the checker validates and synchronizes only the parts with a deterministic owner.

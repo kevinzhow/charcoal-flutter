@@ -14,6 +14,13 @@ final class CharcoalTokenSearchResult {
   final int score;
 }
 
+final class CharcoalPatternSearchResult {
+  const CharcoalPatternSearchResult({required this.pattern, required this.score});
+
+  final CharcoalPatternDoc pattern;
+  final int score;
+}
+
 /// Deterministic component and token search shared by every agent adapter.
 final class CharcoalCatalogSearch {
   const CharcoalCatalogSearch(this.catalog);
@@ -58,6 +65,22 @@ final class CharcoalCatalogSearch {
     return results.take(limit).toList(growable: false);
   }
 
+  List<CharcoalPatternSearchResult> searchPatterns(String query, {int limit = 10}) {
+    final normalizedQuery = _normalize(query);
+    if (normalizedQuery.isEmpty || limit <= 0) return const <CharcoalPatternSearchResult>[];
+    final terms = normalizedQuery.split(' ').where((term) => term.isNotEmpty).toList();
+    final results = <CharcoalPatternSearchResult>[];
+    for (final pattern in catalog.patterns) {
+      final score = _patternScore(pattern, normalizedQuery, terms);
+      if (score > 0) results.add(CharcoalPatternSearchResult(pattern: pattern, score: score));
+    }
+    results.sort((left, right) {
+      final scoreOrder = right.score.compareTo(left.score);
+      return scoreOrder != 0 ? scoreOrder : left.pattern.id.compareTo(right.pattern.id);
+    });
+    return results.take(limit).toList(growable: false);
+  }
+
   CharcoalComponentDoc? exact(String query) {
     final normalizedQuery = _normalize(query);
     final compactQuery = normalizedQuery.replaceAll(' ', '');
@@ -81,6 +104,14 @@ final class CharcoalCatalogSearch {
           _normalize(token.dartAccessor) == normalizedQuery) {
         return token;
       }
+    }
+    return null;
+  }
+
+  CharcoalPatternDoc? exactPattern(String query) {
+    final normalizedQuery = _normalize(query);
+    for (final pattern in catalog.patterns) {
+      if (_normalize(pattern.id) == normalizedQuery) return pattern;
     }
     return null;
   }
@@ -143,6 +174,35 @@ final class CharcoalCatalogSearch {
     if (descriptive.contains(query)) score += 300;
     for (final term in terms) {
       if (path.contains(term) || accessor.contains(term)) score += 80;
+      if (descriptive.contains(term)) score += 30;
+    }
+    return score;
+  }
+
+  int _patternScore(CharcoalPatternDoc pattern, String query, List<String> terms) {
+    final id = _normalize(pattern.id);
+    final keywords = pattern.keywords.map(_normalize).toList(growable: false);
+    if (query == id) return 1000;
+    if (id.startsWith(query)) return 900;
+    if (keywords.contains(query)) return 850;
+    final highSignal = <String>[id, ...keywords].join(' ');
+    final descriptive = _normalize(
+      <String>[
+        pattern.category,
+        pattern.summary,
+        ...pattern.useWhen,
+        ...pattern.avoidWhen,
+        ...pattern.components,
+        ...pattern.composition,
+        ...pattern.interactionStates,
+        ...pattern.feedback,
+      ].join(' '),
+    );
+    var score = 0;
+    if (highSignal.contains(query)) score += 500;
+    if (descriptive.contains(query)) score += 300;
+    for (final term in terms) {
+      if (highSignal.contains(term)) score += 80;
       if (descriptive.contains(term)) score += 30;
     }
     return score;

@@ -1,120 +1,265 @@
 {
   "schemaVersion": 1,
-  "catalogSchemaVersion": 2,
+  "catalogSchemaVersion": 3,
   "libraryVersion": "0.1.0",
   "suite": "charcoal-agent-ready-v1",
   "cases": [
     {
       "id": "responsive-actions",
       "prompt": "Build Cancel and Continue actions. They should sit in a row on desktop and fill the width in a vertical stack on a narrow phone.",
-      "expectedComponents": ["CharcoalButton"],
-      "requiredAssertions": ["uses LayoutBuilder or parent constraints", "uses primary variant for Continue", "both callbacks remain enabled"],
-      "forbiddenPatterns": ["Material Button", "CupertinoButton", "hard-coded component height"]
+      "expectedComponents": [
+        "CharcoalButton"
+      ],
+      "requiredAssertions": [
+        "uses LayoutBuilder or parent constraints",
+        "uses primary variant for Continue",
+        "both callbacks remain enabled"
+      ],
+      "forbiddenPatterns": [
+        "Material Button",
+        "CupertinoButton",
+        "hard-coded component height"
+      ]
     },
     {
       "id": "validated-name-field",
       "prompt": "Add a required display-name field with persistent label and a useful validation message for names shorter than three characters.",
-      "expectedComponents": ["CharcoalTextField"],
-      "requiredAssertions": ["showLabel is true", "invalid and assistiveText agree", "state is updated through onChanged"],
-      "forbiddenPatterns": ["TextField from Material", "raw validation color"]
+      "expectedComponents": [
+        "CharcoalTextField"
+      ],
+      "requiredAssertions": [
+        "showLabel is true",
+        "invalid and assistiveText agree",
+        "state is updated through onChanged"
+      ],
+      "forbiddenPatterns": [
+        "TextField from Material",
+        "raw validation color"
+      ]
     },
     {
       "id": "visibility-dropdown",
       "prompt": "Let the user choose one visibility level from Everyone, Followers, and Only me. Include a short explanation for each option.",
-      "expectedComponents": ["CharcoalDropdown"],
-      "requiredAssertions": ["uses CharcoalDropdownOption", "value is controlled by parent state", "option values are unique"],
-      "forbiddenPatterns": ["DropdownButton", "hand-written popup menu"]
+      "expectedComponents": [
+        "CharcoalDropdown"
+      ],
+      "requiredAssertions": [
+        "uses CharcoalDropdownOption",
+        "value is controlled by parent state",
+        "option values are unique"
+      ],
+      "forbiddenPatterns": [
+        "DropdownButton",
+        "hand-written popup menu"
+      ]
     },
     {
       "id": "feed-mode-segments",
       "prompt": "Create a Recent, Popular, Saved view switcher that fills a compact screen and exposes an accessible group name.",
-      "expectedComponents": ["CharcoalSegmentedControl"],
-      "requiredAssertions": ["fullWidth responds to constraints", "semanticLabel is present", "selection is controlled"],
-      "forbiddenPatterns": ["ToggleButtons", "custom selected background"]
+      "expectedComponents": [
+        "CharcoalSegmentedControl"
+      ],
+      "requiredAssertions": [
+        "fullWidth responds to constraints",
+        "semanticLabel is present",
+        "selection is controlled"
+      ],
+      "forbiddenPatterns": [
+        "ToggleButtons",
+        "custom selected background"
+      ]
     },
     {
       "id": "adaptive-review-modal",
       "prompt": "Open a Review changes task as a centered dialog on desktop and a bottom sheet on compact mobile, with a Done action.",
-      "expectedComponents": ["CharcoalDialog", "CharcoalButton"],
-      "requiredAssertions": ["uses showCharcoalModal", "chooses CharcoalModalStyle from available width", "dialog can be dismissed"],
-      "forbiddenPatterns": ["showDialog from Material", "AlertDialog", "fixed screen width"]
+      "expectedComponents": [
+        "CharcoalDialog",
+        "CharcoalButton"
+      ],
+      "requiredAssertions": [
+        "uses showCharcoalModal",
+        "chooses CharcoalModalStyle from available width",
+        "dialog can be dismissed"
+      ],
+      "forbiddenPatterns": [
+        "showDialog from Material",
+        "AlertDialog",
+        "fixed screen width"
+      ]
     },
     {
       "id": "success-toast",
       "prompt": "After saving, announce Changes saved as brief positive feedback near the bottom edge.",
-      "expectedComponents": ["CharcoalToast"],
-      "requiredAssertions": ["uses showCharcoalToast", "message is self-contained", "uses default success semantics"],
-      "forbiddenPatterns": ["ScaffoldMessenger", "custom overlay colors"]
+      "expectedComponents": [
+        "CharcoalToast"
+      ],
+      "requiredAssertions": [
+        "uses showCharcoalToast",
+        "message is self-contained",
+        "uses default success semantics"
+      ],
+      "forbiddenPatterns": [
+        "ScaffoldMessenger",
+        "custom overlay colors"
+      ]
     },
     {
       "id": "restore-snackbar",
       "prompt": "Show a neutral Draft restored notification with an optional action and allow transient dismissal.",
-      "expectedComponents": ["CharcoalSnackBar"],
-      "requiredAssertions": ["uses showCharcoalSnackBar", "action has an accessible label", "uses an Overlay-owning context"],
-      "forbiddenPatterns": ["SnackBar from Material", "custom border color"]
+      "expectedComponents": [
+        "CharcoalSnackBar"
+      ],
+      "requiredAssertions": [
+        "uses showCharcoalSnackBar",
+        "action has an accessible label",
+        "uses an Overlay-owning context"
+      ],
+      "forbiddenPatterns": [
+        "SnackBar from Material",
+        "custom border color"
+      ]
     },
     {
       "id": "disabled-submit",
       "prompt": "Disable the Submit action until the form is valid while preserving the Charcoal disabled appearance and semantics.",
-      "expectedComponents": ["CharcoalButton"],
-      "requiredAssertions": ["onPressed is null while invalid", "no manual opacity is added", "label describes the action"],
-      "forbiddenPatterns": ["GestureDetector as button", "manual disabled token"]
+      "expectedComponents": [
+        "CharcoalButton"
+      ],
+      "requiredAssertions": [
+        "onPressed is null while invalid",
+        "no manual opacity is added",
+        "label describes the action"
+      ],
+      "forbiddenPatterns": [
+        "GestureDetector as button",
+        "manual disabled token"
+      ]
     },
     {
       "id": "long-form-copy",
       "prompt": "Collect a multi-line biography and show remaining guidance without replacing Charcoal field behavior.",
-      "expectedComponents": ["CharcoalTextArea"],
-      "requiredAssertions": ["uses the cataloged Charcoal API", "respects text scaling", "parent supplies width constraints"],
-      "forbiddenPatterns": ["Material TextField", "fixed text line height outside typography"]
+      "expectedComponents": [
+        "CharcoalTextArea"
+      ],
+      "requiredAssertions": [
+        "uses the cataloged Charcoal API",
+        "respects text scaling",
+        "parent supplies width constraints"
+      ],
+      "forbiddenPatterns": [
+        "Material TextField",
+        "fixed text line height outside typography"
+      ]
     },
     {
       "id": "binary-setting",
       "prompt": "Add an email-notifications on/off setting that can be reached by keyboard and screen reader.",
-      "expectedComponents": ["CharcoalSwitch"],
-      "requiredAssertions": ["controlled value and callback", "meaningful surrounding label", "keyboard interaction preserved"],
-      "forbiddenPatterns": ["Switch from Material", "custom tap-only toggle"]
+      "expectedComponents": [
+        "CharcoalSwitch"
+      ],
+      "requiredAssertions": [
+        "controlled value and callback",
+        "meaningful surrounding label",
+        "keyboard interaction preserved"
+      ],
+      "forbiddenPatterns": [
+        "Switch from Material",
+        "custom tap-only toggle"
+      ]
     },
     {
       "id": "terms-checkbox",
       "prompt": "Require acceptance of the terms with a labeled checkbox and a disabled state while the form submits.",
-      "expectedComponents": ["CharcoalCheckbox"],
-      "requiredAssertions": ["controlled checked state", "disabled state uses public API", "label remains tappable if API supports it"],
-      "forbiddenPatterns": ["Checkbox from Material", "raw border token"]
+      "expectedComponents": [
+        "CharcoalCheckbox"
+      ],
+      "requiredAssertions": [
+        "controlled checked state",
+        "disabled state uses public API",
+        "label remains tappable if API supports it"
+      ],
+      "forbiddenPatterns": [
+        "Checkbox from Material",
+        "raw border token"
+      ]
     },
     {
       "id": "compact-pagination",
       "prompt": "Add pagination for a result list and keep it usable on both a narrow phone and desktop.",
-      "expectedComponents": ["CharcoalPagination"],
-      "requiredAssertions": ["reads exact constructor from catalog", "parent handles compact placement", "current page semantics remain available"],
-      "forbiddenPatterns": ["invented parameter names", "private component dimension copied externally"]
+      "expectedComponents": [
+        "CharcoalPagination"
+      ],
+      "requiredAssertions": [
+        "reads exact constructor from catalog",
+        "parent handles compact placement",
+        "current page semantics remain available"
+      ],
+      "forbiddenPatterns": [
+        "invented parameter names",
+        "private component dimension copied externally"
+      ]
     },
     {
       "id": "tabs-intent-discovery",
       "prompt": "I need three compact tabs that switch a local filter without navigating to new routes.",
-      "expectedComponents": ["CharcoalSegmentedControl"],
-      "requiredAssertions": ["search intent resolves segmented control", "does not invent a CharcoalTabs component", "uses controlled state"],
-      "forbiddenPatterns": ["TabBar", "invented CharcoalTabs"]
+      "expectedComponents": [
+        "CharcoalSegmentedControl"
+      ],
+      "requiredAssertions": [
+        "search intent resolves segmented control",
+        "does not invent a CharcoalTabs component",
+        "uses controlled state"
+      ],
+      "forbiddenPatterns": [
+        "TabBar",
+        "invented CharcoalTabs"
+      ]
     },
     {
       "id": "missing-date-picker",
       "prompt": "Add a Charcoal date picker for a birthday field.",
       "expectedComponents": [],
-      "requiredAssertions": ["reports that no cataloged date picker exists", "offers an explicit product decision instead of silently substituting", "does not fabricate an API"],
-      "forbiddenPatterns": ["invented CharcoalDatePicker", "silent Material substitution"]
+      "requiredAssertions": [
+        "reports that no cataloged date picker exists",
+        "offers an explicit product decision instead of silently substituting",
+        "does not fabricate an API"
+      ],
+      "forbiddenPatterns": [
+        "invented CharcoalDatePicker",
+        "silent Material substitution"
+      ]
     },
     {
       "id": "token-role-boundary",
       "prompt": "Make the primary button 52 pixels high and reuse a page-layout spacing token for its internal icon gap.",
-      "expectedComponents": ["CharcoalButton"],
-      "requiredAssertions": ["rejects overriding component-owned height", "does not misuse layout tokens", "explains that public size variants own geometry"],
-      "forbiddenPatterns": ["SizedBox height around button internals", "layout token used as icon gap"]
+      "expectedComponents": [
+        "CharcoalButton"
+      ],
+      "requiredAssertions": [
+        "rejects overriding component-owned height",
+        "does not misuse layout tokens",
+        "explains that public size variants own geometry"
+      ],
+      "forbiddenPatterns": [
+        "SizedBox height around button internals",
+        "layout token used as icon gap"
+      ]
     },
     {
       "id": "exact-version-api",
       "prompt": "Implement a primary full-width button using only parameters that exist in the installed Charcoal UI version, then verify it.",
-      "expectedComponents": ["CharcoalButton"],
-      "requiredAssertions": ["reads component API before coding", "uses variant and fullWidth with exact names", "static analysis or widget test passes"],
-      "forbiddenPatterns": ["guessed style parameter", "unverified code"]
+      "expectedComponents": [
+        "CharcoalButton"
+      ],
+      "requiredAssertions": [
+        "reads component API before coding",
+        "uses variant and fullWidth with exact names",
+        "static analysis or widget test passes"
+      ],
+      "forbiddenPatterns": [
+        "guessed style parameter",
+        "unverified code"
+      ]
     }
   ]
 }

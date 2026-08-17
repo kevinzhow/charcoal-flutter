@@ -22,6 +22,9 @@ dart run charcoal_mcp:charcoal_mcp
 
 Available read-only tools:
 
+- `charcoal.get_design_rules`
+- `charcoal.search_patterns`
+- `charcoal.get_pattern`
 - `charcoal.search_components`
 - `charcoal.get_component`
 - `charcoal.search_tokens`

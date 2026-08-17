@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 3,
+  "libraryVersion": "0.1.0",
+  "page": {
+    "id": "lumen-core-flow",
+    "title": "Lumen balance and safe transfer",
+    "userContext": "A mobile wallet user checks available money and occasionally sends or adds funds; they need privacy, clear review, and a durable transaction result.",
+    "platforms": ["compact"],
+    "assumptions": [
+      "Transfers and top-ups are local simulations, so submission completes immediately after review.",
+      "A transfer cannot exceed the visible available balance."
+    ],
+    "intents": [
+      {
+        "id": "understand-balance",
+        "priority": "primary",
+        "goal": "Understand available balance and recent money movement at a glance.",
+        "successSignal": "Balance, monthly change, and recent activity are visible without opening a secondary task."
+      },
+      {
+        "id": "send-safely",
+        "priority": "secondary",
+        "goal": "Send the intended amount to the intended recipient with a review before commitment.",
+        "successSignal": "A receipt confirms recipient and amount and the activity list records the transfer."
+      },
+      {
+        "id": "add-funds",
+        "priority": "secondary",
+        "goal": "Add a chosen amount from the linked bank and see the new balance.",
+        "successSignal": "The balance and activity both reflect the top-up."
+      },
+      {
+        "id": "protect-privacy",
+        "priority": "support",
+        "goal": "Hide the account balance when other people can see the screen.",
+        "successSignal": "The balance is masked while all actions remain available."
+      },
+      {
+        "id": "recover-transfer",
+        "priority": "recovery",
+        "goal": "Correct an invalid recipient or amount without re-entering valid information.",
+        "successSignal": "Inline guidance keeps the draft and returns focus to a correctable field."
+      }
+    ],
+    "information": [
+      {
+        "id": "wallet-overview",
+        "intentIds": ["understand-balance", "protect-privacy"],
+        "content": "Available balance, privacy state, monthly change, primary money actions, and recent activity.",
+        "placement": "Balance leads the wallet page; actions follow it; recent activity confirms durable results below.",
+        "visibility": "Visible on wallet home, with the amount masked when privacy is enabled."
+      },
+      {
+        "id": "transfer-decision",
+        "intentIds": ["send-safely", "recover-transfer"],
+        "content": "Recipient, amount, available balance impact, validation guidance, and review summary.",
+        "placement": "Fields appear in a focused task page; review repeats recipient and amount immediately before confirmation.",
+        "visibility": "Draft information remains visible through editing and invalid states; review replaces editing only after valid input."
+      },
+      {
+        "id": "top-up-decision",
+        "intentIds": ["add-funds"],
+        "content": "Funding source, selectable amount, and resulting balance.",
+        "placement": "The amount selector precedes the confirmation action in a dedicated task page.",
+        "visibility": "Visible while selecting and confirming a top-up."
+      }
+    ],
+    "reuse": [
+      {
+        "need": "Transfer editing, validation, review, confirmation, and durable activity.",
+        "resolution": "pattern",
+        "references": ["financial-action-flow"],
+        "rationale": "The reviewed financial pattern requires a review boundary and persistent receipt rather than an expanding home-page panel."
+      },
+      {
+        "need": "Stable wallet destinations while opening focused money tasks.",
+        "resolution": "pattern",
+        "references": ["adaptive-app-shell"],
+        "rationale": "Focused tasks need explicit back behavior without changing the selected top-level Wallet destination."
+      },
+      {
+        "need": "Labeled recipient and amount inputs with validation.",
+        "resolution": "component",
+        "references": ["CharcoalTextField"],
+        "rationale": "The component already owns focus, invalid, assistive-text, and disabled presentation while Lumen owns transaction validation."
+      }
+    ],
+    "interactions": [
+      {
+        "id": "toggle-balance-privacy",
+        "intentId": "protect-privacy",
+        "trigger": "The user presses the labeled visibility action on the balance card.",
+        "states": ["visible", "hidden"],
+        "transitions": [
+          { "from": "visible", "event": "Hide balance is pressed", "to": "hidden" },
+          { "from": "hidden", "event": "Show balance is pressed", "to": "visible" }
+        ]
+      },
+      {
+        "id": "send-transfer",
+        "intentId": "send-safely",
+        "trigger": "The user opens Send, enters a valid recipient and affordable amount, reviews, and confirms.",
+        "states": ["editing", "invalid", "review", "confirmed"],
+        "transitions": [
+          { "from": "editing", "event": "Invalid or unaffordable values are submitted", "to": "invalid" },
+          { "from": "invalid", "event": "Values are corrected", "to": "editing" },
+          { "from": "editing", "event": "Valid values continue", "to": "review" },
+          { "from": "review", "event": "Transfer is confirmed", "to": "confirmed" }
+        ]
+      },
+      {
+        "id": "top-up-balance",
+        "intentId": "add-funds",
+        "trigger": "The user opens Top up, chooses an amount, and confirms the linked-bank action.",
+        "states": ["selecting", "confirmed"],
+        "transitions": [
+          { "from": "selecting", "event": "Add amount is pressed", "to": "confirmed" }
+        ]
+      }
+    ],
+    "feedback": [
+      {
+        "interactionId": "toggle-balance-privacy",
+        "state": "visible or hidden",
+        "immediate": "The amount and semantic action label switch immediately.",
+        "persistent": "The privacy state remains while navigating between wallet destinations.",
+        "recovery": "The same action reverses the state without affecting wallet data.",
+        "announcement": "The visibility action label communicates Show balance or Hide balance."
+      },
+      {
+        "interactionId": "send-transfer",
+        "state": "invalid, review, or confirmed",
+        "immediate": "Invalid amount guidance appears beside the amount; valid input moves to a clear review.",
+        "persistent": "A receipt and Activity row retain recipient and amount after confirmation.",
+        "recovery": "Invalid input remains editable; Back from review returns to the intact draft.",
+        "announcement": "Visible field labels and the confirmation heading expose the changed transaction state."
+      },
+      {
+        "interactionId": "top-up-balance",
+        "state": "confirmed",
+        "immediate": "The task displays the amount added and new balance.",
+        "persistent": "Wallet balance and activity record the top-up.",
+        "recovery": "N/A because this local simulation completes synchronously; a production provider failure would retain the selection and offer retry.",
+        "announcement": "The confirmation summary appears before the Done action in reading order."
+      }
+    ],
+    "bestPractices": [
+      {
+        "area": "financial trust",
+        "decision": "Sending money is a focused edit-review-confirm flow; confirmation is durable and never only a toast.",
+        "evidence": "Lumen page previews render Wallet, Transfer validation, Transfer review, and Transfer receipt at 390x844 and 320x700; runtime tests inspect retained input, updated balance, and Activity."
+      },
+      {
+        "area": "privacy and navigation",
+        "decision": "Balance masking changes only disclosure, while top-level Wallet selection remains stable through tasks.",
+        "evidence": "The isolated balance preview verifies disclosure in both brightness modes; real page previews and widget interactions preserve explicit task back actions."
+      }
+    ],
+    "verification": [
+      {
+        "scenario": "Safe transfer and durable receipt",
+        "viewport": "compact 320x760",
+        "steps": ["Hide balance", "Open Send", "Enter Hana and 8000", "Review transfer", "Confirm transfer", "Open Activity"],
+        "expected": ["Review shows Hana and ¥8,000", "Balance decreases", "Receipt is visible", "Activity contains To Hana"]
+      },
+      {
+        "scenario": "Unaffordable transfer recovery",
+        "viewport": "compact 390x844",
+        "steps": ["Open Send", "Enter an amount larger than the balance", "Continue", "Correct the amount"],
+        "expected": ["Inline guidance explains the available balance", "Recipient remains intact", "The corrected draft can continue"]
+      }
+    ]
+  }
+}

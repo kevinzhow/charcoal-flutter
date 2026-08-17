@@ -23,6 +23,24 @@ final class ManifestCommand extends CharcoalCommand {
       'libraryVersion': charcoalCatalog.libraryVersion,
       'commands': <Map<String, Object?>>[
         <String, Object?>{
+          'name': 'pattern',
+          'usage': 'charcoal pattern <name-or-intent> [--limit 10] [--json]',
+          'responseType': 'pattern|patternResults',
+          'mutatesFiles': false,
+        },
+        <String, Object?>{
+          'name': 'design-rules',
+          'usage': 'charcoal design-rules [--json]',
+          'responseType': 'designRules',
+          'mutatesFiles': false,
+        },
+        <String, Object?>{
+          'name': 'page-spec',
+          'usage': 'charcoal page-spec [--output <path>|--validate <path>] [--json]',
+          'responseType': 'pageSpecTemplate|pageSpecValidation',
+          'mutatesFiles': true,
+        },
+        <String, Object?>{
           'name': 'search',
           'usage': 'charcoal search <query> [--limit 10] [--json]',
           'responseType': 'searchResults',
@@ -74,12 +92,23 @@ final class ManifestCommand extends CharcoalCommand {
           'responseType': 'manifest',
           'mutatesFiles': false,
         },
+        <String, Object?>{
+          'name': 'agent',
+          'usage':
+              'charcoal agent <install|sync> [--agent auto|all|codex|claude|cursor] '
+              '[--scope project|user]',
+          'responseType': 'agentInstall|agentSync',
+          'mutatesFiles': true,
+        },
       ],
       'errors': <String>[
         'ERR_INVALID_ARGUMENT',
         'ERR_BENCHMARK_INVALID',
         'ERR_BENCHMARK_RUN_FAILED',
         'ERR_INPUT_NOT_FOUND',
+        'ERR_OUTPUT_EXISTS',
+        'ERR_PAGE_SPEC_INVALID',
+        'ERR_SKILL_INSTALL',
         'ERR_UNKNOWN_COMPONENT',
         'ERR_UNSAFE_PATH',
       ],
@@ -90,7 +119,8 @@ final class ManifestCommand extends CharcoalCommand {
       text:
           'Charcoal CLI $charcoalCliVersion for ${charcoalCatalog.libraryName} '
           '${charcoalCatalog.libraryVersion}\n'
-          'Commands: search, component, token, benchmark, benchmark-run, doctor, init, manifest',
+          'Commands: search, pattern, design-rules, page-spec, component, token, benchmark, '
+          'benchmark-run, doctor, init, agent, manifest',
     );
     return ExitCode.success.code;
   }

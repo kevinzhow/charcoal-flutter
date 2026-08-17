@@ -29,6 +29,52 @@ final class AgentReadyPipeline {
       problems,
       label: _relative(catalogDartPath(root)),
     );
+    _checkExactFile(
+      _file('agent/skills/charcoal-page-design/references/page-experience-spec.schema.json'),
+      _file('agent/contracts/page-experience-spec-v1.schema.json').readAsStringSync(),
+      problems,
+      label: 'agent/skills/charcoal-page-design/references/page-experience-spec.schema.json',
+    );
+    _checkExactFile(
+      _file('agent/skills/charcoal-page-design/assets/page-experience-spec.json'),
+      _file('agent/contracts/page-experience-spec-v1.template.json').readAsStringSync(),
+      problems,
+      label: 'agent/skills/charcoal-page-design/assets/page-experience-spec.json',
+    );
+    final canonicalSkill = _fileDirectory('agent/skills/charcoal-page-design');
+    final repositorySkill = _fileDirectory('.agents/skills/charcoal-page-design');
+    final bundledSkill = _fileDirectory(
+      'packages/charcoal_cli/agent/skills/charcoal-page-design',
+    );
+    if (!File(p.join(canonicalSkill.path, 'SKILL.md')).existsSync()) {
+      problems.add('Missing agent/skills/charcoal-page-design/SKILL.md.');
+    } else if (!bundledSkill.existsSync()) {
+      problems.add('Missing the charcoal_cli page-design skill bundle.');
+    } else if (charcoalSkillDirectoryHash(canonicalSkill) !=
+        charcoalSkillDirectoryHash(bundledSkill)) {
+      problems.add('The charcoal_cli page-design skill bundle is stale.');
+    }
+    if (!repositorySkill.existsSync()) {
+      problems.add('Missing .agents/skills/charcoal-page-design repository Skill.');
+    } else if (canonicalSkill.existsSync() &&
+        charcoalSkillDirectoryHash(canonicalSkill) != charcoalSkillDirectoryHash(repositorySkill)) {
+      problems.add('The repository-local page-design Skill is stale.');
+    }
+
+    final pageSpecs = _fileDirectory('agent/page-specs').existsSync()
+        ? (_fileDirectory('agent/page-specs').listSync()..sort((a, b) => a.path.compareTo(b.path)))
+              .whereType<File>()
+              .where((file) => p.extension(file.path) == '.json')
+        : const <File>[];
+    for (final pageSpec in pageSpecs) {
+      final report = validateCharcoalPageExperienceSpec(
+        _readObject(pageSpec),
+        catalog: generatedCatalog.catalog,
+      );
+      for (final problem in report.problems) {
+        problems.add('${_relative(pageSpec.path)}: $problem');
+      }
+    }
 
     final canonicalGraderSchema = _readObject(
       _file('agent/runner/grader-response-v1.schema.json'),
@@ -59,17 +105,20 @@ final class AgentReadyPipeline {
       }
     }
 
-    final benchmarkFile = _file('agent/benchmarks/v1.json');
-    if (!benchmarkFile.existsSync()) {
-      problems.add('Missing agent/benchmarks/v1.json.');
-    } else {
-      _validateBenchmark(
-        _readObject(benchmarkFile),
-        generatedCatalog.catalog.schemaVersion,
-        generatedCatalog.catalog.libraryVersion,
-        generatedCatalog.catalog.components.map((component) => component.name).toSet(),
-        problems,
-      );
+    for (final path in _benchmarkPaths) {
+      final benchmarkFile = _file(path);
+      if (!benchmarkFile.existsSync()) {
+        problems.add('Missing $path.');
+      } else {
+        _validateBenchmark(
+          _readObject(benchmarkFile),
+          generatedCatalog.catalog.schemaVersion,
+          generatedCatalog.catalog.libraryVersion,
+          generatedCatalog.catalog.components.map((component) => component.name).toSet(),
+          problems,
+          label: path,
+        );
+      }
     }
     final contracts = <String, Map<String, Object?>>{};
     for (final path in _contractPaths) {
@@ -88,6 +137,18 @@ final class AgentReadyPipeline {
     final generatedCatalog = buildCatalog(root);
     _write(catalogJsonPath(root), generatedCatalog.json);
     _write(catalogDartPath(root), generatedCatalog.dartSource);
+    _write(
+      _file('agent/skills/charcoal-page-design/references/page-experience-spec.schema.json').path,
+      _file('agent/contracts/page-experience-spec-v1.schema.json').readAsStringSync(),
+    );
+    _write(
+      _file('agent/skills/charcoal-page-design/assets/page-experience-spec.json').path,
+      _file('agent/contracts/page-experience-spec-v1.template.json').readAsStringSync(),
+    );
+    _copyExactDirectory(
+      _fileDirectory('agent/skills/charcoal-page-design'),
+      _fileDirectory('packages/charcoal_cli/agent/skills/charcoal-page-design'),
+    );
 
     final canonicalGraderSchema = _readObject(
       _file('agent/runner/grader-response-v1.schema.json'),
@@ -120,15 +181,17 @@ final class AgentReadyPipeline {
               '$managedBlock\n';
     _write(instructionsFile.path, nextInstructions);
 
-    final benchmarkFile = _file('agent/benchmarks/v1.json');
-    final benchmark = _readObject(benchmarkFile);
-    final versionChanged =
-        benchmark['catalogSchemaVersion'] != generatedCatalog.catalog.schemaVersion ||
-        benchmark['libraryVersion'] != generatedCatalog.catalog.libraryVersion;
-    if (versionChanged) {
-      benchmark['catalogSchemaVersion'] = generatedCatalog.catalog.schemaVersion;
-      benchmark['libraryVersion'] = generatedCatalog.catalog.libraryVersion;
-      _write(benchmarkFile.path, '${_prettyJson.convert(benchmark)}\n');
+    for (final path in _benchmarkPaths) {
+      final benchmarkFile = _file(path);
+      final benchmark = _readObject(benchmarkFile);
+      final versionChanged =
+          benchmark['catalogSchemaVersion'] != generatedCatalog.catalog.schemaVersion ||
+          benchmark['libraryVersion'] != generatedCatalog.catalog.libraryVersion;
+      if (versionChanged) {
+        benchmark['catalogSchemaVersion'] = generatedCatalog.catalog.schemaVersion;
+        benchmark['libraryVersion'] = generatedCatalog.catalog.libraryVersion;
+        _write(benchmarkFile.path, '${_prettyJson.convert(benchmark)}\n');
+      }
     }
 
     final problems = check();
@@ -139,12 +202,26 @@ final class AgentReadyPipeline {
 
   File _file(String relativePath) => File(p.join(root.path, relativePath));
 
+  Directory _fileDirectory(String relativePath) => Directory(p.join(root.path, relativePath));
+
   String _relative(String path) => p.relative(path, from: root.path).replaceAll('\\', '/');
 
   void _write(String path, String contents) {
     final file = File(path)..parent.createSync(recursive: true);
     if (!file.existsSync() || file.readAsStringSync() != contents) {
       file.writeAsStringSync(contents);
+    }
+  }
+
+  void _copyExactDirectory(Directory source, Directory target) {
+    if (target.existsSync()) target.deleteSync(recursive: true);
+    target.createSync(recursive: true);
+    for (final entity in source.listSync(recursive: true, followLinks: false)) {
+      if (entity is! File) continue;
+      final relative = p.relative(entity.path, from: source.path);
+      final destination = File(p.join(target.path, relative));
+      destination.parent.createSync(recursive: true);
+      destination.writeAsBytesSync(entity.readAsBytesSync());
     }
   }
 }
@@ -214,20 +291,21 @@ void _validateBenchmark(
   int catalogSchemaVersion,
   String libraryVersion,
   Set<String> catalogComponents,
-  List<String> problems,
-) {
+  List<String> problems, {
+  required String label,
+}) {
   if (benchmark['schemaVersion'] != 1) {
-    problems.add('agent/benchmarks/v1.json has an unsupported schemaVersion.');
+    problems.add('$label has an unsupported schemaVersion.');
   }
   if (benchmark['catalogSchemaVersion'] != catalogSchemaVersion) {
-    problems.add('agent/benchmarks/v1.json has a stale catalogSchemaVersion.');
+    problems.add('$label has a stale catalogSchemaVersion.');
   }
   if (benchmark['libraryVersion'] != libraryVersion) {
-    problems.add('agent/benchmarks/v1.json has a stale libraryVersion.');
+    problems.add('$label has a stale libraryVersion.');
   }
   final rawCases = benchmark['cases'];
   if (rawCases is! List<Object?> || rawCases.isEmpty) {
-    problems.add('agent/benchmarks/v1.json must contain cases.');
+    problems.add('$label must contain cases.');
     return;
   }
   final ids = <String>{};
@@ -408,4 +486,9 @@ const List<String> _contractPaths = <String>[
   'agent/runner/executor-request-v1.schema.json',
   'agent/runner/grader-request-v1.schema.json',
   'agent/runner/grader-response-v1.schema.json',
+];
+
+const List<String> _benchmarkPaths = <String>[
+  'agent/benchmarks/v1.json',
+  'agent/benchmarks/page-experience-v1.json',
 ];

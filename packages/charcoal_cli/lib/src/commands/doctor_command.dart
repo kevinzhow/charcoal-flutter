@@ -5,6 +5,7 @@ import 'package:charcoal_catalog/charcoal_catalog.dart';
 import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
+import '../agent_skill.dart';
 import '../runner.dart';
 
 final class DoctorCommand extends CharcoalCommand {
@@ -39,6 +40,32 @@ final class DoctorCommand extends CharcoalCommand {
         : RegExp(
             r'<!-- charcoal-agent:start\s+version=([^\s]+)',
           ).firstMatch(managedFile.readAsStringSync())?.group(1);
+    final skillSource = resolveCharcoalSkillSource(root);
+    final expectedSkillHash = skillSource == null ? null : charcoalSkillDirectoryHash(skillSource);
+    final projectSkillDirectories = projectCharcoalSkillDirectories(root);
+    final skillDirectories = projectSkillDirectories.isEmpty
+        ? userCharcoalSkillDirectories()
+        : projectSkillDirectories;
+    final skillProblems = <String>[];
+    for (final directory in skillDirectories) {
+      final manifest = readCharcoalSkillManifest(directory);
+      if (manifest == null) {
+        if (expectedSkillHash == null ||
+            charcoalSkillDirectoryHash(directory) != expectedSkillHash) {
+          skillProblems.add(
+            '${_displaySkillPath(directory, root)} has no valid install manifest.',
+          );
+        }
+        continue;
+      }
+      if (manifest['skillVersion'] != charcoalPageDesignSkillVersion ||
+          manifest['libraryVersion'] != charcoalCatalog.libraryVersion ||
+          manifest['catalogSchemaVersion'] != charcoalCatalog.schemaVersion ||
+          manifest['sourceHash'] != expectedSkillHash ||
+          charcoalSkillDirectoryHash(directory) != expectedSkillHash) {
+        skillProblems.add('${_displaySkillPath(directory, root)} is stale or modified.');
+      }
+    }
     final checks = <Map<String, Object?>>[
       <String, Object?>{
         'id': 'pubspec',
@@ -69,6 +96,23 @@ final class DoctorCommand extends CharcoalCommand {
             : 'Managed instructions in ${p.relative(managedFile.path, from: root.path)} '
                   'target ${managedVersion ?? 'an unknown version'}, not '
                   '${charcoalCatalog.libraryVersion}. Run charcoal init.',
+      },
+      <String, Object?>{
+        'id': 'agent-skill',
+        'status': skillSource == null
+            ? 'fail'
+            : skillDirectories.isEmpty
+            ? 'warn'
+            : skillProblems.isEmpty
+            ? 'pass'
+            : 'fail',
+        'message': skillSource == null
+            ? 'The charcoal-page-design bundle is missing from charcoal_cli.'
+            : skillDirectories.isEmpty
+            ? 'The charcoal-page-design skill is not installed. Run charcoal agent install.'
+            : skillProblems.isEmpty
+            ? 'Installed charcoal-page-design skill matches Charcoal UI ${charcoalCatalog.libraryVersion}.'
+            : '${skillProblems.join(' ')} Run charcoal agent sync.',
       },
       <String, Object?>{
         'id': 'catalog-version',
@@ -116,6 +160,11 @@ final class DoctorCommand extends CharcoalCommand {
     return failureCount == 0 ? ExitCode.success.code : 1;
   }
 }
+
+String _displaySkillPath(Directory directory, Directory projectRoot) =>
+    p.isWithin(projectRoot.path, directory.path)
+    ? p.relative(directory.path, from: projectRoot.path)
+    : directory.path;
 
 String? _installedPackageVersion(Directory projectRoot, String packageName) {
   final packageConfig = File(p.join(projectRoot.path, '.dart_tool', 'package_config.json'));

@@ -7,6 +7,8 @@ final class ComponentMetadata {
     required this.avoidWhen,
     required this.accessibility,
     required this.responsiveBehavior,
+    this.interactionStates = const <String>[],
+    this.feedbackResponsibilities = const <String>[],
     required this.tokenRoles,
     required this.relatedComponents,
     required this.companionDeclarations,
@@ -20,6 +22,8 @@ final class ComponentMetadata {
   final List<String> avoidWhen;
   final List<String> accessibility;
   final List<String> responsiveBehavior;
+  final List<String> interactionStates;
+  final List<String> feedbackResponsibilities;
   final List<String> tokenRoles;
   final List<String> relatedComponents;
   final List<String> companionDeclarations;
@@ -61,6 +65,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'Set fullWidth on compact layouts when the action should fill its parent constraint.',
       'Let the parent choose available width; do not hard-code the component height.',
     ],
+    interactionStates: <String>['idle', 'hovered', 'focused', 'pressed', 'selected', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns pointer, focus, pressed, selected, and disabled presentation.',
+      'The caller owns progress, success, failure, recovery, and the durable action result.',
+    ],
     tokenRoles: <String>[
       'space.targetS',
       'space.targetM',
@@ -100,6 +109,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'The field expands to the width supplied by its parent.',
       'Constrain forms to a readable width on desktop instead of sizing the field directly.',
     ],
+    interactionStates: <String>['empty', 'editing', 'focused', 'invalid', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns focus, invalid, assistive-text, and disabled presentation exposed by its API.',
+      'The caller owns validation timing, submission progress, persistence, and recovery.',
+    ],
     tokenRoles: <String>[
       'space.component20',
       'radius.s',
@@ -138,6 +152,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'The popup matches the trigger width and chooses the available vertical direction.',
       'Let the parent constrain trigger width on small and large screens.',
     ],
+    interactionStates: <String>['closed', 'open', 'focused', 'selected', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns popup visibility, option interaction, focus, and disabled option presentation.',
+      'The caller owns selected-value persistence and downstream results or validation.',
+    ],
     tokenRoles: <String>[
       'space.component10',
       'space.layout30',
@@ -174,6 +193,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     responsiveBehavior: <String>[
       'Use fullWidth when compact layouts need equal segments across available width.',
       'Use uniformSegmentWidth for equal fixed segments without filling the parent.',
+    ],
+    interactionStates: <String>['selected', 'unselected', 'focused', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns group selection and focus presentation for the controlled value.',
+      'The caller owns loading, empty results, and persistence caused by selection.',
     ],
     tokenRoles: <String>[
       'space.targetS',
@@ -220,6 +244,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'The title remains geometrically centered while edge slots contract on narrow widths.',
       'Keep edge actions compact and place system safe-area padding outside the component.',
     ],
+    interactionStates: <String>['page context', 'leading action', 'trailing action'],
+    feedbackResponsibilities: <String>[
+      'Owns title geometry and layout slots but not navigation state.',
+      'The caller owns back, close, destination, and contextual-action outcomes.',
+    ],
     tokenRoles: <String>[
       'space.targetL',
       'space.component30',
@@ -242,8 +271,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
   ),
   'CharcoalDialog': ComponentMetadata(
     category: 'Overlays',
-    summary:
-        'Presents a short, blocking decision in a centered dialog or adaptive bottom-sheet surface.',
+    summary: 'Presents a short, blocking decision in a centered dialog or adaptive bottom-sheet surface.',
     keywords: <String>[
       'bottom sheet',
       'confirmation',
@@ -269,6 +297,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'Use CharcoalModalStyle.bottomSheet for compact mobile presentation where appropriate.',
       'Size constrains readable content width; maxWidth can narrow a specific workflow.',
       'showCharcoalModal targets the root Navigator by default; set useRootNavigator to false only from a context under the intended nested Navigator.',
+    ],
+    interactionStates: <String>['presenting', 'open', 'dismissing', 'dismissed'],
+    feedbackResponsibilities: <String>[
+      'Owns modal focus containment, presentation, dismissal, and surface semantics.',
+      'The caller owns task validation, progress, success, failure, and returned result.',
     ],
     tokenRoles: <String>[
       'paragraphWidth.s',
@@ -314,6 +347,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'Choose CharcoalPopupEdge based on nearby persistent navigation and safe areas.',
       'Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay.',
     ],
+    interactionStates: <String>['appearing', 'visible', 'dismissing'],
+    feedbackResponsibilities: <String>[
+      'Owns transient presentation and success or error visual semantics.',
+      'The caller must keep durable or corrective information in the page rather than only in a toast.',
+    ],
     tokenRoles: <String>[
       'containerPositiveDefault',
       'containerNegativeDefault',
@@ -358,6 +396,11 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'The overlay respects horizontal screen insets and a configurable maximum width.',
       'The thumbnail keeps its component-defined size while message content flexes.',
       'Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay.',
+    ],
+    interactionStates: <String>['appearing', 'visible', 'action invoked', 'dismissed'],
+    feedbackResponsibilities: <String>[
+      'Owns transient message, optional action, dismissal, and overlay presentation.',
+      'The caller owns the action outcome and information that must remain after dismissal.',
     ],
     tokenRoles: <String>[
       'borderDefault',

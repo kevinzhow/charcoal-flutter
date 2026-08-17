@@ -2,10 +2,13 @@
 ## Charcoal UI agent workflow
 
 - Discover components before coding: `fvm dart run packages/charcoal_cli/bin/charcoal.dart search <intent>`.
+- For a new, redesigned, or multi-state page, load the installed `charcoal-page-design` skill and validate its Page Experience Spec with `fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec --validate <path>`.
+- Discover reviewed multi-component compositions before authoring local UI: `fvm dart run packages/charcoal_cli/bin/charcoal.dart pattern <intent>`.
 - Read exact installed APIs and examples: `fvm dart run packages/charcoal_cli/bin/charcoal.dart component <name>`.
 - Find exact semantic token accessors by role: `fvm dart run packages/charcoal_cli/bin/charcoal.dart token <intent>`; use `--tier primitive` only for audited foundation work.
 - Import `package:charcoal_ui/charcoal_ui.dart` and use Charcoal components where available.
 - Compose layouts with Flutter primitives such as `Row`, `Column`, `Padding`, and `LayoutBuilder`.
+- For UI work, use Flutter Widget Previewer before the full app: filter to the exact component or selected preview file, verify public/shared components in isolation, then deterministic page-state previews at compact and standard constraints; reserve full Showcase runs for navigation and platform integration.
 - For Flutter UI runs, interaction, hot reload, screenshots, and end-to-end verification, prefer the Dart/Flutter skill tooling first; use `agent-device` only when platform-level automation is specifically required.
 - Do not substitute Material or Cupertino controls for an existing Charcoal component.
 - Use semantic Charcoal tokens only for roles they support; keep component-owned geometry internal.

@@ -13,6 +13,7 @@ void main() {
     expect(File(catalogDartPath(root)).readAsStringSync(), generated.dartSource);
     expect(generated.catalog.coverage.curatedComponents, 8);
     expect(generated.catalog.coverage.componentsWithExamples, 8);
+    expect(generated.catalog.coverage.curatedPatterns, 6);
     expect(generated.catalog.coverage.publicTokens, 502);
   });
 }

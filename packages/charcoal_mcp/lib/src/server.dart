@@ -126,6 +126,9 @@ final class CharcoalMcpServer {
     }
     try {
       final structured = switch (name) {
+        'charcoal.get_design_rules' => _getDesignRules(arguments),
+        'charcoal.search_patterns' => _searchPatterns(arguments),
+        'charcoal.get_pattern' => _getPattern(arguments),
         'charcoal.search_components' => _searchComponents(arguments),
         'charcoal.get_component' => _getComponent(arguments),
         'charcoal.search_tokens' => _searchTokens(arguments),
@@ -137,6 +140,47 @@ final class CharcoalMcpServer {
     } on _ToolInputException catch (error) {
       return _toolError(error, modern: modern);
     }
+  }
+
+  Map<String, Object?> _getDesignRules(Map<String, Object?> arguments) {
+    _rejectUnknown(arguments, const <String>{});
+    return <String, Object?>{
+      'catalogSchemaVersion': catalog.schemaVersion,
+      'libraryVersion': catalog.libraryVersion,
+      'rules': catalog.designRules.map((rule) => rule.toJson()).toList(growable: false),
+    };
+  }
+
+  Map<String, Object?> _searchPatterns(Map<String, Object?> arguments) {
+    _rejectUnknown(arguments, const <String>{'query', 'limit'});
+    final query = _requiredString(arguments, 'query');
+    final limit = _limit(arguments, fallback: 10, maximum: 50);
+    final results = _search.searchPatterns(query, limit: limit);
+    return <String, Object?>{
+      'query': query,
+      'count': results.length,
+      'results': results
+          .map(
+            (result) => <String, Object?>{
+              'id': result.pattern.id,
+              'category': result.pattern.category,
+              'summary': result.pattern.summary,
+              'components': result.pattern.components,
+              'score': result.score,
+            },
+          )
+          .toList(growable: false),
+    };
+  }
+
+  Map<String, Object?> _getPattern(Map<String, Object?> arguments) {
+    _rejectUnknown(arguments, const <String>{'name'});
+    final name = _requiredString(arguments, 'name');
+    final pattern = _search.exactPattern(name);
+    if (pattern == null) {
+      throw _ToolInputException('ERR_UNKNOWN_PATTERN', 'No pattern named "$name" exists.');
+    }
+    return pattern.toJson();
   }
 
   Map<String, Object?> _searchComponents(Map<String, Object?> arguments) {
@@ -351,6 +395,9 @@ void _rejectUnknownParams(Map<String, Object?> params, Set<String> allowed) {
 }
 
 const Set<String> _toolNames = <String>{
+  'charcoal.get_design_rules',
+  'charcoal.search_patterns',
+  'charcoal.get_pattern',
   'charcoal.search_components',
   'charcoal.get_component',
   'charcoal.search_tokens',
@@ -363,6 +410,62 @@ const Map<String, Object?> _serverMeta = <String, Object?>{
 };
 
 const List<Map<String, Object?>> _toolDefinitions = <Map<String, Object?>>[
+  <String, Object?>{
+    'name': 'charcoal.get_design_rules',
+    'title': 'Read Charcoal page-design rules',
+    'description':
+        'Return the versioned intent, hierarchy, reuse, state, feedback, and verification questions '
+        'required before substantial page implementation.',
+    'inputSchema': <String, Object?>{
+      'type': 'object',
+      'additionalProperties': false,
+    },
+    'outputSchema': <String, Object?>{
+      'type': 'object',
+      'required': <String>['catalogSchemaVersion', 'libraryVersion', 'rules'],
+    },
+    'annotations': _readOnlyAnnotations,
+  },
+  <String, Object?>{
+    'name': 'charcoal.search_patterns',
+    'title': 'Search Charcoal composition patterns',
+    'description':
+        'Find reviewed multi-component composition and state-ownership guidance by page intent.',
+    'inputSchema': <String, Object?>{
+      'type': 'object',
+      'properties': <String, Object?>{
+        'query': <String, Object?>{'type': 'string', 'minLength': 1},
+        'limit': <String, Object?>{'type': 'integer', 'minimum': 1, 'maximum': 50},
+      },
+      'required': <String>['query'],
+      'additionalProperties': false,
+    },
+    'outputSchema': <String, Object?>{
+      'type': 'object',
+      'required': <String>['query', 'count', 'results'],
+    },
+    'annotations': _readOnlyAnnotations,
+  },
+  <String, Object?>{
+    'name': 'charcoal.get_pattern',
+    'title': 'Read a Charcoal composition pattern',
+    'description':
+        'Return exact component composition, states, feedback ownership, accessibility, and '
+        'responsive guidance for one reviewed pattern.',
+    'inputSchema': <String, Object?>{
+      'type': 'object',
+      'properties': <String, Object?>{
+        'name': <String, Object?>{'type': 'string', 'minLength': 1},
+      },
+      'required': <String>['name'],
+      'additionalProperties': false,
+    },
+    'outputSchema': <String, Object?>{
+      'type': 'object',
+      'required': <String>['id', 'summary', 'components', 'interactionStates', 'feedback'],
+    },
+    'annotations': _readOnlyAnnotations,
+  },
   <String, Object?>{
     'name': 'charcoal.search_components',
     'title': 'Search Charcoal components',

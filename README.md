@@ -147,6 +147,12 @@ The CLI exposes that same versioned catalog to people, scripts, and coding agent
 # Find a component from product intent.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart search "single choice"
 
+# Find a reviewed page composition before creating local UI.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart pattern "searchable collection"
+
+# Read the seven page-design rules in a stable machine-readable form.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart design-rules --json
+
 # Read the exact constructor, companion APIs, guidance, and executable source.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart component CharcoalSegmentedControl
 
@@ -156,7 +162,18 @@ fvm dart run packages/charcoal_cli/bin/charcoal.dart token "layout spacing" --ki
 # Use stable JSON envelopes for automation.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart manifest --json
 
-# Inspect a project, then add or refresh only the managed instruction block.
+# Install the versioned page-design Skill plus managed agent instructions.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart agent install --agent auto
+
+# Refresh the installed Skill after upgrading Charcoal UI.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart agent sync --agent auto
+
+# Create and validate a durable Page Experience Spec for substantial page work.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec \
+  --output design/my-page.json --page-id my-page --title "My page"
+fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec --validate design/my-page.json
+
+# Inspect project readiness. `init` remains available for instruction-only bootstrap.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor
 fvm dart run packages/charcoal_cli/bin/charcoal.dart init --agent codex
 
@@ -169,8 +186,8 @@ fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark-run \
   --case exact-version-api --output .artifacts/agent-ready/protocol-pilot
 ```
 
-For protocol clients, `charcoal_mcp` exposes the same search, component, token, example, and status
-data through a read-only stdio server:
+For protocol clients, `charcoal_mcp` exposes the same design rules, patterns, component search,
+token, example, and status data through a read-only stdio server:
 
 ```bash
 fvm dart run packages/charcoal_mcp/bin/charcoal_mcp.dart
@@ -183,9 +200,10 @@ fvm dart run tool/agent_ready.dart generate
 fvm dart run tool/agent_ready.dart check
 ```
 
-This single pipeline regenerates the Catalog and synchronizes the benchmark version, managed
-contributor instructions, and Codex grader schema. The CLI and MCP server are adapters over the
-Catalog, not separate documentation sources.
+This single pipeline regenerates the Catalog, derives the distributable Skill bundle, validates
+every checked-in Page Experience Spec, and synchronizes benchmark versions, managed contributor
+instructions, and the Codex grader schema. The CLI and MCP server are adapters over the Catalog,
+not separate documentation sources.
 Executable examples remain ordinary Flutter code; they are reference compositions rather than a
 runtime recipe layer. See [Agent readiness](agent/README.md) for the benchmark, evidence schema,
 and rubric.
@@ -264,7 +282,16 @@ fvm dart run tool/agent_ready.dart check
 
 cd packages/charcoal_ui
 fvm flutter widget-preview start
+
+# In another terminal, preview shared compositions and real page states.
+cd ../../example
+fvm flutter widget-preview start
 ```
+
+Use Previewer in three gates: public components first, then deterministic component/page states in
+the Example package, then the full Showcase only for routing and platform integration. Nook, Lumen,
+and Daylight previews use their production widgets and ViewModels at 390×844 and 320×700 rather
+than maintaining preview-only copies. See the [Widget Preview workflow](docs/widget-preview-workflow.md).
 
 Every push to `main` builds the Showcase for the `/charcoal-flutter/` base path and deploys it to
 GitHub Pages. The package uses local workspace dependencies and is currently `publish_to: none`.

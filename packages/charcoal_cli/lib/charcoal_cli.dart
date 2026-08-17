@@ -6,7 +6,11 @@ import 'dart:io';
 import 'src/runner.dart';
 
 export 'package:charcoal_catalog/charcoal_catalog.dart'
-    show CharcoalCatalogSearch, CharcoalSearchResult, CharcoalTokenSearchResult;
+    show
+        CharcoalCatalogSearch,
+        CharcoalPatternSearchResult,
+        CharcoalSearchResult,
+        CharcoalTokenSearchResult;
 
 export 'src/agent_instructions.dart'
     show
@@ -14,6 +18,14 @@ export 'src/agent_instructions.dart'
         charcoalAgentEndMarker,
         charcoalAgentStartMarker,
         charcoalManagedBlockPattern;
+export 'src/agent_skill.dart'
+    show
+        charcoalPageDesignSkillName,
+        charcoalPageDesignSkillVersion,
+        charcoalSkillDirectoryHash,
+        charcoalSkillInstallManifest,
+        readCharcoalSkillManifest,
+        resolveCharcoalSkillSource;
 export 'src/benchmark.dart'
     show
         CharcoalBenchmarkFormatException,
@@ -51,6 +63,12 @@ export 'src/codex_benchmark_adapter.dart'
         parseCharcoalCodexAdapterArguments,
         readCharcoalCodexRequest,
         runCharcoalCodexProcess;
+export 'src/page_experience.dart'
+    show
+        CharcoalPageSpecValidation,
+        buildCharcoalPageExperienceTemplate,
+        charcoalPageExperienceSpecVersion,
+        validateCharcoalPageExperienceSpec;
 
 /// Runs the Charcoal CLI without terminating the host process.
 ///

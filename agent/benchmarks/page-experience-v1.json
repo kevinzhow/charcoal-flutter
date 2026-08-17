@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 3,
+  "libraryVersion": "0.1.0",
+  "suite": "charcoal-page-experience-v1",
+  "cases": [
+    {
+      "id": "searchable-collection-recovery",
+      "prompt": "Design and implement a compact Nook-style shopping page for a user who wants to find a calm home object, inspect it, save it, and place a simulated order. Search must have a useful no-results recovery, checkout must include a review step, and the confirmed result must remain discoverable after the bag clears. Use Charcoal UI and keep the implementation in candidate.dart.",
+      "expectedComponents": [
+        "CharcoalButton",
+        "CharcoalNavigationBar",
+        "CharcoalSegmentedControl",
+        "CharcoalTextField"
+      ],
+      "requiredAssertions": [
+        "the find-and-buy outcome is visually primary while saved items and account context remain secondary",
+        "search, no-results recovery, product detail, bag, review, confirmation, and post-confirmation states are modeled explicitly",
+        "saving and bag state are reused across collection, detail, and confirmation rather than duplicated",
+        "every interactive state change has immediate feedback and the placed order has persistent feedback",
+        "compact layout remains readable without horizontal overflow and controls preserve semantics"
+      ],
+      "forbiddenPatterns": [
+        "a checkout button that jumps directly to a transient message",
+        "fake controls whose labels promise unimplemented behavior",
+        "Material or Cupertino controls",
+        "raw component-internal geometry copied into page code"
+      ]
+    },
+    {
+      "id": "reviewed-financial-action",
+      "prompt": "Design and implement a compact Lumen-style wallet page for a user who needs to understand an available balance and safely send money. Balance privacy, inline amount validation, an explicit transfer review, confirmation, and durable activity history must all work in the local simulation. Use Charcoal UI and keep the implementation in candidate.dart.",
+      "expectedComponents": [
+        "CharcoalButton",
+        "CharcoalNavigationBar",
+        "CharcoalTextField"
+      ],
+      "requiredAssertions": [
+        "available balance and recent movement precede secondary money actions in the information hierarchy",
+        "recipient and amount validation preserve the draft and explain how to recover",
+        "editing, invalid, review, submitting or immediate completion, receipt, and activity states are coherent",
+        "confirmation updates both the balance and a durable activity record",
+        "focused transfer steps do not falsely select or expose unrelated top-level destinations"
+      ],
+      "forbiddenPatterns": [
+        "money is sent from the first edit screen without a review state",
+        "success exists only as a toast or temporary string",
+        "duplicated transfer fields with independent state owners",
+        "Material or Cupertino controls"
+      ]
+    },
+    {
+      "id": "breathable-daily-checklist",
+      "prompt": "Design and implement a compact Daylight-style wellness page for a user completing three gentle daily habits. The checklist should feel breathable, show reversible progress, reveal tomorrow planning only after completion, save that plan, and show it persistently in a Journey view. Use Charcoal UI and keep the implementation in candidate.dart.",
+      "expectedComponents": [
+        "CharcoalButton",
+        "CharcoalCheckbox",
+        "CharcoalNavigationBar",
+        "CharcoalSwitch"
+      ],
+      "requiredAssertions": [
+        "today completion is the primary intent and tomorrow planning is progressively disclosed",
+        "habit label, supporting cue, streak context, and checked state form one reusable tappable item composition",
+        "incomplete, partial, complete, reopened, planning, saved, and journey states remain internally consistent",
+        "unchecking one habit reverses only that habit and removes premature completion actions",
+        "the compact checklist has deliberate vertical breathing room without applying the same density to unrelated pages"
+      ],
+      "forbiddenPatterns": [
+        "Plan tomorrow navigates directly to Journey without an editable and saved plan state",
+        "separate tap targets for the checkbox and its descriptive item content",
+        "dense task rows copied from a backlog or settings list",
+        "Material or Cupertino controls"
+      ]
+    }
+  ]
+}

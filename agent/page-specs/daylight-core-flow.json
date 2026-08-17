@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 3,
+  "libraryVersion": "0.1.0",
+  "page": {
+    "id": "daylight-core-flow",
+    "title": "Daylight daily checklist and tomorrow plan",
+    "userContext": "A mobile wellness user checks a small set of gentle daily commitments, wants calm progress feedback, and may prepare tomorrow after completing today.",
+    "platforms": ["compact"],
+    "assumptions": [
+      "Today contains three stable habits and local state, so no loading or remote failure state is required.",
+      "Checking an item is reversible and should never require confirmation."
+    ],
+    "intents": [
+      {
+        "id": "complete-today",
+        "priority": "primary",
+        "goal": "See and complete today's gentle commitments without pressure or visual density.",
+        "successSignal": "Each item updates immediately and the page clearly shows all three complete."
+      },
+      {
+        "id": "understand-progress",
+        "priority": "support",
+        "goal": "Understand remaining effort and recent consistency at a glance.",
+        "successSignal": "Progress count, remaining copy, and per-item supporting context agree."
+      },
+      {
+        "id": "plan-tomorrow",
+        "priority": "secondary",
+        "goal": "Carry an intentional set of habits into tomorrow after today's work is complete.",
+        "successSignal": "A dedicated plan state confirms tomorrow's selected habits and returns to the journey."
+      },
+      {
+        "id": "undo-mistake",
+        "priority": "recovery",
+        "goal": "Undo an accidental completion without losing the state of other habits.",
+        "successSignal": "Unchecking one item reopens progress and leaves every other item unchanged."
+      }
+    ],
+    "information": [
+      {
+        "id": "today-overview",
+        "intentIds": ["complete-today", "understand-progress"],
+        "content": "Date, calm page purpose, completed count, remaining count, and the three habit items.",
+        "placement": "The progress summary follows the heading and precedes a vertically breathable checklist.",
+        "visibility": "Visible throughout incomplete, partial, complete, and reopened states."
+      },
+      {
+        "id": "habit-context",
+        "intentIds": ["complete-today", "undo-mistake"],
+        "content": "Habit label, short supporting cue, streak context, and checked state.",
+        "placement": "Supporting copy and streak stay inside the same item surface beneath the primary label.",
+        "visibility": "Each item remains visible after completion so it can be reviewed or undone."
+      },
+      {
+        "id": "tomorrow-plan",
+        "intentIds": ["plan-tomorrow"],
+        "content": "Tomorrow's date, included habits, reminder state, and saved-plan confirmation.",
+        "placement": "A focused planning page appears only after the completion action and keeps the final save action last.",
+        "visibility": "Visible while planning and in the saved confirmation state."
+      }
+    ],
+    "reuse": [
+      {
+        "need": "Progress summary, breathable task items, reversible completion, and a next step after all items are done.",
+        "resolution": "pattern",
+        "references": ["daily-checklist"],
+        "rationale": "The pattern captures the intended breathing room and state feedback without turning the list into a dense backlog."
+      },
+      {
+        "need": "Persistent Today, Journey, Insights, and Profile destinations plus a focused planning detail.",
+        "resolution": "pattern",
+        "references": ["adaptive-app-shell"],
+        "rationale": "Planning is a detail of the Today flow and should not falsely select Journey until the user finishes."
+      },
+      {
+        "need": "Reversible checked state for each habit.",
+        "resolution": "component",
+        "references": ["CharcoalCheckbox"],
+        "rationale": "The public checkbox owns checked and focus semantics while Daylight owns progress and completion feedback."
+      }
+    ],
+    "interactions": [
+      {
+        "id": "toggle-habit",
+        "intentId": "complete-today",
+        "trigger": "The user checks or unchecks one habit item.",
+        "states": ["incomplete", "partial", "complete", "reopened"],
+        "transitions": [
+          { "from": "incomplete", "event": "A habit is checked", "to": "partial" },
+          { "from": "partial", "event": "The final habit is checked", "to": "complete" },
+          { "from": "complete", "event": "A habit is unchecked", "to": "reopened" },
+          { "from": "reopened", "event": "The final habit is checked again", "to": "complete" }
+        ]
+      },
+      {
+        "id": "save-tomorrow-plan",
+        "intentId": "plan-tomorrow",
+        "trigger": "After all habits are complete, the user opens planning and saves tomorrow's selection.",
+        "states": ["unavailable", "editing", "saved"],
+        "transitions": [
+          { "from": "unavailable", "event": "Today becomes complete", "to": "editing" },
+          { "from": "editing", "event": "Save tomorrow is pressed", "to": "saved" }
+        ]
+      }
+    ],
+    "feedback": [
+      {
+        "interactionId": "toggle-habit",
+        "state": "partial, complete, or reopened",
+        "immediate": "The checkbox and progress count update in the same frame.",
+        "persistent": "Completed items remain visible and the completion summary stays until an item is reopened.",
+        "recovery": "Unchecking the affected item reverses only that item and hides the premature completion action.",
+        "announcement": "Each checkbox exposes its label and checked state; progress text follows the heading in reading order."
+      },
+      {
+        "interactionId": "save-tomorrow-plan",
+        "state": "saved",
+        "immediate": "The planning page becomes a saved summary with tomorrow's habit count.",
+        "persistent": "Journey shows Tuesday as planned after the user continues.",
+        "recovery": "Back before saving returns to the complete Today page; selected habits remain local to the planning draft.",
+        "announcement": "The saved-plan heading and summary precede the Continue to journey action."
+      }
+    ],
+    "bestPractices": [
+      {
+        "area": "spacing and emotional tone",
+        "decision": "Only the Daylight checklist receives increased vertical spacing and richer item context; other example apps retain their appropriate density.",
+        "evidence": "The isolated habit preview checks both completion states and brightness modes; Daylight page previews inspect the checklist at 390x844 and 320x700."
+      },
+      {
+        "area": "progressive disclosure",
+        "decision": "Plan tomorrow appears after completion and opens a focused detail rather than crowding the initial checklist.",
+        "evidence": "Today, Day complete, Plan tomorrow, Plan saved, and Journey page previews use the real DaylightViewModel; widget interaction verifies the full transition path."
+      }
+    ],
+    "verification": [
+      {
+        "scenario": "Complete today and plan tomorrow",
+        "viewport": "compact 320x760",
+        "steps": ["Check Walk outside", "Check Read for 20 minutes", "Open Plan tomorrow", "Save tomorrow's plan", "Continue to Journey"],
+        "expected": ["Progress reaches 3 of 3", "Completion feedback replaces the gentle cue", "A saved plan is confirmed", "Journey shows Tuesday planned"]
+      },
+      {
+        "scenario": "Undo accidental completion",
+        "viewport": "compact 390x844",
+        "steps": ["Complete all three habits", "Uncheck Walk outside"],
+        "expected": ["Progress returns to 2 of 3", "Other habits stay complete", "Plan tomorrow is no longer promoted"]
+      }
+    ]
+  }
+}

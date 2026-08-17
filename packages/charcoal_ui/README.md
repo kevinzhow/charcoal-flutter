@@ -12,3 +12,9 @@ and testing.
 Machine consumers should use `charcoal_catalog`, `charcoal_cli`, or the read-only `charcoal_mcp`
 adapter. Those packages document this public API without adding a tooling or recipe dependency to
 the `charcoal_ui` runtime package.
+
+For visual development, run `fvm flutter widget-preview start` from this package before composing
+pages. The previews in `lib/src/previews/` render production components in light and dark modes
+inside a real `CharcoalApp`. Continue with the Example package's deterministic page previews, and
+reserve a full Showcase launch for routing or platform integration. The workspace
+[Widget Preview workflow](../../docs/widget-preview-workflow.md) defines the gates.
