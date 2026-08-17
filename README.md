@@ -5,6 +5,12 @@ depend on Material or Cupertino. The package combines generated Charcoal foundat
 source-backed Flutter components, light and dark themes, accessibility behavior, and reproducible
 drift checks.
 
+**Agent Ready by design.** Charcoal ships a version-matched page-design Skill, generated API and
+token Catalog, CLI/MCP discovery, Widget Preview workflow, and app-wide review gates so coding
+agents can discover, compose, and verify the exact installed UI version instead of guessing.
+[Install the required agent integration](#required-install-the-agent-integration) before using an
+agent to design or implement product UI.
+
 ![Charcoal UI V2 macOS Showcase](docs/assets/charcoal-ui-macos-showcase.jpg)
 
 This project is V2-only. It intentionally contains no Charcoal V1 aliases or compatibility API.
