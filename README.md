@@ -134,73 +134,90 @@ final theme = CharcoalThemeData.light(
 CharcoalTheme(data: theme, child: const MyScreen());
 ```
 
-## Agent-ready tooling
+## Agent Ready
 
-The catalog is generated from the real exported Dart API and generated token sources. Every
+### Required: install the agent integration
+
+Agent Ready starts by installing the version-matched `charcoal-page-design` Skill and managed
+instructions into the consuming project. This step is required: the CLI and MCP tools below can
+expose data, but they do not install the design workflow into a coding agent.
+
+From a Flutter project that declares the matching `charcoal_cli` as a dev dependency, run:
+
+```bash
+dart run charcoal_cli:charcoal agent install --agent auto
+dart run charcoal_cli:charcoal doctor
+```
+
+Project scope is the default. `--agent auto` installs into the detected agent, `--agent all`
+targets Codex, Claude, and Cursor together, and `--scope user` installs a personal copy instead.
+The installer owns only the versioned Skill directory and managed instruction block; unrelated
+project instructions are preserved.
+
+After upgrading Charcoal UI and `charcoal_cli`, synchronize the installed integration and verify
+that its Skill, Catalog, package version, and instructions still match:
+
+```bash
+dart run charcoal_cli:charcoal agent sync --agent auto
+dart run charcoal_cli:charcoal doctor
+```
+
+`init` remains available for instruction-only bootstrap, but it does not install the Skill and is
+not a substitute for `agent install`.
+
+### Supporting CLI and MCP tooling
+
+The installed Skill is the normative design and review workflow. The CLI and MCP server are
+supporting interfaces that let agents and humans discover exact APIs, select semantic tokens,
+persist design decisions, and run repeatable verification against the installed package version.
+
+The Catalog is generated from the real exported Dart API and generated token sources. Every
 discovered public Widget receives constructor data and source documentation; reviewed components
 additionally include use/avoid guidance, accessibility and responsive rules, token roles, related
 components, and source copied from a compiling example. Semantic and primitive tokens are labeled
 separately and include their exact Dart accessors and resolved light/dark values. Coverage is
 reported explicitly so tools never mistake partial guidance for a complete contract.
 
-The CLI exposes that same versioned catalog to people, scripts, and coding agents:
-
 ```bash
-# Find a component from product intent.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart search "single choice"
+# Find a component or reviewed composition from product intent.
+dart run charcoal_cli:charcoal search "single choice"
+dart run charcoal_cli:charcoal pattern "searchable collection"
 
-# Find a reviewed page composition before creating local UI.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart pattern "searchable collection"
-
-# Read the seven page-design rules and five verification stages in a stable form.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart design-rules --json
-
-# Read the exact constructor, companion APIs, guidance, and executable source.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart component CharcoalSegmentedControl
-
-# Find an exact semantic accessor; primitive lookup requires --tier primitive.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart token "layout spacing" --kind dimension
+# Read the design rules, exact component API, or semantic token accessor.
+dart run charcoal_cli:charcoal design-rules --json
+dart run charcoal_cli:charcoal component CharcoalSegmentedControl
+dart run charcoal_cli:charcoal token "layout spacing" --kind dimension
 
 # Use stable JSON envelopes for automation.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart manifest --json
+dart run charcoal_cli:charcoal manifest --json
 
-# Install the versioned page-design Skill plus managed agent instructions.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart agent install --agent auto
-
-# Refresh the installed Skill after upgrading Charcoal UI.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart agent sync --agent auto
-
-# Create and validate a durable Page Experience Spec for substantial page work.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec \
+# Persist and validate decisions for a substantial page.
+dart run charcoal_cli:charcoal page-spec \
   --output design/my-page.json --page-id my-page --title "My page"
-fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec --validate design/my-page.json
+dart run charcoal_cli:charcoal page-spec --validate design/my-page.json
 
-# Inventory every app surface and validate final Agent Ready evidence.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart app-review \
+# Inventory every app surface and validate the final Agent Ready review.
+dart run charcoal_cli:charcoal app-review \
   --output design/my-app.json --app-id my-app --title "My app"
-fvm dart run packages/charcoal_cli/bin/charcoal.dart app-review --validate design/my-app.json
+dart run charcoal_cli:charcoal app-review --validate design/my-app.json
 
-# Inspect project readiness. `init` remains available for instruction-only bootstrap.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor
-fvm dart run packages/charcoal_cli/bin/charcoal.dart init --agent codex
-
-# Validate and score a complete Agent Ready evidence record.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark --results path/to/results.json
-
-# Or execute an isolated candidate + independent grader pilot with the bundled Codex adapter.
-fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark-run \
-  --configuration protocol --model gpt-5.6-sol --grader gpt-5.6-sol \
-  --case exact-version-api --output .artifacts/agent-ready/protocol-pilot
+# Validate or benchmark recorded Agent Ready evidence.
+dart run charcoal_cli:charcoal benchmark --results path/to/results.json
 ```
 
 For protocol clients, `charcoal_mcp` exposes the same design rules, patterns, component search,
-token, example, and status data through a read-only stdio server:
+token, example, and status data through a read-only stdio server. These repository commands run
+the CLI and MCP packages directly from source:
 
 ```bash
+fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor
 fvm dart run packages/charcoal_mcp/bin/charcoal_mcp.dart
 ```
 
-Regenerate after changing a public component API or a curated example:
+### Maintainer synchronization
+
+After changing a public component API or curated example, regenerate and verify every derivable
+Agent Ready artifact:
 
 ```bash
 fvm dart run tool/agent_ready.dart generate
@@ -208,12 +225,11 @@ fvm dart run tool/agent_ready.dart check
 ```
 
 This single pipeline regenerates the Catalog, derives the distributable Skill bundle, validates
-every checked-in Page Experience Spec and App Experience Review, and synchronizes benchmark versions, managed contributor
-instructions, and the Codex grader schema. The CLI and MCP server are adapters over the Catalog,
-not separate documentation sources.
-Executable examples remain ordinary Flutter code; they are reference compositions rather than a
-runtime recipe layer. See [Agent readiness](agent/README.md) for the benchmark, evidence schema,
-and rubric.
+every checked-in Page Experience Spec and App Experience Review, and synchronizes benchmark
+versions, managed contributor instructions, and the Codex grader schema. The CLI and MCP server
+remain adapters over the Catalog rather than separate documentation sources. Executable examples
+remain ordinary Flutter code; they are reference compositions rather than a runtime recipe layer.
+See [Agent readiness](agent/README.md) for the benchmark, evidence schema, and rubric.
 
 ## Motion and navigation
 
@@ -294,6 +310,25 @@ fvm flutter widget-preview start
 cd ../../example
 fvm flutter widget-preview start
 ```
+
+### Preview one widget
+
+Start only the package that owns the target, then filter inside Flutter Widget Previewer. The
+installed Flutter CLI does not provide a `--preview <name>` launch flag.
+
+- For a public Charcoal component, start the Previewer from `packages/charcoal_ui`, then enter the
+  exact annotation name in **Search previews**. For example, search `Text fields` for the
+  `@CharcoalComponentPreview(name: 'Text fields')` target.
+- For an Agent Ready shared composition or page state, start it from `example`, then search its
+  exact target name, such as `Daylight habit states` or `Profile · Standard`.
+- In VS Code, Android Studio, or IntelliJ, open the exact preview source file and enable
+  **Filter previews by selected file**. If that file contains several targets, also use
+  **Search previews** to retain only the one being reviewed.
+
+One target may intentionally expand into light/dark or standard/compact cards. Use the restart
+button on that preview card to reset only its local state; use global restart only after changing
+shared initialization. Preview definitions live in `packages/charcoal_ui/lib/src/previews/` and
+the `previews/` directories below `example/lib/agent_examples/`.
 
 Use five gates: complete surface inventory, reusable component previews, deterministic page-state
 previews, integrated runtime, and an app-wide final review. Nook, Lumen, and Daylight previews use
