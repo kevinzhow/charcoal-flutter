@@ -116,7 +116,7 @@ final class NookCollectionPage extends StatelessWidget {
                   : 'No products match “${viewModel.query.trim()}”. Your category and saved items are unchanged.',
               onAction: () {
                 if (savedOnly) {
-                  viewModel.selectDestination(NookDestination.shop.index);
+                  viewModel.selectDestination(NookDestination.shop);
                 } else {
                   searchController.clear();
                   viewModel.clearSearch();

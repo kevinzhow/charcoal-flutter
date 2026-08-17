@@ -74,8 +74,8 @@ final class LumenViewModel extends ChangeNotifier {
     _ => true,
   };
 
-  void selectDestination(int index) {
-    _destination = LumenDestination.values[index];
+  void selectDestination(LumenDestination destination) {
+    _destination = destination;
     _task = LumenTask.none;
     notifyListeners();
   }

@@ -8,6 +8,7 @@ import 'package:test/test.dart';
 
 void main() {
   late Directory root;
+  late Map<String, Object?> pageExperienceSuite;
   late Map<String, Object?> suite;
 
   setUpAll(() {
@@ -15,6 +16,27 @@ void main() {
     suite = jsonDecode(
       File(p.join(root.path, 'agent', 'benchmarks', 'v1.json')).readAsStringSync(),
     ) as Map<String, Object?>;
+    pageExperienceSuite = jsonDecode(
+      File(
+        p.join(root.path, 'agent', 'benchmarks', 'page-experience-v1.json'),
+      ).readAsStringSync(),
+    ) as Map<String, Object?>;
+  });
+
+  test('top-level navigation benchmark rejects settled-only selection evidence', () {
+    final cases = (pageExperienceSuite['cases']! as List<Object?>).cast<Map<String, Object?>>();
+    final navigation = cases.firstWhere(
+      (benchmarkCase) => benchmarkCase['id'] == 'stable-top-level-navigation',
+    );
+
+    expect(
+      (navigation['requiredAssertions']! as List<Object?>).join(' '),
+      allOf(contains('one pump'), contains('previous tab paints')),
+    );
+    expect(
+      (navigation['forbiddenPatterns']! as List<Object?>).join(' '),
+      allOf(contains('pumpAndSettle-only'), contains('stale selected visuals')),
+    );
   });
 
   test('scores a complete evidence record', () {

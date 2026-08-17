@@ -8,6 +8,15 @@
 
 Do not recreate a component-owned state with opacity, raw colors, or an outer gesture detector.
 
+## Persistent and transient interaction state
+
+- Keep one owner for a controlled value and derive its selected, checked, or expanded presentation directly from that value.
+- Commit a persistent value, its visual and semantic state, and the content it controls in one frame. Do not mirror it in local component state or repair it from route state after paint.
+- Animate transient hover, focus, and press feedback independently. An implicit animation must not reuse a decoration or color tween across a persistent value change; separate the layers or reset/key the animation boundary when the controlled value changes.
+- A top-level destination change updates the app-shell owner without pushing, replacing, or re-keying the root route. The previous destination must not remain visibly selected during the new destination's first frame.
+
+For Flutter regression evidence, tap the target and call `await tester.pump()` exactly once before settling animations. At that frame, assert that the previous item paints and exposes unselected state, the target paints and exposes selected state, the controlled content agrees, and the root route and stable page key are unchanged. Run `pumpAndSettle` only after these assertions; a settled-only test can hide a stale-selection flash.
+
 ## Feedback selection
 
 - Use inline feedback beside the relevant control when the user must correct or retain it.
@@ -30,3 +39,18 @@ For each meaningful interaction, record:
 8. Accessibility announcement when visual feedback alone is insufficient.
 
 An interaction may mark a step not applicable, but it must not silently omit an expected failure or recovery path.
+
+## Cross-surface navigation record
+
+Every App Experience Review transition must also declare:
+
+1. A stable transition ID.
+2. Its route-stack effect: `none`, `push`, `replace`, `pop`, `present`, or `dismiss`.
+3. The user or application state that survives the transition.
+4. The resulting platform-back behavior.
+5. One or more executable runtime scenarios that visit both endpoints and prove the contract.
+
+Top-level destination selection always has a `none` stack effect. It atomically updates one app-shell
+state owner, selected presentation and semantics, and destination content without pushing, replacing,
+or re-keying the root route. Details and transient tasks normally push; durable results may replace
+obsolete task history; back and close pop or dismiss through the active Navigator or overlay owner.

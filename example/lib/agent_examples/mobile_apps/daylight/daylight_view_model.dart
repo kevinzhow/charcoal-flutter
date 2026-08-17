@@ -41,15 +41,15 @@ final class DaylightViewModel extends ChangeNotifier {
   bool isPlannedForTomorrow(DaylightHabit habit) =>
       _tomorrowHabitIds.contains(habit.id);
 
-  void selectDestination(int index) {
-    _destination = DaylightDestination.values[index];
+  void selectDestination(DaylightDestination destination) {
+    _destination = destination;
     _task = DaylightTask.none;
     notifyListeners();
   }
 
-  void openJourney() => selectDestination(DaylightDestination.journey.index);
+  void openJourney() => selectDestination(DaylightDestination.journey);
 
-  void returnToToday() => selectDestination(DaylightDestination.today.index);
+  void returnToToday() => selectDestination(DaylightDestination.today);
 
   void toggleHabit(DaylightHabit habit, bool value) {
     if (value) {

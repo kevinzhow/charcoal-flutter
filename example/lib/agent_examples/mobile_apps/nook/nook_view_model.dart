@@ -72,8 +72,8 @@ final class NookViewModel extends ChangeNotifier {
   bool isSaved(NookProduct product) => _savedIds.contains(product.id);
   bool isInBag(NookProduct product) => _bagIds.contains(product.id);
 
-  void selectDestination(int index) {
-    _destination = NookDestination.values[index];
+  void selectDestination(NookDestination destination) {
+    _destination = destination;
     _route = NookRoute.root;
     _selectedProduct = null;
     notifyListeners();

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://charcoal-flutter.dev/schemas/app-experience-review-v1.json",
+  "$id": "https://charcoal-flutter.dev/schemas/app-experience-review-v2.json",
   "title": "Charcoal App Experience Review",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "catalogSchemaVersion", "libraryVersion", "application"],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "catalogSchemaVersion": { "type": "integer", "minimum": 1 },
     "libraryVersion": { "$ref": "#/$defs/nonEmptyString" },
     "application": { "$ref": "#/$defs/application" }
@@ -15,6 +15,12 @@
     "nonEmptyString": { "type": "string", "minLength": 1 },
     "stringList": {
       "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "nonEmptyStringList": {
+      "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/nonEmptyString" },
       "uniqueItems": true
     },
@@ -172,11 +178,28 @@
     "transition": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["from", "to", "trigger"],
+      "required": [
+        "id",
+        "from",
+        "to",
+        "trigger",
+        "stackEffect",
+        "statePreservation",
+        "backBehavior",
+        "runtimeScenarioIds"
+      ],
       "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
         "from": { "$ref": "#/$defs/nonEmptyString" },
         "to": { "$ref": "#/$defs/nonEmptyString" },
-        "trigger": { "$ref": "#/$defs/nonEmptyString" }
+        "trigger": { "$ref": "#/$defs/nonEmptyString" },
+        "stackEffect": {
+          "type": "string",
+          "enum": ["none", "push", "replace", "pop", "present", "dismiss"]
+        },
+        "statePreservation": { "$ref": "#/$defs/nonEmptyString" },
+        "backBehavior": { "$ref": "#/$defs/nonEmptyString" },
+        "runtimeScenarioIds": { "$ref": "#/$defs/nonEmptyStringList" }
       }
     },
     "runtimeScenario": {

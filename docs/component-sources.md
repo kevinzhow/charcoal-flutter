@@ -38,7 +38,7 @@ buttons. No upstream runtime code is embedded in the Flutter package.
 | Segmented control | Charcoal | Intrinsic, uniform, and full-width segment layouts. |
 | Carousel and pagination | Charcoal | Navigation visibility, indicators, page states, and keyboard adaptation. |
 | Clickable, field ring, overlay tracker, popup path | Flutter primitive | Shared input, accessibility, painting, and positioning infrastructure. |
-| Navigation item and text ellipsis | Flutter composition | Platform-neutral components built from the same foundations and interaction rules. |
+| Navigation bar, tab bar, navigation item, and text ellipsis | Flutter composition | Platform-neutral components built from the same foundations and interaction rules. |
 
 Components in the second source group are not branded differently in their public names. They are
 regular `charcoal_ui` components and can graduate without API churn.
@@ -65,6 +65,7 @@ regular `charcoal_ui` components and can graduate without API churn.
 | Dropdown | 40 px trigger and option minimum height, 8 px trigger padding, 4 px field/menu gaps, 280 px menu maximum height, 8 px menu radius, and 200 ms state motion. |
 | Carousel | Zero default gap, 72 px navigation zones, hover/focus navigation reveal, 40 px indicator area, 8 px dot/gap, and 200 ms indicator transition. |
 | Pagination | 32/40 px sizes, bold 14/22 text, 20 px radius, 4 px focus ring, and hidden navigation at page boundaries. |
+| Tab bar | Two to five equal-width destinations, 64 px baseline height that grows with text scaling, 20 px icons, 10 px labels, 4 px icon gap, and compact semantic badges. |
 | Tag item | 32/40 px sizes, 16/24 px horizontal padding, active 16/8 px asymmetric padding, 8 px gap, 4 px radius, 152 px label maximum, and 16 px remove icon. |
 
 ## Outline and elevation contracts

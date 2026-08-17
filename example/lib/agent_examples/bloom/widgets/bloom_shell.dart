@@ -43,24 +43,40 @@ final class _BloomShell extends StatelessWidget {
                   : content,
             ),
             if (showTabBar)
-              AgentDemoTabBar(
-                appKey: 'social',
-                items: <AgentDemoTabItem>[
-                  const AgentDemoTabItem('Home', CharcoalIcons.home),
-                  const AgentDemoTabItem('Discover', CharcoalIcons.compass),
-                  AgentDemoTabItem(
-                    'Messages',
-                    CharcoalIcons.message,
-                    badgeCount: unreadMessages,
+              CharcoalTabBar<BloomDestination>(
+                items: <CharcoalTabItem<BloomDestination>>[
+                  const CharcoalTabItem<BloomDestination>(
+                    icon: CharcoalIcon(CharcoalIcons.home),
+                    key: ValueKey<String>('agent-social-nav-home'),
+                    label: 'Home',
+                    value: BloomDestination.home,
+                  ),
+                  const CharcoalTabItem<BloomDestination>(
+                    icon: CharcoalIcon(CharcoalIcons.compass),
+                    key: ValueKey<String>('agent-social-nav-discover'),
+                    label: 'Discover',
+                    value: BloomDestination.discover,
+                  ),
+                  CharcoalTabItem<BloomDestination>(
+                    badge: unreadMessages > 0 ? '$unreadMessages' : null,
+                    icon: const CharcoalIcon(CharcoalIcons.message),
+                    key: const ValueKey<String>('agent-social-nav-messages'),
+                    label: 'Messages',
                     semanticLabel: unreadMessages > 0
                         ? 'Messages, $unreadMessages unread'
                         : 'Messages',
+                    value: BloomDestination.messages,
                   ),
-                  const AgentDemoTabItem('Profile', CharcoalIcons.personCircle),
+                  const CharcoalTabItem<BloomDestination>(
+                    icon: CharcoalIcon(CharcoalIcons.personCircle),
+                    key: ValueKey<String>('agent-social-nav-profile'),
+                    label: 'Profile',
+                    value: BloomDestination.profile,
+                  ),
                 ],
-                onSelected: (index) =>
-                    onDestinationSelected(BloomDestination.values[index]),
-                selectedIndex: selectedDestination.index,
+                onChanged: onDestinationSelected,
+                semanticLabel: 'Bloom primary destinations',
+                value: selectedDestination,
               ),
           ],
         ),

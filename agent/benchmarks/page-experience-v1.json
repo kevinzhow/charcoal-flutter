@@ -71,6 +71,31 @@
         "dense task rows copied from a backlog or settings list",
         "Material or Cupertino controls"
       ]
+    },
+    {
+      "id": "stable-top-level-navigation",
+      "prompt": "Design and implement a compact multi-destination app shell with Home, Activity, and Profile plus a pushed Activity detail and a focused completion task. Top-level selection must preserve destination state without adding route history, details must use real platform back behavior, and a durable completion must not reopen obsolete task steps. Use Charcoal UI, including CharcoalTabBar, and keep the implementation in candidate.dart.",
+      "expectedComponents": [
+        "CharcoalButton",
+        "CharcoalNavigationBar",
+        "CharcoalTabBar"
+      ],
+      "requiredAssertions": [
+        "one controlled destination owner drives CharcoalTabBar and selecting a top-level destination leaves the Navigator stack length and stable root Page key unchanged",
+        "after one pump following a destination tap, the previous tab paints and exposes unselected state, the next tab paints and exposes selected state, and visible content agrees before animations settle",
+        "each top-level destination preserves its own scroll position, selection, or draft state when another destination is selected",
+        "Activity detail is a real pushed route whose visible and system back actions pop to the prior destination",
+        "the focused task pushes above its origin and durable completion replaces obsolete task history instead of allowing back into the completed form",
+        "selected and unselected tab semantics, keyboard focus, text scaling, and reduced-motion behavior remain coherent"
+      ],
+      "forbiddenPatterns": [
+        "Navigator.push or a push transition runs from CharcoalTabBar.onChanged",
+        "the selected destination is embedded in the root Page key and causes route replacement",
+        "a pumpAndSettle-only navigation test or an implicit interaction tween can hide stale selected visuals after the controlled destination changes",
+        "AnimatedSwitcher, SlideTransition, or a local back button impersonates detail route history",
+        "a page-local copy of CharcoalTabBar geometry or interaction styling",
+        "Material or Cupertino controls"
+      ]
     }
   ]
 }

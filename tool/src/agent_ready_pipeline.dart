@@ -43,13 +43,13 @@ final class AgentReadyPipeline {
     );
     _checkExactFile(
       _file('agent/skills/charcoal-page-design/references/app-experience-review.schema.json'),
-      _file('agent/contracts/app-experience-review-v1.schema.json').readAsStringSync(),
+      _file('agent/contracts/app-experience-review-v2.schema.json').readAsStringSync(),
       problems,
       label: 'agent/skills/charcoal-page-design/references/app-experience-review.schema.json',
     );
     _checkExactFile(
       _file('agent/skills/charcoal-page-design/assets/app-experience-review.json'),
-      _file('agent/contracts/app-experience-review-v1.template.json').readAsStringSync(),
+      _file('agent/contracts/app-experience-review-v2.template.json').readAsStringSync(),
       problems,
       label: 'agent/skills/charcoal-page-design/assets/app-experience-review.json',
     );
@@ -187,11 +187,11 @@ final class AgentReadyPipeline {
     );
     _write(
       _file('agent/skills/charcoal-page-design/references/app-experience-review.schema.json').path,
-      _file('agent/contracts/app-experience-review-v1.schema.json').readAsStringSync(),
+      _file('agent/contracts/app-experience-review-v2.schema.json').readAsStringSync(),
     );
     _write(
       _file('agent/skills/charcoal-page-design/assets/app-experience-review.json').path,
-      _file('agent/contracts/app-experience-review-v1.template.json').readAsStringSync(),
+      _file('agent/contracts/app-experience-review-v2.template.json').readAsStringSync(),
     );
     _copyExactDirectory(
       _fileDirectory('agent/skills/charcoal-page-design'),

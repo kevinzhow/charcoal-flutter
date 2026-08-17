@@ -42,7 +42,9 @@ references against the exact installed Catalog.
 
 `app-review` is the app-wide release gate. It validates a complete surface inventory, reachability,
 source destination/route/task enum coverage, Page Experience intent references, exact production widgets and Widget Preview states, executable
-runtime keys, seven-rule evidence per surface, and five cross-surface checks. A
+runtime keys, route-stack effects and back behavior for every transition, seven-rule evidence per
+surface, and five cross-surface checks. Top-level destination transitions are required to keep a
+`none` stack effect and link executable evidence that visits both endpoints. A
 `changes-required` verdict is valid work-in-progress data but returns a non-zero exit code and
 `ready: false`.
 

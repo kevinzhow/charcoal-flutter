@@ -3,9 +3,8 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../agent_example_navigator.dart';
-import '../../shared/agent_demo_tab_bar.dart';
 
-final class AgentDemoAppShell extends StatelessWidget {
+final class AgentDemoAppShell<T> extends StatelessWidget {
   const AgentDemoAppShell({
     required this.appKey,
     required this.appLabel,
@@ -16,7 +15,7 @@ final class AgentDemoAppShell extends StatelessWidget {
     required this.content,
     required this.onTabSelected,
     required this.pageKey,
-    required this.selectedTabIndex,
+    required this.selectedTab,
     required this.title,
     this.leading,
     this.showTabBar = true,
@@ -29,12 +28,12 @@ final class AgentDemoAppShell extends StatelessWidget {
   final Color brandColor;
   final Color brandForeground;
   final String brandMark;
-  final List<AgentDemoTabItem> tabItems;
+  final List<CharcoalTabItem<T>> tabItems;
   final Widget content;
   final Widget? leading;
-  final ValueChanged<int> onTabSelected;
+  final ValueChanged<T> onTabSelected;
   final String pageKey;
-  final int selectedTabIndex;
+  final T selectedTab;
   final bool showTabBar;
   final String title;
   final Widget? trailing;
@@ -67,11 +66,11 @@ final class AgentDemoAppShell extends StatelessWidget {
             ),
           ),
           if (showTabBar)
-            AgentDemoTabBar(
-              appKey: appKey,
+            CharcoalTabBar<T>(
               items: tabItems,
-              onSelected: onTabSelected,
-              selectedIndex: selectedTabIndex,
+              onChanged: onTabSelected,
+              semanticLabel: '$appLabel primary destinations',
+              value: selectedTab,
             ),
         ],
       ),

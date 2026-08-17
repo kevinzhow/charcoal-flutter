@@ -64,13 +64,13 @@ LumenViewModel createLumenWalletPrivatePreviewModel() =>
     LumenViewModel()..setBalanceHidden(true);
 
 LumenViewModel createLumenActivityPreviewModel() =>
-    LumenViewModel()..selectDestination(LumenDestination.activity.index);
+    LumenViewModel()..selectDestination(LumenDestination.activity);
 
 LumenViewModel createLumenPlanPreviewModel() =>
-    LumenViewModel()..selectDestination(LumenDestination.plan.index);
+    LumenViewModel()..selectDestination(LumenDestination.plan);
 
 LumenViewModel createLumenProfilePreviewModel() =>
-    LumenViewModel()..selectDestination(LumenDestination.profile.index);
+    LumenViewModel()..selectDestination(LumenDestination.profile);
 
 LumenViewModel createLumenProfilePrivatePreviewModel() =>
     createLumenProfilePreviewModel()..setBalanceHidden(true);

@@ -68,6 +68,10 @@ Runtime scenarios in the App Experience Review reference the exact test file, te
 for the surfaces they visit. Together they must visit the whole inventory so CI can reject stale
 claims when a page disappears from an executable journey.
 
+Each cross-surface transition also records its stack effect, state preservation, and resulting back
+behavior. Widget tests must prove top-level selection retains one stable root route, pushed details
+pop through system back, and durable completion cannot reopen obsolete task steps.
+
 ## 4. App-wide final review
 
 After integrated behavior is stable, revisit every inventoried surface against all seven design

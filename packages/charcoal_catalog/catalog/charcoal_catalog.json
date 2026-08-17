@@ -3,9 +3,9 @@
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 32,
-    "curatedComponents": 8,
-    "componentsWithExamples": 8,
+    "publicComponents": 33,
+    "curatedComponents": 9,
+    "componentsWithExamples": 9,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 226
@@ -153,25 +153,33 @@
       ],
       "components": [
         "CharcoalNavigationBar",
+        "CharcoalTabBar",
         "CharcoalNavigationItem",
         "CharcoalIconButton"
       ],
       "composition": [
         "Keep destination selection in one state owner above the page body.",
+        "Commit the controlled destination, selected visuals and semantics, and page content atomically in the first painted frame; do not mirror selection locally or repair it from route state after paint.",
+        "Treat top-level destination selection as a no-stack-effect state update; do not push a route, replace the root page, or change its stable page key.",
+        "Push details and transient tasks, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.",
+        "Preserve destination-owned scroll positions, drafts, and selections when moving between top-level destinations.",
         "Place contextual actions in the current page; do not change top-level destination selection.",
-        "Use available width to choose navigation placement without resetting page state."
+        "Use CharcoalTabBar on compact layouts and CharcoalNavigationItem in large-layout sidebars without resetting destination state."
       ],
       "interactionStates": [
-        "destination selected",
-        "detail open",
-        "transient task open"
+        "destination selected with no stack effect",
+        "detail pushed",
+        "transient task pushed",
+        "durable result replaces task",
+        "back pops or dismisses"
       ],
       "feedback": [
-        "Selection is persistent and exposed semantically.",
+        "Persistent selection switches atomically; hover, focus, and press may animate without tweening through stale selected state.",
         "Back or close returns to the prior destination without clearing unrelated state."
       ],
       "accessibility": [
-        "Expose one selected destination and explicit labels for icon-only actions."
+        "Expose one selected destination and explicit labels for icon-only actions.",
+        "Preserve focus order and selected semantics when navigation placement changes."
       ],
       "responsiveBehavior": [
         "Switch navigation placement from constraints, not device or orientation checks."
@@ -3197,6 +3205,163 @@
         }
       ],
       "examples": []
+    },
+    {
+      "name": "CharcoalTabBar",
+      "category": "Navigation",
+      "summary": "Switches between stable top-level destinations without owning or mutating the route stack.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/tab_bar.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "bottom navigation",
+        "destination",
+        "navigation tabs",
+        "primary navigation",
+        "tab bar"
+      ],
+      "useWhen": [
+        "A compact application exposes two to five stable top-level destinations.",
+        "Destination selection must remain controlled by one app-shell state owner."
+      ],
+      "avoidWhen": [
+        "Choices switch a local filter or view; use CharcoalSegmentedControl.",
+        "The action opens a detail, task, or durable result; use the app route stack instead."
+      ],
+      "accessibility": [
+        "The bar and its destinations expose tab-bar and tab roles with one explicit selected item.",
+        "Use a full semanticLabel when a visible badge adds information to the destination label."
+      ],
+      "responsiveBehavior": [
+        "Destinations share the available width and retain a 64 logical-pixel baseline height.",
+        "The bar grows for text scaling; use CharcoalNavigationItem when a large layout moves navigation to a sidebar.",
+        "Place system safe-area padding in the surrounding app shell."
+      ],
+      "interactionStates": [
+        "selected",
+        "unselected",
+        "hovered",
+        "focused",
+        "pressed",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Commits controlled persistent selection atomically while animating transient pointer and focus states independently; owns badge rendering.",
+        "The caller owns one destination state source plus route-stack effects, state preservation, and back behavior."
+      ],
+      "tokenRoles": [
+        "space.layout60",
+        "containerSecondaryDefaultA",
+        "containerSecondaryHoverA",
+        "containerSecondaryPressA",
+        "borderFocusLegacy",
+        "containerNegativeDefault"
+      ],
+      "relatedComponents": [
+        "CharcoalNavigationBar",
+        "CharcoalNavigationItem",
+        "CharcoalSegmentedControl"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalTabBar",
+          "kind": "constructor",
+          "signature": "CharcoalTabBar({required this.items, required this.onChanged, required this.value, this.semanticLabel, super.key})",
+          "parameters": [
+            {
+              "name": "items",
+              "type": "List<CharcoalTabItem<T>>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<T>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalTabItem",
+          "kind": "supportingType",
+          "signature": "CharcoalTabItem({required this.icon, required this.label, required this.value, this.badge, this.enabled = true, this.key, this.semanticLabel})",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "badge",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "enabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "tab-bar-controlled",
+          "title": "Controlled top-level destinations",
+          "description": "A stable destination value updates app-shell content without prescribing a route push.",
+          "sourcePath": "example/lib/agent_examples/tab_bar_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Destination { home, discover, messages, profile }\n\n/// A controlled top-level destination selector.\n///\n/// Selection updates the app shell in place. Detail and task actions should\n/// still use a real Navigator push, replace, or pop outside this component.\nfinal class AgentTabBarExample extends StatefulWidget {\n  const AgentTabBarExample({super.key});\n\n  @override\n  State<AgentTabBarExample> createState() => _AgentTabBarExampleState();\n}\n\nfinal class _AgentTabBarExampleState extends State<AgentTabBarExample> {\n  _Destination destination = _Destination.home;\n\n  @override\n  Widget build(BuildContext context) => Column(\n    mainAxisSize: MainAxisSize.min,\n    children: <Widget>[\n      SizedBox(\n        height: CharcoalTheme.of(context).dimensions.space.layout60,\n        child: Center(\n          child: Text(\n            'Current destination: ${destination.name}',\n            style: CharcoalTheme.of(context).textStyles.captionMedium,\n          ),\n        ),\n      ),\n      CharcoalTabBar<_Destination>(\n        items: const <CharcoalTabItem<_Destination>>[\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Home',\n            value: _Destination.home,\n          ),\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.compass),\n            label: 'Discover',\n            value: _Destination.discover,\n          ),\n          CharcoalTabItem<_Destination>(\n            badge: '3',\n            icon: CharcoalIcon(CharcoalIcons.message),\n            label: 'Messages',\n            semanticLabel: 'Messages, 3 unread',\n            value: _Destination.messages,\n          ),\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.personCircle),\n            label: 'Profile',\n            value: _Destination.profile,\n          ),\n        ],\n        onChanged: (value) => setState(() => destination = value),\n        semanticLabel: 'Primary destinations',\n        value: destination,\n      ),\n    ],\n  );\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalTagItem",

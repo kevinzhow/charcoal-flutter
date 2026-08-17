@@ -253,6 +253,8 @@ environment:
       final first = instructions.readAsStringSync();
       expect(first, contains('Keep this sentence.'));
       expect(RegExp(r'charcoal-agent:start').allMatches(first), hasLength(1));
+      expect(first, contains('Keep controlled selection atomic'));
+      expect(first, contains('first post-tap frame'));
 
       final secondOutput = StringBuffer();
       expect(
@@ -308,6 +310,19 @@ environment:
         p.join(project.path, '.cursor', 'skills', charcoalPageDesignSkillName),
       );
       expect(File(p.join(standardSkill.path, 'SKILL.md')).existsSync(), isTrue);
+      expect(
+        File(
+          p.join(
+            standardSkill.path,
+            'references',
+            'interaction-and-feedback.md',
+          ),
+        ).readAsStringSync(),
+        allOf(
+          contains('Persistent and transient interaction state'),
+          contains('await tester.pump()'),
+        ),
+      );
       expect(File(p.join(claudeSkill.path, 'SKILL.md')).existsSync(), isTrue);
       expect(File(p.join(cursorSkill.path, 'SKILL.md')).existsSync(), isTrue);
       expect(File(p.join(project.path, 'AGENTS.md')).existsSync(), isTrue);

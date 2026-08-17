@@ -3,7 +3,6 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../agent_example_navigator.dart';
-import '../../shared/agent_demo_tab_bar.dart';
 import '../shared/demo_shell.dart';
 import 'daylight_models.dart';
 import 'daylight_view_model.dart';
@@ -102,17 +101,37 @@ final class _DaylightDemoState extends State<DaylightDemo> {
   }) {
     final theme = CharcoalTheme.of(context);
     final title = _title(task, destination);
-    return AgentDemoAppShell(
+    return AgentDemoAppShell<DaylightDestination>(
       appKey: 'habits',
       appLabel: 'Daylight wellness app demo',
       brandColor: theme.colors.containerDiscoveryDefault,
       brandForeground: theme.colors.textOnDiscoveryDefault,
       brandMark: 'D',
-      tabItems: const <AgentDemoTabItem>[
-        AgentDemoTabItem('Today', CharcoalIcons.sun),
-        AgentDemoTabItem('Journey', CharcoalIcons.calendar),
-        AgentDemoTabItem('Insights', CharcoalIcons.star),
-        AgentDemoTabItem('Profile', CharcoalIcons.personCircle),
+      tabItems: const <CharcoalTabItem<DaylightDestination>>[
+        CharcoalTabItem<DaylightDestination>(
+          icon: CharcoalIcon(CharcoalIcons.sun),
+          key: ValueKey<String>('agent-habits-nav-today'),
+          label: 'Today',
+          value: DaylightDestination.today,
+        ),
+        CharcoalTabItem<DaylightDestination>(
+          icon: CharcoalIcon(CharcoalIcons.calendar),
+          key: ValueKey<String>('agent-habits-nav-journey'),
+          label: 'Journey',
+          value: DaylightDestination.journey,
+        ),
+        CharcoalTabItem<DaylightDestination>(
+          icon: CharcoalIcon(CharcoalIcons.star),
+          key: ValueKey<String>('agent-habits-nav-insights'),
+          label: 'Insights',
+          value: DaylightDestination.insights,
+        ),
+        CharcoalTabItem<DaylightDestination>(
+          icon: CharcoalIcon(CharcoalIcons.personCircle),
+          key: ValueKey<String>('agent-habits-nav-profile'),
+          label: 'Profile',
+          value: DaylightDestination.profile,
+        ),
       ],
       content: _content(task, destination),
       leading: canGoBack
@@ -125,7 +144,7 @@ final class _DaylightDemoState extends State<DaylightDemo> {
           : null,
       onTabSelected: _viewModel.selectDestination,
       pageKey: pageKey,
-      selectedTabIndex: destination.index,
+      selectedTab: destination,
       showTabBar: task == DaylightTask.none,
       title: title,
       trailing: task == DaylightTask.none

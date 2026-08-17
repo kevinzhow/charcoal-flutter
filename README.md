@@ -37,7 +37,7 @@ Public components include:
 - `CharcoalButton`, `CharcoalLinkButton`, `CharcoalSwitchingButton`, and `CharcoalIconButton`
 - `CharcoalCheckbox`, `CharcoalMultiSelect`, `CharcoalRadio`, and `CharcoalSwitch`
 - `CharcoalFieldLabel`, `CharcoalTextField`, `CharcoalTextArea`, and `CharcoalDropdown`
-- `CharcoalSegmentedControl`, `CharcoalPagination`, `CharcoalCarousel`, and `CharcoalNavigationItem`
+- `CharcoalSegmentedControl`, `CharcoalPagination`, `CharcoalCarousel`, `CharcoalTabBar`, and `CharcoalNavigationItem`
 - `CharcoalTagItem`, `CharcoalHintText`, `CharcoalTextEllipsis`, and loading surfaces
 - tooltip, balloon, toast, snackbar, and modal surfaces and presentation APIs
 - `CharcoalTypography`, `charcoalTypographyStyle`, and `CharcoalTextStyles`

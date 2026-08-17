@@ -24,6 +24,7 @@ export 'src/components/pagination.dart';
 export 'src/components/radio.dart';
 export 'src/components/segmented_control.dart';
 export 'src/components/switch.dart';
+export 'src/components/tab_bar.dart';
 export 'src/components/tag_item.dart';
 export 'src/components/text_area.dart';
 export 'src/components/text_ellipsis.dart';

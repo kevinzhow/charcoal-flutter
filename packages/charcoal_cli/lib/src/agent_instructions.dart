@@ -28,6 +28,8 @@ String buildCharcoalManagedBlock(String profile) {
 - Discover components before coding: `$command search <intent>`.
 - For a new, redesigned, or multi-state page, load the installed `charcoal-page-design` skill and validate its Page Experience Spec with `$command page-spec --validate <path>`.
 - For a multi-surface app or Agent Ready example, inventory every destination, detail, task, modal, overlay, and durable result before implementation; map real destination/route/task enums so new states cannot bypass review, then validate the final evidence with `$command app-review --validate <path>`.
+- Model navigation effects explicitly: top-level destination selection keeps one stable root route, details and transient tasks push, durable completion replaces obsolete task history, and back pops or dismisses; bind every transition to executable evidence.
+- Keep controlled selection atomic: one state owner must update the previous and next selected visuals, semantics, and controlled content in the same frame. Animate hover, focus, and press independently, and assert the first post-tap frame before `pumpAndSettle` can hide a stale-selection flash.
 - Discover reviewed multi-component compositions before authoring local UI: `$command pattern <intent>`.
 - Read exact installed APIs and examples: `$command component <name>`.
 - Find exact semantic token accessors by role: `$command token <intent>`; use `--tier primitive` only for audited foundation work.

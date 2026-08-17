@@ -269,6 +269,68 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       ),
     ],
   ),
+  'CharcoalTabBar': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Switches between stable top-level destinations without owning or mutating the route stack.',
+    keywords: <String>[
+      'bottom navigation',
+      'destination',
+      'navigation tabs',
+      'primary navigation',
+      'tab bar',
+    ],
+    useWhen: <String>[
+      'A compact application exposes two to five stable top-level destinations.',
+      'Destination selection must remain controlled by one app-shell state owner.',
+    ],
+    avoidWhen: <String>[
+      'Choices switch a local filter or view; use CharcoalSegmentedControl.',
+      'The action opens a detail, task, or durable result; use the app route stack instead.',
+    ],
+    accessibility: <String>[
+      'The bar and its destinations expose tab-bar and tab roles with one explicit selected item.',
+      'Use a full semanticLabel when a visible badge adds information to the destination label.',
+    ],
+    responsiveBehavior: <String>[
+      'Destinations share the available width and retain a 64 logical-pixel baseline height.',
+      'The bar grows for text scaling; use CharcoalNavigationItem when a large layout moves navigation to a sidebar.',
+      'Place system safe-area padding in the surrounding app shell.',
+    ],
+    interactionStates: <String>[
+      'selected',
+      'unselected',
+      'hovered',
+      'focused',
+      'pressed',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Commits controlled persistent selection atomically while animating transient pointer and focus states independently; owns badge rendering.',
+      'The caller owns one destination state source plus route-stack effects, state preservation, and back behavior.',
+    ],
+    tokenRoles: <String>[
+      'space.layout60',
+      'containerSecondaryDefaultA',
+      'containerSecondaryHoverA',
+      'containerSecondaryPressA',
+      'borderFocusLegacy',
+      'containerNegativeDefault',
+    ],
+    relatedComponents: <String>[
+      'CharcoalNavigationBar',
+      'CharcoalNavigationItem',
+      'CharcoalSegmentedControl',
+    ],
+    companionDeclarations: <String>['CharcoalTabItem'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'tab-bar-controlled',
+        title: 'Controlled top-level destinations',
+        description: 'A stable destination value updates app-shell content without prescribing a route push.',
+        sourcePath: 'example/lib/agent_examples/tab_bar_example.dart',
+      ),
+    ],
+  ),
   'CharcoalDialog': ComponentMetadata(
     category: 'Overlays',
     summary: 'Presents a short, blocking decision in a centered dialog or adaptive bottom-sheet surface.',

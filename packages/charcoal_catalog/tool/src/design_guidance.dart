@@ -140,21 +140,33 @@ const List<CharcoalPatternDoc> componentPatterns = <CharcoalPatternDoc>[
     ],
     components: <String>[
       'CharcoalNavigationBar',
+      'CharcoalTabBar',
       'CharcoalNavigationItem',
       'CharcoalIconButton',
     ],
     composition: <String>[
       'Keep destination selection in one state owner above the page body.',
+      'Commit the controlled destination, selected visuals and semantics, and page content atomically in the first painted frame; do not mirror selection locally or repair it from route state after paint.',
+      'Treat top-level destination selection as a no-stack-effect state update; do not push a route, replace the root page, or change its stable page key.',
+      'Push details and transient tasks, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.',
+      'Preserve destination-owned scroll positions, drafts, and selections when moving between top-level destinations.',
       'Place contextual actions in the current page; do not change top-level destination selection.',
-      'Use available width to choose navigation placement without resetting page state.',
+      'Use CharcoalTabBar on compact layouts and CharcoalNavigationItem in large-layout sidebars without resetting destination state.',
     ],
-    interactionStates: <String>['destination selected', 'detail open', 'transient task open'],
+    interactionStates: <String>[
+      'destination selected with no stack effect',
+      'detail pushed',
+      'transient task pushed',
+      'durable result replaces task',
+      'back pops or dismisses',
+    ],
     feedback: <String>[
-      'Selection is persistent and exposed semantically.',
+      'Persistent selection switches atomically; hover, focus, and press may animate without tweening through stale selected state.',
       'Back or close returns to the prior destination without clearing unrelated state.',
     ],
     accessibility: <String>[
       'Expose one selected destination and explicit labels for icon-only actions.',
+      'Preserve focus order and selected semantics when navigation placement changes.',
     ],
     responsiveBehavior: <String>[
       'Switch navigation placement from constraints, not device or orientation checks.',

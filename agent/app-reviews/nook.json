@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "application": {
@@ -259,22 +259,156 @@
       }
     ],
     "transitions": [
-      { "from": "shop", "to": "search", "trigger": "Select Search" },
-      { "from": "shop", "to": "saved", "trigger": "Select Saved" },
-      { "from": "shop", "to": "profile", "trigger": "Select Profile" },
-      { "from": "shop", "to": "product-detail", "trigger": "Open a product" },
-      { "from": "shop", "to": "bag", "trigger": "Open the bag" },
-      { "from": "search", "to": "product-detail", "trigger": "Open a search result" },
-      { "from": "saved", "to": "product-detail", "trigger": "Open a saved product" },
-      { "from": "profile", "to": "saved", "trigger": "Open saved activity" },
-      { "from": "profile", "to": "bag", "trigger": "Open bag activity" },
-      { "from": "profile", "to": "order-receipt", "trigger": "View latest order" },
-      { "from": "product-detail", "to": "bag", "trigger": "Open bag after adding" },
-      { "from": "bag", "to": "checkout-review", "trigger": "Review checkout" },
-      { "from": "checkout-review", "to": "order-receipt", "trigger": "Place order" },
-      { "from": "order-receipt", "to": "shop", "trigger": "Continue shopping" }
+      {
+        "id": "shop-to-search",
+        "from": "shop",
+        "to": "search",
+        "trigger": "Select Search",
+        "stackEffect": "none",
+        "statePreservation": "Shop category state, independent destination scroll positions, saved products, and bag contents remain intact.",
+        "backBehavior": "System back does not revisit Shop as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["top-level-route-stability", "destination-scroll-restoration"]
+      },
+      {
+        "id": "shop-to-saved",
+        "from": "shop",
+        "to": "saved",
+        "trigger": "Select Saved",
+        "stackEffect": "none",
+        "statePreservation": "Shop category state, independent destination scroll positions, saved products, and bag contents remain intact.",
+        "backBehavior": "System back does not revisit Shop as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "shop-to-profile",
+        "from": "shop",
+        "to": "profile",
+        "trigger": "Select Profile",
+        "stackEffect": "none",
+        "statePreservation": "Shop category state, independent destination scroll positions, saved products, and receipt history remain intact.",
+        "backBehavior": "System back does not revisit Shop as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "shop-to-product-detail",
+        "from": "shop",
+        "to": "product-detail",
+        "trigger": "Open a product",
+        "stackEffect": "push",
+        "statePreservation": "Shop category and scroll position remain available beneath the selected product.",
+        "backBehavior": "System back pops Product detail and restores Shop on the existing root route.",
+        "runtimeScenarioIds": ["complete-shopping-journey", "route-lifecycle-and-system-back"]
+      },
+      {
+        "id": "shop-to-bag",
+        "from": "shop",
+        "to": "bag",
+        "trigger": "Open the bag",
+        "stackEffect": "push",
+        "statePreservation": "Shop state, saved products, and current bag contents remain available.",
+        "backBehavior": "System back pops Bag and returns to Shop.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "search-to-product-detail",
+        "from": "search",
+        "to": "product-detail",
+        "trigger": "Open a search result",
+        "stackEffect": "push",
+        "statePreservation": "The query, result state, and Search scroll position remain beneath the selected product.",
+        "backBehavior": "System back pops Product detail and restores Search.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "saved-to-product-detail",
+        "from": "saved",
+        "to": "product-detail",
+        "trigger": "Open a saved product",
+        "stackEffect": "push",
+        "statePreservation": "The saved collection and its scroll position remain beneath the selected product.",
+        "backBehavior": "System back pops Product detail and restores Saved.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "profile-to-saved",
+        "from": "profile",
+        "to": "saved",
+        "trigger": "Open saved activity",
+        "stackEffect": "none",
+        "statePreservation": "Profile history, saved products, and independent destination scroll positions remain intact.",
+        "backBehavior": "System back does not revisit Profile as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "profile-to-bag",
+        "from": "profile",
+        "to": "bag",
+        "trigger": "Open bag activity",
+        "stackEffect": "push",
+        "statePreservation": "Profile history and current bag contents remain available beneath Bag.",
+        "backBehavior": "System back pops Bag and restores Profile.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "profile-to-order-receipt",
+        "from": "profile",
+        "to": "order-receipt",
+        "trigger": "View latest order",
+        "stackEffect": "push",
+        "statePreservation": "Profile state and the durable confirmed-product snapshot remain intact.",
+        "backBehavior": "System back pops the receipt and restores Profile.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "product-detail-to-bag",
+        "from": "product-detail",
+        "to": "bag",
+        "trigger": "Open bag after adding",
+        "stackEffect": "replace",
+        "statePreservation": "The selected product addition persists in Bag while obsolete Product detail history is removed.",
+        "backBehavior": "System back returns from Bag to the originating top-level destination, not Product detail.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "bag-to-checkout-review",
+        "from": "bag",
+        "to": "checkout-review",
+        "trigger": "Review checkout",
+        "stackEffect": "push",
+        "statePreservation": "Bag line items and total remain available for review and back navigation.",
+        "backBehavior": "System back pops Checkout review and restores the editable Bag.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "checkout-review-to-order-receipt",
+        "from": "checkout-review",
+        "to": "order-receipt",
+        "trigger": "Place order",
+        "stackEffect": "replace",
+        "statePreservation": "The purchased product snapshot becomes durable while the cleared bag and obsolete checkout stack are discarded.",
+        "backBehavior": "System back cannot reopen Bag or Checkout review after the order is placed.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      },
+      {
+        "id": "order-receipt-to-shop",
+        "from": "order-receipt",
+        "to": "shop",
+        "trigger": "Continue shopping",
+        "stackEffect": "replace",
+        "statePreservation": "The receipt remains available from Profile while transient query and purchase-task state are cleared.",
+        "backBehavior": "System back follows the Shop root instead of reopening the completed checkout.",
+        "runtimeScenarioIds": ["complete-shopping-journey"]
+      }
     ],
     "runtimeScenarios": [
+      {
+        "id": "top-level-route-stability",
+        "testName": "every app keeps its root route stable across tab selection",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["shop", "search"],
+        "verdict": "pass",
+        "evidence": "The executable cross-app route test selects Search, asserts after one pump that Shop is painted and exposed as unselected while Search and its content are selected, and proves that the nested Navigator retains one Page, the same stable root Page key, and the same ModalRoute."
+      },
       {
         "id": "complete-shopping-journey",
         "testName": "Nook completes search, category, save, bag, and checkout flows",
@@ -297,14 +431,14 @@
         "sourcePath": "example/test/mobile_app_gallery_test.dart",
         "surfaceIds": ["shop", "search"],
         "verdict": "pass",
-        "evidence": "The executable destination test verifies independent initial offsets and restores Search after its root Route has been replaced and recreated."
+        "evidence": "The executable destination test verifies independent initial offsets and restores Search while the same stable root Route remains active."
       }
     ],
     "finalReview": {
       "verdict": "pass",
       "reviewedSurfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "Four named destination Pages and the product, bag, review, and Profile-receipt stack run in a nested Navigator; system back pops real CharcoalPageRoutes, completion replaces obsolete task history, and destination scroll offsets survive Route replacement." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar atomically commits selected visuals, semantics, and content in the first painted frame on one stable root Route; product, bag, review, and Profile-receipt pages use the nested Navigator, system back pops real CharcoalPageRoutes, completion replaces obsolete task history, and destination scroll offsets survive tab selection." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Discovery leads Shop and Search, purchase decisions lead task pages, and Profile now gives shopping activity a clear purpose." },
         { "area": "product-copy", "verdict": "pass", "evidence": "All visible copy describes shopper outcomes and real simulation behavior; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every inventoried state is backed by compact and standard production-page previews, with collection columns constraint-driven." },

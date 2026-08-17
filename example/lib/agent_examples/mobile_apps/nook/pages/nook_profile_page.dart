@@ -44,7 +44,7 @@ final class NookProfilePage extends StatelessWidget {
                   fullWidth: true,
                   leading: const CharcoalIcon(CharcoalIcons.bookmark),
                   onPressed: () =>
-                      viewModel.selectDestination(NookDestination.saved.index),
+                      viewModel.selectDestination(NookDestination.saved),
                   child: Text('Saved · ${viewModel.savedCount}'),
                 ),
               ),

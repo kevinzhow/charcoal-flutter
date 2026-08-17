@@ -1,8 +1,10 @@
+import 'dart:ui' show Tristate;
+
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/agent_examples/agent_example_navigator.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_app_gallery.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/daylight/widgets/daylight_item_group.dart';
-import 'package:charcoal_ui_showcase/agent_examples/shared/agent_demo_tab_bar.dart';
+import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/nook/nook_models.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -58,19 +60,18 @@ void main() {
   ) async {
     for (final app in AgentMobileApp.values) {
       await _pumpSimulator(tester, app);
-      final tabBar = find.byType(AgentDemoTabBar);
+      final tabBar = find.byWidgetPredicate(
+        (widget) => widget is CharcoalTabBar<Object?>,
+      );
       expect(tabBar, findsOneWidget, reason: app.name);
       expect(tester.getSize(tabBar).height, 64, reason: app.name);
       if (app == AgentMobileApp.social) {
         final messages = tester
-            .widget<AgentDemoTabBar>(tabBar)
+            .widget<CharcoalTabBar<Object?>>(tabBar)
             .items
             .singleWhere((item) => item.label == 'Messages');
-        expect(messages.badgeCount, greaterThan(0));
-        expect(
-          messages.semanticLabel,
-          'Messages, ${messages.badgeCount} unread',
-        );
+        expect(messages.badge, isNotNull);
+        expect(messages.semanticLabel, 'Messages, ${messages.badge} unread');
         expect(find.bySemanticsLabel(messages.semanticLabel!), findsOneWidget);
       }
     }
@@ -307,45 +308,178 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('top-level destinations update one route without push motion', (
+  testWidgets(
+    'top-level destinations update one route atomically without push motion',
+    (tester) async {
+      await _pumpSimulator(tester, AgentMobileApp.commerce);
+
+      final theme = CharcoalTheme.of(
+        tester.element(find.byType(CharcoalTabBar<NookDestination>)),
+      );
+      final shopPage = find.byKey(
+        const ValueKey<String>('agent-commerce-shop-page'),
+      );
+      final rootRoute = ModalRoute.of(tester.element(shopPage));
+      final rootPageKey = _nestedNavigator(tester, 'commerce').pages.single.key;
+      expect(
+        _paintedTabBackground(
+          tester,
+          const ValueKey<String>('agent-commerce-nav-shop'),
+        ),
+        theme.colors.containerSecondaryDefaultA,
+      );
+
+      await tester.tap(
+        find.byKey(const ValueKey<String>('agent-commerce-nav-search')),
+      );
+      await tester.pump();
+
+      expect(
+        _paintedTabBackground(
+          tester,
+          const ValueKey<String>('agent-commerce-nav-shop'),
+        ),
+        theme.colors.backgroundDefault,
+      );
+      expect(
+        _paintedTabBackground(
+          tester,
+          const ValueKey<String>('agent-commerce-nav-search'),
+        ),
+        theme.colors.containerSecondaryDefaultA,
+      );
+      final searchPage = find.byKey(
+        const ValueKey<String>('agent-commerce-search-page'),
+      );
+      expect(searchPage, findsOneWidget);
+      expect(ModalRoute.of(tester.element(searchPage)), same(rootRoute));
+      final navigator = _nestedNavigator(tester, 'commerce');
+      expect(navigator.pages, hasLength(1));
+      expect(navigator.pages.single.key, rootPageKey);
+      expect(navigator.pages.single.name, '/nook/root-search');
+      expect(
+        tester
+            .widgetList<SlideTransition>(
+              find.descendant(
+                of: find.byKey(
+                  const ValueKey<String>('agent-commerce-navigator'),
+                ),
+                matching: find.byType(SlideTransition),
+              ),
+            )
+            .every((transition) => transition.position.value == Offset.zero),
+        isTrue,
+      );
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('every app keeps its root route stable across tab selection', (
     tester,
   ) async {
-    await _pumpSimulator(tester, AgentMobileApp.commerce);
+    const scenarios =
+        <
+          ({
+            AgentMobileApp app,
+            String appKey,
+            String initialPageKey,
+            String initialTabKey,
+            String tabKey,
+            String targetPageKey,
+          })
+        >[
+          (
+            app: AgentMobileApp.social,
+            appKey: 'social',
+            initialPageKey: 'agent-social-feed-following',
+            initialTabKey: 'agent-social-nav-home',
+            tabKey: 'agent-social-nav-discover',
+            targetPageKey: 'agent-social-discover-page',
+          ),
+          (
+            app: AgentMobileApp.commerce,
+            appKey: 'commerce',
+            initialPageKey: 'agent-commerce-shop-page',
+            initialTabKey: 'agent-commerce-nav-shop',
+            tabKey: 'agent-commerce-nav-search',
+            targetPageKey: 'agent-commerce-search-page',
+          ),
+          (
+            app: AgentMobileApp.wallet,
+            appKey: 'wallet',
+            initialPageKey: 'agent-wallet-home-page',
+            initialTabKey: 'agent-wallet-nav-wallet',
+            tabKey: 'agent-wallet-nav-activity',
+            targetPageKey: 'agent-wallet-activity-page',
+          ),
+          (
+            app: AgentMobileApp.habits,
+            appKey: 'habits',
+            initialPageKey: 'agent-habits-today-page',
+            initialTabKey: 'agent-habits-nav-today',
+            tabKey: 'agent-habits-nav-journey',
+            targetPageKey: 'agent-habits-journey-page',
+          ),
+        ];
 
-    final shopPage = find.byKey(
-      const ValueKey<String>('agent-commerce-shop-page'),
-    );
-    final rootRoute = ModalRoute.of(tester.element(shopPage));
-    final rootPageKey = _nestedNavigator(tester, 'commerce').pages.single.key;
+    for (final scenario in scenarios) {
+      await _pumpSimulator(tester, scenario.app);
+      final initialPage = find.byKey(ValueKey<String>(scenario.initialPageKey));
+      final initialTab = find.byKey(ValueKey<String>(scenario.initialTabKey));
+      final targetTab = find.byKey(ValueKey<String>(scenario.tabKey));
+      final theme = CharcoalTheme.of(tester.element(initialTab));
+      final rootRoute = ModalRoute.of(tester.element(initialPage));
+      final rootPageKey = _nestedNavigator(
+        tester,
+        scenario.appKey,
+      ).pages.single.key;
+      expect(
+        _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
+        theme.colors.containerSecondaryDefaultA,
+        reason: scenario.app.name,
+      );
 
-    await tester.tap(
-      find.byKey(const ValueKey<String>('agent-commerce-nav-search')),
-    );
-    await tester.pump();
+      await tester.tap(targetTab);
+      await tester.pump();
 
-    final searchPage = find.byKey(
-      const ValueKey<String>('agent-commerce-search-page'),
-    );
-    expect(searchPage, findsOneWidget);
-    expect(ModalRoute.of(tester.element(searchPage)), same(rootRoute));
-    final navigator = _nestedNavigator(tester, 'commerce');
-    expect(navigator.pages, hasLength(1));
-    expect(navigator.pages.single.key, rootPageKey);
-    expect(navigator.pages.single.name, '/nook/root-search');
-    expect(
-      tester
-          .widgetList<SlideTransition>(
-            find.descendant(
-              of: find.byKey(
-                const ValueKey<String>('agent-commerce-navigator'),
-              ),
-              matching: find.byType(SlideTransition),
-            ),
-          )
-          .every((transition) => transition.position.value == Offset.zero),
-      isTrue,
-    );
-    await tester.pumpAndSettle();
+      expect(
+        _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
+        theme.colors.backgroundDefault,
+        reason: scenario.app.name,
+      );
+      expect(
+        _paintedTabBackground(tester, ValueKey<String>(scenario.tabKey)),
+        theme.colors.containerSecondaryDefaultA,
+        reason: scenario.app.name,
+      );
+      expect(
+        tester.getSemantics(initialTab).flagsCollection.isSelected,
+        Tristate.isFalse,
+        reason: scenario.app.name,
+      );
+      expect(
+        tester.getSemantics(targetTab).flagsCollection.isSelected,
+        Tristate.isTrue,
+        reason: scenario.app.name,
+      );
+
+      final targetPage = find.byKey(ValueKey<String>(scenario.targetPageKey));
+      expect(targetPage, findsOneWidget, reason: scenario.app.name);
+      expect(
+        ModalRoute.of(tester.element(targetPage)),
+        same(rootRoute),
+        reason: scenario.app.name,
+      );
+      final navigator = _nestedNavigator(tester, scenario.appKey);
+      expect(navigator.pages, hasLength(1), reason: scenario.app.name);
+      expect(
+        navigator.pages.single.key,
+        rootPageKey,
+        reason: scenario.app.name,
+      );
+      await tester.pumpAndSettle();
+    }
     expect(tester.takeException(), isNull);
   });
 
@@ -747,6 +881,7 @@ void main() {
       find.byKey(const ValueKey<String>('agent-habits-tomorrow-plan-page')),
       findsOneWidget,
     );
+    expect(_nestedNavigator(tester, 'habits').pages, hasLength(2));
     await _tapVisible(
       tester,
       find.byKey(const ValueKey<String>('agent-habits-save-tomorrow')),
@@ -754,6 +889,11 @@ void main() {
     expect(
       find.byKey(const ValueKey<String>('agent-habits-plan-saved-page')),
       findsOneWidget,
+    );
+    expect(_nestedNavigator(tester, 'habits').pages, hasLength(1));
+    expect(
+      find.byKey(const ValueKey<String>('agent-habits-tomorrow-plan-page')),
+      findsNothing,
     );
     await _tapVisible(
       tester,
@@ -763,6 +903,7 @@ void main() {
       find.byKey(const ValueKey<String>('agent-habits-journey-page')),
       findsOneWidget,
     );
+    expect(_nestedNavigator(tester, 'habits').pages, hasLength(1));
     expect(find.text('Monday'), findsOneWidget);
     expect(find.text('Tuesday'), findsOneWidget);
     expect(find.text('Planned · 3 habits'), findsOneWidget);
@@ -826,6 +967,20 @@ Navigator _nestedNavigator(WidgetTester tester, String appKey) =>
         matching: find.byType(Navigator),
       ),
     );
+
+Color _paintedTabBackground(WidgetTester tester, Key key) {
+  final animated = find.descendant(
+    of: find.byKey(key),
+    matching: find.byType(AnimatedContainer),
+  );
+  final decorated = find.descendant(
+    of: animated,
+    matching: find.byType(DecoratedBox),
+  );
+  return (tester.widget<DecoratedBox>(decorated.first).decoration
+          as BoxDecoration)
+      .color!;
+}
 
 ScrollableState _verticalScrollState(WidgetTester tester, Finder finder) =>
     tester

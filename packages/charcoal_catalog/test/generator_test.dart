@@ -11,9 +11,20 @@ void main() {
 
     expect(File(catalogJsonPath(root)).readAsStringSync(), generated.json);
     expect(File(catalogDartPath(root)).readAsStringSync(), generated.dartSource);
-    expect(generated.catalog.coverage.curatedComponents, 8);
-    expect(generated.catalog.coverage.componentsWithExamples, 8);
+    expect(generated.catalog.coverage.curatedComponents, 9);
+    expect(generated.catalog.coverage.componentsWithExamples, 9);
     expect(generated.catalog.coverage.curatedPatterns, 6);
     expect(generated.catalog.coverage.publicTokens, 502);
+
+    final tabBar = generated.catalog.componentNamed('CharcoalTabBar')!;
+    expect(
+      tabBar.feedbackResponsibilities.join(' '),
+      allOf(contains('atomically'), contains('transient')),
+    );
+    final appShell = generated.catalog.patternNamed('adaptive-app-shell')!;
+    expect(
+      appShell.composition.join(' '),
+      allOf(contains('first painted frame'), contains('one state owner')),
+    );
   });
 }

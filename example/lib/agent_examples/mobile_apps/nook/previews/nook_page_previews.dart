@@ -57,18 +57,18 @@ Widget nookProfileOrderPreview() =>
     NookDemo(createViewModel: createNookProfileOrderPreviewModel);
 
 NookViewModel createNookSearchPreviewModel() =>
-    NookViewModel()..selectDestination(NookDestination.search.index);
+    NookViewModel()..selectDestination(NookDestination.search);
 
 NookViewModel createNookNoResultPreviewModel() => NookViewModel()
-  ..selectDestination(NookDestination.search.index)
+  ..selectDestination(NookDestination.search)
   ..setQuery('blue lantern');
 
 NookViewModel createNookSavedEmptyPreviewModel() =>
-    NookViewModel()..selectDestination(NookDestination.saved.index);
+    NookViewModel()..selectDestination(NookDestination.saved);
 
 NookViewModel createNookSavedProductPreviewModel() => NookViewModel()
   ..toggleSaved(nookProducts.first)
-  ..selectDestination(NookDestination.saved.index);
+  ..selectDestination(NookDestination.saved);
 
 NookViewModel createNookProductDetailPreviewModel() =>
     NookViewModel()..openProduct(nookProducts.first);
@@ -93,9 +93,9 @@ NookViewModel createNookOrderReceiptPreviewModel() =>
     createNookCheckoutReviewPreviewModel()..placeOrder();
 
 NookViewModel createNookProfileEmptyPreviewModel() =>
-    NookViewModel()..selectDestination(NookDestination.profile.index);
+    NookViewModel()..selectDestination(NookDestination.profile);
 
 NookViewModel createNookProfileOrderPreviewModel() =>
     createNookOrderReceiptPreviewModel()
       ..continueShopping()
-      ..selectDestination(NookDestination.profile.index);
+      ..selectDestination(NookDestination.profile);

@@ -9,7 +9,7 @@ import 'package:path/path.dart' as p;
 import 'agent_instructions.dart';
 
 const String charcoalPageDesignSkillName = 'charcoal-page-design';
-const int charcoalPageDesignSkillVersion = 2;
+const int charcoalPageDesignSkillVersion = 3;
 const String charcoalSkillInstallManifest = '.charcoal-install.json';
 
 final class CharcoalSkillInstallResult {

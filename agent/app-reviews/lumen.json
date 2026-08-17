@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "application": {
@@ -314,24 +314,176 @@
       }
     ],
     "transitions": [
-      { "from": "wallet", "to": "activity", "trigger": "Select Activity" },
-      { "from": "wallet", "to": "plan", "trigger": "Select Plan" },
-      { "from": "wallet", "to": "profile", "trigger": "Select Profile or More" },
-      { "from": "wallet", "to": "receive", "trigger": "Choose Receive" },
-      { "from": "wallet", "to": "send-entry", "trigger": "Choose Send" },
-      { "from": "wallet", "to": "top-up", "trigger": "Choose Top up" },
-      { "from": "receive", "to": "wallet", "trigger": "Go back" },
-      { "from": "send-entry", "to": "transfer-review", "trigger": "Submit a valid transfer draft" },
-      { "from": "transfer-review", "to": "transfer-receipt", "trigger": "Confirm transfer" },
-      { "from": "transfer-receipt", "to": "activity", "trigger": "View activity" },
-      { "from": "transfer-receipt", "to": "wallet", "trigger": "Choose Done" },
-      { "from": "top-up", "to": "top-up-receipt", "trigger": "Confirm top up" },
-      { "from": "top-up-receipt", "to": "wallet", "trigger": "Choose Done" },
-      { "from": "activity", "to": "wallet", "trigger": "Select Wallet" },
-      { "from": "plan", "to": "wallet", "trigger": "Select Wallet" },
-      { "from": "profile", "to": "wallet", "trigger": "Select Wallet" }
+      {
+        "id": "wallet-to-activity",
+        "from": "wallet",
+        "to": "activity",
+        "trigger": "Select Activity",
+        "stackEffect": "none",
+        "statePreservation": "Balance visibility, activity history, destination scroll state, and profile preferences remain intact.",
+        "backBehavior": "System back does not revisit Wallet as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["top-level-route-stability", "complete-wallet-journey"]
+      },
+      {
+        "id": "wallet-to-plan",
+        "from": "wallet",
+        "to": "plan",
+        "trigger": "Select Plan",
+        "stackEffect": "none",
+        "statePreservation": "Balance visibility, activity history, destination scroll state, and profile preferences remain intact.",
+        "backBehavior": "System back does not revisit Wallet as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "wallet-to-profile",
+        "from": "wallet",
+        "to": "profile",
+        "trigger": "Select Profile or More",
+        "stackEffect": "none",
+        "statePreservation": "Balance visibility, activity history, destination scroll state, and profile preferences remain intact.",
+        "backBehavior": "System back does not revisit Wallet as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "wallet-to-receive",
+        "from": "wallet",
+        "to": "receive",
+        "trigger": "Choose Receive",
+        "stackEffect": "push",
+        "statePreservation": "Wallet balance, visibility, and destination state remain beneath the Receive task.",
+        "backBehavior": "System back pops Receive and restores Wallet.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "wallet-to-send-entry",
+        "from": "wallet",
+        "to": "send-entry",
+        "trigger": "Choose Send",
+        "stackEffect": "push",
+        "statePreservation": "Wallet state remains beneath the task while recipient and amount become task-owned draft state.",
+        "backBehavior": "System back pops Send entry and restores Wallet.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "wallet-to-top-up",
+        "from": "wallet",
+        "to": "top-up",
+        "trigger": "Choose Top up",
+        "stackEffect": "push",
+        "statePreservation": "Wallet state remains beneath the task and the selected top-up amount stays task-owned.",
+        "backBehavior": "System back pops Top up and restores Wallet.",
+        "runtimeScenarioIds": ["complete-wallet-journey", "completion-route-replacement"]
+      },
+      {
+        "id": "receive-to-wallet",
+        "from": "receive",
+        "to": "wallet",
+        "trigger": "Go back",
+        "stackEffect": "pop",
+        "statePreservation": "Wallet state remains intact while transient copied-link feedback is discarded.",
+        "backBehavior": "The active Receive route is removed and Wallet becomes current.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "send-entry-to-transfer-review",
+        "from": "send-entry",
+        "to": "transfer-review",
+        "trigger": "Submit a valid transfer draft",
+        "stackEffect": "push",
+        "statePreservation": "Recipient and amount remain available beneath Review for correction through back navigation.",
+        "backBehavior": "System back pops Review and restores the populated Send entry.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "transfer-review-to-transfer-receipt",
+        "from": "transfer-review",
+        "to": "transfer-receipt",
+        "trigger": "Confirm transfer",
+        "stackEffect": "replace",
+        "statePreservation": "The new balance and activity entry become durable while obsolete transfer draft history is discarded.",
+        "backBehavior": "System back cannot reopen Send entry or Review after confirmation.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "transfer-receipt-to-activity",
+        "from": "transfer-receipt",
+        "to": "activity",
+        "trigger": "View activity",
+        "stackEffect": "replace",
+        "statePreservation": "The confirmed transfer remains visible in durable Activity history while task draft state is cleared.",
+        "backBehavior": "System back follows the Activity root instead of reopening the completed transfer.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "transfer-receipt-to-wallet",
+        "from": "transfer-receipt",
+        "to": "wallet",
+        "trigger": "Choose Done",
+        "stackEffect": "replace",
+        "statePreservation": "The updated balance and activity entry remain durable while task draft state is cleared.",
+        "backBehavior": "System back follows the Wallet root instead of reopening the completed transfer.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "top-up-to-top-up-receipt",
+        "from": "top-up",
+        "to": "top-up-receipt",
+        "trigger": "Confirm top up",
+        "stackEffect": "replace",
+        "statePreservation": "The updated balance and activity entry become durable while obsolete Top up history is discarded.",
+        "backBehavior": "System back cannot reopen the completed Top up form.",
+        "runtimeScenarioIds": ["complete-wallet-journey", "completion-route-replacement"]
+      },
+      {
+        "id": "top-up-receipt-to-wallet",
+        "from": "top-up-receipt",
+        "to": "wallet",
+        "trigger": "Choose Done",
+        "stackEffect": "replace",
+        "statePreservation": "The updated balance and activity entry remain durable after the receipt is removed.",
+        "backBehavior": "System back follows the Wallet root instead of reopening the completed Top up flow.",
+        "runtimeScenarioIds": ["complete-wallet-journey", "completion-route-replacement"]
+      },
+      {
+        "id": "activity-to-wallet",
+        "from": "activity",
+        "to": "wallet",
+        "trigger": "Select Wallet",
+        "stackEffect": "none",
+        "statePreservation": "Activity history, balance visibility, and independent destination scroll state remain intact.",
+        "backBehavior": "System back does not revisit Activity as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["top-level-route-stability", "complete-wallet-journey"]
+      },
+      {
+        "id": "plan-to-wallet",
+        "from": "plan",
+        "to": "wallet",
+        "trigger": "Select Wallet",
+        "stackEffect": "none",
+        "statePreservation": "Plan state, balance visibility, and independent destination scroll state remain intact.",
+        "backBehavior": "System back does not revisit Plan as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      },
+      {
+        "id": "profile-to-wallet",
+        "from": "profile",
+        "to": "wallet",
+        "trigger": "Select Wallet",
+        "stackEffect": "none",
+        "statePreservation": "Profile preferences, balance visibility, and independent destination scroll state remain intact.",
+        "backBehavior": "System back does not revisit Profile as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-wallet-journey"]
+      }
     ],
     "runtimeScenarios": [
+      {
+        "id": "top-level-route-stability",
+        "testName": "every app keeps its root route stable across tab selection",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["wallet", "activity"],
+        "verdict": "pass",
+        "evidence": "The executable cross-app route test selects Activity, asserts after one pump that Wallet is painted and exposed as unselected while Activity and its content are selected, and proves that the nested Navigator retains one Page, the same stable root Page key, and the same ModalRoute."
+      },
       {
         "id": "complete-wallet-journey",
         "testName": "Lumen completes privacy, top-up, and transfer flows",
@@ -353,7 +505,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["wallet", "activity", "plan", "profile", "receive", "send-entry", "transfer-review", "transfer-receipt", "top-up", "top-up-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "Named destination and financial-task Pages run in a nested Navigator; review stages push real CharcoalPageRoutes, system back synchronizes the task owner, and durable receipts replace obsolete form history." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar atomically commits selected visuals, semantics, and content in the first painted frame on one stable root Route; financial tasks use the nested Navigator, review stages push real CharcoalPageRoutes, system back synchronizes the task owner, and durable receipts replace obsolete form history." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Balance orientation leads Wallet, transaction facts lead money tasks, and Profile now centers privacy and automation decisions." },
         { "area": "product-copy", "verdict": "pass", "evidence": "Copy states the simulated financial effect and never promises an unavailable service; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every surface state has compact and standard production previews with fields, rows, and review values allowed to adapt." },

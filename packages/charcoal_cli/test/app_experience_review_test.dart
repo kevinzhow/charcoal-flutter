@@ -101,6 +101,56 @@ void main() {
       contains(contains('State inventories do not map surfaces: order-receipt')),
     );
   });
+
+  test('top-level destinations cannot declare a push stack effect', () {
+    final application = nookReview['application']! as Map<String, Object?>;
+    final transition = (application['transitions']! as List<Object?>).first as Map<String, Object?>;
+    transition['stackEffect'] = 'push';
+
+    final report = validateCharcoalAppExperienceReview(
+      nookReview,
+      projectRoot: workspace,
+    );
+
+    expect(report.valid, isFalse);
+    expect(
+      report.problems,
+      contains(contains('must be "none" between top-level destinations')),
+    );
+  });
+
+  test('top-level navigation evidence records the first painted frame', () {
+    final application = nookReview['application']! as Map<String, Object?>;
+    final scenarios = (application['runtimeScenarios']! as List<Object?>)
+        .cast<Map<String, Object?>>();
+    final scenario = scenarios.firstWhere(
+      (item) => item['id'] == 'top-level-route-stability',
+    );
+    final sourcePath = scenario['sourcePath']! as String;
+    final source = File(p.join(workspace.path, sourcePath)).readAsStringSync();
+
+    expect(scenario['evidence'], contains('after one pump'));
+    expect(source, contains(scenario['testName']));
+    expect(source, contains('_paintedTabBackground'));
+    expect(source, contains('await tester.pump();'));
+  });
+
+  test('every transition links executable evidence covering both surfaces', () {
+    final application = nookReview['application']! as Map<String, Object?>;
+    final transition = (application['transitions']! as List<Object?>).first as Map<String, Object?>;
+    transition['runtimeScenarioIds'] = <String>['missing-scenario'];
+
+    final report = validateCharcoalAppExperienceReview(
+      nookReview,
+      projectRoot: workspace,
+    );
+
+    expect(report.valid, isFalse);
+    expect(
+      report.problems,
+      contains(contains('references unknown scenario "missing-scenario"')),
+    );
+  });
 }
 
 Directory _workspaceRoot() {

@@ -3,7 +3,6 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../agent_example_navigator.dart';
-import '../../shared/agent_demo_tab_bar.dart';
 import '../shared/demo_shell.dart';
 import 'nook_models.dart';
 import 'nook_view_model.dart';
@@ -138,17 +137,37 @@ final class _NookDemoState extends State<NookDemo> {
   }) {
     final theme = CharcoalTheme.of(context);
     final title = _title(route, destination, product);
-    return AgentDemoAppShell(
+    return AgentDemoAppShell<NookDestination>(
       appKey: 'commerce',
       appLabel: 'Nook commerce app demo',
       brandColor: theme.colors.containerNoticeDefault,
       brandForeground: theme.colors.textOnNoticeDefault,
       brandMark: 'N',
-      tabItems: const <AgentDemoTabItem>[
-        AgentDemoTabItem('Shop', CharcoalIcons.shopping),
-        AgentDemoTabItem('Search', CharcoalIcons.search),
-        AgentDemoTabItem('Saved', CharcoalIcons.bookmark),
-        AgentDemoTabItem('Profile', CharcoalIcons.personCircle),
+      tabItems: const <CharcoalTabItem<NookDestination>>[
+        CharcoalTabItem<NookDestination>(
+          icon: CharcoalIcon(CharcoalIcons.shopping),
+          key: ValueKey<String>('agent-commerce-nav-shop'),
+          label: 'Shop',
+          value: NookDestination.shop,
+        ),
+        CharcoalTabItem<NookDestination>(
+          icon: CharcoalIcon(CharcoalIcons.search),
+          key: ValueKey<String>('agent-commerce-nav-search'),
+          label: 'Search',
+          value: NookDestination.search,
+        ),
+        CharcoalTabItem<NookDestination>(
+          icon: CharcoalIcon(CharcoalIcons.bookmark),
+          key: ValueKey<String>('agent-commerce-nav-saved'),
+          label: 'Saved',
+          value: NookDestination.saved,
+        ),
+        CharcoalTabItem<NookDestination>(
+          icon: CharcoalIcon(CharcoalIcons.personCircle),
+          key: ValueKey<String>('agent-commerce-nav-profile'),
+          label: 'Profile',
+          value: NookDestination.profile,
+        ),
       ],
       content: _content(route, destination, product),
       leading: canGoBack
@@ -159,15 +178,15 @@ final class _NookDemoState extends State<NookDemo> {
               semanticLabel: 'Back from $title',
             )
           : null,
-      onTabSelected: (index) {
-        _viewModel.selectDestination(index);
-        if (index != NookDestination.search.index) {
+      onTabSelected: (nextDestination) {
+        _viewModel.selectDestination(nextDestination);
+        if (nextDestination != NookDestination.search) {
           _searchController.clear();
           _viewModel.clearSearch();
         }
       },
       pageKey: pageKey,
-      selectedTabIndex: destination.index,
+      selectedTab: destination,
       showTabBar: route == NookRoute.root,
       title: title,
       trailing: route == NookRoute.orderConfirmed

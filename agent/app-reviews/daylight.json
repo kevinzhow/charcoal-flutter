@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "application": {
@@ -201,17 +201,106 @@
       }
     ],
     "transitions": [
-      { "from": "today", "to": "journey", "trigger": "Select Journey or the navigation-bar calendar" },
-      { "from": "today", "to": "insights", "trigger": "Select Insights" },
-      { "from": "today", "to": "profile", "trigger": "Select Profile" },
-      { "from": "today", "to": "plan-tomorrow", "trigger": "Complete today and choose Plan tomorrow" },
-      { "from": "plan-tomorrow", "to": "plan-saved", "trigger": "Save at least one habit" },
-      { "from": "plan-saved", "to": "journey", "trigger": "Continue to journey" },
-      { "from": "journey", "to": "today", "trigger": "Return to today" },
-      { "from": "insights", "to": "today", "trigger": "Select Today" },
-      { "from": "profile", "to": "today", "trigger": "Select Today" }
+      {
+        "id": "today-to-journey",
+        "from": "today",
+        "to": "journey",
+        "trigger": "Select Journey or the navigation-bar calendar",
+        "stackEffect": "none",
+        "statePreservation": "Habit completion, destination scroll state, and profile preferences remain owned by DaylightViewModel.",
+        "backBehavior": "System back does not revisit Today as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["top-level-route-stability", "complete-daylight-journey"]
+      },
+      {
+        "id": "today-to-insights",
+        "from": "today",
+        "to": "insights",
+        "trigger": "Select Insights",
+        "stackEffect": "none",
+        "statePreservation": "Habit completion, destination scroll state, and profile preferences remain owned by DaylightViewModel.",
+        "backBehavior": "System back does not revisit Today as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      },
+      {
+        "id": "today-to-profile",
+        "from": "today",
+        "to": "profile",
+        "trigger": "Select Profile",
+        "stackEffect": "none",
+        "statePreservation": "Habit completion, destination scroll state, and profile preferences remain owned by DaylightViewModel.",
+        "backBehavior": "System back does not revisit Today as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      },
+      {
+        "id": "today-to-plan-tomorrow",
+        "from": "today",
+        "to": "plan-tomorrow",
+        "trigger": "Complete today and choose Plan tomorrow",
+        "stackEffect": "push",
+        "statePreservation": "Completed habits and the Today destination remain intact beneath the editable plan.",
+        "backBehavior": "System back pops the plan and returns to Today without clearing completion.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      },
+      {
+        "id": "plan-tomorrow-to-plan-saved",
+        "from": "plan-tomorrow",
+        "to": "plan-saved",
+        "trigger": "Save at least one habit",
+        "stackEffect": "replace",
+        "statePreservation": "The selected habits become a durable tomorrow plan while obsolete editable task history is discarded.",
+        "backBehavior": "System back cannot reopen the completed plan editor.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      },
+      {
+        "id": "plan-saved-to-journey",
+        "from": "plan-saved",
+        "to": "journey",
+        "trigger": "Continue to journey",
+        "stackEffect": "replace",
+        "statePreservation": "The saved plan remains visible as a durable Journey entry.",
+        "backBehavior": "System back cannot reopen the completion receipt.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      },
+      {
+        "id": "journey-to-today",
+        "from": "journey",
+        "to": "today",
+        "trigger": "Return to today",
+        "stackEffect": "none",
+        "statePreservation": "Journey entries, habit completion, and destination scroll state remain intact.",
+        "backBehavior": "System back does not revisit Journey as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["top-level-route-stability", "complete-daylight-journey"]
+      },
+      {
+        "id": "insights-to-today",
+        "from": "insights",
+        "to": "today",
+        "trigger": "Select Today",
+        "stackEffect": "none",
+        "statePreservation": "Insights inputs, habit completion, and destination scroll state remain intact.",
+        "backBehavior": "System back does not revisit Insights as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      },
+      {
+        "id": "profile-to-today",
+        "from": "profile",
+        "to": "today",
+        "trigger": "Select Today",
+        "stackEffect": "none",
+        "statePreservation": "Profile preferences and habit completion remain intact.",
+        "backBehavior": "System back does not revisit Profile as tab history; the enclosing app handles exit.",
+        "runtimeScenarioIds": ["complete-daylight-journey"]
+      }
     ],
     "runtimeScenarios": [
+      {
+        "id": "top-level-route-stability",
+        "testName": "every app keeps its root route stable across tab selection",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["today", "journey"],
+        "verdict": "pass",
+        "evidence": "The executable cross-app route test selects Journey, asserts after one pump that Today is painted and exposed as unselected while Journey and its content are selected, and proves that the nested Navigator retains one Page, the same stable root Page key, and the same ModalRoute."
+      },
       {
         "id": "complete-daylight-journey",
         "testName": "Daylight completes a day and continues into the journey",
@@ -225,7 +314,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["today", "journey", "insights", "profile", "plan-tomorrow", "plan-saved"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "Four named destination Pages and the focused tomorrow-planning Page run in a nested Navigator; platform back pops the editable task Route, while the saved result replaces obsolete task history before Journey opens." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar atomically commits selected visuals, semantics, and content in the first painted frame on one stable root Route; the focused tomorrow-planning Page uses the nested Navigator, platform back pops the editable task Route, and the saved result replaces obsolete task history before Journey opens." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Today's commitments lead completion, Journey leads history, Insights leads reflection, and Profile now leads support-style decisions." },
         { "area": "product-copy", "verdict": "pass", "evidence": "Copy is calm, specific to real local behavior, and avoids developer-facing design rationale on secondary pages." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every meaningful state has compact and standard production previews; timeline rows adapt below 300 logical pixels." },

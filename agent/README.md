@@ -81,6 +81,11 @@ zero mean every verdict passes and no finding remains. Runtime scenarios referen
 test names, and surface keys, while preview evidence references exact `AgentPagePreview` states.
 State inventories compare the manifest with the application's real Dart destination, route, and task
 enums, so a new enum value cannot enter the product without an explicit reviewed-surface mapping.
+Version 2 transition records also declare the route-stack effect, preserved state, platform-back
+behavior, and executable scenarios for both endpoints. Destination-to-destination selection must
+use a `none` stack effect; details and tasks use explicit push, replace, pop, present, or dismiss
+semantics. The v1 contract remains in `contracts/` for historical artifacts; the CLI emits and
+validates v2 reviews.
 Checked-in passing reviews for Nook, Lumen, and Daylight live in `app-reviews/`.
 
 ## Evaluation matrix
@@ -156,7 +161,7 @@ the package's public contract.
 
 The component/API suite remains `benchmarks/v1.json`. The separate
 `benchmarks/page-experience-v1.json` suite evaluates complete stateful page decisions modeled after
-Nook, Lumen, and Daylight:
+Nook, Lumen, and Daylight, plus stable top-level navigation and real route-stack behavior:
 
 ```sh
 fvm dart run packages/charcoal_cli/bin/charcoal.dart benchmark-run \

@@ -127,7 +127,12 @@ final class _CharcoalClickableState extends State<CharcoalClickable> {
           onExpand: _enabled && widget.expanded == false ? _activate : null,
           onTap: _enabled ? _activate : null,
           role: widget.semanticRole,
-          selected: widget.selected ? true : null,
+          // SemanticsRole.tab requires an explicit selected value for every
+          // tab. Other mutually exclusive controls expose their state through
+          // checked unless they opt into selected themselves.
+          selected: widget.semanticRole == SemanticsRole.tab || widget.selected
+              ? widget.selected
+              : null,
           toggled: widget.toggled,
           validationResult: widget.validationResult,
           value: widget.semanticValue,

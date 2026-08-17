@@ -6,7 +6,16 @@ import 'package:path/path.dart' as p;
 
 import 'page_experience.dart';
 
-const int charcoalAppExperienceReviewVersion = 1;
+const int charcoalAppExperienceReviewVersion = 2;
+
+const Set<String> charcoalAppTransitionStackEffects = <String>{
+  'none',
+  'push',
+  'replace',
+  'pop',
+  'present',
+  'dismiss',
+};
 
 const Set<String> charcoalAppReviewAreas = <String>{
   'navigation',
@@ -171,6 +180,7 @@ CharcoalAppExperienceReviewValidation validateCharcoalAppExperienceReview(
 
   final surfaces = _objectList(application, 'surfaces', 'application', problems);
   final surfaceIds = <String>{};
+  final surfaceKinds = <String, String>{};
   final surfaceRuntimeKeys = <String, String>{};
   final runtimeKeys = <String>{};
   final previewNames = <String>{};
@@ -192,6 +202,7 @@ CharcoalAppExperienceReviewValidation validateCharcoalAppExperienceReview(
         }.contains(kind)) {
       problems.add('$context.kind is not supported.');
     }
+    if (id != null && kind != null) surfaceKinds[id] = kind;
     final widget = _requiredString(surface, 'widget', context, problems);
     final sourcePath = _requiredString(surface, 'sourcePath', context, problems);
     final runtimeKey = _requiredString(surface, 'runtimeKey', context, problems);
@@ -421,14 +432,57 @@ CharcoalAppExperienceReviewValidation validateCharcoalAppExperienceReview(
     allowEmpty: surfaceIds.length <= 1,
   );
   final adjacency = <String, Set<String>>{};
+  final transitionIds = <String>{};
+  final transitionScenarioRefs =
+      <({String context, String from, List<String> scenarioIds, String to})>[];
   for (final (index, transition) in transitions.indexed) {
     final context = 'application.transitions[$index]';
+    final id = _requiredString(transition, 'id', context, problems);
+    if (id != null && !transitionIds.add(id)) {
+      problems.add('$context.id must be unique.');
+    }
     final from = _requiredString(transition, 'from', context, problems);
     final to = _requiredString(transition, 'to', context, problems);
     _requiredString(transition, 'trigger', context, problems);
+    final stackEffect = _requiredString(
+      transition,
+      'stackEffect',
+      context,
+      problems,
+    );
+    if (stackEffect != null && !charcoalAppTransitionStackEffects.contains(stackEffect)) {
+      problems.add(
+        '$context.stackEffect must be one of: '
+        '${_sorted(charcoalAppTransitionStackEffects)}.',
+      );
+    }
+    _requiredString(transition, 'statePreservation', context, problems);
+    _requiredString(transition, 'backBehavior', context, problems);
+    final scenarioIds = _stringList(
+      transition,
+      'runtimeScenarioIds',
+      context,
+      problems,
+      allowEmpty: false,
+    );
     if (from != null && !surfaceIds.contains(from)) problems.add('$context.from is unknown.');
     if (to != null && !surfaceIds.contains(to)) problems.add('$context.to is unknown.');
-    if (from != null && to != null) adjacency.putIfAbsent(from, () => <String>{}).add(to);
+    if (from != null && to != null) {
+      adjacency.putIfAbsent(from, () => <String>{}).add(to);
+      transitionScenarioRefs.add((
+        context: context,
+        from: from,
+        scenarioIds: scenarioIds,
+        to: to,
+      ));
+      if (surfaceKinds[from] == 'destination' &&
+          surfaceKinds[to] == 'destination' &&
+          stackEffect != 'none') {
+        problems.add(
+          '$context.stackEffect must be "none" between top-level destinations.',
+        );
+      }
+    }
   }
   if (entrySurfaceId != null && surfaceIds.contains(entrySurfaceId)) {
     final reachable = <String>{entrySurfaceId};
@@ -453,6 +507,7 @@ CharcoalAppExperienceReviewValidation validateCharcoalAppExperienceReview(
   );
   final runtimeCovered = <String>{};
   final runtimeScenarioIds = <String>{};
+  final runtimeScenarioSurfaces = <String, Set<String>>{};
   for (final (index, scenario) in runtimeScenarios.indexed) {
     final context = 'application.runtimeScenarios[$index]';
     final scenarioId = _requiredString(scenario, 'id', context, problems);
@@ -468,6 +523,9 @@ CharcoalAppExperienceReviewValidation validateCharcoalAppExperienceReview(
       problems,
       allowEmpty: false,
     );
+    if (scenarioId != null) {
+      runtimeScenarioSurfaces[scenarioId] = scenarioSurfaceIds.toSet();
+    }
     final verdict = _verdict(scenario, context, problems);
     _requiredString(scenario, 'evidence', context, problems);
     if (verdict == 'changes-required') {
@@ -498,6 +556,28 @@ CharcoalAppExperienceReviewValidation validateCharcoalAppExperienceReview(
   final missingRuntime = surfaceIds.difference(runtimeCovered);
   if (missingRuntime.isNotEmpty) {
     problems.add('Runtime scenarios do not cover: ${_sorted(missingRuntime)}.');
+  }
+  for (final transition in transitionScenarioRefs) {
+    for (final scenarioId in transition.scenarioIds) {
+      final coveredSurfaces = runtimeScenarioSurfaces[scenarioId];
+      if (coveredSurfaces == null) {
+        problems.add(
+          '${transition.context}.runtimeScenarioIds references unknown scenario '
+          '"$scenarioId".',
+        );
+        continue;
+      }
+      final missing = <String>{
+        transition.from,
+        transition.to,
+      }.difference(coveredSurfaces);
+      if (missing.isNotEmpty) {
+        problems.add(
+          '${transition.context}.runtimeScenarioIds scenario "$scenarioId" '
+          'does not cover transition surfaces: ${_sorted(missing)}.',
+        );
+      }
+    }
   }
 
   final finalReview = _object(application['finalReview'], 'application.finalReview', problems);

@@ -3,7 +3,6 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../agent_example_navigator.dart';
-import '../../shared/agent_demo_tab_bar.dart';
 import '../shared/demo_shell.dart';
 import 'lumen_models.dart';
 import 'lumen_view_model.dart';
@@ -161,17 +160,37 @@ final class _LumenDemoState extends State<LumenDemo> {
   }) {
     final theme = CharcoalTheme.of(context);
     final title = _title(task, destination);
-    return AgentDemoAppShell(
+    return AgentDemoAppShell<LumenDestination>(
       appKey: 'wallet',
       appLabel: 'Lumen personal finance app demo',
       brandColor: theme.colors.containerPositiveDefault,
       brandForeground: theme.colors.textOnPositiveDefault,
       brandMark: 'L',
-      tabItems: const <AgentDemoTabItem>[
-        AgentDemoTabItem('Wallet', CharcoalIcons.invoice),
-        AgentDemoTabItem('Activity', CharcoalIcons.history),
-        AgentDemoTabItem('Plan', CharcoalIcons.calendar),
-        AgentDemoTabItem('Profile', CharcoalIcons.personCircle),
+      tabItems: const <CharcoalTabItem<LumenDestination>>[
+        CharcoalTabItem<LumenDestination>(
+          icon: CharcoalIcon(CharcoalIcons.invoice),
+          key: ValueKey<String>('agent-wallet-nav-wallet'),
+          label: 'Wallet',
+          value: LumenDestination.wallet,
+        ),
+        CharcoalTabItem<LumenDestination>(
+          icon: CharcoalIcon(CharcoalIcons.history),
+          key: ValueKey<String>('agent-wallet-nav-activity'),
+          label: 'Activity',
+          value: LumenDestination.activity,
+        ),
+        CharcoalTabItem<LumenDestination>(
+          icon: CharcoalIcon(CharcoalIcons.calendar),
+          key: ValueKey<String>('agent-wallet-nav-plan'),
+          label: 'Plan',
+          value: LumenDestination.plan,
+        ),
+        CharcoalTabItem<LumenDestination>(
+          icon: CharcoalIcon(CharcoalIcons.personCircle),
+          key: ValueKey<String>('agent-wallet-nav-profile'),
+          label: 'Profile',
+          value: LumenDestination.profile,
+        ),
       ],
       content: _content(
         task,
@@ -191,7 +210,7 @@ final class _LumenDemoState extends State<LumenDemo> {
           : null,
       onTabSelected: _viewModel.selectDestination,
       pageKey: pageKey,
-      selectedTabIndex: destination.index,
+      selectedTab: destination,
       showTabBar: task == LumenTask.none,
       title: title,
       trailing: task == LumenTask.none

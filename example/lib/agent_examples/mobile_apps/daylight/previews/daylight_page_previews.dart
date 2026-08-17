@@ -63,10 +63,10 @@ DaylightViewModel createDaylightJourneyEmptyPreviewModel() =>
     DaylightViewModel()..openJourney();
 
 DaylightViewModel createDaylightInsightsPreviewModel() =>
-    DaylightViewModel()..selectDestination(DaylightDestination.insights.index);
+    DaylightViewModel()..selectDestination(DaylightDestination.insights);
 
 DaylightViewModel createDaylightProfilePreviewModel() =>
-    DaylightViewModel()..selectDestination(DaylightDestination.profile.index);
+    DaylightViewModel()..selectDestination(DaylightDestination.profile);
 
 DaylightViewModel createDaylightProfileQuietPreviewModel() =>
     createDaylightProfilePreviewModel()
