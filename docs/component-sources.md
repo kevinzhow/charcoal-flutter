@@ -93,10 +93,10 @@ not sufficient.
 
 The generated `text.font-family/sans` token preserves Charcoal Web's `Sarasa UI J` source value.
 Runtime availability is an implementation concern: Apple native targets use the system text/display
-families used by Charcoal SwiftUI, while Web and non-Apple targets use the package's Regular/Bold
-`CharcoalSans` assets. The assets are compact Sarasa UI J subsets, so a release build never depends
-on a font installed on the developer's computer or on renderer-specific missing-font behavior.
-Explicit application typography overrides bypass this mapping.
+families used by Charcoal SwiftUI, other native targets defer to Flutter's platform default, and Web
+uses `system-ui` followed by common Windows, Android, and Linux sans-serif families. Charcoal UI does
+not bundle font assets, so adopting the component package does not add a font payload to release
+builds. Explicit application typography overrides bypass this mapping.
 
 ## Icon dependency boundary
 

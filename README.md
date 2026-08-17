@@ -46,6 +46,11 @@ The API follows Flutter conventions instead of reproducing another platform's vi
 Icon-bearing controls accept regular widgets; applications can use `charcoal_icons` or inject
 product-specific artwork without coupling the two packages.
 
+`charcoal_ui` does not bundle font files. Its default typography uses the host system sans-serif:
+Web starts with `system-ui` and a cross-platform fallback stack, while native targets use Flutter's
+platform font selection. Applications that need a fixed brand font can override the generated
+font-family token through `CharcoalThemeData`.
+
 ## Architecture
 
 Component layout follows a four-stage relationship:

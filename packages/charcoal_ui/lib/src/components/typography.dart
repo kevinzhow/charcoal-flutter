@@ -71,6 +71,7 @@ TextStyle charcoalTypographyStyle(
   return TextStyle(
     color: color ?? theme.colors.textDefaultText1,
     fontFamily: monospace ? 'monospace' : font.family,
+    fontFamilyFallback: monospace ? null : font.familyFallback,
     fontSize: fontSize,
     fontWeight: switch (weight) {
       CharcoalTypographyWeight.regular => theme.typography.fontWeight.regular,
@@ -78,6 +79,5 @@ TextStyle charcoalTypographyStyle(
     },
     height: monospace ? null : lineHeight / fontSize,
     leadingDistribution: monospace ? null : TextLeadingDistribution.even,
-    package: monospace ? null : font.fontPackage,
   );
 }
