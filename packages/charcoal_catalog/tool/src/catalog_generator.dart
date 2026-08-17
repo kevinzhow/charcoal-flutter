@@ -138,10 +138,11 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
       .length;
   final exampleCount = components.where((component) => component.examples.isNotEmpty).length;
   final catalog = CharcoalCatalog(
-    schemaVersion: 3,
+    schemaVersion: 4,
     libraryName: 'charcoal_ui',
     libraryVersion: _packageVersion(File(p.join(uiRoot.path, 'pubspec.yaml'))),
     designRules: pageDesignRules,
+    designProcess: pageDesignProcess,
     patterns: componentPatterns,
     coverage: CharcoalCatalogCoverage(
       publicComponents: components.length,

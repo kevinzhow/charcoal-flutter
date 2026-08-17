@@ -111,6 +111,7 @@ void main() {
       expect(pattern['type'], 'pattern');
       expect((pattern['data']! as Map<String, Object?>)['id'], 'daily-checklist');
       expect(((rules['data']! as Map<String, Object?>)['rules']! as List<Object?>), hasLength(7));
+      expect(((rules['data']! as Map<String, Object?>)['process']! as List<Object?>), hasLength(5));
     });
 
     test('manifest declares mutations and response types', () async {
@@ -135,6 +136,7 @@ void main() {
           'pattern',
           'design-rules',
           'page-spec',
+          'app-review',
           'component',
           'token',
           'benchmark',

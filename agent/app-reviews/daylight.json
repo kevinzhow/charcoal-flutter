@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 4,
+  "libraryVersion": "0.1.0",
+  "application": {
+    "id": "daylight",
+    "title": "Daylight",
+    "entrySurfaceId": "today",
+    "supportedLayouts": ["compact", "standard"],
+    "stateInventories": [
+      {
+        "id": "destinations",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/daylight_models.dart",
+        "enumName": "DaylightDestination",
+        "mappings": [
+          { "value": "today", "surfaceId": "today" },
+          { "value": "journey", "surfaceId": "journey" },
+          { "value": "insights", "surfaceId": "insights" },
+          { "value": "profile", "surfaceId": "profile" }
+        ],
+        "ignored": []
+      },
+      {
+        "id": "tasks",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/daylight_models.dart",
+        "enumName": "DaylightTask",
+        "mappings": [
+          { "value": "planTomorrow", "surfaceId": "plan-tomorrow" },
+          { "value": "planSaved", "surfaceId": "plan-saved" }
+        ],
+        "ignored": [
+          { "value": "none", "reason": "The no-task state is resolved by DaylightDestination." }
+        ]
+      }
+    ],
+    "surfaces": [
+      {
+        "id": "today",
+        "title": "Today",
+        "kind": "destination",
+        "widget": "DaylightTodayPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/pages/daylight_today_page.dart",
+        "runtimeKey": "agent-habits-today-page",
+        "specPath": "agent/page-specs/daylight-core-flow.json",
+        "intentIds": ["complete-today", "understand-progress", "undo-mistake"],
+        "states": ["in-progress", "complete"],
+        "previews": [
+          { "name": "Today", "state": "in-progress", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Day complete", "state": "complete", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A user can understand today's small commitments, complete or reopen them, and see progress without pressure." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Today's progress and habit list lead; planning tomorrow appears only after completion." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Progress precedes the list and each habit keeps cue, optional streak, checkbox, and result together." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The daily-checklist pattern, DaylightHabitCard, AgentDemoStatus, and shared state owner are reused." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Incomplete, partial, complete, reopened, and streak-hidden states update independently without losing other progress." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Checkbox state and progress update immediately; complete feedback persists and every item can be undone." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "In-progress, complete, and dark previews cover Today; runtime completes, reopens, and recompletes a habit." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "journey",
+        "title": "Journey",
+        "kind": "destination",
+        "widget": "DaylightJourneyPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/pages/daylight_secondary_pages.dart",
+        "runtimeKey": "agent-habits-journey-page",
+        "specPath": "agent/page-specs/daylight-core-flow.json",
+        "intentIds": ["understand-progress", "plan-tomorrow"],
+        "states": ["history", "with-plan"],
+        "previews": [
+          { "name": "Journey", "state": "history", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Journey with tomorrow", "state": "with-plan", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A user can review recent consistency and confirm whether tomorrow has a saved plan." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The day-by-day timeline leads; Return to today is a clear secondary navigation action." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Each date and completion or planning state remain paired in chronological context." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoSurface provides a consistent adaptive timeline row and the app shell owns navigation." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "History and with-plan states derive from today's completion and the persisted tomorrow plan." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "A saved plan appears as a Tuesday row and Return to today updates the selected destination." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "History and planned previews cover both layouts; runtime arrives after saving and verifies Tuesday." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "insights",
+        "title": "Insights",
+        "kind": "destination",
+        "widget": "DaylightInsightsPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/pages/daylight_secondary_pages.dart",
+        "runtimeKey": "agent-habits-insights-page",
+        "specPath": "agent/page-specs/daylight-core-flow.json",
+        "intentIds": ["understand-progress"],
+        "states": ["content"],
+        "previews": [
+          { "name": "Insights", "state": "content", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A reflective user can notice useful patterns without turning them into another completion task." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Weekly completion leads; strongest rhythm and gentle consistency add supporting interpretation." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Each signal now has its own label and value rather than three identical status messages." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "A page-local insight composition reuses AgentDemoSurface because its contract does not repeat outside Insights." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "This read-only reflection surface derives current counts and exposes no unsupported actions." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "No mutation requires page feedback; destination selection communicates arrival and exit." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The production Insights page has both layout previews and runtime navigation coverage." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "profile",
+        "title": "Profile",
+        "kind": "destination",
+        "widget": "DaylightProfilePage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/pages/daylight_secondary_pages.dart",
+        "runtimeKey": "agent-habits-profile-page",
+        "specPath": "agent/page-specs/daylight-core-flow.json",
+        "intentIds": ["understand-progress", "plan-tomorrow"],
+        "states": ["default", "quiet"],
+        "previews": [
+          { "name": "Profile", "state": "default", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Profile quiet mode", "state": "quiet", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "Mina can choose how Daylight reminds and motivates her without changing committed habits." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Support style preferences lead; identity and weekly progress provide relevant context." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Each preference keeps explanation, switch, and persistent effect in one surface." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoProfileHeader and AgentDemoPreferenceSwitch reuse the shared profile and preference contracts." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Reminder and streak visibility are independent controlled states; disabling streaks leaves progress intact." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Adjacent status copy updates immediately and streak visibility changes on Today when the user returns." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Default and quiet profiles cover both layouts; runtime changes streak preference and verifies its status." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "plan-tomorrow",
+        "title": "Plan tomorrow",
+        "kind": "task",
+        "widget": "DaylightTomorrowPlanPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/pages/daylight_plan_pages.dart",
+        "runtimeKey": "agent-habits-tomorrow-plan-page",
+        "specPath": "agent/page-specs/daylight-core-flow.json",
+        "intentIds": ["plan-tomorrow"],
+        "states": ["editing"],
+        "previews": [
+          { "name": "Plan tomorrow", "state": "editing", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "After finishing today, a user can intentionally choose tomorrow's habits and reminder." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Habit selection leads to one Save action; the reminder is supporting configuration." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Tomorrow's date, each habit cue, selection, reminder, and selection count appear before saving." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "DaylightHabitCard, CharcoalSwitch, CharcoalButton, and the daily-checklist pattern reuse Today behavior." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Selected and unselected habits plus reminder state remain editable; zero selections disable saving." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Checkboxes update immediately and the Save label reports the selected count or recovery requirement." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The deterministic editing state covers both layouts and runtime saves the default three habits." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "plan-saved",
+        "title": "Tomorrow planned",
+        "kind": "result",
+        "widget": "DaylightPlanSavedPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/pages/daylight_plan_pages.dart",
+        "runtimeKey": "agent-habits-plan-saved-page",
+        "specPath": "agent/page-specs/daylight-core-flow.json",
+        "intentIds": ["plan-tomorrow", "understand-progress"],
+        "states": ["saved"],
+        "previews": [
+          { "name": "Plan saved", "state": "saved", "sourcePath": "example/lib/agent_examples/mobile_apps/daylight/previews/daylight_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A planner can confirm what was saved and continue to the place where tomorrow remains visible." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The saved plan result leads and Continue to journey is the single next action." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Habit count and reminder state appear in the result immediately before continuation." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoStatus and CharcoalButton provide the same durable-result language as other flows." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "The saved state persists tomorrow IDs and reminder choice before navigating to Journey." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Positive persistent feedback states the exact plan and Journey retains it as a dated row." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The saved-result preview covers both layouts and runtime verifies the persistent Tuesday plan." }
+          ],
+          "findings": []
+        }
+      }
+    ],
+    "transitions": [
+      { "from": "today", "to": "journey", "trigger": "Select Journey or the navigation-bar calendar" },
+      { "from": "today", "to": "insights", "trigger": "Select Insights" },
+      { "from": "today", "to": "profile", "trigger": "Select Profile" },
+      { "from": "today", "to": "plan-tomorrow", "trigger": "Complete today and choose Plan tomorrow" },
+      { "from": "plan-tomorrow", "to": "plan-saved", "trigger": "Save at least one habit" },
+      { "from": "plan-saved", "to": "journey", "trigger": "Continue to journey" },
+      { "from": "journey", "to": "today", "trigger": "Return to today" },
+      { "from": "insights", "to": "today", "trigger": "Select Today" },
+      { "from": "profile", "to": "today", "trigger": "Select Today" }
+    ],
+    "runtimeScenarios": [
+      {
+        "id": "complete-daylight-journey",
+        "testName": "Daylight completes a day and continues into the journey",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["today", "journey", "insights", "profile", "plan-tomorrow", "plan-saved"],
+        "verdict": "pass",
+        "evidence": "The executable widget journey completes and reopens habits, plans tomorrow, verifies the persistent Journey entry, and reviews Insights and Profile preferences."
+      }
+    ],
+    "finalReview": {
+      "verdict": "pass",
+      "reviewedSurfaceIds": ["today", "journey", "insights", "profile", "plan-tomorrow", "plan-saved"],
+      "checks": [
+        { "area": "navigation", "verdict": "pass", "evidence": "Four stable destinations remain selected while tomorrow planning is a focused task with explicit back and completion routes." },
+        { "area": "hierarchy", "verdict": "pass", "evidence": "Today's commitments lead completion, Journey leads history, Insights leads reflection, and Profile now leads support-style decisions." },
+        { "area": "product-copy", "verdict": "pass", "evidence": "Copy is calm, specific to real local behavior, and avoids developer-facing design rationale on secondary pages." },
+        { "area": "responsive", "verdict": "pass", "evidence": "Every meaningful state has compact and standard production previews; timeline rows adapt below 300 logical pixels." },
+        { "area": "accessibility", "verdict": "pass", "evidence": "Habits expose labels and checked state, switches expose controlled state, and all navigation and focused-task exits are labeled." }
+      ],
+      "openFindings": []
+    }
+  }
+}

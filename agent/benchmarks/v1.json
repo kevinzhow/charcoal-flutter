@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogSchemaVersion": 3,
+  "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "suite": "charcoal-agent-ready-v1",
   "cases": [

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "catalogSchemaVersion": 3,
+  "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "page": {
     "id": "lumen-core-flow",
     "title": "Lumen balance and safe transfer",
     "userContext": "A mobile wallet user checks available money and occasionally sends or adds funds; they need privacy, clear review, and a durable transaction result.",
-    "platforms": ["compact"],
+    "platforms": ["compact", "standard"],
     "assumptions": [
       "Transfers and top-ups are local simulations, so submission completes immediately after review.",
       "A transfer cannot exceed the visible available balance."

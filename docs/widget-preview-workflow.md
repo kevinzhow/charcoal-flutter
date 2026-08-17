@@ -1,6 +1,17 @@
 # Widget Preview workflow
 
-Charcoal UI uses Flutter Widget Previewer as the primary visual feedback loop. Work moves through component, page-state, and integrated-runtime gates in that order.
+Charcoal UI uses Flutter Widget Previewer as the primary visual feedback loop inside a five-gate process: surface inventory, component preview, page-state preview, integrated runtime, and app-wide final review.
+
+## 0. Surface inventory
+
+Before implementation, list every destination, detail, task, modal, sheet, overlay, and durable
+result. Map each surface to its production widget, Page Experience intent IDs, meaningful states,
+supported layouts, runtime key, and transitions. Every surface must be reachable from the entry;
+secondary destinations are not implicitly covered by a primary-flow review.
+
+Map the application's actual Dart destination, route, and task enums in `stateInventories`. A new
+enum value must map to a reviewed surface or be explicitly ignored with a structural reason, so CI
+detects route drift instead of trusting a hand-maintained list.
 
 ## Focus one preview
 
@@ -53,11 +64,31 @@ Launch the full Showcase only for behavior Previewer cannot establish:
 
 Widget tests remain the repeatable interaction regression layer. A Preview proves a state can be reviewed under a known constraint; it does not replace behavioral assertions or platform integration checks.
 
+Runtime scenarios in the App Experience Review reference the exact test file, test name, and keys
+for the surfaces they visit. Together they must visit the whole inventory so CI can reject stale
+claims when a page disappears from an executable journey.
+
+## 4. App-wide final review
+
+After integrated behavior is stable, revisit every inventoried surface against all seven design
+rules. Then review navigation, hierarchy, product copy, responsive behavior, and accessibility
+across the application. Record unresolved work as `changes-required`; it is valid review data but
+does not pass the release gate.
+
+```bash
+fvm dart run packages/charcoal_cli/bin/charcoal.dart app-review \
+  --validate agent/app-reviews/daylight.json
+```
+
+Only `ready: true` and exit code zero permit an Agent Ready claim.
+
 ## Change checklist
 
-1. Search the Catalog and decide whether the work belongs to a public component, shared application composition, or page-local composition.
-2. Add or update the smallest component Preview first.
-3. Add deterministic page-state Previews using the real state owner.
-4. Run static analysis and relevant widget tests.
-5. Start only the owning Previewer package, filter to the exact component or page-state target, and confirm it loads without runtime errors.
-6. Launch the full app only when the change crosses a runtime boundary listed above.
+1. Update the complete surface inventory and Page Experience intent mapping.
+2. Search the Catalog and decide whether the work belongs to a public component, shared application composition, or page-local composition.
+3. Add or update the smallest component Preview first.
+4. Add deterministic page-state Previews using the real state owner for every meaningful state and layout.
+5. Run static analysis and relevant widget tests.
+6. Start only the owning Previewer package, filter to the exact component or page-state target, and confirm it loads without runtime errors.
+7. Launch the full app only when the change crosses a runtime boundary listed above.
+8. Review every surface and validate the App Experience Review.

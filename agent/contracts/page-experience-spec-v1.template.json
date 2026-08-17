@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "catalogSchemaVersion": 3,
+  "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "page": {
     "id": "replace-with-stable-page-id",
     "title": "Replace with page title",
     "userContext": "Describe who is here, what brought them here, and relevant constraints.",
-    "platforms": ["compact", "large"],
+    "platforms": ["compact", "standard"],
     "assumptions": ["Replace with an evidence-backed assumption or remove it."],
     "intents": [
       {

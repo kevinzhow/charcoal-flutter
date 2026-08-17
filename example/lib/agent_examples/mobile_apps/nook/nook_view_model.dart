@@ -9,6 +9,7 @@ final class NookViewModel extends ChangeNotifier {
   final Set<String> _savedIds = <String>{};
   List<NookProduct> _confirmedProducts = const <NookProduct>[];
   String _query = '';
+  bool _receiptOpenedFromProfile = false;
   NookRoute _route = NookRoute.root;
   NookProduct? _selectedProduct;
 
@@ -21,7 +22,8 @@ final class NookViewModel extends ChangeNotifier {
   int get selectedBottomIndex => _destination.index;
   bool get showBottomNavigation => _route == NookRoute.root;
   bool get canGoBack =>
-      _route != NookRoute.root && _route != NookRoute.orderConfirmed;
+      _route != NookRoute.root &&
+      (_route != NookRoute.orderConfirmed || _receiptOpenedFromProfile);
 
   List<NookProduct> get visibleProducts {
     final normalized = _query.trim().toLowerCase();
@@ -134,6 +136,7 @@ final class NookViewModel extends ChangeNotifier {
     if (_bagIds.isEmpty) return;
     _confirmedProducts = bagProducts;
     _bagIds.clear();
+    _receiptOpenedFromProfile = false;
     _route = NookRoute.orderConfirmed;
     notifyListeners();
   }
@@ -143,6 +146,14 @@ final class NookViewModel extends ChangeNotifier {
     _route = NookRoute.root;
     _selectedProduct = null;
     _query = '';
+    _receiptOpenedFromProfile = false;
+    notifyListeners();
+  }
+
+  void openLatestOrder() {
+    if (_confirmedProducts.isEmpty) return;
+    _receiptOpenedFromProfile = true;
+    _route = NookRoute.orderConfirmed;
     notifyListeners();
   }
 
@@ -150,8 +161,10 @@ final class NookViewModel extends ChangeNotifier {
     _route = switch (_route) {
       NookRoute.checkoutReview => NookRoute.bag,
       NookRoute.product || NookRoute.bag => NookRoute.root,
+      NookRoute.orderConfirmed when _receiptOpenedFromProfile => NookRoute.root,
       NookRoute.root || NookRoute.orderConfirmed => _route,
     };
+    if (_route == NookRoute.root) _receiptOpenedFromProfile = false;
     if (_route == NookRoute.root) _selectedProduct = null;
     notifyListeners();
   }

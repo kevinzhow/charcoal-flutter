@@ -24,6 +24,22 @@ Widget daylightPlanSavedPreview() =>
 Widget daylightJourneyPreview() =>
     DaylightDemo(createViewModel: createDaylightJourneyPreviewModel);
 
+@AgentPagePreview(app: 'Daylight', state: 'Journey')
+Widget daylightJourneyEmptyPreview() =>
+    DaylightDemo(createViewModel: createDaylightJourneyEmptyPreviewModel);
+
+@AgentPagePreview(app: 'Daylight', state: 'Insights')
+Widget daylightInsightsPreview() =>
+    DaylightDemo(createViewModel: createDaylightInsightsPreviewModel);
+
+@AgentPagePreview(app: 'Daylight', state: 'Profile')
+Widget daylightProfilePreview() =>
+    DaylightDemo(createViewModel: createDaylightProfilePreviewModel);
+
+@AgentPagePreview(app: 'Daylight', state: 'Profile quiet mode')
+Widget daylightProfileQuietPreview() =>
+    DaylightDemo(createViewModel: createDaylightProfileQuietPreviewModel);
+
 DaylightViewModel createDaylightCompletePreviewModel() {
   final viewModel = DaylightViewModel();
   for (final habit in daylightHabits) {
@@ -42,3 +58,17 @@ DaylightViewModel createDaylightPlanSavedPreviewModel() =>
 
 DaylightViewModel createDaylightJourneyPreviewModel() =>
     createDaylightPlanSavedPreviewModel()..continueToJourney();
+
+DaylightViewModel createDaylightJourneyEmptyPreviewModel() =>
+    DaylightViewModel()..openJourney();
+
+DaylightViewModel createDaylightInsightsPreviewModel() =>
+    DaylightViewModel()..selectDestination(DaylightDestination.insights.index);
+
+DaylightViewModel createDaylightProfilePreviewModel() =>
+    DaylightViewModel()..selectDestination(DaylightDestination.profile.index);
+
+DaylightViewModel createDaylightProfileQuietPreviewModel() =>
+    createDaylightProfilePreviewModel()
+      ..setReminders(false)
+      ..setShowStreaks(false);

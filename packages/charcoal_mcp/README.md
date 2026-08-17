@@ -22,7 +22,7 @@ dart run charcoal_mcp:charcoal_mcp
 
 Available read-only tools:
 
-- `charcoal.get_design_rules`
+- `charcoal.get_design_rules` (seven design rules plus the five-stage verification process)
 - `charcoal.search_patterns`
 - `charcoal.get_pattern`
 - `charcoal.search_components`

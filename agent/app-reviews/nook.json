@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 4,
+  "libraryVersion": "0.1.0",
+  "application": {
+    "id": "nook",
+    "title": "Nook",
+    "entrySurfaceId": "shop",
+    "supportedLayouts": ["compact", "standard"],
+    "stateInventories": [
+      {
+        "id": "destinations",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/nook_models.dart",
+        "enumName": "NookDestination",
+        "mappings": [
+          { "value": "shop", "surfaceId": "shop" },
+          { "value": "search", "surfaceId": "search" },
+          { "value": "saved", "surfaceId": "saved" },
+          { "value": "profile", "surfaceId": "profile" }
+        ],
+        "ignored": []
+      },
+      {
+        "id": "routes",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/nook_models.dart",
+        "enumName": "NookRoute",
+        "mappings": [
+          { "value": "product", "surfaceId": "product-detail" },
+          { "value": "bag", "surfaceId": "bag" },
+          { "value": "checkoutReview", "surfaceId": "checkout-review" },
+          { "value": "orderConfirmed", "surfaceId": "order-receipt" }
+        ],
+        "ignored": [
+          { "value": "root", "reason": "The root state is resolved by NookDestination." }
+        ]
+      }
+    ],
+    "surfaces": [
+      {
+        "id": "shop",
+        "title": "Shop",
+        "kind": "destination",
+        "widget": "NookCollectionPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_collection_page.dart",
+        "runtimeKey": "agent-commerce-shop-page",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["discover-product"],
+        "states": ["browsing"],
+        "previews": [
+          { "name": "Collection", "state": "browsing", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A home shopper can discover a considered product and leave through its detail page." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The weekly edit and product grid lead; category and search refine that outcome." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Search, category, result heading, product name, subtitle, and price appear before product actions." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The searchable-collection pattern, CharcoalTextField, CharcoalSegmentedControl, and NookProductCard are reused." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Category, query, result, save, detail, and bag transitions are owned by NookViewModel." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Result headings, selected category, saved control state, and detail navigation acknowledge actions in context." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Collection previews cover compact, standard, and dark; the Nook runtime journey begins on this surface." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "search",
+        "title": "Search",
+        "kind": "destination",
+        "widget": "NookCollectionPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_collection_page.dart",
+        "runtimeKey": "agent-commerce-search-page",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["discover-product", "recover-discovery"],
+        "states": ["ready", "no-results"],
+        "previews": [
+          { "name": "Search", "state": "ready", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "No-result recovery", "state": "no-results", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A shopper can find a known object or recover from a query with no matches." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The labeled search field leads; browsing and recovery remain secondary." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "The retained query and result count sit immediately above results or the recovery message." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The searchable-collection and empty-state-recovery patterns share the collection owner instead of duplicating a page." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Ready, results, and no-results states preserve the query until the user clears it." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Live result counts acknowledge input; the no-results surface explains retention and offers Clear search." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Ready and recovery previews cover both layouts and the runtime test executes search recovery." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "saved",
+        "title": "Saved",
+        "kind": "destination",
+        "widget": "NookCollectionPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_collection_page.dart",
+        "runtimeKey": "agent-commerce-saved-page",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["discover-product"],
+        "states": ["empty", "content"],
+        "previews": [
+          { "name": "Saved empty", "state": "empty", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Saved product", "state": "content", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A returning shopper can revisit products intentionally saved for later." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Saved products lead; browsing is offered only as recovery when empty." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "The saved count precedes the grid and the empty explanation sits with its Browse products action." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "NookProductCard and the empty-state-recovery pattern reuse the same saved state as Shop." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Empty and content states transition through save toggles without a separate data owner." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Count, selected save state, and the contextual empty recovery persist after navigation." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Empty and populated previews cover both layouts and runtime revisits the saved product." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "profile",
+        "title": "Profile",
+        "kind": "destination",
+        "widget": "NookProfilePage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_profile_page.dart",
+        "runtimeKey": "agent-commerce-profile-page",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["discover-product", "complete-purchase"],
+        "states": ["before-purchase", "with-order"],
+        "previews": [
+          { "name": "Profile before purchase", "state": "before-purchase", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Profile with order", "state": "with-order", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "Mina can resume saved shopping, inspect the bag, or check the latest order." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Current shopping activity and latest order lead; identity is supporting context." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Counts are embedded in their actions and delivery state sits inside the latest-order surface." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoProfileHeader, AgentDemoEmptyState, AgentDemoStatus, and CharcoalButton compose the page without fake account rows." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Before-purchase and with-order states expose only actions backed by NookViewModel." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Saved and bag counts persist; order status remains visible and View order details opens the durable receipt." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Both profile states have compact and standard previews; runtime opens the receipt and returns to Profile." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "product-detail",
+        "title": "Product detail",
+        "kind": "detail",
+        "widget": "NookProductPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_product_page.dart",
+        "runtimeKey": "agent-commerce-product-detail",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["evaluate-product", "complete-purchase"],
+        "states": ["ready", "in-bag"],
+        "previews": [
+          { "name": "Product detail", "state": "ready", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Product in bag", "state": "in-bag", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A shopper can evaluate material, price, delivery timing, and then save or add the product." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Product evaluation precedes the primary Add to bag action; Save for later is secondary." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Product identity, price, provenance, and shipping appear directly before purchase actions." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "CharcoalButton selected states and AgentDemoStatus provide shared action and confirmation behavior." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Ready, saved, and in-bag states are controlled by the shared NookViewModel product ID sets." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Buttons become selected and an in-context persistent bag message explains the next step." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Ready and in-bag previews cover both layouts; runtime saves and adds the product." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "bag",
+        "title": "Bag",
+        "kind": "task",
+        "widget": "NookBagPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_checkout_pages.dart",
+        "runtimeKey": "agent-commerce-bag-page",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["complete-purchase"],
+        "states": ["empty", "ready"],
+        "previews": [
+          { "name": "Bag empty", "state": "empty", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Bag ready", "state": "ready", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A shopper can confirm chosen items, remove mistakes, and continue toward checkout." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Order review and total lead to Review checkout; item removal remains local and secondary." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Each removal action sits with its item and the total appears immediately before checkout." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoSurface, AgentDemoEmptyState, and the shared order-total composition support both states." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Empty and ready states respond to add and remove operations; empty checkout cannot proceed." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Removal updates the list and total immediately; empty recovery preserves Saved products." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Empty and ready previews cover both layouts; runtime reviews a populated bag." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "checkout-review",
+        "title": "Checkout review",
+        "kind": "task",
+        "widget": "NookCheckoutReviewPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_checkout_pages.dart",
+        "runtimeKey": "agent-commerce-checkout-review",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["complete-purchase"],
+        "states": ["review"],
+        "previews": [
+          { "name": "Checkout review", "state": "review", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A shopper can verify destination and cost before creating the simulated order." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Final review information leads directly to the single Place order action." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Recipient, address, delivery method, item count, and total are visible before confirmation." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The checkout uses shared status, total, and CharcoalButton compositions rather than new controls." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "The review is entered only with a non-empty bag; back returns to the editable bag." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Confirmation advances to a durable receipt and clears the bag atomically." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The review preview covers both layouts and runtime verifies forward and back flow ownership." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "order-receipt",
+        "title": "Order receipt",
+        "kind": "result",
+        "widget": "NookOrderConfirmedPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/nook/pages/nook_checkout_pages.dart",
+        "runtimeKey": "agent-commerce-order-confirmed",
+        "specPath": "agent/page-specs/nook-core-flow.json",
+        "intentIds": ["complete-purchase"],
+        "states": ["confirmed"],
+        "previews": [
+          { "name": "Order receipt", "state": "confirmed", "sourcePath": "example/lib/agent_examples/mobile_apps/nook/previews/nook_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A purchaser can confirm success, amount, item count, delivery state, and the next path." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Order confirmation is dominant; Continue shopping is the sole next action after reading." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Receipt ID and durable fulfillment summary appear before the continuation action." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoStatus and CharcoalButton express the durable result consistently." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "The confirmed product snapshot remains available after the bag is cleared and can reopen from Profile." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "A positive persistent receipt replaces transient-only success and Profile retains the order status." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Receipt previews cover both layouts; runtime reaches it from checkout and again from Profile." }
+          ],
+          "findings": []
+        }
+      }
+    ],
+    "transitions": [
+      { "from": "shop", "to": "search", "trigger": "Select Search" },
+      { "from": "shop", "to": "saved", "trigger": "Select Saved" },
+      { "from": "shop", "to": "profile", "trigger": "Select Profile" },
+      { "from": "shop", "to": "product-detail", "trigger": "Open a product" },
+      { "from": "shop", "to": "bag", "trigger": "Open the bag" },
+      { "from": "search", "to": "product-detail", "trigger": "Open a search result" },
+      { "from": "saved", "to": "product-detail", "trigger": "Open a saved product" },
+      { "from": "profile", "to": "saved", "trigger": "Open saved activity" },
+      { "from": "profile", "to": "bag", "trigger": "Open bag activity" },
+      { "from": "profile", "to": "order-receipt", "trigger": "View latest order" },
+      { "from": "product-detail", "to": "bag", "trigger": "Open bag after adding" },
+      { "from": "bag", "to": "checkout-review", "trigger": "Review checkout" },
+      { "from": "checkout-review", "to": "order-receipt", "trigger": "Place order" },
+      { "from": "order-receipt", "to": "shop", "trigger": "Continue shopping" }
+    ],
+    "runtimeScenarios": [
+      {
+        "id": "complete-shopping-journey",
+        "testName": "Nook completes search, category, save, bag, and checkout flows",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
+        "verdict": "pass",
+        "evidence": "The executable widget journey covers discovery recovery, save, purchase, receipt persistence, and return from the Profile order detail."
+      }
+    ],
+    "finalReview": {
+      "verdict": "pass",
+      "reviewedSurfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
+      "checks": [
+        { "area": "navigation", "verdict": "pass", "evidence": "Four stable destinations retain selection; focused tasks hide bottom navigation and use explicit back or completion paths." },
+        { "area": "hierarchy", "verdict": "pass", "evidence": "Discovery leads Shop and Search, purchase decisions lead task pages, and Profile now gives shopping activity a clear purpose." },
+        { "area": "product-copy", "verdict": "pass", "evidence": "All visible copy describes shopper outcomes and real simulation behavior; developer rationale was removed from Profile." },
+        { "area": "responsive", "verdict": "pass", "evidence": "Every inventoried state is backed by compact and standard production-page previews, with collection columns constraint-driven." },
+        { "area": "accessibility", "verdict": "pass", "evidence": "Navigation, search, product open/save, bag removal, and back actions have explicit labels or visible text and persistent state." }
+      ],
+      "openFindings": []
+    }
+  }
+}

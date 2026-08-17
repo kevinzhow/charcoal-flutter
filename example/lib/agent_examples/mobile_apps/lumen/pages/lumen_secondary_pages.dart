@@ -92,20 +92,42 @@ final class LumenProfilePage extends StatelessWidget {
         children: <Widget>[
           const AgentDemoPageHeading(
             eyebrow: 'PROFILE',
-            title: 'Mina’s Lumen',
-            description: 'Preferences stay here instead of opening an unrelated “More” action panel on Wallet.',
+            title: 'Privacy and everyday choices',
+            description: 'Control what is visible at a glance and how small card purchases are handled.',
           ),
           SizedBox(height: space.component30),
-          CharcoalSwitch(
-            label: const Text('Round up card purchases'),
-            onChanged: viewModel.setRoundUps,
-            value: viewModel.roundUps,
+          AgentDemoProfileHeader(
+            name: 'Mina Aoki',
+            context: 'Personal wallet · Linked bank •••• 2418',
+            summary: viewModel.balanceHidden
+                ? 'Wallet balance is private'
+                : 'Wallet balance is visible',
           ),
-          SizedBox(height: space.component25),
-          AgentDemoStatus(
-            message: viewModel.roundUps
-                ? 'Round ups are active for future card purchases.'
-                : 'Round ups are paused.',
+          SizedBox(height: space.component30),
+          const AgentDemoSectionHeading(title: 'Privacy'),
+          SizedBox(height: space.component20),
+          AgentDemoPreferenceSwitch(
+            key: const ValueKey<String>('agent-wallet-profile-balance'),
+            description: 'Keep the amount private when Wallet opens. You can still reveal it from the balance card.',
+            label: 'Hide balance by default',
+            onChanged: viewModel.setBalanceHidden,
+            status: viewModel.balanceHidden
+                ? 'Balance is hidden on Wallet'
+                : 'Balance is visible on Wallet',
+            value: viewModel.balanceHidden,
+          ),
+          SizedBox(height: space.component30),
+          const AgentDemoSectionHeading(title: 'Everyday automation'),
+          SizedBox(height: space.component20),
+          AgentDemoPreferenceSwitch(
+            key: const ValueKey<String>('agent-wallet-profile-round-ups'),
+            description: 'Set aside the small difference to the next ¥100 after future card purchases.',
+            label: 'Round up card purchases',
+            onChanged: viewModel.setRoundUps,
+            status: viewModel.roundUps
+                ? 'Round ups are active'
+                : 'Round ups are paused',
+            value: viewModel.roundUps,
           ),
         ],
       ),

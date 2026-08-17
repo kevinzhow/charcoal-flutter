@@ -6,6 +6,7 @@ final class DaylightViewModel extends ChangeNotifier {
   final Set<String> _completedIds = <String>{'stretch'};
   DaylightDestination _destination = DaylightDestination.today;
   bool _reminders = true;
+  bool _showStreaks = true;
   Set<String> _tomorrowHabitIds = <String>{};
   bool _tomorrowPlanned = false;
   bool _tomorrowReminder = true;
@@ -15,6 +16,7 @@ final class DaylightViewModel extends ChangeNotifier {
   DaylightDestination get destination => _destination;
   bool get isTodayComplete => completedCount == daylightHabits.length;
   bool get reminders => _reminders;
+  bool get showStreaks => _showStreaks;
   int get selectedBottomIndex => _destination.index;
   bool get showBottomNavigation => _task == DaylightTask.none;
   DaylightTask get task => _task;
@@ -95,7 +97,14 @@ final class DaylightViewModel extends ChangeNotifier {
   }
 
   void setReminders(bool value) {
+    if (_reminders == value) return;
     _reminders = value;
+    notifyListeners();
+  }
+
+  void setShowStreaks(bool value) {
+    if (_showStreaks == value) return;
+    _showStreaks = value;
     notifyListeners();
   }
 

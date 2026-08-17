@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 4,
+  "libraryVersion": "0.1.0",
+  "application": {
+    "id": "replace-with-stable-app-id",
+    "title": "Replace with app title",
+    "entrySurfaceId": "home",
+    "supportedLayouts": ["compact", "standard"],
+    "stateInventories": [
+      {
+        "id": "app-destinations",
+        "sourcePath": "lib/app_destination.dart",
+        "enumName": "AppDestination",
+        "mappings": [
+          { "value": "home", "surfaceId": "home" }
+        ],
+        "ignored": []
+      }
+    ],
+    "surfaces": [
+      {
+        "id": "home",
+        "title": "Home",
+        "kind": "destination",
+        "widget": "ReplaceWithHomePage",
+        "sourcePath": "lib/home_page.dart",
+        "runtimeKey": "replace-with-home-runtime-key",
+        "specPath": "agent/page-specs/home.json",
+        "intentIds": ["primary-outcome"],
+        "states": ["content"],
+        "previews": [
+          {
+            "name": "Home",
+            "state": "content",
+            "sourcePath": "lib/previews/home_page_previews.dart",
+            "layouts": ["compact", "standard"]
+          }
+        ],
+        "review": {
+          "verdict": "changes-required",
+          "rules": [
+            { "id": "user-intent", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." },
+            { "id": "intent-priority", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." },
+            { "id": "information-placement", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." },
+            { "id": "necessary-reuse", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." },
+            { "id": "interaction-states", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." },
+            { "id": "interaction-feedback", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." },
+            { "id": "experience-expectations", "verdict": "changes-required", "evidence": "Replace with page-specific evidence." }
+          ],
+          "findings": ["Replace with a concrete finding or remove it after resolution."]
+        }
+      }
+    ],
+    "transitions": [],
+    "runtimeScenarios": [
+      {
+        "id": "primary-journey",
+        "testName": "Replace with the exact executable test name",
+        "sourcePath": "test/app_experience_test.dart",
+        "surfaceIds": ["home"],
+        "verdict": "changes-required",
+        "evidence": "Replace with the runtime behavior verified by the executable test."
+      }
+    ],
+    "finalReview": {
+      "verdict": "changes-required",
+      "reviewedSurfaceIds": ["home"],
+      "checks": [
+        { "area": "navigation", "verdict": "changes-required", "evidence": "Replace with cross-surface evidence." },
+        { "area": "hierarchy", "verdict": "changes-required", "evidence": "Replace with cross-surface evidence." },
+        { "area": "product-copy", "verdict": "changes-required", "evidence": "Replace with cross-surface evidence." },
+        { "area": "responsive", "verdict": "changes-required", "evidence": "Replace with cross-surface evidence." },
+        { "area": "accessibility", "verdict": "changes-required", "evidence": "Replace with cross-surface evidence." }
+      ],
+      "openFindings": []
+    }
+  }
+}

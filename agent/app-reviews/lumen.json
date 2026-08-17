@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 4,
+  "libraryVersion": "0.1.0",
+  "application": {
+    "id": "lumen",
+    "title": "Lumen",
+    "entrySurfaceId": "wallet",
+    "supportedLayouts": ["compact", "standard"],
+    "stateInventories": [
+      {
+        "id": "destinations",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/lumen_models.dart",
+        "enumName": "LumenDestination",
+        "mappings": [
+          { "value": "wallet", "surfaceId": "wallet" },
+          { "value": "activity", "surfaceId": "activity" },
+          { "value": "plan", "surfaceId": "plan" },
+          { "value": "profile", "surfaceId": "profile" }
+        ],
+        "ignored": []
+      },
+      {
+        "id": "tasks",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/lumen_models.dart",
+        "enumName": "LumenTask",
+        "mappings": [
+          { "value": "receive", "surfaceId": "receive" },
+          { "value": "sendEdit", "surfaceId": "send-entry" },
+          { "value": "sendReview", "surfaceId": "transfer-review" },
+          { "value": "sendConfirmed", "surfaceId": "transfer-receipt" },
+          { "value": "topUpEdit", "surfaceId": "top-up" },
+          { "value": "topUpConfirmed", "surfaceId": "top-up-receipt" }
+        ],
+        "ignored": [
+          { "value": "none", "reason": "The no-task state is resolved by LumenDestination." }
+        ]
+      }
+    ],
+    "surfaces": [
+      {
+        "id": "wallet",
+        "title": "Wallet",
+        "kind": "destination",
+        "widget": "LumenWalletPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_wallet_page.dart",
+        "runtimeKey": "agent-wallet-home-page",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["understand-balance", "protect-privacy", "send-safely", "add-funds"],
+        "states": ["visible", "private"],
+        "previews": [
+          { "name": "Wallet", "state": "visible", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Wallet balance hidden", "state": "private", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "Mina can understand available money, protect it at a glance, and start receiving, sending, or adding funds." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Balance and recent movement lead; money actions are visible but remain secondary to orientation." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Balance privacy sits on the balance card and recent activity follows the action group." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "LumenBalanceCard, LumenQuickAction, LumenActivityRow, and the adaptive-app-shell pattern own repeated behavior." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Visible and private balance states persist through the shared view model; each quick action opens one focused task." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "The eye action immediately updates amount and semantics; completed money actions update both balance and activity." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Visible, private, and dark previews cover Wallet; the runtime journey exercises privacy and every money task." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "activity",
+        "title": "Activity",
+        "kind": "destination",
+        "widget": "LumenActivityPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_secondary_pages.dart",
+        "runtimeKey": "agent-wallet-activity-page",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["understand-balance", "recover-transfer"],
+        "states": ["content"],
+        "previews": [
+          { "name": "Activity", "state": "content", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A wallet owner can verify what changed the balance and find the durable result of a transfer or top-up." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Chronological movement is the only primary content; navigation provides escape." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Payee, time, transaction kind, and signed amount remain together in each activity row." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "LumenActivityRow is shared with Wallet and reflects the same persistent activity collection." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Confirmed transfers and top-ups insert at the beginning without losing prior entries." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Receipts link to Activity and the newly inserted row remains visible after task feedback ends." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The production Activity page is previewed at both layouts and runtime verifies the sent transfer row." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "plan",
+        "title": "Plan",
+        "kind": "destination",
+        "widget": "LumenPlanPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_secondary_pages.dart",
+        "runtimeKey": "agent-wallet-plan-page",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["understand-balance"],
+        "states": ["content"],
+        "previews": [
+          { "name": "Plan", "state": "content", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A budget-aware user can understand remaining flexible money and the categories shaping it." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The remaining total leads and category balances provide supporting detail." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Monthly period, budget total, and category remainder are visible in one scan." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoStatus and AgentDemoSurface provide the shared summary and category-row language." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "This simulation is intentionally read-only and exposes no unsupported editing state." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "No page-local mutation exists; navigation selection gives the required arrival and exit feedback." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The production Plan page has compact and standard previews and is visited by the runtime navigation sweep." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "profile",
+        "title": "Profile",
+        "kind": "destination",
+        "widget": "LumenProfilePage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_secondary_pages.dart",
+        "runtimeKey": "agent-wallet-profile-page",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["protect-privacy", "understand-balance"],
+        "states": ["default", "private"],
+        "previews": [
+          { "name": "Profile", "state": "default", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Profile private", "state": "private", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "Mina can control wallet privacy and everyday card automation in one purposeful settings destination." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Privacy appears before round ups; identity and linked-bank context support both decisions." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Each preference keeps its explanation, switch, and persistent current result inside one surface." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoProfileHeader and AgentDemoPreferenceSwitch share identity and preference behavior with other demo profiles." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Balance visibility and round ups are independent controlled values with default and changed states." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Each switch updates an adjacent persistent status and balance privacy is reflected when returning to Wallet." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Default and private profiles have both layout previews; runtime changes privacy and verifies the resulting state." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "receive",
+        "title": "Receive money",
+        "kind": "task",
+        "widget": "LumenReceivePage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_task_pages.dart",
+        "runtimeKey": "agent-wallet-receive-page",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["add-funds"],
+        "states": ["ready", "copied"],
+        "previews": [
+          { "name": "Receive link", "state": "ready", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Receive link copied", "state": "copied", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A user can share a safe payment destination without exposing bank account details." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Payment destination context precedes the single Copy payment link action." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "The recipient identity, link, and arrival behavior are visible before copying." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoStatus and CharcoalButton compose the focused copy task." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Ready and copied states reset each time the task starts; back returns to Wallet." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "The action label persistently changes to Payment link copied in the seeded local simulation." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Ready and copied previews cover both layouts; runtime copies and returns through the task back action." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "send-entry",
+        "title": "Send money",
+        "kind": "task",
+        "widget": "LumenSendEditPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_task_pages.dart",
+        "runtimeKey": "agent-wallet-send-edit",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["send-safely", "recover-transfer"],
+        "states": ["ready", "invalid"],
+        "previews": [
+          { "name": "Transfer entry", "state": "ready", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] },
+          { "name": "Transfer validation", "state": "invalid", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A sender can enter a recipient and affordable amount, then recover from invalid input without losing the draft." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Recipient and amount entry lead to Review transfer; current balance supports the decision." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Visible labels, available balance, and field-specific errors stay next to the values being corrected." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The financial-action-flow pattern and CharcoalTextField validation are reused for the transaction." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Ready, editing, invalid, and review transitions preserve valid values and clear errors as fields change." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Invalid fields show actionable inline errors and the draft remains available for retry." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Ready and over-balance previews cover both layouts; runtime corrects the error and continues." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "transfer-review",
+        "title": "Transfer review",
+        "kind": "task",
+        "widget": "LumenSendReviewPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_task_pages.dart",
+        "runtimeKey": "agent-wallet-send-review",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["send-safely"],
+        "states": ["review"],
+        "previews": [
+          { "name": "Transfer review", "state": "review", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A sender can verify recipient, amount, and resulting balance before committing money." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Transaction facts lead and the amount-specific Send action is the only primary control." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Recipient, amount, and balance after are grouped directly above confirmation." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The financial-action-flow review pattern uses shared surface and button primitives." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Back returns to the retained draft; confirm can proceed only from a validated review." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Confirmation atomically changes balance, records Activity, and advances to the receipt." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The review page covers both layouts in Previewer and the runtime journey confirms it once." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "transfer-receipt",
+        "title": "Transfer receipt",
+        "kind": "result",
+        "widget": "LumenSendConfirmedPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_task_pages.dart",
+        "runtimeKey": "agent-wallet-send-confirmed",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["send-safely", "understand-balance"],
+        "states": ["confirmed"],
+        "previews": [
+          { "name": "Transfer receipt", "state": "confirmed", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A sender can confirm exactly what was sent and choose the durable record or return to Wallet." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The receipt leads, View activity is the primary next step, and Done is secondary." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Receipt ID, amount, and recipient are visible before navigation choices." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "AgentDemoStatus and CharcoalButton express the transaction result consistently." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "The confirmed snapshot remains available until either explicit completion path is chosen." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Positive receipt feedback is reinforced by the updated Wallet balance and Activity row." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "Receipt previews cover both layouts and runtime follows View activity to the persistent record." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "top-up",
+        "title": "Top up",
+        "kind": "task",
+        "widget": "LumenTopUpPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_task_pages.dart",
+        "runtimeKey": "agent-wallet-top-up",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["add-funds"],
+        "states": ["selection"],
+        "previews": [
+          { "name": "Top up selection", "state": "selection", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A user can add a known amount from the verified linked bank." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "Amount selection leads and the amount-specific Add action confirms the choice." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Linked-bank identity is shown before amount options and confirmation." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The financial-action-flow pattern reuses CharcoalSegmentedControl and CharcoalButton." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "A controlled selected amount is always valid; back cancels without changing balance." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "Segment selection is immediate and confirmation advances to a persistent balance result." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The selection state covers both layouts and runtime confirms the default amount." }
+          ],
+          "findings": []
+        }
+      },
+      {
+        "id": "top-up-receipt",
+        "title": "Top-up receipt",
+        "kind": "result",
+        "widget": "LumenTopUpConfirmedPage",
+        "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/pages/lumen_task_pages.dart",
+        "runtimeKey": "agent-wallet-top-up-confirmed",
+        "specPath": "agent/page-specs/lumen-core-flow.json",
+        "intentIds": ["add-funds", "understand-balance"],
+        "states": ["confirmed"],
+        "previews": [
+          { "name": "Top up receipt", "state": "confirmed", "sourcePath": "example/lib/agent_examples/mobile_apps/lumen/previews/lumen_page_previews.dart", "layouts": ["compact", "standard"] }
+        ],
+        "review": {
+          "verdict": "pass",
+          "rules": [
+            { "id": "user-intent", "verdict": "pass", "evidence": "A user can confirm the added amount and resulting available balance." },
+            { "id": "intent-priority", "verdict": "pass", "evidence": "The durable result leads and Done is the single completion action." },
+            { "id": "information-placement", "verdict": "pass", "evidence": "Added amount and new balance appear together before leaving the result." },
+            { "id": "necessary-reuse", "verdict": "pass", "evidence": "The shared positive status and button composition matches other durable results." },
+            { "id": "interaction-states", "verdict": "pass", "evidence": "Confirmation updates balance and Activity before rendering this receipt." },
+            { "id": "interaction-feedback", "verdict": "pass", "evidence": "The positive receipt persists until Done and its transaction remains in Activity." },
+            { "id": "experience-expectations", "verdict": "pass", "evidence": "The receipt has compact and standard previews and runtime verifies the updated Wallet amount." }
+          ],
+          "findings": []
+        }
+      }
+    ],
+    "transitions": [
+      { "from": "wallet", "to": "activity", "trigger": "Select Activity" },
+      { "from": "wallet", "to": "plan", "trigger": "Select Plan" },
+      { "from": "wallet", "to": "profile", "trigger": "Select Profile or More" },
+      { "from": "wallet", "to": "receive", "trigger": "Choose Receive" },
+      { "from": "wallet", "to": "send-entry", "trigger": "Choose Send" },
+      { "from": "wallet", "to": "top-up", "trigger": "Choose Top up" },
+      { "from": "receive", "to": "wallet", "trigger": "Go back" },
+      { "from": "send-entry", "to": "transfer-review", "trigger": "Submit a valid transfer draft" },
+      { "from": "transfer-review", "to": "transfer-receipt", "trigger": "Confirm transfer" },
+      { "from": "transfer-receipt", "to": "activity", "trigger": "View activity" },
+      { "from": "transfer-receipt", "to": "wallet", "trigger": "Choose Done" },
+      { "from": "top-up", "to": "top-up-receipt", "trigger": "Confirm top up" },
+      { "from": "top-up-receipt", "to": "wallet", "trigger": "Choose Done" },
+      { "from": "activity", "to": "wallet", "trigger": "Select Wallet" },
+      { "from": "plan", "to": "wallet", "trigger": "Select Wallet" },
+      { "from": "profile", "to": "wallet", "trigger": "Select Wallet" }
+    ],
+    "runtimeScenarios": [
+      {
+        "id": "complete-wallet-journey",
+        "testName": "Lumen completes privacy, top-up, and transfer flows",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["wallet", "activity", "plan", "profile", "receive", "send-entry", "transfer-review", "transfer-receipt", "top-up", "top-up-receipt"],
+        "verdict": "pass",
+        "evidence": "The executable widget journey covers balance privacy, receive-copy feedback, top-up persistence, transfer recovery and receipt, Activity, Plan, and Profile."
+      }
+    ],
+    "finalReview": {
+      "verdict": "pass",
+      "reviewedSurfaceIds": ["wallet", "activity", "plan", "profile", "receive", "send-entry", "transfer-review", "transfer-receipt", "top-up", "top-up-receipt"],
+      "checks": [
+        { "area": "navigation", "verdict": "pass", "evidence": "Stable destinations remain selected; financial tasks hide destination navigation and expose explicit back or completion paths." },
+        { "area": "hierarchy", "verdict": "pass", "evidence": "Balance orientation leads Wallet, transaction facts lead money tasks, and Profile now centers privacy and automation decisions." },
+        { "area": "product-copy", "verdict": "pass", "evidence": "Copy states the simulated financial effect and never promises an unavailable service; developer rationale was removed from Profile." },
+        { "area": "responsive", "verdict": "pass", "evidence": "Every surface state has compact and standard production previews with fields, rows, and review values allowed to adapt." },
+        { "area": "accessibility", "verdict": "pass", "evidence": "Balance visibility, quick actions, fields, segmented amounts, switches, navigation, and back actions have explicit labels and controlled state." }
+      ],
+      "openFindings": []
+    }
+  }
+}

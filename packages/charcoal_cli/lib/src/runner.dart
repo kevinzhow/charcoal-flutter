@@ -3,6 +3,7 @@ import 'package:args/command_runner.dart';
 import 'package:io/io.dart';
 
 import 'commands/agent_command.dart';
+import 'commands/app_review_command.dart';
 import 'commands/benchmark_command.dart';
 import 'commands/benchmark_run_command.dart';
 import 'commands/component_command.dart';
@@ -34,6 +35,7 @@ final class CharcoalCommandRunner extends CommandRunner<int> {
     addCommand(PatternCommand(environment));
     addCommand(DesignRulesCommand(environment));
     addCommand(PageSpecCommand(environment));
+    addCommand(AppReviewCommand(environment));
     addCommand(ComponentCommand(environment));
     addCommand(TokenCommand(environment));
     addCommand(BenchmarkCommand(environment));

@@ -9,7 +9,7 @@ void main() {
       final names = charcoalCatalog.components.map((component) => component.name).toList();
       final sortedNames = names.toList()..sort();
 
-      expect(charcoalCatalog.schemaVersion, 3);
+      expect(charcoalCatalog.schemaVersion, 4);
       expect(charcoalCatalog.coverage.publicComponents, names.length);
       expect(names, sortedNames);
       expect(names.toSet(), hasLength(names.length));
@@ -18,6 +18,8 @@ void main() {
 
     test('exposes page-design rules and reviewed composition patterns', () {
       expect(charcoalCatalog.designRules, hasLength(7));
+      expect(charcoalCatalog.designProcess, hasLength(5));
+      expect(charcoalCatalog.designProcess.last.id, 'app-wide-review');
       expect(
         charcoalCatalog.designRules.map((rule) => rule.order),
         orderedEquals(<int>[1, 2, 3, 4, 5, 6, 7]),

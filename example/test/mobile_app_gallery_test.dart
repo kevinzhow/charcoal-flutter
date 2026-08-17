@@ -108,6 +108,11 @@ void main() {
     (tester) async {
       await _pumpSimulator(tester, AgentMobileApp.commerce);
 
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-shop-page')),
+        findsOneWidget,
+      );
+
       final search = find.descendant(
         of: find.byKey(const ValueKey<String>('agent-commerce-search')),
         matching: find.byType(EditableText),
@@ -115,6 +120,15 @@ void main() {
       await _tapVisible(tester, find.text('Home'));
       expect(find.text('Paper lamp'), findsOneWidget);
       expect(find.text('Ripple cup'), findsNothing);
+
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey<String>('agent-commerce-nav-search')),
+      );
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-search-page')),
+        findsOneWidget,
+      );
 
       await tester.enterText(search, 'moon');
       await tester.pump();
@@ -171,12 +185,36 @@ void main() {
         tester,
         find.byKey(const ValueKey<String>('agent-commerce-nav-saved')),
       );
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-saved-page')),
+        findsOneWidget,
+      );
       expect(find.text('Paper lamp'), findsOneWidget);
       await _tapVisible(
         tester,
         find.byKey(const ValueKey<String>('agent-commerce-nav-profile')),
       );
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-profile-page')),
+        findsOneWidget,
+      );
       expect(find.textContaining('NK-817'), findsOneWidget);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey<String>('agent-commerce-view-latest-order')),
+      );
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-order-confirmed')),
+        findsOneWidget,
+      );
+      await _tapVisible(
+        tester,
+        find.bySemanticsLabel('Back from Order confirmed'),
+      );
+      expect(
+        find.byKey(const ValueKey<String>('agent-commerce-profile-page')),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
     },
   );
@@ -185,6 +223,23 @@ void main() {
     tester,
   ) async {
     await _pumpSimulator(tester, AgentMobileApp.wallet);
+
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-home-page')),
+      findsOneWidget,
+    );
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-wallet-action-receive')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-receive-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(tester, find.text('Copy payment link'));
+    expect(find.text('Payment link copied'), findsOneWidget);
+    await _tapVisible(tester, find.bySemanticsLabel('Back from Receive money'));
 
     final visibility = find.byKey(
       const ValueKey<String>('agent-wallet-visibility'),
@@ -196,7 +251,15 @@ void main() {
       tester,
       find.byKey(const ValueKey<String>('agent-wallet-action-topUp')),
     );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-top-up')),
+      findsOneWidget,
+    );
     await _tapVisible(tester, find.text('Add ¥ 10,000'));
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-top-up-confirmed')),
+      findsOneWidget,
+    );
     await _tapVisible(tester, find.text('Done'));
     await _tapVisible(tester, visibility);
     expect(find.text('¥ 1,294,600'), findsOneWidget);
@@ -204,6 +267,10 @@ void main() {
     await _tapVisible(
       tester,
       find.byKey(const ValueKey<String>('agent-wallet-action-send')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-send-edit')),
+      findsOneWidget,
     );
     await tester.enterText(
       find.descendant(
@@ -244,10 +311,45 @@ void main() {
       tester,
       find.byKey(const ValueKey<String>('agent-wallet-confirm-transfer')),
     );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-send-confirmed')),
+      findsOneWidget,
+    );
     expect(find.text('¥ 8,000 was sent to Hana.'), findsOneWidget);
 
     await _tapVisible(tester, find.text('View activity'));
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-activity-page')),
+      findsOneWidget,
+    );
     expect(find.text('To Hana'), findsOneWidget);
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-wallet-nav-plan')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-plan-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-wallet-nav-profile')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-profile-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.descendant(
+        of: find.byKey(
+          const ValueKey<String>('agent-wallet-profile-balance'),
+        ),
+        matching: find.byType(CharcoalSwitch),
+      ),
+    );
+    expect(find.text('Balance is hidden on Wallet'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -255,6 +357,11 @@ void main() {
     tester,
   ) async {
     await _pumpSimulator(tester, AgentMobileApp.habits);
+
+    expect(
+      find.byKey(const ValueKey<String>('agent-habits-today-page')),
+      findsOneWidget,
+    );
 
     final walkRow = find.byKey(const ValueKey<String>('agent-habit-walk-row'));
     final walkCheckbox = find.descendant(
@@ -302,6 +409,33 @@ void main() {
     expect(find.text('Monday'), findsOneWidget);
     expect(find.text('Tuesday'), findsOneWidget);
     expect(find.text('Planned · 3 habits'), findsOneWidget);
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-habits-nav-insights')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-habits-insights-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-habits-nav-profile')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-habits-profile-page')),
+      findsOneWidget,
+    );
+    await _tapVisible(
+      tester,
+      find.descendant(
+        of: find.byKey(
+          const ValueKey<String>('agent-habits-profile-streaks'),
+        ),
+        matching: find.byType(CharcoalSwitch),
+      ),
+    );
+    expect(find.text('Today shows cues without streaks'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

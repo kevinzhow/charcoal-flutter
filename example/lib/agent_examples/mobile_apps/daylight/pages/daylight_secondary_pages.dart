@@ -106,14 +106,20 @@ final class DaylightInsightsPage extends StatelessWidget {
             description: 'Signals support reflection; they never compete with today’s checklist.',
           ),
           SizedBox(height: space.component30),
-          AgentDemoStatus(
-            message:
-                'This week: ${14 + viewModel.completedCount} habits completed',
+          _DaylightInsight(
+            label: 'This week',
+            value: '${14 + viewModel.completedCount} habits completed',
           ),
           SizedBox(height: space.component20),
-          const AgentDemoStatus(message: 'Strongest rhythm: Morning stretch'),
+          const _DaylightInsight(
+            label: 'Strongest rhythm',
+            value: 'Morning stretch · 6 of 7 days',
+          ),
           SizedBox(height: space.component20),
-          const AgentDemoStatus(message: 'Kindest streak: 7 gentle days'),
+          const _DaylightInsight(
+            label: 'Gentle consistency',
+            value: '7 days with at least one small step',
+          ),
         ],
       ),
     );
@@ -135,20 +141,75 @@ final class DaylightProfilePage extends StatelessWidget {
         children: <Widget>[
           const AgentDemoPageHeading(
             eyebrow: 'PROFILE',
-            title: 'Make Daylight feel like yours',
-            description: 'Reminder preferences live here, away from the daily completion flow.',
+            title: 'Shape your daily support',
+            description: 'Choose how Daylight encourages you without changing the habits you committed to.',
           ),
           SizedBox(height: space.component30),
-          CharcoalSwitch(
-            label: const Text('Gentle evening reminder'),
+          AgentDemoProfileHeader(
+            name: 'Mina Aoki',
+            context: 'Daylight journey · Week 4',
+            summary:
+                '${14 + viewModel.completedCount} habits completed this week',
+          ),
+          SizedBox(height: space.component30),
+          const AgentDemoSectionHeading(title: 'Support style'),
+          SizedBox(height: space.component20),
+          AgentDemoPreferenceSwitch(
+            key: const ValueKey<String>('agent-habits-profile-reminders'),
+            description: 'Receive one calm prompt when today still has an unfinished habit.',
+            label: 'Gentle evening reminder',
             onChanged: viewModel.setReminders,
+            status: viewModel.reminders
+                ? 'Reminder scheduled for 8:30 PM'
+                : 'Evening reminder is paused',
             value: viewModel.reminders,
           ),
-          SizedBox(height: space.component25),
-          AgentDemoStatus(
-            message: viewModel.reminders
-                ? 'Evening reminders arrive at 8:30 PM.'
-                : 'Evening reminders are paused.',
+          SizedBox(height: space.component20),
+          AgentDemoPreferenceSwitch(
+            key: const ValueKey<String>('agent-habits-profile-streaks'),
+            description: 'Show recent consistency under each habit. Turning this off keeps progress counts intact.',
+            label: 'Show streaks on Today',
+            onChanged: viewModel.setShowStreaks,
+            status: viewModel.showStreaks
+                ? 'Streak context is visible'
+                : 'Today shows cues without streaks',
+            value: viewModel.showStreaks,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+final class _DaylightInsight extends StatelessWidget {
+  const _DaylightInsight({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return AgentDemoSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label.toUpperCase(),
+            style: theme.textStyles.captionSmall.copyWith(
+              color: theme.colors.textTertiaryDefault,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.7,
+            ),
+          ),
+          SizedBox(height: space.component10),
+          Text(
+            value,
+            style: theme.textStyles.captionMediumBold.copyWith(
+              color: theme.colors.textDefault,
+            ),
           ),
         ],
       ),

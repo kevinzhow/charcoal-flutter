@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://charcoal-flutter.dev/schemas/app-experience-review-v1.json",
+  "title": "Charcoal App Experience Review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogSchemaVersion", "libraryVersion", "application"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "catalogSchemaVersion": { "type": "integer", "minimum": 1 },
+    "libraryVersion": { "$ref": "#/$defs/nonEmptyString" },
+    "application": { "$ref": "#/$defs/application" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "stringList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "verdict": { "type": "string", "enum": ["pass", "changes-required"] },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "entrySurfaceId",
+        "supportedLayouts",
+        "stateInventories",
+        "surfaces",
+        "transitions",
+        "runtimeScenarios",
+        "finalReview"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "entrySurfaceId": { "$ref": "#/$defs/nonEmptyString" },
+        "supportedLayouts": { "$ref": "#/$defs/stringList" },
+        "stateInventories": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stateInventory" }
+        },
+        "surfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/surface" }
+        },
+        "transitions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/transition" }
+        },
+        "runtimeScenarios": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/runtimeScenario" }
+        },
+        "finalReview": { "$ref": "#/$defs/finalReview" }
+      }
+    },
+    "stateInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sourcePath", "enumName", "mappings", "ignored"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "sourcePath": { "$ref": "#/$defs/nonEmptyString" },
+        "enumName": { "$ref": "#/$defs/nonEmptyString" },
+        "mappings": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stateMapping" }
+        },
+        "ignored": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ignoredState" }
+        }
+      }
+    },
+    "stateMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "surfaceId"],
+      "properties": {
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "surfaceId": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "ignoredState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "reason"],
+      "properties": {
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "widget",
+        "sourcePath",
+        "runtimeKey",
+        "specPath",
+        "intentIds",
+        "states",
+        "previews",
+        "review"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "type": "string",
+          "enum": ["destination", "detail", "task", "modal", "sheet", "overlay", "result"]
+        },
+        "widget": { "$ref": "#/$defs/nonEmptyString" },
+        "sourcePath": { "$ref": "#/$defs/nonEmptyString" },
+        "runtimeKey": { "$ref": "#/$defs/nonEmptyString" },
+        "specPath": { "$ref": "#/$defs/nonEmptyString" },
+        "intentIds": { "$ref": "#/$defs/stringList" },
+        "states": { "$ref": "#/$defs/stringList" },
+        "previews": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/preview" }
+        },
+        "review": { "$ref": "#/$defs/surfaceReview" }
+      }
+    },
+    "preview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "state", "sourcePath", "layouts"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "state": { "$ref": "#/$defs/nonEmptyString" },
+        "sourcePath": { "$ref": "#/$defs/nonEmptyString" },
+        "layouts": { "$ref": "#/$defs/stringList" }
+      }
+    },
+    "ruleReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "verdict", "evidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "verdict": { "$ref": "#/$defs/verdict" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "surfaceReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "rules", "findings"],
+      "properties": {
+        "verdict": { "$ref": "#/$defs/verdict" },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ruleReview" }
+        },
+        "findings": { "$ref": "#/$defs/stringList" }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to", "trigger"],
+      "properties": {
+        "from": { "$ref": "#/$defs/nonEmptyString" },
+        "to": { "$ref": "#/$defs/nonEmptyString" },
+        "trigger": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "runtimeScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "testName", "sourcePath", "surfaceIds", "verdict", "evidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "testName": { "$ref": "#/$defs/nonEmptyString" },
+        "sourcePath": { "$ref": "#/$defs/nonEmptyString" },
+        "surfaceIds": { "$ref": "#/$defs/stringList" },
+        "verdict": { "$ref": "#/$defs/verdict" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "finalCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["area", "verdict", "evidence"],
+      "properties": {
+        "area": {
+          "type": "string",
+          "enum": ["navigation", "hierarchy", "product-copy", "responsive", "accessibility"]
+        },
+        "verdict": { "$ref": "#/$defs/verdict" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "finalReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "reviewedSurfaceIds", "checks", "openFindings"],
+      "properties": {
+        "verdict": { "$ref": "#/$defs/verdict" },
+        "reviewedSurfaceIds": { "$ref": "#/$defs/stringList" },
+        "checks": {
+          "type": "array",
+          "minItems": 5,
+          "items": { "$ref": "#/$defs/finalCheck" }
+        },
+        "openFindings": { "$ref": "#/$defs/stringList" }
+      }
+    }
+  }
+}

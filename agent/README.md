@@ -4,17 +4,19 @@ Agent readiness means an agent can discover, understand, compose, and verify the
 Charcoal UI version without guessing component names, constructor parameters, token roles, or
 responsive behavior.
 
-For complete pages, readiness has five synchronized layers:
+For complete applications, readiness has six synchronized layers:
 
 1. `skills/charcoal-page-design` is the canonical source for the intent → information → reuse →
    state → feedback → best-practice → verification workflow. The repository exposes that same
    source at `.agents/skills/charcoal-page-design` for local Codex discovery.
-2. The generated Catalog publishes the seven rules, reviewed composition patterns, component
-   interaction states, and feedback ownership.
+2. The generated Catalog publishes the seven rules, five required design-process stages, reviewed
+   composition patterns, component interaction states, and feedback ownership.
 3. CLI and MCP adapters expose those contracts without maintaining separate prose inventories.
 4. A versioned Page Experience Spec records page-specific decisions and validates exact component
    and pattern references before implementation handoff.
-5. Real Flutter flows and the page-experience benchmark verify that the resulting UI behaves at
+5. A versioned App Experience Review inventories every surface and links page reviews, Widget
+   Previews, cross-surface checks, and executable runtime keys into one release gate.
+6. Real Flutter flows and the page-experience benchmark verify that the resulting UI behaves at
    the required constraints.
 
 ## Install into an agent
@@ -58,6 +60,28 @@ dart run charcoal_cli:charcoal page-spec --validate design/account-transfer.json
 
 The canonical JSON Schema and template live in `contracts/`. Checked-in reference specs for Nook,
 Lumen, and Daylight live in `page-specs/` and are validated by the synchronization pipeline.
+
+## App Experience Reviews
+
+Use an App Experience Review for multi-surface applications, cross-page redesigns, and every Agent
+Ready example. The review begins with a complete surface inventory and ends only after each surface
+passes all seven design rules and the app passes navigation, hierarchy, product-copy, responsive,
+and accessibility checks.
+
+```sh
+dart run charcoal_cli:charcoal app-review \
+  --output design/app-experience.json \
+  --app-id my-app \
+  --title "My app"
+dart run charcoal_cli:charcoal app-review --validate design/app-experience.json
+```
+
+`valid: true` means the review record is structurally coherent. Only `ready: true` and exit code
+zero mean every verdict passes and no finding remains. Runtime scenarios reference exact test files,
+test names, and surface keys, while preview evidence references exact `AgentPagePreview` states.
+State inventories compare the manifest with the application's real Dart destination, route, and task
+enums, so a new enum value cannot enter the product without an explicit reviewed-surface mapping.
+Checked-in passing reviews for Nook, Lumen, and Daylight live in `app-reviews/`.
 
 ## Evaluation matrix
 
@@ -159,8 +183,8 @@ fvm dart run tool/agent_ready.dart generate
 ```
 
 CI runs the corresponding `check` command. The pipeline regenerates the Catalog, derives the CLI
-Skill bundle from the canonical Skill, validates every checked-in Page Experience Spec, updates all
-benchmark Catalog/UI version pins, refreshes the managed contributor block, and derives the
+Skill bundle from the canonical Skill, validates every checked-in Page Experience Spec and App
+Experience Review, updates all benchmark Catalog/UI version pins, refreshes the managed contributor block, and derives the
 Codex-compatible grader schema from the canonical schema. Skill instructions, page specs, benchmark
 prompts, and semantic assertions remain reviewed source: they cannot be inferred safely from an API
 signature, so the checker validates and synchronizes only the parts with a deterministic owner.

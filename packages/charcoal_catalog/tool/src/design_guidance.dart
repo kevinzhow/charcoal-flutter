@@ -52,6 +52,79 @@ const List<CharcoalDesignRuleDoc> pageDesignRules = <CharcoalDesignRuleDoc>[
   ),
 ];
 
+const List<CharcoalDesignStageDoc> pageDesignProcess = <CharcoalDesignStageDoc>[
+  CharcoalDesignStageDoc(
+    id: 'surface-inventory',
+    order: 1,
+    title: 'Surface inventory',
+    goal: 'Define the complete application surface and the experience contract before implementation.',
+    requiredEvidence: <String>[
+      'Every destination, detail, task, modal, sheet, overlay, and durable result is listed.',
+      'Every surface names its user intents, meaningful states, source owner, and Page Experience Spec.',
+      'Transitions make every listed surface reachable from the application entry surface.',
+    ],
+    exitCriteria: <String>[
+      'No visible or interactive surface is outside the inventory.',
+      'The inventory distinguishes unsupported product ideas from implemented interactions.',
+    ],
+  ),
+  CharcoalDesignStageDoc(
+    id: 'component-preview',
+    order: 2,
+    title: 'Reusable component preview',
+    goal: 'Verify public and application-shared building blocks before page composition.',
+    requiredEvidence: <String>[
+      'Relevant component states are interactive in focused Widget Previews.',
+      'Color-owning components are reviewed in light and dark brightness.',
+    ],
+    exitCriteria: <String>[
+      'Reusable behavior, geometry, semantics, and state ownership are coherent in isolation.',
+    ],
+  ),
+  CharcoalDesignStageDoc(
+    id: 'page-state-preview',
+    order: 3,
+    title: 'Deterministic page-state preview',
+    goal: 'Make the real page hierarchy and every meaningful state reviewable without launching the full app.',
+    requiredEvidence: <String>[
+      'The production page and real state owner are used with deterministic scenario factories.',
+      'Each inventoried state is previewed at every supported layout class.',
+    ],
+    exitCriteria: <String>[
+      'Initial, boundary or recovery, and durable-result states are covered where applicable.',
+      'No preview-only duplicate page implementation exists.',
+    ],
+  ),
+  CharcoalDesignStageDoc(
+    id: 'integrated-runtime',
+    order: 4,
+    title: 'Integrated runtime verification',
+    goal: 'Verify behavior that an isolated Widget Preview cannot prove.',
+    requiredEvidence: <String>[
+      'Primary and recovery journeys exercise navigation, back behavior, overlays, and persistent state.',
+      'Relevant input, accessibility, text scaling, and platform integration are exercised.',
+    ],
+    exitCriteria: <String>[
+      'The smallest sufficient full-app run confirms every cross-surface boundary in scope.',
+    ],
+  ),
+  CharcoalDesignStageDoc(
+    id: 'app-wide-review',
+    order: 5,
+    title: 'App-wide final review',
+    goal: 'Review every surface and the application as a coherent experience before claiming Agent Ready.',
+    requiredEvidence: <String>[
+      'Every surface has a pass or changes-required verdict for all seven design rules.',
+      'Navigation, hierarchy, product copy, responsive behavior, and accessibility are reviewed across surfaces.',
+      'The final review explicitly covers every inventoried surface and records open findings.',
+    ],
+    exitCriteria: <String>[
+      'Every surface and cross-surface check passes.',
+      'No open finding remains and the machine-readable App Experience Review validates as ready.',
+    ],
+  ),
+];
+
 const List<CharcoalPatternDoc> componentPatterns = <CharcoalPatternDoc>[
   CharcoalPatternDoc(
     id: 'adaptive-app-shell',

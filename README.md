@@ -150,7 +150,7 @@ fvm dart run packages/charcoal_cli/bin/charcoal.dart search "single choice"
 # Find a reviewed page composition before creating local UI.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart pattern "searchable collection"
 
-# Read the seven page-design rules in a stable machine-readable form.
+# Read the seven page-design rules and five verification stages in a stable form.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart design-rules --json
 
 # Read the exact constructor, companion APIs, guidance, and executable source.
@@ -172,6 +172,11 @@ fvm dart run packages/charcoal_cli/bin/charcoal.dart agent sync --agent auto
 fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec \
   --output design/my-page.json --page-id my-page --title "My page"
 fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec --validate design/my-page.json
+
+# Inventory every app surface and validate final Agent Ready evidence.
+fvm dart run packages/charcoal_cli/bin/charcoal.dart app-review \
+  --output design/my-app.json --app-id my-app --title "My app"
+fvm dart run packages/charcoal_cli/bin/charcoal.dart app-review --validate design/my-app.json
 
 # Inspect project readiness. `init` remains available for instruction-only bootstrap.
 fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor
@@ -201,7 +206,7 @@ fvm dart run tool/agent_ready.dart check
 ```
 
 This single pipeline regenerates the Catalog, derives the distributable Skill bundle, validates
-every checked-in Page Experience Spec, and synchronizes benchmark versions, managed contributor
+every checked-in Page Experience Spec and App Experience Review, and synchronizes benchmark versions, managed contributor
 instructions, and the Codex grader schema. The CLI and MCP server are adapters over the Catalog,
 not separate documentation sources.
 Executable examples remain ordinary Flutter code; they are reference compositions rather than a
@@ -288,10 +293,12 @@ cd ../../example
 fvm flutter widget-preview start
 ```
 
-Use Previewer in three gates: public components first, then deterministic component/page states in
-the Example package, then the full Showcase only for routing and platform integration. Nook, Lumen,
-and Daylight previews use their production widgets and ViewModels at 390×844 and 320×700 rather
-than maintaining preview-only copies. See the [Widget Preview workflow](docs/widget-preview-workflow.md).
+Use five gates: complete surface inventory, reusable component previews, deterministic page-state
+previews, integrated runtime, and an app-wide final review. Nook, Lumen, and Daylight previews use
+their production widgets and ViewModels at 390×844 and 320×700 rather than maintaining preview-only
+copies. Their checked-in App Experience Reviews prove that secondary destinations such as Profile
+receive the same seven-rule review as the primary flow. See the
+[Widget Preview workflow](docs/widget-preview-workflow.md).
 
 Every push to `main` builds the Showcase for the `/charcoal-flutter/` base path and deploys it to
 GitHub Pages. The package uses local workspace dependencies and is currently `publish_to: none`.

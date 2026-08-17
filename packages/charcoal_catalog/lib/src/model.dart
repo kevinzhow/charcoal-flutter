@@ -20,6 +20,7 @@ final class CharcoalCatalog {
     required this.libraryName,
     required this.libraryVersion,
     required this.designRules,
+    required this.designProcess,
     required this.patterns,
     required this.components,
     required this.tokens,
@@ -33,6 +34,9 @@ final class CharcoalCatalog {
       libraryVersion: json['libraryVersion'] as String,
       designRules: (json['designRules'] as List<Object?>)
           .map((value) => CharcoalDesignRuleDoc.fromJson(value as Map<String, Object?>))
+          .toList(growable: false),
+      designProcess: (json['designProcess'] as List<Object?>)
+          .map((value) => CharcoalDesignStageDoc.fromJson(value as Map<String, Object?>))
           .toList(growable: false),
       patterns: (json['patterns'] as List<Object?>)
           .map((value) => CharcoalPatternDoc.fromJson(value as Map<String, Object?>))
@@ -51,6 +55,7 @@ final class CharcoalCatalog {
   final String libraryName;
   final String libraryVersion;
   final List<CharcoalDesignRuleDoc> designRules;
+  final List<CharcoalDesignStageDoc> designProcess;
   final List<CharcoalPatternDoc> patterns;
   final List<CharcoalComponentDoc> components;
   final List<CharcoalTokenDoc> tokens;
@@ -78,9 +83,49 @@ final class CharcoalCatalog {
     'libraryVersion': libraryVersion,
     'coverage': coverage.toJson(),
     'designRules': designRules.map((rule) => rule.toJson()).toList(growable: false),
+    'designProcess': designProcess.map((stage) => stage.toJson()).toList(growable: false),
     'patterns': patterns.map((pattern) => pattern.toJson()).toList(growable: false),
     'components': components.map((component) => component.toJson()).toList(growable: false),
     'tokens': tokens.map((token) => token.toJson()).toList(growable: false),
+  };
+}
+
+/// One required verification gate in the Agent Ready page-design process.
+final class CharcoalDesignStageDoc {
+  const CharcoalDesignStageDoc({
+    required this.id,
+    required this.order,
+    required this.title,
+    required this.goal,
+    required this.requiredEvidence,
+    required this.exitCriteria,
+  });
+
+  factory CharcoalDesignStageDoc.fromJson(Map<String, Object?> json) {
+    return CharcoalDesignStageDoc(
+      id: json['id'] as String,
+      order: json['order'] as int,
+      title: json['title'] as String,
+      goal: json['goal'] as String,
+      requiredEvidence: _strings(json['requiredEvidence']),
+      exitCriteria: _strings(json['exitCriteria']),
+    );
+  }
+
+  final String id;
+  final int order;
+  final String title;
+  final String goal;
+  final List<String> requiredEvidence;
+  final List<String> exitCriteria;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'id': id,
+    'order': order,
+    'title': title,
+    'goal': goal,
+    'requiredEvidence': requiredEvidence,
+    'exitCriteria': exitCriteria,
   };
 }
 

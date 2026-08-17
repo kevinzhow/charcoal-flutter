@@ -41,6 +41,12 @@ final class ManifestCommand extends CharcoalCommand {
           'mutatesFiles': true,
         },
         <String, Object?>{
+          'name': 'app-review',
+          'usage': 'charcoal app-review [--output <path>|--validate <path>] [--json]',
+          'responseType': 'appReviewTemplate|appReviewValidation',
+          'mutatesFiles': true,
+        },
+        <String, Object?>{
           'name': 'search',
           'usage': 'charcoal search <query> [--limit 10] [--json]',
           'responseType': 'searchResults',
@@ -105,6 +111,7 @@ final class ManifestCommand extends CharcoalCommand {
         'ERR_INVALID_ARGUMENT',
         'ERR_BENCHMARK_INVALID',
         'ERR_BENCHMARK_RUN_FAILED',
+        'ERR_APP_REVIEW_INVALID',
         'ERR_INPUT_NOT_FOUND',
         'ERR_OUTPUT_EXISTS',
         'ERR_PAGE_SPEC_INVALID',
@@ -119,7 +126,7 @@ final class ManifestCommand extends CharcoalCommand {
       text:
           'Charcoal CLI $charcoalCliVersion for ${charcoalCatalog.libraryName} '
           '${charcoalCatalog.libraryVersion}\n'
-          'Commands: search, pattern, design-rules, page-spec, component, token, benchmark, '
+          'Commands: search, pattern, design-rules, page-spec, app-review, component, token, benchmark, '
           'benchmark-run, doctor, init, agent, manifest',
     );
     return ExitCode.success.code;

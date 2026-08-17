@@ -8,6 +8,7 @@ import 'nook_view_model.dart';
 import 'pages/nook_checkout_pages.dart';
 import 'pages/nook_collection_page.dart';
 import 'pages/nook_product_page.dart';
+import 'pages/nook_profile_page.dart';
 
 final class NookDemo extends StatefulWidget {
   const NookDemo({this.createViewModel, super.key});
@@ -86,10 +87,13 @@ final class _NookDemoState extends State<NookDemo> {
   );
 
   Widget _content() => switch (_viewModel.route) {
-    NookRoute.root => NookCollectionPage(
-      searchController: _searchController,
-      viewModel: _viewModel,
-    ),
+    NookRoute.root => switch (_viewModel.destination) {
+      NookDestination.profile => NookProfilePage(viewModel: _viewModel),
+      _ => NookCollectionPage(
+        searchController: _searchController,
+        viewModel: _viewModel,
+      ),
+    },
     NookRoute.product => NookProductPage(
       product: _viewModel.selectedProduct!,
       viewModel: _viewModel,

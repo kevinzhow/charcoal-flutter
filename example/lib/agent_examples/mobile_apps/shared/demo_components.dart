@@ -71,6 +71,139 @@ final class AgentDemoPageHeading extends StatelessWidget {
   }
 }
 
+/// A shared identity anchor for profile destinations in the Agent Ready demos.
+final class AgentDemoProfileHeader extends StatelessWidget {
+  const AgentDemoProfileHeader({
+    required this.name,
+    required this.context,
+    required this.summary,
+    super.key,
+  });
+
+  final String context;
+  final String name;
+  final String summary;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return AgentDemoSurface(
+      color: theme.colors.containerSecondaryDefault,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+              color: theme.colors.containerPrimaryDefault,
+            ),
+            child: SizedBox.square(
+              dimension: 52,
+              child: Center(
+                child: CharcoalIcon(
+                  CharcoalIcons.personCircle,
+                  color: theme.colors.iconOnPrimaryDefault,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: space.component25),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  name,
+                  style: theme.textStyles.captionMediumBold.copyWith(
+                    color: theme.colors.textDefault,
+                  ),
+                ),
+                SizedBox(height: space.component10),
+                Text(
+                  this.context,
+                  style: theme.textStyles.captionSmall.copyWith(
+                    color: theme.colors.textSecondaryDefault,
+                  ),
+                ),
+                SizedBox(height: space.component10),
+                Text(
+                  summary,
+                  style: theme.textStyles.captionSmall.copyWith(
+                    color: theme.colors.textTertiaryDefault,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A preference row that keeps its explanation and persistent result together.
+final class AgentDemoPreferenceSwitch extends StatelessWidget {
+  const AgentDemoPreferenceSwitch({
+    required this.description,
+    required this.label,
+    required this.onChanged,
+    required this.status,
+    required this.value,
+    super.key,
+  });
+
+  final String description;
+  final String label;
+  final ValueChanged<bool> onChanged;
+  final String status;
+  final bool value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final space = theme.dimensions.space;
+    return AgentDemoSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          CharcoalSwitch(
+            label: Text(
+              label,
+              style: theme.textStyles.captionMediumBold.copyWith(
+                color: theme.colors.textDefault,
+              ),
+            ),
+            onChanged: onChanged,
+            value: value,
+          ),
+          SizedBox(height: space.component10),
+          Text(
+            description,
+            style: theme.textStyles.captionSmall.copyWith(
+              color: theme.colors.textSecondaryDefault,
+            ),
+          ),
+          SizedBox(height: space.component20),
+          Text(
+            status,
+            style: theme.textStyles.captionSmall.copyWith(
+              color: value
+                  ? theme.colors.textPositiveDefault
+                  : theme.colors.textTertiaryDefault,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 final class AgentDemoSectionHeading extends StatelessWidget {
   const AgentDemoSectionHeading({
     required this.title,

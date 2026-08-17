@@ -3,6 +3,7 @@
 
 - Discover components before coding: `fvm dart run packages/charcoal_cli/bin/charcoal.dart search <intent>`.
 - For a new, redesigned, or multi-state page, load the installed `charcoal-page-design` skill and validate its Page Experience Spec with `fvm dart run packages/charcoal_cli/bin/charcoal.dart page-spec --validate <path>`.
+- For a multi-surface app or Agent Ready example, inventory every destination, detail, task, modal, overlay, and durable result before implementation; map real destination/route/task enums so new states cannot bypass review, then validate the final evidence with `fvm dart run packages/charcoal_cli/bin/charcoal.dart app-review --validate <path>`.
 - Discover reviewed multi-component compositions before authoring local UI: `fvm dart run packages/charcoal_cli/bin/charcoal.dart pattern <intent>`.
 - Read exact installed APIs and examples: `fvm dart run packages/charcoal_cli/bin/charcoal.dart component <name>`.
 - Find exact semantic token accessors by role: `fvm dart run packages/charcoal_cli/bin/charcoal.dart token <intent>`; use `--tier primitive` only for audited foundation work.
@@ -13,6 +14,7 @@
 - Do not substitute Material or Cupertino controls for an existing Charcoal component.
 - Use semantic Charcoal tokens only for roles they support; keep component-owned geometry internal.
 - Preserve labels, semantics, focus behavior, text scaling, and compact/desktop layout behavior.
+- Do not claim Agent Ready from a core flow alone. Executable runtime scenarios must collectively visit every inventoried surface, and every surface must pass all seven design rules plus the app-wide final review.
 - Run `fvm dart run packages/charcoal_cli/bin/charcoal.dart doctor`, static analysis, and relevant Flutter tests before handing off.
 - `charcoal_ui` remains an independent Widgets-layer package without Material/Cupertino dependencies.
 - Public component APIs are platform-neutral; upstream provenance belongs in maintainer source contracts.

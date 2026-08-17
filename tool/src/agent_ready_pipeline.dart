@@ -41,6 +41,18 @@ final class AgentReadyPipeline {
       problems,
       label: 'agent/skills/charcoal-page-design/assets/page-experience-spec.json',
     );
+    _checkExactFile(
+      _file('agent/skills/charcoal-page-design/references/app-experience-review.schema.json'),
+      _file('agent/contracts/app-experience-review-v1.schema.json').readAsStringSync(),
+      problems,
+      label: 'agent/skills/charcoal-page-design/references/app-experience-review.schema.json',
+    );
+    _checkExactFile(
+      _file('agent/skills/charcoal-page-design/assets/app-experience-review.json'),
+      _file('agent/contracts/app-experience-review-v1.template.json').readAsStringSync(),
+      problems,
+      label: 'agent/skills/charcoal-page-design/assets/app-experience-review.json',
+    );
     final canonicalSkill = _fileDirectory('agent/skills/charcoal-page-design');
     final repositorySkill = _fileDirectory('.agents/skills/charcoal-page-design');
     final bundledSkill = _fileDirectory(
@@ -74,6 +86,34 @@ final class AgentReadyPipeline {
       for (final problem in report.problems) {
         problems.add('${_relative(pageSpec.path)}: $problem');
       }
+    }
+
+    final appReviews = _jsonFiles('agent/app-reviews');
+    if (appReviews.isEmpty) {
+      problems.add('agent/app-reviews must contain at least one App Experience Review.');
+    }
+    final appReviewIds = <String>{};
+    for (final appReview in appReviews) {
+      final report = validateCharcoalAppExperienceReview(
+        _readObject(appReview),
+        catalog: generatedCatalog.catalog,
+        projectRoot: root,
+      );
+      for (final problem in report.problems) {
+        problems.add('${_relative(appReview.path)}: $problem');
+      }
+      for (final blocker in report.blockers) {
+        problems.add('${_relative(appReview.path)}: not Agent Ready: $blocker');
+      }
+      if (report.appId != null && !appReviewIds.add(report.appId!)) {
+        problems.add('${_relative(appReview.path)}: duplicate application ID ${report.appId}.');
+      }
+    }
+    final missingAppReviews = _requiredAppReviewIds.difference(appReviewIds);
+    if (missingAppReviews.isNotEmpty) {
+      problems.add(
+        'Missing required App Experience Reviews: ${missingAppReviews.toList()..sort()}.',
+      );
     }
 
     final canonicalGraderSchema = _readObject(
@@ -145,10 +185,41 @@ final class AgentReadyPipeline {
       _file('agent/skills/charcoal-page-design/assets/page-experience-spec.json').path,
       _file('agent/contracts/page-experience-spec-v1.template.json').readAsStringSync(),
     );
+    _write(
+      _file('agent/skills/charcoal-page-design/references/app-experience-review.schema.json').path,
+      _file('agent/contracts/app-experience-review-v1.schema.json').readAsStringSync(),
+    );
+    _write(
+      _file('agent/skills/charcoal-page-design/assets/app-experience-review.json').path,
+      _file('agent/contracts/app-experience-review-v1.template.json').readAsStringSync(),
+    );
     _copyExactDirectory(
       _fileDirectory('agent/skills/charcoal-page-design'),
       _fileDirectory('packages/charcoal_cli/agent/skills/charcoal-page-design'),
     );
+
+    for (final pageSpec in _jsonFiles('agent/page-specs')) {
+      final spec = _readObject(pageSpec);
+      final versionChanged =
+          spec['catalogSchemaVersion'] != generatedCatalog.catalog.schemaVersion ||
+          spec['libraryVersion'] != generatedCatalog.catalog.libraryVersion;
+      if (versionChanged) {
+        spec['catalogSchemaVersion'] = generatedCatalog.catalog.schemaVersion;
+        spec['libraryVersion'] = generatedCatalog.catalog.libraryVersion;
+        _write(pageSpec.path, '${_prettyJson.convert(spec)}\n');
+      }
+    }
+    for (final appReview in _jsonFiles('agent/app-reviews')) {
+      final review = _readObject(appReview);
+      final versionChanged =
+          review['catalogSchemaVersion'] != generatedCatalog.catalog.schemaVersion ||
+          review['libraryVersion'] != generatedCatalog.catalog.libraryVersion;
+      if (versionChanged) {
+        review['catalogSchemaVersion'] = generatedCatalog.catalog.schemaVersion;
+        review['libraryVersion'] = generatedCatalog.catalog.libraryVersion;
+        _write(appReview.path, '${_prettyJson.convert(review)}\n');
+      }
+    }
 
     final canonicalGraderSchema = _readObject(
       _file('agent/runner/grader-response-v1.schema.json'),
@@ -203,6 +274,15 @@ final class AgentReadyPipeline {
   File _file(String relativePath) => File(p.join(root.path, relativePath));
 
   Directory _fileDirectory(String relativePath) => Directory(p.join(root.path, relativePath));
+
+  List<File> _jsonFiles(String relativePath) {
+    final directory = _fileDirectory(relativePath);
+    if (!directory.existsSync()) return const <File>[];
+    return (directory.listSync()..sort((left, right) => left.path.compareTo(right.path)))
+        .whereType<File>()
+        .where((file) => p.extension(file.path) == '.json')
+        .toList(growable: false);
+  }
 
   String _relative(String path) => p.relative(path, from: root.path).replaceAll('\\', '/');
 
@@ -272,6 +352,8 @@ const Set<String> _codexUnsupportedSchemaKeywords = <String>{
   'then',
   'uniqueItems',
 };
+
+const Set<String> _requiredAppReviewIds = <String>{'nook', 'lumen', 'daylight'};
 
 void _checkExactFile(
   File file,

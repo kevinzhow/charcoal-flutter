@@ -2,6 +2,8 @@
 
 Use these questions in order. Each answer must lead to a design decision or evidence; repeating the question is not completion.
 
+Apply all seven questions independently to every inventoried surface. A passing primary flow does not cover Profile, settings, empty states, receipts, or task overlays that were not reviewed.
+
 ## 1. User intent
 
 Identify who is using the page now, what brought them here, and what outcome lets them leave successfully. Describe goals rather than controls: “finish checkout,” not “press the checkout button.”

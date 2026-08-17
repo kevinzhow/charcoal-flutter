@@ -1,8 +1,16 @@
 # Preview-led verification
 
-Use three gates in order. A later gate does not replace an earlier one, and a full app launch is not the default feedback loop for local layout work.
+Use five gates in order. A later gate does not replace an earlier one, and a full app launch is not the default feedback loop for local layout work.
 
 Keep the active Previewer surface focused on one target. In a supported IDE, open the owning preview file and enable `Filter previews by selected file`; in the command-line Previewer, search for the exact preview name. Expand the working set only for an intentional comparison.
+
+## Gate 0: complete surface inventory
+
+- List every destination, detail, task, modal, sheet, overlay, and durable result that users can see.
+- Name the production widget and runtime key, meaningful states, supported layouts, Page Experience Spec, and intent IDs for each surface.
+- Map transitions and prove every surface is reachable from the app entry.
+
+Gate exit: the inventory covers the whole product surface, not only the primary journey.
 
 ## Gate 1: reusable components
 
@@ -34,6 +42,17 @@ Launch the full app only to verify behavior that isolated previews cannot prove:
 - the complete primary flow and one recovery or boundary flow.
 
 Gate exit: the Page Experience Spec has both preview evidence and the smallest sufficient integrated-runtime evidence.
+
+Executable runtime scenarios must collectively visit every inventoried surface. The App Experience Review links each scenario to an exact test file, test name, and the runtime keys it exercises so CI can reject stale claims.
+
+## Gate 4: app-wide final review
+
+- Revisit every inventoried surface after integrated behavior is stable.
+- Record a verdict and concrete evidence for each of the seven design rules on every surface.
+- Review navigation, hierarchy, product copy, responsive behavior, and accessibility across the application rather than one route at a time.
+- Keep findings open as `changes-required`; never convert an unresolved issue into a passing narrative.
+
+Gate exit: all surfaces, design rules, runtime scenarios, and cross-surface checks pass; no finding remains; `charcoal app-review --validate <path>` exits successfully.
 
 ## Flutter commands
 

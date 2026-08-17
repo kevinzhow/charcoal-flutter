@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "catalogSchemaVersion": 3,
+  "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "page": {
     "id": "nook-core-flow",
     "title": "Nook product discovery and checkout",
     "userContext": "A design-conscious mobile shopper wants to find a suitable home object, compare its essential details, and purchase it without losing search or saved state.",
-    "platforms": ["compact"],
+    "platforms": ["compact", "standard"],
     "assumptions": [
       "The simulation uses a small local collection, so search results update immediately without a loading state.",
       "Payment and delivery are represented by a review step because the example contains no external payment service."

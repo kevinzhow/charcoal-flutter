@@ -26,6 +26,13 @@ export 'src/agent_skill.dart'
         charcoalSkillInstallManifest,
         readCharcoalSkillManifest,
         resolveCharcoalSkillSource;
+export 'src/app_experience_review.dart'
+    show
+        CharcoalAppExperienceReviewValidation,
+        buildCharcoalAppExperienceReviewTemplate,
+        charcoalAppExperienceReviewVersion,
+        charcoalAppReviewAreas,
+        validateCharcoalAppExperienceReview;
 export 'src/benchmark.dart'
     show
         CharcoalBenchmarkFormatException,

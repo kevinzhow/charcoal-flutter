@@ -36,6 +36,7 @@ final class DaylightTodayPage extends StatelessWidget {
               key: ValueKey<String>('agent-habit-${habit.id}-row'),
               habit: habit,
               onChanged: (value) => viewModel.toggleHabit(habit, value),
+              showStreak: viewModel.showStreaks,
               value: viewModel.isCompleted(habit),
             ),
             SizedBox(height: space.component40),

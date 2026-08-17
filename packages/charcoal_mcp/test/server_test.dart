@@ -114,6 +114,7 @@ void main() {
       );
 
       expect((rules['rules']! as List<Object?>), hasLength(7));
+      expect((rules['process']! as List<Object?>), hasLength(5));
       expect((matches['results']! as List<Object?>), isNotEmpty);
       expect(pattern['components'], contains('CharcoalCheckbox'));
       expect(pattern['feedback'], isNotEmpty);

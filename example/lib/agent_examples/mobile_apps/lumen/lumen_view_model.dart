@@ -87,6 +87,12 @@ final class LumenViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setBalanceHidden(bool value) {
+    if (_balanceHidden == value) return;
+    _balanceHidden = value;
+    notifyListeners();
+  }
+
   void startReceive() {
     _task = LumenTask.receive;
     _linkCopied = false;
@@ -191,6 +197,7 @@ final class LumenViewModel extends ChangeNotifier {
   }
 
   void setRoundUps(bool value) {
+    if (_roundUps == value) return;
     _roundUps = value;
     notifyListeners();
   }

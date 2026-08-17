@@ -19,9 +19,6 @@ final class NookCollectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (viewModel.destination == NookDestination.profile) {
-      return _NookProfilePage(viewModel: viewModel);
-    }
     final theme = CharcoalTheme.of(context);
     final space = theme.dimensions.space;
     final savedOnly = viewModel.destination == NookDestination.saved;
@@ -48,9 +45,14 @@ final class NookCollectionPage extends StatelessWidget {
     };
     return AgentDemoPage(
       child: Column(
-        key: ValueKey<String>(
-          'agent-commerce-${viewModel.destination.name}-page',
-        ),
+        key: ValueKey<String>(switch (viewModel.destination) {
+          NookDestination.shop => 'agent-commerce-shop-page',
+          NookDestination.search => 'agent-commerce-search-page',
+          NookDestination.saved => 'agent-commerce-saved-page',
+          NookDestination.profile => throw StateError(
+            'Profile has its own page.',
+          ),
+        }),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           AgentDemoPageHeading(
@@ -170,45 +172,6 @@ final class _NookProductGrid extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-final class _NookProfilePage extends StatelessWidget {
-  const _NookProfilePage({required this.viewModel});
-
-  final NookViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
-    return AgentDemoPage(
-      child: Column(
-        key: const ValueKey<String>('agent-commerce-profile-page'),
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const AgentDemoPageHeading(
-            eyebrow: 'PROFILE',
-            title: 'Good morning, Mina',
-            description: 'Your shopping context, without pretending every row is a working account service.',
-          ),
-          SizedBox(height: space.component30),
-          AgentDemoStatus(
-            message:
-                '${viewModel.savedCount} saved · ${viewModel.bagCount} in bag · Free delivery enabled',
-          ),
-          if (viewModel.confirmedProducts.isNotEmpty) ...<Widget>[
-            SizedBox(height: space.component30),
-            const AgentDemoSectionHeading(title: 'Latest order'),
-            SizedBox(height: space.component20),
-            AgentDemoSurface(
-              child: Text(
-                'NK-817 · ${viewModel.confirmedProducts.length} item · Preparing for delivery',
-              ),
-            ),
-          ],
-        ],
-      ),
     );
   }
 }

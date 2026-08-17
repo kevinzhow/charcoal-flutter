@@ -148,6 +148,7 @@ final class CharcoalMcpServer {
       'catalogSchemaVersion': catalog.schemaVersion,
       'libraryVersion': catalog.libraryVersion,
       'rules': catalog.designRules.map((rule) => rule.toJson()).toList(growable: false),
+      'process': catalog.designProcess.map((stage) => stage.toJson()).toList(growable: false),
     };
   }
 
@@ -412,17 +413,17 @@ const Map<String, Object?> _serverMeta = <String, Object?>{
 const List<Map<String, Object?>> _toolDefinitions = <Map<String, Object?>>[
   <String, Object?>{
     'name': 'charcoal.get_design_rules',
-    'title': 'Read Charcoal page-design rules',
+    'title': 'Read Charcoal page-design rules and process',
     'description':
-        'Return the versioned intent, hierarchy, reuse, state, feedback, and verification questions '
-        'required before substantial page implementation.',
+        'Return the versioned intent, hierarchy, reuse, state, and feedback questions plus the '
+        'surface-inventory, preview, runtime, and app-wide final-review process.',
     'inputSchema': <String, Object?>{
       'type': 'object',
       'additionalProperties': false,
     },
     'outputSchema': <String, Object?>{
       'type': 'object',
-      'required': <String>['catalogSchemaVersion', 'libraryVersion', 'rules'],
+      'required': <String>['catalogSchemaVersion', 'libraryVersion', 'rules', 'process'],
     },
     'annotations': _readOnlyAnnotations,
   },

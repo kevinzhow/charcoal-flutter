@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "catalogSchemaVersion": 3,
+  "catalogSchemaVersion": 4,
   "libraryVersion": "0.1.0",
   "page": {
     "id": "daylight-core-flow",
     "title": "Daylight daily checklist and tomorrow plan",
     "userContext": "A mobile wellness user checks a small set of gentle daily commitments, wants calm progress feedback, and may prepare tomorrow after completing today.",
-    "platforms": ["compact"],
+    "platforms": ["compact", "standard"],
     "assumptions": [
       "Today contains three stable habits and local state, so no loading or remote failure state is required.",
       "Checking an item is reversible and should never require confirmation."

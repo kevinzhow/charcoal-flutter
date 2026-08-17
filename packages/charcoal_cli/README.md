@@ -12,6 +12,9 @@ dart run packages/charcoal_cli/bin/charcoal.dart token "layout spacing" --kind d
 dart run packages/charcoal_cli/bin/charcoal.dart page-spec \
   --output design/my-page.json --page-id my-page --title "My page"
 dart run packages/charcoal_cli/bin/charcoal.dart page-spec --validate design/my-page.json
+dart run packages/charcoal_cli/bin/charcoal.dart app-review \
+  --output design/my-app.json --app-id my-app --title "My app"
+dart run packages/charcoal_cli/bin/charcoal.dart app-review --validate design/my-app.json
 dart run packages/charcoal_cli/bin/charcoal.dart agent install --agent auto
 dart run packages/charcoal_cli/bin/charcoal.dart agent sync --agent auto
 dart run packages/charcoal_cli/bin/charcoal.dart doctor
@@ -36,6 +39,12 @@ Patterns are reviewed page-level compositions, not runtime recipes. `page-spec` 
 versioned contract for intent priority, information placement, reuse, interaction states,
 feedback, best-practice decisions, and runtime verification. It validates component and pattern
 references against the exact installed Catalog.
+
+`app-review` is the app-wide release gate. It validates a complete surface inventory, reachability,
+source destination/route/task enum coverage, Page Experience intent references, exact production widgets and Widget Preview states, executable
+runtime keys, seven-rule evidence per surface, and five cross-surface checks. A
+`changes-required` verdict is valid work-in-progress data but returns a non-zero exit code and
+`ready: false`.
 
 When the package is available as a dev dependency, use the declared executable with
 `dart run charcoal_cli:charcoal`. The workspace examples above use the source entry point so they

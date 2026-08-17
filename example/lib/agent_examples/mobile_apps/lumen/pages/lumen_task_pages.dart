@@ -15,6 +15,7 @@ final class LumenReceivePage extends StatelessWidget {
     final space = CharcoalTheme.of(context).dimensions.space;
     return AgentDemoPage(
       child: Column(
+        key: const ValueKey<String>('agent-wallet-receive-page'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const AgentDemoPageHeading(
@@ -272,6 +273,7 @@ final class LumenTopUpConfirmedPage extends StatelessWidget {
     final space = CharcoalTheme.of(context).dimensions.space;
     return AgentDemoPage(
       child: Column(
+        key: const ValueKey<String>('agent-wallet-top-up-confirmed'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const AgentDemoPageHeading(

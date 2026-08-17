@@ -31,7 +31,7 @@ Map<String, Object?> buildCharcoalPageExperienceTemplate({
       'id': pageId,
       'title': title,
       'userContext': 'Describe who is here, what brought them here, and relevant constraints.',
-      'platforms': <String>['compact', 'large'],
+      'platforms': <String>['compact', 'standard'],
       'assumptions': <String>['Replace with an evidence-backed assumption or remove it.'],
       'intents': <Map<String, Object?>>[
         <String, Object?>{
