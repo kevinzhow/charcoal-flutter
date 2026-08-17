@@ -242,15 +242,24 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
   ),
   'CharcoalDialog': ComponentMetadata(
     category: 'Overlays',
-    summary: 'Presents focused content in a centered dialog or adaptive bottom-sheet surface.',
-    keywords: <String>['bottom sheet', 'dialog', 'modal', 'overlay', 'prompt'],
+    summary:
+        'Presents a short, blocking decision in a centered dialog or adaptive bottom-sheet surface.',
+    keywords: <String>[
+      'bottom sheet',
+      'confirmation',
+      'dialog',
+      'modal',
+      'overlay',
+      'prompt',
+    ],
     useWhen: <String>[
-      'The user must complete or acknowledge a focused task before returning.',
+      'The user must confirm, choose, or acknowledge a short self-contained task before returning.',
       'The same content needs centered and bottom-sheet presentation styles.',
     ],
     avoidWhen: <String>[
       'The message is transient and does not require focus; use CharcoalToast or CharcoalSnackBar.',
-      'A full page is needed for a long or deeply navigable workflow.',
+      'The task involves browsing content, repeated actions, text composition, or nested navigation; use a page or route.',
+      'The task belongs to a bounded embedded surface without its own Navigator; add a local Navigator or keep the interaction inline.',
     ],
     accessibility: <String>[
       'Use a concise title and a barrierLabel that describes dismissal.',
@@ -259,6 +268,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     responsiveBehavior: <String>[
       'Use CharcoalModalStyle.bottomSheet for compact mobile presentation where appropriate.',
       'Size constrains readable content width; maxWidth can narrow a specific workflow.',
+      'showCharcoalModal targets the root Navigator by default; set useRootNavigator to false only from a context under the intended nested Navigator.',
     ],
     tokenRoles: <String>[
       'paragraphWidth.s',
@@ -302,6 +312,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     responsiveBehavior: <String>[
       'The overlay respects horizontal screen insets and a configurable maximum width.',
       'Choose CharcoalPopupEdge based on nearby persistent navigation and safe areas.',
+      'Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay.',
     ],
     tokenRoles: <String>[
       'containerPositiveDefault',
@@ -346,6 +357,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     responsiveBehavior: <String>[
       'The overlay respects horizontal screen insets and a configurable maximum width.',
       'The thumbnail keeps its component-defined size while message content flexes.',
+      'Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay.',
     ],
     tokenRoles: <String>[
       'borderDefault',

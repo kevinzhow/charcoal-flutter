@@ -211,7 +211,9 @@ void main() {
     );
     expect(tester.element(persistentNavigation), same(persistentElement));
 
-    final like = find.byKey(const ValueKey<String>('agent-social-like'));
+    final like = find.byKey(
+      const ValueKey<String>('agent-social-like-post-aki-rain'),
+    );
     await tester.ensureVisible(like);
     await tester.tap(like);
     await tester.pump(const Duration(milliseconds: 250));

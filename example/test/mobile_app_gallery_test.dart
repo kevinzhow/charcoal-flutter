@@ -55,12 +55,16 @@ void main() {
   ) async {
     await _pumpSimulator(tester, AgentMobileApp.social);
 
-    final like = find.byKey(const ValueKey<String>('agent-social-like'));
+    final like = find.byKey(
+      const ValueKey<String>('agent-social-like-post-aki-rain'),
+    );
     await _tapVisible(tester, like);
     expect(tester.widget<CharcoalIconButton>(like).selected, isTrue);
     expect(find.text('129'), findsOneWidget);
 
-    final save = find.byKey(const ValueKey<String>('agent-social-save'));
+    final save = find.byKey(
+      const ValueKey<String>('agent-social-save-post-aki-rain'),
+    );
     await _tapVisible(tester, save);
     expect(tester.widget<CharcoalIconButton>(save).selected, isTrue);
 
@@ -95,7 +99,7 @@ void main() {
       tester,
       find.byKey(const ValueKey<String>('agent-social-send-message')),
     );
-    expect(find.text('You: Love this palette'), findsOneWidget);
+    expect(find.text('Love this palette'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

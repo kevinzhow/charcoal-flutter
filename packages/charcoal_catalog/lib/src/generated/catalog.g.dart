@@ -841,24 +841,26 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalDialog",
       "category": "Overlays",
-      "summary": "Presents focused content in a centered dialog or adaptive bottom-sheet surface.",
+      "summary": "Presents a short, blocking decision in a centered dialog or adaptive bottom-sheet surface.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/modal.dart",
       "documentationLevel": "curated",
       "keywords": [
         "bottom sheet",
+        "confirmation",
         "dialog",
         "modal",
         "overlay",
         "prompt"
       ],
       "useWhen": [
-        "The user must complete or acknowledge a focused task before returning.",
+        "The user must confirm, choose, or acknowledge a short self-contained task before returning.",
         "The same content needs centered and bottom-sheet presentation styles."
       ],
       "avoidWhen": [
         "The message is transient and does not require focus; use CharcoalToast or CharcoalSnackBar.",
-        "A full page is needed for a long or deeply navigable workflow."
+        "The task involves browsing content, repeated actions, text composition, or nested navigation; use a page or route.",
+        "The task belongs to a bounded embedded surface without its own Navigator; add a local Navigator or keep the interaction inline."
       ],
       "accessibility": [
         "Use a concise title and a barrierLabel that describes dismissal.",
@@ -866,7 +868,8 @@ const String generatedCatalogJson = r'''{
       ],
       "responsiveBehavior": [
         "Use CharcoalModalStyle.bottomSheet for compact mobile presentation where appropriate.",
-        "Size constrains readable content width; maxWidth can narrow a specific workflow."
+        "Size constrains readable content width; maxWidth can narrow a specific workflow.",
+        "showCharcoalModal targets the root Navigator by default; set useRootNavigator to false only from a context under the intended nested Navigator."
       ],
       "tokenRoles": [
         "paragraphWidth.s",
@@ -962,7 +965,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "showCharcoalDialog",
           "kind": "function",
-          "signature": "Future<T?> showCharcoalDialog<T>({required BuildContext context, required WidgetBuilder builder, bool barrierDismissible = true, String barrierLabel = 'Dismiss dialog', Duration? duration, CharcoalModalStyle style = CharcoalModalStyle.center})",
+          "signature": "Future<T?> showCharcoalDialog<T>({required BuildContext context, required WidgetBuilder builder, bool barrierDismissible = true, String barrierLabel = 'Dismiss dialog', Duration? duration, CharcoalModalStyle style = CharcoalModalStyle.center, bool useRootNavigator = true})",
           "parameters": [
             {
               "name": "context",
@@ -1002,6 +1005,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "CharcoalModalStyle.center"
+            },
+            {
+              "name": "useRootNavigator",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
             }
           ],
           "enumValues": []
@@ -1009,7 +1019,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "showCharcoalModal",
           "kind": "function",
-          "signature": "Future<T?> showCharcoalModal<T>({required BuildContext context, required Widget child, List<Widget> actions = const <Widget>[], bool barrierDismissible = true, Widget? closeIcon, Duration? duration, double? maxWidth, CharcoalDialogSize size = CharcoalDialogSize.medium, CharcoalModalStyle style = CharcoalModalStyle.center, String? title})",
+          "signature": "Future<T?> showCharcoalModal<T>({required BuildContext context, required Widget child, List<Widget> actions = const <Widget>[], bool barrierDismissible = true, Widget? closeIcon, Duration? duration, double? maxWidth, CharcoalDialogSize size = CharcoalDialogSize.medium, CharcoalModalStyle style = CharcoalModalStyle.center, String? title, bool useRootNavigator = true})",
           "parameters": [
             {
               "name": "context",
@@ -1074,6 +1084,13 @@ const String generatedCatalogJson = r'''{
               "type": "String?",
               "required": false,
               "named": true
+            },
+            {
+              "name": "useRootNavigator",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
             }
           ],
           "enumValues": []
@@ -2305,7 +2322,8 @@ const String generatedCatalogJson = r'''{
       ],
       "responsiveBehavior": [
         "The overlay respects horizontal screen insets and a configurable maximum width.",
-        "The thumbnail keeps its component-defined size while message content flexes."
+        "The thumbnail keeps its component-defined size while message content flexes.",
+        "Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay."
       ],
       "tokenRoles": [
         "borderDefault",
@@ -2366,7 +2384,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "showCharcoalSnackBar",
           "kind": "function",
-          "signature": "CharcoalToastController showCharcoalSnackBar({required BuildContext context, required String message, Widget? action, CharcoalToastAnimationConfiguration animationConfiguration = CharcoalToastAnimationConfiguration.defaultConfiguration, Duration? duration, CharcoalPopupEdge edge = CharcoalPopupEdge.bottom, double? maxWidth, String? semanticLabel, double? screenEdgeSpacing, Widget? thumbnail})",
+          "signature": "CharcoalToastController showCharcoalSnackBar({required BuildContext context, required String message, Widget? action, CharcoalToastAnimationConfiguration animationConfiguration = CharcoalToastAnimationConfiguration.defaultConfiguration, Duration? duration, CharcoalPopupEdge edge = CharcoalPopupEdge.bottom, double? maxWidth, String? semanticLabel, double? screenEdgeSpacing, Widget? thumbnail, bool useRootOverlay = true})",
           "parameters": [
             {
               "name": "context",
@@ -2429,6 +2447,13 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
+            },
+            {
+              "name": "useRootOverlay",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
             }
           ],
           "enumValues": []
@@ -3297,7 +3322,8 @@ const String generatedCatalogJson = r'''{
       ],
       "responsiveBehavior": [
         "The overlay respects horizontal screen insets and a configurable maximum width.",
-        "Choose CharcoalPopupEdge based on nearby persistent navigation and safe areas."
+        "Choose CharcoalPopupEdge based on nearby persistent navigation and safe areas.",
+        "Feedback targets the root Overlay by default; set useRootOverlay to false from a context under a deliberately bounded nested Overlay."
       ],
       "tokenRoles": [
         "containerPositiveDefault",
@@ -3365,7 +3391,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "showCharcoalToast",
           "kind": "function",
-          "signature": "CharcoalToastController showCharcoalToast({required BuildContext context, required String message, Widget? action, CharcoalToastAnimationConfiguration animationConfiguration = CharcoalToastAnimationConfiguration.defaultConfiguration, Duration? duration, CharcoalPopupEdge edge = CharcoalPopupEdge.bottom, Widget? leading, double? maxWidth, String? semanticLabel, double? screenEdgeSpacing, CharcoalToastVariant variant = CharcoalToastVariant.success})",
+          "signature": "CharcoalToastController showCharcoalToast({required BuildContext context, required String message, Widget? action, CharcoalToastAnimationConfiguration animationConfiguration = CharcoalToastAnimationConfiguration.defaultConfiguration, Duration? duration, CharcoalPopupEdge edge = CharcoalPopupEdge.bottom, Widget? leading, double? maxWidth, String? semanticLabel, double? screenEdgeSpacing, CharcoalToastVariant variant = CharcoalToastVariant.success, bool useRootOverlay = true})",
           "parameters": [
             {
               "name": "context",
@@ -3435,6 +3461,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "CharcoalToastVariant.success"
+            },
+            {
+              "name": "useRootOverlay",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
             }
           ],
           "enumValues": []

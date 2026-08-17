@@ -253,7 +253,10 @@ final class CharcoalToastController {
   }
 }
 
-/// Inserts a [CharcoalToast] into the root overlay.
+/// Inserts a [CharcoalToast] into an overlay.
+///
+/// Set [useRootOverlay] to false when [context] belongs to a deliberately
+/// bounded nested overlay, such as an embedded app preview.
 CharcoalToastController showCharcoalToast({
   required BuildContext context,
   required String message,
@@ -267,6 +270,7 @@ CharcoalToastController showCharcoalToast({
   String? semanticLabel,
   double? screenEdgeSpacing,
   CharcoalToastVariant variant = CharcoalToastVariant.success,
+  bool useRootOverlay = true,
 }) {
   return _showCharcoalPopup(
     animationConfiguration: animationConfiguration,
@@ -279,6 +283,7 @@ CharcoalToastController showCharcoalToast({
       context,
     ).dimensions.space.layout30,
     transitionDuration: _ToastSpec.transitionDuration,
+    useRootOverlay: useRootOverlay,
     child: CharcoalToast(
       action: action,
       leading: leading,
@@ -290,7 +295,10 @@ CharcoalToastController showCharcoalToast({
   );
 }
 
-/// Inserts a draggable [CharcoalSnackBar] into the root overlay.
+/// Inserts a draggable [CharcoalSnackBar] into an overlay.
+///
+/// Set [useRootOverlay] to false when [context] belongs to a deliberately
+/// bounded nested overlay, such as an embedded app preview.
 CharcoalToastController showCharcoalSnackBar({
   required BuildContext context,
   required String message,
@@ -303,6 +311,7 @@ CharcoalToastController showCharcoalSnackBar({
   String? semanticLabel,
   double? screenEdgeSpacing,
   Widget? thumbnail,
+  bool useRootOverlay = true,
 }) {
   return _showCharcoalPopup(
     animationConfiguration: animationConfiguration,
@@ -315,6 +324,7 @@ CharcoalToastController showCharcoalSnackBar({
       context,
     ).dimensions.space.layout30,
     transitionDuration: _ToastSpec.transitionDuration,
+    useRootOverlay: useRootOverlay,
     child: CharcoalSnackBar(
       action: action,
       maxWidth: maxWidth,
@@ -335,8 +345,9 @@ CharcoalToastController _showCharcoalPopup({
   required double screenEdgeSpacing,
   required double screenHorizontalInset,
   required Duration transitionDuration,
+  required bool useRootOverlay,
 }) {
-  final overlay = Overlay.of(context, rootOverlay: true);
+  final overlay = Overlay.of(context, rootOverlay: useRootOverlay);
   final theme = CharcoalTheme.of(context);
   final presentationKey = GlobalKey<_CharcoalPopupPresentationState>();
   late final CharcoalToastController controller;

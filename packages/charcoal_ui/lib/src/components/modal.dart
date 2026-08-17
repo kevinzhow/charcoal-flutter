@@ -31,6 +31,7 @@ Future<T?> showCharcoalDialog<T>({
   String barrierLabel = 'Dismiss dialog',
   Duration? duration,
   CharcoalModalStyle style = CharcoalModalStyle.center,
+  bool useRootNavigator = true,
 }) {
   assert(duration == null || !duration.isNegative);
   final theme = CharcoalTheme.of(context);
@@ -90,10 +91,15 @@ Future<T?> showCharcoalDialog<T>({
       };
     },
     transitionDuration: duration ?? _ModalSpec.animationDuration,
+    useRootNavigator: useRootNavigator,
   );
 }
 
 /// Convenience API that constructs the correctly paired route and surface.
+///
+/// Keep [useRootNavigator] enabled for application-level modal tasks. Set it
+/// to false when [context] belongs to a deliberately bounded nested navigator,
+/// such as an embedded app preview whose modal must stay inside that surface.
 Future<T?> showCharcoalModal<T>({
   required BuildContext context,
   required Widget child,
@@ -105,11 +111,13 @@ Future<T?> showCharcoalModal<T>({
   CharcoalDialogSize size = CharcoalDialogSize.medium,
   CharcoalModalStyle style = CharcoalModalStyle.center,
   String? title,
+  bool useRootNavigator = true,
 }) => showCharcoalDialog<T>(
   context: context,
   barrierDismissible: barrierDismissible,
   duration: duration,
   style: style,
+  useRootNavigator: useRootNavigator,
   builder: (dialogContext) => CharcoalDialog(
     actions: actions,
     closeIcon: closeIcon,

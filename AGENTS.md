@@ -6,6 +6,7 @@
 - Find exact semantic token accessors by role: `fvm dart run packages/charcoal_cli/bin/charcoal.dart token <intent>`; use `--tier primitive` only for audited foundation work.
 - Import `package:charcoal_ui/charcoal_ui.dart` and use Charcoal components where available.
 - Compose layouts with Flutter primitives such as `Row`, `Column`, `Padding`, and `LayoutBuilder`.
+- For Flutter UI runs, interaction, hot reload, screenshots, and end-to-end verification, prefer the Dart/Flutter skill tooling first; use `agent-device` only when platform-level automation is specifically required.
 - Do not substitute Material or Cupertino controls for an existing Charcoal component.
 - Use semantic Charcoal tokens only for roles they support; keep component-owned geometry internal.
 - Preserve labels, semantics, focus behavior, text scaling, and compact/desktop layout behavior.
