@@ -5,6 +5,8 @@ depend on Material or Cupertino. The package combines generated Charcoal foundat
 source-backed Flutter components, light and dark themes, accessibility behavior, and reproducible
 drift checks.
 
+![Charcoal UI V2 macOS Showcase](docs/assets/charcoal-ui-macos-showcase.jpg)
+
 This project is V2-only. It intentionally contains no Charcoal V1 aliases or compatibility API.
 
 Explore the [Charcoal UI V2 Showcase](https://kevinzhow.github.io/charcoal-flutter/) in a browser.
