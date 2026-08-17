@@ -5,6 +5,10 @@ dimensions, every generated icon asset, component variants, interaction states, 
 built from `charcoal_ui`, `charcoal_icons`, and Flutter's Widgets layer, and intentionally imports
 neither Material nor Cupertino.
 
+The Web Showcase self-hosts a subsetted Google Fonts Noto Sans variable WOFF2 for stable Skwasm
+metrics at weights 400 and 700. The asset belongs to this application only; native Showcase builds
+keep their platform font and `charcoal_ui` remains font-asset free.
+
 Run it from the repository root:
 
 ```sh

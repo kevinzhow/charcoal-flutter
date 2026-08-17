@@ -11,10 +11,9 @@ void main() {
     final styles = CharcoalThemeData.light().textStyles;
 
     if (kIsWeb) {
-      expect(styles.body.fontFamily, 'system-ui');
-      expect(styles.headingXs.fontFamily, 'system-ui');
-      expect(styles.body.fontFamilyFallback, contains('Segoe UI'));
-      expect(styles.body.fontFamilyFallback, contains('Roboto'));
+      expect(styles.body.fontFamily, isNull);
+      expect(styles.headingXs.fontFamily, isNull);
+      expect(styles.body.fontFamilyFallback, isNull);
     } else if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       expect(styles.body.fontFamily, 'CupertinoSystemText');
@@ -25,7 +24,7 @@ void main() {
     }
   });
 
-  test('Web uses a cross-platform system sans-serif stack', () {
+  test('Web defers to the renderer default font', () {
     final font = resolveCharcoalSansFontForTarget(
       CharcoalGeneratedTypographyTokens.light,
       fontSize: 14,
@@ -33,19 +32,8 @@ void main() {
       platform: TargetPlatform.windows,
     );
 
-    expect(font.family, 'system-ui');
-    expect(font.familyFallback, <String>[
-      'Segoe UI',
-      'Roboto',
-      'Ubuntu',
-      'Adwaita Sans',
-      'Cantarell',
-      'Noto Sans',
-      'DejaVu Sans',
-      'Liberation Sans',
-      'Arial',
-      'sans-serif',
-    ]);
+    expect(font.family, isNull);
+    expect(font.familyFallback, isNull);
   });
 
   test('non-Apple native targets use Flutter platform defaults', () {

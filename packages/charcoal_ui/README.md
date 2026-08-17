@@ -2,9 +2,10 @@
 
 Charcoal V2 components implemented directly on Flutter Widgets. The package includes controls,
 form fields, dropdowns, overlays, navigation components, themes, and interaction primitives. It is
-an independent package with no Material or Cupertino dependency and no bundled font assets. Default
-typography follows the host platform's system sans-serif family; applications can still provide a
-font-family override through `CharcoalThemeData`.
+an independent package with no Material or Cupertino dependency and no bundled font assets. Apple
+native targets use their system text and display families; Web and other targets defer to Flutter's
+renderer default. Applications can provide a renderer-supported font-family override through
+`CharcoalThemeData`.
 
 The public theme contains generated foundations only. Each widget maps semantic foundation values
 to a private component specification and keeps source-specific geometry beside its implementation.

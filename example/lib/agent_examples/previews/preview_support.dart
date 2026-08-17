@@ -2,8 +2,12 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../showcase_theme.dart';
+
 Widget agentComponentPreviewWrapper(Widget child) => CharcoalApp(
   title: 'Agent Ready component preview',
+  theme: buildShowcaseTheme(Brightness.light),
+  darkTheme: buildShowcaseTheme(Brightness.dark),
   home: Builder(
     builder: (context) {
       final theme = CharcoalTheme.of(context);
@@ -20,6 +24,8 @@ Widget agentComponentPreviewWrapper(Widget child) => CharcoalApp(
 
 Widget agentPagePreviewWrapper(Widget child) => CharcoalApp(
   title: 'Agent Ready page preview',
+  theme: buildShowcaseTheme(Brightness.light),
+  darkTheme: buildShowcaseTheme(Brightness.dark),
   home: Builder(
     builder: (context) => ColoredBox(
       color: CharcoalTheme.of(context).colors.backgroundDefault,

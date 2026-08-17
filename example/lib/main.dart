@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'agent_examples/app_examples_page.dart';
+import 'showcase_theme.dart';
 
 void main() => runCharcoalShowcase();
 
@@ -23,6 +24,8 @@ final class _CharcoalShowcaseAppState extends State<CharcoalShowcaseApp> {
   @override
   Widget build(BuildContext context) => CharcoalApp(
     title: 'Charcoal UI V2 Showcase',
+    theme: buildShowcaseTheme(Brightness.light),
+    darkTheme: buildShowcaseTheme(Brightness.dark),
     themeMode: _darkMode ? CharcoalThemeMode.dark : CharcoalThemeMode.light,
     home: _ShowcasePage(
       darkMode: _darkMode,

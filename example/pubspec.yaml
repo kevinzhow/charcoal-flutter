@@ -24,3 +24,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: false
+  assets:
+    - assets/fonts/OFL.txt
+    - assets/fonts/README.md
+  fonts:
+    - family: Noto Sans
+      fonts:
+        - asset: assets/fonts/NotoSans-Variable.woff2
+          weight: 400
+        - asset: assets/fonts/NotoSans-Variable.woff2
+          weight: 700

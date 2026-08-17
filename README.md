@@ -46,10 +46,11 @@ The API follows Flutter conventions instead of reproducing another platform's vi
 Icon-bearing controls accept regular widgets; applications can use `charcoal_icons` or inject
 product-specific artwork without coupling the two packages.
 
-`charcoal_ui` does not bundle font files. Its default typography uses the host system sans-serif:
-Web starts with `system-ui` and a cross-platform fallback stack, while native targets use Flutter's
-platform font selection. Applications that need a fixed brand font can override the generated
-font-family token through `CharcoalThemeData`.
+`charcoal_ui` does not bundle font files. Apple native targets map the default typography to their
+system text and display families; Web and other native targets defer to Flutter's renderer default.
+Applications that need stable Web metrics or a brand font can bundle a renderer-supported asset and
+override the generated font-family token through `CharcoalThemeData`. The Showcase demonstrates
+that approach with a self-hosted Google Fonts Noto Sans WOFF2 asset on Web.
 
 ## Architecture
 

@@ -4,26 +4,13 @@ import 'package:flutter/foundation.dart';
 const _sourceSansFamily = 'Sarasa UI J';
 const _appleSystemText = 'CupertinoSystemText';
 const _appleSystemDisplay = 'CupertinoSystemDisplay';
-const _webSystemSans = 'system-ui';
-const _webSystemSansFallbacks = <String>[
-  'Segoe UI',
-  'Roboto',
-  'Ubuntu',
-  'Adwaita Sans',
-  'Cantarell',
-  'Noto Sans',
-  'DejaVu Sans',
-  'Liberation Sans',
-  'Arial',
-  'sans-serif',
-];
 
 /// Maps the generated source family to a font that is available at runtime.
 ///
-/// Charcoal SwiftUI uses the Apple system font. Web uses the CSS system UI
-/// family followed by common Windows, Android, and Linux sans-serif families.
-/// Other native targets defer to Flutter's platform font. Explicit application
-/// overrides are left untouched.
+/// Charcoal SwiftUI uses the Apple system font. Web and other native targets
+/// defer to Flutter's renderer default because Skwasm cannot resolve browser
+/// system fonts from CSS family names. Explicit application overrides are left
+/// untouched, allowing an app to provide a renderer-supported Web font asset.
 ({String? family, List<String>? familyFallback}) resolveCharcoalSansFont(
   CharcoalTypographyTokens tokens, {
   required double fontSize,
@@ -49,10 +36,7 @@ const _webSystemSansFallbacks = <String>[
   }
 
   if (isWeb) {
-    return (
-      family: _webSystemSans,
-      familyFallback: _webSystemSansFallbacks,
-    );
+    return (family: null, familyFallback: null);
   }
 
   if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
