@@ -6,6 +6,7 @@ import '../../shared/demo_components.dart';
 import '../daylight_models.dart';
 import '../daylight_view_model.dart';
 import '../widgets/daylight_habit_card.dart';
+import '../widgets/daylight_item_group.dart';
 
 final class DaylightTodayPage extends StatelessWidget {
   const DaylightTodayPage({required this.viewModel, super.key});
@@ -31,16 +32,19 @@ final class DaylightTodayPage extends StatelessWidget {
           SizedBox(height: space.component40),
           const AgentDemoSectionHeading(title: 'Your habits'),
           SizedBox(height: space.component30),
-          for (final habit in daylightHabits) ...<Widget>[
-            DaylightHabitCard(
-              key: ValueKey<String>('agent-habit-${habit.id}-row'),
-              habit: habit,
-              onChanged: (value) => viewModel.toggleHabit(habit, value),
-              showStreak: viewModel.showStreaks,
-              value: viewModel.isCompleted(habit),
-            ),
-            SizedBox(height: space.component40),
-          ],
+          DaylightItemGroup(
+            children: <Widget>[
+              for (final habit in daylightHabits)
+                DaylightHabitCard(
+                  key: ValueKey<String>('agent-habit-${habit.id}-row'),
+                  habit: habit,
+                  onChanged: (value) => viewModel.toggleHabit(habit, value),
+                  showStreak: viewModel.showStreaks,
+                  value: viewModel.isCompleted(habit),
+                ),
+            ],
+          ),
+          SizedBox(height: space.component30),
           if (viewModel.isTodayComplete) ...<Widget>[
             const AgentDemoStatus(
               message: 'Everything is complete. Today’s three commitments remain here if you need to undo one.',

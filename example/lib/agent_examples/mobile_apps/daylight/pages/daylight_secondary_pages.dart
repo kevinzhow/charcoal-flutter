@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../shared/demo_components.dart';
 import '../daylight_models.dart';
 import '../daylight_view_model.dart';
+import '../widgets/daylight_item_group.dart';
 
 final class DaylightJourneyPage extends StatelessWidget {
   const DaylightJourneyPage({required this.viewModel, super.key});
@@ -37,44 +38,47 @@ final class DaylightJourneyPage extends StatelessWidget {
                 'Completed days and future plans share one calm timeline.',
           ),
           SizedBox(height: space.component30),
-          for (final day in days) ...<Widget>[
-            AgentDemoSurface(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final dayLabel = Text(
-                    day.$1,
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textDefault,
-                    ),
-                  );
-                  final statusLabel = Text(
-                    day.$2,
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                    ),
-                  );
-                  if (constraints.maxWidth < 300) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        dayLabel,
-                        SizedBox(height: space.component10),
-                        statusLabel,
-                      ],
-                    );
-                  }
-                  return Row(
-                    children: <Widget>[
-                      Expanded(child: dayLabel),
-                      SizedBox(width: space.component20),
-                      Flexible(child: statusLabel),
-                    ],
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: space.component20),
-          ],
+          DaylightItemGroup(
+            children: <Widget>[
+              for (final day in days)
+                AgentDemoSurface(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final dayLabel = Text(
+                        day.$1,
+                        style: theme.textStyles.captionMediumBold.copyWith(
+                          color: theme.colors.textDefault,
+                        ),
+                      );
+                      final statusLabel = Text(
+                        day.$2,
+                        style: theme.textStyles.captionSmall.copyWith(
+                          color: theme.colors.textSecondaryDefault,
+                        ),
+                      );
+                      if (constraints.maxWidth < 300) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            dayLabel,
+                            SizedBox(height: space.component10),
+                            statusLabel,
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: <Widget>[
+                          Expanded(child: dayLabel),
+                          SizedBox(width: space.component20),
+                          Flexible(child: statusLabel),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
+          SizedBox(height: space.component30),
           CharcoalButton(
             key: const ValueKey<String>('agent-habits-return-today'),
             fullWidth: true,
@@ -106,19 +110,21 @@ final class DaylightInsightsPage extends StatelessWidget {
             description: 'Signals support reflection; they never compete with today’s checklist.',
           ),
           SizedBox(height: space.component30),
-          _DaylightInsight(
-            label: 'This week',
-            value: '${14 + viewModel.completedCount} habits completed',
-          ),
-          SizedBox(height: space.component20),
-          const _DaylightInsight(
-            label: 'Strongest rhythm',
-            value: 'Morning stretch · 6 of 7 days',
-          ),
-          SizedBox(height: space.component20),
-          const _DaylightInsight(
-            label: 'Gentle consistency',
-            value: '7 days with at least one small step',
+          DaylightItemGroup(
+            children: <Widget>[
+              _DaylightInsight(
+                label: 'This week',
+                value: '${14 + viewModel.completedCount} habits completed',
+              ),
+              const _DaylightInsight(
+                label: 'Strongest rhythm',
+                value: 'Morning stretch · 6 of 7 days',
+              ),
+              const _DaylightInsight(
+                label: 'Gentle consistency',
+                value: '7 days with at least one small step',
+              ),
+            ],
           ),
         ],
       ),
@@ -154,26 +160,29 @@ final class DaylightProfilePage extends StatelessWidget {
           SizedBox(height: space.component30),
           const AgentDemoSectionHeading(title: 'Support style'),
           SizedBox(height: space.component20),
-          AgentDemoPreferenceSwitch(
-            key: const ValueKey<String>('agent-habits-profile-reminders'),
-            description: 'Receive one calm prompt when today still has an unfinished habit.',
-            label: 'Gentle evening reminder',
-            onChanged: viewModel.setReminders,
-            status: viewModel.reminders
-                ? 'Reminder scheduled for 8:30 PM'
-                : 'Evening reminder is paused',
-            value: viewModel.reminders,
-          ),
-          SizedBox(height: space.component20),
-          AgentDemoPreferenceSwitch(
-            key: const ValueKey<String>('agent-habits-profile-streaks'),
-            description: 'Show recent consistency under each habit. Turning this off keeps progress counts intact.',
-            label: 'Show streaks on Today',
-            onChanged: viewModel.setShowStreaks,
-            status: viewModel.showStreaks
-                ? 'Streak context is visible'
-                : 'Today shows cues without streaks',
-            value: viewModel.showStreaks,
+          DaylightItemGroup(
+            children: <Widget>[
+              AgentDemoPreferenceSwitch(
+                key: const ValueKey<String>('agent-habits-profile-reminders'),
+                description: 'Receive one calm prompt when today still has an unfinished habit.',
+                label: 'Gentle evening reminder',
+                onChanged: viewModel.setReminders,
+                status: viewModel.reminders
+                    ? 'Reminder scheduled for 8:30 PM'
+                    : 'Evening reminder is paused',
+                value: viewModel.reminders,
+              ),
+              AgentDemoPreferenceSwitch(
+                key: const ValueKey<String>('agent-habits-profile-streaks'),
+                description: 'Show recent consistency under each habit. Turning this off keeps progress counts intact.',
+                label: 'Show streaks on Today',
+                onChanged: viewModel.setShowStreaks,
+                status: viewModel.showStreaks
+                    ? 'Streak context is visible'
+                    : 'Today shows cues without streaks',
+                value: viewModel.showStreaks,
+              ),
+            ],
           ),
         ],
       ),

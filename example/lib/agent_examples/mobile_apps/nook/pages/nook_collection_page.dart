@@ -9,11 +9,13 @@ import '../widgets/nook_product_card.dart';
 
 final class NookCollectionPage extends StatelessWidget {
   const NookCollectionPage({
+    required this.destination,
     required this.searchController,
     required this.viewModel,
     super.key,
   });
 
+  final NookDestination destination;
   final TextEditingController searchController;
   final NookViewModel viewModel;
 
@@ -21,11 +23,11 @@ final class NookCollectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final space = theme.dimensions.space;
-    final savedOnly = viewModel.destination == NookDestination.saved;
+    final savedOnly = destination == NookDestination.saved;
     final products = savedOnly
         ? viewModel.savedProducts
-        : viewModel.visibleProducts;
-    final heading = switch (viewModel.destination) {
+        : viewModel.visibleProductsFor(destination);
+    final heading = switch (destination) {
       NookDestination.shop => (
         'GOOD MORNING, MINA',
         'Small things for a calmer home',
@@ -45,7 +47,7 @@ final class NookCollectionPage extends StatelessWidget {
     };
     return AgentDemoPage(
       child: Column(
-        key: ValueKey<String>(switch (viewModel.destination) {
+        key: ValueKey<String>(switch (destination) {
           NookDestination.shop => 'agent-commerce-shop-page',
           NookDestination.search => 'agent-commerce-search-page',
           NookDestination.saved => 'agent-commerce-saved-page',
@@ -69,9 +71,9 @@ final class NookCollectionPage extends StatelessWidget {
               onChanged: viewModel.setQuery,
               placeholder: 'Try “lamp” or “paper”',
               prefix: const CharcoalIcon(CharcoalIcons.search),
-              showLabel: viewModel.destination == NookDestination.search,
+              showLabel: destination == NookDestination.search,
             ),
-            if (viewModel.destination == NookDestination.shop) ...<Widget>[
+            if (destination == NookDestination.shop) ...<Widget>[
               SizedBox(height: space.component25),
               CharcoalSegmentedControl<NookCategory>(
                 key: const ValueKey<String>('agent-commerce-category'),
@@ -103,7 +105,7 @@ final class NookCollectionPage extends StatelessWidget {
                 ? '${products.length} saved ${products.length == 1 ? 'piece' : 'pieces'}'
                 : viewModel.query.trim().isNotEmpty
                 ? '${products.length} results for “${viewModel.query.trim()}”'
-                : _categoryTitle(viewModel.category, viewModel.destination),
+                : _categoryTitle(viewModel.category, destination),
           ),
           SizedBox(height: space.component20),
           if (products.isEmpty)

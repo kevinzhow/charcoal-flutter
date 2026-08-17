@@ -225,7 +225,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["today", "journey", "insights", "profile", "plan-tomorrow", "plan-saved"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "Four stable destinations remain selected while tomorrow planning is a focused task with explicit back and completion routes." },
+        { "area": "navigation", "verdict": "pass", "evidence": "Four named destination Pages and the focused tomorrow-planning Page run in a nested Navigator; platform back pops the editable task Route, while the saved result replaces obsolete task history before Journey opens." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Today's commitments lead completion, Journey leads history, Insights leads reflection, and Profile now leads support-style decisions." },
         { "area": "product-copy", "verdict": "pass", "evidence": "Copy is calm, specific to real local behavior, and avoids developer-facing design rationale on secondary pages." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every meaningful state has compact and standard production previews; timeline rows adapt below 300 logical pixels." },

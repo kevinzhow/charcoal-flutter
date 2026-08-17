@@ -282,13 +282,29 @@
         "surfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
         "verdict": "pass",
         "evidence": "The executable widget journey covers discovery recovery, save, purchase, receipt persistence, and return from the Profile order detail."
+      },
+      {
+        "id": "route-lifecycle-and-system-back",
+        "testName": "embedded details use a real route stack and system back",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["shop", "product-detail"],
+        "verdict": "pass",
+        "evidence": "The executable route test observes both Page entries during CharcoalPageRoute motion and verifies that platform back pops the nested Navigator stack."
+      },
+      {
+        "id": "destination-scroll-restoration",
+        "testName": "top-level destinations restore their own scroll position",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["shop", "search"],
+        "verdict": "pass",
+        "evidence": "The executable destination test verifies independent initial offsets and restores Search after its root Route has been replaced and recreated."
       }
     ],
     "finalReview": {
       "verdict": "pass",
       "reviewedSurfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "Four stable destinations retain selection; focused tasks hide bottom navigation and use explicit back or completion paths." },
+        { "area": "navigation", "verdict": "pass", "evidence": "Four named destination Pages and the product, bag, review, and Profile-receipt stack run in a nested Navigator; system back pops real CharcoalPageRoutes, completion replaces obsolete task history, and destination scroll offsets survive Route replacement." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Discovery leads Shop and Search, purchase decisions lead task pages, and Profile now gives shopping activity a clear purpose." },
         { "area": "product-copy", "verdict": "pass", "evidence": "All visible copy describes shopper outcomes and real simulation behavior; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every inventoried state is backed by compact and standard production-page previews, with collection columns constraint-driven." },

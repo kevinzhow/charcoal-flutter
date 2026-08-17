@@ -17,8 +17,6 @@ final class DaylightViewModel extends ChangeNotifier {
   bool get isTodayComplete => completedCount == daylightHabits.length;
   bool get reminders => _reminders;
   bool get showStreaks => _showStreaks;
-  int get selectedBottomIndex => _destination.index;
-  bool get showBottomNavigation => _task == DaylightTask.none;
   DaylightTask get task => _task;
   Set<String> get tomorrowHabitIds =>
       Set<String>.unmodifiable(_tomorrowHabitIds);

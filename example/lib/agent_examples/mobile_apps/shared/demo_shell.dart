@@ -2,12 +2,8 @@ import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
-final class AgentDemoBottomItem {
-  const AgentDemoBottomItem(this.label, this.icon);
-
-  final CharcoalIconData icon;
-  final String label;
-}
+import '../../agent_example_navigator.dart';
+import '../../shared/agent_demo_tab_bar.dart';
 
 final class AgentDemoAppShell extends StatelessWidget {
   const AgentDemoAppShell({
@@ -16,13 +12,14 @@ final class AgentDemoAppShell extends StatelessWidget {
     required this.brandColor,
     required this.brandForeground,
     required this.brandMark,
-    required this.bottomItems,
+    required this.tabItems,
     required this.content,
-    required this.onBottomItemSelected,
-    required this.selectedBottomIndex,
+    required this.onTabSelected,
+    required this.pageKey,
+    required this.selectedTabIndex,
     required this.title,
     this.leading,
-    this.showBottomNavigation = true,
+    this.showTabBar = true,
     this.trailing,
     super.key,
   });
@@ -32,12 +29,13 @@ final class AgentDemoAppShell extends StatelessWidget {
   final Color brandColor;
   final Color brandForeground;
   final String brandMark;
-  final List<AgentDemoBottomItem> bottomItems;
+  final List<AgentDemoTabItem> tabItems;
   final Widget content;
   final Widget? leading;
-  final ValueChanged<int> onBottomItemSelected;
-  final int selectedBottomIndex;
-  final bool showBottomNavigation;
+  final ValueChanged<int> onTabSelected;
+  final String pageKey;
+  final int selectedTabIndex;
+  final bool showTabBar;
   final String title;
   final Widget? trailing;
 
@@ -63,17 +61,17 @@ final class AgentDemoAppShell extends StatelessWidget {
             trailing: trailing,
           ),
           Expanded(
-            child: SingleChildScrollView(
-              key: ValueKey<String>('agent-$appKey-page-scroll'),
+            child: AgentExamplePageScrollView(
+              storageKey: 'agent-$appKey-page-scroll-$pageKey',
               child: content,
             ),
           ),
-          if (showBottomNavigation)
-            AgentDemoBottomBar(
+          if (showTabBar)
+            AgentDemoTabBar(
               appKey: appKey,
-              items: bottomItems,
-              onSelected: onBottomItemSelected,
-              selectedIndex: selectedBottomIndex,
+              items: tabItems,
+              onSelected: onTabSelected,
+              selectedIndex: selectedTabIndex,
             ),
         ],
       ),
@@ -98,120 +96,6 @@ final class AgentDemoBackButton extends StatelessWidget {
     semanticLabel: semanticLabel,
     size: CharcoalIconButtonSize.small,
   );
-}
-
-final class AgentDemoBottomBar extends StatelessWidget {
-  const AgentDemoBottomBar({
-    required this.appKey,
-    required this.items,
-    required this.onSelected,
-    required this.selectedIndex,
-    super.key,
-  });
-
-  final String appKey;
-  final List<AgentDemoBottomItem> items;
-  final ValueChanged<int> onSelected;
-  final int selectedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: theme.colors.borderSecondary,
-            width: theme.dimensions.borderWidth.m,
-          ),
-        ),
-        color: theme.colors.backgroundDefault,
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 58,
-          child: Row(
-            children: <Widget>[
-              for (final (index, item) in items.indexed)
-                Expanded(
-                  child: _BottomDestination(
-                    key: ValueKey<String>(
-                      'agent-$appKey-nav-${item.label.toLowerCase()}',
-                    ),
-                    icon: item.icon,
-                    label: item.label,
-                    onPressed: () => onSelected(index),
-                    selected: selectedIndex == index,
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-final class _BottomDestination extends StatelessWidget {
-  const _BottomDestination({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-    required this.selected,
-    super.key,
-  });
-
-  final CharcoalIconData icon;
-  final String label;
-  final VoidCallback onPressed;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
-    return CharcoalClickable(
-      onPressed: onPressed,
-      semanticLabel: label,
-      selected: selected,
-      builder: (context, states) {
-        final active = selected || states.contains(WidgetState.focused);
-        return ColoredBox(
-          color: states.contains(WidgetState.pressed)
-              ? theme.colors.containerSecondaryDefaultA
-              : theme.colors.backgroundDefault,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: space.component10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CharcoalIcon(
-                  icon,
-                  color: active
-                      ? theme.colors.iconDefault
-                      : theme.colors.iconTertiaryDefault,
-                  size: 18,
-                ),
-                SizedBox(height: space.component10),
-                Text(
-                  label,
-                  maxLines: 1,
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: active
-                        ? theme.colors.textDefault
-                        : theme.colors.textTertiaryDefault,
-                    fontSize: 9,
-                    fontWeight: active ? FontWeight.w700 : FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
 
 final class _BrandMark extends StatelessWidget {

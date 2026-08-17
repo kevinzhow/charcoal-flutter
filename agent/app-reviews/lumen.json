@@ -339,13 +339,21 @@
         "surfaceIds": ["wallet", "activity", "plan", "profile", "receive", "send-entry", "transfer-review", "transfer-receipt", "top-up", "top-up-receipt"],
         "verdict": "pass",
         "evidence": "The executable widget journey covers balance privacy, receive-copy feedback, top-up persistence, transfer recovery and receipt, Activity, Plan, and Profile."
+      },
+      {
+        "id": "completion-route-replacement",
+        "testName": "a durable completion replaces the task stack",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["wallet", "top-up", "top-up-receipt"],
+        "verdict": "pass",
+        "evidence": "The executable route test verifies a task push followed by a sole durable receipt Page that does not expose the completed form through system back."
       }
     ],
     "finalReview": {
       "verdict": "pass",
       "reviewedSurfaceIds": ["wallet", "activity", "plan", "profile", "receive", "send-entry", "transfer-review", "transfer-receipt", "top-up", "top-up-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "Stable destinations remain selected; financial tasks hide destination navigation and expose explicit back or completion paths." },
+        { "area": "navigation", "verdict": "pass", "evidence": "Named destination and financial-task Pages run in a nested Navigator; review stages push real CharcoalPageRoutes, system back synchronizes the task owner, and durable receipts replace obsolete form history." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Balance orientation leads Wallet, transaction facts lead money tasks, and Profile now centers privacy and automation decisions." },
         { "area": "product-copy", "verdict": "pass", "evidence": "Copy states the simulated financial effect and never promises an unavailable service; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every surface state has compact and standard production previews with fields, rows, and review values allowed to adapt." },

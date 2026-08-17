@@ -3,7 +3,7 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../mobile_apps/shared/demo_components.dart';
-import '../mobile_apps/shared/demo_shell.dart';
+import '../shared/agent_demo_tab_bar.dart';
 import 'preview_support.dart';
 
 @AgentComponentPreview(
@@ -46,29 +46,32 @@ Widget agentEmptyStatePreview() => AgentDemoEmptyState(
   title: 'No matching products',
 );
 
-@AgentComponentPreview(name: 'Mobile destination bar', size: Size(390, 170))
-Widget agentBottomNavigationPreview() => const _BottomNavigationPreview();
+@AgentComponentPreview(name: 'Shared app tab bar', size: Size(390, 170))
+Widget agentTabBarPreview() => const _TabBarPreview();
 
-final class _BottomNavigationPreview extends StatefulWidget {
-  const _BottomNavigationPreview();
+final class _TabBarPreview extends StatefulWidget {
+  const _TabBarPreview();
 
   @override
-  State<_BottomNavigationPreview> createState() =>
-      _BottomNavigationPreviewState();
+  State<_TabBarPreview> createState() => _TabBarPreviewState();
 }
 
-final class _BottomNavigationPreviewState
-    extends State<_BottomNavigationPreview> {
+final class _TabBarPreviewState extends State<_TabBarPreview> {
   int selectedIndex = 0;
 
   @override
-  Widget build(BuildContext context) => AgentDemoBottomBar(
+  Widget build(BuildContext context) => AgentDemoTabBar(
     appKey: 'preview',
-    items: const <AgentDemoBottomItem>[
-      AgentDemoBottomItem('Today', CharcoalIcons.sun),
-      AgentDemoBottomItem('Journey', CharcoalIcons.calendar),
-      AgentDemoBottomItem('Insights', CharcoalIcons.star),
-      AgentDemoBottomItem('Profile', CharcoalIcons.personCircle),
+    items: const <AgentDemoTabItem>[
+      AgentDemoTabItem('Today', CharcoalIcons.sun),
+      AgentDemoTabItem(
+        'Journey',
+        CharcoalIcons.calendar,
+        badgeCount: 2,
+        semanticLabel: 'Journey, 2 updates',
+      ),
+      AgentDemoTabItem('Insights', CharcoalIcons.star),
+      AgentDemoTabItem('Profile', CharcoalIcons.personCircle),
     ],
     onSelected: (value) => setState(() => selectedIndex = value),
     selectedIndex: selectedIndex,

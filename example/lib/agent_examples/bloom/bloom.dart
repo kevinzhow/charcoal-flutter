@@ -3,6 +3,8 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import '../agent_example_navigator.dart';
+import '../shared/agent_demo_tab_bar.dart';
 import 'bloom_model.dart';
 import 'bloom_repository.dart';
 import 'bloom_view_model.dart';

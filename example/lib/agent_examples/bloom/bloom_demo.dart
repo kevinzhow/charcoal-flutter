@@ -24,35 +24,96 @@ final class _BloomDemoState extends State<BloomDemo> {
   }
 
   @override
-  Widget build(BuildContext context) => Navigator(
-    onGenerateRoute: (_) => PageRouteBuilder<void>(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          ListenableBuilder(
-            listenable: _viewModel,
-            builder: (context, _) {
-              final state = _viewModel.state;
-              final route = state.route;
-              final focusedTask =
-                  route?.kind == BloomRouteKind.conversation ||
-                  route?.kind == BloomRouteKind.comments ||
-                  route?.kind == BloomRouteKind.story;
-              return _BloomShell(
-                content: _buildContent(state),
-                contentKey: route?.storageKey ?? state.destination.name,
-                navigationBar: _buildNavigationBar(context, state),
-                onDestinationSelected: _viewModel.selectDestination,
-                scrollContent: !focusedTask,
-                selectedDestination: state.destination,
-                showBottomNavigation: route == null,
-                unreadMessages: state.unreadConversationCount,
-              );
-            },
-          ),
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: _viewModel,
+    builder: (context, _) => AgentExampleNavigator(
+      appKey: 'social',
+      pages: _pages(_viewModel.state),
     ),
   );
 
-  Widget _buildContent(BloomViewState state) {
-    final route = state.route;
+  List<AgentExamplePage> _pages(BloomViewState state) => <AgentExamplePage>[
+    AgentExamplePage(
+      builder: (context) => _buildPage(
+        context,
+        destination: state.destination,
+        pageKey: 'root-${state.destination.name}',
+        state: _viewModel.state,
+      ),
+      key: ValueKey<String>('agent-social-route-root'),
+      listenable: _viewModel,
+      name: '/bloom/${state.destination.name}',
+    ),
+    for (final (index, route) in state.routeStack.indexed)
+      AgentExamplePage(
+        axis:
+            route.kind == BloomRouteKind.composer ||
+                route.kind == BloomRouteKind.profileEditor
+            ? CharcoalPageTransitionAxis.vertical
+            : CharcoalPageTransitionAxis.horizontal,
+        builder: (context) => _buildPage(
+          context,
+          destination: state.destination,
+          pageKey: '$index-${route.storageKey}',
+          route: route,
+          state: _viewModel.state,
+        ),
+        fullscreenDialog:
+            route.kind == BloomRouteKind.composer ||
+            route.kind == BloomRouteKind.profileEditor,
+        key: ValueKey<String>('agent-social-route-$index-${route.storageKey}'),
+        listenable: _viewModel,
+        name: '/bloom/${route.storageKey}',
+        onDidPop: () => _popRouteIfCurrent(index, route),
+      ),
+  ];
+
+  Widget _buildPage(
+    BuildContext context, {
+    required BloomDestination destination,
+    required String pageKey,
+    required BloomViewState state,
+    BloomRoute? route,
+  }) {
+    final focusedTask =
+        route?.kind == BloomRouteKind.conversation ||
+        route?.kind == BloomRouteKind.comments ||
+        route?.kind == BloomRouteKind.story;
+    final page = _BloomShell(
+      content: _buildContent(state, destination: destination, route: route),
+      contentKey: pageKey,
+      navigationBar: _buildNavigationBar(
+        context,
+        state,
+        destination: destination,
+        route: route,
+      ),
+      onDestinationSelected: _viewModel.selectDestination,
+      scrollContent: !focusedTask,
+      selectedDestination: destination,
+      showTabBar: route == null,
+      unreadMessages: state.unreadConversationCount,
+    );
+    final guardsUnsavedChanges = switch (route?.kind) {
+      BloomRouteKind.composer => state.composerDirty,
+      BloomRouteKind.profileEditor => state.profileDirty,
+      _ => false,
+    };
+    if (!guardsUnsavedChanges) return page;
+    return PopScope<void>(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _handleBack(context, state, route);
+      },
+      child: page,
+    );
+  }
+
+  Widget _buildContent(
+    BloomViewState state, {
+    required BloomDestination destination,
+    required BloomRoute? route,
+  }) {
     if (route != null) {
       return switch (route.kind) {
         BloomRouteKind.story => _BloomStoryPage(
@@ -99,7 +160,7 @@ final class _BloomDemoState extends State<BloomDemo> {
         ),
       };
     }
-    return switch (state.destination) {
+    return switch (destination) {
       BloomDestination.home => _BloomHomePage(viewModel: _viewModel),
       BloomDestination.discover => _BloomDiscoverPage(viewModel: _viewModel),
       BloomDestination.messages => _BloomMessagesPage(viewModel: _viewModel),
@@ -107,8 +168,12 @@ final class _BloomDemoState extends State<BloomDemo> {
     };
   }
 
-  Widget _buildNavigationBar(BuildContext context, BloomViewState state) {
-    final route = state.route;
+  Widget _buildNavigationBar(
+    BuildContext context,
+    BloomViewState state, {
+    required BloomDestination destination,
+    required BloomRoute? route,
+  }) {
     if (route != null) {
       final title = switch (route.kind) {
         BloomRouteKind.story => state.data.creator(route.id!).name,
@@ -130,7 +195,7 @@ final class _BloomDemoState extends State<BloomDemo> {
                 ? CharcoalIcons.x
                 : CharcoalIcons.chevronLeft,
           ),
-          onPressed: () => _handleBack(context, state),
+          onPressed: () => _handleBack(context, state, route),
           semanticLabel: _backSemanticLabel(route.kind),
           size: CharcoalIconButtonSize.small,
         ),
@@ -175,19 +240,19 @@ final class _BloomDemoState extends State<BloomDemo> {
       );
     }
 
-    final title = switch (state.destination) {
+    final title = switch (destination) {
       BloomDestination.home => 'Bloom',
       BloomDestination.discover => 'Discover',
       BloomDestination.messages => 'Messages',
       BloomDestination.profile => 'Profile',
     };
     return CharcoalNavigationBar(
-      leading: state.destination == BloomDestination.home
+      leading: destination == BloomDestination.home
           ? const _BloomBrandMark()
           : null,
       semanticLabel: '$title navigation',
       title: Text(title),
-      trailing: switch (state.destination) {
+      trailing: switch (destination) {
         BloomDestination.home => Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -232,8 +297,12 @@ final class _BloomDemoState extends State<BloomDemo> {
     BloomRouteKind.post => 'Return to previous page',
   };
 
-  Future<void> _handleBack(BuildContext context, BloomViewState state) async {
-    switch (state.route?.kind) {
+  Future<void> _handleBack(
+    BuildContext context,
+    BloomViewState state,
+    BloomRoute? route,
+  ) async {
+    switch (route?.kind) {
       case BloomRouteKind.composer when state.composerDirty:
         final choice = await showCharcoalModal<_BloomExitChoice>(
           actions: <Widget>[
@@ -332,7 +401,15 @@ final class _BloomDemoState extends State<BloomDemo> {
             return;
         }
       default:
-        _viewModel.popRoute();
+        Navigator.of(context).maybePop();
+    }
+  }
+
+  void _popRouteIfCurrent(int index, BloomRoute route) {
+    final routeStack = _viewModel.state.routeStack;
+    if (routeStack.length == index + 1 &&
+        routeStack.last.storageKey == route.storageKey) {
+      _viewModel.popRoute();
     }
   }
 

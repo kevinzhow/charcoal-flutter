@@ -47,8 +47,6 @@ final class LumenViewModel extends ChangeNotifier {
   bool get roundUps => _roundUps;
   String get sendAmount => _sendAmount;
   String? get sendAmountError => _sendAmountError;
-  int get selectedBottomIndex => _destination.index;
-  bool get showBottomNavigation => _task == LumenTask.none;
   LumenTask get task => _task;
   int get topUpAmount => _topUpAmount;
   int? get parsedSendAmount =>

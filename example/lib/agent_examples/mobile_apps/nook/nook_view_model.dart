@@ -19,13 +19,13 @@ final class NookViewModel extends ChangeNotifier {
   NookRoute get route => _route;
   NookProduct? get selectedProduct => _selectedProduct;
   List<NookProduct> get confirmedProducts => _confirmedProducts;
-  int get selectedBottomIndex => _destination.index;
-  bool get showBottomNavigation => _route == NookRoute.root;
   bool get canGoBack =>
       _route != NookRoute.root &&
       (_route != NookRoute.orderConfirmed || _receiptOpenedFromProfile);
 
-  List<NookProduct> get visibleProducts {
+  List<NookProduct> get visibleProducts => visibleProductsFor(_destination);
+
+  List<NookProduct> visibleProductsFor(NookDestination destination) {
     final normalized = _query.trim().toLowerCase();
     return nookProducts
         .where((product) {
@@ -34,7 +34,7 @@ final class NookViewModel extends ChangeNotifier {
               product.name.toLowerCase().contains(normalized) ||
               product.subtitle.toLowerCase().contains(normalized);
           final categoryApplies =
-              _destination == NookDestination.shop && normalized.isEmpty;
+              destination == NookDestination.shop && normalized.isEmpty;
           return matchesQuery &&
               (!categoryApplies || product.category == _category);
         })

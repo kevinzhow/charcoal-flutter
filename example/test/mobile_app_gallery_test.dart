@@ -1,5 +1,8 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui_showcase/agent_examples/agent_example_navigator.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_app_gallery.dart';
+import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/daylight/widgets/daylight_item_group.dart';
+import 'package:charcoal_ui_showcase/agent_examples/shared/agent_demo_tab_bar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -47,6 +50,362 @@ void main() {
       expect(top, greaterThan(previousTop));
       previousTop = top;
     }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('all apps share the Bloom-style top-level tab bar', (
+    tester,
+  ) async {
+    for (final app in AgentMobileApp.values) {
+      await _pumpSimulator(tester, app);
+      final tabBar = find.byType(AgentDemoTabBar);
+      expect(tabBar, findsOneWidget, reason: app.name);
+      expect(tester.getSize(tabBar).height, 64, reason: app.name);
+      if (app == AgentMobileApp.social) {
+        final messages = tester
+            .widget<AgentDemoTabBar>(tabBar)
+            .items
+            .singleWhere((item) => item.label == 'Messages');
+        expect(messages.badgeCount, greaterThan(0));
+        expect(
+          messages.semanticLabel,
+          'Messages, ${messages.badgeCount} unread',
+        );
+        expect(find.bySemanticsLabel(messages.semanticLabel!), findsOneWidget);
+      }
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Daylight keeps repeated items on one visual rhythm', (
+    tester,
+  ) async {
+    await _pumpSimulator(tester, AgentMobileApp.habits);
+
+    expect(
+      tester.widget<DaylightItemGroup>(find.byType(DaylightItemGroup)).children,
+      hasLength(3),
+    );
+    final firstHabit = find.byKey(
+      const ValueKey<String>('agent-habit-stretch-row'),
+    );
+    final secondHabit = find.byKey(
+      const ValueKey<String>('agent-habit-walk-row'),
+    );
+    expect(
+      tester.getTopLeft(secondHabit).dy - tester.getBottomLeft(firstHabit).dy,
+      closeTo(8, 0.01),
+    );
+
+    for (final (tab, itemCount) in <(String, int)>[
+      ('journey', 4),
+      ('insights', 3),
+      ('profile', 2),
+    ]) {
+      await _tapVisible(
+        tester,
+        find.byKey(ValueKey<String>('agent-habits-nav-$tab')),
+      );
+      expect(
+        tester
+            .widget<DaylightItemGroup>(find.byType(DaylightItemGroup))
+            .children,
+        hasLength(itemCount),
+        reason: tab,
+      );
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('embedded details use a real route stack and system back', (
+    tester,
+  ) async {
+    await _pumpSimulator(tester, AgentMobileApp.commerce);
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(1));
+    await tester.ensureVisible(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+
+    final navigator = _nestedNavigator(tester, 'commerce');
+    expect(navigator.pages, hasLength(2));
+    expect(navigator.pages, everyElement(isA<AgentExamplePage>()));
+    expect(navigator.pages.map((page) => page.name), <String>[
+      '/nook/root-shop',
+      '/nook/product-ripple-cup',
+    ]);
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-shop-page')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-product-detail')),
+      findsOneWidget,
+    );
+    expect(
+      tester
+          .widgetList<SlideTransition>(
+            find.descendant(
+              of: find.byKey(
+                const ValueKey<String>('agent-commerce-navigator'),
+              ),
+              matching: find.byType(SlideTransition),
+            ),
+          )
+          .any((transition) => transition.position.value != Offset.zero),
+      isTrue,
+    );
+    await tester.pumpAndSettle();
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(1));
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-shop-page')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-product-detail')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('system back guards an unsaved fullscreen route', (tester) async {
+    await _pumpSimulator(tester, AgentMobileApp.social);
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-social-new-post')),
+    );
+    expect(_nestedNavigator(tester, 'social').pages, hasLength(2));
+    await tester.enterText(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('agent-social-post-field')),
+        matching: find.byType(EditableText),
+      ),
+      'Keep this thought',
+    );
+    await tester.pump();
+    expect(
+      tester
+          .widget<CharcoalButton>(
+            find.byKey(const ValueKey<String>('agent-social-publish-post')),
+          )
+          .onPressed,
+      isNotNull,
+    );
+    expect(
+      tester
+          .widgetList<PopScope<void>>(find.byType(PopScope<void>))
+          .any((scope) => !scope.canPop),
+      isTrue,
+    );
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Leave this post?'), findsOneWidget);
+    expect(_nestedNavigator(tester, 'social').pages, hasLength(2));
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-social-keep-editing-post')),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-social-composer-page')),
+      findsOneWidget,
+    );
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-social-save-draft')),
+    );
+
+    expect(_nestedNavigator(tester, 'social').pages, hasLength(1));
+    expect(
+      find.byKey(const ValueKey<String>('agent-social-composer-page')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a durable completion replaces the task stack', (tester) async {
+    await _pumpSimulator(tester, AgentMobileApp.wallet);
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-wallet-action-topUp')),
+    );
+    expect(_nestedNavigator(tester, 'wallet').pages, hasLength(2));
+    final confirm = find.byKey(
+      const ValueKey<String>('agent-wallet-confirm-top-up'),
+    );
+    await tester.ensureVisible(confirm);
+    await tester.pumpAndSettle();
+    await tester.tap(confirm);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+
+    expect(_nestedNavigator(tester, 'wallet').pages, hasLength(1));
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-top-up')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-top-up-confirmed')),
+      findsOneWidget,
+    );
+    await tester.pumpAndSettle();
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey<String>('agent-wallet-top-up-confirmed')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('route motion is removed when animations are disabled', (
+    tester,
+  ) async {
+    await _pumpSimulator(
+      tester,
+      AgentMobileApp.commerce,
+      disableAnimations: true,
+    );
+
+    await tester.ensureVisible(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pump();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(2));
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('agent-commerce-navigator')),
+        matching: find.byType(SlideTransition),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-product-detail')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('top-level destinations update one route without push motion', (
+    tester,
+  ) async {
+    await _pumpSimulator(tester, AgentMobileApp.commerce);
+
+    final shopPage = find.byKey(
+      const ValueKey<String>('agent-commerce-shop-page'),
+    );
+    final rootRoute = ModalRoute.of(tester.element(shopPage));
+    final rootPageKey = _nestedNavigator(tester, 'commerce').pages.single.key;
+
+    await tester.tap(
+      find.byKey(const ValueKey<String>('agent-commerce-nav-search')),
+    );
+    await tester.pump();
+
+    final searchPage = find.byKey(
+      const ValueKey<String>('agent-commerce-search-page'),
+    );
+    expect(searchPage, findsOneWidget);
+    expect(ModalRoute.of(tester.element(searchPage)), same(rootRoute));
+    final navigator = _nestedNavigator(tester, 'commerce');
+    expect(navigator.pages, hasLength(1));
+    expect(navigator.pages.single.key, rootPageKey);
+    expect(navigator.pages.single.name, '/nook/root-search');
+    expect(
+      tester
+          .widgetList<SlideTransition>(
+            find.descendant(
+              of: find.byKey(
+                const ValueKey<String>('agent-commerce-navigator'),
+              ),
+              matching: find.byType(SlideTransition),
+            ),
+          )
+          .every((transition) => transition.position.value == Offset.zero),
+      isTrue,
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('top-level destinations restore their own scroll position', (
+    tester,
+  ) async {
+    await _pumpSimulator(tester, AgentMobileApp.commerce);
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-commerce-nav-search')),
+    );
+    const searchScrollKey = PageStorageKey<String>(
+      'agent-commerce-page-scroll-root-search',
+    );
+    final searchScroll = find.descendant(
+      of: find.byKey(searchScrollKey),
+      matching: find.byType(Scrollable),
+    );
+    final searchScrollState = _verticalScrollState(tester, searchScroll);
+    await tester.drag(
+      find.byWidget(searchScrollState.widget),
+      const Offset(0, -260),
+    );
+    await tester.pumpAndSettle();
+    final savedOffset = searchScrollState.position.pixels;
+    expect(savedOffset, greaterThan(0));
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-commerce-nav-shop')),
+    );
+    final shopScroll = find.descendant(
+      of: find.byKey(
+        const PageStorageKey<String>('agent-commerce-page-scroll-root-shop'),
+      ),
+      matching: find.byType(Scrollable),
+    );
+    expect(
+      tester
+          .stateList<ScrollableState>(shopScroll)
+          .where((state) => state.position.axis == Axis.vertical)
+          .first
+          .position
+          .pixels,
+      0,
+    );
+
+    await _tapVisible(
+      tester,
+      find.byKey(const ValueKey<String>('agent-commerce-nav-search')),
+    );
+    final restoredSearchScroll = find.descendant(
+      of: find.byKey(searchScrollKey),
+      matching: find.byType(Scrollable),
+    );
+    expect(
+      _verticalScrollState(tester, restoredSearchScroll).position.pixels,
+      closeTo(savedOffset, 0.1),
+    );
     expect(tester.takeException(), isNull);
   });
 
@@ -343,9 +702,7 @@ void main() {
     await _tapVisible(
       tester,
       find.descendant(
-        of: find.byKey(
-          const ValueKey<String>('agent-wallet-profile-balance'),
-        ),
+        of: find.byKey(const ValueKey<String>('agent-wallet-profile-balance')),
         matching: find.byType(CharcoalSwitch),
       ),
     );
@@ -429,9 +786,7 @@ void main() {
     await _tapVisible(
       tester,
       find.descendant(
-        of: find.byKey(
-          const ValueKey<String>('agent-habits-profile-streaks'),
-        ),
+        of: find.byKey(const ValueKey<String>('agent-habits-profile-streaks')),
         matching: find.byType(CharcoalSwitch),
       ),
     );
@@ -440,11 +795,19 @@ void main() {
   });
 }
 
-Future<void> _pumpSimulator(WidgetTester tester, AgentMobileApp app) async {
+Future<void> _pumpSimulator(
+  WidgetTester tester,
+  AgentMobileApp app, {
+  bool disableAnimations = false,
+}) async {
   await tester.binding.setSurfaceSize(const Size(320, 760));
   addTearDown(() => tester.binding.setSurfaceSize(null));
   await tester.pumpWidget(
-    _testApp(width: 320, child: AgentMobileAppSimulator(app: app)),
+    _testApp(
+      width: 320,
+      child: AgentMobileAppSimulator(app: app),
+      disableAnimations: disableAnimations,
+    ),
   );
   await tester.pumpAndSettle();
 }
@@ -456,6 +819,23 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
   await tester.pumpAndSettle();
 }
 
+Navigator _nestedNavigator(WidgetTester tester, String appKey) =>
+    tester.widget<Navigator>(
+      find.descendant(
+        of: find.byKey(ValueKey<String>('agent-$appKey-navigator')),
+        matching: find.byType(Navigator),
+      ),
+    );
+
+ScrollableState _verticalScrollState(WidgetTester tester, Finder finder) =>
+    tester
+        .stateList<ScrollableState>(finder)
+        .firstWhere(
+          (state) =>
+              state.position.axis == Axis.vertical &&
+              state.position.maxScrollExtent > 0,
+        );
+
 Widget _tileCatalog() => AgentExampleTileGrid(
   children: <Widget>[
     for (final app in AgentMobileApp.values)
@@ -463,12 +843,22 @@ Widget _tileCatalog() => AgentExampleTileGrid(
   ],
 );
 
-Widget _testApp({required double width, required Widget child}) => CharcoalApp(
+Widget _testApp({
+  required double width,
+  required Widget child,
+  bool disableAnimations = false,
+}) => CharcoalApp(
   themeMode: CharcoalThemeMode.light,
-  home: SingleChildScrollView(
-    child: Align(
-      alignment: Alignment.topCenter,
-      child: SizedBox(width: width, child: child),
+  home: Builder(
+    builder: (context) => MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(disableAnimations: disableAnimations),
+      child: SingleChildScrollView(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(width: width, child: child),
+        ),
+      ),
     ),
   ),
 );

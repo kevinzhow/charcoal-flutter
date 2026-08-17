@@ -2,6 +2,8 @@ import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../agent_example_navigator.dart';
+import '../../shared/agent_demo_tab_bar.dart';
 import '../shared/demo_shell.dart';
 import 'lumen_models.dart';
 import 'lumen_view_model.dart';
@@ -44,48 +46,177 @@ final class _LumenDemoState extends State<LumenDemo> {
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: _viewModel,
-    builder: (context, _) {
-      final theme = CharcoalTheme.of(context);
-      return AgentDemoAppShell(
-        appKey: 'wallet',
-        appLabel: 'Lumen personal finance app demo',
-        brandColor: theme.colors.containerPositiveDefault,
-        brandForeground: theme.colors.textOnPositiveDefault,
-        brandMark: 'L',
-        bottomItems: const <AgentDemoBottomItem>[
-          AgentDemoBottomItem('Wallet', CharcoalIcons.invoice),
-          AgentDemoBottomItem('Activity', CharcoalIcons.history),
-          AgentDemoBottomItem('Plan', CharcoalIcons.calendar),
-          AgentDemoBottomItem('Profile', CharcoalIcons.personCircle),
-        ],
-        content: _content(),
-        leading: _viewModel.canGoBack
-            ? AgentDemoBackButton(
-                onPressed: _viewModel.goBack,
-                semanticLabel: 'Back from ${_viewModel.title}',
-              )
-            : null,
-        onBottomItemSelected: _viewModel.selectDestination,
-        selectedBottomIndex: _viewModel.selectedBottomIndex,
-        showBottomNavigation: _viewModel.showBottomNavigation,
-        title: _viewModel.title,
-        trailing: _viewModel.task == LumenTask.none
-            ? CharcoalIconButton(
-                icon: const CharcoalIcon(CharcoalIcons.bell),
-                onPressed: () => showCharcoalToast(
-                  context: context,
-                  message: 'No new account alerts. Everything looks calm.',
-                ),
-                semanticLabel: 'Lumen notifications',
-                size: CharcoalIconButtonSize.small,
-              )
-            : null,
-      );
-    },
+    builder: (context, _) =>
+        AgentExampleNavigator(appKey: 'wallet', pages: _pages()),
   );
 
-  Widget _content() => switch (_viewModel.task) {
-    LumenTask.none => switch (_viewModel.destination) {
+  List<AgentExamplePage> _pages() {
+    final destination = _viewModel.destination;
+    final root = _page(
+      destination: destination,
+      pageKey: 'root-${destination.name}',
+      task: LumenTask.none,
+      routeKey: 'root',
+    );
+    return switch (_viewModel.task) {
+      LumenTask.none => <AgentExamplePage>[root],
+      LumenTask.receive => <AgentExamplePage>[
+        root,
+        _page(
+          destination: destination,
+          pageKey: 'receive',
+          onDidPop: () => _popIfCurrent(LumenTask.receive),
+          task: LumenTask.receive,
+        ),
+      ],
+      LumenTask.sendEdit => <AgentExamplePage>[
+        root,
+        _page(
+          destination: destination,
+          pageKey: 'send-edit',
+          onDidPop: () => _popIfCurrent(LumenTask.sendEdit),
+          task: LumenTask.sendEdit,
+        ),
+      ],
+      LumenTask.sendReview => <AgentExamplePage>[
+        root,
+        _page(
+          destination: destination,
+          pageKey: 'send-edit',
+          task: LumenTask.sendEdit,
+        ),
+        _page(
+          destination: destination,
+          pageKey: 'send-review',
+          onDidPop: () => _popIfCurrent(LumenTask.sendReview),
+          task: LumenTask.sendReview,
+        ),
+      ],
+      LumenTask.sendConfirmed => <AgentExamplePage>[
+        _page(
+          destination: destination,
+          pageKey: 'send-confirmed',
+          task: LumenTask.sendConfirmed,
+        ),
+      ],
+      LumenTask.topUpEdit => <AgentExamplePage>[
+        root,
+        _page(
+          destination: destination,
+          pageKey: 'top-up-edit',
+          onDidPop: () => _popIfCurrent(LumenTask.topUpEdit),
+          task: LumenTask.topUpEdit,
+        ),
+      ],
+      LumenTask.topUpConfirmed => <AgentExamplePage>[
+        _page(
+          destination: destination,
+          pageKey: 'top-up-confirmed',
+          task: LumenTask.topUpConfirmed,
+        ),
+      ],
+    };
+  }
+
+  AgentExamplePage _page({
+    required LumenDestination destination,
+    required String pageKey,
+    required LumenTask task,
+    VoidCallback? onDidPop,
+    String? routeKey,
+  }) {
+    final sendAmount = _viewModel.parsedSendAmount;
+    final recipient = _viewModel.recipient.trim();
+    final balance = _viewModel.balance;
+    final topUpAmount = _viewModel.topUpAmount;
+    return AgentExamplePage(
+      builder: (context) => _shell(
+        context,
+        balance: balance,
+        canGoBack: onDidPop != null,
+        destination: destination,
+        pageKey: pageKey,
+        recipient: recipient,
+        sendAmount: sendAmount,
+        task: task,
+        topUpAmount: topUpAmount,
+      ),
+      key: ValueKey<String>('agent-wallet-route-${routeKey ?? pageKey}'),
+      listenable: _viewModel,
+      name: '/lumen/$pageKey',
+      onDidPop: onDidPop,
+    );
+  }
+
+  Widget _shell(
+    BuildContext context, {
+    required int balance,
+    required bool canGoBack,
+    required LumenDestination destination,
+    required String pageKey,
+    required String recipient,
+    required int? sendAmount,
+    required LumenTask task,
+    required int topUpAmount,
+  }) {
+    final theme = CharcoalTheme.of(context);
+    final title = _title(task, destination);
+    return AgentDemoAppShell(
+      appKey: 'wallet',
+      appLabel: 'Lumen personal finance app demo',
+      brandColor: theme.colors.containerPositiveDefault,
+      brandForeground: theme.colors.textOnPositiveDefault,
+      brandMark: 'L',
+      tabItems: const <AgentDemoTabItem>[
+        AgentDemoTabItem('Wallet', CharcoalIcons.invoice),
+        AgentDemoTabItem('Activity', CharcoalIcons.history),
+        AgentDemoTabItem('Plan', CharcoalIcons.calendar),
+        AgentDemoTabItem('Profile', CharcoalIcons.personCircle),
+      ],
+      content: _content(
+        task,
+        destination,
+        balance: balance,
+        recipient: recipient,
+        sendAmount: sendAmount,
+        topUpAmount: topUpAmount,
+      ),
+      leading: canGoBack
+          ? AgentDemoBackButton(
+              onPressed: () {
+                Navigator.of(context).maybePop();
+              },
+              semanticLabel: 'Back from $title',
+            )
+          : null,
+      onTabSelected: _viewModel.selectDestination,
+      pageKey: pageKey,
+      selectedTabIndex: destination.index,
+      showTabBar: task == LumenTask.none,
+      title: title,
+      trailing: task == LumenTask.none
+          ? CharcoalIconButton(
+              icon: const CharcoalIcon(CharcoalIcons.bell),
+              onPressed: () => showCharcoalToast(
+                context: context,
+                message: 'No new account alerts. Everything looks calm.',
+              ),
+              semanticLabel: 'Lumen notifications',
+              size: CharcoalIconButtonSize.small,
+            )
+          : null,
+    );
+  }
+
+  Widget _content(
+    LumenTask task,
+    LumenDestination destination, {
+    required int balance,
+    required String recipient,
+    required int? sendAmount,
+    required int topUpAmount,
+  }) => switch (task) {
+    LumenTask.none => switch (destination) {
       LumenDestination.wallet => LumenWalletPage(viewModel: _viewModel),
       LumenDestination.activity => LumenActivityPage(viewModel: _viewModel),
       LumenDestination.plan => const LumenPlanPage(),
@@ -97,21 +228,47 @@ final class _LumenDemoState extends State<LumenDemo> {
       recipientController: _recipientController,
       viewModel: _viewModel,
     ),
-    LumenTask.sendReview => LumenSendReviewPage(viewModel: _viewModel),
+    LumenTask.sendReview => LumenSendReviewPage(
+      amount: sendAmount!,
+      balance: balance,
+      onConfirm: _viewModel.confirmSend,
+      recipient: recipient,
+    ),
     LumenTask.sendConfirmed => LumenSendConfirmedPage(
+      amount: sendAmount!,
       onDone: _finishTask,
       onViewActivity: () {
         _viewModel.openActivity();
         _clearDraftControllers();
       },
-      viewModel: _viewModel,
+      recipient: recipient,
     ),
     LumenTask.topUpEdit => LumenTopUpPage(viewModel: _viewModel),
     LumenTask.topUpConfirmed => LumenTopUpConfirmedPage(
+      amount: topUpAmount,
+      balance: balance,
       onDone: _finishTask,
-      viewModel: _viewModel,
     ),
   };
+
+  String _title(LumenTask task, LumenDestination destination) => switch (task) {
+    LumenTask.none => switch (destination) {
+      LumenDestination.wallet => 'Lumen',
+      LumenDestination.activity => 'Activity',
+      LumenDestination.plan => 'Plan',
+      LumenDestination.profile => 'Profile',
+    },
+    LumenTask.receive => 'Receive money',
+    LumenTask.sendEdit => 'Send money',
+    LumenTask.sendReview => 'Review transfer',
+    LumenTask.sendConfirmed => 'Transfer sent',
+    LumenTask.topUpEdit => 'Top up',
+    LumenTask.topUpConfirmed => 'Balance updated',
+  };
+
+  void _popIfCurrent(LumenTask task) {
+    if (_viewModel.task == task) _viewModel.goBack();
+  }
 
   void _finishTask() {
     _viewModel.finishTask();

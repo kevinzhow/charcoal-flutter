@@ -111,15 +111,23 @@ final class LumenSendEditPage extends StatelessWidget {
 }
 
 final class LumenSendReviewPage extends StatelessWidget {
-  const LumenSendReviewPage({required this.viewModel, super.key});
+  const LumenSendReviewPage({
+    required this.amount,
+    required this.balance,
+    required this.onConfirm,
+    required this.recipient,
+    super.key,
+  });
 
-  final LumenViewModel viewModel;
+  final int amount;
+  final int balance;
+  final VoidCallback onConfirm;
+  final String recipient;
 
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final space = theme.dimensions.space;
-    final amount = viewModel.parsedSendAmount!;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-send-review'),
@@ -136,13 +144,13 @@ final class LumenSendReviewPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _ReviewRow(label: 'To', value: viewModel.recipient.trim()),
+                _ReviewRow(label: 'To', value: recipient),
                 SizedBox(height: space.component20),
                 _ReviewRow(label: 'Amount', value: formatYen(amount)),
                 SizedBox(height: space.component20),
                 _ReviewRow(
                   label: 'Balance after',
-                  value: formatYen(viewModel.balance - amount),
+                  value: formatYen(balance - amount),
                 ),
               ],
             ),
@@ -151,7 +159,7 @@ final class LumenSendReviewPage extends StatelessWidget {
           CharcoalButton(
             key: const ValueKey<String>('agent-wallet-confirm-transfer'),
             fullWidth: true,
-            onPressed: viewModel.confirmSend,
+            onPressed: onConfirm,
             variant: CharcoalButtonVariant.primary,
             child: Text('Send ${formatYen(amount)}'),
           ),
@@ -163,20 +171,21 @@ final class LumenSendReviewPage extends StatelessWidget {
 
 final class LumenSendConfirmedPage extends StatelessWidget {
   const LumenSendConfirmedPage({
+    required this.amount,
     required this.onDone,
     required this.onViewActivity,
-    required this.viewModel,
+    required this.recipient,
     super.key,
   });
 
+  final int amount;
   final VoidCallback onDone;
   final VoidCallback onViewActivity;
-  final LumenViewModel viewModel;
+  final String recipient;
 
   @override
   Widget build(BuildContext context) {
     final space = CharcoalTheme.of(context).dimensions.space;
-    final amount = viewModel.parsedSendAmount!;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-send-confirmed'),
@@ -191,8 +200,7 @@ final class LumenSendConfirmedPage extends StatelessWidget {
           SizedBox(height: space.component30),
           AgentDemoStatus(
             positive: true,
-            message:
-                '${formatYen(amount)} was sent to ${viewModel.recipient.trim()}.',
+            message: '${formatYen(amount)} was sent to $recipient.',
           ),
           SizedBox(height: space.component30),
           CharcoalButton(
@@ -260,13 +268,15 @@ final class LumenTopUpPage extends StatelessWidget {
 
 final class LumenTopUpConfirmedPage extends StatelessWidget {
   const LumenTopUpConfirmedPage({
+    required this.amount,
+    required this.balance,
     required this.onDone,
-    required this.viewModel,
     super.key,
   });
 
+  final int amount;
+  final int balance;
   final VoidCallback onDone;
-  final LumenViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -285,7 +295,7 @@ final class LumenTopUpConfirmedPage extends StatelessWidget {
           AgentDemoStatus(
             positive: true,
             message:
-                '${formatYen(viewModel.topUpAmount)} was added. New balance: ${formatYen(viewModel.balance)}.',
+                '${formatYen(amount)} was added. New balance: ${formatYen(balance)}.',
           ),
           SizedBox(height: space.component30),
           CharcoalButton(

@@ -5,6 +5,7 @@ import '../../shared/demo_components.dart';
 import '../daylight_models.dart';
 import '../daylight_view_model.dart';
 import '../widgets/daylight_habit_card.dart';
+import '../widgets/daylight_item_group.dart';
 
 final class DaylightTomorrowPlanPage extends StatelessWidget {
   const DaylightTomorrowPlanPage({required this.viewModel, super.key});
@@ -25,15 +26,19 @@ final class DaylightTomorrowPlanPage extends StatelessWidget {
             description: 'Keep what still feels useful. Nothing is carried over until you save.',
           ),
           SizedBox(height: space.component40),
-          for (final habit in daylightHabits) ...<Widget>[
-            DaylightHabitCard(
-              habit: habit,
-              onChanged: (value) => viewModel.toggleTomorrowHabit(habit, value),
-              showStreak: false,
-              value: viewModel.isPlannedForTomorrow(habit),
-            ),
-            SizedBox(height: space.component30),
-          ],
+          DaylightItemGroup(
+            children: <Widget>[
+              for (final habit in daylightHabits)
+                DaylightHabitCard(
+                  habit: habit,
+                  onChanged: (value) =>
+                      viewModel.toggleTomorrowHabit(habit, value),
+                  showStreak: false,
+                  value: viewModel.isPlannedForTomorrow(habit),
+                ),
+            ],
+          ),
+          SizedBox(height: space.component30),
           CharcoalSwitch(
             label: const Text('Gentle reminder at 8:30 PM'),
             onChanged: viewModel.setTomorrowReminder,
