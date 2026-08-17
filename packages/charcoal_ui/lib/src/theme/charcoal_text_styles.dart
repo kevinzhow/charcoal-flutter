@@ -69,11 +69,11 @@ final class CharcoalTextStyles {
     final font = resolveCharcoalSansFont(tokens, fontSize: fontSize);
     return TextStyle(
       fontFamily: font.family,
+      fontFamilyFallback: font.familyFallback,
       fontSize: fontSize,
       fontWeight: fontWeight,
       height: lineHeight / fontSize,
       leadingDistribution: TextLeadingDistribution.even,
-      package: font.fontPackage,
     );
   }
 }
