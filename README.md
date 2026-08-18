@@ -245,15 +245,25 @@ See [Agent readiness](agent/README.md) for the benchmark, evidence schema, and r
 
 ## Motion and navigation
 
-`CharcoalApp` uses `CharcoalPageRoute` as its default route factory. The transition remains opaque,
-disables route snapshotting, and honors reduced motion. Push an explicit route when using
-imperative navigation:
+`CharcoalApp` uses `CharcoalPageRoute` as its default route factory. The route remains opaque,
+disables route snapshotting, and honors reduced motion. Horizontal routes install a native-only,
+RTL-aware leading-edge pop gesture on iOS. On Android they consume predictive-back start, update,
+cancel, and commit events so the destination is visible before the stack changes. Web and desktop
+retain Charcoal shared-axis motion without installing mobile edge gestures.
+
+Push an explicit route when using imperative navigation:
 
 ```dart
 Navigator.of(context).push<void>(
   CharcoalPageRoute<void>(builder: (_) => const DetailPage()),
 );
 ```
+
+Use `PopScope.canPop` for guarded pages so gesture eligibility is known before input begins.
+Fullscreen dialogs and vertical iOS routes intentionally do not expose the horizontal edge gesture.
+Android host applications must also follow Flutter's platform setup for
+[predictive back](https://docs.flutter.dev/platform-integration/android/predictive-back) and set
+`android:enableOnBackInvokedCallback="true"` on the Android application or activity.
 
 `CharcoalMotion` exposes shared composition curves. Component-specific durations stay beside the
 component whose source contract defines them.

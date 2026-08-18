@@ -11,8 +11,8 @@ void main() {
 
     expect(File(catalogJsonPath(root)).readAsStringSync(), generated.json);
     expect(File(catalogDartPath(root)).readAsStringSync(), generated.dartSource);
-    expect(generated.catalog.coverage.curatedComponents, 9);
-    expect(generated.catalog.coverage.componentsWithExamples, 9);
+    expect(generated.catalog.coverage.curatedComponents, 10);
+    expect(generated.catalog.coverage.componentsWithExamples, 10);
     expect(generated.catalog.coverage.curatedPatterns, 6);
     expect(generated.catalog.coverage.publicTokens, 502);
 
@@ -25,6 +25,16 @@ void main() {
     expect(
       appShell.composition.join(' '),
       allOf(contains('first painted frame'), contains('one state owner')),
+    );
+    final pageRoute = generated.catalog.componentNamed('CharcoalPageRoute')!;
+    expect(
+      pageRoute.responsiveBehavior.join(' '),
+      allOf(
+        contains('RTL'),
+        contains('either system edge'),
+        contains('enableOnBackInvokedCallback'),
+        contains('Web and desktop'),
+      ),
     );
   });
 }

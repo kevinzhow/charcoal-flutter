@@ -146,6 +146,37 @@ void main() {
     expect(source, contains('await tester.pump();'));
   });
 
+  test('pushed-route evidence covers native interactive back lifecycles', () {
+    final application = nookReview['application']! as Map<String, Object?>;
+    final scenarios = (application['runtimeScenarios']! as List<Object?>)
+        .cast<Map<String, Object?>>();
+    final ios = scenarios.firstWhere(
+      (item) => item['id'] == 'ios-interactive-route-back',
+    );
+    final android = scenarios.firstWhere(
+      (item) => item['id'] == 'android-predictive-route-back',
+    );
+    final source = File(
+      p.join(workspace.path, ios['sourcePath']! as String),
+    ).readAsStringSync();
+
+    expect(
+      ios['evidence'],
+      allOf(contains('in-progress'), contains('cancellation'), contains('one pop')),
+    );
+    expect(
+      android['evidence'],
+      allOf(contains('start'), contains('update'), contains('cancel'), contains('exactly one pop')),
+    );
+    expect(source, contains(ios['testName']));
+    expect(source, contains(android['testName']));
+    expect(source, contains("'flutter/backgesture'"));
+    expect(source, contains("'startBackGesture'"));
+    expect(source, contains("'updateBackGestureProgress'"));
+    expect(source, contains("'cancelBackGesture'"));
+    expect(source, contains("'commitBackGesture'"));
+  });
+
   test('every transition links executable evidence covering both surfaces', () {
     final application = nookReview['application']! as Map<String, Object?>;
     final transition = (application['transitions']! as List<Object?>).first as Map<String, Object?>;

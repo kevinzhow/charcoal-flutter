@@ -12,6 +12,11 @@
 - Use page-level navigation chrome only for a real destination or hierarchy. Do not put a navigation bar around a gallery section or decorative card.
 - Keep top-level destination state stable while opening details, sheets, or transient tasks.
 - Ensure back, close, and cancellation return to a predictable prior state without losing unrelated work.
+- On native iOS, a horizontally pushed page supports a locale-aware leading-edge interactive return when the active route can pop; the page follows the pointer, cancellation restores it, and commit pops once. Full-screen dialog and non-horizontal routes may intentionally opt out.
+- On native Android, an eligible pushed page participates in predictive back across start, update, cancellation, and commit. Both system-edge directions must drive the same route-owned progress, and cancellation must not alter route or application state.
+- Android hosts set `android:enableOnBackInvokedCallback="true"` on the application or activity so the platform can deliver predictive-back progress.
+- Keep `PopScope` and nested Navigator ownership authoritative. A blocked inner route must not let a root route pop, and a gesture must not begin when pop eligibility is already known to be false.
+- Web and desktop retain their supported browser, keyboard, button, or system back paths; do not synthesize mobile edge gestures.
 
 ## Input and accessibility
 
@@ -29,5 +34,6 @@ Capture or inspect the smallest set of states that proves the experience contrac
 - Error, empty, disabled, or recovery page state when applicable.
 - Large-width page layout when supported.
 - Semantics or focus evidence for non-obvious interaction behavior.
+- On supported mobile platforms, route-stack evidence for the complete interactive-back lifecycle, including an in-progress frame, cancellation restoration, committed pop, blocked route, nested-route ownership, and RTL or opposite-edge behavior as applicable.
 
 Use Widget Previewer for the first five checks. Use the full application only for route history, platform integration, and the final end-to-end path.

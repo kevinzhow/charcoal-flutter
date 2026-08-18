@@ -45,6 +45,65 @@ final class ExampleMetadata {
 }
 
 const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetadata>{
+  'CharcoalPageRoute': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.',
+    keywords: <String>[
+      'android predictive back',
+      'back gesture',
+      'ios swipe back',
+      'navigation',
+      'page route',
+      'route transition',
+    ],
+    useWhen: <String>[
+      'A detail, drill-in, or transient task belongs on a real Navigator stack.',
+      'The page must preserve Charcoal motion while honoring native platform back gestures.',
+    ],
+    avoidWhen: <String>[
+      'A top-level destination is changing; update the stable app-shell owner without pushing a route.',
+      'The task is a bounded dialog or sheet; use showCharcoalModal instead.',
+    ],
+    accessibility: <String>[
+      'Use PopScope.canPop to publish guarded navigation state before a platform gesture begins.',
+      'Fullscreen dialogs and blocked routes do not expose an interactive iOS back gesture.',
+      'The route scopes page semantics while the caller remains responsible for an explicit back action.',
+    ],
+    responsiveBehavior: <String>[
+      'Native iOS uses a leading-edge interactive transition and respects RTL directionality.',
+      'Native Android consumes predictive-back progress from either system edge.',
+      'Android hosts set android:enableOnBackInvokedCallback="true" on the application or activity.',
+      'Web and desktop platforms retain opaque Charcoal shared-axis motion without installing mobile edge gestures.',
+    ],
+    interactionStates: <String>[
+      'entering',
+      'active',
+      'back gesture started',
+      'back gesture updating',
+      'back gesture cancelled',
+      'back gesture committed',
+      'exiting',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns page motion, gesture progress, cancellation recovery, and committed Navigator pop.',
+      'The caller owns route-stack state, unsaved-change guards, and durable completion semantics.',
+    ],
+    tokenRoles: <String>[],
+    relatedComponents: <String>[
+      'CharcoalApp',
+      'CharcoalNavigationBar',
+      'CharcoalTabBar',
+    ],
+    companionDeclarations: <String>['CharcoalPageTransitionAxis'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'page-route-platform-back',
+        title: 'Platform-adaptive detail route',
+        description: 'Pushes a real detail page whose back interaction follows iOS and Android platform gestures.',
+        sourcePath: 'example/lib/agent_examples/page_route_example.dart',
+      ),
+    ],
+  ),
   'CharcoalButton': ComponentMetadata(
     category: 'Actions',
     summary: 'Runs an action with Charcoal interaction states, sizing, and visual variants.',

@@ -296,8 +296,8 @@
         "trigger": "Open a product",
         "stackEffect": "push",
         "statePreservation": "Shop category and scroll position remain available beneath the selected product.",
-        "backBehavior": "System back pops Product detail and restores Shop on the existing root route.",
-        "runtimeScenarioIds": ["complete-shopping-journey", "route-lifecycle-and-system-back"]
+        "backBehavior": "System back pops Product detail and restores Shop on the existing root route; native iOS leading-edge and Android predictive gestures can preview, cancel, or commit that same pop.",
+        "runtimeScenarioIds": ["complete-shopping-journey", "route-lifecycle-and-system-back", "ios-interactive-route-back", "android-predictive-route-back"]
       },
       {
         "id": "shop-to-bag",
@@ -426,6 +426,22 @@
         "evidence": "The executable route test observes both Page entries during CharcoalPageRoute motion and verifies that platform back pops the nested Navigator stack."
       },
       {
+        "id": "ios-interactive-route-back",
+        "testName": "embedded iOS route supports interactive cancel and commit",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["shop", "product-detail"],
+        "verdict": "pass",
+        "evidence": "The executable nested-Navigator test starts at the native iOS leading edge, records an in-progress Product detail displacement with Shop still mounted beneath it, verifies cancellation restores the same detail route, and then commits one pop back to Shop."
+      },
+      {
+        "id": "android-predictive-route-back",
+        "testName": "embedded Android route previews cancel and commit",
+        "sourcePath": "example/test/mobile_app_gallery_test.dart",
+        "surfaceIds": ["shop", "product-detail"],
+        "verdict": "pass",
+        "evidence": "The executable nested-Navigator test sends Android predictive-back start and update events, observes the Product detail preview transform while Shop remains mounted, proves cancel restores the same route, and then commits exactly one pop back to Shop."
+      },
+      {
         "id": "destination-scroll-restoration",
         "testName": "top-level destinations restore their own scroll position",
         "sourcePath": "example/test/mobile_app_gallery_test.dart",
@@ -438,7 +454,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar keeps touch-down and cancellation confined to its transient pressed layer without moving destination bounds, icon/label centers, or text baselines, then atomically commits geometry, selected visuals, semantics, and content in the first post-activation frame on one stable root Route; product, bag, review, and Profile-receipt pages use the nested Navigator, system back pops real CharcoalPageRoutes, completion replaces obsolete task history, and destination scroll offsets survive tab selection." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar keeps touch-down and cancellation confined to its transient pressed layer without moving destination bounds, icon/label centers, or text baselines, then atomically commits geometry, selected visuals, semantics, and content in the first post-activation frame on one stable root Route; product, bag, review, and Profile-receipt pages use the nested Navigator, system back pops real CharcoalPageRoutes, native iOS and Android tests prove interactive preview, cancellation restoration, and one committed pop on that nested stack, completion replaces obsolete task history, and destination scroll offsets survive tab selection." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Discovery leads Shop and Search, purchase decisions lead task pages, and Profile now gives shopping activity a clear purpose." },
         { "area": "product-copy", "verdict": "pass", "evidence": "All visible copy describes shopper outcomes and real simulation behavior; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every inventoried state is backed by compact and standard production-page previews, with collection columns constraint-driven." },

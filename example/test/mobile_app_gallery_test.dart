@@ -7,6 +7,7 @@ import 'package:charcoal_ui_showcase/agent_examples/mobile_app_gallery.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/daylight/widgets/daylight_item_group.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/nook/nook_models.dart';
 import 'package:flutter/gestures.dart' show kPressTimeout;
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -180,6 +181,124 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('embedded iOS route supports interactive cancel and commit', (
+    tester,
+  ) async {
+    await _pumpSimulator(tester, AgentMobileApp.commerce);
+    await tester.ensureVisible(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pumpAndSettle();
+
+    final detail = find.byKey(
+      const ValueKey<String>('agent-commerce-product-detail'),
+    );
+    final initialTopLeft = tester.getTopLeft(detail);
+    final cancelGesture = await tester.startGesture(
+      Offset(initialTopLeft.dx + 1, tester.getCenter(detail).dy),
+    );
+    await cancelGesture.moveBy(const Offset(120, 0));
+    await tester.pump();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(2));
+    expect(tester.getTopLeft(detail).dx, greaterThan(initialTopLeft.dx + 50));
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-shop-page')),
+      findsOneWidget,
+    );
+
+    await cancelGesture.cancel();
+    await tester.pumpAndSettle();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(2));
+    expect(tester.getTopLeft(detail), initialTopLeft);
+
+    final commitGesture = await tester.startGesture(
+      Offset(initialTopLeft.dx + 1, tester.getCenter(detail).dy),
+    );
+    await commitGesture.moveBy(const Offset(240, 0));
+    await tester.pump();
+    await commitGesture.up();
+    await tester.pumpAndSettle();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(1));
+    expect(detail, findsNothing);
+    expect(tester.takeException(), isNull);
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
+  testWidgets('embedded Android route previews cancel and commit', (
+    tester,
+  ) async {
+    await _pumpSimulator(tester, AgentMobileApp.commerce);
+    await tester.ensureVisible(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey<String>('agent-commerce-product-ripple-cup')),
+    );
+    await tester.pumpAndSettle();
+
+    final detail = find.byKey(
+      const ValueKey<String>('agent-commerce-product-detail'),
+    );
+    final initialTopLeft = tester.getTopLeft(detail);
+    await _sendBackGesture(tester.binding, 'startBackGesture', <String, Object>{
+      'touchOffset': <double>[1, 300],
+      'progress': 0.0,
+      'swipeEdge': 0,
+    });
+    await _sendBackGesture(
+      tester.binding,
+      'updateBackGestureProgress',
+      <String, Object>{
+        'touchOffset': <double>[150, 320],
+        'progress': 0.45,
+        'swipeEdge': 0,
+      },
+    );
+    await tester.pump();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(2));
+    expect(tester.getTopLeft(detail).dx, greaterThan(initialTopLeft.dx));
+    expect(
+      find.byKey(const ValueKey<String>('agent-commerce-shop-page')),
+      findsOneWidget,
+    );
+
+    await _sendBackGesture(tester.binding, 'cancelBackGesture');
+    await tester.pumpAndSettle();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(2));
+    expect(tester.getTopLeft(detail), initialTopLeft);
+
+    await _sendBackGesture(tester.binding, 'startBackGesture', <String, Object>{
+      'touchOffset': <double>[1, 300],
+      'progress': 0.0,
+      'swipeEdge': 0,
+    });
+    await _sendBackGesture(
+      tester.binding,
+      'updateBackGestureProgress',
+      <String, Object>{
+        'touchOffset': <double>[220, 300],
+        'progress': 0.7,
+        'swipeEdge': 0,
+      },
+    );
+    await tester.pump();
+    await _sendBackGesture(tester.binding, 'commitBackGesture');
+    await tester.pumpAndSettle();
+
+    expect(_nestedNavigator(tester, 'commerce').pages, hasLength(1));
+    expect(detail, findsNothing);
+    expect(tester.takeException(), isNull);
+  }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
   testWidgets('system back guards an unsaved fullscreen route', (tester) async {
     await _pumpSimulator(tester, AgentMobileApp.social);
@@ -1093,6 +1212,21 @@ Navigator _nestedNavigator(WidgetTester tester, String appKey) =>
         matching: find.byType(Navigator),
       ),
     );
+
+Future<void> _sendBackGesture(
+  TestWidgetsFlutterBinding binding,
+  String method, [
+  Object? arguments,
+]) async {
+  final message = const StandardMethodCodec().encodeMethodCall(
+    MethodCall(method, arguments),
+  );
+  await binding.defaultBinaryMessenger.handlePlatformMessage(
+    'flutter/backgesture',
+    message,
+    (data) {},
+  );
+}
 
 Color _paintedTabBackground(WidgetTester tester, Key key) {
   final colored = find.descendant(

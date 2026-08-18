@@ -31,18 +31,22 @@ void main() {
 
     expect(
       (navigation['requiredAssertions']! as List<Object?>).join(' '),
-      allOf(
+      allOf([
         contains('held touch'),
         contains('cancellation'),
         contains('target rectangle'),
         contains('text baseline'),
         contains('one pump'),
         contains('previous tab paints'),
-      ),
+        contains('locale-aware leading-edge drag'),
+        contains('predictive-back start'),
+        contains('both system edges'),
+        contains('nested Navigator ownership'),
+      ]),
     );
     expect(
       (navigation['forbiddenPatterns']! as List<Object?>).join(' '),
-      allOf(
+      allOf([
         contains('pointer down'),
         contains('cancelled gesture'),
         contains('loose Stack'),
@@ -50,7 +54,9 @@ void main() {
         contains('tester.tap-only'),
         contains('pumpAndSettle-only'),
         contains('stale selected visuals'),
-      ),
+        contains('handlePopRoute alone'),
+        contains('page-local drag detector'),
+      ]),
     );
   });
 

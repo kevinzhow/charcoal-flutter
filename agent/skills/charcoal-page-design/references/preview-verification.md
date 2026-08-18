@@ -38,6 +38,7 @@ Gate exit: information hierarchy, reuse, state-specific copy, feedback placement
 Launch the full app only to verify behavior that isolated previews cannot prove:
 
 - route transitions, back behavior, and destination persistence;
+- native iOS leading-edge follow/cancel/commit and Android predictive-back start/update/cancel/commit on real pushed routes; a committed `handlePopRoute()` check alone is not interactive-gesture evidence;
 - platform input, native plugins, accessibility services, and operating-system surfaces;
 - overlays whose ownership crosses the preview boundary;
 - the complete primary flow and one recovery or boundary flow.

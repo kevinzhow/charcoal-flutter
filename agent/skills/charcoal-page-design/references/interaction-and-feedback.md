@@ -58,3 +58,31 @@ Top-level destination selection always has a `none` stack effect. It atomically 
 state owner, selected presentation and semantics, and destination content without pushing, replacing,
 or re-keying the root route. Details and transient tasks normally push; durable results may replace
 obsolete task history; back and close pop or dismiss through the active Navigator or overlay owner.
+
+## Interactive platform back
+
+A committed system-back callback proves only the final pop. It does not prove an interactive page
+gesture. Treat the gesture as a four-stage transaction owned by the active pushed route:
+
+1. `start` identifies the eligible leading edge and checks whether the route can pop before any
+   stack mutation.
+2. `update` drives visible route progress while the prior route remains mounted and visible; it must
+   not pop, rebuild the app shell, or mutate durable page state.
+3. `cancel` returns the current route to its original geometry and leaves route identity, stack,
+   focus, scroll positions, drafts, and controlled selection unchanged.
+4. `commit` completes from the current progress and pops exactly once through the active Navigator.
+
+For native iOS horizontal navigation, verify both follow and cancellation from the locale-aware
+leading edge, including the RTL edge. For native Android, verify predictive-back
+`start`/`update`/`cancel`/`commit` from both system edges. A guarded route must expose its inability
+to pop before the interactive gesture begins; the legacy or button-back fallback must still invoke
+the guard without allowing an enclosing Navigator to pop instead. Nested Navigators keep gesture
+ownership with their active inner route.
+
+Web and desktop do not inherit mobile edge gestures merely because they share route transition
+code. Use the platform's supported back inputs there and do not advertise unavailable behavior.
+
+Executable evidence records route identities and stack length before the gesture, visible geometry
+or transform progress during update, restoration after cancellation, and the single stack change
+after commit. Calling `handlePopRoute()` alone, settling only the final animation, or testing a local
+drag detector without the route stack is insufficient evidence.

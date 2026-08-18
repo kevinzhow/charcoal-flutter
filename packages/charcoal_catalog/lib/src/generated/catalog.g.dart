@@ -5,9 +5,9 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 33,
-    "curatedComponents": 9,
-    "componentsWithExamples": 9,
+    "publicComponents": 34,
+    "curatedComponents": 10,
+    "componentsWithExamples": 10,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 226
@@ -154,6 +154,7 @@ const String generatedCatalogJson = r'''{
         "A gallery or section only needs a heading rather than application navigation."
       ],
       "components": [
+        "CharcoalPageRoute",
         "CharcoalNavigationBar",
         "CharcoalTabBar",
         "CharcoalNavigationItem",
@@ -165,7 +166,8 @@ const String generatedCatalogJson = r'''{
         "On touch input, let pointer down change only the target pressed layer, let cancellation clear it without selecting, and commit the controlled destination only after the tap is accepted.",
         "Keep transient state layers paint-only: destination bounds, sibling allocation, icon and label centers, and text baselines must not move through hover, focus, press, cancellation, or selection.",
         "Treat top-level destination selection as a no-stack-effect state update; do not push a route, replace the root page, or change its stable page key.",
-        "Push details and transient tasks, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.",
+        "Push details and transient tasks with CharcoalPageRoute, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.",
+        "On native iOS, verify the leading-edge gesture follows the pointer and can both cancel and commit; on native Android, verify predictive-back start, update, cancel, and commit drive the active Route before any stack mutation.",
         "Preserve destination-owned scroll positions, drafts, and selections when moving between top-level destinations.",
         "Place contextual actions in the current page; do not change top-level destination selection.",
         "Use CharcoalTabBar on compact layouts and CharcoalNavigationItem in large-layout sidebars without resetting destination state."
@@ -2450,6 +2452,142 @@ const String generatedCatalogJson = r'''{
         }
       ],
       "examples": []
+    },
+    {
+      "name": "CharcoalPageRoute",
+      "category": "Navigation",
+      "summary": "Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_page_route.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "android predictive back",
+        "back gesture",
+        "ios swipe back",
+        "navigation",
+        "page route",
+        "route transition"
+      ],
+      "useWhen": [
+        "A detail, drill-in, or transient task belongs on a real Navigator stack.",
+        "The page must preserve Charcoal motion while honoring native platform back gestures."
+      ],
+      "avoidWhen": [
+        "A top-level destination is changing; update the stable app-shell owner without pushing a route.",
+        "The task is a bounded dialog or sheet; use showCharcoalModal instead."
+      ],
+      "accessibility": [
+        "Use PopScope.canPop to publish guarded navigation state before a platform gesture begins.",
+        "Fullscreen dialogs and blocked routes do not expose an interactive iOS back gesture.",
+        "The route scopes page semantics while the caller remains responsible for an explicit back action."
+      ],
+      "responsiveBehavior": [
+        "Native iOS uses a leading-edge interactive transition and respects RTL directionality.",
+        "Native Android consumes predictive-back progress from either system edge.",
+        "Android hosts set android:enableOnBackInvokedCallback=\"true\" on the application or activity.",
+        "Web and desktop platforms retain opaque Charcoal shared-axis motion without installing mobile edge gestures."
+      ],
+      "interactionStates": [
+        "entering",
+        "active",
+        "back gesture started",
+        "back gesture updating",
+        "back gesture cancelled",
+        "back gesture committed",
+        "exiting"
+      ],
+      "feedbackResponsibilities": [
+        "Owns page motion, gesture progress, cancellation recovery, and committed Navigator pop.",
+        "The caller owns route-stack state, unsaved-change guards, and durable completion semantics."
+      ],
+      "tokenRoles": [],
+      "relatedComponents": [
+        "CharcoalApp",
+        "CharcoalNavigationBar",
+        "CharcoalTabBar"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalPageRoute",
+          "kind": "constructor",
+          "signature": "CharcoalPageRoute({required this.builder, this.axis = CharcoalPageTransitionAxis.horizontal, super.fullscreenDialog = false, this.maintainState = true, super.requestFocus, this.reverseTransitionDuration = CharcoalMotion.routeReverse, super.settings, this.transitionDuration = CharcoalMotion.routeForward})",
+          "parameters": [
+            {
+              "name": "builder",
+              "type": "WidgetBuilder",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "axis",
+              "type": "CharcoalPageTransitionAxis",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPageTransitionAxis.horizontal"
+            },
+            {
+              "name": "fullscreenDialog",
+              "type": "dynamic",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "maintainState",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "requestFocus",
+              "type": "dynamic",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "reverseTransitionDuration",
+              "type": "Duration",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalMotion.routeReverse"
+            },
+            {
+              "name": "settings",
+              "type": "dynamic",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "transitionDuration",
+              "type": "Duration",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalMotion.routeForward"
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalPageTransitionAxis",
+          "kind": "enum",
+          "signature": "enum CharcoalPageTransitionAxis { horizontal, vertical }",
+          "parameters": [],
+          "enumValues": [
+            "horizontal",
+            "vertical"
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "page-route-platform-back",
+          "title": "Platform-adaptive detail route",
+          "description": "Pushes a real detail page whose back interaction follows iOS and Android platform gestures.",
+          "sourcePath": "example/lib/agent_examples/page_route_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Pushes a real detail route with Charcoal's platform-adaptive back gesture.\nfinal class AgentPageRouteExample extends StatelessWidget {\n  const AgentPageRouteExample({super.key});\n\n  @override\n  Widget build(BuildContext context) => CharcoalButton(\n    onPressed: () => Navigator.of(context).push<void>(\n      CharcoalPageRoute<void>(builder: (_) => const _AccountDetailPage()),\n    ),\n    variant: CharcoalButtonVariant.primary,\n    child: const Text('Open account details'),\n  );\n}\n\nfinal class _AccountDetailPage extends StatelessWidget {\n  const _AccountDetailPage();\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    return ColoredBox(\n      color: theme.colors.backgroundDefault,\n      child: SafeArea(\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalNavigationBar(\n              leading: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.chevronLeft),\n                onPressed: () => Navigator.of(context).pop(),\n                semanticLabel: 'Back to account',\n                size: CharcoalIconButtonSize.small,\n              ),\n              title: const Text('Account details'),\n            ),\n            Padding(\n              padding: EdgeInsets.all(theme.dimensions.space.layout40),\n              child: const Text(\n                'Your profile and security settings are up to date.',\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalPagination",

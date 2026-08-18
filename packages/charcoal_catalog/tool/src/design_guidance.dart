@@ -139,6 +139,7 @@ const List<CharcoalPatternDoc> componentPatterns = <CharcoalPatternDoc>[
       'A gallery or section only needs a heading rather than application navigation.',
     ],
     components: <String>[
+      'CharcoalPageRoute',
       'CharcoalNavigationBar',
       'CharcoalTabBar',
       'CharcoalNavigationItem',
@@ -150,7 +151,8 @@ const List<CharcoalPatternDoc> componentPatterns = <CharcoalPatternDoc>[
       'On touch input, let pointer down change only the target pressed layer, let cancellation clear it without selecting, and commit the controlled destination only after the tap is accepted.',
       'Keep transient state layers paint-only: destination bounds, sibling allocation, icon and label centers, and text baselines must not move through hover, focus, press, cancellation, or selection.',
       'Treat top-level destination selection as a no-stack-effect state update; do not push a route, replace the root page, or change its stable page key.',
-      'Push details and transient tasks, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.',
+      'Push details and transient tasks with CharcoalPageRoute, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.',
+      'On native iOS, verify the leading-edge gesture follows the pointer and can both cancel and commit; on native Android, verify predictive-back start, update, cancel, and commit drive the active Route before any stack mutation.',
       'Preserve destination-owned scroll positions, drafts, and selections when moving between top-level destinations.',
       'Place contextual actions in the current page; do not change top-level destination selection.',
       'Use CharcoalTabBar on compact layouts and CharcoalNavigationItem in large-layout sidebars without resetting destination state.',

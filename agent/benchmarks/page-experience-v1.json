@@ -87,6 +87,8 @@
         "after one pump following a destination tap, the previous tab paints and exposes unselected state, the next tab paints and exposes selected state, and visible content agrees before animations settle",
         "each top-level destination preserves its own scroll position, selection, or draft state when another destination is selected",
         "Activity detail is a real pushed route whose visible and system back actions pop to the prior destination",
+        "on native iOS the pushed Activity detail follows a locale-aware leading-edge drag and proves cancellation plus one committed pop; on native Android it proves predictive-back start, update, cancellation, and commit from both system edges without mutating the stack before commit",
+        "a guarded pushed route rejects interactive back before progress begins, nested Navigator ownership prevents an enclosing route from popping, and web or desktop do not synthesize mobile edge gestures",
         "the focused task pushes above its origin and durable completion replaces obsolete task history instead of allowing back into the completed form",
         "selected and unselected tab semantics, keyboard focus, text scaling, and reduced-motion behavior remain coherent"
       ],
@@ -98,6 +100,7 @@
         "a state-only overlay loosens the content constraints, uses an unverified loose Stack around normal content, or moves target bounds, icon or label centers, or text baselines",
         "a tester.tap-only or pumpAndSettle-only navigation test can hide a press-down double highlight or stale selected visuals after the controlled destination changes",
         "AnimatedSwitcher, SlideTransition, or a local back button impersonates detail route history",
+        "handlePopRoute alone, a settled final frame, or a page-local drag detector is presented as proof of native interactive back",
         "a page-local copy of CharcoalTabBar geometry or interaction styling",
         "Material or Cupertino controls"
       ]

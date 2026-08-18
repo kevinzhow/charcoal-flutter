@@ -11,6 +11,7 @@ import 'metadata.dart';
 
 const Set<String> _widgetBaseTypes = <String>{
   'InheritedTheme',
+  'PageRoute',
   'SingleChildRenderObjectWidget',
   'StatefulWidget',
   'StatelessWidget',
