@@ -254,7 +254,7 @@ environment:
       expect(first, contains('Keep this sentence.'));
       expect(RegExp(r'charcoal-agent:start').allMatches(first), hasLength(1));
       expect(first, contains('Keep controlled selection atomic'));
-      expect(first, contains('first post-tap frame'));
+      expect(first, contains('first post-activation frame'));
 
       final secondOutput = StringBuffer();
       expect(
