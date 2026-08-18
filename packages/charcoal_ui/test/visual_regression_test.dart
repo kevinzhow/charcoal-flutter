@@ -1,12 +1,22 @@
+import 'dart:io' show Platform;
+
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart' show vg;
 import 'package:flutter_test/flutter_test.dart';
 
 const _goldenKey = ValueKey<String>('golden-surface');
-// Flutter's deterministic test font keeps macOS and Linux baselines identical.
+// Ahem fixes text metrics; host-specific baselines isolate rasterizer output.
 const _goldenFontFamily = 'Ahem';
+final _goldenHostPlatform = switch (Platform.operatingSystem) {
+  'linux' => 'linux',
+  'macos' => 'macos',
+  final platform => throw UnsupportedError(
+    'Visual golden baselines are not available for $platform.',
+  ),
+};
 
 enum _Destination { home, discover, messages, profile }
 
@@ -16,80 +26,82 @@ void main() {
     (name: 'dark', theme: CharcoalThemeData.dark()),
   ]) {
     testWidgets('navigation geometry remains stable in ${mode.name}', (tester) async {
-      await _pumpGoldenSurface(
+      await _expectGoldenSurface(
         tester,
         size: const Size(840, 480),
         theme: mode.theme,
         child: const _NavigationGoldenSurface(),
-      );
-
-      await expectLater(
-        find.byKey(_goldenKey),
-        matchesGoldenFile('goldens/navigation.${mode.name}.png'),
+        fileName: 'goldens/$_goldenHostPlatform/navigation.${mode.name}.png',
       );
     });
 
     testWidgets('form validation remains stable in ${mode.name}', (tester) async {
-      await _pumpGoldenSurface(
+      await _expectGoldenSurface(
         tester,
         size: const Size(420, 520),
         theme: mode.theme,
         child: const _FormGoldenSurface(),
-      );
-
-      await expectLater(
-        find.byKey(_goldenKey),
-        matchesGoldenFile('goldens/form_validation.${mode.name}.png'),
+        fileName: 'goldens/$_goldenHostPlatform/form_validation.${mode.name}.png',
       );
     });
 
     testWidgets('selection controls remain stable in ${mode.name}', (
       tester,
     ) async {
-      await _pumpGoldenSurface(
+      await _expectGoldenSurface(
         tester,
         size: const Size(420, 520),
         theme: mode.theme,
         child: const _SelectionControlsGoldenSurface(),
-      );
-
-      await expectLater(
-        find.byKey(_goldenKey),
-        matchesGoldenFile('goldens/selection_controls.${mode.name}.png'),
+        fileName: 'goldens/$_goldenHostPlatform/selection_controls.${mode.name}.png',
       );
     });
 
     testWidgets('multi-select states remain stable in ${mode.name}', (
       tester,
     ) async {
-      await _pumpGoldenSurface(
+      await _expectGoldenSurface(
         tester,
         size: const Size(420, 400),
         theme: mode.theme,
         child: const _MultiSelectGoldenSurface(),
-      );
-
-      await expectLater(
-        find.byKey(_goldenKey),
-        matchesGoldenFile('goldens/multi_select.${mode.name}.png'),
+        fileName: 'goldens/$_goldenHostPlatform/multi_select.${mode.name}.png',
       );
     });
 
     testWidgets('action controls remain stable in ${mode.name}', (
       tester,
     ) async {
-      await _pumpGoldenSurface(
+      await _expectGoldenSurface(
         tester,
         size: const Size(520, 360),
         theme: mode.theme,
         child: const _ActionControlsGoldenSurface(),
-      );
-
-      await expectLater(
-        find.byKey(_goldenKey),
-        matchesGoldenFile('goldens/action_controls.${mode.name}.png'),
+        fileName: 'goldens/$_goldenHostPlatform/action_controls.${mode.name}.png',
       );
     });
+  }
+}
+
+Future<void> _expectGoldenSurface(
+  WidgetTester tester, {
+  required Size size,
+  required CharcoalThemeData theme,
+  required Widget child,
+  required String fileName,
+}) async {
+  final originalPlatform = debugDefaultTargetPlatformOverride;
+  debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+  try {
+    await _pumpGoldenSurface(
+      tester,
+      size: size,
+      theme: theme,
+      child: child,
+    );
+    await expectLater(find.byKey(_goldenKey), matchesGoldenFile(fileName));
+  } finally {
+    debugDefaultTargetPlatformOverride = originalPlatform;
   }
 }
 
