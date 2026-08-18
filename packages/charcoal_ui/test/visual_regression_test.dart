@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart' show vg;
 import 'package:flutter_test/flutter_test.dart';
 
 const _goldenKey = ValueKey<String>('golden-surface');
+// Flutter's deterministic test font keeps macOS and Linux baselines identical.
+const _goldenFontFamily = 'Ahem';
 
 enum _Destination { home, discover, messages, profile }
 
@@ -97,6 +99,14 @@ Future<void> _pumpGoldenSurface(
   required CharcoalThemeData theme,
   required Widget child,
 }) async {
+  final goldenTheme = theme.copyWith(
+    typography: theme.typography.copyWith(
+      fontFamily: theme.typography.fontFamily.copyWith(
+        sans: _goldenFontFamily,
+      ),
+    ),
+  );
+
   tester.view
     ..devicePixelRatio = 1
     ..physicalSize = size;
@@ -105,8 +115,8 @@ Future<void> _pumpGoldenSurface(
 
   await tester.pumpWidget(
     CharcoalApp(
-      darkTheme: theme,
-      theme: theme,
+      darkTheme: goldenTheme,
+      theme: goldenTheme,
       themeMode: CharcoalThemeMode.light,
       home: Builder(
         builder: (context) {
