@@ -1,3 +1,4 @@
+import 'package:flutter/semantics.dart' show SemanticsRole;
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
@@ -22,7 +23,9 @@ final class CharcoalLoadingSpinner extends StatefulWidget {
     this.size,
     this.transparent = false,
     super.key,
-  });
+  }) : assert(size == null || size > 0),
+       assert(padding == null || padding >= 0),
+       assert(semanticLabel != '');
 
   final Color? color;
   final bool once;
@@ -38,19 +41,24 @@ final class CharcoalLoadingSpinner extends StatefulWidget {
 /// Centers a Charcoal spinner over [child] while [visible] is true.
 ///
 /// By default the overlay intercepts input, matching the iOS modifier. Set
-/// [interactionPassthrough] when the underlying content should remain usable.
+/// [interactionPassthrough] only for background work where the underlying
+/// content remains safe to use. A blocking overlay also removes the child from
+/// keyboard focus and accessibility traversal until loading finishes.
 final class CharcoalSpinnerOverlay extends StatelessWidget {
   const CharcoalSpinnerOverlay({
     required this.child,
     required this.visible,
     this.interactionPassthrough = false,
+    this.semanticLabel = 'Loading',
     this.spinnerSize,
     this.transparentBackground = false,
     super.key,
-  });
+  }) : assert(semanticLabel != ''),
+       assert(spinnerSize == null || spinnerSize > 0);
 
   final Widget child;
   final bool interactionPassthrough;
+  final String semanticLabel;
   final double? spinnerSize;
   final bool transparentBackground;
   final bool visible;
@@ -58,9 +66,16 @@ final class CharcoalSpinnerOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final blocksInteraction = visible && !interactionPassthrough;
     return Stack(
       children: <Widget>[
-        child,
+        ExcludeFocus(
+          excluding: blocksInteraction,
+          child: ExcludeSemantics(
+            excluding: blocksInteraction,
+            child: child,
+          ),
+        ),
         Positioned.fill(
           child: IgnorePointer(
             ignoring: interactionPassthrough || !visible,
@@ -79,6 +94,7 @@ final class CharcoalSpinnerOverlay extends StatelessWidget {
                       onPointerDown: (_) {},
                       child: Center(
                         child: CharcoalLoadingSpinner(
+                          semanticLabel: semanticLabel,
                           size: spinnerSize,
                           transparent: transparentBackground,
                         ),
@@ -149,6 +165,7 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
       container: true,
       label: widget.semanticLabel,
       liveRegion: true,
+      role: SemanticsRole.loadingSpinner,
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(

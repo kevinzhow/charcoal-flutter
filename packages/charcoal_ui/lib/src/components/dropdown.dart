@@ -328,6 +328,9 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
     final isPlaceholder = selectedOption == null;
     final visibleText = selectedOption?.label ?? widget.placeholder ?? '';
     final assistiveText = widget.assistiveText;
+    final errorHint = widget.invalid && assistiveText != null && assistiveText.isNotEmpty
+        ? assistiveText
+        : null;
     final fieldGap = theme.dimensions.space.component10;
 
     final dropdown = OverlayPortal(
@@ -341,92 +344,96 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
           onTapOutside: _isOpen ? (_) => _close() : null,
           child: ExcludeFocus(
             excluding: !_enabled,
-            child: CharcoalClickable(
-              autofocus: widget.autofocus,
-              expanded: _isOpen,
-              focusNode: _focusNode,
-              keyboardActivationEnabled: false,
-              onFocusChange: (focused) {
-                if (!focused && _isOpen) {
-                  _close();
-                }
-              },
-              onKeyEvent: _handleKeyEvent,
-              onPressed: _enabled ? _toggle : null,
-              semanticLabel: widget.label.isEmpty ? null : widget.label,
-              semanticValue: visibleText.isEmpty ? null : visibleText,
-              selected: _isOpen,
-              statesController: _statesController,
-              validationResult: widget.invalid
-                  ? SemanticsValidationResult.invalid
-                  : SemanticsValidationResult.none,
-              builder: (context, states) {
-                final focused = states.contains(WidgetState.focused);
-                final background = resolveCharcoalStateColor(
-                  states,
-                  normal: theme.colors.containerSecondaryDefaultA,
-                  hovered: theme.colors.containerSecondaryHoverA,
-                  pressed: theme.colors.containerSecondaryPressA,
-                  focused: theme.colors.containerSecondaryDefaultA,
-                  selected: theme.colors.containerSecondaryPressA,
-                );
-                final ringColor = widget.invalid
-                    ? theme.colors.borderNegative
-                    : theme.colors.borderFocusLegacy;
-                return AnimatedContainer(
-                  // Expanded state is persistent UI state, not a transient
-                  // hover tween. Switch it atomically when the menu opens or
-                  // closes so the pressed surface cannot linger.
-                  key: ValueKey<bool>(_isOpen),
-                  duration: CharcoalMotion.resolveDuration(
-                    context,
-                    _DropdownSpec.animationDuration,
-                  ),
-                  curve: CharcoalMotion.standardCurve,
-                  height: theme.dimensions.space.targetM,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: theme.dimensions.space.component20,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      theme.dimensions.radius.s,
+            child: Semantics(
+              isRequired: widget.required ? true : null,
+              child: CharcoalClickable(
+                autofocus: widget.autofocus,
+                expanded: _isOpen,
+                focusNode: _focusNode,
+                keyboardActivationEnabled: false,
+                onFocusChange: (focused) {
+                  if (!focused && _isOpen) {
+                    _close();
+                  }
+                },
+                onKeyEvent: _handleKeyEvent,
+                onPressed: _enabled ? _toggle : null,
+                semanticHint: errorHint,
+                semanticLabel: widget.label.isEmpty ? null : widget.label,
+                semanticValue: visibleText.isEmpty ? null : visibleText,
+                selected: _isOpen,
+                statesController: _statesController,
+                validationResult: widget.invalid
+                    ? SemanticsValidationResult.invalid
+                    : SemanticsValidationResult.none,
+                builder: (context, states) {
+                  final focused = states.contains(WidgetState.focused);
+                  final background = resolveCharcoalStateColor(
+                    states,
+                    normal: theme.colors.containerSecondaryDefaultA,
+                    hovered: theme.colors.containerSecondaryHoverA,
+                    pressed: theme.colors.containerSecondaryPressA,
+                    focused: theme.colors.containerSecondaryDefaultA,
+                    selected: theme.colors.containerSecondaryPressA,
+                  );
+                  final ringColor = widget.invalid
+                      ? theme.colors.borderNegative
+                      : theme.colors.borderFocusLegacy;
+                  return AnimatedContainer(
+                    // Expanded state is persistent UI state, not a transient
+                    // hover tween. Switch it atomically when the menu opens or
+                    // closes so the pressed surface cannot linger.
+                    key: ValueKey<bool>(_isOpen),
+                    duration: CharcoalMotion.resolveDuration(
+                      context,
+                      _DropdownSpec.animationDuration,
                     ),
-                    boxShadow: focused || widget.invalid
-                        ? <BoxShadow>[
-                            BoxShadow(
-                              color: ringColor,
-                              spreadRadius: _DropdownSpec.focusRingWidth,
+                    curve: CharcoalMotion.standardCurve,
+                    height: theme.dimensions.space.targetM,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: theme.dimensions.space.component20,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        theme.dimensions.radius.s,
+                      ),
+                      boxShadow: focused || widget.invalid
+                          ? <BoxShadow>[
+                              BoxShadow(
+                                color: ringColor,
+                                spreadRadius: _DropdownSpec.focusRingWidth,
+                              ),
+                            ]
+                          : const <BoxShadow>[],
+                      color: background,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            visibleText,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: charcoalTypographyStyle(
+                              context,
+                              color: isPlaceholder
+                                  ? theme.colors.textPlaceholderDefault
+                                  : theme.colors.textDefault,
+                              size: CharcoalTypographySize.size14,
                             ),
-                          ]
-                        : const <BoxShadow>[],
-                    color: background,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          visibleText,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: charcoalTypographyStyle(
-                            context,
-                            color: isPlaceholder
-                                ? theme.colors.textPlaceholderDefault
-                                : theme.colors.textDefault,
-                            size: CharcoalTypographySize.size14,
                           ),
                         ),
-                      ),
-                      SizedBox(width: fieldGap),
-                      CharcoalIcon(
-                        CharcoalIcons16.chevronDown,
-                        color: theme.colors.iconSecondaryDefault,
-                        size: _DropdownSpec.iconSize,
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        SizedBox(width: fieldGap),
+                        CharcoalIcon(
+                          CharcoalIcons16.chevronDown,
+                          color: theme.colors.iconSecondaryDefault,
+                          size: _DropdownSpec.iconSize,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -456,14 +463,18 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
           dropdown,
           if (assistiveText != null && assistiveText.isNotEmpty) ...<Widget>[
             SizedBox(height: fieldGap),
-            Text(
-              assistiveText,
-              style: charcoalTypographyStyle(
-                context,
-                color: widget.invalid
-                    ? theme.colors.textNegativeDefault
-                    : theme.colors.textSecondaryDefault,
-                size: CharcoalTypographySize.size14,
+            Semantics(
+              container: true,
+              liveRegion: widget.invalid && !MediaQuery.supportsAnnounceOf(context),
+              child: Text(
+                assistiveText,
+                style: charcoalTypographyStyle(
+                  context,
+                  color: widget.invalid
+                      ? theme.colors.textNegativeDefault
+                      : theme.colors.textSecondaryDefault,
+                  size: CharcoalTypographySize.size14,
+                ),
               ),
             ),
           ],

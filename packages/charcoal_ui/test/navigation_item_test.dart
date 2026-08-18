@@ -1,10 +1,90 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_helpers.dart';
 
 void main() {
+  testWidgets('exposes selected state for every controlled destination', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        Column(
+          children: <Widget>[
+            CharcoalNavigationItem(
+              selected: true,
+              onPressed: () {},
+              child: const Text('Home'),
+            ),
+            CharcoalNavigationItem(
+              onPressed: () {},
+              child: const Text('Discover'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(
+      tester.getSemantics(
+        find.widgetWithText(CharcoalNavigationItem, 'Home'),
+      ),
+      matchesSemantics(
+        label: 'Home',
+        hasEnabledState: true,
+        isEnabled: true,
+        isButton: true,
+        isFocusable: true,
+        hasSelectedState: true,
+        isSelected: true,
+        hasFocusAction: true,
+        hasTapAction: true,
+      ),
+    );
+    expect(
+      tester.getSemantics(
+        find.widgetWithText(CharcoalNavigationItem, 'Discover'),
+      ),
+      matchesSemantics(
+        label: 'Discover',
+        hasEnabledState: true,
+        isEnabled: true,
+        isButton: true,
+        isFocusable: true,
+        hasSelectedState: true,
+        isSelected: false,
+        hasFocusAction: true,
+        hasTapAction: true,
+      ),
+    );
+  });
+
+  testWidgets('activates a focused destination from the keyboard', (
+    tester,
+  ) async {
+    var activations = 0;
+    final focusNode = FocusNode();
+    addTearDown(focusNode.dispose);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalNavigationItem(
+          focusNode: focusNode,
+          onPressed: () => activations++,
+          child: const Text('Discover'),
+        ),
+      ),
+    );
+
+    focusNode.requestFocus();
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+
+    expect(focusNode.hasFocus, isTrue);
+    expect(activations, 1);
+  });
+
   testWidgets('centers content and preserves geometry across state layers', (
     tester,
   ) async {

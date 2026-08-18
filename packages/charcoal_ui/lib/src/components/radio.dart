@@ -1,3 +1,4 @@
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
@@ -14,6 +15,8 @@ abstract final class _RadioSpec {
 }
 
 /// A controlled Charcoal V2 radio option.
+///
+/// [invalid] is reflected visually and through input validation semantics.
 final class CharcoalRadio<T> extends StatelessWidget {
   const CharcoalRadio({
     required this.value,
@@ -53,6 +56,9 @@ final class CharcoalRadio<T> extends StatelessWidget {
         semanticButton: false,
         semanticLabel: semanticLabel,
         statesController: statesController,
+        validationResult: invalid
+            ? SemanticsValidationResult.invalid
+            : SemanticsValidationResult.none,
         builder: (context, states) {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);

@@ -18,6 +18,10 @@ abstract final class _IconButtonSpec {
 }
 
 /// A circular Charcoal V2 button for an icon-only action.
+///
+/// When [selected] is null this is a regular action. A non-null value makes it
+/// a controlled toggle whose selected or unselected state is exposed through
+/// semantics.
 final class CharcoalIconButton extends StatelessWidget {
   const CharcoalIconButton({
     required this.icon,
@@ -25,7 +29,7 @@ final class CharcoalIconButton extends StatelessWidget {
     this.autofocus = false,
     this.focusNode,
     this.semanticLabel,
-    this.selected = false,
+    this.selected,
     this.size = CharcoalIconButtonSize.medium,
     this.statesController,
     this.variant = CharcoalIconButtonVariant.normal,
@@ -37,7 +41,7 @@ final class CharcoalIconButton extends StatelessWidget {
   final bool autofocus;
   final FocusNode? focusNode;
   final String? semanticLabel;
-  final bool selected;
+  final bool? selected;
   final CharcoalIconButtonSize size;
   final WidgetStatesController? statesController;
   final CharcoalIconButtonVariant variant;
@@ -59,83 +63,90 @@ final class CharcoalIconButton extends StatelessWidget {
         icon: _IconButtonSpec.regularIconSize,
       ),
     };
-    return CharcoalClickable(
-      autofocus: autofocus,
-      focusNode: focusNode,
-      onPressed: onPressed,
-      selected: selected,
-      semanticLabel: semanticLabel,
-      statesController: statesController,
-      builder: (context, states) {
-        final visualStates = selected ? <WidgetState>{...states, WidgetState.pressed} : states;
-        final disabled = states.contains(WidgetState.disabled);
-        final focused = states.contains(WidgetState.focused);
-        final background = switch (variant) {
-          CharcoalIconButtonVariant.normal => resolveCharcoalStateColor(
-            visualStates,
-            normal: theme.colors.containerDefaultA,
-            hovered: theme.colors.containerHoverA,
-            pressed: theme.colors.containerPressA,
-          ),
-          CharcoalIconButtonVariant.overlay => resolveCharcoalStateColor(
-            visualStates,
-            normal: theme.colors.containerOnImgDefault,
-            hovered: theme.colors.containerOnImgHover,
-            pressed: theme.colors.containerOnImgPress,
-          ),
-        };
-        final foreground = switch (variant) {
-          CharcoalIconButtonVariant.normal => resolveCharcoalStateColor(
-            visualStates,
-            normal: theme.colors.iconTertiaryDefault,
-            hovered: theme.colors.iconTertiaryHover,
-            pressed: theme.colors.iconTertiaryPress,
-          ),
-          CharcoalIconButtonVariant.overlay => resolveCharcoalStateColor(
-            visualStates,
-            normal: theme.colors.iconOnOnImgDefault,
-            hovered: theme.colors.iconOnOnImgHover,
-            pressed: theme.colors.iconOnOnImgPress,
-          ),
-        };
-        return AnimatedOpacity(
-          curve: CharcoalMotion.standardCurve,
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            _IconButtonSpec.animationDuration,
-          ),
-          opacity: disabled ? charcoalDisabledOpacity : 1,
-          child: AnimatedContainer(
-            duration: CharcoalMotion.resolveDuration(
-              context,
-              _IconButtonSpec.animationDuration,
-            ),
-            curve: CharcoalMotion.standardCurve,
-            width: sizeSpec.button,
-            height: sizeSpec.button,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                theme.dimensions.radius.oval,
+    return MergeSemantics(
+      child: Semantics(
+        selected: selected,
+        child: CharcoalClickable(
+          autofocus: autofocus,
+          focusNode: focusNode,
+          onPressed: onPressed,
+          selected: selected ?? false,
+          semanticLabel: semanticLabel,
+          statesController: statesController,
+          builder: (context, states) {
+            final visualStates = selected == true
+                ? <WidgetState>{...states, WidgetState.pressed}
+                : states;
+            final disabled = states.contains(WidgetState.disabled);
+            final focused = states.contains(WidgetState.focused);
+            final background = switch (variant) {
+              CharcoalIconButtonVariant.normal => resolveCharcoalStateColor(
+                visualStates,
+                normal: theme.colors.containerDefaultA,
+                hovered: theme.colors.containerHoverA,
+                pressed: theme.colors.containerPressA,
               ),
-              boxShadow: focused
-                  ? <BoxShadow>[
-                      BoxShadow(
-                        color: theme.colors.borderFocusLegacy,
-                        spreadRadius: _IconButtonSpec.focusRingWidth,
-                      ),
-                    ]
-                  : const <BoxShadow>[],
-              color: background,
-            ),
-            child: Center(
-              child: IconTheme(
-                data: IconThemeData(color: foreground, size: sizeSpec.icon),
-                child: icon,
+              CharcoalIconButtonVariant.overlay => resolveCharcoalStateColor(
+                visualStates,
+                normal: theme.colors.containerOnImgDefault,
+                hovered: theme.colors.containerOnImgHover,
+                pressed: theme.colors.containerOnImgPress,
               ),
-            ),
-          ),
-        );
-      },
+            };
+            final foreground = switch (variant) {
+              CharcoalIconButtonVariant.normal => resolveCharcoalStateColor(
+                visualStates,
+                normal: theme.colors.iconTertiaryDefault,
+                hovered: theme.colors.iconTertiaryHover,
+                pressed: theme.colors.iconTertiaryPress,
+              ),
+              CharcoalIconButtonVariant.overlay => resolveCharcoalStateColor(
+                visualStates,
+                normal: theme.colors.iconOnOnImgDefault,
+                hovered: theme.colors.iconOnOnImgHover,
+                pressed: theme.colors.iconOnOnImgPress,
+              ),
+            };
+            return AnimatedOpacity(
+              curve: CharcoalMotion.standardCurve,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _IconButtonSpec.animationDuration,
+              ),
+              opacity: disabled ? charcoalDisabledOpacity : 1,
+              child: AnimatedContainer(
+                duration: CharcoalMotion.resolveDuration(
+                  context,
+                  _IconButtonSpec.animationDuration,
+                ),
+                curve: CharcoalMotion.standardCurve,
+                width: sizeSpec.button,
+                height: sizeSpec.button,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    theme.dimensions.radius.oval,
+                  ),
+                  boxShadow: focused
+                      ? <BoxShadow>[
+                          BoxShadow(
+                            color: theme.colors.borderFocusLegacy,
+                            spreadRadius: _IconButtonSpec.focusRingWidth,
+                          ),
+                        ]
+                      : const <BoxShadow>[],
+                  color: background,
+                ),
+                child: Center(
+                  child: IconTheme(
+                    data: IconThemeData(color: foreground, size: sizeSpec.icon),
+                    child: icon,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

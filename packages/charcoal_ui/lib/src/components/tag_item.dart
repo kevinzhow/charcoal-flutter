@@ -21,6 +21,12 @@ abstract final class _TagItemSpec {
 }
 
 /// A compact Charcoal V2 tag action with optional translated text or artwork.
+///
+/// [status] is controlled by the caller. The active state is exposed as
+/// selected and keeps one interaction target: its trailing remove icon
+/// communicates that activating the tag again can clear the selection, but is
+/// not a nested action. The baseline sizes grow when accessibility text scaling
+/// needs more vertical space.
 final class CharcoalTagItem extends StatelessWidget {
   const CharcoalTagItem({
     required this.label,
@@ -68,19 +74,7 @@ final class CharcoalTagItem extends StatelessWidget {
       ),
     };
     final hasImage = backgroundImage != null && status != CharcoalTagItemStatus.inactive;
-    final foreground = switch (status) {
-      CharcoalTagItemStatus.inactive => theme.colors.textSecondaryDefault,
-      _ when hasImage => theme.colors.textOnOnImgDefault,
-      _ => theme.colors.textOnPrimaryDefault,
-    };
-    final iconColor = hasImage
-        ? theme.colors.iconOnOnImgDefault
-        : theme.colors.iconOnPrimaryDefault;
-    final background = switch (status) {
-      CharcoalTagItemStatus.inactive => theme.colors.containerSecondaryDefault,
-      _ when hasImage => theme.colors.containerOnImgDefault,
-      _ => backgroundColor ?? _TagItemSpec.defaultBackground,
-    };
+    final baseBackground = backgroundColor ?? _TagItemSpec.defaultBackground;
     final horizontalPadding = status == CharcoalTagItemStatus.active
         ? (
             left: theme.dimensions.space.component30,
@@ -91,75 +85,149 @@ final class CharcoalTagItem extends StatelessWidget {
     final effectiveSemanticLabel =
         semanticLabel ?? (_hasTranslation ? '${translatedLabel!}, $label' : label);
 
-    return CharcoalClickable(
-      autofocus: autofocus,
-      focusNode: focusNode,
-      onPressed: onPressed,
-      semanticLabel: effectiveSemanticLabel,
-      selected: status == CharcoalTagItemStatus.active,
-      statesController: statesController,
-      builder: (context, states) {
-        final disabled = states.contains(WidgetState.disabled);
-        final focused = states.contains(WidgetState.focused);
-        return AnimatedOpacity(
-          curve: CharcoalMotion.standardCurve,
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            _TagItemSpec.animationDuration,
-          ),
-          opacity: disabled ? charcoalDisabledOpacity : 1,
-          child: AnimatedContainer(
-            clipBehavior: Clip.antiAlias,
-            duration: CharcoalMotion.resolveDuration(
-              context,
-              _TagItemSpec.animationDuration,
-            ),
-            curve: CharcoalMotion.standardCurve,
-            height: sizeSpec.height,
-            padding: EdgeInsetsDirectional.only(
-              start: horizontalPadding.left,
-              end: horizontalPadding.right,
-            ),
-            decoration: BoxDecoration(
-              backgroundBlendMode: hasImage ? BlendMode.overlay : null,
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.s),
-              boxShadow: focused
-                  ? <BoxShadow>[
-                      BoxShadow(
-                        color: theme.colors.borderFocusLegacy,
-                        spreadRadius: _TagItemSpec.focusRingWidth,
-                      ),
-                    ]
-                  : const <BoxShadow>[],
-              color: background,
-              image: hasImage ? DecorationImage(image: backgroundImage!, fit: imageFit) : null,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: _TagItemSpec.maxLabelWidth,
-                  ),
-                  child: _TagLabels(
-                    foreground: foreground,
-                    label: label,
-                    translatedLabel: translatedLabel,
-                  ),
+    final selected = status == CharcoalTagItemStatus.active;
+    return MergeSemantics(
+      child: Semantics(
+        // CharcoalClickable already exposes the active state. Supply only the
+        // missing explicit false state here so active does not create two
+        // selected semantics boundaries.
+        selected: selected ? null : false,
+        child: CharcoalClickable(
+          autofocus: autofocus,
+          focusNode: focusNode,
+          onPressed: onPressed,
+          semanticLabel: effectiveSemanticLabel,
+          selected: selected,
+          statesController: statesController,
+          builder: (context, states) {
+            final disabled = states.contains(WidgetState.disabled);
+            final focused = states.contains(WidgetState.focused);
+            final foreground = switch (status) {
+              CharcoalTagItemStatus.inactive => resolveCharcoalStateColor(
+                states,
+                normal: theme.colors.textSecondaryDefault,
+                hovered: theme.colors.textSecondaryHover,
+                pressed: theme.colors.textSecondaryPress,
+              ),
+              _ when hasImage => resolveCharcoalStateColor(
+                states,
+                normal: theme.colors.textOnOnImgDefault,
+                hovered: theme.colors.textOnOnImgHover,
+                pressed: theme.colors.textOnOnImgPress,
+              ),
+              _ => resolveCharcoalStateColor(
+                states,
+                normal: theme.colors.textOnPrimaryDefault,
+                hovered: theme.colors.textOnPrimaryHover,
+                pressed: theme.colors.textOnPrimaryPress,
+              ),
+            };
+            final iconColor = hasImage
+                ? resolveCharcoalStateColor(
+                    states,
+                    normal: theme.colors.iconOnOnImgDefault,
+                    hovered: theme.colors.iconOnOnImgHover,
+                    pressed: theme.colors.iconOnOnImgPress,
+                  )
+                : resolveCharcoalStateColor(
+                    states,
+                    normal: theme.colors.iconOnPrimaryDefault,
+                    hovered: theme.colors.iconOnPrimaryHover,
+                    pressed: theme.colors.iconOnPrimaryPress,
+                  );
+            final background = switch (status) {
+              CharcoalTagItemStatus.inactive => resolveCharcoalStateColor(
+                states,
+                normal: theme.colors.containerSecondaryDefault,
+                hovered: theme.colors.containerSecondaryHover,
+                pressed: theme.colors.containerSecondaryPress,
+              ),
+              _ when hasImage => resolveCharcoalStateColor(
+                states,
+                normal: theme.colors.containerOnImgDefault,
+                hovered: theme.colors.containerOnImgHover,
+                pressed: theme.colors.containerOnImgPress,
+              ),
+              _ when states.contains(WidgetState.pressed) => Color.alphaBlend(
+                theme.colors.containerPressA,
+                baseBackground,
+              ),
+              _ when states.contains(WidgetState.hovered) => Color.alphaBlend(
+                theme.colors.containerHoverA,
+                baseBackground,
+              ),
+              _ => baseBackground,
+            };
+            return AnimatedOpacity(
+              curve: CharcoalMotion.standardCurve,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _TagItemSpec.animationDuration,
+              ),
+              opacity: disabled ? charcoalDisabledOpacity : 1,
+              child: AnimatedContainer(
+                clipBehavior: Clip.antiAlias,
+                duration: CharcoalMotion.resolveDuration(
+                  context,
+                  _TagItemSpec.animationDuration,
                 ),
-                if (status == CharcoalTagItemStatus.active) ...<Widget>[
-                  SizedBox(width: activeGap),
-                  CharcoalIcon(
-                    CharcoalIcons.x,
-                    color: iconColor,
-                    size: _TagItemSpec.iconSize,
+                curve: CharcoalMotion.standardCurve,
+                constraints: BoxConstraints(minHeight: sizeSpec.height),
+                padding: EdgeInsetsDirectional.only(
+                  start: horizontalPadding.left,
+                  end: horizontalPadding.right,
+                ),
+                decoration: BoxDecoration(
+                  backgroundBlendMode: hasImage ? BlendMode.overlay : null,
+                  borderRadius: BorderRadius.circular(
+                    theme.dimensions.radius.s,
                   ),
-                ],
-              ],
-            ),
-          ),
-        );
-      },
+                  boxShadow: focused
+                      ? <BoxShadow>[
+                          BoxShadow(
+                            color: theme.colors.borderFocusLegacy,
+                            spreadRadius: _TagItemSpec.focusRingWidth,
+                          ),
+                        ]
+                      : const <BoxShadow>[],
+                  color: background,
+                  image: hasImage
+                      ? DecorationImage(
+                          image: backgroundImage!,
+                          fit: imageFit,
+                        )
+                      : null,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Flexible(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: _TagItemSpec.maxLabelWidth,
+                        ),
+                        child: _TagLabels(
+                          foreground: foreground,
+                          label: label,
+                          translatedLabel: translatedLabel,
+                        ),
+                      ),
+                    ),
+                    if (selected) ...<Widget>[
+                      SizedBox(width: activeGap),
+                      CharcoalIcon(
+                        CharcoalIcons.x,
+                        color: iconColor,
+                        size: _TagItemSpec.iconSize,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -47,12 +47,17 @@ regular `charcoal_ui` components and can graduate without API churn.
 
 | Component | Contract |
 | --- | --- |
+| Theme | One coherent light or dark semantic token set per scope, atomic dependent updates, and exact propagation through captured framework overlays. |
+| Typography | Numeric 10/18, 12/20, 14/22, 16/24, and 20/28 component styles retain ambient text scaling; semantic page hierarchy remains in `theme.textStyles`. |
+| Text ellipsis | Positive one-or-more-line plain-text clamping, soft wrapping, directional alignment, and complete default spoken content without automatic tooltip behavior. |
 | Buttons | Small 32 px and medium 40 px targets; 16/24 px horizontal padding; bold 14/22 text; capsule shape; 0.32 disabled opacity. |
+| Switching button | Reserves the maximum geometry of two registered buttons while only the active branch paints, ticks, receives focus, and contributes semantics. |
+| Field label | Bold or regular 14/22 label, regular required and trailing metadata, 4/8 px gaps, source-order RTL behavior, and width-relative multiline adaptation under text scaling. |
 | Text field | 8/10 px padding, 10 px content gap, 4 px body radius, external 4 px ring, regular 14/22 text, and 8 px label/assistive gap. The invalid counter uses the negative semantic color. |
 | Text area | `22 × rows + 18` px without a count and `22 × (rows + 1) + 18` px with one; 9 px horizontal inset, 8 px top inset, 4 px field gaps, and a 4 px external ring. |
 | Switch | 51 × 31 px track, 27 px thumb, 4 px horizontal control wrapper padding, regular 14/22 label, and disabled opacity applied to the control rather than its label. |
-| Spinner | One-second ease-out expansion/fade, 48 px default circle, 16 px padding, 8 px radius, and a 10% black shadow with blur 8. Transparent mode removes the surface fill while retaining the source shadow. |
-| Hint | 8 px radius, 16/12 px padding, 4 px icon gap, the exact iOS `16/Info.pdf` icon geometry and authored `#858585` fill, and regular 14/22 text. The default surface is intrinsic-width; an action or infinite maximum width expands it and keeps the action trailing. |
+| Spinner | One-second ease-out expansion/fade, 48 px default circle, 16 px padding, 8 px radius, a named loading-spinner live region, and a 10% black shadow with blur 8. Transparent mode removes the surface fill while retaining the source shadow; blocking overlays also exclude stale child focus and semantics. |
+| Hint | 8 px radius, 16/12 px padding, 4 px icon gap, the exact iOS `16/Info.pdf` icon geometry and authored `#858585` fill, and regular 14/22 text. The default surface is intrinsic-width; an action or infinite maximum width expands it, keeping the action trailing until width-relative text scaling requires a stacked action. |
 | Tooltip | 184 px maximum width, 4 px radius, 12/4 px padding, 3 px arrow height, 5 px arrow half-width, 4 px target gap, 16 px screen inset, regular centered 12/20 text, and 200 ms fade. Automatic placement tries below then above. |
 | Balloon | 240 px maximum width, 16 px radius, 16/12 px padding, 4 px arrow height, 7 px arrow half-width, 2 px light outline, bold 14/22 text, close affordance, and capsule action. Placement priority is below, above, right, then left. |
 | Toast | 312 px maximum width, 32 px radius, 2 px outline, 24/8 px padding, 8 px gap, bold single-line 14/22 text, 96 px edge spacing, and two-second default timeout. |
@@ -66,7 +71,7 @@ regular `charcoal_ui` components and can graduate without API churn.
 | Carousel | Zero default gap, 72 px navigation zones, hover/focus navigation reveal, 40 px indicator area, 8 px dot/gap, and 200 ms indicator transition. |
 | Pagination | 32/40 px sizes, bold 14/22 text, 20 px radius, 4 px focus ring, and hidden navigation at page boundaries. |
 | Tab bar | Two to five equal-width destinations, 64 px baseline height that grows with text scaling, 20 px icons, 10 px labels, 4 px icon gap, and compact semantic badges. |
-| Tag item | 32/40 px sizes, 16/24 px horizontal padding, active 16/8 px asymmetric padding, 8 px gap, 4 px radius, 152 px label maximum, and 16 px remove icon. |
+| Tag item | 32/40 px baseline sizes that grow with text scaling, 16/24 px horizontal padding, active 16/8 px asymmetric padding, 8 px gap, 4 px radius, 152 px label maximum, and one decorative 16 px remove affordance inside the selected tag action. |
 
 ## Outline and elevation contracts
 
@@ -94,10 +99,11 @@ not sufficient.
 
 The generated `text.font-family/sans` token preserves Charcoal Web's `Sarasa UI J` source value.
 Runtime availability is an implementation concern: Apple native targets use the system text/display
-families used by Charcoal SwiftUI, other native targets defer to Flutter's platform default, and Web
-uses `system-ui` followed by common Windows, Android, and Linux sans-serif families. Charcoal UI does
-not bundle font assets, so adopting the component package does not add a font payload to release
-builds. Explicit application typography overrides bypass this mapping.
+families used by Charcoal SwiftUI, while Web and other native targets defer to Flutter's renderer
+default. Skwasm cannot resolve browser-installed fonts from CSS family names, so a Web application
+that requires exact typography must provide a renderer-supported font asset through its theme.
+Charcoal UI does not bundle font assets, so adopting the component package does not add a font
+payload to release builds. Explicit application typography overrides bypass this mapping.
 
 ## Icon dependency boundary
 

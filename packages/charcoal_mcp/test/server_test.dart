@@ -96,7 +96,7 @@ void main() {
       expect(result['isError'], isFalse);
       expect(structured['count'], 2);
       final matches = (structured['results']! as List<Object?>).cast<Map<String, Object?>>();
-      expect(matches.first['name'], 'CharcoalSegmentedControl');
+      expect(matches.first['name'], 'CharcoalRadio');
       expect(jsonDecode(content['text']! as String), structured);
     });
 

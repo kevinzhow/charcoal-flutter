@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
@@ -21,7 +22,8 @@ abstract final class _TooltipSpec {
 ///
 /// With no explicit [position], placement is automatic and follows Charcoal's
 /// below-then-above priority. Supplying [visible] makes
-/// the tooltip controlled; otherwise it manages its own visibility.
+/// the tooltip controlled; otherwise it manages its own visibility. A visible
+/// focus-triggered tooltip dismisses with Escape without moving anchor focus.
 final class CharcoalTooltip extends StatefulWidget {
   const CharcoalTooltip({
     required this.child,
@@ -139,8 +141,8 @@ final class _CharcoalTooltipState extends State<CharcoalTooltip>
   void _requestVisibility(bool visible) {
     _showTimer?.cancel();
     if (visible && widget.message.isEmpty) return;
-    if (widget.visible == null) {
-      _internalVisible = visible;
+    if (widget.visible == null && _internalVisible != visible) {
+      setState(() => _internalVisible = visible);
     }
     widget.onVisibilityChanged?.call(visible);
     final effectiveVisible = widget.visible ?? visible;
@@ -217,30 +219,46 @@ final class _CharcoalTooltipState extends State<CharcoalTooltip>
   }
 
   @override
-  Widget build(BuildContext context) => Semantics(
-    tooltip: widget.message,
-    child: MouseRegion(
-      onEnter: widget.showOnHover ? (_) => _scheduleShow() : null,
-      onExit: widget.showOnHover ? (_) => _requestVisibility(false) : null,
-      child: Focus(
-        canRequestFocus: false,
-        onFocusChange: widget.showOnFocus
-            ? (focused) => focused ? _scheduleShow() : _requestVisibility(false)
-            : null,
-        child: Listener(
-          behavior: HitTestBehavior.translucent,
-          onPointerDown: widget.showOnTap
-              ? (event) {
-                  if (event.buttons == kPrimaryButton ||
-                      event.kind == PointerDeviceKind.touch ||
-                      event.kind == PointerDeviceKind.stylus) {
-                    _requestVisibility(true);
-                  }
-                }
-              : null,
-          child: CharcoalOverlayAnchorTracker(
-            onRectChanged: _handleTargetRectChanged,
-            child: KeyedSubtree(key: _targetKey, child: widget.child),
+  Widget build(BuildContext context) => Shortcuts(
+    shortcuts: const <ShortcutActivator, Intent>{
+      SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
+    },
+    child: Actions(
+      actions: <Type, Action<Intent>>{
+        if (_isVisible)
+          DismissIntent: CallbackAction<DismissIntent>(
+            onInvoke: (_) {
+              _requestVisibility(false);
+              return null;
+            },
+          ),
+      },
+      child: Semantics(
+        tooltip: widget.message,
+        child: MouseRegion(
+          onEnter: widget.showOnHover ? (_) => _scheduleShow() : null,
+          onExit: widget.showOnHover ? (_) => _requestVisibility(false) : null,
+          child: Focus(
+            canRequestFocus: false,
+            onFocusChange: widget.showOnFocus
+                ? (focused) => focused ? _scheduleShow() : _requestVisibility(false)
+                : null,
+            child: Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: widget.showOnTap
+                  ? (event) {
+                      if (event.buttons == kPrimaryButton ||
+                          event.kind == PointerDeviceKind.touch ||
+                          event.kind == PointerDeviceKind.stylus) {
+                        _requestVisibility(true);
+                      }
+                    }
+                  : null,
+              child: CharcoalOverlayAnchorTracker(
+                onRectChanged: _handleTargetRectChanged,
+                child: KeyedSubtree(key: _targetKey, child: widget.child),
+              ),
+            ),
           ),
         ),
       ),
@@ -367,6 +385,7 @@ final class _TooltipOverlay extends StatelessWidget {
             Positioned.fill(
               child: GestureDetector(
                 behavior: HitTestBehavior.translucent,
+                excludeFromSemantics: true,
                 onPanStart: (_) => onDismiss(),
                 onTap: onDismiss,
               ),

@@ -1,3 +1,4 @@
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,6 +18,8 @@ abstract final class _TextFieldSpec {
 }
 
 /// A single-line Charcoal V2 text field built on [EditableText].
+///
+/// [invalid], [required], and an actionable [assistiveText] are reflected in the field's semantics.
 final class CharcoalTextField extends StatefulWidget {
   const CharcoalTextField({
     this.assistiveText,
@@ -271,11 +274,19 @@ final class _CharcoalTextFieldState extends State<CharcoalTextField> {
     );
 
     final assistiveText = widget.assistiveText;
+    final errorHint = widget.invalid && assistiveText != null && assistiveText.isNotEmpty
+        ? assistiveText
+        : null;
     return Semantics(
       enabled: !widget.disabled,
+      hint: errorHint,
+      isRequired: widget.required ? true : null,
       label: widget.label.isEmpty ? null : widget.label,
       readOnly: widget.readOnly,
       textField: true,
+      validationResult: widget.invalid
+          ? SemanticsValidationResult.invalid
+          : SemanticsValidationResult.none,
       child: AnimatedOpacity(
         curve: CharcoalMotion.standardCurve,
         duration: CharcoalMotion.resolveDuration(
@@ -303,14 +314,18 @@ final class _CharcoalTextFieldState extends State<CharcoalTextField> {
             ),
             if (assistiveText != null && assistiveText.isNotEmpty) ...<Widget>[
               SizedBox(height: fieldGap),
-              Text(
-                assistiveText,
-                style: charcoalTypographyStyle(
-                  context,
-                  color: widget.invalid
-                      ? theme.colors.textNegativeDefault
-                      : theme.colors.textSecondaryDefault,
-                  size: CharcoalTypographySize.size14,
+              Semantics(
+                container: true,
+                liveRegion: widget.invalid && !MediaQuery.supportsAnnounceOf(context),
+                child: Text(
+                  assistiveText,
+                  style: charcoalTypographyStyle(
+                    context,
+                    color: widget.invalid
+                        ? theme.colors.textNegativeDefault
+                        : theme.colors.textSecondaryDefault,
+                    size: CharcoalTypographySize.size14,
+                  ),
                 ),
               ),
             ],

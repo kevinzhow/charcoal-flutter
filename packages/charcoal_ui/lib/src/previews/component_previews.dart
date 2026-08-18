@@ -119,31 +119,6 @@ Widget charcoalIconActionsPreview() => Row(
   ],
 );
 
-@CharcoalComponentPreview(name: 'Tag items', size: Size(520, 220))
-Widget charcoalTagItemsPreview() => Wrap(
-  spacing: 12,
-  runSpacing: 12,
-  children: <Widget>[
-    CharcoalTagItem(label: '#landscape', onPressed: () {}),
-    CharcoalTagItem(
-      label: '#landscape',
-      onPressed: () {},
-      status: CharcoalTagItemStatus.active,
-    ),
-    CharcoalTagItem(
-      label: '#landscape',
-      onPressed: () {},
-      status: CharcoalTagItemStatus.inactive,
-    ),
-    CharcoalTagItem(
-      label: '#original',
-      onPressed: () {},
-      translatedLabel: 'original work',
-    ),
-    const CharcoalTagItem(label: '#disabled', onPressed: null),
-  ],
-);
-
 @CharcoalComponentPreview(name: 'Composed UI', size: Size(520, 360))
 Widget charcoalComposedUiPreview() => const _ComposedUiPreview();
 
@@ -153,49 +128,6 @@ final class _ComposedUiPreview extends StatefulWidget {
   @override
   State<_ComposedUiPreview> createState() => _ComposedUiPreviewState();
 }
-
-@CharcoalComponentPreview(name: 'Carousel', size: Size(620, 320))
-Widget charcoalCarouselPreview() => const _CarouselPreview();
-
-final class _CarouselPreview extends StatelessWidget {
-  const _CarouselPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final colors = <Color>[
-      theme.colors.containerPrimaryDefault,
-      theme.colors.containerSecondaryDefault,
-      theme.colors.containerNeutralDefault,
-    ];
-    return SizedBox(
-      height: 240,
-      child: CharcoalCarousel(
-        gap: theme.dimensions.space.component20,
-        semanticLabel: 'Featured works',
-        showIndicators: true,
-        children: <Widget>[
-          for (var index = 0; index < colors.length; index++)
-            DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-                color: colors[index],
-              ),
-              child: Center(
-                child: Text(
-                  'Slide ${index + 1}',
-                  style: theme.textStyles.headingS.copyWith(color: theme.colors.textDefault),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-@CharcoalComponentPreview(name: 'Pagination', size: Size(640, 140))
-Widget charcoalPaginationPreview() => const _PaginationPreview();
 
 @CharcoalComponentPreview(name: 'Tab bar', size: Size(420, 180))
 Widget charcoalTabBarPreview() => const _TabBarPreview();
@@ -239,24 +171,6 @@ final class _TabBarPreviewState extends State<_TabBarPreview> {
     onChanged: (value) => setState(() => destination = value),
     semanticLabel: 'Primary destinations',
     value: destination,
-  );
-}
-
-final class _PaginationPreview extends StatefulWidget {
-  const _PaginationPreview();
-
-  @override
-  State<_PaginationPreview> createState() => _PaginationPreviewState();
-}
-
-final class _PaginationPreviewState extends State<_PaginationPreview> {
-  int page = 8;
-
-  @override
-  Widget build(BuildContext context) => CharcoalPagination(
-    currentPage: page,
-    pageCount: 20,
-    onPageChanged: (value) => setState(() => page = value),
   );
 }
 

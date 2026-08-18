@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/semantics.dart' show SemanticsRole, SemanticsValidationResult;
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
+abstract final class _ClickableSpec {
+  static const keyboardActivationDuration = Duration(milliseconds: 100);
+}
 
 typedef CharcoalClickableBuilder = Widget Function(
   BuildContext context,
@@ -10,7 +15,13 @@ typedef CharcoalClickableBuilder = Widget Function(
 /// A Widgets-layer interaction primitive shared by all Charcoal controls.
 ///
 /// It centralizes pointer, keyboard, focus, hover, disabled, and selected states
-/// without relying on Material's InkWell or CupertinoButton.
+/// without relying on Material's InkWell or CupertinoButton. Prefer a
+/// higher-level Charcoal component whenever one already expresses the intended
+/// interaction; this primitive owns no visual geometry or color contract.
+///
+/// Keyboard activation follows the ambient [WidgetsApp] shortcuts, including
+/// Web's button-specific Enter intent, and exposes a short pressed pulse to the
+/// builder without changing its layout.
 final class CharcoalClickable extends StatefulWidget {
   const CharcoalClickable({
     required this.builder,
@@ -42,6 +53,11 @@ final class CharcoalClickable extends StatefulWidget {
   final bool? expanded;
   final FocusNode? focusNode;
   final bool inMutuallyExclusiveGroup;
+
+  /// Whether ambient Flutter activation intents can invoke [onPressed].
+  ///
+  /// Disable this only when an owning composite implements and tests its full
+  /// key map. Pointer and assistive-technology semantics remain available.
   final bool keyboardActivationEnabled;
   final ValueChanged<bool>? onFocusChange;
   final FocusOnKeyEventCallback? onKeyEvent;
@@ -61,6 +77,8 @@ final class CharcoalClickable extends StatefulWidget {
 
 final class _CharcoalClickableState extends State<CharcoalClickable> {
   WidgetStatesController? _internalStatesController;
+  Timer? _keyboardActivationTimer;
+  WidgetStatesController? _keyboardActivationStatesController;
 
   WidgetStatesController get _statesController =>
       widget.statesController ?? _internalStatesController!;
@@ -80,6 +98,7 @@ final class _CharcoalClickableState extends State<CharcoalClickable> {
   void didUpdateWidget(CharcoalClickable oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.statesController != widget.statesController) {
+      _cancelKeyboardActivation();
       if (oldWidget.statesController == null) {
         _internalStatesController!.dispose();
         _internalStatesController = null;
@@ -88,16 +107,23 @@ final class _CharcoalClickableState extends State<CharcoalClickable> {
         _internalStatesController = WidgetStatesController();
       }
     }
+    if (!widget.keyboardActivationEnabled) {
+      _cancelKeyboardActivation();
+    }
     _syncPersistentStates();
   }
 
   @override
   void dispose() {
+    _cancelKeyboardActivation();
     _internalStatesController?.dispose();
     super.dispose();
   }
 
   void _syncPersistentStates() {
+    if (!_enabled) {
+      _cancelKeyboardActivation();
+    }
     _statesController
       ..update(WidgetState.disabled, !_enabled)
       ..update(WidgetState.selected, widget.selected);
@@ -107,6 +133,38 @@ final class _CharcoalClickableState extends State<CharcoalClickable> {
   }
 
   void _activate() => widget.onPressed?.call();
+
+  void _activateFromKeyboard() {
+    _cancelKeyboardActivation();
+    final statesController = _statesController;
+    _keyboardActivationStatesController = statesController;
+    statesController.update(WidgetState.pressed, true);
+    _activate();
+    _keyboardActivationTimer = Timer(
+      _ClickableSpec.keyboardActivationDuration,
+      () {
+        _keyboardActivationTimer = null;
+        _keyboardActivationStatesController = null;
+        statesController.update(WidgetState.pressed, false);
+      },
+    );
+  }
+
+  void _cancelKeyboardActivation() {
+    _keyboardActivationTimer?.cancel();
+    _keyboardActivationTimer = null;
+    _keyboardActivationStatesController?.update(WidgetState.pressed, false);
+    _keyboardActivationStatesController = null;
+  }
+
+  void _handleTapDown(TapDownDetails details) {
+    _cancelKeyboardActivation();
+    _statesController.update(WidgetState.pressed, true);
+  }
+
+  void _handleTapEnd() {
+    _statesController.update(WidgetState.pressed, false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,14 +195,21 @@ final class _CharcoalClickableState extends State<CharcoalClickable> {
           validationResult: widget.validationResult,
           value: widget.semanticValue,
           child: FocusableActionDetector(
-            actions: _enabled
+            actions: _enabled && widget.keyboardActivationEnabled
                 ? <Type, Action<Intent>>{
                     ActivateIntent: CallbackAction<ActivateIntent>(
                       onInvoke: (_) {
-                        _activate();
+                        _activateFromKeyboard();
                         return null;
                       },
                     ),
+                    if (widget.semanticButton || widget.semanticRole == SemanticsRole.tab)
+                      ButtonActivateIntent: CallbackAction<ButtonActivateIntent>(
+                        onInvoke: (_) {
+                          _activateFromKeyboard();
+                          return null;
+                        },
+                      ),
                   }
                 : null,
             autofocus: widget.autofocus,
@@ -154,24 +219,12 @@ final class _CharcoalClickableState extends State<CharcoalClickable> {
             onShowFocusHighlight: (value) => _statesController.update(WidgetState.focused, value),
             onShowHoverHighlight: (value) => _statesController.update(WidgetState.hovered, value),
             onFocusChange: widget.onFocusChange,
-            shortcuts: widget.keyboardActivationEnabled
-                ? const <ShortcutActivator, Intent>{
-                    SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
-                    SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
-                  }
-                : null,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: _enabled ? _activate : null,
-              onTapCancel: _enabled
-                  ? () => _statesController.update(WidgetState.pressed, false)
-                  : null,
-              onTapDown: _enabled
-                  ? (_) => _statesController.update(WidgetState.pressed, true)
-                  : null,
-              onTapUp: _enabled
-                  ? (_) => _statesController.update(WidgetState.pressed, false)
-                  : null,
+              onTapCancel: _enabled ? _handleTapEnd : null,
+              onTapDown: _enabled ? _handleTapDown : null,
+              onTapUp: _enabled ? (_) => _handleTapEnd() : null,
               child: widget.builder(context, effectiveStates),
             ),
           ),

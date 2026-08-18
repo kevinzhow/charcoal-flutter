@@ -20,6 +20,10 @@ abstract final class _ButtonSpec {
 }
 
 /// A Charcoal V2 button implemented entirely with Flutter Widgets.
+///
+/// When [selected] is null this is a regular action. A non-null value makes it
+/// a controlled toggle whose selected or unselected state is exposed through
+/// semantics.
 final class CharcoalButton extends StatelessWidget {
   const CharcoalButton({
     required this.child,
@@ -30,7 +34,7 @@ final class CharcoalButton extends StatelessWidget {
     this.leading,
     this.primaryColor,
     this.semanticLabel,
-    this.selected = false,
+    this.selected,
     this.size = CharcoalButtonSize.medium,
     this.statesController,
     this.trailing,
@@ -46,7 +50,7 @@ final class CharcoalButton extends StatelessWidget {
   final Widget? leading;
   final Color? primaryColor;
   final String? semanticLabel;
-  final bool selected;
+  final bool? selected;
   final CharcoalButtonSize size;
   final WidgetStatesController? statesController;
   final Widget? trailing;
@@ -73,115 +77,122 @@ final class CharcoalButton extends StatelessWidget {
     final iconGap = theme.dimensions.space.component10;
     final palette = _buttonPalette(theme, variant);
 
-    return CharcoalClickable(
-      autofocus: autofocus,
-      focusNode: focusNode,
-      onPressed: onPressed,
-      selected: selected,
-      semanticLabel: semanticLabel,
-      statesController: statesController,
-      builder: (context, states) {
-        final visualStates = selected ? <WidgetState>{...states, WidgetState.pressed} : states;
-        final background = variant == CharcoalButtonVariant.primary && primaryColor != null
-            ? _resolveCustomPrimaryColor(
-                primaryColor!,
-                visualStates,
-                theme,
-              )
-            : resolveCharcoalStateColor(
-                visualStates,
-                normal: palette.normalBackground,
-                hovered: palette.hoveredBackground,
-                pressed: palette.pressedBackground,
-                disabled: palette.normalBackground,
-              );
-        final foreground = resolveCharcoalStateColor(
-          visualStates,
-          normal: palette.normalForeground,
-          hovered: palette.hoveredForeground,
-          pressed: palette.pressedForeground,
-          disabled: palette.normalForeground,
-        );
-        final isDisabled = states.contains(WidgetState.disabled);
-        final isFocused = states.contains(WidgetState.focused);
-        final textStyle = charcoalTypographyStyle(
-          context,
-          color: foreground,
-          size: CharcoalTypographySize.size14,
-          weight: CharcoalTypographyWeight.bold,
-        );
+    return MergeSemantics(
+      child: Semantics(
+        selected: selected,
+        child: CharcoalClickable(
+          autofocus: autofocus,
+          focusNode: focusNode,
+          onPressed: onPressed,
+          selected: selected ?? false,
+          semanticLabel: semanticLabel,
+          statesController: statesController,
+          builder: (context, states) {
+            final visualStates = selected == true
+                ? <WidgetState>{...states, WidgetState.pressed}
+                : states;
+            final background = variant == CharcoalButtonVariant.primary && primaryColor != null
+                ? _resolveCustomPrimaryColor(
+                    primaryColor!,
+                    visualStates,
+                    theme,
+                  )
+                : resolveCharcoalStateColor(
+                    visualStates,
+                    normal: palette.normalBackground,
+                    hovered: palette.hoveredBackground,
+                    pressed: palette.pressedBackground,
+                    disabled: palette.normalBackground,
+                  );
+            final foreground = resolveCharcoalStateColor(
+              visualStates,
+              normal: palette.normalForeground,
+              hovered: palette.hoveredForeground,
+              pressed: palette.pressedForeground,
+              disabled: palette.normalForeground,
+            );
+            final isDisabled = states.contains(WidgetState.disabled);
+            final isFocused = states.contains(WidgetState.focused);
+            final textStyle = charcoalTypographyStyle(
+              context,
+              color: foreground,
+              size: CharcoalTypographySize.size14,
+              weight: CharcoalTypographyWeight.bold,
+            );
 
-        Widget content = Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
-          children: <Widget>[
-            if (leading != null) ...<Widget>[
-              IconTheme(
-                data: const IconThemeData(
-                  size: _ButtonSpec.iconSize,
-                ).copyWith(color: foreground),
-                child: leading!,
+            Widget content = Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
+              children: <Widget>[
+                if (leading != null) ...<Widget>[
+                  IconTheme(
+                    data: const IconThemeData(
+                      size: _ButtonSpec.iconSize,
+                    ).copyWith(color: foreground),
+                    child: leading!,
+                  ),
+                  SizedBox(width: iconGap),
+                ],
+                Flexible(
+                  child: DefaultTextStyle(style: textStyle, child: child),
+                ),
+                if (trailing != null) ...<Widget>[
+                  SizedBox(width: iconGap),
+                  IconTheme(
+                    data: const IconThemeData(
+                      size: _ButtonSpec.iconSize,
+                    ).copyWith(color: foreground),
+                    child: trailing!,
+                  ),
+                ],
+              ],
+            );
+
+            content = AnimatedContainer(
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _ButtonSpec.animationDuration,
               ),
-              SizedBox(width: iconGap),
-            ],
-            Flexible(
-              child: DefaultTextStyle(style: textStyle, child: child),
-            ),
-            if (trailing != null) ...<Widget>[
-              SizedBox(width: iconGap),
-              IconTheme(
-                data: const IconThemeData(
-                  size: _ButtonSpec.iconSize,
-                ).copyWith(color: foreground),
-                child: trailing!,
+              curve: CharcoalMotion.standardCurve,
+              constraints: BoxConstraints(minHeight: sizeSpec.height),
+              padding: EdgeInsets.symmetric(
+                horizontal: sizeSpec.horizontalPadding,
+                vertical: sizeSpec.verticalPadding,
               ),
-            ],
-          ],
-        );
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+                boxShadow: isFocused
+                    ? <BoxShadow>[
+                        BoxShadow(
+                          color: theme.colors.borderFocusLegacy,
+                          spreadRadius: _ButtonSpec.focusRingWidth,
+                        ),
+                      ]
+                    : const <BoxShadow>[],
+                color: background,
+              ),
+              child: content,
+            );
 
-        content = AnimatedContainer(
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            _ButtonSpec.animationDuration,
-          ),
-          curve: CharcoalMotion.standardCurve,
-          constraints: BoxConstraints(minHeight: sizeSpec.height),
-          padding: EdgeInsets.symmetric(
-            horizontal: sizeSpec.horizontalPadding,
-            vertical: sizeSpec.verticalPadding,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-            boxShadow: isFocused
-                ? <BoxShadow>[
-                    BoxShadow(
-                      color: theme.colors.borderFocusLegacy,
-                      spreadRadius: _ButtonSpec.focusRingWidth,
-                    ),
-                  ]
-                : const <BoxShadow>[],
-            color: background,
-          ),
-          child: content,
-        );
-
-        if (fullWidth) {
-          content = SizedBox(width: double.infinity, child: content);
-        }
-        return AnimatedOpacity(
-          curve: CharcoalMotion.standardCurve,
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            _ButtonSpec.animationDuration,
-          ),
-          opacity: isDisabled
-              ? variant == CharcoalButtonVariant.navigation
-                    ? 0
-                    : charcoalDisabledOpacity
-              : 1,
-          child: content,
-        );
-      },
+            if (fullWidth) {
+              content = SizedBox(width: double.infinity, child: content);
+            }
+            return AnimatedOpacity(
+              curve: CharcoalMotion.standardCurve,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _ButtonSpec.animationDuration,
+              ),
+              opacity: isDisabled
+                  ? variant == CharcoalButtonVariant.navigation
+                        ? 0
+                        : charcoalDisabledOpacity
+                  : 1,
+              child: content,
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -230,65 +241,69 @@ final class CharcoalLinkButton extends StatelessWidget {
       verticalPadding: _ButtonSpec.mediumVerticalPadding,
       radius: theme.dimensions.radius.s,
     );
-    return CharcoalClickable(
-      autofocus: autofocus,
-      focusNode: focusNode,
-      onPressed: onPressed,
-      semanticLabel: semanticLabel,
-      statesController: statesController,
-      builder: (context, states) {
-        final disabled = states.contains(WidgetState.disabled);
-        final focused = states.contains(WidgetState.focused);
-        final color = resolveCharcoalStateColor(
-          states,
-          normal: theme.colors.textDefault,
-          hovered: theme.colors.textHover,
-          pressed: theme.colors.textTertiaryDefault,
-          disabled: theme.colors.textDefault,
-        );
-        return AnimatedOpacity(
-          curve: CharcoalMotion.standardCurve,
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            _ButtonSpec.animationDuration,
-          ),
-          opacity: disabled ? charcoalDisabledOpacity : 1,
-          child: AnimatedContainer(
+    return MergeSemantics(
+      child: CharcoalClickable(
+        autofocus: autofocus,
+        focusNode: focusNode,
+        onPressed: onPressed,
+        semanticLabel: semanticLabel,
+        statesController: statesController,
+        builder: (context, states) {
+          final disabled = states.contains(WidgetState.disabled);
+          final focused = states.contains(WidgetState.focused);
+          final color = resolveCharcoalStateColor(
+            states,
+            normal: theme.colors.textDefault,
+            hovered: theme.colors.textHover,
+            pressed: theme.colors.textTertiaryDefault,
+            disabled: theme.colors.textDefault,
+          );
+          return AnimatedOpacity(
+            curve: CharcoalMotion.standardCurve,
             duration: CharcoalMotion.resolveDuration(
               context,
               _ButtonSpec.animationDuration,
             ),
-            curve: CharcoalMotion.standardCurve,
-            constraints: BoxConstraints(minHeight: spec.height),
-            padding: EdgeInsets.symmetric(
-              horizontal: spec.horizontalPadding,
-              vertical: spec.verticalPadding,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(spec.radius),
-              boxShadow: focused
-                  ? <BoxShadow>[
-                      BoxShadow(
-                        color: theme.colors.borderFocusLegacy,
-                        spreadRadius: _ButtonSpec.focusRingWidth,
-                      ),
-                    ]
-                  : const <BoxShadow>[],
-            ),
-            child: Center(
-              child: DefaultTextStyle(
-                style: charcoalTypographyStyle(
-                  context,
-                  color: color,
-                  size: CharcoalTypographySize.size14,
-                  weight: CharcoalTypographyWeight.bold,
+            opacity: disabled ? charcoalDisabledOpacity : 1,
+            child: AnimatedContainer(
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _ButtonSpec.animationDuration,
+              ),
+              curve: CharcoalMotion.standardCurve,
+              constraints: BoxConstraints(minHeight: spec.height),
+              padding: EdgeInsets.symmetric(
+                horizontal: spec.horizontalPadding,
+                vertical: spec.verticalPadding,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(spec.radius),
+                boxShadow: focused
+                    ? <BoxShadow>[
+                        BoxShadow(
+                          color: theme.colors.borderFocusLegacy,
+                          spreadRadius: _ButtonSpec.focusRingWidth,
+                        ),
+                      ]
+                    : const <BoxShadow>[],
+              ),
+              child: Center(
+                widthFactor: 1,
+                heightFactor: 1,
+                child: DefaultTextStyle(
+                  style: charcoalTypographyStyle(
+                    context,
+                    color: color,
+                    size: CharcoalTypographySize.size14,
+                    weight: CharcoalTypographyWeight.bold,
+                  ),
+                  child: child,
                 ),
-                child: child,
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -350,7 +365,9 @@ _ButtonPalette _buttonPalette(CharcoalThemeData theme, CharcoalButtonVariant var
 ///
 /// This is the Flutter counterpart of Charcoal iOS's UIKit-only
 /// `CharcoalSwitchingButton`. Both children remain laid out, and [isOn]
-/// selects which one is painted and exposed to semantics.
+/// selects which one is painted, focusable, animated, and exposed to
+/// semantics. Each visible button owns its own action semantics; this layout
+/// wrapper does not add a separate toggle node.
 final class CharcoalSwitchingButton extends StatelessWidget {
   const CharcoalSwitchingButton({
     required this.isOn,
@@ -364,13 +381,22 @@ final class CharcoalSwitchingButton extends StatelessWidget {
   final Widget onButton;
 
   @override
-  Widget build(BuildContext context) => Semantics(
-    container: true,
-    toggled: isOn,
-    child: IndexedStack(
+  Widget build(BuildContext context) {
+    Widget branch({required bool visible, required Widget child}) => ExcludeFocus(
+      excluding: !visible,
+      child: ExcludeSemantics(
+        excluding: !visible,
+        child: TickerMode(enabled: visible, child: child),
+      ),
+    );
+
+    return IndexedStack(
       alignment: Alignment.center,
       index: isOn ? 0 : 1,
-      children: <Widget>[onButton, offButton],
-    ),
-  );
+      children: <Widget>[
+        branch(visible: isOn, child: onButton),
+        branch(visible: !isOn, child: offButton),
+      ],
+    );
+  }
 }

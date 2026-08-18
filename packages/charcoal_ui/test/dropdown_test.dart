@@ -128,10 +128,12 @@ void main() {
         const SizedBox(
           width: 320,
           child: CharcoalDropdown<String>(
+            assistiveText: 'Choose a work type',
             invalid: true,
             label: 'Work type',
             onChanged: _ignoreString,
             options: options,
+            required: true,
             value: 'illustration',
           ),
         ),
@@ -142,6 +144,7 @@ void main() {
       tester.getSemantics(find.byType(CharcoalClickable)),
       matchesSemantics(
         label: 'Work type',
+        hint: 'Choose a work type',
         value: 'Illustration',
         validationResult: SemanticsValidationResult.invalid,
         hasEnabledState: true,
@@ -149,6 +152,8 @@ void main() {
         isButton: true,
         hasExpandedState: true,
         isExpanded: false,
+        hasRequiredState: true,
+        isRequired: true,
         hasTapAction: true,
       ),
     );

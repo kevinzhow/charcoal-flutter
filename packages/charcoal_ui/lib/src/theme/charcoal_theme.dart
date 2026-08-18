@@ -2,7 +2,12 @@ import 'package:flutter/widgets.dart';
 
 import 'charcoal_theme_data.dart';
 
-/// Injects [CharcoalThemeData] without depending on Material or Cupertino.
+/// Injects one coherent [CharcoalThemeData] without depending on Material or
+/// Cupertino.
+///
+/// Use [CharcoalThemeData.light] or [CharcoalThemeData.dark] for complete
+/// generated token sets. Scoped overrides should preserve semantic token roles
+/// and replace [data] atomically so every dependent rebuilds together.
 final class CharcoalTheme extends InheritedTheme {
   const CharcoalTheme({required this.data, required super.child, super.key});
 

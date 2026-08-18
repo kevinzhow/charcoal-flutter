@@ -19,8 +19,16 @@ abstract final class _CarouselSpec {
   static const focusRingWidth = 4.0;
 }
 
-enum CharcoalCarouselSize { small, medium }
+/// The layout behavior of a [CharcoalCarousel].
+enum CharcoalCarouselSize {
+  /// Shows one full-width page and page indicators by default.
+  small,
 
+  /// Shows a partial neighboring page and overlay navigation by default.
+  medium,
+}
+
+/// Builds an accessible label for a zero-based slide [index].
 typedef CharcoalCarouselSemanticLabelBuilder = String Function(int index, int itemCount);
 
 /// A horizontally paged Charcoal V2 carousel.
@@ -28,6 +36,10 @@ typedef CharcoalCarouselSemanticLabelBuilder = String Function(int index, int it
 /// The carousel must receive a bounded height from its parent. Small carousels
 /// default to full-page slides and indicators; medium carousels default to a
 /// partial next-slide preview and overlay navigation buttons.
+///
+/// Touch and trackpad input swipe the viewport. Arrow, Home, and End keys act
+/// while the carousel has keyboard focus, and navigation direction follows the
+/// ambient [Directionality]. The component never auto-rotates content.
 final class CharcoalCarousel extends StatefulWidget {
   const CharcoalCarousel({
     required this.children,
@@ -49,24 +61,62 @@ final class CharcoalCarousel extends StatefulWidget {
     this.viewportFraction,
     super.key,
   }) : assert(initialPage >= 0),
+       assert(gap == null || gap >= 0),
        assert(viewportFraction == null || (viewportFraction > 0 && viewportFraction <= 1));
 
+  /// The ordered slides. At least one slide is required.
   final List<Widget> children;
+
+  /// Whether offscreen pages may respond to accessibility show-on-screen requests.
   final bool allowImplicitScrolling;
+
+  /// Whether the carousel requests focus when it is first mounted.
   final bool autofocus;
+
+  /// An optional externally owned page controller.
+  ///
+  /// When supplied, its initial page and viewport fraction take precedence over
+  /// [initialPage] and [viewportFraction]. The carousel never disposes it.
   final PageController? controller;
+
+  /// An optional externally owned focus node.
   final FocusNode? focusNode;
+
+  /// The non-negative logical-pixel gap between slides.
   final double? gap;
+
+  /// The zero-based initial page used by the internal controller.
   final int initialPage;
+
+  /// Called after touch, keyboard, indicator, controller, or button navigation
+  /// accepts a different zero-based page.
   final ValueChanged<int>? onPageChanged;
+
+  /// Optional scroll physics for the page viewport.
   final ScrollPhysics? physics;
+
+  /// Accessible name for the previous-page action.
   final String previousSemanticLabel;
+
+  /// Accessible name for the carousel region.
   final String semanticLabel;
+
+  /// Optional localized label shared by each slide and its indicator.
   final CharcoalCarouselSemanticLabelBuilder? semanticLabelBuilder;
+
+  /// Whether to show page indicators, overriding the [size] default.
   final bool? showIndicators;
+
+  /// Whether to show overlay navigation buttons, overriding the [size] default.
   final bool? showNavigationButtons;
+
+  /// The default viewport and control treatment.
   final CharcoalCarouselSize size;
+
+  /// Accessible name for the next-page action.
   final String nextSemanticLabel;
+
+  /// The page fraction used only when the carousel owns its controller.
   final double? viewportFraction;
 
   @override
@@ -78,6 +128,7 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
   double? _internalViewportFraction;
   late FocusNode _focusNode;
   late int _currentPage;
+  bool _focusWithin = false;
   bool _focusVisible = false;
   bool _hovered = false;
 
@@ -90,7 +141,10 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
     assert(widget.children.isNotEmpty);
     assert(widget.initialPage < widget.children.length);
     _focusNode = widget.focusNode ?? FocusNode(debugLabel: 'CharcoalCarousel');
-    _currentPage = math.min(widget.initialPage, _lastPage);
+    _currentPage = math.min(
+      widget.controller?.initialPage ?? widget.initialPage,
+      _lastPage,
+    );
   }
 
   @override
@@ -200,6 +254,11 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
     widget.onPageChanged?.call(page);
   }
 
+  void _handleFocusWithinChanged(bool focused) {
+    if (_focusWithin == focused) return;
+    setState(() => _focusWithin = focused);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
@@ -267,7 +326,7 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
                 enabled: canPrevious,
                 onPressed: () => _animateTo(_currentPage - 1),
                 semanticLabel: widget.previousSemanticLabel,
-                visible: _hovered || _focusVisible,
+                visible: _hovered || _focusWithin,
               ),
             ),
             PositionedDirectional(
@@ -280,7 +339,7 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
                 enabled: canNext,
                 onPressed: () => _animateTo(_currentPage + 1),
                 semanticLabel: widget.nextSemanticLabel,
-                visible: _hovered || _focusVisible,
+                visible: _hovered || _focusWithin,
               ),
             ),
           ],
@@ -294,6 +353,7 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
       label: widget.semanticLabel,
       child: Focus(
         canRequestFocus: false,
+        onFocusChange: _handleFocusWithinChanged,
         onKeyEvent: _handleKeyEvent,
         child: FocusableActionDetector(
           autofocus: widget.autofocus,
@@ -309,26 +369,11 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
                 if (showIndicators)
                   SizedBox(
                     height: theme.dimensions.space.targetM,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (var index = 0; index < widget.children.length; index++) ...<Widget>[
-                          if (index > 0)
-                            SizedBox(
-                              width: theme.dimensions.space.component20,
-                            ),
-                          _CarouselIndicator(
-                            active: index == _currentPage,
-                            onPressed: () => _animateTo(index),
-                            semanticLabel:
-                                widget.semanticLabelBuilder?.call(
-                                  index,
-                                  widget.children.length,
-                                ) ??
-                                '${index + 1}/${widget.children.length}',
-                          ),
-                        ],
-                      ],
+                    child: _CarouselIndicators(
+                      currentPage: _currentPage,
+                      itemCount: widget.children.length,
+                      onSelected: _animateTo,
+                      semanticLabelBuilder: widget.semanticLabelBuilder,
                     ),
                   ),
               ],
@@ -336,6 +381,58 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
           ),
         ),
       ),
+    );
+  }
+}
+
+final class _CarouselIndicators extends StatelessWidget {
+  const _CarouselIndicators({
+    required this.currentPage,
+    required this.itemCount,
+    required this.onSelected,
+    required this.semanticLabelBuilder,
+  });
+
+  final int currentPage;
+  final int itemCount;
+  final ValueChanged<int> onSelected;
+  final CharcoalCarouselSemanticLabelBuilder? semanticLabelBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final dotSize = theme.dimensions.space.component20;
+    final gap = theme.dimensions.space.component20;
+    final edgeInset = theme.dimensions.space.component20;
+    final contentWidth = itemCount * dotSize + math.max(0, itemCount - 1) * gap;
+
+    Row indicators() => Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        for (var index = 0; index < itemCount; index++) ...<Widget>[
+          if (index > 0) SizedBox(width: gap),
+          _CarouselIndicator(
+            active: index == currentPage,
+            onPressed: () => onSelected(index),
+            semanticLabel:
+                semanticLabelBuilder?.call(index, itemCount) ?? '${index + 1}/$itemCount',
+          ),
+        ],
+      ],
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final needsScrolling =
+            constraints.maxWidth.isFinite && contentWidth + edgeInset * 2 > constraints.maxWidth;
+        if (!needsScrolling) return Center(child: indicators());
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: edgeInset),
+          scrollDirection: Axis.horizontal,
+          child: indicators(),
+        );
+      },
     );
   }
 }

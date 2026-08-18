@@ -2,6 +2,7 @@ import 'dart:ui' show PointerDeviceKind;
 
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/src/components/popup_shape.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -72,6 +73,41 @@ void main() {
     expect(find.text('Above the anchor'), findsNothing);
   });
 
+  testWidgets('focused tooltip dismisses with Escape without moving focus', (
+    tester,
+  ) async {
+    final focusNode = FocusNode();
+    final visibilityChanges = <bool>[];
+    addTearDown(focusNode.dispose);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalTooltip(
+          message: 'Keyboard context',
+          onVisibilityChanged: visibilityChanges.add,
+          waitDuration: Duration.zero,
+          child: CharcoalButton(
+            focusNode: focusNode,
+            onPressed: () {},
+            child: const Text('Focusable trigger'),
+          ),
+        ),
+      ),
+    );
+
+    focusNode.requestFocus();
+    await tester.pump();
+
+    expect(find.text('Keyboard context'), findsOneWidget);
+    expect(focusNode.hasFocus, isTrue);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Keyboard context'), findsNothing);
+    expect(focusNode.hasFocus, isTrue);
+    expect(visibilityChanges, <bool>[true, false]);
+  });
+
   testWidgets('tooltip constrains long content and follows a scrolling anchor', (
     tester,
   ) async {
@@ -139,6 +175,77 @@ void main() {
     for (final position in CharcoalOverlayPosition.values) {
       expect(find.text(position.name), findsOneWidget);
     }
+  });
+
+  testWidgets('balloon close affordance supports keyboard activation', (
+    tester,
+  ) async {
+    var dismissCount = 0;
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalBalloon(
+          onDismiss: () => dismissCount += 1,
+          child: const Text('Persistent context'),
+        ),
+      ),
+    );
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
+
+    expect(dismissCount, 1);
+  });
+
+  testWidgets('anchored balloon dismisses with Escape from its focused anchor', (
+    tester,
+  ) async {
+    final focusNode = FocusNode();
+    final visibilityChanges = <bool>[];
+    addTearDown(focusNode.dispose);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalAnchoredBalloon(
+          message: 'Persistent details',
+          onVisibilityChanged: visibilityChanges.add,
+          anchor: CharcoalButton(
+            focusNode: focusNode,
+            onPressed: () {},
+            child: const Text('Balloon trigger'),
+          ),
+        ),
+      ),
+    );
+
+    focusNode.requestFocus();
+    await tester.pump();
+    await tester.tap(find.text('Balloon trigger'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Persistent details'), findsOneWidget);
+    expect(focusNode.hasFocus, isTrue);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Persistent details'), findsNothing);
+    expect(focusNode.hasFocus, isTrue);
+    expect(visibilityChanges, <bool>[true, false]);
+
+    await tester.tap(find.text('Balloon trigger'));
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pump();
+
+    expect(find.text('Persistent details'), findsOneWidget);
+    expect(focusNode.hasFocus, isFalse);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Persistent details'), findsNothing);
+    expect(visibilityChanges, <bool>[true, false, true, false]);
   });
 
   testWidgets('anchored balloon points back to an edge-clamped anchor', (

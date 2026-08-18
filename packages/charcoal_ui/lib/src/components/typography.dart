@@ -11,6 +11,9 @@ enum CharcoalTypographyWeight { regular, bold }
 ///
 /// Flutter's ambient [MediaQuery.textScalerOf] is intentionally left intact,
 /// so these styles participate in Dynamic Type/accessibility text scaling.
+/// For page hierarchy, prefer the semantic styles on
+/// `CharcoalTheme.of(context).textStyles`; this wrapper preserves the upstream
+/// component scale of 10, 12, 14, 16, and 20 logical pixels.
 final class CharcoalTypography extends StatelessWidget {
   const CharcoalTypography({
     required this.child,

@@ -1,4 +1,6 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -49,6 +51,58 @@ void main() {
 
     await tester.tap(find.text('Public'));
     expect(nextValue, 'public');
+  });
+
+  testWidgets('checkbox and radio expose invalid input semantics', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      charcoalTestApp(
+        Column(
+          children: <Widget>[
+            CharcoalCheckbox(
+              value: false,
+              invalid: true,
+              onChanged: (_) {},
+              semanticLabel: 'Accept terms',
+            ),
+            CharcoalRadio<String>(
+              value: 'public',
+              groupValue: 'private',
+              invalid: true,
+              onChanged: (_) {},
+              semanticLabel: 'Public',
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(
+      tester.getSemantics(find.byType(CharcoalCheckbox)),
+      matchesSemantics(
+        label: 'Accept terms',
+        validationResult: SemanticsValidationResult.invalid,
+        hasCheckedState: true,
+        isChecked: false,
+        hasEnabledState: true,
+        isEnabled: true,
+        hasTapAction: true,
+      ),
+    );
+    expect(
+      tester.getSemantics(find.byType(CharcoalRadio<String>)),
+      matchesSemantics(
+        label: 'Public',
+        validationResult: SemanticsValidationResult.invalid,
+        hasCheckedState: true,
+        isChecked: false,
+        hasEnabledState: true,
+        isEnabled: true,
+        isInMutuallyExclusiveGroup: true,
+        hasTapAction: true,
+      ),
+    );
   });
 
   testWidgets('switch exposes toggled semantics and toggles', (tester) async {
@@ -102,6 +156,29 @@ void main() {
     );
   });
 
+  testWidgets('switch supports keyboard activation', (tester) async {
+    bool? nextValue;
+    final focusNode = FocusNode();
+    addTearDown(focusNode.dispose);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalSwitch(
+          value: true,
+          focusNode: focusNode,
+          onChanged: (value) => nextValue = value,
+          label: const Text('Notifications'),
+        ),
+      ),
+    );
+
+    focusNode.requestFocus();
+    await tester.pump();
+    expect(focusNode.hasFocus, isTrue);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.space);
+    expect(nextValue, isFalse);
+  });
+
   testWidgets('switch disabled opacity applies only to the control', (
     tester,
   ) async {
@@ -125,6 +202,16 @@ void main() {
         matching: find.byType(AnimatedOpacity),
       ),
       findsNothing,
+    );
+    expect(
+      tester.getSemantics(find.byType(CharcoalSwitch)),
+      matchesSemantics(
+        label: 'Always readable',
+        hasEnabledState: true,
+        isEnabled: false,
+        hasToggledState: true,
+        isToggled: false,
+      ),
     );
   });
 

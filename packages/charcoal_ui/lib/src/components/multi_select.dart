@@ -1,4 +1,5 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
@@ -15,13 +16,28 @@ abstract final class _MultiSelectSpec {
   static const focusRingWidth = 4.0;
 }
 
-enum CharcoalMultiSelectVariant { normal, overlay }
+/// Visual context for one [CharcoalMultiSelect] option.
+enum CharcoalMultiSelectVariant {
+  /// A neutral indicator on a standard application surface.
+  normal,
+
+  /// A HUD-bordered indicator painted over artwork or other media.
+  overlay,
+}
 
 /// A controlled Charcoal V2 multi-selection control.
 ///
 /// Unlike `CharcoalCheckbox`, this component uses a circular, borderless
 /// indicator. Use one instance per option
 /// and keep the selected set in the parent widget.
+///
+/// Place related instances in one visibly and semantically named group. This
+/// option widget intentionally does not own a list, select-all behavior, or a
+/// hidden popup.
+///
+/// [onChanged] requests the next value but does not mutate [selected]. A null
+/// callback disables pointer, keyboard, and assistive-technology activation.
+/// [invalid] is reflected both visually and through input validation semantics.
 final class CharcoalMultiSelect extends StatelessWidget {
   const CharcoalMultiSelect({
     required this.selected,
@@ -36,14 +52,21 @@ final class CharcoalMultiSelect extends StatelessWidget {
     super.key,
   });
 
+  /// Whether this option belongs to the parent-owned selected set.
   final bool selected;
+
+  /// Requests that the caller add or remove this option from its selected set.
   final ValueChanged<bool>? onChanged;
   final bool autofocus;
   final FocusNode? focusNode;
+
+  /// Whether the option is part of an invalid multi-selection result.
   final bool invalid;
   final Widget? label;
   final String? semanticLabel;
   final WidgetStatesController? statesController;
+
+  /// The visual surface on which the indicator is painted.
   final CharcoalMultiSelectVariant variant;
 
   @override
@@ -58,6 +81,9 @@ final class CharcoalMultiSelect extends StatelessWidget {
         semanticButton: false,
         semanticLabel: semanticLabel,
         statesController: statesController,
+        validationResult: invalid
+            ? SemanticsValidationResult.invalid
+            : SemanticsValidationResult.none,
         builder: (context, states) {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);
@@ -100,7 +126,7 @@ final class CharcoalMultiSelect extends StatelessWidget {
                     borderRadius: BorderRadius.circular(
                       theme.dimensions.radius.oval,
                     ),
-                    boxShadow: focused || (invalid && !overlay)
+                    boxShadow: !disabled && (focused || (invalid && !overlay))
                         ? <BoxShadow>[
                             BoxShadow(
                               color: invalid
@@ -130,7 +156,7 @@ final class CharcoalMultiSelect extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                           theme.dimensions.radius.oval,
                         ),
-                        boxShadow: invalid && overlay
+                        boxShadow: !disabled && invalid && overlay
                             ? <BoxShadow>[
                                 BoxShadow(
                                   color: theme.colors.borderNegative,

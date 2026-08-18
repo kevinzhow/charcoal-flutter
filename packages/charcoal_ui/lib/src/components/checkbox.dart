@@ -1,4 +1,5 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_motion.dart';
@@ -20,6 +21,8 @@ abstract final class _CheckboxSpec {
 }
 
 /// A controlled Charcoal V2 checkbox.
+///
+/// [invalid] is reflected visually and through input validation semantics.
 final class CharcoalCheckbox extends StatelessWidget {
   const CharcoalCheckbox({
     required this.value,
@@ -56,6 +59,9 @@ final class CharcoalCheckbox extends StatelessWidget {
         semanticButton: false,
         semanticLabel: semanticLabel,
         statesController: statesController,
+        validationResult: invalid
+            ? SemanticsValidationResult.invalid
+            : SemanticsValidationResult.none,
         builder: (context, states) {
           final disabled = states.contains(WidgetState.disabled);
           final focused = states.contains(WidgetState.focused);

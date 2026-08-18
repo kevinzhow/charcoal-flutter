@@ -4,8 +4,10 @@ import '../theme/charcoal_theme.dart';
 import 'typography.dart';
 
 abstract final class _HintSpec {
+  static const actionStackBreakpoint = 240.0;
   static const infoIconColor = Color(0xFF858585);
   static const iconSize = 16.0;
+  static const textSize = 14.0;
 }
 
 final class _HintInfoIcon extends StatelessWidget {
@@ -49,6 +51,10 @@ final class _HintInfoIconPainter extends CustomPainter {
 }
 
 /// Informational copy on a semantic secondary container.
+///
+/// Use this for advisory page or section guidance, not validation or error
+/// feedback. When an [action] no longer fits beside scaled copy, it moves below
+/// the message while remaining the directional trailing action.
 final class CharcoalHintText extends StatelessWidget {
   const CharcoalHintText({
     required this.child,
@@ -59,7 +65,7 @@ final class CharcoalHintText extends StatelessWidget {
     this.subtitle,
     this.visible = true,
     super.key,
-  });
+  }) : assert(maxWidth == null || maxWidth >= 0);
 
   final Widget? action;
   final Alignment alignment;
@@ -111,48 +117,87 @@ final class CharcoalHintText extends StatelessWidget {
     );
     final expands = action != null || maxWidth == double.infinity;
     final actionWidget = action;
-    final content = actionWidget != null
-        ? Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  heightFactor: 1,
-                  child: leadingContent,
-                ),
-              ),
-              SizedBox(width: contentGap),
-              actionWidget,
-            ],
-          )
-        : Align(
-            alignment: alignment,
-            heightFactor: 1,
-            widthFactor: expands ? null : 1,
-            child: leadingContent,
-          );
+    final scaledFontSize = MediaQuery.textScalerOf(
+      context,
+    ).scale(_HintSpec.textSize);
+    final scaleFactor = (scaledFontSize / _HintSpec.textSize).clamp(1.0, 2.0);
 
-    return Align(
-      alignment: alignment,
-      heightFactor: 1,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-          color: theme.colors.containerSecondaryDefault,
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: verticalPadding,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        var availableContentWidth = constraints.hasBoundedWidth
+            ? (constraints.maxWidth - horizontalPadding * 2).clamp(0.0, double.infinity).toDouble()
+            : double.infinity;
+        final configuredMaxWidth = maxWidth;
+        if (configuredMaxWidth != null && configuredMaxWidth < availableContentWidth) {
+          availableContentWidth = configuredMaxWidth;
+        }
+        final stackAction =
+            actionWidget != null &&
+            availableContentWidth < _HintSpec.actionStackBreakpoint * scaleFactor;
+        final content = actionWidget != null
+            ? stackAction
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          heightFactor: 1,
+                          child: leadingContent,
+                        ),
+                        SizedBox(height: contentGap),
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          heightFactor: 1,
+                          child: actionWidget,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            heightFactor: 1,
+                            child: leadingContent,
+                          ),
+                        ),
+                        SizedBox(width: contentGap),
+                        actionWidget,
+                      ],
+                    )
+            : Align(
+                alignment: alignment,
+                heightFactor: 1,
+                widthFactor: expands ? null : 1,
+                child: leadingContent,
+              );
+
+        return Align(
+          alignment: alignment,
+          heightFactor: 1,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+              color: theme.colors.containerSecondaryDefault,
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: maxWidth ?? double.infinity,
+                ),
+                child: content,
+              ),
+            ),
           ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
-            child: content,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

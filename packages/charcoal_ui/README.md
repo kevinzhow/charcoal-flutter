@@ -7,6 +7,11 @@ native targets use their system text and display families; Web and other targets
 renderer default. Applications can provide a renderer-supported font-family override through
 `CharcoalThemeData`.
 
+`CharcoalApp` supports both Navigator-based named routes and declarative `CharcoalApp.router`
+configuration. Both entry points install the same light and dark themes, application localization
+delegates, keyboard shortcuts, platform-adaptive scrolling, Hero controller, and restoration scope.
+Apps can override these policies without importing Material or Cupertino.
+
 The public theme contains generated foundations only. Each widget maps semantic foundation values
 to a private component specification and keeps source-specific geometry beside its implementation.
 See the workspace [README](../../README.md) for architecture, source contracts, setup, previews,

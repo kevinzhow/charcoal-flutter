@@ -14,9 +14,21 @@ abstract final class _PaginationSpec {
   static const focusRingWidth = 4.0;
 }
 
-enum CharcoalPaginationSize { small, medium }
+/// The visual target size of a [CharcoalPagination].
+enum CharcoalPaginationSize {
+  /// A compact target for dense surfaces with limited horizontal space.
+  small,
 
-/// A one-indexed, controlled pagination component.
+  /// The default target for page-level pagination.
+  medium,
+}
+
+/// A one-indexed, controlled pagination component for a finite collection.
+///
+/// [currentPage] remains owned by the caller. Activating a page or navigation
+/// button only requests a new value through [onPageChanged]; the caller updates
+/// the visible results, loading and error feedback, scroll or focus position,
+/// and any URL state before rebuilding with the accepted page.
 final class CharcoalPagination extends StatelessWidget {
   const CharcoalPagination({
     required this.currentPage,
@@ -32,57 +44,93 @@ final class CharcoalPagination extends StatelessWidget {
        assert(currentPage > 0 && currentPage <= pageCount),
        assert(maxVisiblePages >= 3 && maxVisiblePages % 2 == 1);
 
+  /// The selected one-indexed page.
   final int currentPage;
+
+  /// The total number of pages in the finite collection.
   final int pageCount;
+
+  /// Called with the requested one-indexed page.
+  ///
+  /// When null, all page actions are disabled.
   final ValueChanged<int>? onPageChanged;
 
-  /// Maximum number of numbered page buttons, as an odd value of at least 3.
+  /// Maximum number of page-window slots, including ellipses.
+  ///
+  /// The effective odd value decreases to five or three when the available
+  /// width cannot fit this upper bound at the selected [size].
   final int maxVisiblePages;
+
+  /// Accessible name for the next-page action.
   final String nextLabel;
+
+  /// Accessible name for the previous-page action.
   final String previousLabel;
+
+  /// Accessible name for the pagination group.
   final String semanticLabel;
+
+  /// The visual target size used by every item.
   final CharcoalPaginationSize size;
 
   @override
   Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
     final iconSize = switch (size) {
       CharcoalPaginationSize.small => CharcoalIconButtonSize.small,
       CharcoalPaginationSize.medium => CharcoalIconButtonSize.medium,
     };
-    final items = _visibleItems(currentPage, pageCount, maxVisiblePages);
+    final itemExtent = switch (size) {
+      CharcoalPaginationSize.small => theme.dimensions.space.targetS,
+      CharcoalPaginationSize.medium => theme.dimensions.space.targetM,
+    };
     return Semantics(
       container: true,
       explicitChildNodes: true,
       label: semanticLabel,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _PaginationNavigationButton(
-            backwards: true,
-            onPressed: onPageChanged == null ? null : () => onPageChanged!(currentPage - 1),
-            semanticLabel: previousLabel,
-            size: iconSize,
-            visible: currentPage > 1,
-          ),
-          for (final item in items)
-            if (item == null)
-              _PaginationEllipsis(size: size)
-            else
-              _PaginationPage(
-                current: item == currentPage,
-                onPressed: onPageChanged == null ? null : () => onPageChanged!(item),
-                page: item,
-                size: size,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final effectiveMaxVisiblePages = _effectiveMaxVisiblePages(
+            availableWidth: constraints.maxWidth,
+            itemExtent: itemExtent,
+            requested: maxVisiblePages,
+          );
+          final items = _visibleItems(
+            currentPage,
+            pageCount,
+            effectiveMaxVisiblePages,
+          );
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              _PaginationNavigationButton(
+                backwards: true,
+                onPressed: onPageChanged == null ? null : () => onPageChanged!(currentPage - 1),
+                semanticLabel: previousLabel,
+                size: iconSize,
+                visible: currentPage > 1,
               ),
-          _PaginationNavigationButton(
-            backwards: false,
-            onPressed: onPageChanged == null ? null : () => onPageChanged!(currentPage + 1),
-            semanticLabel: nextLabel,
-            size: iconSize,
-            visible: currentPage < pageCount,
-          ),
-        ],
+              for (final item in items)
+                if (item == null)
+                  _PaginationEllipsis(size: size)
+                else
+                  _PaginationPage(
+                    current: item == currentPage,
+                    onPressed: onPageChanged == null ? null : () => onPageChanged!(item),
+                    page: item,
+                    size: size,
+                  ),
+              _PaginationNavigationButton(
+                backwards: false,
+                onPressed: onPageChanged == null ? null : () => onPageChanged!(currentPage + 1),
+                semanticLabel: nextLabel,
+                size: iconSize,
+                visible: currentPage < pageCount,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -115,6 +163,7 @@ final class _PaginationPage extends StatelessWidget {
     );
     if (current) {
       return Semantics(
+        excludeSemantics: true,
         label: 'Page $page',
         selected: true,
         child: SizedBox.square(
@@ -239,27 +288,41 @@ final class _PaginationNavigationButton extends StatelessWidget {
   final bool visible;
 
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(
-    excluding: !visible,
-    child: IgnorePointer(
-      ignoring: !visible,
-      child: AnimatedOpacity(
-        duration: CharcoalMotion.resolveDuration(
-          context,
-          _PaginationSpec.animationDuration,
-        ),
-        opacity: visible ? 1 : 0,
-        child: CharcoalIconButton(
-          icon: CharcoalIcon(
-            backwards ? CharcoalIcons16.chevronLeft : CharcoalIcons16.chevronRight,
+  Widget build(BuildContext context) {
+    final pointsLeft = backwards == (Directionality.of(context) == TextDirection.ltr);
+    return ExcludeSemantics(
+      excluding: !visible,
+      child: IgnorePointer(
+        ignoring: !visible,
+        child: AnimatedOpacity(
+          duration: CharcoalMotion.resolveDuration(
+            context,
+            _PaginationSpec.animationDuration,
           ),
-          onPressed: onPressed,
-          semanticLabel: semanticLabel,
-          size: size,
+          opacity: visible ? 1 : 0,
+          child: CharcoalIconButton(
+            icon: CharcoalIcon(
+              pointsLeft ? CharcoalIcons16.chevronLeft : CharcoalIcons16.chevronRight,
+            ),
+            onPressed: visible ? onPressed : null,
+            semanticLabel: semanticLabel,
+            size: size,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
+}
+
+int _effectiveMaxVisiblePages({
+  required double availableWidth,
+  required double itemExtent,
+  required int requested,
+}) {
+  if (!availableWidth.isFinite) return requested;
+  final availablePageSlots = (availableWidth / itemExtent).floor() - 2;
+  final capped = availablePageSlots.clamp(3, requested);
+  return capped.isEven ? capped - 1 : capped;
 }
 
 List<int?> _visibleItems(int current, int total, int maxVisible) {

@@ -113,6 +113,22 @@ void main() {
 }
 ```
 
+Use the router constructor when navigation owns URL or deep-link state. The Navigator and Router
+constructors share the same Charcoal theme, localization, scrolling, shortcut, Hero, and restoration
+infrastructure:
+
+```dart
+Widget buildApplication(
+  RouterConfig<Object> routerConfig,
+  Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
+) => CharcoalApp.router(
+  routerConfig: routerConfig,
+  localizationsDelegates: localizationsDelegates,
+  supportedLocales: const <Locale>[Locale('en'), Locale('ja')],
+  restorationScopeId: 'charcoal-app',
+);
+```
+
 Import the icon package independently when composing icon-bearing controls:
 
 ```dart
@@ -321,7 +337,8 @@ fvm dart test
 fvm dart test packages/charcoal_catalog
 fvm dart test packages/charcoal_cli
 fvm dart test packages/charcoal_mcp
-fvm flutter test packages/charcoal_ui/test example/test
+(cd packages/charcoal_ui && fvm flutter test)
+(cd example && fvm flutter test)
 fvm dart run tool/tokens.dart check
 fvm dart run tool/agent_ready.dart check
 

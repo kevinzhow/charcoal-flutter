@@ -2,6 +2,7 @@ import 'dart:ui' show PointerDeviceKind;
 
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/src/components/field_ring.dart';
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -78,6 +79,7 @@ void main() {
             assistiveText: 'Required field',
             invalid: true,
             label: 'Name',
+            required: true,
           ),
         ),
         theme: theme,
@@ -98,6 +100,19 @@ void main() {
 
     final assistive = tester.widget<Text>(find.text('Required field'));
     expect(assistive.style!.color, theme.colors.textNegativeDefault);
+    expect(
+      tester.getSemantics(find.byType(CharcoalTextField)),
+      isSemantics(
+        label: 'Name',
+        hint: 'Required field',
+        validationResult: SemanticsValidationResult.invalid,
+        isTextField: true,
+        hasEnabledState: true,
+        isEnabled: true,
+        hasRequiredState: true,
+        isRequired: true,
+      ),
+    );
   });
 
   testWidgets('disabled field ignores text input', (tester) async {

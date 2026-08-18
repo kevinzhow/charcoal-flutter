@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../theme/charcoal_theme.dart';
+import 'clickable.dart';
+import 'interaction_state.dart';
 import 'overlay_anchor_tracker.dart';
 import 'overlay_position.dart';
 import 'popup_shape.dart';
@@ -24,6 +27,10 @@ abstract final class _BalloonSpec {
 }
 
 /// A persistent speech surface with a directional tail.
+///
+/// When [onDismiss] is provided, the close affordance supports pointer and
+/// keyboard activation. The caller continues to own this surface's placement
+/// and visibility.
 final class CharcoalBalloon extends StatelessWidget {
   const CharcoalBalloon({
     required this.child,
@@ -161,43 +168,59 @@ final class _BalloonCloseButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final colors = theme.colors;
-    return Semantics(
-      button: true,
-      label: 'Close',
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onPressed,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.containerOnImgDefault,
-              shape: BoxShape.circle,
-            ),
-            child: SizedBox.square(
-              dimension: _BalloonSpec.closeVisualSize,
-              child: Center(
-                child: IconTheme(
-                  data: IconThemeData(
-                    color: colors.textOnPrimaryDefault,
-                    size: _BalloonSpec.closeIconSize,
-                  ),
-                  child:
-                      icon ??
-                      CustomPaint(
-                        painter: _BalloonClosePainter(
-                          color: colors.textOnPrimaryDefault,
-                          inset: _BalloonSpec.closeIconInset,
-                          strokeWidth: _BalloonSpec.closeIconStrokeWidth,
-                        ),
-                        size: const Size.square(_BalloonSpec.closeIconSize),
-                      ),
+    return CharcoalClickable(
+      onPressed: onPressed,
+      semanticLabel: 'Close',
+      builder: (context, states) {
+        final focused = states.contains(WidgetState.focused);
+        final background = resolveCharcoalStateColor(
+          states,
+          normal: colors.containerOnImgDefault,
+          hovered: colors.containerOnImgHover,
+          pressed: colors.containerOnImgPress,
+        );
+        final foreground = resolveCharcoalStateColor(
+          states,
+          normal: colors.iconOnOnImgDefault,
+          hovered: colors.iconOnOnImgHover,
+          pressed: colors.iconOnOnImgPress,
+        );
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            boxShadow: focused
+                ? <BoxShadow>[
+                    BoxShadow(
+                      color: colors.borderFocusLegacy,
+                      spreadRadius: theme.dimensions.borderWidth.focus2,
+                    ),
+                  ]
+                : const <BoxShadow>[],
+            color: background,
+            shape: BoxShape.circle,
+          ),
+          child: SizedBox.square(
+            dimension: _BalloonSpec.closeVisualSize,
+            child: Center(
+              child: IconTheme(
+                data: IconThemeData(
+                  color: foreground,
+                  size: _BalloonSpec.closeIconSize,
                 ),
+                child:
+                    icon ??
+                    CustomPaint(
+                      painter: _BalloonClosePainter(
+                        color: foreground,
+                        inset: _BalloonSpec.closeIconInset,
+                        strokeWidth: _BalloonSpec.closeIconStrokeWidth,
+                      ),
+                      size: const Size.square(_BalloonSpec.closeIconSize),
+                    ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -242,8 +265,11 @@ final class _BalloonClosePainter extends CustomPainter {
 /// Attaches a controlled-or-uncontrolled balloon to [anchor].
 ///
 /// Placement follows the Charcoal priority: below, above, right, then
-/// left. The balloon can be toggled by tapping the anchor and always exposes a
-/// close affordance.
+/// left. The balloon can be toggled by pointer input on the anchor and always
+/// exposes a close affordance. For an interactive anchor, prefer controlled
+/// [visible] state with [showOnTap] disabled and toggle from the anchor action
+/// so pointer and keyboard activation share one path. Escape dismisses while
+/// focus is on the anchor or within the balloon.
 final class CharcoalAnchoredBalloon extends StatefulWidget {
   const CharcoalAnchoredBalloon({
     required this.anchor,
@@ -333,7 +359,9 @@ final class _CharcoalAnchoredBalloonState extends State<CharcoalAnchoredBalloon>
 
   void _requestVisibility(bool visible) {
     if (visible && widget.message.isEmpty) return;
-    if (widget.visible == null) _internalVisible = visible;
+    if (widget.visible == null && _internalVisible != visible) {
+      setState(() => _internalVisible = visible);
+    }
     widget.onVisibilityChanged?.call(visible);
     if (widget.visible ?? visible) {
       _showEntry();
@@ -400,20 +428,36 @@ final class _CharcoalAnchoredBalloonState extends State<CharcoalAnchoredBalloon>
   }
 
   @override
-  Widget build(BuildContext context) => Listener(
-    behavior: HitTestBehavior.translucent,
-    onPointerDown: widget.showOnTap
-        ? (event) {
-            if (event.buttons == kPrimaryButton ||
-                event.kind == PointerDeviceKind.touch ||
-                event.kind == PointerDeviceKind.stylus) {
-              _requestVisibility(!_isVisible);
-            }
-          }
-        : null,
-    child: CharcoalOverlayAnchorTracker(
-      onRectChanged: _handleTargetRectChanged,
-      child: KeyedSubtree(key: _anchorKey, child: widget.anchor),
+  Widget build(BuildContext context) => Shortcuts(
+    shortcuts: const <ShortcutActivator, Intent>{
+      SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
+    },
+    child: Actions(
+      actions: <Type, Action<Intent>>{
+        if (_isVisible)
+          DismissIntent: CallbackAction<DismissIntent>(
+            onInvoke: (_) {
+              _requestVisibility(false);
+              return null;
+            },
+          ),
+      },
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: widget.showOnTap
+            ? (event) {
+                if (event.buttons == kPrimaryButton ||
+                    event.kind == PointerDeviceKind.touch ||
+                    event.kind == PointerDeviceKind.stylus) {
+                  _requestVisibility(!_isVisible);
+                }
+              }
+            : null,
+        child: CharcoalOverlayAnchorTracker(
+          onRectChanged: _handleTargetRectChanged,
+          child: KeyedSubtree(key: _anchorKey, child: widget.anchor),
+        ),
+      ),
     ),
   );
 }
@@ -510,39 +554,55 @@ final class _BalloonOverlayState extends State<_BalloonOverlay> {
     };
     WidgetsBinding.instance.addPostFrameCallback((_) => _measure());
     return Positioned.fill(
-      child: Stack(
-        children: <Widget>[
-          if (widget.dismissOnTapOutside)
-            Positioned.fill(
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onPanStart: (_) => widget.onDismiss(),
-                onTap: widget.onDismiss,
-              ),
+      child: Shortcuts(
+        shortcuts: const <ShortcutActivator, Intent>{
+          SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
+        },
+        child: Actions(
+          actions: <Type, Action<Intent>>{
+            DismissIntent: CallbackAction<DismissIntent>(
+              onInvoke: (_) {
+                widget.onDismiss();
+                return null;
+              },
             ),
-          Positioned(
-            left: origin.dx,
-            top: origin.dy,
-            child: FadeTransition(
-              opacity: CurvedAnimation(
-                parent: widget.animation,
-                curve: Curves.easeInOut,
-              ),
-              child: KeyedSubtree(
-                key: _surfaceKey,
-                child: CharcoalBalloon(
-                  action: widget.action,
-                  arrowCenter: arrowCenter,
-                  dismissIcon: widget.dismissIcon,
-                  maxWidth: widget.maxWidth,
-                  onDismiss: widget.onDismiss,
-                  position: tailPosition,
-                  child: Text(widget.message),
+          },
+          child: Stack(
+            children: <Widget>[
+              if (widget.dismissOnTapOutside)
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    excludeFromSemantics: true,
+                    onPanStart: (_) => widget.onDismiss(),
+                    onTap: widget.onDismiss,
+                  ),
+                ),
+              Positioned(
+                left: origin.dx,
+                top: origin.dy,
+                child: FadeTransition(
+                  opacity: CurvedAnimation(
+                    parent: widget.animation,
+                    curve: Curves.easeInOut,
+                  ),
+                  child: KeyedSubtree(
+                    key: _surfaceKey,
+                    child: CharcoalBalloon(
+                      action: widget.action,
+                      arrowCenter: arrowCenter,
+                      dismissIcon: widget.dismissIcon,
+                      maxWidth: widget.maxWidth,
+                      onDismiss: widget.onDismiss,
+                      position: tailPosition,
+                      child: Text(widget.message),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

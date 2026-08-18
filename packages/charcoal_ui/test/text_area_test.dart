@@ -1,5 +1,6 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/src/components/field_ring.dart';
+import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -43,7 +44,13 @@ void main() {
       charcoalTestApp(
         const SizedBox(
           width: 320,
-          child: CharcoalTextArea(invalid: true, rows: 2),
+          child: CharcoalTextArea(
+            assistiveText: 'Describe the issue',
+            invalid: true,
+            label: 'Report details',
+            required: true,
+            rows: 2,
+          ),
         ),
         theme: theme,
       ),
@@ -60,6 +67,20 @@ void main() {
     final ringPainter = ring.foregroundPainter! as CharcoalFieldRingPainter;
     expect(ringPainter.color, theme.colors.borderNegative);
     expect(ringPainter.opacity, 1);
+    expect(
+      tester.getSemantics(find.byType(CharcoalTextArea)),
+      isSemantics(
+        label: 'Report details',
+        hint: 'Describe the issue',
+        validationResult: SemanticsValidationResult.invalid,
+        isTextField: true,
+        isMultiline: true,
+        hasEnabledState: true,
+        isEnabled: true,
+        hasRequiredState: true,
+        isRequired: true,
+      ),
+    );
   });
 
   testWidgets('invalid state does not recolor the character count', (

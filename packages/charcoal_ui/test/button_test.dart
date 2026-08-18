@@ -1,10 +1,92 @@
+import 'dart:ui' show SemanticsFlag, Tristate;
+
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_helpers.dart';
 
 void main() {
+  testWidgets('button exposes selection only when configured as a toggle', (
+    tester,
+  ) async {
+    const actionKey = ValueKey<String>('button-action');
+    const toggleKey = ValueKey<String>('button-toggle');
+    await tester.pumpWidget(
+      charcoalTestApp(
+        Column(
+          children: <Widget>[
+            CharcoalButton(
+              key: actionKey,
+              onPressed: () {},
+              child: const Text('Continue'),
+            ),
+            CharcoalButton(
+              key: toggleKey,
+              onPressed: () {},
+              selected: false,
+              child: const Text('Follow'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(
+      tester.getSemantics(find.byKey(actionKey)).flagsCollection.isSelected,
+      Tristate.none,
+    );
+    expect(
+      tester.getSemantics(find.byKey(toggleKey)).flagsCollection.isSelected,
+      Tristate.isFalse,
+    );
+  });
+
+  testWidgets('link button is a keyboard-accessible text action', (
+    tester,
+  ) async {
+    var activations = 0;
+    final focusNode = FocusNode();
+    addTearDown(focusNode.dispose);
+    await tester.pumpWidget(
+      charcoalTestApp(
+        CharcoalLinkButton(
+          focusNode: focusNode,
+          onPressed: () => activations++,
+          child: const Text('Clear filters'),
+        ),
+      ),
+    );
+
+    focusNode.requestFocus();
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.space);
+
+    expect(activations, 1);
+    expect(
+      tester.getSemantics(find.byType(CharcoalClickable)),
+      isSemantics(
+        label: 'Clear filters',
+        isButton: true,
+        isFocused: true,
+        isFocusable: true,
+        hasFocusAction: true,
+        hasEnabledState: true,
+        isEnabled: true,
+        hasTapAction: true,
+      ),
+    );
+    expect(
+      tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).constraints!.minHeight,
+      40,
+    );
+    expect(
+      tester.getSize(find.byType(CharcoalLinkButton)).width,
+      lessThan(800),
+    );
+  });
+
   testWidgets('invokes onPressed from a pointer tap', (tester) async {
     var pressCount = 0;
     await tester.pumpWidget(
@@ -173,6 +255,67 @@ void main() {
     expect(tester.getSize(find.byType(IndexedStack)), const Size(120, 40));
     final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));
     expect(stack.index, 1);
+  });
+
+  testWidgets('switching button exposes and focuses only its visible action', (
+    tester,
+  ) async {
+    var isOn = false;
+    late StateSetter setState;
+    final onFocusNode = FocusNode();
+    final offFocusNode = FocusNode();
+    addTearDown(onFocusNode.dispose);
+    addTearDown(offFocusNode.dispose);
+
+    await tester.pumpWidget(
+      charcoalTestApp(
+        StatefulBuilder(
+          builder: (context, update) {
+            setState = update;
+            return CharcoalSwitchingButton(
+              isOn: isOn,
+              offButton: CharcoalButton(
+                focusNode: offFocusNode,
+                onPressed: () {},
+                child: const Text('Enable notifications'),
+              ),
+              onButton: CharcoalButton(
+                focusNode: onFocusNode,
+                onPressed: () {},
+                child: const Text('Disable notifications'),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
+    onFocusNode.requestFocus();
+    await tester.pump();
+    expect(onFocusNode.hasFocus, isFalse);
+    expect(find.bySemanticsLabel('Enable notifications'), findsOneWidget);
+    expect(find.bySemanticsLabel('Disable notifications'), findsNothing);
+    expect(
+      find.semantics.byFlag(SemanticsFlag.hasToggledState),
+      findsNothing,
+    );
+
+    offFocusNode.requestFocus();
+    await tester.pump();
+    expect(offFocusNode.hasPrimaryFocus, isTrue);
+
+    setState(() => isOn = true);
+    await tester.pump();
+    expect(offFocusNode.hasFocus, isFalse);
+    expect(find.bySemanticsLabel('Enable notifications'), findsNothing);
+    expect(find.bySemanticsLabel('Disable notifications'), findsOneWidget);
+
+    offFocusNode.requestFocus();
+    await tester.pump();
+    expect(offFocusNode.hasFocus, isFalse);
+    onFocusNode.requestFocus();
+    await tester.pump();
+    expect(onFocusNode.hasPrimaryFocus, isTrue);
   });
 }
 
