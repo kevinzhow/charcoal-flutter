@@ -16,8 +16,8 @@ abstract final class _NavigationItemSpec {
 /// A full-width destination item for sidebars, drawers, and navigation lists.
 ///
 /// Selection is a persistent state and therefore remains visually stable while
-/// the pointer is hovered or pressed. Transient states are only applied to
-/// unselected destinations.
+/// hover, focus, and press feedback is painted on an independent transient
+/// layer. A cancelled pointer gesture never changes [selected].
 final class CharcoalNavigationItem extends StatelessWidget {
   const CharcoalNavigationItem({
     required this.child,
@@ -57,9 +57,10 @@ final class CharcoalNavigationItem extends StatelessWidget {
         final focused = states.contains(WidgetState.focused);
         final hovered = states.contains(WidgetState.hovered);
         final pressed = states.contains(WidgetState.pressed);
-        final background = selected
+        final persistentBackground = selected
             ? theme.colors.containerSecondaryDefault
-            : pressed
+            : theme.colors.containerDefaultA;
+        final interactionOverlay = pressed
             ? theme.colors.containerSecondaryPressA
             : hovered
             ? theme.colors.containerSecondaryHoverA
@@ -92,70 +93,75 @@ final class CharcoalNavigationItem extends StatelessWidget {
             _NavigationItemSpec.animationDuration,
           ),
           opacity: disabled ? charcoalDisabledOpacity : 1,
-          child: AnimatedContainer(
-            // Persistent destination selection must switch atomically. Reset
-            // the implicit decoration tween when selection changes, while
-            // preserving hover and press motion within the same state.
-            key: ValueKey<bool>(selected),
-            curve: CharcoalMotion.standardCurve,
-            duration: CharcoalMotion.resolveDuration(
-              context,
-              _NavigationItemSpec.animationDuration,
-            ),
-            constraints: BoxConstraints(
-              minHeight: theme.dimensions.space.targetM,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: theme.dimensions.space.component25,
-            ),
+          child: DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-              boxShadow: focused
-                  ? <BoxShadow>[
-                      BoxShadow(
-                        color: theme.colors.borderFocusLegacy,
-                        spreadRadius: _NavigationItemSpec.focusRingWidth,
-                      ),
-                    ]
-                  : const <BoxShadow>[],
-              color: background,
+              color: persistentBackground,
             ),
-            child: Row(
-              children: <Widget>[
-                if (leading != null) ...<Widget>[
-                  SizedBox.square(
-                    dimension: theme.dimensions.space.targetXs,
-                    child: Center(
-                      child: IconTheme(
-                        data: IconThemeData(
-                          color: iconColor,
-                          size: _NavigationItemSpec.leadingIconSize,
+            child: AnimatedContainer(
+              // The transient layer also carries the component's constraints
+              // and padding so its Row remains vertically centered. A loose
+              // Stack here would let the content collapse to intrinsic height.
+              curve: CharcoalMotion.standardCurve,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                _NavigationItemSpec.animationDuration,
+              ),
+              constraints: BoxConstraints(
+                minHeight: theme.dimensions.space.targetM,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: theme.dimensions.space.component25,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+                boxShadow: focused
+                    ? <BoxShadow>[
+                        BoxShadow(
+                          color: theme.colors.borderFocusLegacy,
+                          spreadRadius: _NavigationItemSpec.focusRingWidth,
                         ),
-                        child: leading!,
+                      ]
+                    : const <BoxShadow>[],
+                color: interactionOverlay,
+              ),
+              child: Row(
+                children: <Widget>[
+                  if (leading != null) ...<Widget>[
+                    SizedBox.square(
+                      dimension: theme.dimensions.space.targetXs,
+                      child: Center(
+                        child: IconTheme(
+                          data: IconThemeData(
+                            color: iconColor,
+                            size: _NavigationItemSpec.leadingIconSize,
+                          ),
+                          child: leading!,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: theme.dimensions.space.component20),
-                ],
-                Expanded(
-                  child: DefaultTextStyle(
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textStyle,
-                    child: child,
-                  ),
-                ),
-                if (trailing != null) ...<Widget>[
-                  SizedBox(width: theme.dimensions.space.component20),
-                  IconTheme(
-                    data: IconThemeData(
-                      color: iconColor,
-                      size: _NavigationItemSpec.trailingIconSize,
+                    SizedBox(width: theme.dimensions.space.component20),
+                  ],
+                  Expanded(
+                    child: DefaultTextStyle(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: textStyle,
+                      child: child,
                     ),
-                    child: trailing!,
                   ),
+                  if (trailing != null) ...<Widget>[
+                    SizedBox(width: theme.dimensions.space.component20),
+                    IconTheme(
+                      data: IconThemeData(
+                        color: iconColor,
+                        size: _NavigationItemSpec.trailingIconSize,
+                      ),
+                      child: trailing!,
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         );

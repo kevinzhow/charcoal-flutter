@@ -62,6 +62,10 @@ final class CharcoalTabItem<T> {
 /// details and tasks continue to use normal push, replace, and pop semantics.
 /// System safe-area padding remains the responsibility of that app shell.
 ///
+/// A pointer down only produces transient pressed feedback. Selection is
+/// reported after the tap gesture is accepted, while a cancelled gesture keeps
+/// [value] and its controlled content unchanged.
+///
 /// When [onChanged] is null, every destination is disabled. Individual items
 /// can be disabled with [CharcoalTabItem.enabled].
 final class CharcoalTabBar<T> extends StatelessWidget {
@@ -174,13 +178,14 @@ final class _CharcoalTabDestination<T> extends StatelessWidget {
         final hovered = states.contains(WidgetState.hovered);
         final pressed = states.contains(WidgetState.pressed);
         final active = selected || focused;
-        final background = selected
+        final persistentBackground = selected
             ? theme.colors.containerSecondaryDefaultA
-            : pressed
+            : theme.colors.backgroundDefault;
+        final interactionOverlay = pressed
             ? theme.colors.containerSecondaryPressA
             : hovered || focused
             ? theme.colors.containerSecondaryHoverA
-            : theme.colors.backgroundDefault;
+            : theme.colors.containerDefaultA;
         final iconColor = active
             ? theme.colors.iconDefault
             : pressed
@@ -200,62 +205,72 @@ final class _CharcoalTabDestination<T> extends StatelessWidget {
           curve: CharcoalMotion.standardCurve,
           duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
           opacity: disabled ? charcoalDisabledOpacity : 1,
-          child: AnimatedContainer(
-            // Selection belongs to the controlled app-shell state and must
-            // commit atomically. A new key discards the previous decoration
-            // tween, while hover, focus, and press still animate within the
-            // same persistent selection state.
-            key: ValueKey<bool>(selected),
-            curve: CharcoalMotion.standardCurve,
-            duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
-            decoration: BoxDecoration(
-              boxShadow: focused
-                  ? <BoxShadow>[
-                      BoxShadow(
-                        color: theme.colors.borderFocusLegacy,
-                        spreadRadius: theme.dimensions.borderWidth.focus2,
-                      ),
-                    ]
-                  : const <BoxShadow>[],
-              color: background,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: theme.dimensions.space.component10,
-              vertical: theme.dimensions.space.component20,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: <Widget>[
-                    IconTheme(
-                      data: IconThemeData(color: iconColor, size: _TabBarSpec.iconSize),
-                      child: item.icon,
-                    ),
-                    if (item.badge case final badge?)
-                      PositionedDirectional(
-                        end: -10,
-                        top: -7,
-                        child: ExcludeSemantics(
-                          child: _CharcoalTabBadge(label: badge),
+          child: ColoredBox(
+            // Persistent selection is painted directly from the controlled
+            // app-shell value. It never shares an implicit color tween with a
+            // pointer state, so selection and content commit in one frame.
+            color: persistentBackground,
+            child: AnimatedContainer(
+              // Press, hover, and focus use an independent paint layer. Keeping
+              // that layer in the normal box chain preserves the tight width
+              // and stretched height supplied by the destination Row.
+              curve: CharcoalMotion.standardCurve,
+              duration: CharcoalMotion.resolveDuration(
+                context,
+                CharcoalMotion.fast,
+              ),
+              decoration: BoxDecoration(
+                boxShadow: focused
+                    ? <BoxShadow>[
+                        BoxShadow(
+                          color: theme.colors.borderFocusLegacy,
+                          spreadRadius: theme.dimensions.borderWidth.focus2,
                         ),
+                      ]
+                    : const <BoxShadow>[],
+                color: interactionOverlay,
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: theme.dimensions.space.component10,
+                vertical: theme.dimensions.space.component20,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: <Widget>[
+                      IconTheme(
+                        data: IconThemeData(
+                          color: iconColor,
+                          size: _TabBarSpec.iconSize,
+                        ),
+                        child: item.icon,
                       ),
-                  ],
-                ),
-                SizedBox(height: theme.dimensions.space.component10),
-                Text(
-                  item.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: textColor,
-                    fontSize: _TabBarSpec.labelFontSize,
-                    fontWeight: active ? FontWeight.w700 : FontWeight.w400,
+                      if (item.badge case final badge?)
+                        PositionedDirectional(
+                          end: -10,
+                          top: -7,
+                          child: ExcludeSemantics(
+                            child: _CharcoalTabBadge(label: badge),
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  SizedBox(height: theme.dimensions.space.component10),
+                  Text(
+                    item.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textStyles.captionSmall.copyWith(
+                      color: textColor,
+                      fontSize: _TabBarSpec.labelFontSize,
+                      fontWeight: active ? FontWeight.w700 : FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

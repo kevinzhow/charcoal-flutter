@@ -82,6 +82,8 @@
       ],
       "requiredAssertions": [
         "one controlled destination owner drives CharcoalTabBar and selecting a top-level destination leaves the Navigator stack length and stable root Page key unchanged",
+        "during a held touch, only the target pressed layer changes while the previous selected visual, semantics, visible content, Navigator stack, and root Page key remain unchanged; cancellation clears pressed feedback without selecting",
+        "every destination target rectangle, icon center, label center, and text baseline is recorded before input and remains unchanged during held press, cancellation, and the first painted frame after accepted selection",
         "after one pump following a destination tap, the previous tab paints and exposes unselected state, the next tab paints and exposes selected state, and visible content agrees before animations settle",
         "each top-level destination preserves its own scroll position, selection, or draft state when another destination is selected",
         "Activity detail is a real pushed route whose visible and system back actions pop to the prior destination",
@@ -91,7 +93,10 @@
       "forbiddenPatterns": [
         "Navigator.push or a push transition runs from CharcoalTabBar.onChanged",
         "the selected destination is embedded in the root Page key and causes route replacement",
-        "a pumpAndSettle-only navigation test or an implicit interaction tween can hide stale selected visuals after the controlled destination changes",
+        "selection commits on pointer down before the touch gesture is accepted or survives a cancelled gesture",
+        "pressed and selected reuse one implicit background tween so a held touch can resemble two selected destinations",
+        "a state-only overlay loosens the content constraints, uses an unverified loose Stack around normal content, or moves target bounds, icon or label centers, or text baselines",
+        "a tester.tap-only or pumpAndSettle-only navigation test can hide a press-down double highlight or stale selected visuals after the controlled destination changes",
         "AnimatedSwitcher, SlideTransition, or a local back button impersonates detail route history",
         "a page-local copy of CharcoalTabBar geometry or interaction styling",
         "Material or Cupertino controls"

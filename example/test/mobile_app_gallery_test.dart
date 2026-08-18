@@ -1,10 +1,12 @@
 import 'dart:ui' show Tristate;
 
+import 'package:charcoal_icons/charcoal_icons.dart' show CharcoalIcon;
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/agent_examples/agent_example_navigator.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_app_gallery.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/daylight/widgets/daylight_item_group.dart';
 import 'package:charcoal_ui_showcase/agent_examples/mobile_apps/nook/nook_models.dart';
+import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -434,13 +436,127 @@ void main() {
         tester,
         scenario.appKey,
       ).pages.single.key;
+      final initialGeometry = _tabGeometry(
+        tester,
+        ValueKey<String>(scenario.initialTabKey),
+      );
+      final targetGeometry = _tabGeometry(
+        tester,
+        ValueKey<String>(scenario.tabKey),
+      );
+      _expectCenteredTabGeometry(initialGeometry, reason: scenario.app.name);
+      _expectCenteredTabGeometry(targetGeometry, reason: scenario.app.name);
+      expect(
+        initialGeometry.iconCenter.dy,
+        moreOrLessEquals(targetGeometry.iconCenter.dy),
+        reason: scenario.app.name,
+      );
+      expect(
+        initialGeometry.labelBaseline,
+        moreOrLessEquals(targetGeometry.labelBaseline),
+        reason: scenario.app.name,
+      );
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
         theme.colors.containerSecondaryDefaultA,
         reason: scenario.app.name,
       );
+      expect(
+        _paintedTabBackground(tester, ValueKey<String>(scenario.tabKey)),
+        theme.colors.backgroundDefault,
+        reason: scenario.app.name,
+      );
 
-      await tester.tap(targetTab);
+      final cancelledGesture = await tester.startGesture(
+        tester.getCenter(targetTab),
+      );
+      await tester.pump(kPressTimeout);
+      await tester.pump(CharcoalMotion.fast);
+
+      expect(
+        _paintedTabInteractionOverlay(
+          tester,
+          ValueKey<String>(scenario.tabKey),
+        ),
+        theme.colors.containerSecondaryPressA,
+        reason: scenario.app.name,
+      );
+      expect(
+        _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
+        theme.colors.containerSecondaryDefaultA,
+        reason: scenario.app.name,
+      );
+      expect(
+        _paintedTabBackground(tester, ValueKey<String>(scenario.tabKey)),
+        theme.colors.backgroundDefault,
+        reason: scenario.app.name,
+      );
+      expect(
+        tester.getSemantics(initialTab).flagsCollection.isSelected,
+        Tristate.isTrue,
+        reason: scenario.app.name,
+      );
+      expect(
+        tester.getSemantics(targetTab).flagsCollection.isSelected,
+        Tristate.isFalse,
+        reason: scenario.app.name,
+      );
+      expect(initialPage, findsOneWidget, reason: scenario.app.name);
+      expect(
+        find.byKey(ValueKey<String>(scenario.targetPageKey)),
+        findsNothing,
+        reason: scenario.app.name,
+      );
+      expect(
+        _nestedNavigator(tester, scenario.appKey).pages.single.key,
+        rootPageKey,
+        reason: scenario.app.name,
+      );
+      _expectSameTabGeometry(
+        initialGeometry,
+        _tabGeometry(tester, ValueKey<String>(scenario.initialTabKey)),
+        reason: scenario.app.name,
+      );
+      _expectSameTabGeometry(
+        targetGeometry,
+        _tabGeometry(tester, ValueKey<String>(scenario.tabKey)),
+        reason: scenario.app.name,
+      );
+
+      await cancelledGesture.cancel();
+      await tester.pumpAndSettle();
+
+      expect(
+        _paintedTabInteractionOverlay(
+          tester,
+          ValueKey<String>(scenario.tabKey),
+        ),
+        theme.colors.containerDefaultA,
+        reason: scenario.app.name,
+      );
+      expect(
+        tester.getSemantics(initialTab).flagsCollection.isSelected,
+        Tristate.isTrue,
+        reason: scenario.app.name,
+      );
+      expect(initialPage, findsOneWidget, reason: scenario.app.name);
+      _expectSameTabGeometry(
+        initialGeometry,
+        _tabGeometry(tester, ValueKey<String>(scenario.initialTabKey)),
+        reason: scenario.app.name,
+      );
+      _expectSameTabGeometry(
+        targetGeometry,
+        _tabGeometry(tester, ValueKey<String>(scenario.tabKey)),
+        reason: scenario.app.name,
+      );
+
+      final acceptedGesture = await tester.startGesture(
+        tester.getCenter(targetTab),
+      );
+      await tester.pump(kPressTimeout);
+      await tester.pump(CharcoalMotion.fast);
+      await acceptedGesture.up();
       await tester.pump();
 
       expect(
@@ -476,6 +592,16 @@ void main() {
       expect(
         navigator.pages.single.key,
         rootPageKey,
+        reason: scenario.app.name,
+      );
+      _expectSameTabGeometry(
+        initialGeometry,
+        _tabGeometry(tester, ValueKey<String>(scenario.initialTabKey)),
+        reason: scenario.app.name,
+      );
+      _expectSameTabGeometry(
+        targetGeometry,
+        _tabGeometry(tester, ValueKey<String>(scenario.tabKey)),
         reason: scenario.app.name,
       );
       await tester.pumpAndSettle();
@@ -969,6 +1095,14 @@ Navigator _nestedNavigator(WidgetTester tester, String appKey) =>
     );
 
 Color _paintedTabBackground(WidgetTester tester, Key key) {
+  final colored = find.descendant(
+    of: find.byKey(key),
+    matching: find.byType(ColoredBox),
+  );
+  return tester.widget<ColoredBox>(colored.first).color;
+}
+
+Color _paintedTabInteractionOverlay(WidgetTester tester, Key key) {
   final animated = find.descendant(
     of: find.byKey(key),
     matching: find.byType(AnimatedContainer),
@@ -980,6 +1114,52 @@ Color _paintedTabBackground(WidgetTester tester, Key key) {
   return (tester.widget<DecoratedBox>(decorated.first).decoration
           as BoxDecoration)
       .color!;
+}
+
+({Offset iconCenter, Rect itemRect, double labelBaseline, Offset labelCenter})
+_tabGeometry(WidgetTester tester, Key key) {
+  final item = find.byKey(key);
+  final icon = find.descendant(of: item, matching: find.byType(CharcoalIcon));
+  final label = find.descendant(of: item, matching: find.byType(Text)).first;
+  final labelBox = tester.renderObject<RenderBox>(label);
+  return (
+    iconCenter: tester.getCenter(icon),
+    itemRect: tester.getRect(item),
+    labelBaseline:
+        tester.getTopLeft(label).dy +
+        labelBox.getDryBaseline(labelBox.constraints, TextBaseline.alphabetic)!,
+    labelCenter: tester.getCenter(label),
+  );
+}
+
+void _expectCenteredTabGeometry(
+  ({Offset iconCenter, Rect itemRect, double labelBaseline, Offset labelCenter})
+  geometry, {
+  required String reason,
+}) {
+  expect(
+    geometry.iconCenter.dx,
+    moreOrLessEquals(geometry.itemRect.center.dx),
+    reason: reason,
+  );
+  expect(
+    geometry.labelCenter.dx,
+    moreOrLessEquals(geometry.itemRect.center.dx),
+    reason: reason,
+  );
+}
+
+void _expectSameTabGeometry(
+  ({Offset iconCenter, Rect itemRect, double labelBaseline, Offset labelCenter})
+  before,
+  ({Offset iconCenter, Rect itemRect, double labelBaseline, Offset labelCenter})
+  after, {
+  required String reason,
+}) {
+  expect(after.itemRect, before.itemRect, reason: reason);
+  expect(after.iconCenter, before.iconCenter, reason: reason);
+  expect(after.labelCenter, before.labelCenter, reason: reason);
+  expect(after.labelBaseline, before.labelBaseline, reason: reason);
 }
 
 ScrollableState _verticalScrollState(WidgetTester tester, Finder finder) =>

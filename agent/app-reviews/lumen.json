@@ -482,7 +482,7 @@
         "sourcePath": "example/test/mobile_app_gallery_test.dart",
         "surfaceIds": ["wallet", "activity"],
         "verdict": "pass",
-        "evidence": "The executable cross-app route test selects Activity, asserts after one pump that Wallet is painted and exposed as unselected while Activity and its content are selected, and proves that the nested Navigator retains one Page, the same stable root Page key, and the same ModalRoute."
+        "evidence": "The executable cross-app route test records Wallet and Activity target bounds, icon and label centers, and text baselines; holds touch on Activity and proves only its pressed layer changes with geometry fixed while Wallet remains the selected semantic and content owner; cancels once with no persistent effect; then accepts a fresh tap and asserts after one pump that geometry is still fixed, Wallet is painted and exposed as unselected, and Activity and its content are selected on the same single Page, stable root Page key, and ModalRoute."
       },
       {
         "id": "complete-wallet-journey",
@@ -505,7 +505,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["wallet", "activity", "plan", "profile", "receive", "send-entry", "transfer-review", "transfer-receipt", "top-up", "top-up-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar atomically commits selected visuals, semantics, and content in the first painted frame on one stable root Route; financial tasks use the nested Navigator, review stages push real CharcoalPageRoutes, system back synchronizes the task owner, and durable receipts replace obsolete form history." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar keeps touch-down and cancellation confined to its transient pressed layer without moving destination bounds, icon/label centers, or text baselines, then atomically commits geometry, selected visuals, semantics, and content in the first post-activation frame on one stable root Route; financial tasks use the nested Navigator, review stages push real CharcoalPageRoutes, system back synchronizes the task owner, and durable receipts replace obsolete form history." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Balance orientation leads Wallet, transaction facts lead money tasks, and Profile now centers privacy and automation decisions." },
         { "area": "product-copy", "verdict": "pass", "evidence": "Copy states the simulated financial effect and never promises an unavailable service; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every surface state has compact and standard production previews with fields, rows, and review values allowed to adapt." },

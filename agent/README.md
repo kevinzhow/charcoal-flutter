@@ -84,7 +84,10 @@ enums, so a new enum value cannot enter the product without an explicit reviewed
 Version 2 transition records also declare the route-stack effect, preserved state, platform-back
 behavior, and executable scenarios for both endpoints. Destination-to-destination selection must
 use a `none` stack effect; details and tasks use explicit push, replace, pop, present, or dismiss
-semantics. The v1 contract remains in `contracts/` for historical artifacts; the CLI emits and
+semantics. Touch navigation evidence must keep pointer-down feedback transient, prove cancellation
+has no persistent effect, preserve target bounds plus icon and label alignment through every state,
+and verify the first painted frame after an accepted tap before settling animations. The v1
+contract remains in `contracts/` for historical artifacts; the CLI emits and
 validates v2 reviews.
 Checked-in passing reviews for Nook, Lumen, and Daylight live in `app-reviews/`.
 

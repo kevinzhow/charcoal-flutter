@@ -23,7 +23,7 @@ void main() {
     ) as Map<String, Object?>;
   });
 
-  test('top-level navigation benchmark rejects settled-only selection evidence', () {
+  test('top-level navigation benchmark requires full touch lifecycle evidence', () {
     final cases = (pageExperienceSuite['cases']! as List<Object?>).cast<Map<String, Object?>>();
     final navigation = cases.firstWhere(
       (benchmarkCase) => benchmarkCase['id'] == 'stable-top-level-navigation',
@@ -31,11 +31,26 @@ void main() {
 
     expect(
       (navigation['requiredAssertions']! as List<Object?>).join(' '),
-      allOf(contains('one pump'), contains('previous tab paints')),
+      allOf(
+        contains('held touch'),
+        contains('cancellation'),
+        contains('target rectangle'),
+        contains('text baseline'),
+        contains('one pump'),
+        contains('previous tab paints'),
+      ),
     );
     expect(
       (navigation['forbiddenPatterns']! as List<Object?>).join(' '),
-      allOf(contains('pumpAndSettle-only'), contains('stale selected visuals')),
+      allOf(
+        contains('pointer down'),
+        contains('cancelled gesture'),
+        contains('loose Stack'),
+        contains('target bounds'),
+        contains('tester.tap-only'),
+        contains('pumpAndSettle-only'),
+        contains('stale selected visuals'),
+      ),
     );
   });
 

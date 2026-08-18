@@ -407,7 +407,7 @@
         "sourcePath": "example/test/mobile_app_gallery_test.dart",
         "surfaceIds": ["shop", "search"],
         "verdict": "pass",
-        "evidence": "The executable cross-app route test selects Search, asserts after one pump that Shop is painted and exposed as unselected while Search and its content are selected, and proves that the nested Navigator retains one Page, the same stable root Page key, and the same ModalRoute."
+        "evidence": "The executable cross-app route test records Shop and Search target bounds, icon and label centers, and text baselines; holds touch on Search and proves only its pressed layer changes with geometry fixed while Shop remains the selected semantic and content owner; cancels once with no persistent effect; then accepts a fresh tap and asserts after one pump that geometry is still fixed, Shop is painted and exposed as unselected, and Search and its content are selected on the same single Page, stable root Page key, and ModalRoute."
       },
       {
         "id": "complete-shopping-journey",
@@ -438,7 +438,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["shop", "search", "saved", "profile", "product-detail", "bag", "checkout-review", "order-receipt"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar atomically commits selected visuals, semantics, and content in the first painted frame on one stable root Route; product, bag, review, and Profile-receipt pages use the nested Navigator, system back pops real CharcoalPageRoutes, completion replaces obsolete task history, and destination scroll offsets survive tab selection." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar keeps touch-down and cancellation confined to its transient pressed layer without moving destination bounds, icon/label centers, or text baselines, then atomically commits geometry, selected visuals, semantics, and content in the first post-activation frame on one stable root Route; product, bag, review, and Profile-receipt pages use the nested Navigator, system back pops real CharcoalPageRoutes, completion replaces obsolete task history, and destination scroll offsets survive tab selection." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Discovery leads Shop and Search, purchase decisions lead task pages, and Profile now gives shopping activity a clear purpose." },
         { "area": "product-copy", "verdict": "pass", "evidence": "All visible copy describes shopper outcomes and real simulation behavior; developer rationale was removed from Profile." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every inventoried state is backed by compact and standard production-page previews, with collection columns constraint-driven." },

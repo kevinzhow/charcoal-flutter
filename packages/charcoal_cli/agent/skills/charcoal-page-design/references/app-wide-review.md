@@ -31,7 +31,7 @@ Widget Preview evidence uses the exact `AgentPagePreview` state name in the refe
 
 The final review must name every inventoried surface and pass five cross-surface checks:
 
-- navigation: the first painted frame keeps controlled selection, semantics, content, and route state atomic; reachability, back behavior, and state persistence are coherent;
+- navigation: touch down and cancellation affect only transient feedback without moving target bounds or icon/label alignment, while the first painted frame after accepted activation keeps geometry, controlled selection, semantics, content, and route state atomic; reachability, back behavior, and state persistence are coherent;
 - hierarchy: primary intents remain identifiable and secondary pages receive equal design care;
 - product copy: labels describe real behavior and no developer-facing rationale leaks into the product;
 - responsive: every state holds at all supported layout classes and relevant text scaling;

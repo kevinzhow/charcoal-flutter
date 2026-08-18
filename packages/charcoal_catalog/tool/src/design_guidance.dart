@@ -147,6 +147,8 @@ const List<CharcoalPatternDoc> componentPatterns = <CharcoalPatternDoc>[
     composition: <String>[
       'Keep destination selection in one state owner above the page body.',
       'Commit the controlled destination, selected visuals and semantics, and page content atomically in the first painted frame; do not mirror selection locally or repair it from route state after paint.',
+      'On touch input, let pointer down change only the target pressed layer, let cancellation clear it without selecting, and commit the controlled destination only after the tap is accepted.',
+      'Keep transient state layers paint-only: destination bounds, sibling allocation, icon and label centers, and text baselines must not move through hover, focus, press, cancellation, or selection.',
       'Treat top-level destination selection as a no-stack-effect state update; do not push a route, replace the root page, or change its stable page key.',
       'Push details and transient tasks, replace a completed task with its durable result when prior steps must not return, and pop or dismiss through platform back behavior.',
       'Preserve destination-owned scroll positions, drafts, and selections when moving between top-level destinations.',
@@ -161,7 +163,8 @@ const List<CharcoalPatternDoc> componentPatterns = <CharcoalPatternDoc>[
       'back pops or dismisses',
     ],
     feedback: <String>[
-      'Persistent selection switches atomically; hover, focus, and press may animate without tweening through stale selected state.',
+      'Persistent selection switches atomically; hover, focus, and press animate on a distinct state layer without tweening through stale selected state or resembling a second selection.',
+      'State feedback preserves destination geometry and alignment.',
       'Back or close returns to the prior destination without clearing unrelated state.',
     ],
     accessibility: <String>[

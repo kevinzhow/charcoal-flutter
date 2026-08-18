@@ -293,6 +293,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     ],
     responsiveBehavior: <String>[
       'Destinations share the available width and retain a 64 logical-pixel baseline height.',
+      'State layers preserve each destination rectangle plus icon and label alignment; they never loosen the content constraints.',
       'The bar grows for text scaling; use CharcoalNavigationItem when a large layout moves navigation to a sidebar.',
       'Place system safe-area padding in the surrounding app shell.',
     ],
@@ -305,7 +306,9 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       'disabled',
     ],
     feedbackResponsibilities: <String>[
-      'Commits controlled persistent selection atomically while animating transient pointer and focus states independently; owns badge rendering.',
+      'Owns a touch lifecycle where pointer down paints an independent pressed layer, cancellation has no persistent effect, and an accepted tap reports selection; owns badge rendering.',
+      'Commits controlled persistent selection atomically without reusing the transient interaction tween.',
+      'Keeps target bounds, icon and label centers, and text baselines invariant across interaction states.',
       'The caller owns one destination state source plus route-stack effects, state preservation, and back behavior.',
     ],
     tokenRoles: <String>[

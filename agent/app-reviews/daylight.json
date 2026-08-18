@@ -299,7 +299,7 @@
         "sourcePath": "example/test/mobile_app_gallery_test.dart",
         "surfaceIds": ["today", "journey"],
         "verdict": "pass",
-        "evidence": "The executable cross-app route test selects Journey, asserts after one pump that Today is painted and exposed as unselected while Journey and its content are selected, and proves that the nested Navigator retains one Page, the same stable root Page key, and the same ModalRoute."
+        "evidence": "The executable cross-app route test records Today and Journey target bounds, icon and label centers, and text baselines; holds touch on Journey and proves only its pressed layer changes with geometry fixed while Today remains the selected semantic and content owner; cancels once with no persistent effect; then accepts a fresh tap and asserts after one pump that geometry is still fixed, Today is painted and exposed as unselected, and Journey and its content are selected on the same single Page, stable root Page key, and ModalRoute."
       },
       {
         "id": "complete-daylight-journey",
@@ -314,7 +314,7 @@
       "verdict": "pass",
       "reviewedSurfaceIds": ["today", "journey", "insights", "profile", "plan-tomorrow", "plan-saved"],
       "checks": [
-        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar atomically commits selected visuals, semantics, and content in the first painted frame on one stable root Route; the focused tomorrow-planning Page uses the nested Navigator, platform back pops the editable task Route, and the saved result replaces obsolete task history before Journey opens." },
+        { "area": "navigation", "verdict": "pass", "evidence": "CharcoalTabBar keeps touch-down and cancellation confined to its transient pressed layer without moving destination bounds, icon/label centers, or text baselines, then atomically commits geometry, selected visuals, semantics, and content in the first post-activation frame on one stable root Route; the focused tomorrow-planning Page uses the nested Navigator, platform back pops the editable task Route, and the saved result replaces obsolete task history before Journey opens." },
         { "area": "hierarchy", "verdict": "pass", "evidence": "Today's commitments lead completion, Journey leads history, Insights leads reflection, and Profile now leads support-style decisions." },
         { "area": "product-copy", "verdict": "pass", "evidence": "Copy is calm, specific to real local behavior, and avoids developer-facing design rationale on secondary pages." },
         { "area": "responsive", "verdict": "pass", "evidence": "Every meaningful state has compact and standard production previews; timeline rows adapt below 300 logical pixels." },

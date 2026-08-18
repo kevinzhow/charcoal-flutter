@@ -16,6 +16,7 @@ Gate exit: the inventory covers the whole product surface, not only the primary 
 
 - Preview public Charcoal components and application-shared compositions before placing them on a page.
 - Use the production widget, semantic tokens, and real callbacks. Cover relevant selected, disabled, invalid, empty, or completed states rather than drawing lookalikes.
+- For controlled navigation used on touch surfaces, interactively review held press and cancellation as well as selected and unselected states; pressed feedback must not masquerade as a second persistent selection, and item bounds, icon/label centers, and baselines must not move between states.
 - Check light and dark brightness when the component owns color or elevation behavior.
 - Keep the preview narrowly constrained so spacing, text wrapping, focus, and target size are inspectable.
 - Do not extract a page-private fragment into shared API solely to give it an isolated preview. Review that fragment in its owning page state.

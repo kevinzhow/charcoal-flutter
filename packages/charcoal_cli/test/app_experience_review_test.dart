@@ -119,7 +119,7 @@ void main() {
     );
   });
 
-  test('top-level navigation evidence records the first painted frame', () {
+  test('top-level navigation evidence records touch phases and geometry', () {
     final application = nookReview['application']! as Map<String, Object?>;
     final scenarios = (application['runtimeScenarios']! as List<Object?>)
         .cast<Map<String, Object?>>();
@@ -129,9 +129,20 @@ void main() {
     final sourcePath = scenario['sourcePath']! as String;
     final source = File(p.join(workspace.path, sourcePath)).readAsStringSync();
 
-    expect(scenario['evidence'], contains('after one pump'));
+    expect(
+      scenario['evidence'],
+      allOf(
+        contains('target bounds'),
+        contains('text baselines'),
+        contains('holds touch'),
+        contains('after one pump'),
+      ),
+    );
     expect(source, contains(scenario['testName']));
     expect(source, contains('_paintedTabBackground'));
+    expect(source, contains('cancelledGesture'));
+    expect(source, contains('_expectSameTabGeometry'));
+    expect(source, contains('labelBaseline'));
     expect(source, contains('await tester.pump();'));
   });
 

@@ -15,7 +15,7 @@
 
 ## Input and accessibility
 
-- Support touch targets, keyboard focus, pointer interaction, text scaling, and screen-reader labels relevant to the target platforms.
+- Support touch targets, keyboard focus, pointer interaction, text scaling, and screen-reader labels relevant to the target platforms. Do not use hover as evidence for touch behavior; verify pressed acknowledgement, cancellation, and accepted activation separately, and confirm that feedback never reflows or misaligns the target's content.
 - Keep validation and state changes understandable without relying only on color.
 - Announce asynchronous completion or failure when focus does not naturally move to the changed content.
 
