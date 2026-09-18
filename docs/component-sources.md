@@ -110,3 +110,17 @@ payload to release builds. Explicit application typography overrides bypass this
 `charcoal_ui` and `charcoal_icons` are sibling packages. UI controls accept regular widget slots so
 the UI package does not create a circular or mandatory icon dependency. The Showcase uses Charcoal
 Icons V2, while applications may inject product-specific artwork.
+
+## Platform behavior contract
+
+Visual source parity does not imply platform editing or window behavior parity.
+The shared text editor composes Flutter's Widgets-layer selection gesture builder,
+EditableText and RawMagnifier with Charcoal handles and a localized toolbar. A
+stable handle callback preserves the selection overlay across focus rebuilds.
+Supported iOS fields use the system context menu. Character counters and length
+limits both use grapheme clusters.
+
+CharcoalScaffold owns page insets, keyboard avoidance and system-bar appearance;
+CharcoalNavigationBar supplies a preferred height and grows with text scaling.
+Native desktop captions remain host-owned. See [Platform behavior](platform-behavior.md)
+for the responsibility matrix and executable acceptance cases.

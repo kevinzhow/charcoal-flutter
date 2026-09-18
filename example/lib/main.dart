@@ -1,13 +1,17 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'agent_examples/app_examples_page.dart';
 import 'showcase_theme.dart';
+import 'showcase_window.dart';
 
-void main() => runCharcoalShowcase();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configureCharcoalSystemUi();
+  runCharcoalShowcase();
+}
 
 void runCharcoalShowcase() => runApp(const CharcoalShowcaseApp());
 
@@ -27,6 +31,10 @@ final class _CharcoalShowcaseAppState extends State<CharcoalShowcaseApp> {
     theme: buildShowcaseTheme(Brightness.light),
     darkTheme: buildShowcaseTheme(Brightness.dark),
     themeMode: _darkMode ? CharcoalThemeMode.dark : CharcoalThemeMode.light,
+    builder: (context, child) => ShowcaseWindow(
+      brightness: _darkMode ? Brightness.dark : Brightness.light,
+      child: child!,
+    ),
     home: _ShowcasePage(
       darkMode: _darkMode,
       onDarkModeChanged: (value) => setState(() => _darkMode = value),
@@ -93,25 +101,13 @@ final class _ShowcasePageState extends State<_ShowcasePage> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final systemOverlayStyle =
-        (theme.brightness == Brightness.dark
-                ? SystemUiOverlayStyle.light
-                : SystemUiOverlayStyle.dark)
-            .copyWith(
-              statusBarColor: theme.colors.backgroundDefault,
-              systemNavigationBarColor: theme.colors.backgroundDefault,
-              systemNavigationBarDividerColor: theme.colors.borderSecondary,
-            );
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: systemOverlayStyle,
-      child: ColoredBox(
-        color: theme.colors.backgroundDefault,
-        child: LayoutBuilder(
-          builder: (context, constraints) =>
-              constraints.maxWidth >= _desktopLayoutMinWidth
-              ? _buildDesktopShell(context, theme)
-              : _buildMobileShell(context, theme),
-        ),
+    return CharcoalScaffold(
+      backgroundColor: theme.colors.backgroundDefault,
+      body: LayoutBuilder(
+        builder: (context, constraints) =>
+            constraints.maxWidth >= _desktopLayoutMinWidth
+            ? _buildDesktopShell(context, theme)
+            : _buildMobileShell(context, theme),
       ),
     );
   }

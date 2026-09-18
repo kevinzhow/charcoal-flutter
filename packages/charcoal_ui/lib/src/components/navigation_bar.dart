@@ -15,7 +15,7 @@ abstract final class _NavigationBarSpec {
 /// [CharcoalIconButton] or another appropriately sized control in [leading]
 /// and [trailing]. System safe-area padding remains the responsibility of the
 /// surrounding app shell.
-final class CharcoalNavigationBar extends StatelessWidget {
+final class CharcoalNavigationBar extends StatelessWidget implements PreferredSizeWidget {
   const CharcoalNavigationBar({
     required this.title,
     this.leading,
@@ -41,6 +41,15 @@ final class CharcoalNavigationBar extends StatelessWidget {
   final Widget? trailing;
 
   @override
+  Size get preferredSize => const Size.fromHeight(_NavigationBarSpec.height);
+
+  /// The bar height after accounting for the current text scale.
+  double heightFor(BuildContext context) => math.max(
+    _NavigationBarSpec.height,
+    MediaQuery.textScalerOf(context).scale(20) + 24,
+  );
+
+  @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final space = theme.dimensions.space;
@@ -61,7 +70,7 @@ final class CharcoalNavigationBar extends StatelessWidget {
           color: theme.colors.backgroundDefault,
         ),
         child: SizedBox(
-          height: _NavigationBarSpec.height,
+          height: heightFor(context),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final horizontalInset = space.component30;

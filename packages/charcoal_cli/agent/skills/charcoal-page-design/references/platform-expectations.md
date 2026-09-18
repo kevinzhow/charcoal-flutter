@@ -7,6 +7,13 @@
 - Preserve the same intent and state when crossing compact and large layout thresholds.
 - Let Charcoal components own their internal geometry. Use semantic layout spacing for page and section composition.
 
+## System UI and page insets
+
+- Use CharcoalScaffold for full pages that need navigation, bottom controls or keyboard avoidance. Backgrounds may extend behind system bars; interactive content must remain safe.
+- Consume padding and viewInsets once. Verify keyboard show/hide, small height, nested safe areas, and a scrolling form with persistent bottom actions.
+- The host chooses edge-to-edge or immersive display mode; each page owns system-bar contrast. A page navigation bar does not replace a desktop native caption.
+- Keep desktop caption metrics above navigation so pushed routes receive the same safe inset. Native window buttons, dragging and fullscreen remain host responsibilities.
+
 ## Navigation
 
 - Use page-level navigation chrome only for a real destination or hierarchy. Do not put a navigation bar around a gallery section or decorative card.
@@ -23,6 +30,9 @@
 - Support touch targets, keyboard focus, pointer interaction, text scaling, and screen-reader labels relevant to the target platforms. Do not use hover as evidence for touch behavior; verify pressed acknowledgement, cancellation, and accepted activation separately, and confirm that feedback never reflows or misaligns the target's content.
 - Keep validation and state changes understandable without relying only on color.
 - Announce asynchronous completion or failure when focus does not naturally move to the changed content.
+
+- For text editing, test actual touch long-press and movement, selection-handle drag, cancellation, pointer double-click/drag, clipboard and undo, and read-only/password restrictions. Text injection alone is not evidence for editing gestures.
+- Keep context-menu labels localized; custom actions need explicit labels. Do not replace Flutter clipboard permission and password policies with ad hoc copy/paste handlers.
 
 ## Runtime evidence
 

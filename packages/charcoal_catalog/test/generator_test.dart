@@ -11,10 +11,13 @@ void main() {
 
     expect(File(catalogJsonPath(root)).readAsStringSync(), generated.json);
     expect(File(catalogDartPath(root)).readAsStringSync(), generated.dartSource);
-    expect(generated.catalog.coverage.curatedComponents, 34);
-    expect(generated.catalog.coverage.componentsWithExamples, 34);
+    expect(generated.catalog.coverage.curatedComponents, 35);
+    expect(generated.catalog.coverage.componentsWithExamples, 35);
     expect(generated.catalog.coverage.curatedPatterns, 6);
     expect(generated.catalog.coverage.publicTokens, 502);
+
+    expect(generated.catalog.componentNamed('CharcoalScaffold'), isNotNull);
+    expect(generated.catalog.componentNamed('CharcoalEditableText'), isNull);
 
     final tabBar = generated.catalog.componentNamed('CharcoalTabBar')!;
     expect(

@@ -3,9 +3,9 @@ import 'package:flutter_skill/flutter_skill.dart';
 
 import 'main.dart' as showcase;
 
-void main() {
+Future<void> main() async {
   if (kDebugMode) {
     FlutterSkillBinding.ensureInitialized(autoEnableIndicators: false);
   }
-  showcase.runCharcoalShowcase();
+  await showcase.main();
 }

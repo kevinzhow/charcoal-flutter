@@ -7,6 +7,8 @@ import '../theme/charcoal_theme.dart';
 import 'field_label.dart';
 import 'field_ring.dart';
 import 'interaction_state.dart';
+import 'text_editing.dart';
+import 'text_selection_toolbar.dart';
 import 'typography.dart';
 
 abstract final class _TextAreaSpec {
@@ -25,6 +27,12 @@ final class CharcoalTextArea extends StatefulWidget {
   const CharcoalTextArea({
     this.assistiveText,
     this.autofocus = false,
+    this.autofillHints,
+    this.contextMenuBuilder = buildCharcoalTextContextMenu,
+    this.enableInteractiveSelection = true,
+    this.inputFormatters,
+    this.scrollPadding = const EdgeInsets.all(20),
+    this.undoController,
     this.controller,
     this.disabled = false,
     this.focusNode,
@@ -46,6 +54,24 @@ final class CharcoalTextArea extends StatefulWidget {
 
   final String? assistiveText;
   final bool autofocus;
+
+  /// The platform autofill hints for this input.
+  final Iterable<String>? autofillHints;
+
+  /// The editing menu builder, or `null` to disable the menu.
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
+
+  /// Whether touch and pointer gestures may change the selection.
+  final bool enableInteractiveSelection;
+
+  /// The input transformations applied before the length limit.
+  final List<TextInputFormatter>? inputFormatters;
+
+  /// The space kept around the caret when scrolling it into view.
+  final EdgeInsets scrollPadding;
+
+  /// The optional controller for editing undo and redo.
+  final UndoHistoryController? undoController;
   final TextEditingController? controller;
   final bool disabled;
   final FocusNode? focusNode;
@@ -175,22 +201,28 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
       pressed: theme.colors.containerSecondaryPressA,
     );
 
-    final editable = EditableText(
+    final editable = CharcoalEditableText(
       autofocus: widget.autofocus,
+      autofillHints: widget.autofillHints,
+      contextMenuBuilder: widget.contextMenuBuilder,
+      enableInteractiveSelection: widget.enableInteractiveSelection,
+      scrollPadding: widget.scrollPadding,
+      undoController: widget.undoController,
       backgroundCursorColor: theme.colors.backgroundDefault,
       controller: _controller,
       cursorColor: theme.colors.containerPrimaryDefault,
       focusNode: _focusNode,
-      inputFormatters: widget.maxLength == null
-          ? null
-          : <TextInputFormatter>[LengthLimitingTextInputFormatter(widget.maxLength)],
+      inputFormatters: <TextInputFormatter>[
+        ...?widget.inputFormatters,
+        if (widget.maxLength != null) LengthLimitingTextInputFormatter(widget.maxLength),
+      ],
       keyboardAppearance: theme.brightness,
       keyboardType: TextInputType.multiline,
       maxLines: widget.rows,
       minLines: widget.rows,
       onChanged: widget.onChanged,
       readOnly: widget.readOnly || widget.disabled,
-      selectionColor: theme.colors.borderFocusLegacy,
+      selectionColor: focused ? theme.colors.borderFocusLegacy : null,
       style: textStyle,
       textInputAction: TextInputAction.newline,
     );
@@ -256,8 +288,8 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
                     bottom: _TextAreaSpec.counterBottomInset,
                     child: Text(
                       widget.maxLength == null
-                          ? '${_controller.text.runes.length}'
-                          : '${_controller.text.runes.length}/${widget.maxLength}',
+                          ? '${_controller.text.characters.length}'
+                          : '${_controller.text.characters.length}/${widget.maxLength}',
                       style: textStyle.copyWith(
                         color: theme.colors.textTertiaryDefault,
                       ),

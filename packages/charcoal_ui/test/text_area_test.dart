@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_helpers.dart';
 
 void main() {
-  testWidgets('accepts multiline input and counts code points', (tester) async {
+  testWidgets('accepts multiline input and counts characters', (tester) async {
     String? changedValue;
     final theme = CharcoalThemeData.light();
     await tester.pumpWidget(

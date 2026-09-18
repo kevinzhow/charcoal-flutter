@@ -3,9 +3,9 @@
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 34,
-    "curatedComponents": 34,
-    "componentsWithExamples": 34,
+    "publicComponents": 35,
+    "curatedComponents": 35,
+    "componentsWithExamples": 35,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 226
@@ -3198,7 +3198,7 @@
       ],
       "responsiveBehavior": [
         "The title remains geometrically centered while edge slots contract on narrow widths.",
-        "Keep edge actions compact and place system safe-area padding outside the component."
+        "Keep edge actions compact; CharcoalScaffold owns system safe-area padding around this bar."
       ],
       "interactionStates": [
         "page context",
@@ -3844,6 +3844,147 @@
           "description": "Keeps one audience value in a parent and exposes the related options as a named group.",
           "sourcePath": "example/lib/agent_examples/selection_controls_example.dart",
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing preferences', style: theme.textStyles.headingS),\n        SizedBox(height: space.component30),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.layout40),\n        Text('Audience', style: theme.textStyles.bodyBold),\n        SizedBox(height: space.component20),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalScaffold",
+      "category": "Layout",
+      "summary": "Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_scaffold.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "scaffold",
+        "page",
+        "safe area",
+        "edge to edge",
+        "keyboard",
+        "system bars"
+      ],
+      "useWhen": [
+        "A full page needs consistent system insets, navigation and bottom controls."
+      ],
+      "avoidWhen": [
+        "A small component only needs local layout constraints."
+      ],
+      "accessibility": [
+        "Keep interactive controls safe when choosing a full-bleed body.",
+        "Use a scrollable body for compact screens and enlarged text."
+      ],
+      "responsiveBehavior": [
+        "Shrinks above the software keyboard by default.",
+        "Background fills the window; content and bars consume safe insets once."
+      ],
+      "interactionStates": [
+        "keyboard hidden",
+        "keyboard visible",
+        "full bleed",
+        "light",
+        "dark"
+      ],
+      "feedbackResponsibilities": [
+        "Owns page geometry, system bar appearance and scroll observation.",
+        "The host owns display mode and native window chrome; the application owns navigation and persistence."
+      ],
+      "tokenRoles": [
+        "backgroundDefault"
+      ],
+      "relatedComponents": [
+        "CharcoalApp",
+        "CharcoalNavigationBar",
+        "CharcoalTextField",
+        "CharcoalTextArea"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalScaffold",
+          "kind": "constructor",
+          "signature": "CharcoalScaffold({required this.body, this.navigationBar, this.bottomBar, this.backgroundColor, this.systemOverlayStyle, this.bodySafeArea = true, this.extendBodyBehindNavigationBar = false, this.resizeToAvoidBottomInset = true, super.key})",
+          "parameters": [
+            {
+              "name": "body",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "navigationBar",
+              "type": "PreferredSizeWidget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "bottomBar",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "backgroundColor",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "systemOverlayStyle",
+              "type": "SystemUiOverlayStyle?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "bodySafeArea",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "extendBodyBehindNavigationBar",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "resizeToAvoidBottomInset",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "configureCharcoalSystemUi",
+          "kind": "function",
+          "signature": "Future<void> configureCharcoalSystemUi({SystemUiMode mode = SystemUiMode.edgeToEdge})",
+          "parameters": [
+            {
+              "name": "mode",
+              "type": "SystemUiMode",
+              "required": false,
+              "named": true,
+              "defaultValue": "SystemUiMode.edgeToEdge"
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "scaffold-editor",
+          "title": "Keyboard-safe editor",
+          "description": "A scrollable editor with safe navigation and persistent bottom controls.",
+          "sourcePath": "example/lib/agent_examples/scaffold_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A scrollable profile editor with persistent page and keyboard-safe controls.\nfinal class AgentScaffoldExample extends StatefulWidget {\n  const AgentScaffoldExample({super.key});\n\n  @override\n  State<AgentScaffoldExample> createState() => _AgentScaffoldExampleState();\n}\n\nfinal class _AgentScaffoldExampleState extends State<AgentScaffoldExample> {\n  final _name = TextEditingController(text: 'Aki Kondo');\n  final _bio = TextEditingController(text: 'Illustrator and storyteller.');\n  bool _saved = false;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _bio.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) => CharcoalScaffold(\n    navigationBar: const CharcoalNavigationBar(title: Text('Edit profile')),\n    body: SingleChildScrollView(\n      padding: const EdgeInsets.all(24),\n      child: AutofillGroup(\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: [\n            CharcoalTextField(\n              controller: _name,\n              label: 'Display name',\n              showLabel: true,\n              autofillHints: const [AutofillHints.name],\n              onChanged: (_) => setState(() => _saved = false),\n            ),\n            const SizedBox(height: 24),\n            CharcoalTextArea(\n              controller: _bio,\n              label: 'About you',\n              showLabel: true,\n              showCount: true,\n              maxLength: 200,\n              onChanged: (_) => setState(() => _saved = false),\n            ),\n            if (_saved) ...[\n              const SizedBox(height: 24),\n              Semantics(\n                liveRegion: true,\n                child: const Text('Saved for this session.'),\n              ),\n            ],\n          ],\n        ),\n      ),\n    ),\n    bottomBar: Padding(\n      padding: const EdgeInsets.all(16),\n      child: CharcoalButton(\n        onPressed: () {\n          FocusManager.instance.primaryFocus?.unfocus();\n          setState(() => _saved = true);\n        },\n        variant: CharcoalButtonVariant.primary,\n        child: const Text('Save profile'),\n      ),\n    ),\n  );\n}\n"
         }
       ]
     },
@@ -4975,7 +5116,7 @@
         {
           "name": "CharcoalTextArea",
           "kind": "constructor",
-          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows = 4, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
+          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding = const EdgeInsets.all(20), this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows = 4, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -4989,6 +5130,45 @@
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "autofillHints",
+              "type": "Iterable<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "contextMenuBuilder",
+              "type": "EditableTextContextMenuBuilder?",
+              "required": false,
+              "named": true,
+              "defaultValue": "buildCharcoalTextContextMenu"
+            },
+            {
+              "name": "enableInteractiveSelection",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "inputFormatters",
+              "type": "List<TextInputFormatter>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "scrollPadding",
+              "type": "EdgeInsets",
+              "required": false,
+              "named": true,
+              "defaultValue": "const EdgeInsets.all(20)"
+            },
+            {
+              "name": "undoController",
+              "type": "UndoHistoryController?",
+              "required": false,
+              "named": true
             },
             {
               "name": "controller",
@@ -5258,7 +5438,7 @@
         "disabled"
       ],
       "feedbackResponsibilities": [
-        "Owns focus, invalid, assistive-text, and disabled presentation exposed by its API.",
+        "Owns focus, validation presentation, platform selection gestures, handles, magnifier and localized editing menus.",
         "The caller owns validation timing, submission progress, persistence, and recovery."
       ],
       "tokenRoles": [
@@ -5277,7 +5457,7 @@
         {
           "name": "CharcoalTextField",
           "kind": "constructor",
-          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
+          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding = const EdgeInsets.all(20), this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -5291,6 +5471,45 @@
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "autofillHints",
+              "type": "Iterable<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "contextMenuBuilder",
+              "type": "EditableTextContextMenuBuilder?",
+              "required": false,
+              "named": true,
+              "defaultValue": "buildCharcoalTextContextMenu"
+            },
+            {
+              "name": "enableInteractiveSelection",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "inputFormatters",
+              "type": "List<TextInputFormatter>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "scrollPadding",
+              "type": "EdgeInsets",
+              "required": false,
+              "named": true,
+              "defaultValue": "const EdgeInsets.all(20)"
+            },
+            {
+              "name": "undoController",
+              "type": "UndoHistoryController?",
+              "required": false,
+              "named": true
             },
             {
               "name": "controller",

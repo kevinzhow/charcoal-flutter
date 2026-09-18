@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "catalogSchemaVersion": 4,
+  "libraryVersion": "0.1.0",
+  "page": {
+    "id": "platform-editor",
+    "title": "Edit profile",
+    "userContext": "A person updates a display name and biography in a compact or desktop viewport.",
+    "platforms": [
+      "compact",
+      "standard"
+    ],
+    "assumptions": [
+      "The curated example saves only in-memory session state; the interface says so."
+    ],
+    "intents": [
+      {
+        "id": "edit-profile",
+        "priority": "primary",
+        "goal": "Edit profile text and acknowledge the saved session state.",
+        "successSignal": "Saved for this session appears after saving and clears when editing resumes."
+      }
+    ],
+    "information": [
+      {
+        "id": "profile-fields",
+        "intentIds": [
+          "edit-profile"
+        ],
+        "content": "Display name, biography, character count and save status.",
+        "placement": "Labeled scrollable fields between navigation and bottom save action.",
+        "visibility": "Fields always; save status only after saving."
+      }
+    ],
+    "reuse": [
+      {
+        "need": "Page insets and text editing",
+        "resolution": "local-composition",
+        "references": [
+          "CharcoalNavigationBar",
+          "CharcoalTextField",
+          "CharcoalTextArea",
+          "CharcoalButton"
+        ],
+        "rationale": "Catalog search found existing controls; a shared scaffold supplies missing page geometry and system bar ownership."
+      }
+    ],
+    "interactions": [
+      {
+        "id": "save-profile",
+        "intentId": "edit-profile",
+        "trigger": "Edit text and activate Save profile.",
+        "states": [
+          "editing",
+          "saved"
+        ],
+        "transitions": [
+          {
+            "from": "editing",
+            "event": "Save profile",
+            "to": "saved"
+          },
+          {
+            "from": "saved",
+            "event": "Edit either field",
+            "to": "editing"
+          }
+        ]
+      }
+    ],
+    "feedback": [
+      {
+        "interactionId": "save-profile",
+        "state": "saved",
+        "immediate": "Button acknowledges activation and dismisses the keyboard.",
+        "persistent": "Saved for this session status.",
+        "recovery": "Edit again; data remains local to the session.",
+        "announcement": "Live-region save status."
+      }
+    ],
+    "bestPractices": [
+      {
+        "area": "platform input and layout",
+        "decision": "Use shared editing behavior and a keyboard-safe bottom action; fields scroll independently of navigation.",
+        "evidence": "scaffold_test.dart and text_editing_test.dart cover keyboard, safe area and platform gesture behavior."
+      }
+    ],
+    "verification": [
+      {
+        "scenario": "Edit and save",
+        "viewport": "compact 320x640 and standard 390x844",
+        "steps": [
+          "Edit the name and biography.",
+          "Save profile.",
+          "Edit again."
+        ],
+        "expected": [
+          "Save stays above keyboard.",
+          "Saved for this session is announced.",
+          "Editing clears the saved status."
+        ]
+      }
+    ]
+  }
+}

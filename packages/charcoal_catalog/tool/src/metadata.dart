@@ -740,7 +740,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     ],
     interactionStates: <String>['empty', 'editing', 'focused', 'invalid', 'disabled'],
     feedbackResponsibilities: <String>[
-      'Owns focus, invalid, assistive-text, and disabled presentation exposed by its API.',
+      'Owns focus, validation presentation, platform selection gestures, handles, magnifier and localized editing menus.',
       'The caller owns validation timing, submission progress, persistence, and recovery.',
     ],
     tokenRoles: <String>[
@@ -1176,6 +1176,51 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
       ),
     ],
   ),
+  'CharcoalScaffold': ComponentMetadata(
+    category: 'Layout',
+    summary:
+        'Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.',
+    keywords: <String>['scaffold', 'page', 'safe area', 'edge to edge', 'keyboard', 'system bars'],
+    useWhen: <String>[
+      'A full page needs consistent system insets, navigation and bottom controls.',
+    ],
+    avoidWhen: <String>['A small component only needs local layout constraints.'],
+    accessibility: <String>[
+      'Keep interactive controls safe when choosing a full-bleed body.',
+      'Use a scrollable body for compact screens and enlarged text.',
+    ],
+    responsiveBehavior: <String>[
+      'Shrinks above the software keyboard by default.',
+      'Background fills the window; content and bars consume safe insets once.',
+    ],
+    interactionStates: <String>[
+      'keyboard hidden',
+      'keyboard visible',
+      'full bleed',
+      'light',
+      'dark',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns page geometry, system bar appearance and scroll observation.',
+      'The host owns display mode and native window chrome; the application owns navigation and persistence.',
+    ],
+    tokenRoles: <String>['backgroundDefault'],
+    relatedComponents: <String>[
+      'CharcoalApp',
+      'CharcoalNavigationBar',
+      'CharcoalTextField',
+      'CharcoalTextArea',
+    ],
+    companionDeclarations: <String>['configureCharcoalSystemUi'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'scaffold-editor',
+        title: 'Keyboard-safe editor',
+        description: 'A scrollable editor with safe navigation and persistent bottom controls.',
+        sourcePath: 'example/lib/agent_examples/scaffold_example.dart',
+      ),
+    ],
+  ),
   'CharcoalNavigationBar': ComponentMetadata(
     category: 'Navigation',
     summary:
@@ -1201,7 +1246,7 @@ const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetad
     ],
     responsiveBehavior: <String>[
       'The title remains geometrically centered while edge slots contract on narrow widths.',
-      'Keep edge actions compact and place system safe-area padding outside the component.',
+      'Keep edge actions compact; CharcoalScaffold owns system safe-area padding around this bar.',
     ],
     interactionStates: <String>['page context', 'leading action', 'trailing action'],
     feedbackResponsibilities: <String>[

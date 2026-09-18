@@ -259,6 +259,18 @@ remain adapters over the Catalog rather than separate documentation sources. Exe
 remain ordinary Flutter code; they are reference compositions rather than a runtime recipe layer.
 See [Agent readiness](agent/README.md) for the benchmark, evidence schema, and rubric.
 
+## Platform behavior
+
+`CharcoalScaffold` coordinates safe areas, keyboard avoidance, system-bar contrast,
+page navigation and bottom controls. Backgrounds extend edge to edge; protected
+content consumes the system insets once. Use `configureCharcoalSystemUi()` at host
+startup for the application-wide display mode.
+
+Text fields and areas share platform selection gestures, draggable handles,
+a magnifier, localized editing menus, clipboard restrictions and undo support.
+See [Platform behavior](docs/platform-behavior.md) for ownership, extension APIs,
+macOS native caption integration and the verification matrix.
+
 ## Motion and navigation
 
 `CharcoalApp` uses `CharcoalPageRoute` as its default route factory. The route remains opaque,

@@ -285,19 +285,39 @@ final class CharcoalDialog extends StatelessWidget {
         ),
       ),
     );
-    return Semantics(
-      container: true,
-      label: title,
-      namesRoute: true,
-      scopesRoute: true,
-      explicitChildNodes: true,
-      child: Align(
-        alignment: style == CharcoalModalStyle.center ? Alignment.center : Alignment.bottomCenter,
-        child: Padding(
-          padding: style == CharcoalModalStyle.center
-              ? EdgeInsets.all(centerPadding)
-              : EdgeInsets.zero,
-          child: surface,
+    return ScrollNotificationObserver(
+      child: Semantics(
+        container: true,
+        label: title,
+        namesRoute: true,
+        scopesRoute: true,
+        explicitChildNodes: true,
+        child: AnimatedPadding(
+          padding: media.viewInsets,
+          duration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : const Duration(milliseconds: 150),
+          child: MediaQuery.removeViewInsets(
+            context: context,
+            removeLeft: true,
+            removeTop: true,
+            removeRight: true,
+            removeBottom: true,
+            child: SafeArea(
+              bottom: style == CharcoalModalStyle.center,
+              child: Align(
+                alignment: style == CharcoalModalStyle.center
+                    ? Alignment.center
+                    : Alignment.bottomCenter,
+                child: Padding(
+                  padding: style == CharcoalModalStyle.center
+                      ? EdgeInsets.all(centerPadding)
+                      : EdgeInsets.zero,
+                  child: SingleChildScrollView(child: surface),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
