@@ -1,4 +1,4 @@
-import 'package:charcoal_ui_showcase/showcase_theme.dart';
+import 'package:charcoal_ui_showcase/showcase/theme.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 

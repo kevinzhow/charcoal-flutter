@@ -1,8 +1,7 @@
 import 'index.dart';
 
 /// Catalog metadata fragment: fields.
-const Map<String, ComponentMetadata>
-fieldsMetadata = <String, ComponentMetadata>{
+const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata>{
   'CharcoalFieldLabel': ComponentMetadata(
     category: 'Forms',
     summary: 'Composes visible field naming, required copy, and trailing metadata without owning input semantics.',
@@ -121,8 +120,7 @@ fieldsMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'text-field-validation',
         title: 'Labeled text field',
-        description:
-            'A controlled account-name field with validation guidance.',
+        description: 'A controlled account-name field with validation guidance.',
         sourcePath: 'example/lib/agent_examples/text_field_example.dart',
       ),
     ],
@@ -252,8 +250,7 @@ fieldsMetadata = <String, ComponentMetadata>{
         id: 'checkbox-controlled',
         title: 'Independent controlled choice',
         description: 'Keeps an optional form choice in parent-owned state alongside related selection controls.',
-        sourcePath:
-            'example/lib/agent_examples/selection_controls_example.dart',
+        sourcePath: 'example/lib/agent_examples/selection_controls_example.dart',
       ),
     ],
   ),
@@ -387,8 +384,7 @@ fieldsMetadata = <String, ComponentMetadata>{
         id: 'radio-controlled-group',
         title: 'Named controlled option group',
         description: 'Keeps one audience value in a parent and exposes the related options as a named group.',
-        sourcePath:
-            'example/lib/agent_examples/selection_controls_example.dart',
+        sourcePath: 'example/lib/agent_examples/selection_controls_example.dart',
       ),
     ],
   ),
@@ -450,16 +446,15 @@ fieldsMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'switch-controlled-setting',
         title: 'Immediate controlled setting',
-        description: 'Keeps an immediate notification preference in the same parent-owned settings model.',
-        sourcePath:
-            'example/lib/agent_examples/selection_controls_example.dart',
+        description:
+            'Keeps an immediate notification preference in the same parent-owned settings model.',
+        sourcePath: 'example/lib/agent_examples/selection_controls_example.dart',
       ),
     ],
   ),
   'CharcoalDropdown': ComponentMetadata(
     category: 'Forms',
-    summary:
-        'Selects one value from a controlled list using a Charcoal popup menu.',
+    summary: 'Selects one value from a controlled list using a Charcoal popup menu.',
     keywords: <String>['combobox', 'dropdown', 'menu', 'option', 'select'],
     useWhen: <String>[
       'The user must choose one item from a fixed list that is too long for segmented control.',

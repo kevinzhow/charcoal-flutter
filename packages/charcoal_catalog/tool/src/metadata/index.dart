@@ -53,13 +53,12 @@ final class ExampleMetadata {
 }
 
 /// All component metadata, merged from the per-family fragment files.
-const Map<String, ComponentMetadata> componentMetadata =
-    <String, ComponentMetadata>{
-      ...themeMetadata,
-      ...actionsMetadata,
-      ...fieldsMetadata,
-      ...navigationMetadata,
-      ...overlaysMetadata,
-      ...patternsMetadata,
-      ...rulesMetadata,
-    };
+const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetadata>{
+  ...themeMetadata,
+  ...actionsMetadata,
+  ...fieldsMetadata,
+  ...navigationMetadata,
+  ...overlaysMetadata,
+  ...patternsMetadata,
+  ...rulesMetadata,
+};

@@ -1,8 +1,7 @@
 import 'index.dart';
 
 /// Catalog metadata fragment: actions.
-const Map<String, ComponentMetadata>
-actionsMetadata = <String, ComponentMetadata>{
+const Map<String, ComponentMetadata> actionsMetadata = <String, ComponentMetadata>{
   'CharcoalButton': ComponentMetadata(
     category: 'Actions',
     summary: 'Runs an action with Charcoal interaction states, sizing, and visual variants.',
@@ -53,8 +52,7 @@ actionsMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'button-basic',
         title: 'Primary and secondary actions',
-        description:
-            'A compact action row that becomes full-width when constrained.',
+        description: 'A compact action row that becomes full-width when constrained.',
         sourcePath: 'example/lib/agent_examples/button_example.dart',
       ),
     ],
@@ -126,7 +124,8 @@ actionsMetadata = <String, ComponentMetadata>{
   ),
   'CharcoalIconButton': ComponentMetadata(
     category: 'Actions',
-    summary: 'Runs a compact icon-only action or controlled toggle with explicit accessible naming.',
+    summary:
+        'Runs a compact icon-only action or controlled toggle with explicit accessible naming.',
     keywords: <String>[
       'icon action',
       'icon button',
@@ -195,7 +194,8 @@ actionsMetadata = <String, ComponentMetadata>{
   ),
   'CharcoalLinkButton': ComponentMetadata(
     category: 'Actions',
-    summary: 'Runs a low-emphasis text action with intrinsic width and a stable interaction target.',
+    summary:
+        'Runs a low-emphasis text action with intrinsic width and a stable interaction target.',
     keywords: <String>[
       'clear action',
       'link button',
@@ -245,7 +245,8 @@ actionsMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'link-button-action',
         title: 'Low-emphasis text action',
-        description: 'Runs a clear action without turning application behavior into hyperlink semantics.',
+        description:
+            'Runs a clear action without turning application behavior into hyperlink semantics.',
         sourcePath: 'example/lib/agent_examples/action_controls_example.dart',
       ),
     ],

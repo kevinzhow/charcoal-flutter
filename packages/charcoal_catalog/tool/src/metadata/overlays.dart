@@ -1,8 +1,7 @@
 import 'index.dart';
 
 /// Catalog metadata fragment: overlays.
-const Map<String, ComponentMetadata>
-overlaysMetadata = <String, ComponentMetadata>{
+const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetadata>{
   'CharcoalTooltip': ComponentMetadata(
     category: 'Overlays',
     summary: 'Adds brief, non-interactive context to an anchored control across pointer, focus, and touch input.',
@@ -241,15 +240,15 @@ overlaysMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'dialog-launcher',
         title: 'Open an adaptive modal',
-        description:
-            'Launches a dialog with Charcoal content and action widgets.',
+        description: 'Launches a dialog with Charcoal content and action widgets.',
         sourcePath: 'example/lib/agent_examples/modal_example.dart',
       ),
     ],
   ),
   'CharcoalLoadingSpinner': ComponentMetadata(
     category: 'Utility',
-    summary: 'Announces and renders an indeterminate wait with Charcoal source geometry and motion.',
+    summary:
+        'Announces and renders an indeterminate wait with Charcoal source geometry and motion.',
     keywords: <String>[
       'busy indicator',
       'indeterminate progress',
@@ -371,7 +370,8 @@ overlaysMetadata = <String, ComponentMetadata>{
   ),
   'CharcoalHintText': ComponentMetadata(
     category: 'Feedback',
-    summary: 'Keeps optional page or section guidance visible with an optional, clearly named action.',
+    summary:
+        'Keeps optional page or section guidance visible with an optional, clearly named action.',
     keywords: <String>[
       'advisory message',
       'contextual guidance',
@@ -486,8 +486,7 @@ overlaysMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'toast-and-snackbar',
         title: 'Transient feedback',
-        description:
-            'Shows toast and snackbar overlays from a context with an Overlay.',
+        description: 'Shows toast and snackbar overlays from a context with an Overlay.',
         sourcePath: 'example/lib/agent_examples/feedback_example.dart',
       ),
     ],
@@ -547,8 +546,7 @@ overlaysMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'toast-and-snackbar',
         title: 'Transient feedback',
-        description:
-            'Shows toast and snackbar overlays from a context with an Overlay.',
+        description: 'Shows toast and snackbar overlays from a context with an Overlay.',
         sourcePath: 'example/lib/agent_examples/feedback_example.dart',
       ),
     ],

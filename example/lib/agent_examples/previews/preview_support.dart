@@ -2,7 +2,7 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../showcase_theme.dart';
+import '../../showcase/theme.dart';
 
 Widget agentComponentPreviewWrapper(Widget child) => CharcoalApp(
   title: 'Agent Ready component preview',

@@ -1,8 +1,7 @@
 import 'index.dart';
 
 /// Catalog metadata fragment: navigation.
-const Map<String, ComponentMetadata>
-navigationMetadata = <String, ComponentMetadata>{
+const Map<String, ComponentMetadata> navigationMetadata = <String, ComponentMetadata>{
   'CharcoalPageRoute': ComponentMetadata(
     category: 'Navigation',
     summary: 'Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.',
@@ -64,7 +63,8 @@ navigationMetadata = <String, ComponentMetadata>{
   ),
   'CharcoalScaffold': ComponentMetadata(
     category: 'Layout',
-    summary: 'Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.',
+    summary:
+        'Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.',
     keywords: <String>[
       'scaffold',
       'page',
@@ -117,7 +117,8 @@ navigationMetadata = <String, ComponentMetadata>{
   ),
   'CharcoalNavigationBar': ComponentMetadata(
     category: 'Navigation',
-    summary: 'Provides page-level title context with balanced leading and trailing navigation slots.',
+    summary:
+        'Provides page-level title context with balanced leading and trailing navigation slots.',
     keywords: <String>[
       'app bar',
       'back navigation',

@@ -1,8 +1,7 @@
 import 'index.dart';
 
 /// Catalog metadata fragment: theme.
-const Map<String, ComponentMetadata>
-themeMetadata = <String, ComponentMetadata>{
+const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>{
   'CharcoalTheme': ComponentMetadata(
     category: 'Foundation',
     summary: 'Propagates one coherent Charcoal token set through a Widgets-layer subtree.',
@@ -136,7 +135,8 @@ themeMetadata = <String, ComponentMetadata>{
   ),
   'CharcoalTextEllipsis': ComponentMetadata(
     category: 'Content',
-    summary: 'Truncates plain text to a positive line limit while preserving complete spoken content.',
+    summary:
+        'Truncates plain text to a positive line limit while preserving complete spoken content.',
     keywords: <String>[
       'clamp text',
       'ellipsis',
@@ -187,7 +187,8 @@ themeMetadata = <String, ComponentMetadata>{
       ExampleMetadata(
         id: 'text-ellipsis-project-title',
         title: 'Scaled multiline project title',
-        description: 'Limits a long localized title to two lines while retaining its complete spoken form.',
+        description:
+            'Limits a long localized title to two lines while retaining its complete spoken form.',
         sourcePath: 'example/lib/agent_examples/theme_typography_example.dart',
       ),
     ],
