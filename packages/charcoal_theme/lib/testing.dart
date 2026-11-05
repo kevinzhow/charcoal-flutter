@@ -17,9 +17,9 @@ import 'charcoal_theme.dart';
 /// durations); zero elevations become 3. A widget that renders a colour outside this set, or a
 /// size that did not move, is reading something other than the theme.
 ///
-/// [base] defaults to the temporary pack of [brightness].
+/// [base] defaults to the Charcoal pack of [brightness].
 CharcoalThemePack extremePack(Brightness brightness, {CharcoalThemePack? base}) {
-  final source = base ?? (brightness == Brightness.dark ? temporaryDarkPack : temporaryLightPack);
+  final source = base ?? (brightness == Brightness.dark ? charcoalDarkPack : charcoalLightPack);
   final roleNames = source.colors.toMap().keys.toList();
   return CharcoalThemePack(
     name: 'extreme',

@@ -15,38 +15,38 @@ void main() {
   group('contract shape', () {
     test('both packs define exactly the same names', () {
       expect(
-        temporaryLightPack.toFlatMap().keys.toList(),
-        temporaryDarkPack.toFlatMap().keys.toList(),
+        charcoalLightPack.toFlatMap().keys.toList(),
+        charcoalDarkPack.toFlatMap().keys.toList(),
       );
     });
 
     test('contract size is what the review sees', () {
-      final flat = temporaryLightPack.toFlatMap();
-      expect(temporaryLightPack.colors.toMap(), hasLength(88));
+      final flat = charcoalLightPack.toFlatMap();
+      expect(charcoalLightPack.colors.toMap(), hasLength(88));
       expect(flat.length, 367);
     });
 
     test('frozen names are append-only: every one still exists', () {
-      final flat = temporaryLightPack.toFlatMap();
+      final flat = charcoalLightPack.toFlatMap();
       final missing = _frozenNames().where((name) => !flat.containsKey(name)).toList();
       expect(missing, isEmpty, reason: 'contract names were removed or renamed: $missing');
     });
 
     test('names added after the freeze are appended to test/frozen_names.txt', () {
       final frozen = _frozenNames().toSet();
-      final added = temporaryLightPack.toFlatMap().keys.where((k) => !frozen.contains(k)).toList();
+      final added = charcoalLightPack.toFlatMap().keys.where((k) => !frozen.contains(k)).toList();
       expect(added, isEmpty, reason: 'append these to test/frozen_names.txt: $added');
     });
 
     test('every value is non-null except the optional sans family', () {
-      for (final entry in temporaryLightPack.toFlatMap().entries) {
+      for (final entry in charcoalLightPack.toFlatMap().entries) {
         if (entry.key == 'typography.sansFamily') continue;
         expect(entry.value, isNotNull, reason: entry.key);
       }
     });
 
     test('colour role names are unique and camelCase', () {
-      final names = temporaryLightPack.colors.toMap().keys.toList();
+      final names = charcoalLightPack.colors.toMap().keys.toList();
       expect(names.toSet(), hasLength(names.length));
       for (final name in names) {
         expect(RegExp(r'^[a-z][A-Za-z0-9]*$').hasMatch(name), isTrue, reason: name);
@@ -56,14 +56,14 @@ void main() {
 
   group('packs', () {
     test('carry their brightness and the shared name', () {
-      expect(temporaryLightPack.brightness, Brightness.light);
-      expect(temporaryDarkPack.brightness, Brightness.dark);
-      expect(temporaryLightPack.name, temporaryDarkPack.name);
+      expect(charcoalLightPack.brightness, Brightness.light);
+      expect(charcoalDarkPack.brightness, Brightness.dark);
+      expect(charcoalLightPack.name, charcoalDarkPack.name);
     });
 
     test('light and dark differ on surfaces, text and borders', () {
-      final light = temporaryLightPack.colors;
-      final dark = temporaryDarkPack.colors;
+      final light = charcoalLightPack.colors;
+      final dark = charcoalDarkPack.colors;
       expect(light.background, isNot(dark.background));
       expect(light.text, isNot(dark.text));
       expect(light.borderSubtle, isNot(dark.borderSubtle));
@@ -71,36 +71,36 @@ void main() {
     });
 
     test('light and dark share all geometry', () {
-      final light = temporaryLightPack.toFlatMap()..removeWhere((k, _) => k.startsWith('colors.'));
-      final dark = temporaryDarkPack.toFlatMap()..removeWhere((k, _) => k.startsWith('colors.'));
+      final light = charcoalLightPack.toFlatMap()..removeWhere((k, _) => k.startsWith('colors.'));
+      final dark = charcoalDarkPack.toFlatMap()..removeWhere((k, _) => k.startsWith('colors.'));
       expect(light, dark);
     });
 
     test('myopay roles keep their names and Charcoal values', () {
-      final light = temporaryLightPack.colors;
+      final light = charcoalLightPack.colors;
       expect(light.background, const Color(0xFFFFFFFF));
       expect(light.primary, const Color(0xFF0096FA));
       expect(light.primaryHover, const Color(0xFF1F75BC));
       expect(light.negative, const Color(0xFFFD5B4E));
       expect(light.text, const Color(0xFF1F1F1F));
       expect(light.barrier, const Color(0x99000000));
-      expect(temporaryDarkPack.colors.background, const Color(0xFF1F1F1F));
+      expect(charcoalDarkPack.colors.background, const Color(0xFF1F1F1F));
     });
 
     test('the old private geometry survives as metrics', () {
-      final m = temporaryLightPack.metrics;
+      final m = charcoalLightPack.metrics;
       expect(m.switchToggle.trackWidth, 51);
       expect(m.switchToggle.trackHeight, 31);
       expect(m.switchToggle.thumbSize, 27);
       expect(m.textArea.horizontalInset, 9);
       expect(m.tooltip.arrowHeight, 3);
       expect(m.clickable.disabledOpacity, 0.32);
-      expect(temporaryLightPack.motion.standard, const Duration(milliseconds: 200));
-      expect(temporaryLightPack.borders.focusHalo, 4);
+      expect(charcoalLightPack.motion.standard, const Duration(milliseconds: 200));
+      expect(charcoalLightPack.borders.focusHalo, 4);
     });
 
     test('toMap/fromMap/copyWith round-trip every group', () {
-      final p = temporaryLightPack;
+      final p = charcoalLightPack;
       expect(CharcoalColorRoles.fromMap(p.colors.toMap()), p.colors);
       expect(CharcoalSpaceScale.fromMap(p.space.toMap()), p.space);
       expect(CharcoalRadiusScale.fromMap(p.radius.toMap()), p.radius);
@@ -116,17 +116,17 @@ void main() {
         p.metrics.copyWith(button: p.metrics.button.copyWith(iconSize: 99)).button.iconSize,
         99,
       );
-      expect(p, isNot(temporaryDarkPack));
+      expect(p, isNot(charcoalDarkPack));
     });
 
     test('transparent is a constant, not a role', () {
       expect(CharcoalColorRoles.transparent, const Color(0x00000000));
-      expect(temporaryLightPack.colors.toMap().containsKey('transparent'), isFalse);
+      expect(charcoalLightPack.colors.toMap().containsKey('transparent'), isFalse);
     });
   });
 
   group('typography', () {
-    final scale = temporaryLightPack.typography;
+    final scale = charcoalLightPack.typography;
 
     test('application roles keep the console values', () {
       expect(scale.pageTitle.fontSize, 25);
@@ -170,7 +170,7 @@ void main() {
 
   group('tones', () {
     test('resolve from roles only', () {
-      final colors = temporaryLightPack.colors;
+      final colors = charcoalLightPack.colors;
       final negative = resolveCharcoalTone(colors, CharcoalTone.negative);
       expect(negative.surface, colors.negativeSurface);
       expect(negative.foreground, colors.textNegative);
@@ -189,7 +189,7 @@ void main() {
     for (final brightness in Brightness.values) {
       test('${brightness.name}: colours are distinct, opaque and foreign', () {
         final pack = extremePack(brightness);
-        final base = brightness == Brightness.dark ? temporaryDarkPack : temporaryLightPack;
+        final base = brightness == Brightness.dark ? charcoalDarkPack : charcoalLightPack;
         final colors = pack.colors.toMap().values.cast<Color>().toList();
         expect(colors.toSet(), hasLength(colors.length));
         expect(colors.every((c) => c.a == 1), isTrue);
@@ -200,7 +200,7 @@ void main() {
 
       test('${brightness.name}: every number moved', () {
         final pack = extremePack(brightness).toFlatMap();
-        final base = (brightness == Brightness.dark ? temporaryDarkPack : temporaryLightPack)
+        final base = (brightness == Brightness.dark ? charcoalDarkPack : charcoalLightPack)
             .toFlatMap();
         final unchanged = <String>[
           for (final entry in base.entries)
@@ -218,7 +218,7 @@ void main() {
     Widget host(Widget child, {TargetPlatform platform = TargetPlatform.android}) => MaterialApp(
       theme: ThemeData(
         extensions: <ThemeExtension<dynamic>>[
-          CharcoalTheme(temporaryLightPack, platform: platform),
+          CharcoalTheme(charcoalLightPack, platform: platform),
         ],
       ),
       home: child,
@@ -236,8 +236,8 @@ void main() {
           ),
         ),
       );
-      expect(found.pack, temporaryLightPack);
-      expect(found.colors.primary, temporaryLightPack.colors.primary);
+      expect(found.pack, charcoalLightPack);
+      expect(found.colors.primary, charcoalLightPack.colors.primary);
       expect(found.brightness, Brightness.light);
     });
 
@@ -273,11 +273,11 @@ void main() {
       final body = theme.style(CharcoalTextRole.body);
       expect(body.fontSize, 14);
       expect(body.height, closeTo(22 / 14, 1e-9));
-      expect(body.color, temporaryLightPack.colors.text);
+      expect(body.color, charcoalLightPack.colors.text);
       expect(body.fontWeight, FontWeight.w400);
       expect(theme.style(CharcoalTextRole.body, bold: true).fontWeight, FontWeight.w700);
       final caption = theme.style(CharcoalTextRole.caption);
-      expect(caption.color, temporaryLightPack.colors.textTertiary);
+      expect(caption.color, charcoalLightPack.colors.textTertiary);
       final mono = theme.style(CharcoalTextRole.captionMono);
       expect(mono.fontFamily, 'monospace');
       expect(mono.height, isNull);
@@ -325,13 +325,13 @@ void main() {
     });
 
     test('lerp switches at the midpoint; copyWith replaces fields', () {
-      final a = CharcoalTheme(temporaryLightPack);
-      final b = CharcoalTheme(temporaryDarkPack);
+      final a = CharcoalTheme(charcoalLightPack);
+      final b = CharcoalTheme(charcoalDarkPack);
       expect(a.lerp(b, 0.49), a);
       expect(a.lerp(b, 0.5), b);
       expect(a.lerp(null, 1), a);
       expect(a.copyWith(platform: TargetPlatform.iOS).platform, TargetPlatform.iOS);
-      expect(b.tone(CharcoalTone.positive).dot, temporaryDarkPack.colors.positive);
+      expect(b.tone(CharcoalTone.positive).dot, charcoalDarkPack.colors.positive);
     });
   });
 

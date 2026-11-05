@@ -65,7 +65,7 @@ String _stem(File f) => f.uri.pathSegments.last.replaceAll('.dart', '');
 
 void main() {
   final rows = _rows();
-  final flat = temporaryLightPack.toFlatMap();
+  final flat = charcoalLightPack.toFlatMap();
   final known = <String>{
     ...flat.keys,
     'colors.transparent',

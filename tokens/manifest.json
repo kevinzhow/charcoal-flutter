@@ -19,5 +19,9 @@
         "sha256": "e11d97e415da051e45663217f1e150a1b48872342c8c62cece4fac2d6a1331ed"
       }
     }
+  },
+  "pack": {
+    "path": "tokens/theme/charcoal.pack.json",
+    "sha256": "438d320c2bc8bede99b32f0a71ecb0be0d5a2b135e1bce1956d5c7c0bccb86f0"
   }
 }
