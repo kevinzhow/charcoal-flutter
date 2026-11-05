@@ -28,7 +28,7 @@ packages/charcoal_theme/
   lib/src/build/                   buildCharcoalThemeData, buildCharcoalTextTheme, buildCharcoalButtonStyle
   test/contract_test.dart          shape, packs, extremePack, CharcoalTheme, hygiene
   test/role_audit_test.dart        proves section 8 covers every read in charcoal_ui and targets exist
-  test/frozen_names.txt            the 368 frozen names
+  test/frozen_names.txt            the 370 frozen names
 ```
 
 Rules: values (colours, numbers, durations) exist only in `src/packs/`; `src/contract/` holds types and docs, no values (one exception: the constant `CharcoalColorRoles.transparent`).
@@ -39,7 +39,7 @@ is the single import for libraries and tests (applications do not use the theme 
 
 | Group | Class | Access | Entries |
 | --- | --- | --- | --- |
-| colours | `CharcoalColorRoles` | `theme.colors.<role>` | 88 |
+| colours | `CharcoalColorRoles` | `theme.colors.<role>` | 90 |
 | spacing | `CharcoalSpaceScale` | `theme.space.<step>` | 8 |
 | radii | `CharcoalRadiusScale` | `theme.radius.<step>` | 7 |
 | line widths | `CharcoalBorderScale` | `theme.borders.<name>` | 4 |
@@ -52,7 +52,7 @@ is the single import for libraries and tests (applications do not use the theme 
 
 ## 2. Colour roles
 
-88 roles: 55 kept from `MyoColors` under their myopay names (all of them), 33 added because the current `charcoal_ui` reads a colour myopay has no role for.
+90 roles: 55 kept from `MyoColors` under their myopay names (all of them), 33 added because the current `charcoal_ui` reads a colour myopay has no role for.
 `CharcoalColorRoles.transparent` is a constant, not a role. Values below are the generated pack (`tokens/theme/charcoal.pack.json`): token references into `charcoal_tokens` (no copied hex), literals only where noted.
 
 | Role | Origin | Upstream token (pack JSON) | Light | Dark | Meaning |
@@ -144,6 +144,8 @@ is the single import for libraries and tests (applications do not use the theme 
 | `colors.iconNotice` | myopay | `iconNoticeDefault` | `#FFA16309` | `#FFDEA71D` | Notice icon. |
 | `colors.iconOnPrimary` | myopay | `iconOnPrimaryDefault` | `#FFFFFFFF` | `#FFE4E4E4` | Icon or switch thumb on a primary fill. |
 | `colors.iconOnImage` | new | `iconOnOnImgDefault` | `#FFFFFFFF` | `#FFE4E4E4` | Icon on an over-image fill. |
+| `colors.textOnNotice` | new | `textOnNoticeDefault` | `#FF1F1F1F` | `#FF292929` | Text on a notice fill (appended in 3A/3B; the swap had approximated it). |
+| `colors.iconOnNotice` | new | `iconOnNoticeDefault` | `#FF1F1F1F` | `#FF292929` | Icon on a notice fill (appended in 3A/3B). |
 | `colors.iconHint` | new | literal | `#FF858585` | `#FF858585` | Fill of the hint-text info glyph (authored by Charcoal iOS 16/Info.pdf). |
 
 ## 3. Space, radius, borders, sizes, elevation
@@ -963,7 +965,7 @@ Line numbers are at `de89016` (the legacy files no longer exist); the targets ar
 ## 9. Naming decisions
 
 1. **Class names.** `CharcoalColorRoles`, `CharcoalSpaceScale`, `CharcoalRadiusScale`, `CharcoalBorderScale`, `CharcoalSizeScale`, `CharcoalMotionScale`, `CharcoalElevationScale`, `CharcoalTypeScale` instead of myopay's `Myo*` or the obvious `CharcoalMotion` / `CharcoalTypography`, which already exist in `charcoal_ui` (the typography widget, the motion constants). Cost: slightly longer names.
-2. **Role count.** `MyoColors` has 55 roles, not 53 as in the plan; all 55 are kept under their names. 33 roles are new, giving 88.
+2. **Role count.** `MyoColors` has 55 roles, not 53 as in the plan; all 55 are kept under their names. 33 roles are new, giving 88 at the freeze (90 since textOnNotice and iconOnNotice were appended).
 3. **`radius.lg`.** myopay `radius.lg` is 32 (dialog corner). Upstream `radius.l` is 12, which the checkbox focus ring reads. The scale follows upstream (`xs 2, sm 4, md 8, lg 12, xl 16, xxl 24, pill`); the 32 lives in `metrics.modal.cornerRadius` and `metrics.toast.cornerRadius`. myopay call sites of `radius.lg` must change in phase 4. Alternative: keep `lg = 32` and name the 12 something else.
 4. **`motion.toastVisible`.** myopay 3 s, Charcoal `_ToastSpec.dismissDuration` 2 s. The pack uses 2 s (library look); myopay can pass its own duration.
 5. **State-invariant roles collapsed.** 18 accessors (`textOnPrimary{Default,Hover,Press}`, `textOnNegative*`, `textOnHud*`, `textOnOnImg*`, `iconOnPrimary*`, `iconOnOnImg*`) have identical values in every state and both brightnesses upstream. They map to one role each (`textOnPrimary`, `textOnNegative`, `textOnHud`, `textOnImage`, `iconOnPrimary`, `iconOnImage`). Pixel-identical today; a pack cannot give them separate hover/press colours until a role is appended.

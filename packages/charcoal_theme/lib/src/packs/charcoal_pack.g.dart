@@ -110,6 +110,8 @@ const CharcoalThemePack charcoalLightPack = CharcoalThemePack(
     iconNotice: Color(0xFFA16309), // color.icon/notice/default
     iconOnPrimary: Color(0xFFFFFFFF), // color.icon/on-primary/default
     iconOnImage: Color(0xFFFFFFFF), // color.icon/on-on-img/default
+    textOnNotice: Color(0xFF1F1F1F), // color.text/on-notice/default
+    iconOnNotice: Color(0xFF1F1F1F), // color.icon/on-notice/default
     iconHint: Color(0xFF858585),
   ),
   space: CharcoalSpaceScale(
@@ -320,6 +322,8 @@ const CharcoalThemePack charcoalDarkPack = CharcoalThemePack(
     iconNotice: Color(0xFFDEA71D), // color.icon/notice/default
     iconOnPrimary: Color(0xFFE4E4E4), // color.icon/on-primary/default
     iconOnImage: Color(0xFFE4E4E4), // color.icon/on-on-img/default
+    textOnNotice: Color(0xFF292929), // color.text/on-notice/default
+    iconOnNotice: Color(0xFF292929), // color.icon/on-notice/default
     iconHint: Color(0xFF858585),
   ),
   space: CharcoalSpaceScale(

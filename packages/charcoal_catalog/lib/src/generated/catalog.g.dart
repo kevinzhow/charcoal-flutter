@@ -10,7 +10,7 @@ const String generatedCatalogJson = r'''{
     "componentsWithExamples": 71,
     "curatedPatterns": 6,
     "publicTokens": 502,
-    "semanticTokens": 126
+    "semanticTokens": 128
   },
   "designRules": [
     {
@@ -13409,13 +13409,13 @@ const String generatedCatalogJson = r'''{
     },
     {
       "path": "color.icon/on-notice/default",
-      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNoticeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconOnNotice",
       "kind": "color",
-      "tier": "primitive",
+      "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
+      "guidance": "Theme role colors.iconOnNotice, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/on-notice/hover",
@@ -15029,13 +15029,13 @@ const String generatedCatalogJson = r'''{
     },
     {
       "path": "color.text/on-notice/default",
-      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnNoticeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textOnNotice",
       "kind": "color",
-      "tier": "primitive",
+      "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
+      "guidance": "Theme role colors.textOnNotice, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/on-notice/hover",
