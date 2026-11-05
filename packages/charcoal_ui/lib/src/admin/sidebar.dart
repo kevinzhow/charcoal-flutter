@@ -1,6 +1,8 @@
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
+import 'brand_mark.dart';
+
 /// The fixed-width sidebar of an admin shell: a [brand] header, a scrolling list of destination
 /// groups, and an optional [footer] (usually the account tile) above a rule.
 ///
@@ -73,19 +75,7 @@ final class CharcoalSidebarBrand extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return Row(
       children: <Widget>[
-        Container(
-          width: theme.sizes.brandMark,
-          height: theme.sizes.brandMark,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: theme.colors.primary,
-            borderRadius: BorderRadius.circular(theme.radius.md),
-          ),
-          child: Text(
-            mark,
-            style: theme.style(CharcoalTextRole.bodyBold, color: theme.colors.textOnPrimary),
-          ),
-        ),
+        CharcoalBrandMark(mark),
         SizedBox(width: theme.space.sm),
         Expanded(
           child: Semantics(

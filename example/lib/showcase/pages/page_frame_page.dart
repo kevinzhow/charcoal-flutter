@@ -160,6 +160,59 @@ final class PageFramePage extends StatelessWidget {
               ),
             ),
             ShowcaseCard(
+              description: 'CharcoalBrandMark and CharcoalBadge, a negative-toned button label, a secret value box with trailing actions, a key/value table and a divider.',
+              eyebrow: 'BRAND · BADGE · SECRET BOX',
+              title: 'Brand, badge, secret box',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const CharcoalWrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      CharcoalBrandMark('M'),
+                      CharcoalBadge('Owner'),
+                      CharcoalBadge('Paid', tone: CharcoalBadgeTone.positive),
+                      CharcoalBadge('Banned', tone: CharcoalBadgeTone.negative),
+                    ],
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  CharcoalCodeBlock(
+                    '••••••••••••••••',
+                    field: true,
+                    maxLines: 1,
+                    tone: CharcoalTextTone.secondary,
+                    trailing: CharcoalIconButton(
+                      icon: const CharcoalIcon(CharcoalIcons.copy),
+                      semanticLabel: 'Copy',
+                      onPressed: showcaseNoop,
+                    ),
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: CharcoalButton(
+                      size: CharcoalButtonSize.small,
+                      labelTone: CharcoalTextTone.negative,
+                      onPressed: showcaseNoop,
+                      child: const Text('Delete'),
+                    ),
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  const CharcoalInfoRows([
+                    ('Email', 'alice@example.com'),
+                    ('OpenID', 'oid-1234'),
+                  ], labelWidth: CharcoalInfoLabelWidth.narrow),
+                  const CharcoalGap(CharcoalSpace.md),
+                  const CharcoalDivider(),
+                  const CharcoalGap(CharcoalSpace.md),
+                  const CharcoalFieldBox(
+                    width: CharcoalFieldWidth.compact,
+                    child: CharcoalTextField(label: 'Compact field'),
+                  ),
+                ],
+              ),
+            ),
+            ShowcaseCard(
               description: 'CharcoalActionTile for dashboards, and a CharcoalListRow with a body slot and running-text subtitle.',
               eyebrow: 'TILE · ROW',
               title: 'Action tile and rich row',

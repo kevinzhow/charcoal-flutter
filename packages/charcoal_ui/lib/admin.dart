@@ -7,6 +7,7 @@
 library;
 
 export 'src/admin/admin_shell.dart';
+export 'src/admin/brand_mark.dart';
 export 'src/admin/page.dart';
 export 'src/admin/sidebar.dart';
 export 'src/components/layout/batch_bar.dart';

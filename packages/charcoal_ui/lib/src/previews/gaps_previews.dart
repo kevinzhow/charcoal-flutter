@@ -41,3 +41,33 @@ Widget charcoalPagePreview() => SizedBox(
     ),
   ),
 );
+
+@CharcoalNextComponentPreview(name: 'Brand, badge, secret box', size: Size(420, 360))
+Widget charcoalBadgePreview() => Column(
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  mainAxisSize: MainAxisSize.min,
+  children: <Widget>[
+    const CharcoalWrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: <Widget>[
+        CharcoalBrandMark('M'),
+        CharcoalBadge('Owner'),
+        CharcoalBadge('Banned', tone: CharcoalBadgeTone.negative),
+      ],
+    ),
+    const CharcoalGap(CharcoalSpace.md),
+    CharcoalCodeBlock(
+      '••••••••••••',
+      field: true,
+      maxLines: 1,
+      tone: CharcoalTextTone.secondary,
+      trailing: CharcoalIconButton(
+        icon: const CharcoalIcon(CharcoalIcons.copy),
+        semanticLabel: 'Copy',
+        onPressed: () {},
+      ),
+    ),
+    const CharcoalGap(CharcoalSpace.md),
+    const CharcoalInfoRows([('Email', 'alice@example.com')]),
+  ],
+);

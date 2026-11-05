@@ -3,7 +3,7 @@ import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
 import '../components/actions/icon_button.dart';
-import '../components/feedback/progress_ring.dart';
+import '../components/feedback/spinner_overlay.dart';
 import '../components/text/charcoal_text.dart';
 import '../components/text/text_tone.dart';
 import '../foundation/charcoal_clickable.dart';
@@ -38,7 +38,7 @@ enum CharcoalPageWidth {
 /// layout; the page scrolls unless [scrollable] is false, for content that scrolls itself.
 /// [header] is pinned between the title block and [child] (a tab strip, say). A [banner] replaces
 /// [child] altogether, for a page that cannot be used yet (missing credentials). [busy] covers the
-/// page with a dimmed, blocking progress ring.
+/// page with a dimmed, blocking spinner (`CharcoalSpinnerOverlay`).
 ///
 /// ```dart
 /// CharcoalPage(
@@ -84,7 +84,7 @@ final class CharcoalPage extends StatelessWidget {
   /// Shown in place of [child] when non-null, e.g. a `CharcoalBanner` asking for credentials.
   final Widget? banner;
 
-  /// Whether a blocking progress ring covers the page.
+  /// Whether a blocking spinner covers the page.
   final bool busy;
 
   /// What assistive technology announces while [busy].
@@ -182,9 +182,10 @@ final class CharcoalPage extends StatelessWidget {
       ),
     );
 
-    return _BusyOverlay(
+    return CharcoalSpinnerOverlay(
       visible: busy,
-      label: busyLabel,
+      dimBackground: true,
+      semanticLabel: busyLabel,
       child: ColoredBox(
         color: theme.colors.background,
         child: Column(
@@ -340,36 +341,6 @@ class _BackLink extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-/// Dims and blocks [child] with a progress ring while [visible].
-class _BusyOverlay extends StatelessWidget {
-  const _BusyOverlay({
-    required this.visible,
-    required this.label,
-    required this.child,
-  });
-
-  final bool visible;
-  final String label;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return Stack(
-      children: <Widget>[
-        ExcludeFocus(excluding: visible, child: child),
-        if (visible)
-          Positioned.fill(
-            child: ColoredBox(
-              color: theme.colors.scrim,
-              child: Center(child: CharcoalProgressRing(semanticLabel: label)),
-            ),
-          ),
-      ],
     );
   }
 }

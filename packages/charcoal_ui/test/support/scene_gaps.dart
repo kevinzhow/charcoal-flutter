@@ -87,6 +87,41 @@ class _Primitives extends StatelessWidget {
                 ),
                 onPressed: noop,
               ),
+              const CharcoalWrap(
+                children: [
+                  CharcoalBrandMark('M'),
+                  CharcoalBadge('Owner'),
+                  CharcoalBadge('Paid', tone: CharcoalBadgeTone.positive),
+                  CharcoalBadge('Banned', tone: CharcoalBadgeTone.negative),
+                ],
+              ),
+              const CharcoalGap(CharcoalSpace.sm),
+              CharcoalCodeBlock(
+                '••••••••••••',
+                field: true,
+                maxLines: 1,
+                tone: CharcoalTextTone.secondary,
+                trailing: CharcoalIconButton(
+                  icon: const CharcoalIcon(CharcoalIcons.copy),
+                  semanticLabel: 'Copy',
+                  onPressed: noop,
+                ),
+              ),
+              const CharcoalGap(CharcoalSpace.sm),
+              CharcoalButton(
+                size: CharcoalButtonSize.small,
+                labelTone: CharcoalTextTone.negative,
+                onPressed: noop,
+                child: const Text('Delete'),
+              ),
+              const CharcoalInfoRows([
+                ('Email', 'a@b.co'),
+              ], labelWidth: CharcoalInfoLabelWidth.narrow),
+              const CharcoalDivider(),
+              const CharcoalFieldBox(
+                width: CharcoalFieldWidth.compact,
+                child: CharcoalTextField(label: 'Compact'),
+              ),
               const CharcoalLoadingState(),
             ],
           ),

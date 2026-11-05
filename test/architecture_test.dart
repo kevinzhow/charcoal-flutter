@@ -25,10 +25,8 @@ void main() {
     // route.
     '/src/components/overlays/dialog.dart',
     '/src/components/overlays/modal.dart',
-    // p3 gaps: selectable text in the code block (shared with the code dialog) and the themed
-    // Material progress ring.
+    // p3 gaps: selectable text in the code block (shared with the code dialog).
     '/src/components/overlays/code_block.dart',
-    '/src/components/feedback/progress_ring.dart',
     // 2B: the only fields file that wraps Material widgets.
     '/src/components/fields/date_time_field.dart',
   ];
