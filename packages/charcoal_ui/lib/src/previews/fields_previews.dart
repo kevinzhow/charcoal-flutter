@@ -1,50 +1,13 @@
-import 'package:flutter/widget_previews.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../next.dart';
+import 'next_preview_support.dart';
 
 // Previews for the Material-based fields and text family (batch 2B). They run in the new
 // CharcoalApp in both brightnesses; the legacy previews next to this file stay until the legacy
 // components are removed.
 
-Widget _wrap(Widget child) => CharcoalApp(
-  title: 'Charcoal fields preview',
-  home: Builder(
-    builder: (context) => ColoredBox(
-      color: CharcoalTheme.of(context).colors.background,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(CharcoalTheme.of(context).space.xl),
-        child: child,
-      ),
-    ),
-  ),
-);
-
-/// Publishes a preview in both brightnesses inside the new [CharcoalApp].
-final class CharcoalFieldsPreview extends MultiPreview {
-  /// A preview called [name] of [size].
-  const CharcoalFieldsPreview({required this.name, required this.size});
-
-  /// Display name.
-  final String name;
-
-  /// Logical size.
-  final Size size;
-
-  @override
-  List<Preview> get previews => <Preview>[
-    for (final brightness in Brightness.values)
-      Preview(
-        name: '$name — ${brightness == Brightness.light ? 'Light' : 'Dark'}',
-        group: 'Charcoal UI · Fields (Material)',
-        size: size,
-        brightness: brightness,
-        wrapper: _wrap,
-      ),
-  ];
-}
-
-@CharcoalFieldsPreview(name: 'Field label · Metadata', size: Size(420, 180))
+@CharcoalNextComponentPreview(name: 'Field label · Metadata', size: Size(420, 180))
 Widget charcoalNextFieldLabelPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -59,7 +22,7 @@ Widget charcoalNextFieldLabelPreview() => const Column(
   ],
 );
 
-@CharcoalFieldsPreview(name: 'Text fields', size: Size(420, 460))
+@CharcoalNextComponentPreview(name: 'Text fields', size: Size(420, 460))
 Widget charcoalNextTextFieldPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -85,7 +48,7 @@ Widget charcoalNextTextFieldPreview() => const Column(
   ],
 );
 
-@CharcoalFieldsPreview(name: 'Hint text · Advisory action', size: Size(420, 240))
+@CharcoalNextComponentPreview(name: 'Hint text · Advisory action', size: Size(420, 240))
 Widget charcoalNextHintTextPreview() => const CharcoalHintText(
   action: Text('Review'),
   maxWidth: double.infinity,
@@ -93,7 +56,7 @@ Widget charcoalNextHintTextPreview() => const CharcoalHintText(
   child: Text('Changes are saved automatically.'),
 );
 
-@CharcoalFieldsPreview(name: 'Form section', size: Size(420, 560))
+@CharcoalNextComponentPreview(name: 'Form section', size: Size(420, 560))
 Widget charcoalNextFormGuidancePreview() => const CharcoalFormSection(
   caption: 'Credentials are stored encrypted',
   title: 'Signing key',
@@ -109,7 +72,7 @@ Widget charcoalNextFormGuidancePreview() => const CharcoalFormSection(
   ],
 );
 
-@CharcoalFieldsPreview(name: 'Typography · Roles', size: Size(420, 520))
+@CharcoalNextComponentPreview(name: 'Typography · Roles', size: Size(420, 520))
 Widget charcoalNextTypographyPreview() => const Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisSize: MainAxisSize.min,

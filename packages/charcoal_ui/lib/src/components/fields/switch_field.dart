@@ -1,14 +1,12 @@
 import 'package:charcoal_theme/charcoal_theme.dart';
-import 'package:flutter/material.dart' show MaterialType, Material, Switch;
 import 'package:flutter/widgets.dart';
 
-import '../../foundation/charcoal_clickable.dart';
+import '../selection/switch.dart';
 
-/// A labelled switch row with an optional hint line.
+/// A labelled switch with an optional hint line.
 ///
-/// The whole row is the control: tapping the label toggles, and the semantics node is a single
-/// toggle. The switch itself is painted by the theme's switch style and is decorative inside the
-/// row, so label and switch never disagree about the state.
+/// The label and the switch are one control ([CharcoalSwitch]), so tapping the label toggles and
+/// the semantics expose a single toggle; the hint sits muted underneath.
 class CharcoalSwitchField extends StatelessWidget {
   /// A switch field showing [label] and [value].
   const CharcoalSwitchField({
@@ -34,43 +32,15 @@ class CharcoalSwitchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final enabled = onChanged != null;
-    final row = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Flexible(
-          child: Text(
-            label,
-            style: theme.style(
-              CharcoalTextRole.body,
-              color: enabled ? theme.colors.text : theme.colors.textDisabled,
-            ),
-          ),
-        ),
-        SizedBox(width: theme.space.md),
-        // Decorative: the clickable above owns pointer, focus and semantics.
-        ExcludeSemantics(
-          child: ExcludeFocus(
-            child: IgnorePointer(
-              child: Material(
-                type: MaterialType.transparency,
-                child: Switch(value: value, onChanged: enabled ? (_) {} : null),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        CharcoalClickable(
-          onPressed: enabled ? () => onChanged!(!value) : null,
-          semanticButton: false,
+        CharcoalSwitch(
+          label: Text(label),
           semanticLabel: label,
-          toggled: value,
-          builder: (context, states) => row,
+          value: value,
+          onChanged: onChanged,
         ),
         if (hint != null) ...<Widget>[
           SizedBox(height: theme.space.xs),

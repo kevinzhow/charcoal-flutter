@@ -21,8 +21,7 @@ void main() {
     '/lib/testing.dart',
     // 2A: a themed Material Slider.
     '/src/components/selection/slider.dart',
-    // 2B: the only fields files that wrap Material widgets.
-    '/src/components/fields/switch_field.dart',
+    // 2B: the only fields file that wraps Material widgets.
     '/src/components/fields/date_time_field.dart',
   ];
 

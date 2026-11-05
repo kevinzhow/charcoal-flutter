@@ -1,25 +1,15 @@
-import 'package:charcoal_ui/charcoal_ui.dart' as legacy show CharcoalTheme;
 import 'package:charcoal_ui/next.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'
-    show DefaultMaterialLocalizations, Material, MaterialType, Theme;
+    show DefaultMaterialLocalizations, Material, MaterialType;
 import 'package:flutter/widgets.dart';
 
-const _showcaseWebFontFamily = 'Noto Sans';
+import 'actions_next_host.dart';
 
-/// The pack the island installs for [brightness], with the self-hosted Web font on Web.
-CharcoalThemePack showcaseNextPack(Brightness brightness, {bool isWeb = kIsWeb}) {
-  final base = brightness == Brightness.dark ? charcoalDarkPack : charcoalLightPack;
-  if (!isWeb) return base;
-  return base.copyWith(typography: base.typography.copyWith(sansFamily: _showcaseWebFontFamily));
-}
+// TODO(P2 end): delete with ActionsNextHost when the showcase shell switches to next.dart.
 
-// TODO(P2 end): the showcase shell still runs on the legacy CharcoalApp, so pages that show
-// next.dart components mount them in this island: a Material theme built from the pack that
-// matches the shell's brightness, a transparent Material, and the pack's text defaults. Delete it
-// when the shell switches to next.dart's CharcoalApp.
-
-/// Mounts [child] with the Material-based Charcoal theme inside the legacy showcase shell.
+/// [ActionsNextHost] plus what fields need on top of the theme: a transparent `Material` (the
+/// themed `Switch`), Material localizations (the date and time pickers) and the pack's text
+/// defaults.
 class NextThemeIsland extends StatelessWidget {
   /// Wraps [child] in the island.
   const NextThemeIsland({required this.child, super.key});
@@ -28,19 +18,14 @@ class NextThemeIsland extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    final brightness = legacy.CharcoalTheme.of(context).brightness;
-    final data = buildCharcoalThemeData(showcaseNextPack(brightness));
-    return Localizations.override(
+  Widget build(BuildContext context) => ActionsNextHost(
+    child: Localizations.override(
       context: context,
       delegates: const <LocalizationsDelegate<dynamic>>[DefaultMaterialLocalizations.delegate],
-      child: Theme(
-        data: data,
-        child: Material(
-          type: MaterialType.transparency,
-          child: CharcoalTextDefaults(child: child),
-        ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: CharcoalTextDefaults(child: child),
       ),
-    );
-  }
+    ),
+  );
 }

@@ -9,26 +9,15 @@ library;
 
 export 'package:charcoal_theme/charcoal_theme.dart';
 
+// Families: actions and selection (2A), fields and text (2B), foundation, app.
 export 'src/app/charcoal_app.dart';
 export 'src/app/charcoal_page_route.dart';
 export 'src/app/charcoal_scaffold.dart';
 export 'src/app/charcoal_text_defaults.dart';
-// actions and selection
 export 'src/components/actions/button.dart';
 export 'src/components/actions/icon_button.dart';
 export 'src/components/actions/link_button.dart';
 export 'src/components/actions/switching_button.dart';
-export 'src/components/selection/checkbox.dart';
-export 'src/components/selection/multi_select.dart';
-export 'src/components/selection/radio.dart';
-export 'src/components/selection/segmented_control.dart';
-export 'src/components/selection/selection_box.dart';
-export 'src/components/selection/slider.dart';
-export 'src/components/selection/switch.dart';
-export 'src/components/status/chip.dart';
-export 'src/components/status/status_dot.dart';
-export 'src/components/status/tag_item.dart';
-// fields and text
 export 'src/components/fields/date_time_field.dart';
 export 'src/components/fields/dropdown.dart';
 export 'src/components/fields/field_label.dart';
@@ -40,6 +29,16 @@ export 'src/components/fields/search_field.dart';
 export 'src/components/fields/switch_field.dart';
 export 'src/components/fields/text_area.dart';
 export 'src/components/fields/text_field.dart';
+export 'src/components/selection/checkbox.dart';
+export 'src/components/selection/multi_select.dart';
+export 'src/components/selection/radio.dart';
+export 'src/components/selection/segmented_control.dart';
+export 'src/components/selection/selection_box.dart';
+export 'src/components/selection/slider.dart';
+export 'src/components/selection/switch.dart';
+export 'src/components/status/chip.dart';
+export 'src/components/status/status_dot.dart';
+export 'src/components/status/tag_item.dart';
 export 'src/components/text/charcoal_text.dart';
 export 'src/components/text/selection_toolbar.dart';
 export 'src/components/text/text_editing.dart';

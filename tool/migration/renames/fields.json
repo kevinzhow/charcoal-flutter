@@ -56,6 +56,6 @@
     "CharcoalFieldRing is no longer given a fixed duration and width; CharcoalFieldRingPainter has no opacity (the ring fades through an Opacity layer).",
     "CharcoalSelectionToolbar replaces the private toolbar of the context menu and no longer depends on CharcoalButton.",
     "KeyFileField is not in the library: file_picker stays in the application; CharcoalFormField supplies label, required marker, assistive text and the action slot.",
-    "CharcoalSwitchField paints Material's Switch through the theme until CharcoalSwitch (2A) is merged; the row is the single semantics toggle."
+    "CharcoalSwitchField is a CharcoalSwitch (2A) with its label plus a hint line."
   ]
 }
