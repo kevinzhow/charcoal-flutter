@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 
 import 'dart_source.dart';
 import 'dart_token_generator.dart';
+import 'pack_generator.dart';
 import 'token_diff.dart';
 import 'token_model.dart';
 
@@ -80,6 +81,10 @@ final class TokenPipeline {
           },
         },
       };
+      final packEntry = await _packManifestEntry();
+      if (packEntry != null) {
+        manifest['pack'] = packEntry;
+      }
       await _manifestFile.writeAsString(_prettyJson(manifest));
       stdout.writeln('Synced Charcoal V2 tokens from $repository@$commit.');
     } finally {
@@ -91,7 +96,8 @@ final class TokenPipeline {
   Future<TokenDiff> generate({Map<String, Object>? previousSnapshot}) async {
     final before = previousSnapshot ?? await _readSnapshotIfPresent();
     final bundle = await loadBundle();
-    final artifacts = await _renderArtifacts(bundle);
+    final packGenerator = await _packGenerator(bundle);
+    final artifacts = await _renderArtifacts(bundle, packGenerator);
     for (final artifact in artifacts) {
       final file = File('${root.path}/${artifact.relativePath}');
       await file.parent.create(recursive: true);
@@ -106,11 +112,16 @@ final class TokenPipeline {
 
     final snapshot = bundle.snapshot();
     await _snapshotFile.writeAsString(_prettyJson(snapshot));
-    final diff = TokenDiff.between(before, snapshot);
+    await _writePackManifestEntry();
+    final diff = TokenDiff.between(
+      before,
+      snapshot,
+      packReferences: packGenerator.references,
+    );
     final commit = await _manifestCommit();
     await _diffFile.writeAsString(diff.renderMarkdown(upstreamCommit: commit));
     stdout
-      ..writeln('Generated ${artifacts.length} Dart token artifacts.')
+      ..writeln('Generated ${artifacts.length} Dart artifacts (tokens and theme pack).')
       ..writeln(
         'Token diff: +${diff.added.length} -${diff.removed.length} '
         '~${diff.changed.length}.',
@@ -123,7 +134,12 @@ final class TokenPipeline {
     problems.addAll(await _checkManifestHashes());
 
     final bundle = await loadBundle();
-    final artifacts = await _renderArtifacts(bundle);
+    final List<GeneratedArtifact> artifacts;
+    try {
+      artifacts = await _renderArtifacts(bundle, await _packGenerator(bundle));
+    } on TokenGenerationException catch (error) {
+      return <String>[...problems, error.message];
+    }
     final temporary = await Directory.systemTemp.createTemp('charcoal_flutter_check_');
     try {
       final temporaryDartFiles = <String>[];
@@ -160,7 +176,13 @@ final class TokenPipeline {
 
   Future<TokenDiff> diff() async {
     final bundle = await loadBundle();
-    return TokenDiff.between(await _readSnapshotIfPresent(), bundle.snapshot());
+    final packGenerator = await _packGenerator(bundle);
+    packGenerator.render();
+    return TokenDiff.between(
+      await _readSnapshotIfPresent(),
+      bundle.snapshot(),
+      packReferences: packGenerator.references,
+    );
   }
 
   Future<TokenBundle> loadBundle() async {
@@ -179,8 +201,49 @@ final class TokenPipeline {
     );
   }
 
-  Future<List<GeneratedArtifact>> _renderArtifacts(TokenBundle bundle) async =>
-      DartTokenGenerator(bundle: bundle).render();
+  File get _packFile => File('${root.path}/$packSourcePath');
+
+  Future<PackGenerator> _packGenerator(TokenBundle bundle) async {
+    if (!await _packFile.exists()) {
+      throw const TokenGenerationException('Missing $packSourcePath.');
+    }
+    return PackGenerator(
+      bundle: bundle,
+      packJson: await _packFile.readAsString(),
+      contract: PackContract.load(root),
+    );
+  }
+
+  Future<List<GeneratedArtifact>> _renderArtifacts(
+    TokenBundle bundle,
+    PackGenerator packGenerator,
+  ) async => <GeneratedArtifact>[
+    ...DartTokenGenerator(bundle: bundle).render(),
+    packGenerator.render(),
+  ];
+
+  Future<Map<String, Object>?> _packManifestEntry() async {
+    if (!await _packFile.exists()) {
+      return null;
+    }
+    return <String, Object>{
+      'path': packSourcePath,
+      'sha256': sha256.convert(await _packFile.readAsBytes()).toString(),
+    };
+  }
+
+  Future<void> _writePackManifestEntry() async {
+    final entry = await _packManifestEntry();
+    if (entry == null || !await _manifestFile.exists()) {
+      return;
+    }
+    final decoded = jsonDecode(await _manifestFile.readAsString());
+    if (decoded is! Map<String, dynamic>) {
+      return;
+    }
+    decoded['pack'] = entry;
+    await _manifestFile.writeAsString(_prettyJson(decoded.cast<String, Object>()));
+  }
 
   Future<List<String>> _checkManifestHashes() async {
     if (!await _manifestFile.exists()) {
@@ -200,6 +263,14 @@ final class TokenPipeline {
     }
 
     final problems = <String>[];
+    final pack = decoded['pack'];
+    if (pack is! Map<String, dynamic> || pack['sha256'] is! String) {
+      problems.add('tokens/manifest.json has no SHA-256 for $packSourcePath.');
+    } else if (!await _packFile.exists()) {
+      problems.add('Missing $packSourcePath.');
+    } else if (pack['sha256'] != sha256.convert(await _packFile.readAsBytes()).toString()) {
+      problems.add('$packSourcePath does not match its manifest SHA-256.');
+    }
     for (final fileName in _sourceFiles.keys) {
       final metadata = files[fileName];
       if (metadata is! Map<String, dynamic> || metadata['sha256'] is! String) {

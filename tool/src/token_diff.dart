@@ -11,12 +11,18 @@ final class TokenChange {
 }
 
 final class TokenDiff {
-  const TokenDiff({required this.added, required this.removed, required this.changed});
+  const TokenDiff({
+    required this.added,
+    required this.removed,
+    required this.changed,
+    this.affectedPackNames = const <String, List<String>>{},
+  });
 
   factory TokenDiff.between(
     Map<String, Object>? beforeSnapshot,
-    Map<String, Object> afterSnapshot,
-  ) {
+    Map<String, Object> afterSnapshot, {
+    Map<String, Set<String>> packReferences = const <String, Set<String>>{},
+  }) {
     final before = _flattenSnapshot(beforeSnapshot);
     final after = _flattenSnapshot(afterSnapshot);
     final beforeKeys = before.keys.toSet();
@@ -26,7 +32,20 @@ final class TokenDiff {
     final removedKeys = beforeKeys.difference(afterKeys).toList()..sort();
     final sharedKeys = beforeKeys.intersection(afterKeys).toList()..sort();
 
+    // Tokens are `light.<category>.<key>`; pack mappings are `<category>.<key>`.
+    String bare(String path) => path.substring(path.indexOf('.') + 1);
+    final affected = <String, Set<String>>{};
+    for (final key in <String>[...removedKeys, ...changedKeys(before, after, sharedKeys)]) {
+      final names = packReferences[bare(key)];
+      if (names != null) {
+        affected.putIfAbsent(bare(key), () => <String>{}).addAll(names);
+      }
+    }
+
     return TokenDiff(
+      affectedPackNames: <String, List<String>>{
+        for (final entry in affected.entries) entry.key: (entry.value.toList()..sort()),
+      },
       added: <TokenChange>[
         for (final key in addedKeys) TokenChange(path: key, after: after[key]),
       ],
@@ -44,6 +63,9 @@ final class TokenDiff {
   final List<TokenChange> added;
   final List<TokenChange> removed;
   final List<TokenChange> changed;
+
+  /// Token path (without mode) to the pack names that read it, for removed or changed tokens.
+  final Map<String, List<String>> affectedPackNames;
 
   bool get isEmpty => added.isEmpty && removed.isEmpty && changed.isEmpty;
 
@@ -78,9 +100,31 @@ final class TokenDiff {
       changed,
       (change) => '`${change.path}`: `${change.before}` → `${change.after}`',
     );
+    if (affectedPackNames.isNotEmpty) {
+      output
+        ..writeln()
+        ..writeln('## Pack roles affected')
+        ..writeln();
+      final tokens = affectedPackNames.keys.toList()..sort();
+      for (final token in tokens.take(200)) {
+        output.writeln('- `$token`: ${affectedPackNames[token]!.map((n) => '`$n`').join(', ')}');
+      }
+      if (tokens.length > 200) {
+        output.writeln('- …and ${tokens.length - 200} more.');
+      }
+    }
     return output.toString();
   }
 }
+
+List<String> changedKeys(
+  Map<String, Object> before,
+  Map<String, Object> after,
+  List<String> shared,
+) => <String>[
+  for (final key in shared)
+    if (before[key] != after[key]) key,
+];
 
 Map<String, Object> decodeSnapshot(String source) {
   final decoded = jsonDecode(source);

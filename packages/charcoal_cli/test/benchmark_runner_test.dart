@@ -14,7 +14,12 @@ void main() {
   setUp(() {
     temporary = Directory.systemTemp.createTempSync('charcoal_runner_test_');
     sourceWorkspace = Directory(p.join(temporary.path, 'source'))..createSync();
-    for (final packageName in <String>['charcoal_icons', 'charcoal_tokens', 'charcoal_ui']) {
+    for (final packageName in <String>[
+      'charcoal_icons',
+      'charcoal_theme',
+      'charcoal_tokens',
+      'charcoal_ui',
+    ]) {
       final package = Directory(p.join(sourceWorkspace.path, 'packages', packageName))
         ..createSync(
           recursive: true,

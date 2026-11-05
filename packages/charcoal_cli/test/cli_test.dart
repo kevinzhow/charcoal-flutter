@@ -60,7 +60,7 @@ void main() {
       expect(results, isNotEmpty);
       expect(results.every((token) => token['tier'] == 'semantic'), isTrue);
       expect(results.every((token) => token['kind'] == 'dimension'), isTrue);
-      expect(results.first['dartAccessor'], startsWith('theme.dimensions.'));
+      expect(results.first['dartAccessor'], startsWith('CharcoalTheme.of(context).'));
     });
 
     test('primitive token search requires explicit tier selection', () async {
@@ -255,6 +255,14 @@ environment:
       expect(RegExp(r'charcoal-agent:start').allMatches(first), hasLength(1));
       expect(first, contains('Keep controlled selection atomic'));
       expect(first, contains('first post-activation frame'));
+      // The block describes the Material-based architecture and the consumer rules.
+      expect(first, contains('owns all styling'));
+      expect(first, contains('Composition versus styling'));
+      for (final rule in <String>['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9']) {
+        expect(first, contains('- $rule '), reason: rule);
+      }
+      expect(first, isNot(contains('independent Widgets-layer')));
+      expect(first, isNot(contains('Do not substitute Material')));
 
       final secondOutput = StringBuffer();
       expect(

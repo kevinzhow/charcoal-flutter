@@ -1,0 +1,16 @@
+final a = Color(0xFF112233); // expect: L1
+final b = Colors.red; // expect: L1
+final c = const EdgeInsets.all(12); // expect: L3
+final d = BorderRadius.circular(8); // expect: L3
+final e = SizedBox(width: 24); // expect: L3
+final f = TextStyle(fontSize: 14); // expect: L2
+final g = Duration(milliseconds: 120); // expect: L4
+const double h = 960; // expect: L3
+final i = Theme.of(context); // expect: L5
+final j = ColorScheme.light(); // expect: L5
+final k = Theme.of(context).textTheme; // expect: L5
+import 'package:flutter/cupertino.dart'; // expect: L6
+final l = size.width / 20; // expect: L7
+final m = x * 0.35; // expect: L7
+final n = c.withValues(alpha: 0.5); // expect: L1,L3
+final o = Color(0xFF000000); // theme-guard: allow  expect: L1

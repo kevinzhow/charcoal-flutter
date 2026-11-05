@@ -19,19 +19,19 @@ final class _AgentActionControlsExampleState
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Item actions', style: theme.textStyles.headingS),
-        SizedBox(height: space.component20),
-        Text(_status, style: theme.textStyles.captionMedium),
-        SizedBox(height: space.layout40),
+        Text('Item actions', style: theme.style(CharcoalTextRole.headingS)),
+        SizedBox(height: space.sm),
+        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),
+        SizedBox(height: space.xl),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: space.component30,
-          runSpacing: space.component30,
+          spacing: space.lg,
+          runSpacing: space.lg,
           children: <Widget>[
             CharcoalIconButton(
               icon: const CharcoalIcon(CharcoalIcons.bookmark),
@@ -56,7 +56,7 @@ final class _AgentActionControlsExampleState
             ),
           ],
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         Align(
           alignment: AlignmentDirectional.centerStart,
           child: CharcoalLinkButton(

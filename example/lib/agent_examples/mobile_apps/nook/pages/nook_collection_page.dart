@@ -22,7 +22,7 @@ final class NookCollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final savedOnly = destination == NookDestination.saved;
     final products = savedOnly
         ? viewModel.savedProducts
@@ -62,7 +62,7 @@ final class NookCollectionPage extends StatelessWidget {
             title: heading.$2,
             description: heading.$3,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           if (!savedOnly) ...<Widget>[
             CharcoalTextField(
               key: const ValueKey<String>('agent-commerce-search'),
@@ -74,7 +74,7 @@ final class NookCollectionPage extends StatelessWidget {
               showLabel: destination == NookDestination.search,
             ),
             if (destination == NookDestination.shop) ...<Widget>[
-              SizedBox(height: space.component25),
+              SizedBox(height: space.md),
               CharcoalSegmentedControl<NookCategory>(
                 key: const ValueKey<String>('agent-commerce-category'),
                 fullWidth: true,
@@ -97,9 +97,9 @@ final class NookCollectionPage extends StatelessWidget {
                 value: viewModel.category,
               ),
             ],
-            SizedBox(height: space.component30),
+            SizedBox(height: space.lg),
           ] else
-            SizedBox(height: space.component30),
+            SizedBox(height: space.lg),
           AgentDemoSectionHeading(
             title: savedOnly
                 ? '${products.length} saved ${products.length == 1 ? 'piece' : 'pieces'}'
@@ -107,7 +107,7 @@ final class NookCollectionPage extends StatelessWidget {
                 ? '${products.length} results for “${viewModel.query.trim()}”'
                 : _categoryTitle(viewModel.category, destination),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           if (products.isEmpty)
             AgentDemoEmptyState(
               actionLabel: savedOnly ? 'Browse products' : 'Clear search',
@@ -151,14 +151,14 @@ final class _NookProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gap = CharcoalTheme.of(context).dimensions.space.component20;
+    final gap = CharcoalTheme.of(context).space.sm;
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = constraints.maxWidth >= 520 ? 3 : 2;
         final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
         return Wrap(
           spacing: gap,
-          runSpacing: CharcoalTheme.of(context).dimensions.space.component30,
+          runSpacing: CharcoalTheme.of(context).space.lg,
           children: <Widget>[
             for (final product in products)
               SizedBox(

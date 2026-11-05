@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/overlay_app.dart';
 
 void main() {
   testWidgets('navigation buttons advance a medium carousel', (tester) async {
@@ -267,7 +267,7 @@ void main() {
   });
 
   testWidgets('uses token-driven indicator colors and root semantics', (tester) async {
-    final theme = CharcoalThemeData.dark();
+    final theme = CharcoalTheme(charcoalDarkPack);
     await tester.pumpWidget(
       charcoalTestApp(
         const SizedBox(
@@ -282,7 +282,7 @@ void main() {
             ],
           ),
         ),
-        theme: theme,
+        pack: charcoalDarkPack,
       ),
     );
 
@@ -293,6 +293,6 @@ void main() {
       matching: find.byType(AnimatedContainer),
     );
     final first = tester.widget<AnimatedContainer>(indicators.first);
-    expect((first.decoration! as BoxDecoration).color, theme.colors.textDefault);
+    expect((first.decoration! as BoxDecoration).color, theme.colors.text);
   });
 }

@@ -104,8 +104,8 @@ final class _DaylightDemoState extends State<DaylightDemo> {
     return AgentDemoAppShell<DaylightDestination>(
       appKey: 'habits',
       appLabel: 'Daylight wellness app demo',
-      brandColor: theme.colors.containerDiscoveryDefault,
-      brandForeground: theme.colors.textOnDiscoveryDefault,
+      brandColor: theme.colors.negative,
+      brandForeground: theme.colors.textOnNegative,
       brandMark: 'D',
       tabItems: const <CharcoalTabItem<DaylightDestination>>[
         CharcoalTabItem<DaylightDestination>(

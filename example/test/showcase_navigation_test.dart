@@ -1,12 +1,84 @@
 import 'dart:ui' as ui;
 
 import 'package:charcoal_ui/charcoal_ui.dart';
-import 'package:charcoal_ui_showcase/main.dart';
+import 'package:charcoal_ui_showcase/showcase/app.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:charcoal_ui_showcase/showcase/registry.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// Page title -> a heading rendered by that page. Every registered page except
+/// the overview must appear here (checked below), so new pages get a heading
+/// assertion when they are added.
+const _destinationHeadings = <String, String>{
+  'Agent Ready apps': 'Agent Ready app examples',
+  'Colors': 'Color catalog',
+  'Typography': 'Typography catalog',
+  'Dimensions': 'Dimension catalog',
+  'Roles': 'Theme roles',
+  'Supporting': 'Supporting components',
+  'Icons': 'Icon catalog',
+  'Buttons': 'Content slots',
+  'Selection': 'Selection controls',
+  'Tags': 'Tags and status',
+  'Fields': 'Fields and menus',
+  'Navigation': 'Navigation and paging',
+  'Layout': 'Lists and cards',
+  'Admin': 'Admin console pieces',
+  'Page frame': 'Page frame and tones',
+  'Content': 'Content presentation',
+  'Feedback': 'Feedback and overlays',
+  'Token pipeline': 'From source to Flutter',
+};
+
 void main() {
+  test('every registered page has a heading assertion and a unique route', () {
+    final titles = showcasePages
+        .where((page) => page.id != showcaseHomeId)
+        .map((page) => page.title);
+    expect(titles.toSet(), _destinationHeadings.keys.toSet());
+    expect(
+      showcasePages.map((page) => page.id).toSet(),
+      hasLength(showcasePages.length),
+    );
+    expect(showcasePages.first.id, showcaseHomeId);
+    for (final page in showcasePages) {
+      expect(page.id, matches(RegExp(r'^[a-z0-9]+(-[a-z0-9]+)*$')));
+    }
+  });
+
+  testWidgets('hash routes open the named page and unknown ones the overview', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1180, 820));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    addTearDown(tester.platformDispatcher.clearDefaultRouteNameTestValue);
+
+    tester.platformDispatcher.defaultRouteNameTestValue = '/colors';
+    await tester.pumpWidget(const CharcoalShowcaseApp());
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Color catalog'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('page-colors')), findsOneWidget);
+
+    // A later platform route (browser back/forward) switches the page.
+    await tester.binding.handlePushRoute('/typography');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Typography catalog'), findsOneWidget);
+    expect(find.text('Color catalog'), findsNothing);
+  });
+
+  testWidgets('an unknown route falls back to the overview', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1180, 820));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    addTearDown(tester.platformDispatcher.clearDefaultRouteNameTestValue);
+
+    tester.platformDispatcher.defaultRouteNameTestValue = '/no-such-page';
+    await tester.pumpWidget(const CharcoalShowcaseApp());
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('Source-backed components'), findsOneWidget);
+  });
+
   testWidgets('mobile shell exposes touch navigation and preserves its page', (
     tester,
   ) async {
@@ -139,20 +211,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(const CharcoalShowcaseApp());
-    const destinations = <String, String>{
-      'Agent Ready apps': 'Agent Ready app examples',
-      'Colors': 'Color catalog',
-      'Typography': 'Typography catalog',
-      'Dimensions': 'Dimension catalog',
-      'Icons': 'Icon catalog',
-      'Buttons': 'Content slots',
-      'Selection': 'Selection controls',
-      'Fields': 'Fields and menus',
-      'Navigation': 'Navigation and paging',
-      'Content': 'Content presentation',
-      'Feedback': 'Feedback and overlays',
-      'Token pipeline': 'From source to Flutter',
-    };
+    const destinations = _destinationHeadings;
 
     for (final destination in destinations.entries) {
       await tester.tap(
@@ -200,20 +259,7 @@ void main() {
       'Native',
     );
 
-    const destinations = <String, String>{
-      'Agent Ready apps': 'Agent Ready app examples',
-      'Colors': 'Color catalog',
-      'Typography': 'Typography catalog',
-      'Dimensions': 'Dimension catalog',
-      'Icons': 'Icon catalog',
-      'Buttons': 'Content slots',
-      'Selection': 'Selection controls',
-      'Fields': 'Fields and menus',
-      'Navigation': 'Navigation and paging',
-      'Content': 'Content presentation',
-      'Feedback': 'Feedback and overlays',
-      'Token pipeline': 'From source to Flutter',
-    };
+    const destinations = _destinationHeadings;
 
     for (final destination in destinations.entries) {
       final navigationItem = find.byKey(
@@ -242,7 +288,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       final typographyScroll = find.byKey(
-        const ValueKey<String>('page-scroll-Typography'),
+        const ValueKey<String>('page-scroll-typography'),
       );
       await tester.drag(typographyScroll, const Offset(0, -560));
       await tester.pump();
@@ -262,17 +308,17 @@ void main() {
             'the outgoing page must not jump to its top before transitioning',
       );
       expect(
-        find.byKey(const ValueKey<String>('page-Typography')),
+        find.byKey(const ValueKey<String>('page-typography')),
         findsOneWidget,
       );
       expect(
-        find.byKey(const ValueKey<String>('page-Buttons')),
+        find.byKey(const ValueKey<String>('page-buttons')),
         findsOneWidget,
       );
 
       await tester.pump(const Duration(milliseconds: 250));
       expect(
-        find.byKey(const ValueKey<String>('page-Typography')),
+        find.byKey(const ValueKey<String>('page-typography')),
         findsNothing,
       );
 
@@ -300,7 +346,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
 
       expect(tester.takeException(), isNull);
-      expect(find.byKey(const ValueKey<String>('page-Colors')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('page-colors')), findsOneWidget);
     },
   );
 
@@ -322,10 +368,10 @@ void main() {
     final dividerColor = tester.widget<ColoredBox>(
       find.descendant(of: divider, matching: find.byType(ColoredBox)),
     );
-    final theme = CharcoalThemeData.light();
+    final theme = CharcoalTheme(charcoalLightPack);
 
     expect(tester.getSize(divider).width, 1);
-    expect(dividerColor.color, theme.colors.borderSecondary);
+    expect(dividerColor.color, theme.colors.borderSubtle);
 
     final feedback = find.byKey(const ValueKey<String>('nav-Feedback'));
     await tester.ensureVisible(feedback);
@@ -360,7 +406,7 @@ void main() {
     }
 
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.byKey(const ValueKey<String>('page-Overview')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('page-overview')), findsNothing);
   });
 }
 

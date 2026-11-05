@@ -53,7 +53,7 @@ final class AgentExampleTileGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gap = CharcoalTheme.of(context).dimensions.space.component30;
+    final gap = CharcoalTheme.of(context).space.lg;
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = constraints.maxWidth >= 960
@@ -90,7 +90,7 @@ final class AgentMobileAppTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return CharcoalClickable(
       key: ValueKey<String>('agent-app-tile-${app.keyName}'),
       onPressed: onPressed,
@@ -101,23 +101,19 @@ final class AgentMobileAppTile extends StatelessWidget {
             states.contains(WidgetState.focused) ||
             states.contains(WidgetState.pressed);
         return AnimatedContainer(
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            CharcoalMotion.fast,
-          ),
+          duration: CharcoalTheme.of(context)
+              .duration(context, CharcoalTheme.of(context).motion.fast),
           decoration: BoxDecoration(
             border: Border.all(
-              color: active
-                  ? theme.colors.borderDefault
-                  : theme.colors.borderSecondary,
+              color: active ? theme.colors.border : theme.colors.borderSubtle,
             ),
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+            borderRadius: BorderRadius.circular(theme.radius.lg),
             color: states.contains(WidgetState.pressed)
-                ? theme.colors.containerSecondaryDefaultA
-                : theme.colors.backgroundDefault,
+                ? theme.colors.fillSecondary
+                : theme.colors.background,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+            borderRadius: BorderRadius.circular(theme.radius.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -138,11 +134,11 @@ final class AgentMobileAppTile extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: theme.dimensions.borderWidth.m,
-                  child: ColoredBox(color: theme.colors.borderSecondary),
+                  height: theme.borders.hairline,
+                  child: ColoredBox(color: theme.colors.borderSubtle),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(space.component30),
+                  padding: EdgeInsets.all(space.lg),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -158,49 +154,53 @@ final class AgentMobileAppTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: space.component20),
+                          SizedBox(width: space.sm),
                           Text(
                             app.catalogIndex,
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textTertiaryDefault,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(
+                                  color: theme.colors.textTertiary,
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
                         ],
                       ),
-                      SizedBox(height: space.component20),
+                      SizedBox(height: space.sm),
                       Text(
                         '${app.title} · ${app.type}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionMediumBold.copyWith(
-                          color: theme.colors.textDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.captionMediumBold)
+                            .copyWith(color: theme.colors.text),
                       ),
-                      SizedBox(height: space.component10),
+                      SizedBox(height: space.xs),
                       Text(
                         app.description,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textSecondary),
                       ),
-                      SizedBox(height: space.component25),
+                      SizedBox(height: space.md),
                       Row(
                         children: <Widget>[
                           Expanded(
                             child: Text(
                               'Open simulation',
-                              style: theme.textStyles.captionSmall.copyWith(
-                                color: theme.colors.textInfoDefault,
-                                fontWeight: FontWeight.w700,
-                              ),
+                              style: theme
+                                  .style(CharcoalTextRole.caption)
+                                  .copyWith(
+                                    color: theme.colors.textInfo,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                           ),
                           CharcoalIcon(
                             CharcoalIcons.chevronRight,
-                            color: theme.colors.iconDefault,
+                            color: theme.colors.icon,
                             size: 16,
                           ),
                         ],
@@ -227,7 +227,7 @@ final class AgentMobileAppSimulator extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
-        final stageInset = theme.dimensions.space.component10;
+        final stageInset = theme.space.xs;
         final width = (constraints.maxWidth - stageInset * 2)
             .clamp(0, 390)
             .toDouble();
@@ -235,7 +235,7 @@ final class AgentMobileAppSimulator extends StatelessWidget {
           child: DecoratedBox(
             key: ValueKey<String>('agent-app-simulator-stage-${app.keyName}'),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+              borderRadius: BorderRadius.circular(theme.radius.lg),
               color: theme.colors.backgroundTertiary,
             ),
             child: Padding(
@@ -244,18 +244,14 @@ final class AgentMobileAppSimulator extends StatelessWidget {
                 key: ValueKey<String>('agent-app-simulator-${app.keyName}'),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: theme.colors.borderDefault,
-                    width: theme.dimensions.borderWidth.m,
+                    color: theme.colors.border,
+                    width: theme.borders.hairline,
                   ),
-                  borderRadius: BorderRadius.circular(
-                    theme.dimensions.radius.m,
-                  ),
-                  color: theme.colors.backgroundDefault,
+                  borderRadius: BorderRadius.circular(theme.radius.md),
+                  color: theme.colors.background,
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    theme.dimensions.radius.m,
-                  ),
+                  borderRadius: BorderRadius.circular(theme.radius.md),
                   child: SizedBox(
                     width: width,
                     height: 640,
@@ -286,34 +282,33 @@ final class _AgentReadyBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-        color: theme.colors.containerPrimaryDefault,
+        borderRadius: BorderRadius.circular(theme.radius.pill),
+        color: theme.colors.primary,
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: space.component20,
-          vertical: space.component10,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: space.sm, vertical: space.xs),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CharcoalIcon(
               CharcoalIcons.check,
-              color: theme.colors.iconOnPrimaryDefault,
+              color: theme.colors.iconOnPrimary,
               size: 12,
             ),
-            SizedBox(width: space.component10),
+            SizedBox(width: space.xs),
             Text(
               compact ? 'AGENT READY' : 'MADE WITH AGENT READY',
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textOnPrimaryDefault,
-                fontSize: 9,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(
+                    color: theme.colors.textOnPrimary,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
+                  ),
             ),
           ],
         ),

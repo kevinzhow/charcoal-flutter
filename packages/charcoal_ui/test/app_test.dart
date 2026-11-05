@@ -1,10 +1,10 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('named routes use CharcoalPageRoute and notify observers', (tester) async {
+  testWidgets('named routes get Charcoal transitions and notify observers', (tester) async {
     final observer = _RecordingNavigatorObserver();
 
     await tester.pumpWidget(
@@ -16,9 +16,7 @@ void main() {
             child: const Text('Open details'),
           ),
         ),
-        routes: <String, WidgetBuilder>{
-          '/details': (_) => const Text('Account details'),
-        },
+        routes: <String, WidgetBuilder>{'/details': (_) => const Text('Account details')},
       ),
     );
 
@@ -26,31 +24,31 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Account details'), findsOneWidget);
-    expect(observer.pushed.last, isA<CharcoalPageRoute<void>>());
-    expect(
-      find.ancestor(
-        of: find.byType(WidgetsApp),
-        matching: find.byType(HeroControllerScope),
-      ),
-      findsOneWidget,
-    );
+    expect(observer.pushed.last, isA<PageRoute<void>>());
+    expect(find.byType(HeroControllerScope), findsWidgets);
+    // Every platform's transition is Charcoal's, so routes Material creates behave like
+    // CharcoalPageRoute.
+    final context = tester.element(find.text('Account details'));
+    final transitions = Theme.of(context).pageTransitionsTheme.builders;
+    expect(transitions.keys, containsAll(TargetPlatform.values));
+    expect(transitions.values.every((b) => b is CharcoalPageTransitionsBuilder), isTrue);
   });
 
-  testWidgets('selects light and dark themes from the requested mode', (tester) async {
-    final light = CharcoalThemeData.light();
-    final dark = CharcoalThemeData.dark();
-    late CharcoalThemeData resolvedTheme;
+  testWidgets('selects light and dark packs from the requested mode', (tester) async {
+    final light = charcoalLightPack.copyWith(name: 'custom-light');
+    final dark = charcoalDarkPack.copyWith(name: 'custom-dark');
+    late CharcoalThemePack resolved;
 
     Widget buildApp(Brightness brightness, {CharcoalThemeMode mode = CharcoalThemeMode.system}) =>
         MediaQuery(
           data: MediaQueryData(platformBrightness: brightness),
           child: CharcoalApp(
-            theme: light,
-            darkTheme: dark,
+            lightPack: light,
+            darkPack: dark,
             themeMode: mode,
             home: Builder(
               builder: (context) {
-                resolvedTheme = CharcoalTheme.of(context);
+                resolved = CharcoalTheme.of(context).pack;
                 return const SizedBox.shrink();
               },
             ),
@@ -58,15 +56,36 @@ void main() {
         );
 
     await tester.pumpWidget(buildApp(Brightness.light));
-    expect(resolvedTheme, same(light));
+    expect(resolved, same(light));
 
     await tester.pumpWidget(buildApp(Brightness.dark));
-    expect(resolvedTheme, same(dark));
+    await tester.pumpAndSettle();
+    expect(resolved, same(dark));
 
+    await tester.pumpWidget(buildApp(Brightness.dark, mode: CharcoalThemeMode.light));
+    await tester.pumpAndSettle();
+    expect(resolved, same(light));
+  });
+
+  testWidgets('defaults to the generated Charcoal packs and sets ambient text', (tester) async {
+    late BuildContext inner;
     await tester.pumpWidget(
-      buildApp(Brightness.dark, mode: CharcoalThemeMode.light),
+      MediaQuery(
+        data: const MediaQueryData(platformBrightness: Brightness.light),
+        child: CharcoalApp(
+          home: Builder(
+            builder: (context) {
+              inner = context;
+              return const Text('x');
+            },
+          ),
+        ),
+      ),
     );
-    expect(resolvedTheme, same(light));
+    expect(CharcoalTheme.of(inner).pack, same(charcoalLightPack));
+    final style = DefaultTextStyle.of(inner).style;
+    expect(style.decoration, isNot(TextDecoration.underline));
+    expect(style.fontSize, charcoalLightPack.typography.spec(CharcoalTextRole.bodyLarge).fontSize);
   });
 
   testWidgets('propagates locale delegates and generates a localized title', (tester) async {
@@ -105,19 +124,20 @@ void main() {
   testWidgets('router constructor installs the same app-level infrastructure', (tester) async {
     final delegate = _TestRouterDelegate();
     addTearDown(delegate.dispose);
-    final theme = CharcoalThemeData.light();
+    final pack = charcoalLightPack.copyWith(name: 'router-pack');
     const scrollBehavior = _TestScrollBehavior();
-    CharcoalThemeData? builderTheme;
+    CharcoalThemePack? builderPack;
     ScrollBehavior? builderScrollBehavior;
 
     await tester.pumpWidget(
       CharcoalApp.router(
         routerConfig: RouterConfig<Object>(routerDelegate: delegate),
-        theme: theme,
+        lightPack: pack,
+        themeMode: CharcoalThemeMode.light,
         scrollBehavior: scrollBehavior,
         restorationScopeId: 'charcoal-app',
         builder: (context, child) {
-          builderTheme = CharcoalTheme.of(context);
+          builderPack = CharcoalTheme.of(context).pack;
           builderScrollBehavior = ScrollConfiguration.of(context);
           return child!;
         },
@@ -126,9 +146,9 @@ void main() {
     await tester.pump();
 
     expect(find.text('Router destination'), findsOneWidget);
-    expect(builderTheme, same(theme));
+    expect(builderPack, same(pack));
     expect(builderScrollBehavior, same(scrollBehavior));
-    expect(find.byType(HeroControllerScope), findsOneWidget);
+    expect(find.byType(HeroControllerScope), findsWidgets);
     expect(
       find.byWidgetPredicate(
         (widget) => widget is RootRestorationScope && widget.restorationId == 'charcoal-app',
@@ -137,7 +157,7 @@ void main() {
     );
   });
 
-  testWidgets('forwards shortcuts and actions to WidgetsApp', (tester) async {
+  testWidgets('forwards shortcuts and actions to MaterialApp', (tester) async {
     const shortcuts = <ShortcutActivator, Intent>{
       SingleActivator(LogicalKeyboardKey.keyK, control: true): _TestIntent(),
     };
@@ -153,9 +173,9 @@ void main() {
       ),
     );
 
-    final widgetsApp = tester.widget<WidgetsApp>(find.byType(WidgetsApp));
-    expect(widgetsApp.shortcuts, same(shortcuts));
-    expect(widgetsApp.actions, same(actions));
+    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+    expect(app.shortcuts, same(shortcuts));
+    expect(app.actions, same(actions));
   });
 }
 

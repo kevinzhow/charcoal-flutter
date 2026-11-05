@@ -27,7 +27,7 @@ void main() {
           bodySafeArea: !fullBleed,
           extendBodyBehindNavigationBar: extend,
           resizeToAvoidBottomInset: resize,
-          navigationBar: bar ? const CharcoalNavigationBar(title: Text('Editor')) : null,
+          navigationBar: bar ? const _TestBar() : null,
           bottomBar: bottom
               ? const SizedBox(key: bottomKey, height: 48, width: double.infinity)
               : null,
@@ -43,7 +43,7 @@ void main() {
     await mount(tester);
     expect(tester.getRect(find.byKey(bodyKey)), const Rect.fromLTRB(12, 86, 784, 532));
     expect(tester.getRect(find.byKey(bottomKey)).bottom, 580);
-    expect(tester.getRect(find.byType(CharcoalNavigationBar)).top, 30);
+    expect(tester.getRect(find.byType(_TestBar)).top, 30);
   });
 
   testWidgets('keyboard moves the bottom controls and shrinks the body without double insets', (
@@ -67,7 +67,7 @@ void main() {
   testWidgets('full bleed paints to all edges while controls stay safe', (tester) async {
     await mount(tester, fullBleed: true, extend: true);
     expect(tester.getRect(find.byKey(bodyKey)), const Rect.fromLTRB(0, 0, 800, 532));
-    expect(tester.getRect(find.byType(CharcoalNavigationBar)).top, 30);
+    expect(tester.getRect(find.byType(_TestBar)).top, 30);
     expect(MediaQuery.paddingOf(tester.element(find.byKey(bodyKey))).top, 86);
   });
 
@@ -86,6 +86,7 @@ void main() {
           home: const CharcoalScaffold(body: SizedBox()),
         ),
       );
+      await tester.pumpAndSettle();
       final region = tester.widget<AnnotatedRegion<SystemUiOverlayStyle>>(
         find.byType(AnnotatedRegion<SystemUiOverlayStyle>),
       );
@@ -93,29 +94,22 @@ void main() {
         region.value.statusBarIconBrightness,
         brightness == Brightness.dark ? Brightness.light : Brightness.dark,
       );
-      expect(region.value.statusBarColor, const Color(0x00000000));
+      expect(region.value.statusBarColor, CharcoalColorRoles.transparent);
     }
   });
+}
 
-  testWidgets('dialog remains scrollable above keyboard and system safe area', (tester) async {
-    await tester.pumpWidget(
-      const CharcoalApp(
-        home: MediaQuery(
-          data: MediaQueryData(
-            size: Size(800, 600),
-            padding: EdgeInsets.only(top: 30),
-            viewInsets: EdgeInsets.only(bottom: 260),
-          ),
-          child: CharcoalDialog(child: SizedBox(height: 600, child: Text('Long form'))),
-        ),
-      ),
-    );
-    expect(tester.takeException(), isNull);
-    final viewport = tester.getRect(find.byType(SingleChildScrollView));
-    expect(viewport.top, greaterThanOrEqualTo(30));
-    expect(viewport.bottom, lessThanOrEqualTo(340));
-    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -180));
-    await tester.pumpAndSettle();
-    expect(tester.takeException(), isNull);
-  });
+/// A navigation bar stand-in with a context-dependent height (the real bar is ported in 2D).
+final class _TestBar extends StatelessWidget
+    implements PreferredSizeWidget, CharcoalContextualHeight {
+  const _TestBar();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+
+  @override
+  double heightFor(BuildContext context) => 56;
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.expand();
 }

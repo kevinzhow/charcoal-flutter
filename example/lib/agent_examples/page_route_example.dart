@@ -23,7 +23,7 @@ final class _AccountDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     return ColoredBox(
-      color: theme.colors.backgroundDefault,
+      color: theme.colors.background,
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,7 +38,7 @@ final class _AccountDetailPage extends StatelessWidget {
               title: const Text('Account details'),
             ),
             Padding(
-              padding: EdgeInsets.all(theme.dimensions.space.layout40),
+              padding: EdgeInsets.all(theme.space.xl),
               child: const Text(
                 'Your profile and security settings are up to date.',
               ),

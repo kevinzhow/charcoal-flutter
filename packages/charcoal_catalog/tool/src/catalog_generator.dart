@@ -7,7 +7,7 @@ import 'package:charcoal_catalog/src/model.dart';
 import 'package:path/path.dart' as p;
 
 import 'design_guidance.dart';
-import 'metadata.dart';
+import 'metadata/index.dart';
 
 const Set<String> _widgetBaseTypes = <String>{
   'InheritedTheme',
@@ -32,22 +32,72 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
     throw StateError('Could not find packages/charcoal_ui/lib/charcoal_ui.dart.');
   }
 
-  final libraryUnit = parseString(
-    content: libraryFile.readAsStringSync(),
-    path: libraryFile.path,
-    throwIfDiagnostics: false,
-  ).unit;
-  final exportedFiles = libraryUnit.directives
-      .whereType<ExportDirective>()
-      .map((directive) => directive.uri.stringValue)
-      .whereType<String>()
-      .where((uri) => !uri.startsWith('package:'))
-      .map((uri) => File(p.normalize(p.join(uiRoot.path, 'lib', uri))))
-      .toList(growable: false);
+  // Public libraries of charcoal_ui: the main entry and the admin-console entry.
+  final entries = <({String import, File file})>[
+    (import: 'package:charcoal_ui/charcoal_ui.dart', file: libraryFile),
+    (
+      import: 'package:charcoal_ui/admin.dart',
+      file: File(p.join(uiRoot.path, 'lib', 'admin.dart')),
+    ),
+  ];
+  final exportedFiles = <({String import, File file})>[];
+  for (final entry in entries) {
+    if (!entry.file.existsSync()) continue;
+    final libraryUnit = parseString(
+      content: entry.file.readAsStringSync(),
+      path: entry.file.path,
+      throwIfDiagnostics: false,
+    ).unit;
+    for (final uri
+        in libraryUnit.directives
+            .whereType<ExportDirective>()
+            .map((directive) => directive.uri.stringValue)
+            .whereType<String>()
+            .where((uri) => !uri.startsWith('package:'))) {
+      exportedFiles.add((
+        import: entry.import,
+        file: File(p.normalize(p.join(uiRoot.path, 'lib', uri))),
+      ));
+    }
+  }
 
   final declarationIndex = <String, _IndexedDeclaration>{};
   final widgetDeclarations = <_IndexedDeclaration>[];
-  for (final file in exportedFiles) {
+
+  // Supporting types that live in charcoal_theme (CharcoalButtonVariant, CharcoalTone, ...) are
+  // part of the public API of the components and may be named as companion declarations.
+  final themeRoot = Directory(p.join(workspaceRoot.path, 'packages', 'charcoal_theme'));
+  final themeLibrary = File(p.join(themeRoot.path, 'lib', 'charcoal_theme.dart'));
+  if (themeLibrary.existsSync()) {
+    final themeUnit = parseString(
+      content: themeLibrary.readAsStringSync(),
+      path: themeLibrary.path,
+      throwIfDiagnostics: false,
+    ).unit;
+    for (final uri
+        in themeUnit.directives
+            .whereType<ExportDirective>()
+            .map((directive) => directive.uri.stringValue)
+            .whereType<String>()
+            .where((uri) => !uri.startsWith('package:'))) {
+      final file = File(p.normalize(p.join(themeRoot.path, 'lib', uri)));
+      if (!file.existsSync()) continue;
+      final unit = parseString(
+        content: file.readAsStringSync(),
+        path: file.path,
+        throwIfDiagnostics: false,
+      ).unit;
+      final sourcePath = _relativePath(workspaceRoot, file);
+      for (final declaration in unit.declarations) {
+        final name = _declarationName(declaration);
+        if (name == null || name.startsWith('_')) continue;
+        declarationIndex[name] = _IndexedDeclaration(declaration, sourcePath);
+      }
+    }
+  }
+
+  for (final entry in exportedFiles) {
+    final file = entry.file;
     if (!file.existsSync()) {
       throw StateError('Exported file does not exist: ${file.path}');
     }
@@ -64,7 +114,9 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
       if (declaration case final ClassDeclaration classDeclaration) {
         final superclass = classDeclaration.extendsClause?.superclass.name.lexeme;
         if (name.startsWith('Charcoal') && _widgetBaseTypes.contains(superclass)) {
-          widgetDeclarations.add(_IndexedDeclaration(classDeclaration, sourcePath));
+          widgetDeclarations.add(
+            _IndexedDeclaration(classDeclaration, sourcePath, importUri: entry.import),
+          );
         }
       }
     }
@@ -105,7 +157,7 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
         name: name,
         category: metadata?.category ?? _categoryFor(indexed.sourcePath),
         summary: metadata?.summary ?? _summaryFor(declaration, name),
-        import: 'package:charcoal_ui/charcoal_ui.dart',
+        import: indexed.importUri,
         sourcePath: indexed.sourcePath,
         documentationLevel: metadata == null
             ? CharcoalDocumentationLevel.generated
@@ -133,6 +185,16 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
     }
   }
   final tokens = _buildTokens(workspaceRoot);
+  final roles = _themeRolePaths(workspaceRoot);
+  for (final component in components) {
+    final unknown = component.tokenRoles.where((role) => !roles.contains(role));
+    if (unknown.isNotEmpty) {
+      throw StateError(
+        '${component.name} names token roles that are not in tokens/theme/charcoal.pack.json: '
+        '${unknown.join(', ')}.',
+      );
+    }
+  }
 
   final curatedCount = components
       .where((component) => component.documentationLevel == CharcoalDocumentationLevel.curated)
@@ -186,11 +248,128 @@ String catalogJsonPath(Directory root) =>
 String catalogDartPath(Directory root) =>
     p.join(root.path, 'packages', 'charcoal_catalog', 'lib', 'src', 'generated', 'catalog.g.dart');
 
+/// Where an upstream token lands in the theme contract (`tokens/theme/charcoal.pack.json`).
+///
+/// A token with a role is addressable as a theme role by the library; every other token is an
+/// upstream value that the components resolve themselves (state variants, unused scales).
+final class _PackMapping {
+  const _PackMapping(this.rolesByToken);
+
+  /// Upstream token path -> contract role paths such as `colors.textTertiary` or `space.md`.
+  final Map<String, List<String>> rolesByToken;
+
+  factory _PackMapping.read(Directory workspaceRoot) {
+    final file = File(p.join(workspaceRoot.path, 'tokens', 'theme', 'charcoal.pack.json'));
+    final pack = jsonDecode(file.readAsStringSync()) as Map<String, Object?>;
+    final roles = <String, List<String>>{};
+    void walk(List<String> path, Object? node) {
+      if (node is Map<String, Object?>) {
+        for (final entry in node.entries) {
+          walk(<String>[...path, entry.key], entry.value);
+        }
+      } else if (node is String && node.startsWith('{') && node.endsWith('}')) {
+        roles.putIfAbsent(node.substring(1, node.length - 1), () => <String>[]).add(path.join('.'));
+      }
+    }
+
+    for (final section in const <String>[
+      'colors',
+      'space',
+      'radius',
+      'borders',
+      'sizes',
+      'typography',
+    ]) {
+      walk(<String>[section], pack[section]);
+    }
+    return _PackMapping(roles);
+  }
+
+  /// The role an application-facing accessor is documented for: the first one in pack order,
+  /// preferring a scale-level role (`typography.weightBold`) over a per-text-role one.
+  String? primaryRole(String tokenPath) {
+    final candidates = rolesByToken[tokenPath];
+    if (candidates == null || candidates.isEmpty) return null;
+    return candidates.firstWhere(
+      (role) => !role.startsWith('typography.roles.'),
+      orElse: () => candidates.first,
+    );
+  }
+
+  List<String> alternatives(String tokenPath) {
+    final primary = primaryRole(tokenPath);
+    return <String>[
+      for (final role in rolesByToken[tokenPath] ?? const <String>[])
+        if (role != primary) role,
+    ];
+  }
+}
+
+/// Every role path of the theme contract as the pack declares it: `colors.text`, `space.md`,
+/// `sizes.controlSm`, `typography.roles.body.fontSize`, ... Component metadata may only cite these.
+Set<String> _themeRolePaths(Directory workspaceRoot) {
+  final file = File(p.join(workspaceRoot.path, 'tokens', 'theme', 'charcoal.pack.json'));
+  final pack = jsonDecode(file.readAsStringSync()) as Map<String, Object?>;
+  final paths = <String>{};
+  void walk(List<String> path, Object? node) {
+    if (node is Map<String, Object?>) {
+      for (final entry in node.entries) {
+        walk(<String>[...path, entry.key], entry.value);
+      }
+    } else {
+      paths.add(path.join('.'));
+    }
+  }
+
+  for (final section in const <String>[
+    'colors',
+    'space',
+    'radius',
+    'borders',
+    'sizes',
+    'motion',
+    'elevation',
+    'typography',
+  ]) {
+    walk(<String>[section], pack[section]);
+  }
+  for (final name in (pack['extensions']! as Map<String, Object?>).keys) {
+    paths.add('colors.$name');
+  }
+  return paths;
+}
+
+/// Text-tone enum value -> colour role, read from `CharcoalTextTone.resolve` so the catalog
+/// names the only way an application reaches a text colour.
+Map<String, String> _textToneByColorRole(Directory workspaceRoot) {
+  final file = File(
+    p.join(
+      workspaceRoot.path,
+      'packages',
+      'charcoal_ui',
+      'lib',
+      'src',
+      'components',
+      'text',
+      'text_tone.dart',
+    ),
+  );
+  if (!file.existsSync()) return const <String, String>{};
+  return <String, String>{
+    for (final match in RegExp(r'CharcoalTextTone\.(\w+)\s*=>\s*colors\.(\w+)').allMatches(
+      file.readAsStringSync(),
+    ))
+      'colors.${match.group(2)}': 'CharcoalTextTone.${match.group(1)}',
+  };
+}
+
 List<CharcoalTokenDoc> _buildTokens(Directory workspaceRoot) {
   final snapshotFile = File(p.join(workspaceRoot.path, 'tokens', 'snapshot.json'));
   final snapshot = jsonDecode(snapshotFile.readAsStringSync()) as Map<String, Object?>;
   final light = (snapshot['light']! as Map<String, Object?>).cast<String, Object?>();
   final dark = (snapshot['dark']! as Map<String, Object?>).cast<String, Object?>();
+  final mapping = _PackMapping.read(workspaceRoot);
+  final textTones = _textToneByColorRole(workspaceRoot);
   final generatedRoot = p.join(
     workspaceRoot.path,
     'packages',
@@ -225,17 +404,25 @@ List<CharcoalTokenDoc> _buildTokens(Directory workspaceRoot) {
       if (lightValue == null || darkValue == null) {
         throw StateError('Generated token $path is missing from tokens/snapshot.json.');
       }
-      final tier = _tokenTier(path, source.key);
+      final role = mapping.primaryRole(path);
+      final tier = _tokenTier(path, source.key, hasRole: role != null);
       tokens.add(
         CharcoalTokenDoc(
           path: path,
-          dartAccessor: _tokenAccessor(path, field, source.key, tier),
+          dartAccessor: _tokenAccessor(path, field, source.key, tier, role),
           kind: source.key,
           tier: tier,
           valueType: _tokenValueType(path, source.key),
           lightValue: lightValue.toString(),
           darkValue: darkValue.toString(),
-          guidance: _tokenGuidance(path, source.key, tier),
+          guidance: _tokenGuidance(
+            path,
+            source.key,
+            tier,
+            role: role,
+            alternatives: mapping.alternatives(path),
+            textTone: role == null ? null : textTones[role],
+          ),
         ),
       );
     }
@@ -246,34 +433,47 @@ List<CharcoalTokenDoc> _buildTokens(Directory workspaceRoot) {
   return tokens;
 }
 
-CharcoalTokenTier _tokenTier(String path, CharcoalTokenKind kind) {
-  if (kind != CharcoalTokenKind.color) return CharcoalTokenTier.semantic;
-  const semanticPrefixes = <String>[
-    'color.background/',
-    'color.border/',
-    'color.container/',
-    'color.icon/',
-    'color.text/',
-  ];
-  return semanticPrefixes.any(path.startsWith)
-      ? CharcoalTokenTier.semantic
-      : CharcoalTokenTier.primitive;
-}
+/// Semantic = the token has a role in the theme contract. Palette primitives and upstream
+/// semantic tokens without a role are primitive: the library owns them, applications never do.
+CharcoalTokenTier _tokenTier(String path, CharcoalTokenKind kind, {required bool hasRole}) =>
+    hasRole ? CharcoalTokenTier.semantic : CharcoalTokenTier.primitive;
+
+const String _themeAccessor = 'CharcoalTheme.of(context)';
 
 String _tokenAccessor(
   String path,
   String field,
   CharcoalTokenKind kind,
   CharcoalTokenTier tier,
+  String? role,
 ) {
+  if (role != null) {
+    // `typography.roles.body.fontSize` -> a TextSpec lookup; scale-level roles are plain getters.
+    final specRole = RegExp(r'^typography\.roles\.(\w+)\.(\w+)$').firstMatch(role);
+    if (specRole != null) {
+      return '$_themeAccessor.typography.spec(CharcoalTextRole.${specRole.group(1)}).${specRole.group(2)}';
+    }
+    return '$_themeAccessor.$role';
+  }
   return switch (kind) {
-    CharcoalTokenKind.color when tier == CharcoalTokenTier.semantic => 'theme.colors.$field',
     CharcoalTokenKind.color when path.startsWith('brand-color.') => 'CharcoalBrandColors.$field',
+    CharcoalTokenKind.color when _isUpstreamSemanticColor(path) =>
+      'CharcoalGeneratedColorTokens.light.$field',
     CharcoalTokenKind.color => 'CharcoalPrimitiveColors.$field',
-    CharcoalTokenKind.dimension => 'theme.dimensions.${_dimensionGroup(path)}.$field',
-    CharcoalTokenKind.typography => 'theme.typography.${_typographyGroup(path)}.$field',
+    CharcoalTokenKind.dimension =>
+      'CharcoalGeneratedDimensionTokens.light.${_dimensionGroup(path)}.$field',
+    CharcoalTokenKind.typography =>
+      'CharcoalGeneratedTypographyTokens.light.${_typographyGroup(path)}.$field',
   };
 }
+
+bool _isUpstreamSemanticColor(String path) => const <String>[
+  'color.background/',
+  'color.border/',
+  'color.container/',
+  'color.icon/',
+  'color.text/',
+].any(path.startsWith);
 
 String _dimensionGroup(String path) {
   if (path.startsWith('border-width.')) return 'borderWidth';
@@ -301,30 +501,42 @@ String _tokenValueType(String path, CharcoalTokenKind kind) {
   };
 }
 
-String _tokenGuidance(String path, CharcoalTokenKind kind, CharcoalTokenTier tier) {
-  if (tier == CharcoalTokenTier.primitive) {
-    return 'Palette primitive. Prefer a semantic theme role; use directly only for audited '
-        'foundation work that cannot be expressed semantically.';
+String _tokenGuidance(
+  String path,
+  CharcoalTokenKind kind,
+  CharcoalTokenTier tier, {
+  required String? role,
+  required List<String> alternatives,
+  required String? textTone,
+}) {
+  if (role == null) {
+    if (kind == CharcoalTokenKind.color && !_isUpstreamSemanticColor(path)) {
+      return 'Palette primitive. Library and theme-pack authors only; applications never read '
+          'palette values. Choose a theme role instead.';
+    }
+    return 'Upstream token with no theme role: components resolve state variants themselves and '
+        'applications cannot read it. If a role is missing, add it to the theme contract '
+        '(tokens/theme/charcoal.pack.json) instead of reading this directly.';
   }
-  if (path.startsWith('space.layout/')) {
-    return 'Layout spacing for page, section, and responsive composition outside component internals.';
-  }
-  if (path.startsWith('space.component/')) {
-    return 'Component-scale spacing. Use for custom compositions; existing Charcoal components own '
-        'their internal gaps.';
-  }
-  if (path.startsWith('space.target/')) {
-    return 'Standard interaction target measurement. Do not force it onto a component with its own size API.';
-  }
-  if (path.startsWith('paragraph-width.')) {
-    return 'Readable content-width constraint selected by layout density and available space.';
-  }
-  if (path.startsWith('radius.')) return 'Semantic corner radius for authored Charcoal surfaces.';
-  if (path.startsWith('border-width.')) return 'Semantic border or focus-ring width.';
-  if (kind == CharcoalTokenKind.typography) {
-    return 'Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text.';
-  }
-  return 'Semantic color role. Select by UI meaning and state, not by its resolved light/dark value.';
+  final shown = alternatives.take(3).join(', ');
+  final more = alternatives.length > 3 ? ' and ${alternatives.length - 3} more' : '';
+  final also = alternatives.isEmpty ? '' : ' Also used by: $shown$more.';
+  final app = switch (role.split('.').first) {
+    'space' =>
+      'Applications name a step with CharcoalGap(CharcoalSpace.${role.split('.').last}), '
+          'CharcoalInset or CharcoalPadding and never read the number.',
+    'colors' =>
+      textTone != null
+          ? 'Applications reach this colour with CharcoalText(..., tone: $textTone); they never '
+                'read or pass a colour.'
+          : 'Applied by Charcoal components (or via CharcoalTone / a tone parameter); '
+                'applications never read or pass a colour.',
+    'typography' =>
+      'Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle.',
+    _ => 'Applied by Charcoal components; applications never read it.',
+  };
+  return 'Theme role ${role.replaceAll('typography.roles.', 'typography role ')}, for library '
+      'code that reads the theme. $app$also';
 }
 
 List<CharcoalApiDoc> _companionApis(
@@ -483,8 +695,13 @@ String _relativePath(Directory root, File file) =>
     p.relative(file.path, from: root.path).replaceAll('\\', '/');
 
 final class _IndexedDeclaration {
-  const _IndexedDeclaration(this.node, this.sourcePath);
+  const _IndexedDeclaration(
+    this.node,
+    this.sourcePath, {
+    this.importUri = 'package:charcoal_ui/charcoal_ui.dart',
+  });
 
   final CompilationUnitMember node;
   final String sourcePath;
+  final String importUri;
 }

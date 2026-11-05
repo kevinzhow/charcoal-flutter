@@ -265,9 +265,7 @@ final class _BloomDemoState extends State<BloomDemo> {
                   : 'Create a post',
               size: CharcoalIconButtonSize.small,
             ),
-            SizedBox(
-              width: CharcoalTheme.of(context).dimensions.space.component10,
-            ),
+            SizedBox(width: CharcoalTheme.of(context).space.xs),
             _BloomNotificationButton(
               onPressed: _viewModel.openNotifications,
               unreadCount: state.unreadNotificationCount,
@@ -442,9 +440,9 @@ final class _BloomModalMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: space.component25),
+      padding: EdgeInsets.symmetric(horizontal: space.md),
       child: CharcoalTypography(child: Text(message)),
     );
   }

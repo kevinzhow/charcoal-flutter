@@ -13,7 +13,7 @@ final class DaylightItemGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemGap = CharcoalTheme.of(context).dimensions.space.component20;
+    final itemGap = CharcoalTheme.of(context).space.sm;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[

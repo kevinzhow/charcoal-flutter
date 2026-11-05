@@ -29,6 +29,8 @@ jobs:
       - run: flutter test
         working-directory: packages/charcoal_icons
       - run: flutter test
+        working-directory: packages/charcoal_theme
+      - run: flutter test
         working-directory: packages/charcoal_ui
       - run: flutter test
         working-directory: example

@@ -2,31 +2,28 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/harness.dart';
 
 void main() {
-  testWidgets('preserves full semantics while compact RTL copy is truncated', (
-    tester,
-  ) async {
+  testWidgets('preserves full semantics while compact RTL copy is truncated', (tester) async {
     const spokenLabel = 'Complete project title: Moonlit Garden Archive';
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const SizedBox(
+    await pumpCharcoal(
+      tester,
+      const Center(
+        child: SizedBox(
           width: 120,
-          child: MediaQuery(
-            data: MediaQueryData(textScaler: TextScaler.linear(2)),
-            child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: CharcoalTextEllipsis(
-                'Moonlit Garden Archive for the Northern Collection',
-                maxLines: 2,
-                semanticLabel: spokenLabel,
-                textAlign: TextAlign.start,
-              ),
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: CharcoalTextEllipsis(
+              'Moonlit Garden Archive for the Northern Collection',
+              maxLines: 2,
+              semanticLabel: spokenLabel,
+              textAlign: TextAlign.start,
             ),
           ),
         ),
       ),
+      textScale: 2,
     );
 
     final text = tester.widget<Text>(
@@ -41,10 +38,7 @@ void main() {
   });
 
   test('rejects invalid line counts and empty semantic overrides', () {
-    expect(
-      () => CharcoalTextEllipsis('Invalid', maxLines: 0),
-      throwsAssertionError,
-    );
+    expect(() => CharcoalTextEllipsis('Invalid', maxLines: 0), throwsAssertionError);
     expect(
       () => CharcoalTextEllipsis('Hidden from speech', semanticLabel: ''),
       throwsAssertionError,

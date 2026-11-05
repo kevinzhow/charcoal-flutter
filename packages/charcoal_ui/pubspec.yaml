@@ -1,5 +1,5 @@
 name: charcoal_ui
-description: A Charcoal V2 UI library built directly on Flutter Widgets.
+description: Charcoal V2 components for Flutter, built on Material with a generated theme contract.
 publish_to: none
 version: 0.1.0
 
@@ -12,9 +12,13 @@ resolution: workspace
 dependencies:
   charcoal_icons:
     path: ../charcoal_icons
+  charcoal_theme:
+    path: ../charcoal_theme
   charcoal_tokens:
     path: ../charcoal_tokens
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 
 dev_dependencies:

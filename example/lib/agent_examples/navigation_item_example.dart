@@ -28,17 +28,17 @@ final class _AgentNavigationItemExampleState
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return SizedBox(
       height: 320,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final content = ColoredBox(
-            color: theme.colors.containerSecondaryDefaultA,
+            color: theme.colors.fillSecondary,
             child: Center(
               child: Text(
                 'Current destination: ${_destination.name}',
-                style: theme.textStyles.bodyBold,
+                style: theme.style(CharcoalTextRole.bodyLargeBold),
               ),
             ),
           );
@@ -86,7 +86,7 @@ final class _AgentNavigationItemExampleState
                   label: 'Primary destinations',
                   role: SemanticsRole.navigation,
                   child: Padding(
-                    padding: EdgeInsets.all(space.component20),
+                    padding: EdgeInsets.all(space.sm),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -96,7 +96,7 @@ final class _AgentNavigationItemExampleState
                           selected: _destination == _NavigationDestination.home,
                           child: const Text('Home'),
                         ),
-                        SizedBox(height: space.component20),
+                        SizedBox(height: space.sm),
                         CharcoalNavigationItem(
                           leading: const CharcoalIcon(CharcoalIcons.compass),
                           onPressed: () =>
@@ -105,7 +105,7 @@ final class _AgentNavigationItemExampleState
                               _destination == _NavigationDestination.discover,
                           child: const Text('Discover'),
                         ),
-                        SizedBox(height: space.component20),
+                        SizedBox(height: space.sm),
                         CharcoalNavigationItem(
                           leading: const CharcoalIcon(CharcoalIcons.message),
                           onPressed: () =>
@@ -121,7 +121,7 @@ final class _AgentNavigationItemExampleState
                   ),
                 ),
               ),
-              SizedBox(width: space.layout40),
+              SizedBox(width: space.xl),
               Expanded(child: content),
             ],
           );

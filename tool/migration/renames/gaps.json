@@ -1,0 +1,34 @@
+{
+  "family": "gaps",
+  "note": "Old name -> new name for the p3-gaps batch (library features found while migrating myopay). Library: package:charcoal_ui/next.dart; CharcoalPage is in package:charcoal_ui/admin.dart. Callers of ConsoleText/MyoTheme read helpers are listed under 'patterns'.",
+  "symbols": {
+    "ConsoleScreen": "CharcoalPage (admin.dart)",
+    "ConsoleLayoutScope": "CharcoalAdminLayout (admin.dart; provided by CharcoalAdminShell)",
+    "ConsoleLoading": "CharcoalLoadingState (Charcoal's expanding-circle spinner, not myopay's ring)",
+    "ConsoleSpinner": "CharcoalLoadingSpinner",
+    "ConsoleBusyOverlay": "CharcoalPage(busy: true) for a page, CharcoalSpinnerOverlay(dimBackground: true) elsewhere",
+    "login/shell brand square": "CharcoalBrandMark (admin.dart)",
+    "ConsoleTopBar (compact page header)": "CharcoalPage (compact layout)"
+  },
+  "patterns": {
+    "Text(s, style: text.body(color: myo.colors.textSecondary))": "CharcoalText(s, tone: CharcoalTextTone.secondary)",
+    "Text(s, style: text.caption(color: myo.colors.textNegative))": "CharcoalText(s, role: CharcoalTextRole.caption, tone: CharcoalTextTone.negative)",
+    "CharcoalIcon(i, size: myo.sizes.iconSm, color: myo.colors.iconSecondary)": "CharcoalIconView(i, size: CharcoalIconSize.sm, tone: CharcoalIconTone.secondary)",
+    "Container(color: backgroundSecondary, radius md, padding md) + SelectableText(captionMono)": "CharcoalCodeBlock(text)",
+    "ListView.builder of SelectableText(captionMono) on backgroundSecondary": "CharcoalCodeBlock.lines(lines)",
+    "Wrap(spacing: space.sm, runSpacing: space.xs)": "CharcoalWrap(spacing: CharcoalSpace.sm, runSpacing: CharcoalSpace.xs)",
+    "bordered ConsoleClickable tile with icon + label": "CharcoalActionTile",
+    "hand-painted hover/press row with chips below the text": "CharcoalListRow(crossAxisAlignment: start, verticalPadding:, subtitleRole:, subtitleTone:, body:)",
+    "Container(primary fill, radius.sm) + Text(captionBold, textOnPrimary)": "CharcoalBadge(label)",
+    "Container(primary fill, brandMark square) + letter": "CharcoalBrandMark(letter)",
+    "Container(backgroundSecondary, radius.sm, padding md/sm/sm/sm) + Row(text, buttons)": "CharcoalCodeBlock(text, field: true, trailing: ...)",
+    "ConsoleButton(small, child: Text(s, style: TextStyle(color: textNegative)))": "CharcoalButton(size: small, labelTone: CharcoalTextTone.negative, child: Text(s))",
+    "DecoratedBox(border: Border(top: BorderSide(borderSubtle))) around ReorderableListView": "CharcoalList.around(ReorderableListView(...))",
+    "SizedBox(height: hairline, width: infinity) + borderSubtle": "CharcoalDivider()",
+    "SizedBox(width: sizes.fieldWidthCompact, child: field)": "CharcoalFieldBox(width: CharcoalFieldWidth.compact, child: field)",
+    "ConstrainedBox(maxWidth: sizes.formMaxWidth, child: field)": "CharcoalFieldBox(width: CharcoalFieldWidth.standard, child: field)",
+    "ConsoleInfoRows(labelWidth: sizes.infoLabelWidthWide)": "CharcoalInfoRows(labelWidth: CharcoalInfoLabelWidth.wide)",
+    "ConsoleRow(minHeight: sizes.rowMinHeight{Compact,Tall})": "CharcoalListRow(height: CharcoalListRowHeight.{compact,tall})",
+    "Row(SizedBox(infoLabelWidthNarrow, Text(label)), Text(value)) key/value rows": "CharcoalInfoRows(rows, labelWidth: CharcoalInfoLabelWidth.narrow)"
+  }
+}

@@ -26,7 +26,7 @@ final class _BloomPostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final author = _bloomAuthor(state.data, post.creatorId);
     final liked = state.data.likedPostIds.contains(post.id);
     final saved = state.data.savedPostIds.contains(post.id);
@@ -37,7 +37,7 @@ final class _BloomPostCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(space.component25),
+            padding: EdgeInsets.all(space.md),
             child: Row(
               children: <Widget>[
                 _BloomAvatar(
@@ -45,7 +45,7 @@ final class _BloomPostCard extends StatelessWidget {
                   tone: author.tone,
                   size: 38,
                 ),
-                SizedBox(width: space.component20),
+                SizedBox(width: space.sm),
                 Expanded(
                   child: CharcoalClickable(
                     onPressed: onCreator,
@@ -53,9 +53,9 @@ final class _BloomPostCard extends StatelessWidget {
                         ? null
                         : 'Open ${author.name} profile',
                     builder: (context, states) => AnimatedOpacity(
-                      duration: CharcoalMotion.resolveDuration(
+                      duration: CharcoalTheme.of(context).duration(
                         context,
-                        CharcoalMotion.fast,
+                        CharcoalTheme.of(context).motion.fast,
                       ),
                       opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
                       child: Column(
@@ -65,24 +65,24 @@ final class _BloomPostCard extends StatelessWidget {
                             author.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textStyles.captionMediumBold.copyWith(
-                              color: theme.colors.textDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.captionMediumBold)
+                                .copyWith(color: theme.colors.text),
                           ),
                           Text(
                             post.meta,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textSecondaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(color: theme.colors.textSecondary),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: space.component10),
+                SizedBox(width: space.xs),
                 CharcoalIconButton(
                   key: ValueKey<String>('agent-social-post-actions-${post.id}'),
                   icon: const CharcoalIcon(CharcoalIcons.dotsHorizontal),
@@ -94,18 +94,18 @@ final class _BloomPostCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: space.component25),
+            padding: EdgeInsets.symmetric(horizontal: space.md),
             child: Text(
               post.copy,
-              style: theme.textStyles.captionMedium.copyWith(
-                color: theme.colors.textDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMedium)
+                  .copyWith(color: theme.colors.text),
             ),
           ),
           if (showFollow && post.creatorId != 'mina') ...<Widget>[
-            SizedBox(height: space.component20),
+            SizedBox(height: space.sm),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: space.component25),
+              padding: EdgeInsets.symmetric(horizontal: space.md),
               child: Align(
                 alignment: AlignmentDirectional.centerStart,
                 child: CharcoalButton(
@@ -120,12 +120,12 @@ final class _BloomPostCard extends StatelessWidget {
               ),
             ),
           ],
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           _BloomArtwork(altText: post.altText, height: 174, tone: post.tone),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: space.component20,
-              vertical: space.component10,
+              horizontal: space.sm,
+              vertical: space.xs,
             ),
             child: Row(
               children: <Widget>[
@@ -139,12 +139,14 @@ final class _BloomPostCard extends StatelessWidget {
                 ),
                 Text(
                   '${post.likes + (liked ? 1 : 0)}',
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(
+                        color: theme.colors.textSecondary,
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
-                SizedBox(width: space.component20),
+                SizedBox(width: space.sm),
                 CharcoalIconButton(
                   key: ValueKey<String>('agent-social-comment-${post.id}'),
                   icon: const CharcoalIcon(CharcoalIcons.message),
@@ -154,10 +156,12 @@ final class _BloomPostCard extends StatelessWidget {
                 ),
                 Text(
                   '${post.comments}',
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(
+                        color: theme.colors.textSecondary,
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
                 const Spacer(),
                 CharcoalIconButton(

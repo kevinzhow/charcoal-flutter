@@ -19,7 +19,7 @@ final class _BloomProfilePage extends StatelessWidget {
         ? ownPosts
         : savedPosts;
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -29,31 +29,31 @@ final class _BloomProfilePage extends StatelessWidget {
           Center(
             child: _BloomAvatar(initials: 'MA', tone: profile.tone, size: 72),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           Text(
             profile.name,
             textAlign: TextAlign.center,
-            style: theme.textStyles.headingXxs.copyWith(
-              color: theme.colors.textDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.headingXxs)
+                .copyWith(color: theme.colors.text),
           ),
-          SizedBox(height: space.component10),
+          SizedBox(height: space.xs),
           Text(
             '${profile.handle} · ${profile.location}',
             textAlign: TextAlign.center,
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(color: theme.colors.textSecondary),
           ),
-          SizedBox(height: space.component25),
+          SizedBox(height: space.md),
           Text(
             profile.bio.isEmpty ? 'No bio yet.' : profile.bio,
             textAlign: TextAlign.center,
-            style: theme.textStyles.captionMedium.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(color: theme.colors.textSecondary),
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           _BloomSurface(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -67,7 +67,7 @@ final class _BloomProfilePage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalSegmentedControl<BloomProfileTab>(
             fullWidth: true,
             onChanged: viewModel.changeProfileTab,
@@ -84,7 +84,7 @@ final class _BloomProfilePage extends StatelessWidget {
             semanticLabel: 'Profile content',
             value: state.profileTab,
           ),
-          SizedBox(height: space.component25),
+          SizedBox(height: space.md),
           if (visiblePosts.isEmpty &&
               state.profileTab == BloomProfileTab.saved) ...<Widget>[
             const _BloomEmptyState(
@@ -93,7 +93,7 @@ final class _BloomProfilePage extends StatelessWidget {
               icon: CharcoalIcons.bookmark,
               title: 'Nothing saved yet',
             ),
-            SizedBox(height: space.component20),
+            SizedBox(height: space.sm),
             CharcoalButton(
               fullWidth: true,
               onPressed: viewModel.exploreFromProfile,
@@ -116,7 +116,7 @@ final class _BloomArtworkGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final gap = theme.dimensions.space.component20;
+    final gap = theme.space.sm;
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -130,13 +130,11 @@ final class _BloomArtworkGrid extends StatelessWidget {
         onPressed: () => onOpen(posts[index].id),
         semanticLabel: 'Open post: ${posts[index].copy}',
         builder: (context, states) => AnimatedOpacity(
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            CharcoalMotion.fast,
-          ),
+          duration: CharcoalTheme.of(context)
+              .duration(context, CharcoalTheme.of(context).motion.fast),
           opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+            borderRadius: BorderRadius.circular(theme.radius.md),
             child: LayoutBuilder(
               builder: (context, constraints) => _BloomArtwork(
                 altText: posts[index].altText,
@@ -186,7 +184,7 @@ final class _BloomProfileEditorPageState
     final state = widget.viewModel.state;
     final invalid = state.profileDraftName.trim().isEmpty;
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -200,7 +198,7 @@ final class _BloomProfileEditorPageState
               size: 72,
             ),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           Center(
             child: CharcoalButton(
               onPressed: widget.viewModel.changeProfileTone,
@@ -208,7 +206,7 @@ final class _BloomProfileEditorPageState
               child: const Text('Change avatar color'),
             ),
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalTextField(
             assistiveText: invalid ? 'Enter a display name.' : null,
             controller: _nameController,
@@ -220,7 +218,7 @@ final class _BloomProfileEditorPageState
             showCount: true,
             showLabel: true,
           ),
-          SizedBox(height: space.component25),
+          SizedBox(height: space.md),
           CharcoalTextArea(
             assistiveText: 'Tell people what you notice or make.',
             controller: _bioController,
@@ -233,13 +231,13 @@ final class _BloomProfileEditorPageState
             showLabel: true,
           ),
           if (state.profileDirty) ...<Widget>[
-            SizedBox(height: space.component25),
+            SizedBox(height: space.md),
             Text(
               'Unsaved changes',
               textAlign: TextAlign.center,
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textSecondaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(color: theme.colors.textSecondary),
             ),
           ],
         ],

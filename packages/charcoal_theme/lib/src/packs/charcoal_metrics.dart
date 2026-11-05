@@ -1,0 +1,194 @@
+// Hand-written component geometry (not generated). Literal values are allowed in this directory
+// only. The generated `charcoal_pack.g.dart` references `charcoalMetrics`.
+
+import '../contract/metrics/metrics.dart';
+
+/// Per-family component geometry shared by every generated pack. Hand-written: the metrics are
+/// library-owned and not derived from upstream tokens.
+const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
+  button: CharcoalButtonMetrics(
+    iconSize: 16,
+    smallVerticalPadding: 5,
+    mediumVerticalPadding: 9,
+  ),
+  iconButton: CharcoalIconButtonMetrics(
+    extraSmallSize: 20,
+    smallIconSize: 16,
+    regularIconSize: 24,
+  ),
+  switchToggle: CharcoalSwitchMetrics(
+    trackWidth: 51,
+    trackHeight: 31,
+    trackInset: 2,
+    thumbSize: 27,
+  ),
+  checkbox: CharcoalCheckboxMetrics(
+    controlSize: 20,
+    roundedRadius: 10,
+    checkSize: 16,
+    roundedFocusHaloWidth: 6,
+    outerOffset: 2,
+  ),
+  radio: CharcoalRadioMetrics(
+    controlSize: 20,
+    dotSize: 8,
+  ),
+  multiSelect: CharcoalMultiSelectMetrics(
+    controlSize: 20,
+    outerOffset: 2,
+    checkSize: 16,
+  ),
+  segmented: CharcoalSegmentedMetrics(
+    uniformSegmentMinWidth: 80,
+  ),
+  tag: CharcoalTagMetrics(
+    maxLabelWidth: 152,
+    iconSize: 16,
+    translatedLabelLineHeight: 1.4,
+  ),
+  field: CharcoalFieldMetrics(
+    compactBreakpoint: 240,
+    lineHeight: 22,
+    textScaleClampMax: 2,
+    secondaryMaxWidthFraction: 0.4,
+  ),
+  textField: CharcoalTextFieldMetrics(
+    verticalPadding: 10,
+    contentGap: 10,
+    iconSize: 16,
+  ),
+  textArea: CharcoalTextAreaMetrics(
+    horizontalInset: 9,
+    counterBottomInset: 9,
+    lineHeight: 22,
+    verticalChrome: 18,
+    defaultRows: 4,
+  ),
+  dropdown: CharcoalDropdownMetrics(
+    menuMaxHeight: 280,
+    iconSize: 16,
+  ),
+  hint: CharcoalHintMetrics(
+    actionStackBreakpoint: 240,
+    iconSize: 16,
+  ),
+  spinner: CharcoalSpinnerMetrics(
+    rotationDuration: Duration(seconds: 1),
+    shadowBlur: 8,
+  ),
+  modal: CharcoalModalMetrics(
+    initialScale: 1.05,
+    minWidth: 280,
+    cornerRadius: 32,
+    titleHorizontalPadding: 48,
+    actionPadding: 20,
+    bottomSheetMinimumBottomPadding: 30,
+    closeIconSize: 24,
+    closeIconInset: 6,
+    closeIconStrokeWidth: 2,
+    exitFadeDuration: Duration(milliseconds: 150),
+    smallWidth: 320,
+    mediumWidth: 440,
+    largeWidth: 672,
+  ),
+  toast: CharcoalToastMetrics(
+    maxWidth: 312,
+    cornerRadius: 32,
+    iconSize: 16,
+    toastScreenEdgeSpacing: 96,
+    snackBarScreenEdgeSpacing: 120,
+    dragDismissDistance: 50,
+    dragDismissVelocity: 100,
+    rubberBandLimit: 60,
+    thumbnailSize: 64,
+  ),
+  tooltip: CharcoalTooltipMetrics(
+    defaultWaitDuration: Duration(milliseconds: 500),
+    defaultMaxWidth: 184,
+    arrowHeight: 3,
+    arrowHalfWidth: 5,
+  ),
+  balloon: CharcoalBalloonMetrics(
+    defaultMaxWidth: 240,
+    arrowHeight: 4,
+    arrowHalfWidth: 7,
+    strokeWidth: 2,
+    closeGap: 5,
+    closeVisualSize: 22,
+    closeIconSize: 16,
+    closeIconInset: 4,
+    closeIconStrokeWidth: 1.5,
+    actionVerticalPadding: 3,
+  ),
+  carousel: CharcoalCarouselMetrics(
+    navigationFadeDuration: Duration(milliseconds: 400),
+    scrollDuration: Duration(milliseconds: 300),
+    mediumViewportFraction: 0.75,
+    navigationZoneWidth: 72,
+  ),
+  pagination: CharcoalPaginationMetrics(
+    cornerRadius: 20,
+    defaultMaxVisiblePages: 7,
+  ),
+  navigationItem: CharcoalNavigationItemMetrics(
+    leadingIconSize: 24,
+    trailingIconSize: 16,
+  ),
+  tabBar: CharcoalTabBarMetrics(
+    badgeFontSize: 9,
+    badgeMinExtent: 16,
+    iconSize: 20,
+    labelFontSize: 10,
+    badgeOffsetEnd: -10,
+    badgeOffsetTop: -7,
+  ),
+  navigationBar: CharcoalNavigationBarMetrics(
+    height: 56,
+    minTitleExtent: 96,
+    titleScaleBase: 20,
+    verticalChrome: 24,
+  ),
+  clickable: CharcoalClickableMetrics(
+    keyboardActivationDuration: Duration(milliseconds: 100),
+    disabledOpacity: 0.32,
+  ),
+  popup: CharcoalPopupMetrics(
+    seamOverlap: 0.5,
+  ),
+  textEditing: CharcoalTextEditingMetrics(
+    scrollPadding: 20,
+    cursorRadius: 2,
+    handleSize: 22,
+    handleAnchorX: 11,
+    handleInnerSize: 14,
+    magnifierWidth: 112,
+    magnifierHeight: 48,
+    magnifierFocalOffset: 76,
+    magnifierScale: 1.3,
+  ),
+  selectionToolbar: CharcoalSelectionToolbarMetrics(
+    edgeInset: 8,
+    anchorAboveGap: 8,
+    anchorBelowGap: 16,
+    padding: 4,
+  ),
+  pageRoute: CharcoalPageRouteMetrics(
+    edgeGestureWidth: 20,
+    horizontalEnterOffset: 0.035,
+    verticalEnterOffset: 0.025,
+    horizontalSecondaryOffset: -0.012,
+    verticalSecondaryOffset: -0.008,
+    secondaryParallax: -0.28,
+    secondaryScrimOpacity: 0.1,
+    commitThreshold: 0.5,
+    flingVelocityThreshold: 1,
+    predictiveShiftDivisor: 20,
+    predictiveShiftInset: 8,
+    predictiveScaleDrop: 0.1,
+    predictiveCornerRadius: 32,
+    predictiveExitOffsetFraction: 0.1,
+  ),
+  scaffold: CharcoalScaffoldMetrics(
+    darkLuminanceThreshold: 0.179,
+  ),
+);

@@ -4,21 +4,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/geometry.dart';
 
 void main() {
   testWidgets('adapts the default page window to compact constraints', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        SizedBox(
-          width: 280,
-          child: CharcoalPagination(
-            currentPage: 50,
-            pageCount: 100,
-            onPageChanged: (_) {},
-          ),
+    await pumpLoose(
+      tester,
+      SizedBox(
+        width: 280,
+        child: CharcoalPagination(
+          currentPage: 50,
+          pageCount: 100,
+          onPageChanged: (_) {},
         ),
       ),
     );
@@ -33,16 +32,15 @@ void main() {
   });
 
   testWidgets('supports a compact three-page mobile window', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        SizedBox(
-          width: 200,
-          child: CharcoalPagination(
-            currentPage: 50,
-            maxVisiblePages: 3,
-            pageCount: 100,
-            onPageChanged: (_) {},
-          ),
+    await pumpLoose(
+      tester,
+      SizedBox(
+        width: 200,
+        child: CharcoalPagination(
+          currentPage: 50,
+          maxVisiblePages: 3,
+          pageCount: 100,
+          onPageChanged: (_) {},
         ),
       ),
     );
@@ -56,13 +54,12 @@ void main() {
 
   testWidgets('shows a centered page window and reports navigation', (tester) async {
     int? nextPage;
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalPagination(
-          currentPage: 50,
-          pageCount: 100,
-          onPageChanged: (page) => nextPage = page,
-        ),
+    await pumpLoose(
+      tester,
+      CharcoalPagination(
+        currentPage: 50,
+        pageCount: 100,
+        onPageChanged: (page) => nextPage = page,
       ),
     );
 
@@ -80,14 +77,13 @@ void main() {
   testWidgets('announces one non-interactive current page and hides ellipses', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalPagination(
-          currentPage: 50,
-          pageCount: 100,
-          onPageChanged: (_) {},
-          semanticLabel: 'Search result pages',
-        ),
+    await pumpLoose(
+      tester,
+      CharcoalPagination(
+        currentPage: 50,
+        pageCount: 100,
+        onPageChanged: (_) {},
+        semanticLabel: 'Search result pages',
       ),
     );
 
@@ -104,10 +100,9 @@ void main() {
   });
 
   testWidgets('hides previous navigation on the first page', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalPagination(currentPage: 1, pageCount: 10, onPageChanged: (_) {}),
-      ),
+    await pumpLoose(
+      tester,
+      CharcoalPagination(currentPage: 1, pageCount: 10, onPageChanged: (_) {}),
     );
 
     expect(find.bySemanticsLabel('Previous page'), findsNothing);
@@ -118,13 +113,12 @@ void main() {
     tester,
   ) async {
     int? requestedPage;
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalPagination(
-          currentPage: 1,
-          pageCount: 3,
-          onPageChanged: (page) => requestedPage = page,
-        ),
+    await pumpLoose(
+      tester,
+      CharcoalPagination(
+        currentPage: 1,
+        pageCount: 3,
+        onPageChanged: (page) => requestedPage = page,
       ),
     );
 
@@ -137,15 +131,14 @@ void main() {
   });
 
   testWidgets('navigation chevrons follow text direction', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: CharcoalPagination(
-            currentPage: 2,
-            pageCount: 3,
-            onPageChanged: (_) {},
-          ),
+    await pumpLoose(
+      tester,
+      Directionality(
+        textDirection: TextDirection.rtl,
+        child: CharcoalPagination(
+          currentPage: 2,
+          pageCount: 3,
+          onPageChanged: (_) {},
         ),
       ),
     );

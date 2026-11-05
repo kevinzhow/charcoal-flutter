@@ -1,19 +1,34 @@
-import 'package:flutter/widgets.dart';
+import 'package:charcoal_theme/charcoal_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-import '../theme/charcoal_theme.dart';
-import '../theme/charcoal_theme_data.dart';
 import 'charcoal_page_route.dart';
+import 'charcoal_text_defaults.dart';
 
 /// Selects which brightness variant [CharcoalApp] installs.
-enum CharcoalThemeMode { system, light, dark }
+enum CharcoalThemeMode {
+  /// Follow the platform brightness.
+  system,
 
-/// A Widgets-layer application shell with Charcoal theming and no Material/Cupertino dependency.
+  /// Always the light pack.
+  light,
+
+  /// Always the dark pack.
+  dark,
+}
+
+/// The application shell: a thin wrapper over [MaterialApp].
+///
+/// It installs the light and dark `ThemeData` built from [lightPack] and [darkPack], the ambient
+/// text and icon defaults ([CharcoalTextDefaults]), and [CharcoalPageTransitionsBuilder] as the
+/// page transition on every platform (so `home`, named routes and declarative routers all get
+/// Charcoal motion, iOS edge-back and Android predictive back). Application code never touches
+/// `ThemeData`.
 ///
 /// Use the default constructor for an imperative [Navigator] and [CharcoalApp.router] for a
-/// declarative [Router]. Both constructors install the same theme, localization, restoration,
-/// shortcut, scrolling, and Hero infrastructure.
-final class CharcoalApp extends StatefulWidget {
-  /// Creates a Charcoal application backed by a [Navigator].
+/// declarative [Router] such as `go_router`.
+class CharcoalApp extends StatefulWidget {
+  /// Creates an application backed by a [Navigator].
   const CharcoalApp({
     this.navigatorKey,
     this.home,
@@ -26,8 +41,8 @@ final class CharcoalApp extends StatefulWidget {
     this.builder,
     this.title = '',
     this.onGenerateTitle,
-    this.theme,
-    this.darkTheme,
+    this.lightPack,
+    this.darkPack,
     this.themeMode = CharcoalThemeMode.system,
     this.locale,
     this.localizationsDelegates,
@@ -39,7 +54,6 @@ final class CharcoalApp extends StatefulWidget {
     this.actions,
     this.restorationScopeId,
     this.scrollBehavior,
-    this.pageRouteBuilder,
     super.key,
   }) : routeInformationProvider = null,
        routeInformationParser = null,
@@ -47,7 +61,7 @@ final class CharcoalApp extends StatefulWidget {
        routerConfig = null,
        backButtonDispatcher = null;
 
-  /// Creates a Charcoal application backed by a declarative [Router].
+  /// Creates an application backed by a declarative [Router].
   const CharcoalApp.router({
     this.routeInformationProvider,
     this.routeInformationParser,
@@ -57,8 +71,8 @@ final class CharcoalApp extends StatefulWidget {
     this.builder,
     this.title = '',
     this.onGenerateTitle,
-    this.theme,
-    this.darkTheme,
+    this.lightPack,
+    this.darkPack,
     this.themeMode = CharcoalThemeMode.system,
     this.locale,
     this.localizationsDelegates,
@@ -94,8 +108,7 @@ final class CharcoalApp extends StatefulWidget {
        onGenerateRoute = null,
        onGenerateInitialRoutes = null,
        onUnknownRoute = null,
-       navigatorObservers = const <NavigatorObserver>[],
-       pageRouteBuilder = null;
+       navigatorObservers = const <NavigatorObserver>[];
 
   /// The key for the root [Navigator] created by the default constructor.
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -136,10 +149,9 @@ final class CharcoalApp extends StatefulWidget {
   /// Dispatches platform back requests to [CharcoalApp.router].
   final BackButtonDispatcher? backButtonDispatcher;
 
-  /// Inserts widgets above the root Navigator or Router.
+  /// Inserts widgets above the root Navigator or Router, below the text defaults.
   ///
-  /// The supplied context can resolve [CharcoalTheme], [Localizations], and the effective
-  /// [ScrollConfiguration].
+  /// The supplied context resolves `CharcoalTheme`, `Localizations` and the scroll configuration.
   final TransitionBuilder? builder;
 
   /// A one-line application description used by the host platform.
@@ -148,13 +160,13 @@ final class CharcoalApp extends StatefulWidget {
   /// Generates a localized application title.
   final GenerateAppTitle? onGenerateTitle;
 
-  /// The light Charcoal theme.
-  final CharcoalThemeData? theme;
+  /// The light look. Defaults to the library's light pack; pass one only to change the look.
+  final CharcoalThemePack? lightPack;
 
-  /// The dark Charcoal theme.
-  final CharcoalThemeData? darkTheme;
+  /// The dark look. Defaults to the library's dark pack; pass one only to change the look.
+  final CharcoalThemePack? darkPack;
 
-  /// Selects the effective light or dark theme.
+  /// Selects the effective light or dark pack.
   final CharcoalThemeMode themeMode;
 
   /// Overrides the platform locale.
@@ -187,69 +199,88 @@ final class CharcoalApp extends StatefulWidget {
   /// Overrides the platform-adaptive scrolling policy.
   final ScrollBehavior? scrollBehavior;
 
-  /// Creates pages for named routes in the default constructor.
-  ///
-  /// Defaults to [CharcoalPageRoute].
-  final PageRouteFactory? pageRouteBuilder;
-
-  /// Creates the Hero controller shared by the root navigation hierarchy.
-  static HeroController createCharcoalHeroController() => HeroController();
-
   @override
   State<CharcoalApp> createState() => _CharcoalAppState();
 }
 
-final class _CharcoalAppState extends State<CharcoalApp> {
-  late final HeroController _heroController;
+class _CharcoalAppState extends State<CharcoalApp> {
+  late ThemeData _light;
+  late ThemeData _dark;
 
   bool get _usesRouter => widget.routerDelegate != null || widget.routerConfig != null;
 
   @override
   void initState() {
     super.initState();
-    _heroController = CharcoalApp.createCharcoalHeroController();
+    _buildThemes();
   }
 
   @override
-  void dispose() {
-    _heroController.dispose();
-    super.dispose();
+  void didUpdateWidget(CharcoalApp oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.lightPack != widget.lightPack || oldWidget.darkPack != widget.darkPack) {
+      _buildThemes();
+    }
   }
 
-  CharcoalThemeData _resolveTheme(
-    BuildContext context, {
-    required CharcoalThemeData light,
-    required CharcoalThemeData dark,
-  }) {
-    final platformBrightness = MediaQuery.platformBrightnessOf(context);
-    final useDark = switch (widget.themeMode) {
-      CharcoalThemeMode.light => false,
-      CharcoalThemeMode.dark => true,
-      CharcoalThemeMode.system => platformBrightness == Brightness.dark,
-    };
-    return useDark ? dark : light;
+  void _buildThemes() {
+    _light = _withTransitions(
+      buildCharcoalThemeData(widget.lightPack ?? charcoalLightPack),
+    );
+    _dark = _withTransitions(buildCharcoalThemeData(widget.darkPack ?? charcoalDarkPack));
   }
 
-  WidgetsApp _buildWidgetsApp({
-    required CharcoalThemeData theme,
-    required Color applicationColor,
-  }) {
-    final textStyle = theme.textStyles.body.copyWith(color: theme.colors.textDefault);
+  ThemeData _withTransitions(ThemeData base) => base.copyWith(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: CharcoalPageTransitionsBuilder(),
+        TargetPlatform.iOS: CharcoalPageTransitionsBuilder(),
+        TargetPlatform.fuchsia: CharcoalPageTransitionsBuilder(),
+        TargetPlatform.linux: CharcoalPageTransitionsBuilder(),
+        TargetPlatform.macOS: CharcoalPageTransitionsBuilder(),
+        TargetPlatform.windows: CharcoalPageTransitionsBuilder(),
+      },
+    ),
+  );
+
+  ThemeMode get _themeMode => switch (widget.themeMode) {
+    CharcoalThemeMode.system => ThemeMode.system,
+    CharcoalThemeMode.light => ThemeMode.light,
+    CharcoalThemeMode.dark => ThemeMode.dark,
+  };
+
+  /// The application's delegates followed by the framework's global ones, so any locale the
+  /// application supports also has Material, Widgets and Cupertino strings.
+  Iterable<LocalizationsDelegate<dynamic>> get _delegates => <LocalizationsDelegate<dynamic>>[
+    ...?widget.localizationsDelegates,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ];
+
+  Widget _wrap(BuildContext context, Widget? child) {
+    final defaults = CharcoalTextDefaults(child: child ?? const SizedBox.shrink());
+    final builder = widget.builder;
+    return builder == null ? defaults : builder(context, defaults);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if (_usesRouter) {
-      return WidgetsApp.router(
-        key: GlobalObjectKey(this),
+      return MaterialApp.router(
         routeInformationProvider: widget.routeInformationProvider,
         routeInformationParser: widget.routeInformationParser,
         routerDelegate: widget.routerDelegate,
         routerConfig: widget.routerConfig,
         backButtonDispatcher: widget.backButtonDispatcher,
-        builder: widget.builder,
+        builder: _wrap,
         title: widget.title,
         onGenerateTitle: widget.onGenerateTitle,
-        textStyle: textStyle,
-        color: applicationColor,
+        theme: _light,
+        darkTheme: _dark,
+        themeMode: _themeMode,
         locale: widget.locale,
-        localizationsDelegates: widget.localizationsDelegates,
+        localizationsDelegates: _delegates,
         localeListResolutionCallback: widget.localeListResolutionCallback,
         localeResolutionCallback: widget.localeResolutionCallback,
         supportedLocales: widget.supportedLocales,
@@ -257,11 +288,10 @@ final class _CharcoalAppState extends State<CharcoalApp> {
         shortcuts: widget.shortcuts,
         actions: widget.actions,
         restorationScopeId: widget.restorationScopeId,
+        scrollBehavior: widget.scrollBehavior,
       );
     }
-
-    return WidgetsApp(
-      key: GlobalObjectKey(this),
+    return MaterialApp(
       navigatorKey: widget.navigatorKey,
       home: widget.home,
       routes: widget.routes,
@@ -270,17 +300,14 @@ final class _CharcoalAppState extends State<CharcoalApp> {
       onGenerateInitialRoutes: widget.onGenerateInitialRoutes,
       onUnknownRoute: widget.onUnknownRoute,
       navigatorObservers: widget.navigatorObservers,
-      pageRouteBuilder:
-          widget.pageRouteBuilder ??
-          <T>(RouteSettings settings, WidgetBuilder builder) =>
-              CharcoalPageRoute<T>(builder: builder, settings: settings),
-      builder: widget.builder,
+      builder: _wrap,
       title: widget.title,
       onGenerateTitle: widget.onGenerateTitle,
-      textStyle: textStyle,
-      color: applicationColor,
+      theme: _light,
+      darkTheme: _dark,
+      themeMode: _themeMode,
       locale: widget.locale,
-      localizationsDelegates: widget.localizationsDelegates,
+      localizationsDelegates: _delegates,
       localeListResolutionCallback: widget.localeListResolutionCallback,
       localeResolutionCallback: widget.localeResolutionCallback,
       supportedLocales: widget.supportedLocales,
@@ -288,25 +315,7 @@ final class _CharcoalAppState extends State<CharcoalApp> {
       shortcuts: widget.shortcuts,
       actions: widget.actions,
       restorationScopeId: widget.restorationScopeId,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final light = widget.theme ?? CharcoalThemeData.light();
-    final dark = widget.darkTheme ?? CharcoalThemeData.dark();
-    final effectiveTheme = _resolveTheme(context, light: light, dark: dark);
-    final applicationColor = light.colors.containerPrimaryDefault;
-
-    return ScrollConfiguration(
-      behavior: widget.scrollBehavior ?? const ScrollBehavior(),
-      child: CharcoalTheme(
-        data: effectiveTheme,
-        child: HeroControllerScope(
-          controller: _heroController,
-          child: _buildWidgetsApp(theme: effectiveTheme, applicationColor: applicationColor),
-        ),
-      ),
+      scrollBehavior: widget.scrollBehavior,
     );
   }
 }

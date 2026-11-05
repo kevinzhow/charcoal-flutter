@@ -145,7 +145,10 @@ void main() {
       expect(tokens, isNotEmpty);
       expect(tokens.every((token) => token['tier'] == 'semantic'), isTrue);
       expect(
-        tokens.any((token) => (token['dartAccessor']! as String).contains('theme.dimensions')),
+        tokens.any(
+          (token) =>
+              (token['dartAccessor']! as String).startsWith('CharcoalTheme.of(context).space.'),
+        ),
         isTrue,
       );
     });
