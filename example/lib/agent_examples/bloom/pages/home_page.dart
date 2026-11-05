@@ -83,8 +83,7 @@ final class _BloomHomePage extends StatelessWidget {
           SizedBox(height: space.component30),
           if (posts.isEmpty)
             const _BloomEmptyState(
-              description:
-                  'Try the other feed or restore a hidden post from the latest message.',
+              description: 'Try the other feed or restore a hidden post from the latest message.',
               icon: CharcoalIcons.home,
               title: 'No posts here right now',
             )

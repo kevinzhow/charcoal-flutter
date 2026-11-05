@@ -28,8 +28,7 @@ final class TypographyPage extends StatelessWidget {
             child: NextThemeIsland(child: _FontContract()),
           ),
           ShowcaseCard(
-            description:
-                'The 10/12/14/16/20 ladder, regular and bold, plus monospace and truncation.',
+            description: 'The 10/12/14/16/20 ladder, regular and bold, plus monospace and truncation.',
             eyebrow: 'COMPONENT SCALE',
             title: 'CharcoalTypography',
             child: NextThemeIsland(child: _Ladder()),
@@ -94,11 +93,17 @@ class _FontContract extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        _Row(label: 'Sans family', value: typography.sansFamily ?? 'platform default'),
+        _Row(
+          label: 'Sans family',
+          value: typography.sansFamily ?? 'platform default',
+        ),
         const CharcoalGap(CharcoalSpace.md),
         _Row(label: 'Monospace family', value: typography.monoFamily),
         const CharcoalGap(CharcoalSpace.md),
-        _Row(label: 'Regular weight', value: 'w${typography.weightRegular.value}'),
+        _Row(
+          label: 'Regular weight',
+          value: 'w${typography.weightRegular.value}',
+        ),
         const CharcoalGap(CharcoalSpace.md),
         _Row(label: 'Bold weight', value: 'w${typography.weightBold.value}'),
       ],
@@ -129,21 +134,40 @@ class _Ladder extends StatelessWidget {
   Widget build(BuildContext context) => const Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      CharcoalTypography(role: CharcoalTextRole.size10, child: Text('10 / 18 · Regular')),
+      CharcoalTypography(
+        role: CharcoalTextRole.size10,
+        child: Text('10 / 18 · Regular'),
+      ),
       CharcoalGap(CharcoalSpace.sm),
-      CharcoalTypography(role: CharcoalTextRole.size12, bold: true, child: Text('12 / 20 · Bold')),
+      CharcoalTypography(
+        role: CharcoalTextRole.size12,
+        bold: true,
+        child: Text('12 / 20 · Bold'),
+      ),
       CharcoalGap(CharcoalSpace.sm),
-      CharcoalTypography(role: CharcoalTextRole.size14, child: Text('14 / 22 · Regular')),
+      CharcoalTypography(
+        role: CharcoalTextRole.size14,
+        child: Text('14 / 22 · Regular'),
+      ),
       CharcoalGap(CharcoalSpace.sm),
-      CharcoalTypography(role: CharcoalTextRole.size16, bold: true, child: Text('16 / 24 · Bold')),
+      CharcoalTypography(
+        role: CharcoalTextRole.size16,
+        bold: true,
+        child: Text('16 / 24 · Bold'),
+      ),
       CharcoalGap(CharcoalSpace.sm),
-      CharcoalTypography(role: CharcoalTextRole.size20, child: Text('20 / 28 · Regular')),
+      CharcoalTypography(
+        role: CharcoalTextRole.size20,
+        child: Text('20 / 28 · Regular'),
+      ),
       CharcoalGap(CharcoalSpace.sm),
       CharcoalTypography(monospace: true, child: Text('id_0123456789abcdef')),
       CharcoalGap(CharcoalSpace.sm),
       SizedBox(
         width: 220,
-        child: CharcoalTextEllipsis('A long run of text that is truncated when it is too wide'),
+        child: CharcoalTextEllipsis(
+          'A long run of text that is truncated when it is too wide',
+        ),
       ),
     ],
   );

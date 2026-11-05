@@ -1,0 +1,50 @@
+{
+  "family": "navigation",
+  "note": "Old name -> new name for batch 2D (navigation and layout). Library: package:charcoal_ui/next.dart; the admin pieces are in package:charcoal_ui/admin.dart.",
+  "symbols": {
+    "CharcoalNavigationBar": "CharcoalNavigationBar",
+    "CharcoalNavigationItem": "CharcoalNavigationItem",
+    "CharcoalTabBar": "CharcoalTabBar",
+    "CharcoalTabItem": "CharcoalTabItem",
+    "CharcoalPagination": "CharcoalPagination",
+    "CharcoalPaginationSize": "CharcoalPaginationSize",
+    "ConsoleTopBar": "CharcoalNavigationBar",
+    "ConsoleNavTile": "CharcoalNavigationItem (variant: CharcoalNavigationItemVariant.sidebar)",
+    "ConsolePagination": "CharcoalPagination.compact",
+    "ConsoleList": "CharcoalList",
+    "ConsoleRow": "CharcoalListRow",
+    "ConsoleSectionHeader": "CharcoalSectionHeader",
+    "ConsoleCard": "CharcoalCard",
+    "ConsoleAvatar": "CharcoalAvatar",
+    "ConsoleInfoRows": "CharcoalInfoRows (admin.dart)",
+    "ConsoleStatCard": "CharcoalStatCard (admin.dart)",
+    "ConsoleMeter": "CharcoalMeter (admin.dart)",
+    "ConsoleBatchBar": "CharcoalBatchBar (admin.dart)",
+    "ConsoleSelection": "CharcoalBatchSelection (admin.dart)",
+    "_Sidebar (console_shell.dart)": "CharcoalSidebar + CharcoalSidebarBrand + CharcoalSidebarGroup (admin.dart)",
+    "_MobileTabBar (console_shell.dart)": "CharcoalTabBar inside CharcoalAdminShell.bottomBar (admin.dart)"
+  },
+  "members": {
+    "ConsoleRow.onTap": "CharcoalListRow.onPressed",
+    "ConsoleRow.minHeight": "CharcoalListRow.height (CharcoalListRowHeight.compact|regular|tall)",
+    "ConsoleRow.titleStyle": "removed; CharcoalListRow.titleMonospace covers the monospace case",
+    "ConsoleRow.titleMonospace": "CharcoalListRow.titleMonospace",
+    "ConsoleAvatar.size (double)": "CharcoalAvatar.size (CharcoalAvatarSize.small|regular|large)",
+    "ConsoleInfoRows.labelWidth (double)": "CharcoalInfoRows.labelWidth (CharcoalInfoLabelWidth.narrow|regular|wide)",
+    "ConsoleCard.padding (EdgeInsetsGeometry)": "CharcoalCard.padding (CharcoalInset)",
+    "ConsoleStatCard.statusTone (ConsoleTone?)": "CharcoalStatCard.statusTone (CharcoalTone, default neutral)",
+    "ConsoleStatCard.valueStyle": "removed; the value is always the section-title role",
+    "ConsoleTopBar.title (String)": "CharcoalNavigationBar.title (Widget)",
+    "ConsoleBatchBar.deleteLabel": "CharcoalBatchBar.deleteLabel (default 'Delete selected')",
+    "ConsolePagination.currentPage|pageCount|onPageChanged": "same names on CharcoalPagination.compact"
+  },
+  "changes": [
+    "ConsoleNavTile and CharcoalNavigationItem are one widget: the sidebar look is CharcoalNavigationItemVariant.sidebar (smaller corners, information-tone selection). Selection is a persistent layer painted directly from `selected`; hover and press are a separate transient layer.",
+    "ConsoleRow no longer needs a Material ancestor: it is built on CharcoalClickable and paints its state layer inside its own decoration. Row hover, focus, press and selection never change bounds.",
+    "CharcoalNavigationBar implements CharcoalContextualHeight, so CharcoalScaffold reserves the text-scale-aware height.",
+    "CharcoalPagination takes pageLabel (accessible name of a page button) in addition to previousLabel/nextLabel; CharcoalPagination.compact keeps both buttons in place and disables them at the ends.",
+    "ConsoleBatchBar's Chinese strings became parameters (selectLabel, cancelLabel, deleteLabel, selectedCountLabel) with English defaults.",
+    "Selectable text in rows and info tables uses a widgets-level SelectableRegion without platform handles.",
+    "Admin pieces (batch bar, info rows, meter, stat card, sidebar, admin shell) are exported from package:charcoal_ui/admin.dart, not next.dart."
+  ]
+}

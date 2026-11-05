@@ -38,7 +38,8 @@ final class _FieldsPageState extends State<FieldsPage> {
       ShowcaseCatalogGrid(
         children: <Widget>[
           const ShowcaseCard(
-            description: 'Label, required marker, and trailing sub-label composition.',
+            description:
+                'Label, required marker, and trailing sub-label composition.',
             eyebrow: 'FIELD LABEL',
             title: 'FieldLabel',
             child: NextThemeIsland(
@@ -47,13 +48,18 @@ final class _FieldsPageState extends State<FieldsPage> {
                 children: <Widget>[
                   CharcoalFieldLabel(label: 'Display name'),
                   SizedBox(height: 18),
-                  CharcoalFieldLabel(label: 'Description', required: true, subLabel: Text('0/500')),
+                  CharcoalFieldLabel(
+                    label: 'Description',
+                    required: true,
+                    subLabel: Text('0/500'),
+                  ),
                 ],
               ),
             ),
           ),
           const ShowcaseCard(
-            description: 'Default, invalid, disabled and read-only single-line states.',
+            description:
+                'Default, invalid, disabled and read-only single-line states.',
             eyebrow: 'TEXT FIELD',
             title: 'TextField',
             child: NextThemeIsland(
@@ -79,15 +85,24 @@ final class _FieldsPageState extends State<FieldsPage> {
                     showLabel: true,
                   ),
                   CharcoalGap(CharcoalSpace.md),
-                  CharcoalTextField(disabled: true, label: 'Disabled', placeholder: 'Unavailable'),
+                  CharcoalTextField(
+                    disabled: true,
+                    label: 'Disabled',
+                    placeholder: 'Unavailable',
+                  ),
                   CharcoalGap(CharcoalSpace.md),
-                  CharcoalTextField(label: 'Read only', placeholder: 'Fixed', readOnly: true),
+                  CharcoalTextField(
+                    label: 'Read only',
+                    placeholder: 'Fixed',
+                    readOnly: true,
+                  ),
                 ],
               ),
             ),
           ),
           const ShowcaseCard(
-            description: 'A fixed-row multiline input with a counter inside the box.',
+            description:
+                'A fixed-row multiline input with a counter inside the box.',
             eyebrow: 'TEXT AREA',
             title: 'TextArea',
             child: NextThemeIsland(
@@ -159,13 +174,19 @@ final class _FieldsPageState extends State<FieldsPage> {
                     label: 'Work type',
                     onChanged: (value) => setState(() => _workType = value),
                     options: const <CharcoalDropdownOption<String>>[
-                      CharcoalDropdownOption<String>(value: 'illustration', label: 'Illustration'),
+                      CharcoalDropdownOption<String>(
+                        value: 'illustration',
+                        label: 'Illustration',
+                      ),
                       CharcoalDropdownOption<String>(
                         value: 'manga',
                         label: 'Manga',
                         secondary: 'Multiple pages',
                       ),
-                      CharcoalDropdownOption<String>(value: 'novel', label: 'Novel'),
+                      CharcoalDropdownOption<String>(
+                        value: 'novel',
+                        label: 'Novel',
+                      ),
                     ],
                     placeholder: 'Choose a type',
                     showLabel: true,
@@ -187,7 +208,8 @@ final class _FieldsPageState extends State<FieldsPage> {
             ),
           ),
           const ShowcaseCard(
-            description: 'Advisory guidance on a secondary surface, with an action.',
+            description:
+                'Advisory guidance on a secondary surface, with an action.',
             eyebrow: 'HINT TEXT',
             title: 'HintText',
             child: NextThemeIsland(

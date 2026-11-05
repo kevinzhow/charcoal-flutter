@@ -22,6 +22,8 @@ const _destinationHeadings = <String, String>{
   'Tags': 'Tags and status',
   'Fields': 'Fields and menus',
   'Navigation': 'Navigation and paging',
+  'Layout': 'Lists and cards',
+  'Admin': 'Admin console pieces',
   'Content': 'Content presentation',
   'Feedback': 'Feedback and overlays',
   'Token pipeline': 'From source to Flutter',
