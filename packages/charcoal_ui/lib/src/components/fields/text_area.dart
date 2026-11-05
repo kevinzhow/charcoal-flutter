@@ -310,7 +310,6 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
         duration: duration,
         opacity: widget.disabled ? theme.metrics.clickable.disabledOpacity : 1,
         child: CharcoalFieldFrame(
-          gap: theme.space.xs,
           assistiveText: assistiveText,
           invalid: widget.invalid,
           label: widget.label,

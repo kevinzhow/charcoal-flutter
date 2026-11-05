@@ -313,8 +313,6 @@ final class _CharcoalTextFieldState extends State<CharcoalTextField> {
         duration: duration,
         opacity: widget.disabled ? theme.metrics.clickable.disabledOpacity : 1,
         child: CharcoalFieldFrame(
-          gap: theme.space.sm,
-          boldLabel: false,
           assistiveText: assistiveText,
           invalid: widget.invalid,
           label: widget.label,
