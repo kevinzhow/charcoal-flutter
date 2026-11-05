@@ -127,7 +127,7 @@ void main(List<String> argv) {
   }
   stdout.writeln(
     '\n${names.length} compared, $failed over threshold '
-    '${threshold}% / missing (tolerance $tolerance, text mask '
+    '$threshold% / missing (tolerance $tolerance, text mask '
     '${useMask ? 'on' : 'off'})',
   );
   exit(failed == 0 ? 0 : 1);
