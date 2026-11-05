@@ -4,7 +4,6 @@ import 'package:test/test.dart';
 
 import '../tool/src/migrate_api.dart';
 
-
 void main() {
   final table = RenameTable.fromJson([
     {

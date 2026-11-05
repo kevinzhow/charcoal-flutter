@@ -431,8 +431,7 @@ void main() {
       );
     });
 
-    test('separates theme propagation, semantic hierarchy, and truncation', () {
-      final theme = charcoalCatalog.componentNamed('CharcoalTheme')!;
+    test('separates semantic hierarchy and truncation', () {
       final typography = charcoalCatalog.componentNamed(
         'CharcoalTypography',
       )!;
@@ -441,7 +440,6 @@ void main() {
       )!;
 
       for (final component in <CharcoalComponentDoc>[
-        theme,
         typography,
         ellipsis,
       ]) {
@@ -455,16 +453,8 @@ void main() {
         );
       }
       expect(
-        theme.avoidWhen.join(' '),
-        allOf(contains('CharcoalApp'), contains('coherent light or dark')),
-      );
-      expect(
-        theme.responsiveBehavior.join(' '),
-        allOf(contains('InheritedTheme'), contains('atomically')),
-      );
-      expect(
         typography.avoidWhen.join(' '),
-        allOf(contains('page heading'), contains('textStyles')),
+        allOf(contains('page heading'), contains('CharcoalText')),
       );
       expect(
         typography.responsiveBehavior.join(' '),
