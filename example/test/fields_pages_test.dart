@@ -3,8 +3,8 @@ import 'package:charcoal_ui_showcase/showcase/app.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The fields, typography and roles pages mount charcoal_ui.dart components inside the legacy shell
-/// through the theme island; they must build without errors at phone and desktop widths.
+/// The fields, typography and roles pages mount the Material-based components
+/// in the showcase shell; they must build without errors at phone and desktop widths.
 void main() {
   for (final route in <String, String>{
     '/fields': 'Fields and menus',
