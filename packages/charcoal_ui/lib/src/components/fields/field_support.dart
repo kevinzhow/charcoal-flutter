@@ -11,15 +11,13 @@ String charcoalFieldCountText(String text, int? maxLength) =>
 /// The label above a field, the field, and the assistive line below it.
 ///
 /// Shared by every Charcoal field so label gap, assistive colour and the live region behave the
-/// same. [gap] is the distance to the label and to the assistive line; [boldLabel] selects the
-/// label weight.
+/// same. The label is always the bold `CharcoalFieldLabel` and the distance to the label and to the
+/// assistive line is always `space.sm`, so mixed forms line up.
 class CharcoalFieldFrame extends StatelessWidget {
   /// Frames [field].
   const CharcoalFieldFrame({
     required this.field,
-    required this.gap,
     this.assistiveText,
-    this.boldLabel = true,
     this.invalid = false,
     this.label = '',
     this.required = false,
@@ -32,14 +30,8 @@ class CharcoalFieldFrame extends StatelessWidget {
   /// The control itself.
   final Widget field;
 
-  /// Space between label, field and assistive line.
-  final double gap;
-
   /// Helper or error text below the field.
   final String? assistiveText;
-
-  /// Whether the label is bold.
-  final bool boldLabel;
 
   /// Whether the field is invalid; colours the assistive text and announces it.
   final bool invalid;
@@ -63,6 +55,7 @@ class CharcoalFieldFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final assistive = assistiveText;
+    final gap = theme.space.sm;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -70,7 +63,6 @@ class CharcoalFieldFrame extends StatelessWidget {
         if (showLabel) ...<Widget>[
           CharcoalFieldLabel(
             label: label,
-            bold: boldLabel,
             required: required,
             requiredText: requiredText,
             subLabel: subLabel,

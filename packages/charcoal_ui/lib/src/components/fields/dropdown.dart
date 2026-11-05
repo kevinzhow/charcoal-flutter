@@ -458,7 +458,6 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
       duration: duration,
       opacity: _enabled ? 1 : theme.metrics.clickable.disabledOpacity,
       child: CharcoalFieldFrame(
-        gap: fieldGap,
         assistiveText: assistiveText,
         invalid: widget.invalid,
         label: widget.label,

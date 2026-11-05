@@ -98,9 +98,14 @@ void main() {
       const ValueKey<String>('agent-example-selector'),
     );
     await tester.ensureVisible(selector);
-    await tester.tap(
-      find.descendant(of: selector, matching: find.text('Settings')),
+    // On a narrow surface the selector scrolls; reveal the segment before tapping it.
+    final settings = find.descendant(
+      of: selector,
+      matching: find.text('Settings'),
     );
+    await tester.ensureVisible(settings);
+    await tester.pump();
+    await tester.tap(settings);
     await tester.pump(const Duration(milliseconds: 250));
 
     final displayNameField = find.descendant(

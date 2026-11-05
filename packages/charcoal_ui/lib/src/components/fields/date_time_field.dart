@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../foundation/charcoal_clickable.dart';
 import '../../foundation/interaction_state.dart';
-import 'field_label.dart';
+import 'field_support.dart';
 
 /// Picks a moment for a [CharcoalDateTimeField]; returns null when cancelled.
 typedef CharcoalDateTimePicker = Future<DateTime?> Function(
@@ -168,75 +168,68 @@ class CharcoalDateTimeField extends StatelessWidget {
         ),
       ),
     );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        CharcoalFieldLabel(label: label),
-        SizedBox(height: theme.space.sm),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: CharcoalClickable(
-                onPressed: enabled ? () => _pick(context) : null,
-                semanticLabel: label,
-                semanticValue: current == null ? emptyText : mode.format(current),
-                builder: (context, states) => surface(
-                  states,
-                  Row(
-                    children: <Widget>[
-                      CharcoalIcon(
-                        mode == CharcoalDateTimeMode.date
-                            ? CharcoalIcons.calendar
-                            : CharcoalIcons.history,
-                        color: colors.iconSecondary,
-                        size: theme.metrics.textField.iconSize,
-                      ),
-                      SizedBox(width: theme.metrics.textField.contentGap),
-                      Expanded(
-                        child: Text(
-                          current == null ? emptyText : mode.format(current),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.style(
-                            CharcoalTextRole.size14,
-                            color: current == null ? colors.textPlaceholder : colors.textSecondary,
-                          ),
+    return CharcoalFieldFrame(
+      label: label,
+      showLabel: true,
+      assistiveText: hint,
+      field: Row(
+        children: <Widget>[
+          Expanded(
+            child: CharcoalClickable(
+              onPressed: enabled ? () => _pick(context) : null,
+              semanticLabel: label,
+              semanticValue: current == null ? emptyText : mode.format(current),
+              builder: (context, states) => surface(
+                states,
+                Row(
+                  children: <Widget>[
+                    CharcoalIcon(
+                      mode == CharcoalDateTimeMode.date
+                          ? CharcoalIcons.calendar
+                          : CharcoalIcons.history,
+                      color: colors.iconSecondary,
+                      size: theme.metrics.textField.iconSize,
+                    ),
+                    SizedBox(width: theme.metrics.textField.contentGap),
+                    Expanded(
+                      child: Text(
+                        current == null ? emptyText : mode.format(current),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.style(
+                          CharcoalTextRole.size14,
+                          color: current == null ? colors.textPlaceholder : colors.textSecondary,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            if (current != null && enabled) ...<Widget>[
-              SizedBox(width: theme.space.sm),
-              CharcoalClickable(
-                onPressed: () => onChanged!(null),
-                semanticLabel: clearText,
-                builder: (context, states) => surface(
-                  states,
-                  Center(
-                    widthFactor: 1,
-                    child: Text(
-                      clearText,
-                      style: theme.style(
-                        CharcoalTextRole.size14,
-                        bold: true,
-                        color: colors.textSecondary,
-                      ),
+          ),
+          if (current != null && enabled) ...<Widget>[
+            SizedBox(width: theme.space.sm),
+            CharcoalClickable(
+              onPressed: () => onChanged!(null),
+              semanticLabel: clearText,
+              builder: (context, states) => surface(
+                states,
+                Center(
+                  widthFactor: 1,
+                  child: Text(
+                    clearText,
+                    style: theme.style(
+                      CharcoalTextRole.size14,
+                      bold: true,
+                      color: colors.textSecondary,
                     ),
                   ),
                 ),
               ),
-            ],
+            ),
           ],
-        ),
-        if (hint != null) ...<Widget>[
-          SizedBox(height: theme.space.xs),
-          Text(hint!, style: theme.style(CharcoalTextRole.caption)),
         ],
-      ],
+      ),
     );
   }
 }

@@ -49,11 +49,9 @@ class CharcoalFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final gap = theme.space.sm;
     return Semantics(
       container: true,
       child: CharcoalFieldFrame(
-        gap: gap,
         assistiveText: assistiveText,
         invalid: invalid,
         label: label,

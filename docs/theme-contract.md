@@ -207,7 +207,7 @@ Class names end in `Roles` / `Scale` / `Metrics` so that `charcoal_ui` can re-ex
 | `sizes.rowMinHeightCompact` | 52 | literal | Minimum height of a compact action row. |
 | `sizes.rowMinHeightTall` | 64 | literal | Minimum height of a two-line list row. |
 | `sizes.formMaxWidth` | 392 | literal | Maximum width of the sign-in card. |
-| `sizes.contentWideMaxWidth` | 840 | literal | Maximum width of a wide tabbed page. |
+| `sizes.contentWideMaxWidth` | 1200 | literal | Maximum width of a wide page (tables, dense forms); never below `contentMaxWidth`. |
 | `sizes.fieldWidthCompact` | 200 | literal | Width of a compact inline control. |
 | `sizes.infoLabelWidthNarrow` | 72 | literal | Narrow label column of a key/value block. |
 | `sizes.infoLabelWidthWide` | 112 | literal | Wide label column of a key/value block. |

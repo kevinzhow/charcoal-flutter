@@ -117,8 +117,9 @@ final class CharcoalListRow extends StatelessWidget {
   /// Whether the title uses the monospace family (identifiers, keys).
   final bool titleMonospace;
 
-  /// Inline widgets on the title line itself, which wrap with the title instead of sitting at
-  /// the far end of the row.
+  /// Inline widgets on the title line itself instead of at the far end of the row. They stay
+  /// together as one group: beside the title when the whole group fits on its line, below the
+  /// title otherwise.
   final List<Widget>? titleTrailing;
 
   /// Widgets between the text block and the chevron, usually chips.
@@ -203,13 +204,21 @@ final class CharcoalListRow extends StatelessWidget {
                     if (inlineTrailing == null || inlineTrailing.isEmpty)
                       Text(title, style: titleStyle, maxLines: 1, overflow: TextOverflow.ellipsis)
                     else
+                      // One rule at every width: the inline widgets stay together as a group,
+                      // beside the title when the whole group fits on its line and below it
+                      // otherwise.
                       Wrap(
                         spacing: space.sm,
                         runSpacing: space.xs,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: <Widget>[
                           Text(title, style: titleStyle),
-                          ...inlineTrailing,
+                          Wrap(
+                            spacing: space.sm,
+                            runSpacing: space.xs,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: inlineTrailing,
+                          ),
                         ],
                       ),
                     if (subtitle != null)
@@ -255,7 +264,10 @@ final class CharcoalListRow extends StatelessWidget {
           ),
           if (details != null)
             Padding(
-              padding: EdgeInsets.only(top: space.sm),
+              // Directly under the title when there is no subtitle or body to separate from.
+              padding: EdgeInsets.only(
+                top: subtitle == null && body == null ? 0 : space.sm,
+              ),
               child: CharcoalSelectable(
                 child: Text(details!, style: theme.style(CharcoalTextRole.caption)),
               ),
