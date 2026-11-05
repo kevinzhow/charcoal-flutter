@@ -4,6 +4,8 @@ import 'package:charcoal_ui/next.dart'
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart' show Theme;
 
+const _showcaseFont = 'Noto Sans';
+
 /// Gives the Material-based Charcoal components a `ThemeData` below the legacy showcase shell.
 ///
 /// The shell still runs on the pre-Material `CharcoalApp`; until it switches (end of phase 2) the
@@ -19,8 +21,14 @@ final class ActionsNextHost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = legacy.CharcoalTheme.of(context).brightness == Brightness.dark;
+    final pack = dark ? charcoalDarkPack : charcoalLightPack;
     return Theme(
-      data: buildCharcoalThemeData(dark ? charcoalDarkPack : charcoalLightPack),
+      // The showcase bundles Noto Sans; the legacy shell sets it explicitly, so do the same.
+      data: buildCharcoalThemeData(
+        pack.copyWith(
+          typography: pack.typography.copyWith(sansFamily: _showcaseFont),
+        ),
+      ),
       child: child,
     );
   }

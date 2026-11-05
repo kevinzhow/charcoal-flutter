@@ -137,12 +137,40 @@ final class _SelectionPageState extends State<SelectionPage> {
             ),
           ),
           ShowcaseCard(
+            description: 'On, off, and disabled switch states.',
+            eyebrow: 'SWITCH',
+            title: 'Switch',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CharcoalSwitch(
+                  label: const Text('Show notifications'),
+                  onChanged: (value) =>
+                      setState(() => _showNotifications = value),
+                  value: _showNotifications,
+                ),
+                const SizedBox(height: 18),
+                CharcoalSwitch(
+                  label: const Text('Receive updates'),
+                  onChanged: (value) => setState(() => _receiveUpdates = value),
+                  value: _receiveUpdates,
+                ),
+                const SizedBox(height: 18),
+                const CharcoalSwitch(
+                  label: Text('Disabled'),
+                  onChanged: null,
+                  value: true,
+                ),
+              ],
+            ),
+          ),
+          ShowcaseCard(
             description:
                 'Atomic single selection with intrinsic segment widths.',
             eyebrow: 'SEGMENTED CONTROL',
             title: 'Segmented control',
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 CharcoalSegmentedControl<String>(
                   key: const ValueKey<String>('range-segmented-control'),
@@ -169,34 +197,6 @@ final class _SelectionPageState extends State<SelectionPage> {
                   value: _volume,
                 ),
                 const CharcoalSlider(onChanged: null, value: 0.6),
-              ],
-            ),
-          ),
-          ShowcaseCard(
-            description: 'On, off, and disabled switch states.',
-            eyebrow: 'SWITCH',
-            title: 'Switch',
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CharcoalSwitch(
-                  label: const Text('Show notifications'),
-                  onChanged: (value) =>
-                      setState(() => _showNotifications = value),
-                  value: _showNotifications,
-                ),
-                const SizedBox(height: 18),
-                CharcoalSwitch(
-                  label: const Text('Receive updates'),
-                  onChanged: (value) => setState(() => _receiveUpdates = value),
-                  value: _receiveUpdates,
-                ),
-                const SizedBox(height: 18),
-                const CharcoalSwitch(
-                  label: Text('Disabled'),
-                  onChanged: null,
-                  value: true,
-                ),
               ],
             ),
           ),

@@ -38,7 +38,7 @@ final class ButtonsPage extends StatelessWidget {
       const SizedBox(height: 24),
       ShowcaseCatalogGrid(
         children: <Widget>[
-          for (final variant in CharcoalButtonVariant.values)
+          for (final variant in _buttonVariantOrder)
             _ButtonVariantCard(variant: variant),
         ],
       ),
@@ -97,6 +97,15 @@ final class ButtonsPage extends StatelessWidget {
     ],
   );
 }
+
+/// The order the legacy page used (the theme enum lists danger before overlay).
+const _buttonVariantOrder = <CharcoalButtonVariant>[
+  CharcoalButtonVariant.normal,
+  CharcoalButtonVariant.primary,
+  CharcoalButtonVariant.overlay,
+  CharcoalButtonVariant.danger,
+  CharcoalButtonVariant.navigation,
+];
 
 final class _SwitchingButtonSample extends StatefulWidget {
   const _SwitchingButtonSample();
