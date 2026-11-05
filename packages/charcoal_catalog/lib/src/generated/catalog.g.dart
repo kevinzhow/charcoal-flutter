@@ -3934,7 +3934,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalGrid",
           "kind": "constructor",
-          "signature": "CharcoalGrid({required this.children, this.columns = const CharcoalGridColumns(), this.runSpacing, this.spacing = CharcoalSpace.md, super.key})",
+          "signature": "CharcoalGrid({required this.children, this.columns = const CharcoalGridColumns(), this.rowHeight = CharcoalGridRowHeight.equal, this.runSpacing, this.spacing = CharcoalSpace.md, super.key})",
           "parameters": [
             {
               "name": "children",
@@ -3948,6 +3948,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "const CharcoalGridColumns()"
+            },
+            {
+              "name": "rowHeight",
+              "type": "CharcoalGridRowHeight",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalGridRowHeight.equal"
             },
             {
               "name": "runSpacing",
