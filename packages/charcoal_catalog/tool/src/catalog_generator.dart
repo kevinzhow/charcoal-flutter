@@ -7,7 +7,7 @@ import 'package:charcoal_catalog/src/model.dart';
 import 'package:path/path.dart' as p;
 
 import 'design_guidance.dart';
-import 'metadata.dart';
+import 'metadata/index.dart';
 
 const Set<String> _widgetBaseTypes = <String>{
   'InheritedTheme',

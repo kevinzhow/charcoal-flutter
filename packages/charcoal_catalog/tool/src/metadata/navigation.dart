@@ -1,0 +1,445 @@
+import 'index.dart';
+
+/// Catalog metadata fragment: navigation.
+const Map<String, ComponentMetadata> navigationMetadata = <String, ComponentMetadata>{
+  'CharcoalPageRoute': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.',
+    keywords: <String>[
+      'android predictive back',
+      'back gesture',
+      'ios swipe back',
+      'navigation',
+      'page route',
+      'route transition',
+    ],
+    useWhen: <String>[
+      'A detail, drill-in, or transient task belongs on a real Navigator stack.',
+      'The page must preserve Charcoal motion while honoring native platform back gestures.',
+    ],
+    avoidWhen: <String>[
+      'A top-level destination is changing; update the stable app-shell owner without pushing a route.',
+      'The task is a bounded dialog or sheet; use showCharcoalModal instead.',
+    ],
+    accessibility: <String>[
+      'Use PopScope.canPop to publish guarded navigation state before a platform gesture begins.',
+      'Fullscreen dialogs and blocked routes do not expose an interactive iOS back gesture.',
+      'The route scopes page semantics while the caller remains responsible for an explicit back action.',
+    ],
+    responsiveBehavior: <String>[
+      'Native iOS uses a leading-edge interactive transition and respects RTL directionality.',
+      'Native Android consumes predictive-back progress from either system edge.',
+      'Android hosts set android:enableOnBackInvokedCallback="true" on the application or activity.',
+      'Web and desktop platforms retain opaque Charcoal shared-axis motion without installing mobile edge gestures.',
+    ],
+    interactionStates: <String>[
+      'entering',
+      'active',
+      'back gesture started',
+      'back gesture updating',
+      'back gesture cancelled',
+      'back gesture committed',
+      'exiting',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns page motion, gesture progress, cancellation recovery, and committed Navigator pop.',
+      'The caller owns route-stack state, unsaved-change guards, and durable completion semantics.',
+    ],
+    tokenRoles: <String>[],
+    relatedComponents: <String>[
+      'CharcoalApp',
+      'CharcoalNavigationBar',
+      'CharcoalTabBar',
+    ],
+    companionDeclarations: <String>['CharcoalPageTransitionAxis'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'page-route-platform-back',
+        title: 'Platform-adaptive detail route',
+        description: 'Pushes a real detail page whose back interaction follows iOS and Android platform gestures.',
+        sourcePath: 'example/lib/agent_examples/page_route_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalScaffold': ComponentMetadata(
+    category: 'Layout',
+    summary:
+        'Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.',
+    keywords: <String>[
+      'scaffold',
+      'page',
+      'safe area',
+      'edge to edge',
+      'keyboard',
+      'system bars',
+    ],
+    useWhen: <String>[
+      'A full page needs consistent system insets, navigation and bottom controls.',
+    ],
+    avoidWhen: <String>[
+      'A small component only needs local layout constraints.',
+    ],
+    accessibility: <String>[
+      'Keep interactive controls safe when choosing a full-bleed body.',
+      'Use a scrollable body for compact screens and enlarged text.',
+    ],
+    responsiveBehavior: <String>[
+      'Shrinks above the software keyboard by default.',
+      'Background fills the window; content and bars consume safe insets once.',
+    ],
+    interactionStates: <String>[
+      'keyboard hidden',
+      'keyboard visible',
+      'full bleed',
+      'light',
+      'dark',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns page geometry, system bar appearance and scroll observation.',
+      'The host owns display mode and native window chrome; the application owns navigation and persistence.',
+    ],
+    tokenRoles: <String>['backgroundDefault'],
+    relatedComponents: <String>[
+      'CharcoalApp',
+      'CharcoalNavigationBar',
+      'CharcoalTextField',
+      'CharcoalTextArea',
+    ],
+    companionDeclarations: <String>['configureCharcoalSystemUi'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'scaffold-editor',
+        title: 'Keyboard-safe editor',
+        description: 'A scrollable editor with safe navigation and persistent bottom controls.',
+        sourcePath: 'example/lib/agent_examples/scaffold_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalNavigationBar': ComponentMetadata(
+    category: 'Navigation',
+    summary:
+        'Provides page-level title context with balanced leading and trailing navigation slots.',
+    keywords: <String>[
+      'app bar',
+      'back navigation',
+      'header',
+      'navigation bar',
+      'toolbar',
+    ],
+    useWhen: <String>[
+      'A page needs a stable title plus back, close, or contextual actions.',
+      'A hierarchical mobile flow needs its current destination to remain visible.',
+    ],
+    avoidWhen: <String>[
+      'The control switches between top-level destinations; use a tab bar or navigation items.',
+      'The content only needs a section heading inside the page body.',
+    ],
+    accessibility: <String>[
+      'Keep the title concise; it is exposed as a semantic header.',
+      'Give icon-only leading and trailing controls explicit semantic labels.',
+    ],
+    responsiveBehavior: <String>[
+      'The title remains geometrically centered while edge slots contract on narrow widths.',
+      'Keep edge actions compact; CharcoalScaffold owns system safe-area padding around this bar.',
+    ],
+    interactionStates: <String>[
+      'page context',
+      'leading action',
+      'trailing action',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns title geometry and layout slots but not navigation state.',
+      'The caller owns back, close, destination, and contextual-action outcomes.',
+    ],
+    tokenRoles: <String>[
+      'space.targetL',
+      'space.component30',
+      'borderSecondary',
+      'backgroundDefault',
+    ],
+    relatedComponents: <String>['CharcoalIconButton', 'CharcoalNavigationItem'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'navigation-bar-detail',
+        title: 'Detail navigation bar',
+        description: 'A centered destination title with back navigation and one contextual action.',
+        sourcePath: 'example/lib/agent_examples/navigation_bar_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalNavigationItem': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Selects one stable top-level destination in a sidebar, drawer, or navigation list.',
+    keywords: <String>[
+      'destination',
+      'drawer item',
+      'navigation item',
+      'primary navigation',
+      'sidebar',
+      'top level navigation',
+    ],
+    useWhen: <String>[
+      'A wide layout exposes stable top-level destinations in a sidebar or drawer.',
+      'The selected destination and page content are controlled by one app-shell state owner.',
+    ],
+    avoidWhen: <String>[
+      'The action opens a detail or transient task; push a CharcoalPageRoute instead.',
+      'The choice only changes a local filter or compact view; use CharcoalSegmentedControl.',
+    ],
+    accessibility: <String>[
+      'Every enabled item exposes button, focus, and explicit selected or unselected semantics.',
+      'Wrap the destination collection in a named navigation semantic region.',
+      'Use semanticLabel when icons, badges, or trailing content add meaning not present in the visible label.',
+    ],
+    responsiveBehavior: <String>[
+      'The item fills its parent width and retains a 40 logical-pixel minimum height.',
+      'Leading, label, and trailing geometry remains fixed through hover, focus, press, cancellation, and selection.',
+      'Move the same controlled destination state to CharcoalTabBar when compact constraints no longer support a sidebar.',
+      'Long labels use one-line ellipsis; keep destination names concise and localizable.',
+    ],
+    interactionStates: <String>[
+      'selected',
+      'unselected',
+      'hovered',
+      'focused',
+      'pressed',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns persistent selection presentation on one layer and transient hover, focus, and press feedback on another.',
+      'Keeps geometry stable and reports activation without mutating routes or destination state.',
+      'The caller atomically updates the previous and next selected semantics plus content in the first painted frame.',
+      'The caller owns destination state preservation and all detail, task, replacement, pop, and back effects.',
+    ],
+    tokenRoles: <String>[
+      'space.targetM',
+      'space.targetXs',
+      'space.component20',
+      'space.component25',
+      'radius.m',
+      'containerSecondaryDefault',
+      'containerSecondaryHoverA',
+      'containerSecondaryPressA',
+      'borderFocusLegacy',
+    ],
+    relatedComponents: <String>[
+      'CharcoalTabBar',
+      'CharcoalNavigationBar',
+      'CharcoalPageRoute',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'navigation-item-adaptive-destinations',
+        title: 'Adaptive controlled destinations',
+        description: 'Shares one destination owner between a wide sidebar and compact tab bar without changing the route stack.',
+        sourcePath: 'example/lib/agent_examples/navigation_item_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalTabBar': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Switches between stable top-level destinations without owning or mutating the route stack.',
+    keywords: <String>[
+      'bottom navigation',
+      'destination',
+      'navigation tabs',
+      'primary navigation',
+      'tab bar',
+    ],
+    useWhen: <String>[
+      'A compact application exposes two to five stable top-level destinations.',
+      'Destination selection must remain controlled by one app-shell state owner.',
+    ],
+    avoidWhen: <String>[
+      'Choices switch a local filter or view; use CharcoalSegmentedControl.',
+      'The action opens a detail, task, or durable result; use the app route stack instead.',
+    ],
+    accessibility: <String>[
+      'The bar and its destinations expose tab-bar and tab roles with one explicit selected item.',
+      'Use a full semanticLabel when a visible badge adds information to the destination label.',
+    ],
+    responsiveBehavior: <String>[
+      'Destinations share the available width and retain a 64 logical-pixel baseline height.',
+      'State layers preserve each destination rectangle plus icon and label alignment; they never loosen the content constraints.',
+      'The bar grows for text scaling; use CharcoalNavigationItem when a large layout moves navigation to a sidebar.',
+      'Place system safe-area padding in the surrounding app shell.',
+    ],
+    interactionStates: <String>[
+      'selected',
+      'unselected',
+      'hovered',
+      'focused',
+      'pressed',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns a touch lifecycle where pointer down paints an independent pressed layer, cancellation has no persistent effect, and an accepted tap reports selection; owns badge rendering.',
+      'Commits controlled persistent selection atomically without reusing the transient interaction tween.',
+      'Keeps target bounds, icon and label centers, and text baselines invariant across interaction states.',
+      'The caller owns one destination state source plus route-stack effects, state preservation, and back behavior.',
+    ],
+    tokenRoles: <String>[
+      'space.layout60',
+      'containerSecondaryDefaultA',
+      'containerSecondaryHoverA',
+      'containerSecondaryPressA',
+      'borderFocusLegacy',
+      'containerNegativeDefault',
+    ],
+    relatedComponents: <String>[
+      'CharcoalNavigationBar',
+      'CharcoalNavigationItem',
+      'CharcoalSegmentedControl',
+    ],
+    companionDeclarations: <String>['CharcoalTabItem'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'tab-bar-controlled',
+        title: 'Controlled top-level destinations',
+        description: 'A stable destination value updates app-shell content without prescribing a route push.',
+        sourcePath: 'example/lib/agent_examples/tab_bar_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalCarousel': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Presents a short, non-auto-rotating horizontal sequence across touch, pointer, keyboard, and assistive input.',
+    keywords: <String>[
+      'carousel',
+      'featured content',
+      'gallery',
+      'page indicator',
+      'slide',
+      'swipe',
+    ],
+    useWhen: <String>[
+      'A short set of related featured, media, or explanatory items benefits from direct swiping and optional neighboring-page context.',
+      'The sequence remains meaningful without automatic rotation and the caller can provide a bounded height for every supported layout.',
+    ],
+    avoidWhen: <String>[
+      'The user is moving between stable application destinations; use CharcoalTabBar or CharcoalNavigationItem.',
+      'A finite result collection needs direct access to numbered pages; use CharcoalPagination.',
+      'A long or unbounded collection must remain simultaneously discoverable; use a scrollable list or gallery instead.',
+      'Only one static item exists or essential information would become hidden in an unvisited slide.',
+    ],
+    accessibility: <String>[
+      'Name the carousel region and use semanticLabelBuilder to localize each zero-based slide and indicator position.',
+      'Give every image and action inside a slide its own meaningful label; the carousel does not replace child semantics.',
+      'Arrow keys follow reading direction, Home and End reach boundaries, indicators expose selection, and unavailable boundary controls leave semantics and focus traversal.',
+      'Keyboard focus reveals overlay navigation before focus enters its buttons, so a focused control never becomes visually hidden.',
+    ],
+    responsiveBehavior: <String>[
+      'The parent supplies a bounded height; small shows one full page and indicators, while medium defaults to a partial neighbor and overlay navigation.',
+      'Touch and trackpad users swipe the viewport without depending on hover; pointer hover and focus-within reveal desktop navigation.',
+      'A long indicator row scrolls horizontally instead of overflowing compact constraints, but keep carousel sequences intentionally short.',
+      'Slides, chevrons, and horizontal arrow keys follow ambient LTR or RTL direction.',
+    ],
+    interactionStates: <String>[
+      'idle',
+      'dragging',
+      'settling',
+      'hovered',
+      'focus within',
+      'current page',
+      'first page',
+      'last page',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns viewport motion, the internal current page, selected indicators, boundary availability, and navigation feedback when no controller is supplied.',
+      'An external PageController owns the first painted page and viewport fraction; the caller owns that controller lifecycle and observes accepted pages through onPageChanged.',
+      'The caller owns slide loading, errors, action outcomes, live page context when needed, routes, and durable product state.',
+    ],
+    tokenRoles: <String>[
+      'space.targetM',
+      'space.component20',
+      'radius.oval',
+      'borderFocusLegacy',
+      'borderFocus1',
+      'textDefault',
+      'textTertiaryDefault',
+    ],
+    relatedComponents: <String>[
+      'CharcoalIconButton',
+      'CharcoalPagination',
+      'CharcoalTabBar',
+    ],
+    companionDeclarations: <String>['CharcoalCarouselSize'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'carousel-responsive-featured-guides',
+        title: 'Responsive featured guides',
+        description: 'Preserves reported page context while the same carousel moves between compact full-page and wide neighboring-page layouts.',
+        sourcePath: 'example/lib/agent_examples/carousel_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalPagination': ComponentMetadata(
+    category: 'Navigation',
+    summary: 'Requests a page from a finite ordered collection while the caller owns results and navigation state.',
+    keywords: <String>[
+      'current page',
+      'finite results',
+      'next page',
+      'page navigation',
+      'pagination',
+      'previous page',
+    ],
+    useWhen: <String>[
+      'A large ordered result collection has a known page count and users need direct access to nearby or boundary pages.',
+      'The current page, loaded results, and optional URL state are controlled by one parent.',
+    ],
+    avoidWhen: <String>[
+      'Content continues without a known page count; use an explicit load-more or infinite-results pattern.',
+      'The control advances media or featured content; use CharcoalCarousel.',
+      'The choice changes a top-level destination; use CharcoalTabBar or CharcoalNavigationItem.',
+    ],
+    accessibility: <String>[
+      'Give the group and previous and next actions localized semantic labels that describe the paged content.',
+      'The current page is selected and non-interactive, available page numbers are buttons, and ellipses are excluded from semantics.',
+      'At the first and last page, the unavailable boundary arrow keeps layout space but leaves semantics and keyboard focus order.',
+    ],
+    responsiveBehavior: <String>[
+      'The page window automatically contracts from seven to five to three slots while preserving both boundary pages.',
+      'Provide at least two navigation targets plus three page slots; use CharcoalPaginationSize.small in audited dense layouts.',
+      'Previous and next chevrons follow ambient LTR or RTL text direction.',
+    ],
+    interactionStates: <String>[
+      'current',
+      'available',
+      'hovered',
+      'focused',
+      'pressed',
+      'disabled',
+      'first page',
+      'last page',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the visible page window, current-page presentation, boundary visibility, interaction state, and requested one-indexed page.',
+      'The caller owns the accepted current page, loading and error feedback, result replacement, scroll or focus restoration, and URL history.',
+    ],
+    tokenRoles: <String>[
+      'space.targetS',
+      'space.targetM',
+      'radius.oval',
+      'containerHudDefault',
+      'containerSecondaryDefault',
+      'borderFocusLegacy',
+    ],
+    relatedComponents: <String>[
+      'CharcoalCarousel',
+      'CharcoalNavigationItem',
+      'CharcoalTabBar',
+    ],
+    companionDeclarations: <String>['CharcoalPaginationSize'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'pagination-controlled-results',
+        title: 'Adaptive controlled result pages',
+        description: 'Keeps result context and the accepted page in one parent while the page window adapts to compact constraints.',
+        sourcePath: 'example/lib/agent_examples/pagination_example.dart',
+      ),
+    ],
+  ),
+};
