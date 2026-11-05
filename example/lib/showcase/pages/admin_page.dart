@@ -52,6 +52,7 @@ final class _AdminPageState extends State<AdminPage> {
               eyebrow: 'SIDEBAR',
               title: 'Sidebar',
               child: SizedBox(
+                width: theme.sizes.sidebarWidth,
                 height: 420,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
