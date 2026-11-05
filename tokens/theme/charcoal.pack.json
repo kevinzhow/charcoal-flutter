@@ -184,7 +184,8 @@
     "sidebarWidth": 240,
     "sidebarBreakpoint": 900,
     "pageInsetWide": 48,
-    "sidebarInset": 20
+    "sidebarInset": 20,
+    "infoLabelWidthExtraWide": 128
   },
   "motion": {
     "fast": "120ms",

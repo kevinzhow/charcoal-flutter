@@ -24,6 +24,7 @@ final class CharcoalBalloon extends StatelessWidget {
     this.action,
     this.arrowCenter,
     this.dismissIcon,
+    this.dismissLabel = 'Close',
     this.maxWidth,
     this.onDismiss,
     this.position = CharcoalOverlayPosition.top,
@@ -35,6 +36,9 @@ final class CharcoalBalloon extends StatelessWidget {
   final double? arrowCenter;
   final Widget child;
   final Widget? dismissIcon;
+
+  /// Semantics label of the dismiss button; pass the localized string.
+  final String dismissLabel;
   final double? maxWidth;
   final VoidCallback? onDismiss;
   final CharcoalOverlayPosition position;
@@ -111,6 +115,7 @@ final class CharcoalBalloon extends StatelessWidget {
                         SizedBox(width: metrics.closeGap),
                         _BalloonCloseButton(
                           icon: dismissIcon,
+                          label: dismissLabel,
                           onPressed: onDismiss!,
                         ),
                       ],
@@ -143,7 +148,9 @@ final class CharcoalBalloon extends StatelessWidget {
 }
 
 final class _BalloonCloseButton extends StatelessWidget {
-  const _BalloonCloseButton({required this.onPressed, this.icon});
+  const _BalloonCloseButton({required this.label, required this.onPressed, this.icon});
+
+  final String label;
 
   final Widget? icon;
   final VoidCallback onPressed;
@@ -155,7 +162,7 @@ final class _BalloonCloseButton extends StatelessWidget {
     final metrics = theme.metrics.balloon;
     return CharcoalClickable(
       onPressed: onPressed,
-      semanticLabel: 'Close',
+      semanticLabel: label,
       builder: (context, states) {
         final focused = states.contains(WidgetState.focused);
         final background = resolveCharcoalStateColor(
@@ -224,6 +231,7 @@ final class CharcoalAnchoredBalloon extends StatefulWidget {
     required this.message,
     this.action,
     this.dismissIcon,
+    this.dismissLabel = 'Close',
     this.dismissAfter,
     this.dismissOnTapOutside = false,
     this.maxWidth,
@@ -236,6 +244,9 @@ final class CharcoalAnchoredBalloon extends StatefulWidget {
   final Widget? action;
   final Widget anchor;
   final Widget? dismissIcon;
+
+  /// Semantics label of the dismiss button; pass the localized string.
+  final String dismissLabel;
   final Duration? dismissAfter;
   final bool dismissOnTapOutside;
   final double? maxWidth;
@@ -363,6 +374,7 @@ final class _CharcoalAnchoredBalloonState extends State<CharcoalAnchoredBalloon>
         animation: _animation,
         dismissOnTapOutside: widget.dismissOnTapOutside,
         dismissIcon: widget.dismissIcon,
+        dismissLabel: widget.dismissLabel,
         maxWidth: maxWidth,
         message: widget.message,
         onDismiss: () => _requestVisibility(false),
@@ -418,6 +430,7 @@ final class _BalloonOverlay extends StatefulWidget {
     required this.animation,
     required this.dismissOnTapOutside,
     required this.dismissIcon,
+    required this.dismissLabel,
     required this.maxWidth,
     required this.message,
     required this.onDismiss,
@@ -428,6 +441,7 @@ final class _BalloonOverlay extends StatefulWidget {
   final Animation<double> animation;
   final bool dismissOnTapOutside;
   final Widget? dismissIcon;
+  final String dismissLabel;
   final double maxWidth;
   final String message;
   final VoidCallback onDismiss;
@@ -542,6 +556,7 @@ final class _BalloonOverlayState extends State<_BalloonOverlay> {
                       action: widget.action,
                       arrowCenter: arrowCenter,
                       dismissIcon: widget.dismissIcon,
+                      dismissLabel: widget.dismissLabel,
                       maxWidth: widget.maxWidth,
                       onDismiss: widget.onDismiss,
                       position: tailPosition,

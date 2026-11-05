@@ -174,6 +174,7 @@ const CharcoalThemePack charcoalLightPack = CharcoalThemePack(
     sidebarBreakpoint: 900,
     pageInsetWide: 48,
     sidebarInset: 20,
+    infoLabelWidthExtraWide: 128,
   ),
   motion: CharcoalMotionScale(
     fast: Duration(milliseconds: 120),
@@ -383,6 +384,7 @@ const CharcoalThemePack charcoalDarkPack = CharcoalThemePack(
     sidebarBreakpoint: 900,
     pageInsetWide: 48,
     sidebarInset: 20,
+    infoLabelWidthExtraWide: 128,
   ),
   motion: CharcoalMotionScale(
     fast: Duration(milliseconds: 120),

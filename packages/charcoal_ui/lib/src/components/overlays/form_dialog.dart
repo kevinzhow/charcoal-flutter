@@ -79,13 +79,15 @@ class CharcoalFormDialogField {
 /// Required fields and validators run on submit; the first problem is shown inline under the
 /// fields, in the negative text colour. The body scrolls when the keyboard or a short window
 /// leaves too little room, while the buttons stay reachable. [requiredMessage] builds the message
-/// for missing fields from their labels.
+/// for missing fields from their labels. [requiredText] is the marker shown after the label of
+/// required fields; pass the localized string.
 Future<Map<String, String>?> showCharcoalFormDialog(
   BuildContext context, {
   required String title,
   required List<CharcoalFormDialogField> fields,
   String submitLabel = 'Save',
   String cancelLabel = 'Cancel',
+  String requiredText = '*Required',
   String? description,
   String Function(List<String> labels)? requiredMessage,
 }) => showCharcoalDialog<Map<String, String>>(
@@ -95,6 +97,7 @@ Future<Map<String, String>?> showCharcoalFormDialog(
     fields: fields,
     submitLabel: submitLabel,
     cancelLabel: cancelLabel,
+    requiredText: requiredText,
     description: description,
     requiredMessage: requiredMessage ?? (labels) => 'Please fill in ${labels.join(', ')}',
   ),
@@ -106,6 +109,7 @@ class _FormDialog extends StatefulWidget {
     required this.fields,
     required this.submitLabel,
     required this.cancelLabel,
+    required this.requiredText,
     required this.requiredMessage,
     this.description,
   });
@@ -114,6 +118,7 @@ class _FormDialog extends StatefulWidget {
   final List<CharcoalFormDialogField> fields;
   final String submitLabel;
   final String cancelLabel;
+  final String requiredText;
   final String? description;
   final String Function(List<String> labels) requiredMessage;
 
@@ -166,6 +171,7 @@ class _FormDialogState extends State<_FormDialog> {
         label: field.label,
         showLabel: true,
         required: field.required,
+        requiredText: widget.requiredText,
         placeholder: field.placeholder,
         assistiveText: field.hint,
         rows: 3,
@@ -176,6 +182,7 @@ class _FormDialogState extends State<_FormDialog> {
       label: field.label,
       showLabel: true,
       required: field.required,
+      requiredText: widget.requiredText,
       placeholder: field.placeholder,
       assistiveText: field.hint,
       obscureText: field.obscureText,

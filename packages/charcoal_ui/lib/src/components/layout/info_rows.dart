@@ -13,6 +13,9 @@ enum CharcoalInfoLabelWidth {
 
   /// `sizes.infoLabelWidthWide`.
   wide,
+
+  /// `sizes.infoLabelWidthExtraWide`.
+  extraWide,
 }
 
 /// A key/value table: a tertiary label, and a selectable value, per ruled row.
@@ -24,13 +27,21 @@ enum CharcoalInfoLabelWidth {
 /// ```
 final class CharcoalInfoRows extends StatelessWidget {
   /// Creates a table of [rows].
-  const CharcoalInfoRows(this.rows, {this.labelWidth = CharcoalInfoLabelWidth.regular, super.key});
+  const CharcoalInfoRows(
+    this.rows, {
+    this.labelWidth = CharcoalInfoLabelWidth.regular,
+    this.mono = false,
+    super.key,
+  });
 
   /// The `(label, value)` pairs in display order.
   final List<(String, String)> rows;
 
   /// The width of the label column.
   final CharcoalInfoLabelWidth labelWidth;
+
+  /// Whether the values use the monospace family (identifiers, keys, JSON).
+  final bool mono;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +51,7 @@ final class CharcoalInfoRows extends StatelessWidget {
       CharcoalInfoLabelWidth.narrow => theme.sizes.infoLabelWidthNarrow,
       CharcoalInfoLabelWidth.regular => theme.sizes.infoLabelWidth,
       CharcoalInfoLabelWidth.wide => theme.sizes.infoLabelWidthWide,
+      CharcoalInfoLabelWidth.extraWide => theme.sizes.infoLabelWidthExtraWide,
     };
     return CharcoalSelectable(
       child: DecoratedBox(
@@ -65,7 +77,9 @@ final class CharcoalInfoRows extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: theme.space.lg),
-                      Expanded(child: Text(value, style: theme.style(CharcoalTextRole.body))),
+                      Expanded(
+                        child: Text(value, style: theme.style(CharcoalTextRole.body, mono: mono)),
+                      ),
                     ],
                   ),
                 ),

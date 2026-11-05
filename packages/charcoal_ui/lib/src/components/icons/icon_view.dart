@@ -30,6 +30,9 @@ enum CharcoalIconTone {
   /// `colors.iconNotice`.
   notice,
 
+  /// `colors.primary`: the brand accent.
+  accent,
+
   /// `colors.iconOnPrimary`: on a primary-coloured surface.
   onPrimary,
 
@@ -46,6 +49,7 @@ enum CharcoalIconTone {
     CharcoalIconTone.positive => colors.iconPositive,
     CharcoalIconTone.negative => colors.iconNegative,
     CharcoalIconTone.notice => colors.iconNotice,
+    CharcoalIconTone.accent => colors.primary,
     CharcoalIconTone.onPrimary => colors.iconOnPrimary,
     CharcoalIconTone.onImage => colors.iconOnImage,
   };

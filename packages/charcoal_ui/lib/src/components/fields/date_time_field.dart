@@ -30,6 +30,48 @@ String formatCharcoalDate(DateTime value) {
       '${local.day.toString().padLeft(2, '0')}';
 }
 
+/// Formats [value] as `14:20` in local time.
+String formatCharcoalTime(DateTime value) {
+  final local = value.toLocal();
+  return '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+}
+
+/// What a [CharcoalDateTimeField] picks and shows.
+enum CharcoalDateTimeMode {
+  /// A calendar date, shown as `2026-09-13`; the picked value is midnight local time.
+  date,
+
+  /// A date then a time, shown as `2026-09-13 14:20`.
+  dateTime,
+
+  /// A time of day, shown as `14:20`; the date part is that of the current value, or today.
+  time;
+
+  /// Formats [value] for this mode.
+  String format(DateTime value) => switch (this) {
+    CharcoalDateTimeMode.date => formatCharcoalDate(value),
+    CharcoalDateTimeMode.dateTime => formatCharcoalDateTime(value),
+    CharcoalDateTimeMode.time => formatCharcoalTime(value),
+  };
+}
+
+Future<DateTime?> _pickDate(BuildContext context, DateTime? current) async {
+  final now = DateTime.now();
+  final date = await showDatePicker(
+    context: context,
+    initialDate: current ?? now,
+    firstDate: DateTime(now.year - _pickerYearSpan),
+    lastDate: DateTime(now.year + _pickerYearSpan),
+  );
+  return date == null ? null : DateTime(date.year, date.month, date.day);
+}
+
+Future<DateTime?> _pickTime(BuildContext context, DateTime? current) async {
+  final base = current ?? DateTime.now();
+  final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(base));
+  return time == null ? null : DateTime(base.year, base.month, base.day, time.hour, time.minute);
+}
+
 Future<DateTime?> _pickDateAndTime(BuildContext context, DateTime? current) async {
   final now = DateTime.now();
   final date = await showDatePicker(
@@ -47,7 +89,7 @@ Future<DateTime?> _pickDateAndTime(BuildContext context, DateTime? current) asyn
   return DateTime(date.year, date.month, date.day, time.hour, time.minute);
 }
 
-/// A date-and-time picker rendered as a field.
+/// A date, date-and-time or time picker rendered as a field ([mode]).
 ///
 /// Shows the chosen moment with a clear affordance, because an accidentally set time can silently
 /// hide content from everyone. Tapping opens [picker] (the platform date then time dialogs by
@@ -61,7 +103,8 @@ class CharcoalDateTimeField extends StatelessWidget {
     this.clearText = 'Clear',
     this.emptyText = 'Not set',
     this.hint,
-    this.picker = _pickDateAndTime,
+    this.mode = CharcoalDateTimeMode.dateTime,
+    this.picker,
     super.key,
   });
 
@@ -83,11 +126,21 @@ class CharcoalDateTimeField extends StatelessWidget {
   /// Muted text under the field.
   final String? hint;
 
-  /// Opens the picker; replace to use another dialog.
-  final CharcoalDateTimePicker picker;
+  /// What the field picks and shows.
+  final CharcoalDateTimeMode mode;
+
+  /// Opens the picker; replace to use another dialog. Defaults to the platform dialogs of [mode].
+  final CharcoalDateTimePicker? picker;
 
   Future<void> _pick(BuildContext context) async {
-    final picked = await picker(context, value);
+    final open =
+        picker ??
+        switch (mode) {
+          CharcoalDateTimeMode.date => _pickDate,
+          CharcoalDateTimeMode.dateTime => _pickDateAndTime,
+          CharcoalDateTimeMode.time => _pickTime,
+        };
+    final picked = await open(context, value);
     if (picked != null) onChanged?.call(picked);
   }
 
@@ -127,20 +180,22 @@ class CharcoalDateTimeField extends StatelessWidget {
               child: CharcoalClickable(
                 onPressed: enabled ? () => _pick(context) : null,
                 semanticLabel: label,
-                semanticValue: current == null ? emptyText : formatCharcoalDateTime(current),
+                semanticValue: current == null ? emptyText : mode.format(current),
                 builder: (context, states) => surface(
                   states,
                   Row(
                     children: <Widget>[
                       CharcoalIcon(
-                        CharcoalIcons.history,
+                        mode == CharcoalDateTimeMode.date
+                            ? CharcoalIcons.calendar
+                            : CharcoalIcons.history,
                         color: colors.iconSecondary,
                         size: theme.metrics.textField.iconSize,
                       ),
                       SizedBox(width: theme.metrics.textField.contentGap),
                       Expanded(
                         child: Text(
-                          current == null ? emptyText : formatCharcoalDateTime(current),
+                          current == null ? emptyText : mode.format(current),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: theme.style(

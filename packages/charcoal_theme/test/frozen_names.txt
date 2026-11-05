@@ -142,6 +142,7 @@ sizes.sidebarWidth
 sizes.sidebarBreakpoint
 sizes.pageInsetWide
 sizes.sidebarInset
+sizes.infoLabelWidthExtraWide
 motion.fast
 motion.standard
 motion.overlay

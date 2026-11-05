@@ -33,6 +33,9 @@ enum CharcoalTextTone {
   /// `colors.textInfo`: information and links.
   info,
 
+  /// `colors.primary`: the brand accent, for emphasised text.
+  accent,
+
   /// `colors.textOnPrimary`: text on a primary-coloured surface.
   onPrimary,
 
@@ -59,6 +62,7 @@ enum CharcoalTextTone {
     CharcoalTextTone.negative => colors.textNegative,
     CharcoalTextTone.notice => colors.textNotice,
     CharcoalTextTone.info => colors.textInfo,
+    CharcoalTextTone.accent => colors.primary,
     CharcoalTextTone.onPrimary => colors.textOnPrimary,
     CharcoalTextTone.onNegative => colors.textOnNegative,
     CharcoalTextTone.onPositive => colors.textOnPositive,

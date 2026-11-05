@@ -216,6 +216,7 @@ Class names end in `Roles` / `Scale` / `Metrics` so that `charcoal_ui` can re-ex
 | `sizes.sidebarBreakpoint` | 900 | literal | Window width from which the sidebar replaces the tab bar. |
 | `sizes.pageInsetWide` | 48 | literal | Horizontal page padding in the sidebar layout. |
 | `sizes.sidebarInset` | 20 | literal | Padding of the sidebar header. |
+| `sizes.infoLabelWidthExtraWide` | 128 | literal | Extra-wide label column of a key/value block. |
 
 ## 3.5 Elevation
 

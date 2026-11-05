@@ -213,6 +213,59 @@ final class PageFramePage extends StatelessWidget {
               ),
             ),
             ShowcaseCard(
+              description: 'CharcoalGrid: equal-width cells, three columns in the standard layout and one in the compact layout, with theme spacing. Accent tones use the brand colour.',
+              eyebrow: 'GRID · ACCENT',
+              title: 'Grid and accent',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  CharcoalGrid(
+                    children: <Widget>[
+                      for (final label in <String>[
+                        'One',
+                        'Two',
+                        'Three',
+                        'Four',
+                      ])
+                        CharcoalCard(child: CharcoalText(label)),
+                    ],
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  const Row(
+                    children: <Widget>[
+                      CharcoalIconView(
+                        CharcoalIcons.lock,
+                        tone: CharcoalIconTone.accent,
+                        size: CharcoalIconSize.lg,
+                      ),
+                      CharcoalGap(CharcoalSpace.sm),
+                      CharcoalText(
+                        'Accent text',
+                        tone: CharcoalTextTone.accent,
+                      ),
+                    ],
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  const CharcoalSelectable(
+                    child: CharcoalText('Selectable text'),
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  const CharcoalInfoRows(
+                    [('Id', 'a1b2c3')],
+                    labelWidth: CharcoalInfoLabelWidth.extraWide,
+                    mono: true,
+                  ),
+                  const CharcoalGap(CharcoalSpace.md),
+                  CharcoalDateTimeField(
+                    label: 'Date only',
+                    mode: CharcoalDateTimeMode.date,
+                    value: DateTime(2026, 9, 13),
+                    onChanged: (_) {},
+                  ),
+                ],
+              ),
+            ),
+            ShowcaseCard(
               description: 'CharcoalActionTile for dashboards, and a CharcoalListRow with a body slot and running-text subtitle.',
               eyebrow: 'TILE · ROW',
               title: 'Action tile and rich row',
