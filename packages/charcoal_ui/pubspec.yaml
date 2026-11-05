@@ -12,9 +12,13 @@ resolution: workspace
 dependencies:
   charcoal_icons:
     path: ../charcoal_icons
+  charcoal_theme:
+    path: ../charcoal_theme
   charcoal_tokens:
     path: ../charcoal_tokens
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 
 dev_dependencies:

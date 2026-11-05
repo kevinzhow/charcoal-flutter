@@ -1,63 +1,80 @@
+// The back-gesture state machine drives `TransitionRoute.controller` of routes it does not
+// subclass (Material's own pages), exactly as Flutter's Cupertino transition does.
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:math' as math;
 
+import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../theme/charcoal_motion.dart';
+/// The axis of Charcoal's shared-axis page transition.
+enum CharcoalPageTransitionAxis {
+  /// Pages slide sideways; the default.
+  horizontal,
 
-enum CharcoalPageTransitionAxis { horizontal, vertical }
+  /// Pages slide up; used for full-screen dialogs.
+  vertical,
+}
 
 /// An opaque, platform-adaptive route for Charcoal applications.
 ///
-/// Normal navigation uses Charcoal shared-axis motion. On native iOS,
-/// horizontal routes also support an interactive leading-edge pop gesture. On
-/// native Android, the route consumes predictive-back progress so the current
-/// page reveals the destination before the gesture is committed or cancelled.
-/// Fullscreen dialogs, the first route, and routes blocked by [PopScope] do not
-/// start an interactive pop gesture.
+/// Normal navigation uses Charcoal shared-axis motion. On native iOS, horizontal routes also
+/// support an interactive leading-edge pop gesture. On native Android, the route consumes
+/// predictive-back progress so the current page reveals the destination before the gesture is
+/// committed or cancelled. Fullscreen dialogs, the first route, and routes blocked by [PopScope]
+/// do not start an interactive pop gesture.
 ///
-/// The implementation stays in Flutter's Widgets layer and does not depend on
-/// Material or Cupertino route classes.
+/// Every number, curve, duration and colour comes from the active `CharcoalTheme`
+/// (`metrics.pageRoute`, `motion`, `colors.pageBackdrop`).
+///
+/// `CharcoalApp` installs [CharcoalPageTransitionsBuilder] in `ThemeData.pageTransitionsTheme`, so
+/// routes created by `MaterialApp.home`, named routes and declarative routers get the same
+/// transitions and gestures without being [CharcoalPageRoute]s. Use this class directly for
+/// imperative pushes that want an explicit [axis] or duration.
 final class CharcoalPageRoute<T> extends PageRoute<T> {
+  /// Creates a route that shows [builder].
   CharcoalPageRoute({
     required this.builder,
     this.axis = CharcoalPageTransitionAxis.horizontal,
     super.fullscreenDialog = false,
     this.maintainState = true,
     super.requestFocus,
-    this.reverseTransitionDuration = CharcoalMotion.routeReverse,
+    this._reverseTransitionDuration,
     super.settings,
-    this.transitionDuration = CharcoalMotion.routeForward,
+    this._transitionDuration,
   }) : super(allowSnapshotting: false);
 
+  /// Builds the page.
   final WidgetBuilder builder;
 
+  /// The transition axis.
   final CharcoalPageTransitionAxis axis;
 
   @override
   final bool maintainState;
 
-  @override
-  final Duration reverseTransitionDuration;
+  final Duration? _reverseTransitionDuration;
+  final Duration? _transitionDuration;
+
+  late final _CharcoalBackGesture<T> _gesture = _CharcoalBackGesture<T>(this);
+
+  CharcoalTheme get _theme => CharcoalTheme.of(navigator!.context);
 
   @override
-  final Duration transitionDuration;
+  Duration get reverseTransitionDuration =>
+      _reverseTransitionDuration ?? _theme.motion.routeReverse;
 
-  bool _userGestureActive = false;
-  NavigatorState? _gestureNavigator;
-  AnimationController? _settlingController;
-  AnimationStatusListener? _settlingStatusListener;
+  @override
+  Duration get transitionDuration => _transitionDuration ?? _theme.motion.routeForward;
 
   @override
   Color? get barrierColor => null;
 
   @override
   String? get barrierLabel => null;
-
-  bool get _iosBackGestureEnabled =>
-      axis == CharcoalPageTransitionAxis.horizontal && popGestureEnabled;
 
   @override
   Widget buildPage(
@@ -72,33 +89,95 @@ final class CharcoalPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
     Widget child,
+  ) => _buildCharcoalTransitions<T>(
+    route: this,
+    axis: axis,
+    gesture: _gesture,
+    context: context,
+    animation: animation,
+    secondaryAnimation: secondaryAnimation,
+    child: child,
+  );
+
+  @override
+  void handleStartBackGesture({double progress = 0.0}) {
+    if (!popGestureEnabled) return;
+    _gesture.begin(progress: progress);
+  }
+
+  @override
+  void handleUpdateBackGestureProgress({required double progress}) {
+    _gesture.update(progress);
+  }
+
+  @override
+  void handleCancelBackGesture() => _gesture.finish(commit: false);
+
+  @override
+  void handleCommitBackGesture() => _gesture.finish(commit: true);
+
+  @override
+  void dispose() {
+    _gesture.dispose();
+    super.dispose();
+  }
+
+  @override
+  String get debugLabel => '${super.debugLabel}(${settings.name})';
+}
+
+/// Applies Charcoal's page transition and back gestures to any [PageRoute].
+///
+/// `CharcoalApp` puts this in `ThemeData.pageTransitionsTheme` for every platform, so routes made
+/// by Material (`MaterialPageRoute`, `go_router` pages) behave like a [CharcoalPageRoute]. The
+/// platform branches (iOS edge swipe, Android predictive back, shared axis elsewhere) are the same.
+class CharcoalPageTransitionsBuilder extends PageTransitionsBuilder {
+  /// Creates the builder.
+  const CharcoalPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
   ) {
-    final motionDisabled = MediaQuery.disableAnimationsOf(context);
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
-      if (axis == CharcoalPageTransitionAxis.horizontal) {
-        return _CharcoalIosPageTransition<T>(
-          animation: animation,
-          motionDisabled: motionDisabled,
-          route: this,
-          secondaryAnimation: secondaryAnimation,
-          child: child,
-        );
-      }
-      return _CharcoalSharedAxisTransition(
-        animation: animation,
-        axis: axis,
-        linear: popGestureInProgress,
-        motionDisabled: motionDisabled,
-        secondaryAnimation: secondaryAnimation,
-        child: child,
-      );
+    if (route is CharcoalPageRoute<T>) {
+      // Already built by the route itself (Material only asks a builder of its own route kinds).
+      return child;
     }
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      return _CharcoalAndroidPredictiveBackTransition<T>(
+    return _buildCharcoalTransitions<T>(
+      route: route,
+      axis: route.fullscreenDialog
+          ? CharcoalPageTransitionAxis.vertical
+          : CharcoalPageTransitionAxis.horizontal,
+      gesture: null,
+      context: context,
+      animation: animation,
+      secondaryAnimation: secondaryAnimation,
+      child: child,
+    );
+  }
+}
+
+Widget _buildCharcoalTransitions<T>({
+  required PageRoute<T> route,
+  required CharcoalPageTransitionAxis axis,
+  required _CharcoalBackGesture<T>? gesture,
+  required BuildContext context,
+  required Animation<double> animation,
+  required Animation<double> secondaryAnimation,
+  required Widget child,
+}) {
+  final motionDisabled = MediaQuery.disableAnimationsOf(context);
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+    if (axis == CharcoalPageTransitionAxis.horizontal) {
+      return _CharcoalIosPageTransition<T>(
         animation: animation,
-        axis: axis,
+        gesture: gesture,
         motionDisabled: motionDisabled,
-        route: this,
+        route: route,
         secondaryAnimation: secondaryAnimation,
         child: child,
       );
@@ -106,97 +185,111 @@ final class CharcoalPageRoute<T> extends PageRoute<T> {
     return _CharcoalSharedAxisTransition(
       animation: animation,
       axis: axis,
-      linear: popGestureInProgress,
+      linear: route.popGestureInProgress,
       motionDisabled: motionDisabled,
       secondaryAnimation: secondaryAnimation,
       child: child,
     );
   }
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    return _CharcoalAndroidPredictiveBackTransition<T>(
+      animation: animation,
+      axis: axis,
+      gesture: gesture,
+      motionDisabled: motionDisabled,
+      route: route,
+      secondaryAnimation: secondaryAnimation,
+      child: child,
+    );
+  }
+  return _CharcoalSharedAxisTransition(
+    animation: animation,
+    axis: axis,
+    linear: route.popGestureInProgress,
+    motionDisabled: motionDisabled,
+    secondaryAnimation: secondaryAnimation,
+    child: child,
+  );
+}
 
-  @override
-  void handleStartBackGesture({double progress = 0.0}) {
-    if (!popGestureEnabled) return;
-    _beginUserGesture(progress: progress);
+double _clampUnit(double value) => math.max(0.0, math.min(1.0, value));
+
+/// The user-driven pop of one route: start, drive the route's controller, settle, commit or
+/// restore. Shared by [CharcoalPageRoute] and by routes that only borrow Charcoal transitions.
+final class _CharcoalBackGesture<T> {
+  _CharcoalBackGesture(this.route);
+
+  final PageRoute<T> route;
+
+  bool active = false;
+  NavigatorState? _navigator;
+  AnimationController? _settlingController;
+  AnimationStatusListener? _settlingStatusListener;
+
+  CharcoalTheme get _theme => CharcoalTheme.of(route.navigator!.context);
+
+  void begin({required double progress}) {
+    if (active || !route.isCurrent) return;
+    final routeNavigator = route.navigator;
+    if (routeNavigator == null) return;
+
+    _removeSettlingListener();
+    route.controller?.value = _clampUnit(progress);
+    _navigator = routeNavigator;
+    active = true;
+    routeNavigator.didStartUserGesture();
   }
 
-  @override
-  void handleUpdateBackGestureProgress({required double progress}) {
-    if (!isCurrent || !_userGestureActive) return;
-    controller?.value = _clampUnit(progress);
+  void update(double progress) {
+    if (!route.isCurrent || !active) return;
+    route.controller?.value = _clampUnit(progress);
   }
 
-  @override
-  void handleCancelBackGesture() {
-    _finishUserGesture(commit: false);
-  }
+  void startIos() => begin(progress: route.animation?.value ?? 1.0);
 
-  @override
-  void handleCommitBackGesture() {
-    _finishUserGesture(commit: true);
-  }
-
-  void _startIosBackGesture() {
-    _beginUserGesture(progress: animation?.value ?? 1.0);
-  }
-
-  void _updateIosBackGesture(double logicalDelta) {
-    if (!isCurrent || !_userGestureActive) return;
-    final routeController = controller;
+  void updateIos(double logicalDelta) {
+    if (!route.isCurrent || !active) return;
+    final routeController = route.controller;
     if (routeController == null) return;
     routeController.value = _clampUnit(routeController.value - logicalDelta);
   }
 
-  void _endIosBackGesture(double logicalVelocity) {
-    final routeController = controller;
-    if (routeController == null || !_userGestureActive) return;
+  void endIos(double logicalVelocity) {
+    final routeController = route.controller;
+    if (routeController == null || !active) return;
+    final metrics = _theme.metrics.pageRoute;
 
     final bool commit;
-    if (!isCurrent) {
-      commit = !isActive;
-    } else if (logicalVelocity.abs() >= 1.0) {
+    if (!route.isCurrent) {
+      commit = !route.isActive;
+    } else if (logicalVelocity.abs() >= metrics.flingVelocityThreshold) {
       commit = logicalVelocity > 0;
     } else {
-      commit = routeController.value <= 0.5;
+      commit = routeController.value <= metrics.commitThreshold;
     }
-    _finishUserGesture(commit: commit);
+    finish(commit: commit);
   }
 
-  void _cancelIosBackGesture() {
-    _finishUserGesture(commit: false);
-  }
+  void finish({required bool commit}) {
+    if (!active) return;
+    final routeController = route.controller;
 
-  void _beginUserGesture({required double progress}) {
-    if (_userGestureActive || !isCurrent) return;
-    final routeNavigator = navigator;
-    if (routeNavigator == null) return;
-
-    _removeSettlingListener();
-    controller?.value = _clampUnit(progress);
-    _gestureNavigator = routeNavigator;
-    _userGestureActive = true;
-    routeNavigator.didStartUserGesture();
-  }
-
-  void _finishUserGesture({required bool commit}) {
-    if (!_userGestureActive) return;
-    final routeController = controller;
-
-    if (commit && isCurrent) {
-      switch (popDisposition) {
+    if (commit && route.isCurrent) {
+      switch (route.popDisposition) {
         case RoutePopDisposition.pop:
-          navigator?.pop();
+          route.navigator?.pop();
         case RoutePopDisposition.doNotPop:
-          onPopInvokedWithResult(false, null);
+          route.onPopInvokedWithResult(false, null);
         case RoutePopDisposition.bubble:
           break;
       }
     }
-    final shouldRestore = isActive && (!commit || isCurrent);
+    final shouldRestore = route.isActive && (!commit || route.isCurrent);
     if (shouldRestore && routeController != null && !routeController.isCompleted) {
       routeController.animateTo(
         1.0,
-        curve: CharcoalMotion.standardCurve,
-        duration: reverseTransitionDuration,
+        curve: _theme.motion.curve,
+        duration: route.reverseTransitionDuration,
       );
     }
 
@@ -210,20 +303,20 @@ final class CharcoalPageRoute<T> extends PageRoute<T> {
           _settlingController = null;
           _settlingStatusListener = null;
         }
-        _stopUserGesture();
+        _stop();
       };
       _settlingStatusListener = listener;
       routeController!.addStatusListener(listener);
     } else {
-      _stopUserGesture();
+      _stop();
     }
   }
 
-  void _stopUserGesture() {
-    if (!_userGestureActive) return;
-    _userGestureActive = false;
-    final routeNavigator = _gestureNavigator;
-    _gestureNavigator = null;
+  void _stop() {
+    if (!active) return;
+    active = false;
+    final routeNavigator = _navigator;
+    _navigator = null;
     if (routeNavigator?.mounted ?? false) {
       routeNavigator!.didStopUserGesture();
     }
@@ -238,18 +331,11 @@ final class CharcoalPageRoute<T> extends PageRoute<T> {
     _settlingStatusListener = null;
   }
 
-  @override
   void dispose() {
     _removeSettlingListener();
-    _stopUserGesture();
-    super.dispose();
+    _stop();
   }
-
-  @override
-  String get debugLabel => '${super.debugLabel}(${settings.name})';
 }
-
-double _clampUnit(double value) => math.max(0.0, math.min(1.0, value));
 
 final class _CharcoalSharedAxisTransition extends StatelessWidget {
   const _CharcoalSharedAxisTransition({
@@ -272,23 +358,25 @@ final class _CharcoalSharedAxisTransition extends StatelessWidget {
   Widget build(BuildContext context) {
     if (motionDisabled) return child;
 
-    final textDirection = Directionality.of(context);
-    final direction = textDirection == TextDirection.rtl ? -1.0 : 1.0;
+    final theme = CharcoalTheme.of(context);
+    final metrics = theme.metrics.pageRoute;
+    final direction = Directionality.of(context) == TextDirection.rtl ? -1.0 : 1.0;
     final incomingOffset = switch (axis) {
-      CharcoalPageTransitionAxis.horizontal => Offset(0.035 * direction, 0),
-      CharcoalPageTransitionAxis.vertical => const Offset(0, 0.025),
+      CharcoalPageTransitionAxis.horizontal => Offset(metrics.horizontalEnterOffset * direction, 0),
+      CharcoalPageTransitionAxis.vertical => Offset(0, metrics.verticalEnterOffset),
     };
     final outgoingOffset = switch (axis) {
-      CharcoalPageTransitionAxis.horizontal => Offset(-0.012 * direction, 0),
-      CharcoalPageTransitionAxis.vertical => const Offset(0, -0.008),
+      CharcoalPageTransitionAxis.horizontal => Offset(
+        metrics.horizontalSecondaryOffset * direction,
+        0,
+      ),
+      CharcoalPageTransitionAxis.vertical => Offset(0, metrics.verticalSecondaryOffset),
     };
     final incoming = Tween<Offset>(begin: incomingOffset, end: Offset.zero).animate(
-      linear ? animation : animation.drive(CurveTween(curve: CharcoalMotion.emphasizedCurve)),
+      linear ? animation : animation.drive(CurveTween(curve: theme.motion.emphasizedCurve)),
     );
     final outgoing = Tween<Offset>(begin: Offset.zero, end: outgoingOffset).animate(
-      linear
-          ? secondaryAnimation
-          : secondaryAnimation.drive(CurveTween(curve: CharcoalMotion.standardCurve)),
+      linear ? secondaryAnimation : secondaryAnimation.drive(CurveTween(curve: theme.motion.curve)),
     );
     return ClipRect(
       child: SlideTransition(
@@ -303,6 +391,7 @@ final class _CharcoalIosPageTransition<T> extends StatelessWidget {
   const _CharcoalIosPageTransition({
     required this.animation,
     required this.child,
+    required this.gesture,
     required this.motionDisabled,
     required this.route,
     required this.secondaryAnimation,
@@ -310,13 +399,15 @@ final class _CharcoalIosPageTransition<T> extends StatelessWidget {
 
   final Animation<double> animation;
   final Widget child;
+  final _CharcoalBackGesture<T>? gesture;
   final bool motionDisabled;
-  final CharcoalPageRoute<T> route;
+  final PageRoute<T> route;
   final Animation<double> secondaryAnimation;
 
   @override
   Widget build(BuildContext context) => _CharcoalIosBackGestureDetector<T>(
     route: route,
+    gesture: gesture,
     child: ClipRect(
       child: AnimatedBuilder(
         animation: Listenable.merge(<Listenable>[animation, secondaryAnimation]),
@@ -325,24 +416,26 @@ final class _CharcoalIosPageTransition<T> extends StatelessWidget {
           final interactive = route.popGestureInProgress;
           if (motionDisabled && !interactive) return child!;
 
+          final theme = CharcoalTheme.of(context);
+          final metrics = theme.metrics.pageRoute;
           final direction = Directionality.of(context) == TextDirection.rtl ? -1.0 : 1.0;
           final primaryValue = interactive
               ? animation.value
               : _curvedValue(
                   animation,
-                  forward: CharcoalMotion.emphasizedCurve,
-                  reverse: CharcoalMotion.standardCurve,
+                  forward: theme.motion.emphasizedCurve,
+                  reverse: theme.motion.curve,
                 );
           final secondaryValue = interactive
               ? secondaryAnimation.value
               : _curvedValue(
                   secondaryAnimation,
-                  forward: CharcoalMotion.standardCurve,
-                  reverse: CharcoalMotion.standardCurve,
+                  forward: theme.motion.curve,
+                  reverse: theme.motion.curve,
                 );
           final primaryOffset = Offset((1.0 - primaryValue) * direction, 0);
-          final secondaryOffset = Offset(-0.28 * secondaryValue * direction, 0);
-          final scrimOpacity = 0.10 * secondaryValue;
+          final secondaryOffset = Offset(metrics.secondaryParallax * secondaryValue * direction, 0);
+          final scrimOpacity = metrics.secondaryScrimOpacity * secondaryValue;
 
           return FractionalTranslation(
             transformHitTests: false,
@@ -359,7 +452,7 @@ final class _CharcoalIosPageTransition<T> extends StatelessWidget {
                       child: IgnorePointer(
                         child: Opacity(
                           opacity: scrimOpacity,
-                          child: const ColoredBox(color: Color(0xFF000000)),
+                          child: ColoredBox(color: theme.colors.pageBackdrop),
                         ),
                       ),
                     ),
@@ -385,10 +478,17 @@ double _curvedValue(
 }
 
 final class _CharcoalIosBackGestureDetector<T> extends StatefulWidget {
-  const _CharcoalIosBackGestureDetector({required this.child, required this.route});
+  const _CharcoalIosBackGestureDetector({
+    required this.child,
+    required this.gesture,
+    required this.route,
+  });
 
   final Widget child;
-  final CharcoalPageRoute<T> route;
+
+  /// The route's own gesture state, or null for a route that only borrows the transition.
+  final _CharcoalBackGesture<T>? gesture;
+  final PageRoute<T> route;
 
   @override
   State<_CharcoalIosBackGestureDetector<T>> createState() =>
@@ -397,10 +497,12 @@ final class _CharcoalIosBackGestureDetector<T> extends StatefulWidget {
 
 final class _CharcoalIosBackGestureDetectorState<T>
     extends State<_CharcoalIosBackGestureDetector<T>> {
-  static const _edgeWidth = 20.0;
-
   late final HorizontalDragGestureRecognizer _recognizer;
+  late final _CharcoalBackGesture<T> _gesture =
+      widget.gesture ?? _CharcoalBackGesture<T>(widget.route);
   bool _gestureStarted = false;
+
+  bool get _enabled => widget.route.popGestureEnabled;
 
   @override
   void initState() {
@@ -415,27 +517,26 @@ final class _CharcoalIosBackGestureDetectorState<T>
   @override
   void dispose() {
     _recognizer.dispose();
-    if (_gestureStarted) widget.route._cancelIosBackGesture();
+    if (_gestureStarted) _gesture.finish(commit: false);
+    if (widget.gesture == null) _gesture.dispose();
     super.dispose();
   }
 
   void _handlePointerDown(PointerDownEvent event) {
-    if (widget.route._iosBackGestureEnabled) {
-      _recognizer.addPointer(event);
-    }
+    if (_enabled) _recognizer.addPointer(event);
   }
 
   void _handleDragStart(DragStartDetails details) {
-    if (!widget.route._iosBackGestureEnabled) return;
+    if (!_enabled) return;
     _gestureStarted = true;
-    widget.route._startIosBackGesture();
+    _gesture.startIos();
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
     if (!_gestureStarted) return;
     final width = context.size?.width ?? 0.0;
     if (width <= 0) return;
-    widget.route._updateIosBackGesture(_toLogical(details.primaryDelta! / width));
+    _gesture.updateIos(_toLogical(details.primaryDelta! / width));
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -443,13 +544,13 @@ final class _CharcoalIosBackGestureDetectorState<T>
     final width = context.size?.width ?? 0.0;
     final velocity = width <= 0 ? 0.0 : _toLogical(details.velocity.pixelsPerSecond.dx / width);
     _gestureStarted = false;
-    widget.route._endIosBackGesture(velocity);
+    _gesture.endIos(velocity);
   }
 
   void _handleDragCancel() {
     if (!_gestureStarted) return;
     _gestureStarted = false;
-    widget.route._cancelIosBackGesture();
+    _gesture.finish(commit: false);
   }
 
   double _toLogical(double value) =>
@@ -461,6 +562,7 @@ final class _CharcoalIosBackGestureDetectorState<T>
     final leadingPadding = Directionality.of(context) == TextDirection.rtl
         ? padding.right
         : padding.left;
+    final edgeWidth = CharcoalTheme.of(context).metrics.pageRoute.edgeGestureWidth;
     return Stack(
       fit: StackFit.passthrough,
       children: <Widget>[
@@ -469,7 +571,7 @@ final class _CharcoalIosBackGestureDetectorState<T>
           bottom: 0,
           start: 0,
           top: 0,
-          width: math.max(_edgeWidth, leadingPadding),
+          width: math.max(edgeWidth, leadingPadding),
           child: Listener(
             behavior: HitTestBehavior.translucent,
             onPointerDown: _handlePointerDown,
@@ -487,6 +589,7 @@ final class _CharcoalAndroidPredictiveBackTransition<T> extends StatefulWidget {
     required this.animation,
     required this.axis,
     required this.child,
+    required this.gesture,
     required this.motionDisabled,
     required this.route,
     required this.secondaryAnimation,
@@ -495,8 +598,11 @@ final class _CharcoalAndroidPredictiveBackTransition<T> extends StatefulWidget {
   final Animation<double> animation;
   final CharcoalPageTransitionAxis axis;
   final Widget child;
+
+  /// The route's own gesture state, or null for a route that only borrows the transition.
+  final _CharcoalBackGesture<T>? gesture;
   final bool motionDisabled;
-  final CharcoalPageRoute<T> route;
+  final PageRoute<T> route;
   final Animation<double> secondaryAnimation;
 
   @override
@@ -512,6 +618,8 @@ final class _CharcoalAndroidPredictiveBackTransitionState<T>
   PredictiveBackEvent? _currentEvent;
   double _commitStartAnimationValue = 1.0;
   AnimationStatusListener? _settlingListener;
+  late final _CharcoalBackGesture<T> _gesture =
+      widget.gesture ?? _CharcoalBackGesture<T>(widget.route);
 
   @override
   void initState() {
@@ -522,6 +630,7 @@ final class _CharcoalAndroidPredictiveBackTransitionState<T>
   @override
   void dispose() {
     _removeSettlingListener();
+    if (widget.gesture == null) _gesture.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -535,7 +644,7 @@ final class _CharcoalAndroidPredictiveBackTransitionState<T>
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
     if (backEvent.isButtonEvent || !_canStart) return false;
     _removeSettlingListener();
-    widget.route.handleStartBackGesture(progress: 1.0 - backEvent.progress);
+    _gesture.begin(progress: 1.0 - backEvent.progress);
     setState(() {
       _phase = _CharcoalPredictiveBackPhase.started;
       _startEvent = backEvent;
@@ -547,7 +656,7 @@ final class _CharcoalAndroidPredictiveBackTransitionState<T>
   @override
   void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) {
     if (_phase == _CharcoalPredictiveBackPhase.idle) return;
-    widget.route.handleUpdateBackGestureProgress(progress: 1.0 - backEvent.progress);
+    _gesture.update(1.0 - backEvent.progress);
     setState(() {
       _phase = _CharcoalPredictiveBackPhase.updating;
       _currentEvent = backEvent;
@@ -558,7 +667,7 @@ final class _CharcoalAndroidPredictiveBackTransitionState<T>
   void handleCancelBackGesture() {
     if (_phase == _CharcoalPredictiveBackPhase.idle) return;
     setState(() => _phase = _CharcoalPredictiveBackPhase.cancelling);
-    widget.route.handleCancelBackGesture();
+    _gesture.finish(commit: false);
     _resetWhenSettled();
   }
 
@@ -569,7 +678,7 @@ final class _CharcoalAndroidPredictiveBackTransitionState<T>
       _phase = _CharcoalPredictiveBackPhase.committing;
       _commitStartAnimationValue = widget.animation.value;
     });
-    widget.route.handleCommitBackGesture();
+    _gesture.finish(commit: true);
     _resetWhenSettled();
   }
 
@@ -656,14 +765,21 @@ final class _CharcoalPredictivePageTransition extends StatelessWidget {
     builder: (context, child) {
       if (motionDisabled) return child!;
 
+      final metrics = CharcoalTheme.of(context).metrics.pageRoute;
       final size = MediaQuery.sizeOf(context);
       final swipeEdge = currentEvent?.swipeEdge ?? startEvent?.swipeEdge ?? SwipeEdge.left;
       final horizontalDirection = swipeEdge == SwipeEdge.left ? 1.0 : -1.0;
-      final maxHorizontalShift = math.max(0.0, size.width / 20.0 - 8.0);
+      final maxHorizontalShift = math.max(
+        0.0,
+        size.width / metrics.predictiveShiftDivisor - metrics.predictiveShiftInset,
+      );
       final startY = startEvent?.touchOffset?.dy;
       final currentY = currentEvent?.touchOffset?.dy;
       final rawVerticalDelta = startY == null || currentY == null ? 0.0 : currentY - startY;
-      final maxVerticalShift = math.max(0.0, size.height / 20.0 - 8.0);
+      final maxVerticalShift = math.max(
+        0.0,
+        size.height / metrics.predictiveShiftDivisor - metrics.predictiveShiftInset,
+      );
       final verticalFraction = size.height <= 0
           ? 0.0
           : _clampUnit(rawVerticalDelta.abs() / size.height);
@@ -679,16 +795,19 @@ final class _CharcoalPredictivePageTransition extends StatelessWidget {
         horizontalDirection * maxHorizontalShift * easedGestureProgress,
         maxGestureVerticalShift * gestureProgress,
       );
-      final gestureScale = 1.0 - 0.10 * easedGestureProgress;
-      final gestureRadius = 32.0 * easedGestureProgress;
+      final gestureScale = 1.0 - metrics.predictiveScaleDrop * easedGestureProgress;
+      final gestureRadius = metrics.predictiveCornerRadius * easedGestureProgress;
 
       final commitProgress = phase == _CharcoalPredictiveBackPhase.committing
           ? _clampUnit(
-              1.0 - animation.value / math.max(commitStartAnimationValue, 0.0001),
+              1.0 - animation.value / math.max(commitStartAnimationValue, double.minPositive),
             )
           : 0.0;
       final easedCommitProgress = Curves.easeInOutCubicEmphasized.transform(commitProgress);
-      final exitOffset = Offset(horizontalDirection * size.height * 0.10, 0.0);
+      final exitOffset = Offset(
+        horizontalDirection * size.height * metrics.predictiveExitOffsetFraction,
+        0.0,
+      );
       final offset = phase == _CharcoalPredictiveBackPhase.committing
           ? Offset.lerp(gestureOffset, exitOffset, easedCommitProgress)!
           : gestureOffset;

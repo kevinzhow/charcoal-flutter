@@ -620,6 +620,7 @@ void _createSandbox(
 ) {
   final packageNames = <String>[
     'charcoal_icons',
+    'charcoal_theme',
     'charcoal_tokens',
     'charcoal_ui',
     if (options.configuration == 'cli') ...<String>['charcoal_catalog', 'charcoal_cli'],

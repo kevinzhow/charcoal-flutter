@@ -9,9 +9,22 @@ void main() {
       .where((file) => file.path.endsWith('.dart'))
       .toList();
 
-  test('charcoal_ui has no Material or Cupertino imports', () async {
+  // The Material rebuild reverses this rule file by file: new code under src/app and
+  // src/foundation (and next.dart/testing.dart) is built on Material. Everything still on the
+  // pre-Material API stays Widgets-only until it is replaced and deleted. Cupertino is never
+  // imported (the guard in packages/charcoal_ui/test/source_guard_test.dart enforces that for the
+  // new code as well).
+  const materialBased = <String>[
+    '/src/app/',
+    '/src/foundation/',
+    '/lib/next.dart',
+    '/lib/testing.dart',
+  ];
+
+  test('pre-Material charcoal_ui code has no Material or Cupertino imports', () async {
     final violations = <String>[];
     for (final file in libraryFiles) {
+      if (materialBased.any(file.path.contains)) continue;
       final source = await file.readAsString();
       if (source.contains("package:flutter/material.dart") ||
           source.contains("package:flutter/cupertino.dart") ||
