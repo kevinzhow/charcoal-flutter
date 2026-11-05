@@ -21,7 +21,9 @@ class NextThemeIsland extends StatelessWidget {
   Widget build(BuildContext context) => ActionsNextHost(
     child: Localizations.override(
       context: context,
-      delegates: const <LocalizationsDelegate<dynamic>>[DefaultMaterialLocalizations.delegate],
+      delegates: const <LocalizationsDelegate<dynamic>>[
+        DefaultMaterialLocalizations.delegate,
+      ],
       child: Material(
         type: MaterialType.transparency,
         child: CharcoalTextDefaults(child: child),

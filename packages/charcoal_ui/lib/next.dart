@@ -9,7 +9,9 @@ library;
 
 export 'package:charcoal_theme/charcoal_theme.dart';
 
-// Families: actions and selection (2A), fields and text (2B), foundation, app.
+// Families: actions and selection (2A), fields and text (2B), navigation and layout (2D),
+// foundation, app. Admin pieces of 2D are in `admin.dart`.
+// overlays and feedback
 export 'src/app/charcoal_app.dart';
 export 'src/app/charcoal_page_route.dart';
 export 'src/app/charcoal_scaffold.dart';
@@ -18,7 +20,6 @@ export 'src/components/actions/button.dart';
 export 'src/components/actions/icon_button.dart';
 export 'src/components/actions/link_button.dart';
 export 'src/components/actions/switching_button.dart';
-// overlays and feedback
 export 'src/components/carousel/carousel.dart';
 export 'src/components/feedback/banner.dart';
 export 'src/components/feedback/empty_state.dart';
@@ -37,6 +38,15 @@ export 'src/components/fields/search_field.dart';
 export 'src/components/fields/switch_field.dart';
 export 'src/components/fields/text_area.dart';
 export 'src/components/fields/text_field.dart';
+export 'src/components/layout/avatar.dart';
+export 'src/components/layout/card.dart';
+export 'src/components/layout/list.dart';
+export 'src/components/layout/list_row.dart';
+export 'src/components/layout/section_header.dart';
+export 'src/components/navigation/navigation_bar.dart';
+export 'src/components/navigation/navigation_item.dart';
+export 'src/components/navigation/pagination.dart';
+export 'src/components/navigation/tab_bar.dart';
 export 'src/components/overlays/balloon.dart';
 export 'src/components/overlays/choice_dialog.dart';
 export 'src/components/overlays/code_dialog.dart';

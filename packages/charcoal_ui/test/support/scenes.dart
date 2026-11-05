@@ -2,6 +2,7 @@ import 'package:charcoal_ui/testing.dart';
 
 import 'scene_actions.dart';
 import 'scene_fields.dart';
+import 'scene_navigation.dart';
 import 'scene_overlays.dart';
 import 'scene_shell.dart';
 
@@ -12,4 +13,5 @@ final charcoalScenes = <CharcoalScene>[
   ...actionsScenes,
   ...fieldsScenes,
   ...overlaysScenes,
+  ...navigationScenes,
 ];

@@ -1,4 +1,5 @@
-import 'package:charcoal_ui/next.dart' show CharcoalDropdown, CharcoalTextArea, CharcoalTextField;
+import 'package:charcoal_ui/next.dart'
+    show CharcoalDropdown, CharcoalTextArea, CharcoalTextField;
 import 'package:charcoal_ui_showcase/showcase/app.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,7 +26,9 @@ void main() {
     }
   }
 
-  testWidgets('the fields page fields accept input and the dropdown opens', (tester) async {
+  testWidgets('the fields page fields accept input and the dropdown opens', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(1180, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     addTearDown(tester.platformDispatcher.clearDefaultRouteNameTestValue);
@@ -48,7 +51,9 @@ void main() {
 
     final dropdown = find.byKey(const ValueKey<String>('work-type-dropdown'));
     await tester.ensureVisible(dropdown);
-    await tester.tap(find.descendant(of: dropdown, matching: find.text('Illustration')));
+    await tester.tap(
+      find.descendant(of: dropdown, matching: find.text('Illustration')),
+    );
     await tester.pump();
     expect(find.text('Multiple pages'), findsOneWidget);
     await tester.tap(find.text('Novel'));

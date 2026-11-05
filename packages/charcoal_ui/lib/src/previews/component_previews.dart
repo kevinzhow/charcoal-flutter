@@ -1,4 +1,3 @@
-import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../charcoal_ui.dart';
@@ -12,51 +11,6 @@ final class _ComposedUiPreview extends StatefulWidget {
 
   @override
   State<_ComposedUiPreview> createState() => _ComposedUiPreviewState();
-}
-
-@CharcoalComponentPreview(name: 'Tab bar', size: Size(420, 180))
-Widget charcoalTabBarPreview() => const _TabBarPreview();
-
-final class _TabBarPreview extends StatefulWidget {
-  const _TabBarPreview();
-
-  @override
-  State<_TabBarPreview> createState() => _TabBarPreviewState();
-}
-
-final class _TabBarPreviewState extends State<_TabBarPreview> {
-  String destination = 'home';
-
-  @override
-  Widget build(BuildContext context) => CharcoalTabBar<String>(
-    items: const <CharcoalTabItem<String>>[
-      CharcoalTabItem<String>(
-        icon: CharcoalIcon(CharcoalIcons.home),
-        label: 'Home',
-        value: 'home',
-      ),
-      CharcoalTabItem<String>(
-        icon: CharcoalIcon(CharcoalIcons.compass),
-        label: 'Discover',
-        value: 'discover',
-      ),
-      CharcoalTabItem<String>(
-        badge: '3',
-        icon: CharcoalIcon(CharcoalIcons.message),
-        label: 'Messages',
-        semanticLabel: 'Messages, 3 unread',
-        value: 'messages',
-      ),
-      CharcoalTabItem<String>(
-        icon: CharcoalIcon(CharcoalIcons.personCircle),
-        label: 'Profile',
-        value: 'profile',
-      ),
-    ],
-    onChanged: (value) => setState(() => destination = value),
-    semanticLabel: 'Primary destinations',
-    value: destination,
-  );
 }
 
 final class _ComposedUiPreviewState extends State<_ComposedUiPreview> {

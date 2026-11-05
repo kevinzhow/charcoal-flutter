@@ -36,7 +36,9 @@ class _RoleCards extends StatelessWidget {
       final value = entry.value;
       if (value is! Color) continue;
       final family = entry.key.split(RegExp('(?=[A-Z])')).first;
-      groups.putIfAbsent(family, () => <MapEntry<String, Color>>[]).add(MapEntry(entry.key, value));
+      groups
+          .putIfAbsent(family, () => <MapEntry<String, Color>>[])
+          .add(MapEntry(entry.key, value));
     }
     return ShowcaseCatalogGrid(
       children: <Widget>[
@@ -49,7 +51,8 @@ class _RoleCards extends StatelessWidget {
               spacing: 12,
               runSpacing: 12,
               children: <Widget>[
-                for (final entry in group.value) _Swatch(name: entry.key, color: entry.value),
+                for (final entry in group.value)
+                  _Swatch(name: entry.key, color: entry.value),
               ],
             ),
           ),
@@ -77,7 +80,10 @@ class _RoleCards extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              _Scale(title: 'textField', values: pack.metrics.textField.toMap()),
+              _Scale(
+                title: 'textField',
+                values: pack.metrics.textField.toMap(),
+              ),
               const CharcoalGap(CharcoalSpace.lg),
               _Scale(title: 'textArea', values: pack.metrics.textArea.toMap()),
               const CharcoalGap(CharcoalSpace.lg),
@@ -109,10 +115,16 @@ class _Swatch extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               color: color,
-              border: Border.all(color: theme.colors.border, width: theme.borders.hairline),
+              border: Border.all(
+                color: theme.colors.border,
+                width: theme.borders.hairline,
+              ),
               borderRadius: BorderRadius.circular(theme.radius.md),
             ),
-            child: SizedBox(height: theme.sizes.controlLg, width: double.infinity),
+            child: SizedBox(
+              height: theme.sizes.controlLg,
+              width: double.infinity,
+            ),
           ),
           const CharcoalGap(CharcoalSpace.xs),
           CharcoalText(name, role: CharcoalTextRole.captionBold, maxLines: 2),
@@ -137,7 +149,9 @@ class _Scale extends StatelessWidget {
       for (final entry in values.entries)
         Row(
           children: <Widget>[
-            Expanded(child: CharcoalText(entry.key, role: CharcoalTextRole.caption)),
+            Expanded(
+              child: CharcoalText(entry.key, role: CharcoalTextRole.caption),
+            ),
             CharcoalText('${entry.value}', role: CharcoalTextRole.captionMono),
           ],
         ),

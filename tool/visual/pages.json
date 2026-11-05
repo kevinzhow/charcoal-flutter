@@ -20,6 +20,8 @@
     { "id": "roles", "nav": "Roles" },
     { "id": "fields", "nav": "Fields" },
     { "id": "navigation", "nav": "Navigation" },
+    { "id": "layout", "nav": "Layout" },
+    { "id": "admin", "nav": "Admin" },
     { "id": "content", "nav": "Content" },
     { "id": "feedback", "nav": "Feedback" },
     { "id": "token-pipeline", "nav": "Token pipeline" },
