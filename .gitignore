@@ -7,6 +7,8 @@
 .flutter-plugins-dependencies
 .pub/
 build/
+# charcoal_theme keeps its ThemeData builder in lib/src/build/
+!packages/charcoal_theme/lib/src/build/
 coverage/
 .artifacts/
 **/.widget_preview/
