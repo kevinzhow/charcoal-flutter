@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "comment": "Page id -> how to reach it in the showcase. The web showcase has no routes, so pages are reached by clicking the Flutter semantics tree (role=button, exact accessible name). 'nav' is a sidebar (desktop) or navigation-panel (mobile) label. 'steps' run afterwards: {click: <regex source or exact name>} clicks the first matching button. If the target sidebar item is already selected, capture.mjs first visits 'Overview'.",
+  "viewports": [
+    { "name": "1440x900", "width": 1440, "height": 900 },
+    { "name": "390x844", "width": 390, "height": 844 },
+    { "name": "320x700", "width": 320, "height": 700 }
+  ],
+  "themes": ["light", "dark"],
+  "pages": [
+    { "id": "overview", "nav": "Overview" },
+    { "id": "agent-apps", "nav": "Agent Ready apps" },
+    { "id": "colors", "nav": "Colors" },
+    { "id": "typography", "nav": "Typography" },
+    { "id": "dimensions", "nav": "Dimensions" },
+    { "id": "icons", "nav": "Icons" },
+    { "id": "buttons", "nav": "Buttons" },
+    { "id": "selection", "nav": "Selection" },
+    { "id": "fields", "nav": "Fields" },
+    { "id": "navigation", "nav": "Navigation" },
+    { "id": "content", "nav": "Content" },
+    { "id": "feedback", "nav": "Feedback" },
+    { "id": "token-pipeline", "nav": "Token pipeline" },
+    { "id": "app-nook", "nav": "Agent Ready apps", "steps": [{ "click": "Open Nook simulation" }] },
+    { "id": "app-lumen", "nav": "Agent Ready apps", "steps": [{ "click": "Open Lumen simulation" }] },
+    { "id": "app-daylight", "nav": "Agent Ready apps", "steps": [{ "click": "Open Daylight simulation" }] },
+    { "id": "app-bloom", "nav": "Agent Ready apps", "steps": [{ "click": "Open Bloom simulation" }] },
+    { "id": "app-aster", "nav": "Agent Ready apps", "steps": [{ "click": "Aster" }], "optional": true }
+  ]
+}
