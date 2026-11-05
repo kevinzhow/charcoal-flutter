@@ -577,7 +577,7 @@ const String generatedCatalogJson = r'''{
       "category": "Application",
       "summary": "Hosts a Charcoal application with Navigator or Router navigation and shared platform infrastructure.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_app.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/legacy/app/charcoal_app.dart",
       "documentationLevel": "curated",
       "keywords": [
         "app shell",
@@ -3429,7 +3429,7 @@ const String generatedCatalogJson = r'''{
       "category": "Navigation",
       "summary": "Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_page_route.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/legacy/app/charcoal_page_route.dart",
       "documentationLevel": "curated",
       "keywords": [
         "android predictive back",
@@ -3854,7 +3854,7 @@ const String generatedCatalogJson = r'''{
       "category": "Layout",
       "summary": "Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_scaffold.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/legacy/app/charcoal_scaffold.dart",
       "documentationLevel": "curated",
       "keywords": [
         "scaffold",
