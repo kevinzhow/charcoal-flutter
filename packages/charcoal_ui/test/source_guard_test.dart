@@ -22,6 +22,9 @@ const libraryGuarded = <String>[
   'components/actions/',
   'components/selection/',
   'components/status/',
+  // 2B fields and text
+  'components/fields/',
+  'components/text/',
 ];
 
 void main() {

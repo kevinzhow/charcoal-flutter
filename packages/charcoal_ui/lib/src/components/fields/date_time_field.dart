@@ -1,0 +1,187 @@
+import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:charcoal_theme/charcoal_theme.dart';
+import 'package:flutter/material.dart' show TimeOfDay, showDatePicker, showTimePicker;
+import 'package:flutter/widgets.dart';
+
+import '../../foundation/charcoal_clickable.dart';
+import '../../foundation/interaction_state.dart';
+import 'field_label.dart';
+
+/// Picks a moment for a [CharcoalDateTimeField]; returns null when cancelled.
+typedef CharcoalDateTimePicker = Future<DateTime?> Function(
+  BuildContext context,
+  DateTime? current,
+);
+
+/// Years either side of today offered by the default picker.
+const _pickerYearSpan = 5;
+
+/// Formats [value] as `2026-09-13 14:20` in local time: the one date-time format of Charcoal forms.
+String formatCharcoalDateTime(DateTime value) {
+  final local = value.toLocal();
+  return '${formatCharcoalDate(local)} '
+      '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
+}
+
+/// Formats [value] as `2026-09-13` in local time, for values where the time of day is noise.
+String formatCharcoalDate(DateTime value) {
+  final local = value.toLocal();
+  return '${local.year}-${local.month.toString().padLeft(2, '0')}-'
+      '${local.day.toString().padLeft(2, '0')}';
+}
+
+Future<DateTime?> _pickDateAndTime(BuildContext context, DateTime? current) async {
+  final now = DateTime.now();
+  final date = await showDatePicker(
+    context: context,
+    initialDate: current ?? now,
+    firstDate: DateTime(now.year - _pickerYearSpan),
+    lastDate: DateTime(now.year + _pickerYearSpan),
+  );
+  if (date == null || !context.mounted) return null;
+  final time = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.fromDateTime(current ?? now),
+  );
+  if (time == null) return null;
+  return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+}
+
+/// A date-and-time picker rendered as a field.
+///
+/// Shows the chosen moment with a clear affordance, because an accidentally set time can silently
+/// hide content from everyone. Tapping opens [picker] (the platform date then time dialogs by
+/// default).
+class CharcoalDateTimeField extends StatelessWidget {
+  /// A field labelled [label] showing [value].
+  const CharcoalDateTimeField({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+    this.clearText = 'Clear',
+    this.emptyText = 'Not set',
+    this.hint,
+    this.picker = _pickDateAndTime,
+    super.key,
+  });
+
+  /// The label above the field.
+  final String label;
+
+  /// The chosen moment, or null.
+  final DateTime? value;
+
+  /// Called with the picked moment, or null when cleared; null disables the field.
+  final ValueChanged<DateTime?>? onChanged;
+
+  /// Label of the clear button; pass the localized string.
+  final String clearText;
+
+  /// Text shown while [value] is null; pass the localized string.
+  final String emptyText;
+
+  /// Muted text under the field.
+  final String? hint;
+
+  /// Opens the picker; replace to use another dialog.
+  final CharcoalDateTimePicker picker;
+
+  Future<void> _pick(BuildContext context) async {
+    final picked = await picker(context, value);
+    if (picked != null) onChanged?.call(picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final colors = theme.colors;
+    final enabled = onChanged != null;
+    final current = value;
+    Widget surface(Set<WidgetState> states, Widget child) => DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(theme.radius.sm),
+        color: resolveCharcoalStateColor(
+          states,
+          normal: colors.fillSecondary,
+          hovered: colors.fillSecondaryHover,
+          pressed: colors.fillSecondaryPress,
+        ),
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: theme.sizes.controlMd),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: theme.space.sm),
+          child: child,
+        ),
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        CharcoalFieldLabel(label: label),
+        SizedBox(height: theme.space.sm),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: CharcoalClickable(
+                onPressed: enabled ? () => _pick(context) : null,
+                semanticLabel: label,
+                semanticValue: current == null ? emptyText : formatCharcoalDateTime(current),
+                builder: (context, states) => surface(
+                  states,
+                  Row(
+                    children: <Widget>[
+                      CharcoalIcon(
+                        CharcoalIcons.history,
+                        color: colors.iconSecondary,
+                        size: theme.metrics.textField.iconSize,
+                      ),
+                      SizedBox(width: theme.metrics.textField.contentGap),
+                      Expanded(
+                        child: Text(
+                          current == null ? emptyText : formatCharcoalDateTime(current),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.style(
+                            CharcoalTextRole.size14,
+                            color: current == null ? colors.textPlaceholder : colors.textSecondary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            if (current != null && enabled) ...<Widget>[
+              SizedBox(width: theme.space.sm),
+              CharcoalClickable(
+                onPressed: () => onChanged!(null),
+                semanticLabel: clearText,
+                builder: (context, states) => surface(
+                  states,
+                  Center(
+                    widthFactor: 1,
+                    child: Text(
+                      clearText,
+                      style: theme.style(
+                        CharcoalTextRole.size14,
+                        bold: true,
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        if (hint != null) ...<Widget>[
+          SizedBox(height: theme.space.xs),
+          Text(hint!, style: theme.style(CharcoalTextRole.caption)),
+        ],
+      ],
+    );
+  }
+}

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import '../test_helpers.dart';
 
 void main() {
   test('default source font resolves without a bundled asset', () {

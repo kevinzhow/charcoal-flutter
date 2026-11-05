@@ -21,6 +21,8 @@ void main() {
     '/lib/testing.dart',
     // 2A: a themed Material Slider.
     '/src/components/selection/slider.dart',
+    // 2B: the only fields file that wraps Material widgets.
+    '/src/components/fields/date_time_field.dart',
   ];
 
   test('pre-Material charcoal_ui code has no Material or Cupertino imports', () async {

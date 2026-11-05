@@ -1,32 +1,24 @@
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/next.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/harness.dart';
 
 void main() {
-  testWidgets('stacks its action below scaled copy at compact width', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const SizedBox(
+  testWidgets('stacks its action below scaled copy at compact width', (tester) async {
+    await pumpCharcoal(
+      tester,
+      const Center(
+        child: SizedBox(
           width: 200,
-          child: MediaQuery(
-            data: MediaQueryData(textScaler: TextScaler.linear(2)),
-            child: CharcoalHintText(
-              action: CharcoalButton(
-                onPressed: _noop,
-                size: CharcoalButtonSize.small,
-                variant: CharcoalButtonVariant.primary,
-                child: Text('Review'),
-              ),
-              subtitle: Text('Editable later.'),
-              child: Text('Changes saved.'),
-            ),
+          child: CharcoalHintText(
+            action: Text('Review'),
+            subtitle: Text('Editable later.'),
+            child: Text('Changes saved.'),
           ),
         ),
       ),
+      textScale: 2,
     );
 
     expect(tester.takeException(), isNull);
@@ -39,9 +31,10 @@ void main() {
   testWidgets('keeps copy leading and action trailing in RTL', (tester) async {
     const iconKey = ValueKey<String>('hint-icon');
     const actionKey = ValueKey<String>('hint-action');
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const SizedBox(
+    await pumpCharcoal(
+      tester,
+      const Center(
+        child: SizedBox(
           width: 320,
           child: Directionality(
             textDirection: TextDirection.rtl,
@@ -56,36 +49,23 @@ void main() {
     );
 
     final boxRect = tester.getRect(
-      find.descendant(
-        of: find.byType(CharcoalHintText),
-        matching: find.byType(DecoratedBox),
-      ),
+      find.descendant(of: find.byType(CharcoalHintText), matching: find.byType(DecoratedBox)).first,
     );
     expect(tester.getRect(find.byKey(actionKey)).left, boxRect.left + 16);
     expect(tester.getRect(find.byKey(iconKey)).right, boxRect.right - 16);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('keeps a horizontal action when scaled copy has enough room', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const SizedBox(
+  testWidgets('keeps a horizontal action when scaled copy has enough room', (tester) async {
+    await pumpCharcoal(
+      tester,
+      const Center(
+        child: SizedBox(
           width: 640,
-          child: MediaQuery(
-            data: MediaQueryData(textScaler: TextScaler.linear(2)),
-            child: CharcoalHintText(
-              action: CharcoalButton(
-                onPressed: _noop,
-                size: CharcoalButtonSize.small,
-                child: Text('Review'),
-              ),
-              child: Text('Changes saved.'),
-            ),
-          ),
+          child: CharcoalHintText(action: Text('Review'), child: Text('Changes saved.')),
         ),
       ),
+      textScale: 2,
     );
 
     expect(
@@ -97,20 +77,16 @@ void main() {
 
   test('rejects a negative maximum width', () {
     expect(
-      () => CharcoalHintText(
-        maxWidth: -1,
-        child: const Text('Invalid constraint'),
-      ),
+      () => CharcoalHintText(maxWidth: -1, child: const Text('Invalid constraint')),
       throwsAssertionError,
     );
   });
 
-  testWidgets('hidden hints remove copy and actions from the tree', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const CharcoalHintText(
+  testWidgets('hidden hints remove copy and actions from the tree', (tester) async {
+    await pumpCharcoal(
+      tester,
+      const Center(
+        child: CharcoalHintText(
           action: Text('Action'),
           visible: false,
           child: Text('Hidden guidance'),
@@ -122,6 +98,27 @@ void main() {
     expect(find.text('Action'), findsNothing);
     expect(tester.getSize(find.byType(CharcoalHintText)), Size.zero);
   });
-}
 
-void _noop() {}
+  testWidgets('paints the info icon in the iconHint role on the secondary surface', (tester) async {
+    await pumpCharcoal(
+      tester,
+      const Center(child: CharcoalHintText(child: Text('Info'))),
+    );
+    final surface = tester
+        .widgetList<DecoratedBox>(
+          find.descendant(of: find.byType(CharcoalHintText), matching: find.byType(DecoratedBox)),
+        )
+        .map((b) => b.decoration)
+        .whereType<BoxDecoration>()
+        .first;
+    expect(surface.color, charcoalLightPack.colors.surfaceSecondary);
+    final painter = tester
+        .widgetList<CustomPaint>(
+          find.descendant(of: find.byType(CharcoalHintText), matching: find.byType(CustomPaint)),
+        )
+        .map((p) => p.painter)
+        .whereType<CustomPainter>()
+        .toList();
+    expect(painter, isNotEmpty);
+  });
+}

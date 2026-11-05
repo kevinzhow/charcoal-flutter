@@ -1,236 +1,175 @@
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/next.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';
+import 'next_island.dart';
 
 final class TypographyPage extends StatelessWidget {
   const TypographyPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final fontSizes = theme.typography.fontSize.entries.toList()
-      ..sort((left, right) {
-        final sizeOrder = right.value.compareTo(left.value);
-        return sizeOrder == 0 ? left.path.compareTo(right.path) : sizeOrder;
-      });
-    final lineHeights = <String, double>{
-      for (final entry in theme.typography.lineHeight.entries)
-        entry.path.substring('text.line-height/'.length): entry.value,
-    };
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        const ShowcasePageIntro(
-          description: 'Every generated V2 semantic text size, line height, family, and weight. The specimens update with the token pipeline.',
-          eyebrow: 'FOUNDATION · TYPOGRAPHY',
-          title: 'Typography catalog',
-        ),
-        const SizedBox(height: 24),
-        ShowcaseCatalogGrid(
-          children: <Widget>[
-            ShowcaseCard(
-              description: 'Generated family and weight primitives used by component typography.',
-              eyebrow: 'TYPE PRIMITIVES',
-              title: 'Font contract',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _TypographyMetadataRow(
-                    label: 'Family',
-                    token: theme.typography.fontFamily.entries.single.path,
-                    value: theme.typography.fontFamily.sans,
-                  ),
-                  const SizedBox(height: 14),
-                  for (final entry
-                      in theme.typography.fontWeight.entries) ...<Widget>[
-                    _TypographyMetadataRow(
-                      label: displayTokenName(
-                        entry.path.substring('text.font-weight/'.length),
-                      ),
-                      token: entry.path,
-                      value: 'w${entry.value.value}',
-                    ),
-                    if (entry != theme.typography.fontWeight.entries.last)
-                      const SizedBox(height: 14),
-                  ],
-                ],
-              ),
-            ),
-            ShowcaseCard(
-              description: 'The public iOS 10/12/14/16/20 family, including regular, bold, and monospaced styles.',
-              eyebrow: 'IOS PARITY',
-              title: 'Component type scale',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  for (final size in CharcoalTypographySize.values) ...<Widget>[
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 58,
-                          child: Text(
-                            size.name.replaceFirst('size', ''),
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textTertiaryDefault,
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: CharcoalTypography(
-                            size: size,
-                            child: const Text('Regular typography'),
-                          ),
-                        ),
-                        CharcoalTypography(
-                          monospace: true,
-                          size: size,
-                          weight: CharcoalTypographyWeight.bold,
-                          child: const Text('0123'),
-                        ),
-                      ],
-                    ),
-                    if (size != CharcoalTypographySize.values.last)
-                      const SizedBox(height: 8),
-                  ],
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        ShowcaseCatalogGrid(
-          children: <Widget>[
-            for (final entry in fontSizes)
-              _TypographyTokenCard(
-                fontFamily: theme.typography.fontFamily.sans,
-                fontSize: entry.value,
-                lineHeight:
-                    lineHeights[entry.path.substring(
-                      'text.font-size/'.length,
-                    )] ??
-                    entry.value,
-                path: entry.path,
-                regularWeight: theme.typography.fontWeight.regular,
-                boldWeight: theme.typography.fontWeight.bold,
-              ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-final class _TypographyMetadataRow extends StatelessWidget {
-  const _TypographyMetadataRow({
-    required this.label,
-    required this.token,
-    required this.value,
-  });
-
-  final String label;
-  final String token;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                label,
-                style: theme.textStyles.captionMediumBold.copyWith(
-                  color: theme.colors.textDefault,
-                ),
-              ),
-              Text(
-                token,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textTertiaryDefault,
-                  fontFamily: 'monospace',
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 16),
-        Text(
-          value,
-          style: theme.textStyles.captionMedium.copyWith(
-            color: theme.colors.textSecondaryDefault,
-            fontFamily: 'monospace',
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-final class _TypographyTokenCard extends StatelessWidget {
-  const _TypographyTokenCard({
-    required this.boldWeight,
-    required this.fontFamily,
-    required this.fontSize,
-    required this.lineHeight,
-    required this.path,
-    required this.regularWeight,
-  });
-
-  final FontWeight boldWeight;
-  final String fontFamily;
-  final double fontSize;
-  final double lineHeight;
-  final String path;
-  final FontWeight regularWeight;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final semanticName = path.substring('text.font-size/'.length);
-    final baseStyle = TextStyle(
-      color: theme.colors.textDefault,
-      fontFamily: fontFamily,
-      fontSize: fontSize,
-      height: lineHeight / fontSize,
-      leadingDistribution: TextLeadingDistribution.even,
-    );
-    return ShowcaseCard(
-      description:
-          '${formatShowcaseNumber(fontSize)} px size · ${formatShowcaseNumber(lineHeight)} px line height',
-      eyebrow: 'TEXT STYLE',
-      title: displayTokenName(semanticName),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget build(BuildContext context) => const Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      ShowcasePageIntro(
+        description:
+            'Every type role of the active theme pack: size, line height, weight and family. '
+            'The specimens follow the light and dark packs and the system text scale.',
+        eyebrow: 'FOUNDATION · TYPOGRAPHY',
+        title: 'Typography catalog',
+      ),
+      SizedBox(height: 24),
+      ShowcaseCatalogGrid(
         children: <Widget>[
-          Text(
-            'Design with shared decisions',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: baseStyle.copyWith(fontWeight: regularWeight),
+          ShowcaseCard(
+            description: 'Family and weight primitives behind every role.',
+            eyebrow: 'TYPE PRIMITIVES',
+            title: 'Font contract',
+            child: NextThemeIsland(child: _FontContract()),
           ),
-          const SizedBox(height: 12),
-          Text(
-            'Design with shared decisions',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: baseStyle.copyWith(fontWeight: boldWeight),
+          ShowcaseCard(
+            description:
+                'The 10/12/14/16/20 ladder, regular and bold, plus monospace and truncation.',
+            eyebrow: 'COMPONENT SCALE',
+            title: 'CharcoalTypography',
+            child: NextThemeIsland(child: _Ladder()),
           ),
-          const SizedBox(height: 14),
-          Text(
-            '$path  ·  text.line-height/$semanticName',
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textTertiaryDefault,
-              fontFamily: 'monospace',
+          ShowcaseCard(
+            description: 'Application roles for pages, rows and metadata.',
+            eyebrow: 'APPLICATION ROLES',
+            title: 'Application type roles',
+            child: NextThemeIsland(
+              child: _Roles(
+                roles: <CharcoalTextRole>[
+                  CharcoalTextRole.pageTitle,
+                  CharcoalTextRole.modalTitle,
+                  CharcoalTextRole.sectionTitle,
+                  CharcoalTextRole.body,
+                  CharcoalTextRole.bodyBold,
+                  CharcoalTextRole.caption,
+                  CharcoalTextRole.captionBold,
+                  CharcoalTextRole.captionMono,
+                ],
+              ),
+            ),
+          ),
+          ShowcaseCard(
+            description: 'Upstream body, caption and heading tokens.',
+            eyebrow: 'UPSTREAM ROLES',
+            title: 'Body and heading roles',
+            child: NextThemeIsland(
+              child: _Roles(
+                roles: <CharcoalTextRole>[
+                  CharcoalTextRole.bodyLarge,
+                  CharcoalTextRole.bodyLargeBold,
+                  CharcoalTextRole.paragraph,
+                  CharcoalTextRole.captionMedium,
+                  CharcoalTextRole.captionMediumBold,
+                  CharcoalTextRole.headingXxxs,
+                  CharcoalTextRole.headingXxs,
+                  CharcoalTextRole.headingXs,
+                  CharcoalTextRole.headingS,
+                  CharcoalTextRole.headingM,
+                  CharcoalTextRole.headingL,
+                  CharcoalTextRole.headingXl,
+                  CharcoalTextRole.headingXxl,
+                  CharcoalTextRole.headingXxxl,
+                ],
+              ),
             ),
           ),
         ],
       ),
+    ],
+  );
+}
+
+class _FontContract extends StatelessWidget {
+  const _FontContract();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    final typography = theme.typography;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _Row(label: 'Sans family', value: typography.sansFamily ?? 'platform default'),
+        const CharcoalGap(CharcoalSpace.md),
+        _Row(label: 'Monospace family', value: typography.monoFamily),
+        const CharcoalGap(CharcoalSpace.md),
+        _Row(label: 'Regular weight', value: 'w${typography.weightRegular.value}'),
+        const CharcoalGap(CharcoalSpace.md),
+        _Row(label: 'Bold weight', value: 'w${typography.weightBold.value}'),
+      ],
+    );
+  }
+}
+
+class _Row extends StatelessWidget {
+  const _Row({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: <Widget>[
+      Expanded(child: CharcoalText(label, role: CharcoalTextRole.captionBold)),
+      const CharcoalGap(CharcoalSpace.md),
+      CharcoalText(value, role: CharcoalTextRole.captionMono),
+    ],
+  );
+}
+
+class _Ladder extends StatelessWidget {
+  const _Ladder();
+
+  @override
+  Widget build(BuildContext context) => const Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      CharcoalTypography(role: CharcoalTextRole.size10, child: Text('10 / 18 · Regular')),
+      CharcoalGap(CharcoalSpace.sm),
+      CharcoalTypography(role: CharcoalTextRole.size12, bold: true, child: Text('12 / 20 · Bold')),
+      CharcoalGap(CharcoalSpace.sm),
+      CharcoalTypography(role: CharcoalTextRole.size14, child: Text('14 / 22 · Regular')),
+      CharcoalGap(CharcoalSpace.sm),
+      CharcoalTypography(role: CharcoalTextRole.size16, bold: true, child: Text('16 / 24 · Bold')),
+      CharcoalGap(CharcoalSpace.sm),
+      CharcoalTypography(role: CharcoalTextRole.size20, child: Text('20 / 28 · Regular')),
+      CharcoalGap(CharcoalSpace.sm),
+      CharcoalTypography(monospace: true, child: Text('id_0123456789abcdef')),
+      CharcoalGap(CharcoalSpace.sm),
+      SizedBox(
+        width: 220,
+        child: CharcoalTextEllipsis('A long run of text that is truncated when it is too wide'),
+      ),
+    ],
+  );
+}
+
+class _Roles extends StatelessWidget {
+  const _Roles({required this.roles});
+
+  final List<CharcoalTextRole> roles;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        for (final role in roles) ...<Widget>[
+          CharcoalText(
+            '${role.name}  ${theme.typography.spec(role).fontSize.toStringAsFixed(0)}'
+            '/${theme.typography.spec(role).lineHeight.toStringAsFixed(0)}',
+            role: role,
+            maxLines: 2,
+          ),
+          const CharcoalGap(CharcoalSpace.sm),
+        ],
+      ],
     );
   }
 }
