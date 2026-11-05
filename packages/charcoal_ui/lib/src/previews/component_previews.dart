@@ -4,22 +4,6 @@ import 'package:flutter/widgets.dart';
 import '../../charcoal_ui.dart';
 import 'preview_support.dart';
 
-@CharcoalComponentPreview(name: 'Buttons', size: Size(420, 360))
-Widget charcoalButtonGalleryPreview() => Column(
-  crossAxisAlignment: CrossAxisAlignment.stretch,
-  mainAxisSize: MainAxisSize.min,
-  children: <Widget>[
-    for (final variant in CharcoalButtonVariant.values) ...<Widget>[
-      CharcoalButton(
-        onPressed: () {},
-        variant: variant,
-        child: Text(variant.name),
-      ),
-      const SizedBox(height: 12),
-    ],
-  ],
-);
-
 @CharcoalComponentPreview(name: 'Text fields', size: Size(420, 360))
 Widget charcoalTextFieldGalleryPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
@@ -88,36 +72,6 @@ final class _DropdownPreviewState extends State<_DropdownPreview> {
     value: value,
   );
 }
-
-@CharcoalComponentPreview(
-  name: 'Selection controls',
-  size: Size(420, 360),
-)
-Widget charcoalSelectionControlsPreview() => const _SelectionControlsPreview();
-
-final class _SelectionControlsPreview extends StatefulWidget {
-  const _SelectionControlsPreview();
-
-  @override
-  State<_SelectionControlsPreview> createState() => _SelectionControlsPreviewState();
-}
-
-@CharcoalComponentPreview(name: 'Icon actions', size: Size(420, 180))
-Widget charcoalIconActionsPreview() => Row(
-  mainAxisSize: MainAxisSize.min,
-  children: <Widget>[
-    for (final size in CharcoalIconButtonSize.values) ...<Widget>[
-      CharcoalIconButton(
-        icon: const CharcoalIcon(CharcoalIcons.add),
-        onPressed: () {},
-        semanticLabel: size.name,
-        size: size,
-      ),
-      const SizedBox(width: 16),
-    ],
-    const CharcoalLoadingSpinner(size: 24, padding: 8),
-  ],
-);
 
 @CharcoalComponentPreview(name: 'Composed UI', size: Size(520, 360))
 Widget charcoalComposedUiPreview() => const _ComposedUiPreview();
@@ -212,54 +166,6 @@ final class _ComposedUiPreviewState extends State<_ComposedUiPreview> {
             ),
           ),
           child: const Text('Open dialog'),
-        ),
-      ],
-    );
-  }
-}
-
-final class _SelectionControlsPreviewState extends State<_SelectionControlsPreview> {
-  bool checkbox = true;
-  bool multiSelect = true;
-  bool switchValue = true;
-  String radio = 'first';
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        CharcoalCheckbox(
-          value: checkbox,
-          onChanged: (value) => setState(() => checkbox = value),
-          label: const Text('Receive updates'),
-        ),
-        const SizedBox(height: 20),
-        CharcoalMultiSelect(
-          selected: multiSelect,
-          onChanged: (value) => setState(() => multiSelect = value),
-          label: const Text('Include original files'),
-        ),
-        const SizedBox(height: 20),
-        CharcoalRadio<String>(
-          value: 'first',
-          groupValue: radio,
-          onChanged: (value) => setState(() => radio = value),
-          label: const Text('First option'),
-        ),
-        const SizedBox(height: 12),
-        CharcoalRadio<String>(
-          value: 'second',
-          groupValue: radio,
-          onChanged: (value) => setState(() => radio = value),
-          label: const Text('Second option'),
-        ),
-        const SizedBox(height: 20),
-        CharcoalSwitch(
-          value: switchValue,
-          onChanged: (value) => setState(() => switchValue = value),
-          label: const Text('Enable notifications'),
         ),
       ],
     );

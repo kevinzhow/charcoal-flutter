@@ -1,5 +1,24 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/charcoal_ui.dart'
+    hide
+        CharcoalButton,
+        CharcoalButtonSize,
+        CharcoalButtonVariant,
+        CharcoalIconButton,
+        CharcoalIconButtonSize,
+        CharcoalIconButtonVariant,
+        CharcoalLinkButton,
+        CharcoalSwitchingButton;
+import 'package:charcoal_ui/next.dart'
+    show
+        CharcoalButton,
+        CharcoalButtonSize,
+        CharcoalButtonVariant,
+        CharcoalIconButton,
+        CharcoalIconButtonSize,
+        CharcoalIconButtonVariant,
+        CharcoalLinkButton,
+        CharcoalSwitchingButton;
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';

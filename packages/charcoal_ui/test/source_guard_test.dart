@@ -15,6 +15,15 @@ import 'support/guard.dart';
 /// exist (a stale entry fails the test, so the list cannot rot).
 const libraryExcluded = <String>['components/', 'legacy/', 'previews/', 'theme/'];
 
+/// Family folders inside an excluded directory that are already migrated and so ARE guarded.
+/// Each Phase 2 batch appends its folders here.
+const libraryGuarded = <String>[
+  // 2A actions and selection
+  'components/actions/',
+  'components/selection/',
+  'components/status/',
+];
+
 void main() {
   final root = Directory.current.path; // packages/charcoal_ui
   final src = '$root/lib/src';
@@ -56,7 +65,9 @@ void main() {
       final hits = <GuardHit>[];
       for (final file in dartFiles(src)) {
         final relative = file.path.substring(src.length + 1);
-        if (libraryExcluded.any(relative.startsWith)) continue;
+        if (libraryExcluded.any(relative.startsWith) && !libraryGuarded.any(relative.startsWith)) {
+          continue;
+        }
         hits.addAll(scanText('lib/src/$relative', file.readAsStringSync(), libraryRules));
       }
       expect(hits, isEmpty, reason: hits.join('\n'));

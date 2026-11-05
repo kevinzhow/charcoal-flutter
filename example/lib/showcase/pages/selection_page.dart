@@ -1,4 +1,13 @@
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/next.dart'
+    show
+        CharcoalCheckbox,
+        CharcoalMultiSelect,
+        CharcoalMultiSelectVariant,
+        CharcoalRadio,
+        CharcoalSegment,
+        CharcoalSegmentedControl,
+        CharcoalSlider,
+        CharcoalSwitch;
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';
@@ -15,6 +24,8 @@ final class _SelectionPageState extends State<SelectionPage> {
   bool _receiveUpdates = true;
   bool _showNotifications = true;
   String _privacy = 'public';
+  String _range = 'week';
+  double _volume = 0.4;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -122,6 +133,42 @@ final class _SelectionPageState extends State<SelectionPage> {
                   onChanged: null,
                   value: 'disabled',
                 ),
+              ],
+            ),
+          ),
+          ShowcaseCard(
+            description:
+                'Atomic single selection with intrinsic segment widths.',
+            eyebrow: 'SEGMENTED CONTROL',
+            title: 'Segmented control',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CharcoalSegmentedControl<String>(
+                  key: const ValueKey<String>('range-segmented-control'),
+                  onChanged: (value) => setState(() => _range = value),
+                  segments: const <CharcoalSegment<String>>[
+                    CharcoalSegment<String>(value: 'day', child: Text('Day')),
+                    CharcoalSegment<String>(value: 'week', child: Text('Week')),
+                  ],
+                  value: _range,
+                ),
+              ],
+            ),
+          ),
+          ShowcaseCard(
+            description: 'A themed Material slider in the primary colour.',
+            eyebrow: 'SLIDER',
+            title: 'Slider',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CharcoalSlider(
+                  onChanged: (value) => setState(() => _volume = value),
+                  semanticLabel: 'Volume',
+                  value: _volume,
+                ),
+                const CharcoalSlider(onChanged: null, value: 0.6),
               ],
             ),
           ),

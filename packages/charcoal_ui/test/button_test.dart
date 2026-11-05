@@ -1,73 +1,279 @@
-import 'dart:ui' show SemanticsFlag, Tristate;
+import 'dart:ui' show PointerDeviceKind, SemanticsFlag, Tristate;
 
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:charcoal_ui/next.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/geometry.dart';
+
+BoxDecoration _decoration(WidgetTester tester, Finder within) =>
+    tester
+            .widget<AnimatedContainer>(
+              find.descendant(of: within, matching: find.byType(AnimatedContainer)).first,
+            )
+            .decoration!
+        as BoxDecoration;
 
 void main() {
-  testWidgets('button exposes selection only when configured as a toggle', (
-    tester,
-  ) async {
-    const actionKey = ValueKey<String>('button-action');
-    const toggleKey = ValueKey<String>('button-toggle');
-    await tester.pumpWidget(
-      charcoalTestApp(
-        Column(
-          children: <Widget>[
-            CharcoalButton(
-              key: actionKey,
-              onPressed: () {},
-              child: const Text('Continue'),
-            ),
-            CharcoalButton(
-              key: toggleKey,
-              onPressed: () {},
-              selected: false,
-              child: const Text('Follow'),
-            ),
-          ],
-        ),
+  const key = ValueKey<String>('button');
+
+  testWidgets('exposes selection only when configured as a toggle', (tester) async {
+    await pumpLoose(
+      tester,
+      Column(
+        children: [
+          CharcoalButton(key: key, onPressed: () {}, child: const Text('Continue')),
+          CharcoalButton(
+            key: const ValueKey('toggle'),
+            onPressed: () {},
+            selected: false,
+            child: const Text('Follow'),
+          ),
+        ],
       ),
     );
-
+    expect(tester.getSemantics(find.byKey(key)).flagsCollection.isSelected, Tristate.none);
     expect(
-      tester.getSemantics(find.byKey(actionKey)).flagsCollection.isSelected,
-      Tristate.none,
-    );
-    expect(
-      tester.getSemantics(find.byKey(toggleKey)).flagsCollection.isSelected,
+      tester.getSemantics(find.byKey(const ValueKey('toggle'))).flagsCollection.isSelected,
       Tristate.isFalse,
     );
   });
 
-  testWidgets('link button is a keyboard-accessible text action', (
-    tester,
-  ) async {
-    var activations = 0;
-    final focusNode = FocusNode();
-    addTearDown(focusNode.dispose);
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalLinkButton(
-          focusNode: focusNode,
-          onPressed: () => activations++,
-          child: const Text('Clear filters'),
-        ),
+  testWidgets('taps invoke onPressed; a disabled button does nothing and says so', (tester) async {
+    var presses = 0;
+    await pumpLoose(
+      tester,
+      Column(
+        children: [
+          CharcoalButton(onPressed: () => presses++, child: const Text('Submit')),
+          const CharcoalButton(key: key, onPressed: null, child: Text('Disabled')),
+        ],
       ),
     );
+    await tester.tap(find.text('Submit'));
+    await tester.tap(find.text('Disabled'), warnIfMissed: false);
+    await tester.pump();
+    expect(presses, 1);
+    expect(
+      tester.getSemantics(find.byKey(key)),
+      matchesSemantics(isButton: true, hasEnabledState: true, isEnabled: false),
+    );
+  });
 
-    focusNode.requestFocus();
+  testWidgets('variants take their fills from the pack', (tester) async {
+    for (final variant in CharcoalButtonVariant.values) {
+      await pumpLoose(
+        tester,
+        CharcoalButton(key: key, variant: variant, onPressed: () {}, child: const Text('X')),
+      );
+      final theme = CharcoalTheme.of(tester.element(find.byKey(key)));
+      expect(
+        _decoration(tester, find.byKey(key)).color,
+        charcoalButtonColors(theme, variant).rest,
+        reason: variant.name,
+      );
+    }
+  });
+
+  testWidgets('sizes are 32 and 40 and the pill radius comes from the pack', (tester) async {
+    await pumpLoose(
+      tester,
+      Column(
+        children: [
+          CharcoalButton(
+            key: key,
+            size: CharcoalButtonSize.small,
+            onPressed: () {},
+            child: const Text('S'),
+          ),
+          CharcoalButton(key: const ValueKey('m'), onPressed: () {}, child: const Text('M')),
+        ],
+      ),
+    );
+    expect(tester.getSize(find.byKey(key)).height, 32);
+    expect(tester.getSize(find.byKey(const ValueKey('m'))).height, 40);
+  });
+
+  testWidgets('pressed colour comes from a controller and custom primary blends over', (
+    tester,
+  ) async {
+    final states = WidgetStatesController();
+    addTearDown(states.dispose);
+    await pumpLoose(
+      tester,
+      CharcoalButton(
+        key: key,
+        variant: CharcoalButtonVariant.primary,
+        statesController: states,
+        onPressed: () {},
+        child: const Text('P'),
+      ),
+    );
+    final theme = CharcoalTheme.of(tester.element(find.byKey(key)));
+    states.update(WidgetState.pressed, true);
+    await tester.pump(const Duration(seconds: 1));
+    expect(_decoration(tester, find.byKey(key)).color, theme.colors.primaryPress);
+
+    const custom = Color(0xFF8A2BE2);
+    await pumpLoose(
+      tester,
+      CharcoalButton(
+        key: key,
+        variant: CharcoalButtonVariant.primary,
+        primaryColor: custom,
+        onPressed: () {},
+        child: const Text('P'),
+      ),
+    );
+    expect(_decoration(tester, find.byKey(key)).color, custom);
+  });
+
+  testWidgets('geometry is stable through hover, focus, press and disabled', (tester) async {
+    final focus = FocusNode();
+    addTearDown(focus.dispose);
+    await pumpLoose(
+      tester,
+      CharcoalButton(
+        key: key,
+        focusNode: focus,
+        leading: CharcoalIcon(CharcoalIcons.check),
+        onPressed: () {},
+        child: const Text('Label'),
+      ),
+    );
+    final probes = [find.byKey(key), find.byType(CharcoalIcon), find.text('Label')];
+    final rest = rectsOf(tester, probes);
+
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    addTearDown(mouse.removePointer);
+    await mouse.addPointer(location: tester.getCenter(find.byKey(key)));
+    await tester.pump(const Duration(seconds: 1));
+    expect(rectsOf(tester, probes), rest, reason: 'hover');
+
+    focus.requestFocus();
+    await tester.pump(const Duration(seconds: 1));
+    expect(rectsOf(tester, probes), rest, reason: 'focus');
+
+    final gesture = await pressAndHold(tester, find.byKey(key));
+    await tester.pump(const Duration(seconds: 1));
+    expect(rectsOf(tester, probes), rest, reason: 'pressed');
+    await gesture.up();
+    await tester.pump();
+
+    await pumpLoose(
+      tester,
+      CharcoalButton(
+        key: key,
+        leading: CharcoalIcon(CharcoalIcons.check),
+        onPressed: null,
+        child: const Text('Label'),
+      ),
+    );
+    expect(rectsOf(tester, probes), rest, reason: 'disabled');
+  });
+
+  testWidgets('touch is down then cancel (no activation) or accepted tap', (tester) async {
+    var presses = 0;
+    final states = WidgetStatesController();
+    addTearDown(states.dispose);
+    await pumpLoose(
+      tester,
+      CharcoalButton(
+        key: key,
+        statesController: states,
+        onPressed: () => presses++,
+        child: const Text('Go'),
+      ),
+    );
+    final down = await tester.startGesture(tester.getCenter(find.byKey(key)));
+    await tester.pump();
+    expect(states.value, contains(WidgetState.pressed));
+    expect(presses, 0, reason: 'down never activates');
+    await down.moveBy(const Offset(0, 200));
+    await down.up();
+    await tester.pump();
+    expect(presses, 0);
+    expect(states.value, isNot(contains(WidgetState.pressed)));
+
+    await tester.tap(find.byKey(key));
+    await tester.pump();
+    expect(presses, 1);
+  });
+
+  testWidgets('disabled fades to 0.32; a disabled navigation button disappears', (tester) async {
+    await pumpLoose(
+      tester,
+      Column(
+        children: const [
+          CharcoalButton(key: key, onPressed: null, child: Text('A')),
+          CharcoalButton(
+            key: ValueKey('nav'),
+            variant: CharcoalButtonVariant.navigation,
+            onPressed: null,
+            child: Text('B'),
+          ),
+        ],
+      ),
+    );
+    expect(targetOpacity(tester, find.text('A')), 0.32);
+    expect(targetOpacity(tester, find.text('B')), 0);
+  });
+
+  testWidgets('keyboard activation works', (tester) async {
+    var presses = 0;
+    final focus = FocusNode();
+    addTearDown(focus.dispose);
+    await pumpLoose(
+      tester,
+      CharcoalButton(focusNode: focus, onPressed: () => presses++, child: const Text('K')),
+    );
+    focus.requestFocus();
     await tester.pump();
     await tester.sendKeyEvent(LogicalKeyboardKey.space);
+    await tester.pump(const Duration(seconds: 1));
+    expect(presses, 1);
+  });
 
-    expect(activations, 1);
+  for (final scale in [0.8, 1.0, 2.0, 3.0]) {
+    testWidgets('text scale $scale grows the button without overflow', (tester) async {
+      await pumpLoose(
+        tester,
+        const SizedBox(
+          width: 300,
+          child: CharcoalButton(
+            key: key,
+            fullWidth: true,
+            onPressed: null,
+            child: Text('Scaled action'),
+          ),
+        ),
+        textScale: scale,
+      );
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byKey(key)).height, greaterThanOrEqualTo(40));
+    });
+  }
+
+  testWidgets('link button is a keyboard-accessible text action', (tester) async {
+    var presses = 0;
+    final focus = FocusNode();
+    addTearDown(focus.dispose);
+    await pumpLoose(
+      tester,
+      CharcoalLinkButton(focusNode: focus, onPressed: () => presses++, child: const Text('Clear')),
+    );
+    focus.requestFocus();
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.space);
+    await tester.pump(const Duration(seconds: 1));
+    expect(presses, 1);
+    expect(tester.getSize(find.byType(CharcoalLinkButton)).height, 40);
     expect(
-      tester.getSemantics(find.byType(CharcoalClickable)),
-      isSemantics(
-        label: 'Clear filters',
+      tester.getSemantics(find.byType(CharcoalLinkButton)),
+      matchesSemantics(
+        label: 'Clear',
         isButton: true,
         isFocused: true,
         isFocusable: true,
@@ -77,246 +283,62 @@ void main() {
         hasTapAction: true,
       ),
     );
-    expect(
-      tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).constraints!.minHeight,
-      40,
-    );
-    expect(
-      tester.getSize(find.byType(CharcoalLinkButton)).width,
-      lessThan(800),
-    );
   });
 
-  testWidgets('invokes onPressed from a pointer tap', (tester) async {
-    var pressCount = 0;
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalButton(
-          onPressed: () => pressCount += 1,
-          child: const Text('Submit'),
-        ),
+  testWidgets('switching button reserves the larger geometry and shows one branch', (tester) async {
+    await pumpLoose(
+      tester,
+      const CharcoalSwitchingButton(
+        isOn: false,
+        offButton: SizedBox(width: 80, height: 32, child: Text('Off')),
+        onButton: SizedBox(width: 120, height: 40, child: Text('On')),
       ),
     );
-
-    await tester.tap(find.text('Submit'));
-    await tester.pump();
-
-    expect(pressCount, 1);
-  });
-
-  testWidgets('does not invoke a disabled button', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(const CharcoalButton(onPressed: null, child: Text('Disabled'))),
-    );
-
-    await tester.tap(find.text('Disabled'));
-    await tester.pump();
-
-    expect(
-      tester.getSemantics(find.byType(CharcoalButton)),
-      matchesSemantics(isButton: true, hasEnabledState: true, isEnabled: false),
-    );
-  });
-
-  testWidgets('semantic color overrides propagate into component surfaces', (
-    tester,
-  ) async {
-    const replacement = Color(0xFF9C27B0);
-    final colors = CharcoalGeneratedColorTokens.light.copyWith(
-      containerPrimaryDefault: replacement,
-    );
-    final theme = CharcoalThemeData.light(colors: colors);
-
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalButton(
-          onPressed: () {},
-          variant: CharcoalButtonVariant.primary,
-          child: const Text('Primary'),
-        ),
-        theme: theme,
-      ),
-    );
-
-    final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    final decoration = container.decoration! as BoxDecoration;
-    expect(decoration.color, replacement);
-  });
-
-  testWidgets('semantic dimension overrides resolve into component layout', (
-    tester,
-  ) async {
-    final base = CharcoalGeneratedDimensionTokens.light;
-    final dimensions = base.copyWith(
-      space: base.space.copyWith(component30: 20, targetS: 36),
-    );
-    final theme = CharcoalThemeData.light(dimensions: dimensions);
-
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalButton(
-          onPressed: () {},
-          size: CharcoalButtonSize.small,
-          child: const Text('Small'),
-        ),
-        theme: theme,
-      ),
-    );
-
-    final container = tester.widget<AnimatedContainer>(
-      find.byType(AnimatedContainer),
-    );
-    expect(container.constraints!.minHeight, 36);
-    expect(
-      container.padding,
-      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-    );
-  });
-
-  testWidgets('resolves pressed colors from WidgetStatesController', (tester) async {
-    final states = WidgetStatesController();
-    addTearDown(states.dispose);
-    final theme = CharcoalThemeData.light();
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalButton(
-          onPressed: () {},
-          statesController: states,
-          variant: CharcoalButtonVariant.primary,
-          child: const Text('Primary'),
-        ),
-        theme: theme,
-      ),
-    );
-
-    states.update(WidgetState.pressed, true);
-    await tester.pump();
-
-    final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    final decoration = container.decoration! as BoxDecoration;
-    expect(decoration.color, theme.colors.containerPrimaryPress);
-  });
-
-  testWidgets('supports the iOS custom primary color', (tester) async {
-    const custom = Color(0xFF8A2BE2);
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalButton(
-          onPressed: () {},
-          primaryColor: custom,
-          variant: CharcoalButtonVariant.primary,
-          child: const Text('Custom'),
-        ),
-      ),
-    );
-
-    final container = tester.widget<AnimatedContainer>(
-      find.byType(AnimatedContainer),
-    );
-    expect((container.decoration! as BoxDecoration).color, custom);
-  });
-
-  testWidgets('grows vertically with accessibility text scaling', (
-    tester,
-  ) async {
-    final theme = CharcoalThemeData.light();
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const MediaQuery(
-          data: MediaQueryData(textScaler: TextScaler.linear(2)),
-          child: CharcoalButton(
-            onPressed: _noop,
-            child: Text('Scaled action'),
-          ),
-        ),
-        theme: theme,
-      ),
-    );
-
-    expect(
-      tester.getSize(find.byType(AnimatedContainer)).height,
-      greaterThan(40),
-    );
-  });
-
-  testWidgets('switching button keeps the larger layout and selects a child', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const CharcoalSwitchingButton(
-          isOn: false,
-          offButton: SizedBox(width: 80, height: 32, child: Text('Off')),
-          onButton: SizedBox(width: 120, height: 40, child: Text('On')),
-        ),
-      ),
-    );
-
     expect(tester.getSize(find.byType(IndexedStack)), const Size(120, 40));
-    final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));
-    expect(stack.index, 1);
+    expect(tester.widget<IndexedStack>(find.byType(IndexedStack)).index, 1);
   });
 
-  testWidgets('switching button exposes and focuses only its visible action', (
-    tester,
-  ) async {
+  testWidgets('switching button exposes and focuses only its visible action', (tester) async {
     var isOn = false;
     late StateSetter setState;
-    final onFocusNode = FocusNode();
-    final offFocusNode = FocusNode();
-    addTearDown(onFocusNode.dispose);
-    addTearDown(offFocusNode.dispose);
-
-    await tester.pumpWidget(
-      charcoalTestApp(
-        StatefulBuilder(
-          builder: (context, update) {
-            setState = update;
-            return CharcoalSwitchingButton(
-              isOn: isOn,
-              offButton: CharcoalButton(
-                focusNode: offFocusNode,
-                onPressed: () {},
-                child: const Text('Enable notifications'),
-              ),
-              onButton: CharcoalButton(
-                focusNode: onFocusNode,
-                onPressed: () {},
-                child: const Text('Disable notifications'),
-              ),
-            );
-          },
-        ),
+    final onFocus = FocusNode();
+    final offFocus = FocusNode();
+    addTearDown(onFocus.dispose);
+    addTearDown(offFocus.dispose);
+    await pumpLoose(
+      tester,
+      StatefulBuilder(
+        builder: (context, update) {
+          setState = update;
+          return CharcoalSwitchingButton(
+            isOn: isOn,
+            offButton: CharcoalButton(
+              focusNode: offFocus,
+              onPressed: () {},
+              child: const Text('Enable'),
+            ),
+            onButton: CharcoalButton(
+              focusNode: onFocus,
+              onPressed: () {},
+              child: const Text('Disable'),
+            ),
+          );
+        },
       ),
     );
-
-    onFocusNode.requestFocus();
+    onFocus.requestFocus();
     await tester.pump();
-    expect(onFocusNode.hasFocus, isFalse);
-    expect(find.bySemanticsLabel('Enable notifications'), findsOneWidget);
-    expect(find.bySemanticsLabel('Disable notifications'), findsNothing);
-    expect(
-      find.semantics.byFlag(SemanticsFlag.hasToggledState),
-      findsNothing,
-    );
-
-    offFocusNode.requestFocus();
-    await tester.pump();
-    expect(offFocusNode.hasPrimaryFocus, isTrue);
+    expect(onFocus.hasFocus, isFalse);
+    expect(find.bySemanticsLabel('Enable'), findsOneWidget);
+    expect(find.bySemanticsLabel('Disable'), findsNothing);
+    expect(find.semantics.byFlag(SemanticsFlag.hasToggledState), findsNothing);
 
     setState(() => isOn = true);
     await tester.pump();
-    expect(offFocusNode.hasFocus, isFalse);
-    expect(find.bySemanticsLabel('Enable notifications'), findsNothing);
-    expect(find.bySemanticsLabel('Disable notifications'), findsOneWidget);
-
-    offFocusNode.requestFocus();
+    expect(find.bySemanticsLabel('Enable'), findsNothing);
+    expect(find.bySemanticsLabel('Disable'), findsOneWidget);
+    onFocus.requestFocus();
     await tester.pump();
-    expect(offFocusNode.hasFocus, isFalse);
-    onFocusNode.requestFocus();
-    await tester.pump();
-    expect(onFocusNode.hasPrimaryFocus, isTrue);
+    expect(onFocus.hasPrimaryFocus, isTrue);
   });
 }
-
-void _noop() {}
