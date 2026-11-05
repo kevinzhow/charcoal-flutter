@@ -12,6 +12,7 @@ workspace:
   - packages/charcoal_cli
   - packages/charcoal_icons
   - packages/charcoal_mcp
+  - packages/charcoal_theme
   - packages/charcoal_tokens
   - packages/charcoal_ui
 
