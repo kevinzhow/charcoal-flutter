@@ -18,6 +18,7 @@
     { "id": "selection", "nav": "Selection" },
     { "id": "tags", "nav": "Tags" },
     { "id": "roles", "nav": "Roles" },
+    { "id": "supporting", "nav": "Supporting" },
     { "id": "fields", "nav": "Fields" },
     { "id": "navigation", "nav": "Navigation" },
     { "id": "layout", "nav": "Layout" },

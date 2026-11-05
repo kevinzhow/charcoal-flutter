@@ -91,7 +91,7 @@ final class _TodayProgress extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: theme.colors.icon.withValues(alpha: 0.32),
+                  color: theme.colors.iconOnNotice.withValues(alpha: 0.32),
                   width: 6,
                 ),
                 borderRadius: BorderRadius.circular(theme.radius.pill),
@@ -104,7 +104,7 @@ final class _TodayProgress extends StatelessWidget {
                     '${viewModel.completedCount}/${daylightHabits.length}',
                     style: theme
                         .style(CharcoalTextRole.captionMediumBold)
-                        .copyWith(color: theme.colors.text),
+                        .copyWith(color: theme.colors.textOnNotice),
                   ),
                 ),
               ),
@@ -118,7 +118,7 @@ final class _TodayProgress extends StatelessWidget {
                     'Today’s rhythm',
                     style: theme
                         .style(CharcoalTextRole.captionMediumBold)
-                        .copyWith(color: theme.colors.text),
+                        .copyWith(color: theme.colors.textOnNotice),
                   ),
                   SizedBox(height: space.xs),
                   Text(
@@ -130,7 +130,7 @@ final class _TodayProgress extends StatelessWidget {
                     style: theme
                         .style(CharcoalTextRole.caption)
                         .copyWith(
-                          color: theme.colors.text.withValues(alpha: 0.76),
+                          color: theme.colors.textOnNotice.withValues(alpha: 0.76),
                         ),
                   ),
                 ],

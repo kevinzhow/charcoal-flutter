@@ -53,7 +53,7 @@ void main() {
     final contract = charcoalLightPack.colors.toMap().keys.toSet();
     expect(colors.keys.toSet().intersection(extensions.keys.toSet()), isEmpty);
     expect({...colors.keys, ...extensions.keys}, contract);
-    expect(contract, hasLength(88));
+    expect(contract, hasLength(90));
   });
 
   test('both packs carry the same names', () {

@@ -103,6 +103,8 @@ class CharcoalColorRoles {
     required this.iconNotice,
     required this.iconOnPrimary,
     required this.iconOnImage,
+    required this.textOnNotice,
+    required this.iconOnNotice,
     required this.iconHint,
   });
 
@@ -367,6 +369,12 @@ class CharcoalColorRoles {
   /// Icon on an over-image fill.
   final Color iconOnImage;
 
+  /// Text on a notice fill (appended after the freeze).
+  final Color textOnNotice;
+
+  /// Icon on a notice fill (appended after the freeze).
+  final Color iconOnNotice;
+
   /// Fill of the hint-text info glyph (authored by Charcoal iOS 16/Info.pdf).
   final Color iconHint;
 
@@ -459,6 +467,8 @@ class CharcoalColorRoles {
     Color? iconNotice,
     Color? iconOnPrimary,
     Color? iconOnImage,
+    Color? textOnNotice,
+    Color? iconOnNotice,
     Color? iconHint,
   }) => CharcoalColorRoles(
     background: background ?? this.background,
@@ -548,6 +558,8 @@ class CharcoalColorRoles {
     iconNotice: iconNotice ?? this.iconNotice,
     iconOnPrimary: iconOnPrimary ?? this.iconOnPrimary,
     iconOnImage: iconOnImage ?? this.iconOnImage,
+    textOnNotice: textOnNotice ?? this.textOnNotice,
+    iconOnNotice: iconOnNotice ?? this.iconOnNotice,
     iconHint: iconHint ?? this.iconHint,
   );
 
@@ -640,6 +652,8 @@ class CharcoalColorRoles {
     'iconNotice': iconNotice,
     'iconOnPrimary': iconOnPrimary,
     'iconOnImage': iconOnImage,
+    'textOnNotice': textOnNotice,
+    'iconOnNotice': iconOnNotice,
     'iconHint': iconHint,
   };
 
@@ -732,6 +746,8 @@ class CharcoalColorRoles {
     iconNotice: map['iconNotice']! as Color,
     iconOnPrimary: map['iconOnPrimary']! as Color,
     iconOnImage: map['iconOnImage']! as Color,
+    textOnNotice: map['textOnNotice']! as Color,
+    iconOnNotice: map['iconOnNotice']! as Color,
     iconHint: map['iconHint']! as Color,
   );
 
@@ -826,6 +842,8 @@ class CharcoalColorRoles {
           other.iconNotice == iconNotice &&
           other.iconOnPrimary == iconOnPrimary &&
           other.iconOnImage == iconOnImage &&
+          other.textOnNotice == textOnNotice &&
+          other.iconOnNotice == iconOnNotice &&
           other.iconHint == iconHint;
 
   @override
@@ -917,6 +935,8 @@ class CharcoalColorRoles {
     iconNotice,
     iconOnPrimary,
     iconOnImage,
+    textOnNotice,
+    iconOnNotice,
     iconHint,
   ]);
 }

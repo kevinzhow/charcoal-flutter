@@ -19,12 +19,13 @@ SHA-256 hashes. The current snapshot is pinned to
 Reference resolution creates this dependency chain:
 
 ```text
-base primitive → applied semantic token → private component mapping → Flutter layout
+base primitive → applied semantic token → theme role (pack) → component reads the role → Flutter layout
 ```
 
-For example, the primitive `space.30 = 16px` resolves into `space.component/30`; a button then maps
-that semantic value to its small horizontal padding. A source-specific value with no exact semantic
-role stays in the component's private specification instead.
+For example, the primitive `space.30 = 16px` resolves into `space.component/30`; the pack maps it to
+the `space.lg` step, and a card's padding or a `CharcoalGap(CharcoalSpace.lg)` reads that step from
+the theme. A source-specific value with no exact semantic role stays a metric of its component
+family in the theme contract (for example the 51 x 31 switch track) instead.
 
 ## Generated artifacts
 
@@ -38,12 +39,16 @@ One generation transaction writes:
 - `tokens/diff.md` for upstream update reviews.
 
 Each generated foundation group exposes typed fields, `copyWith` support, and typed `entries`
-catalogs. Components never parse JSON at runtime. `CharcoalThemeData` carries only brightness,
-colors, dimensions, and typography.
+catalogs. Components never parse JSON at runtime and never read these generated foundations
+directly: they read the theme pack (`CharcoalTheme.of(context)`), whose roles the pack JSON maps
+onto the foundations.
 
-Component layout, state mapping, and motion are ordinary reviewed Dart source. This keeps exact
-source behavior close to the widget, avoids pretending every platform measurement is a universal
-token, and prevents application themes from replacing a component's structural contract.
+Component layout, state mapping, and motion are ordinary reviewed Dart source whose measurements are
+typed metrics in `charcoal_theme`. This keeps exact source behavior close to the widget, avoids
+pretending every platform measurement is a universal token, and keeps a pack from replacing a
+component's structural contract: a pack changes values, never behavior. The library source guard
+rejects any literal that bypasses this split, and the extreme-theme test proves components follow
+the pack.
 
 ## Theme pack
 

@@ -1,39 +1,45 @@
-# Theme contract (batch 1.1, frozen)
+# Theme contract
 
-Status: contract freeze for review. After this batch merges, every name below is **append-only**: add a role or
-a metric field in your own PR (in `packages/charcoal_theme/lib/src/contract/`, plus the pack mapping), never
-rename or remove one. `packages/charcoal_theme/test/frozen_names.txt` enforces this.
+Status: frozen and in use. Every name below is **append-only**: add a role or a metric field in the
+pull request that needs it (in `packages/charcoal_theme/lib/src/contract/`, plus the mapping in
+`tokens/theme/charcoal.pack.json` and a `dart run tool/tokens.dart generate`), never rename or remove one.
+`packages/charcoal_theme/test/frozen_names.txt` enforces this.
 
-Source revisions: charcoal-flutter `de89016`; myopay `main@3c75e2b` and `origin/cindy/feature-flags@b486212`
-(`packages/myopay_theme`, `lib/ui/console_controls.dart`). Architecture follows `raft_theme`.
+This contract is how the library is themed: `charcoal_ui` components read only these roles and metrics
+through `CharcoalTheme.of(context)`, `buildCharcoalThemeData` fills Material's slots from the same pack,
+and the extreme-theme test proves no component keeps a value of its own. Applications never read it; they
+use `CharcoalTone`, `CharcoalTextTone`, `CharcoalTextRole`, `CharcoalSpace` and components (see
+[Guards](guards.md)). Source revisions it was derived from: charcoal-flutter `de89016` (the pre-Material
+library, see section 8) and the `myopay_theme` package of the first consumer. The architecture follows
+`raft_theme`.
 
 ## 1. Shape
 
 ```
 packages/charcoal_theme/
   lib/charcoal_theme.dart          public barrel
-  lib/testing.dart                 extremePack(brightness)  (placeholder; scenes arrive in batch 1B)
+  lib/testing.dart                 extremePack(brightness): the pack the extreme-theme test mounts every scene under
   lib/src/theme.dart               CharcoalTheme extends ThemeExtension<CharcoalTheme>; .of(context); style(role); tone(tone)
   lib/src/pack.dart                CharcoalThemePack (name, brightness + the nine groups below)
   lib/src/contract/                colors space radius borders sizes motion elevation typography tones
   lib/src/contract/metrics/        one typed block per component family + metrics.dart (CharcoalMetrics)
-  lib/src/packs/charcoal_pack.g.dart GENERATED from tokens/theme/charcoal.pack.json (batch 1A; replaced temporary_pack.dart)
+  lib/src/packs/charcoal_pack.g.dart GENERATED from tokens/theme/charcoal.pack.json
   lib/src/packs/charcoal_metrics.dart hand-written per-family metrics shared by both packs
-  lib/src/build/                   buildCharcoalThemeData, buildCharcoalTextTheme, buildCharcoalButtonStyle (batch 1A)
+  lib/src/build/                   buildCharcoalThemeData, buildCharcoalTextTheme, buildCharcoalButtonStyle
   test/contract_test.dart          shape, packs, extremePack, CharcoalTheme, hygiene
   test/role_audit_test.dart        proves section 8 covers every read in charcoal_ui and targets exist
-  test/frozen_names.txt            the 367 frozen names
+  test/frozen_names.txt            the 370 frozen names
 ```
 
 Rules: values (colours, numbers, durations) exist only in `src/packs/`; `src/contract/` holds types and docs, no values (one exception: the constant `CharcoalColorRoles.transparent`).
 `charcoal_theme` depends on `flutter` and `charcoal_tokens` only. `CharcoalTheme` lives in `ThemeData.extensions`; its `lerp` is discrete (as in `myopay_theme`).
 
-Class names end in `Roles` / `Scale` / `Metrics` so that `charcoal_ui` can re-export this package while the pre-Material
-`CharcoalMotion`, `CharcoalTypography` (widget), `CharcoalTheme` (InheritedWidget, replaced) are still in the tree.
+Class names end in `Roles` / `Scale` / `Metrics`; `charcoal_ui` re-exports this package, so `package:charcoal_ui/charcoal_ui.dart`
+is the single import for libraries and tests (applications do not use the theme classes at all).
 
 | Group | Class | Access | Entries |
 | --- | --- | --- | --- |
-| colours | `CharcoalColorRoles` | `theme.colors.<role>` | 88 |
+| colours | `CharcoalColorRoles` | `theme.colors.<role>` | 90 |
 | spacing | `CharcoalSpaceScale` | `theme.space.<step>` | 8 |
 | radii | `CharcoalRadiusScale` | `theme.radius.<step>` | 7 |
 | line widths | `CharcoalBorderScale` | `theme.borders.<name>` | 4 |
@@ -42,11 +48,11 @@ Class names end in `Roles` / `Scale` / `Metrics` so that `charcoal_ui` can re-ex
 | elevation | `CharcoalElevationScale` | `theme.elevation.<name>` | 2 |
 | typography | `CharcoalTypeScale` + `CharcoalTextRole` + `CharcoalTextSpec` | `theme.style(role)`, `theme.typography.<role>` | 27 roles + 7 |
 | tones | `CharcoalTone` + `CharcoalToneColors` | `theme.tone(tone)` | 5 (resolved from colour roles, not stored) |
-| metrics | `CharcoalMetrics` + `Charcoal<Family>Metrics` | `theme.metrics.<family>.<field>` | 29 families, 126 fields |
+| metrics | `CharcoalMetrics` + `Charcoal<Family>Metrics` | `theme.metrics.<family>.<field>` | 29 families, 127 fields |
 
 ## 2. Colour roles
 
-88 roles: 55 kept from `MyoColors` under their myopay names (all of them), 33 added because the current `charcoal_ui` reads a colour myopay has no role for.
+90 roles: 55 kept from `MyoColors` under their myopay names (all of them), 33 added because the current `charcoal_ui` reads a colour myopay has no role for.
 `CharcoalColorRoles.transparent` is a constant, not a role. Values below are the generated pack (`tokens/theme/charcoal.pack.json`): token references into `charcoal_tokens` (no copied hex), literals only where noted.
 
 | Role | Origin | Upstream token (pack JSON) | Light | Dark | Meaning |
@@ -138,6 +144,8 @@ Class names end in `Roles` / `Scale` / `Metrics` so that `charcoal_ui` can re-ex
 | `colors.iconNotice` | myopay | `iconNoticeDefault` | `#FFA16309` | `#FFDEA71D` | Notice icon. |
 | `colors.iconOnPrimary` | myopay | `iconOnPrimaryDefault` | `#FFFFFFFF` | `#FFE4E4E4` | Icon or switch thumb on a primary fill. |
 | `colors.iconOnImage` | new | `iconOnOnImgDefault` | `#FFFFFFFF` | `#FFE4E4E4` | Icon on an over-image fill. |
+| `colors.textOnNotice` | new | `textOnNoticeDefault` | `#FF1F1F1F` | `#FF292929` | Text on a notice fill (appended in 3A/3B; the swap had approximated it). |
+| `colors.iconOnNotice` | new | `iconOnNoticeDefault` | `#FF1F1F1F` | `#FF292929` | Icon on a notice fill (appended in 3A/3B). |
 | `colors.iconHint` | new | literal | `#FF858585` | `#FF858585` | Fill of the hint-text info glyph (authored by Charcoal iOS 16/Info.pdf). |
 
 ## 3. Space, radius, borders, sizes, elevation
@@ -618,9 +626,11 @@ Scaffold and system chrome.
 | --- | --- | --- | --- | --- |
 | `metrics.scaffold.darkLuminanceThreshold` | double | 0.179 | `charcoal_scaffold.dart:63` | Background luminance below which system icons turn light. |
 
-## 8. Role audit (every read in `packages/charcoal_ui/lib/src/{components,app}`)
+## 8. Role audit (historical: every read in the pre-Material `charcoal_ui` at `de89016`)
 
-Row keys use the old spelling (`theme.colors.X`, `theme.dimensions.X`, `file.dart#CONST`); the last column is the contract entry. `test/role_audit_test.dart` re-scans the sources and fails when a read is missing from these tables or a target is not a contract name.
+This audit mapped each value the legacy components read to a contract entry before the components were rebuilt. The legacy
+sources are deleted; the tables stay as the record of where each role and metric came from, and `test/role_audit_test.dart`
+still checks that every mapping target is a real contract name. Row keys use the old spelling (`theme.colors.X`, `theme.dimensions.X`, `file.dart#CONST`); the last column is the contract entry. `test/role_audit_test.dart` re-scans the sources and fails when a read is missing from these tables or a target is not a contract name.
 
 ### 8.1 Colour accessors
 
@@ -882,7 +892,7 @@ The other 13 `CharcoalTextStyles` getters (`bodyBold`, `paragraph`, `captionMedi
 
 ### 8.5 Inline literals that are not `static const`
 
-Line numbers are at `de89016` and will drift as phase 2 rewrites the files; the targets are what matter. These are not machine-checked against the source (the checked tables are 8.1-8.4).
+Line numbers are at `de89016` (the legacy files no longer exist); the targets are what matter. These are not machine-checked against the source (the checked tables are 8.1-8.4).
 
 | Read | Value | Contract entry | Note |
 | --- | --- | --- | --- |
@@ -939,7 +949,7 @@ Line numbers are at `de89016` and will drift as phase 2 rewrites the files; the 
 - **E1** hint-text info glyph path coordinates (artwork, see 8.5).
 - **E2** structural values: `0`, `1`, `-1` as alignment, opacity end points, `maxLines`, list indices and `clamp` bounds.
 - **E3** algorithm tolerances: `0.0001` division guard in the predictive-back commit, `assert` bounds (`maxVisiblePages >= 3`).
-- **E4** curve choices inside the page route (`Curves.easeOut`, `Curves.easeInOutCubicEmphasized`); the contract carries the two named curves in `motion`, the page route keeps these two until batch 2D decides whether to move them.
+- **E4** curve choices inside the page route (`Curves.easeOut`, `Curves.easeInOutCubicEmphasized`); the contract carries the two named curves in `motion`, the page route keeps these two.
 - **E5** `toast.dart#defaultConfiguration` is an API object, not a number.
 
 ### 8.7 Coverage
@@ -952,12 +962,12 @@ Line numbers are at `de89016` and will drift as phase 2 rewrites the files; the 
 | `static const` geometry | 125 | 125 (86 metrics, 38 shared roles, 1 exempt) | 0 |
 | inline literals listed in 8.5 | 47 | 47 (1 exempt) | 0 |
 
-## 9. Naming decisions for review
+## 9. Naming decisions
 
 1. **Class names.** `CharcoalColorRoles`, `CharcoalSpaceScale`, `CharcoalRadiusScale`, `CharcoalBorderScale`, `CharcoalSizeScale`, `CharcoalMotionScale`, `CharcoalElevationScale`, `CharcoalTypeScale` instead of myopay's `Myo*` or the obvious `CharcoalMotion` / `CharcoalTypography`, which already exist in `charcoal_ui` (the typography widget, the motion constants). Cost: slightly longer names.
-2. **Role count.** `MyoColors` has 55 roles, not 53 as in the plan; all 55 are kept under their names. 33 roles are new, giving 88.
+2. **Role count.** `MyoColors` has 55 roles, not 53 as in the plan; all 55 are kept under their names. 33 roles are new, giving 88 at the freeze (90 since textOnNotice and iconOnNotice were appended).
 3. **`radius.lg`.** myopay `radius.lg` is 32 (dialog corner). Upstream `radius.l` is 12, which the checkbox focus ring reads. The scale follows upstream (`xs 2, sm 4, md 8, lg 12, xl 16, xxl 24, pill`); the 32 lives in `metrics.modal.cornerRadius` and `metrics.toast.cornerRadius`. myopay call sites of `radius.lg` must change in phase 4. Alternative: keep `lg = 32` and name the 12 something else.
-4. **`motion.toastVisible`.** myopay 3 s, Charcoal `_ToastSpec.dismissDuration` 2 s. The temporary pack uses 2 s (library look); myopay can pass its own duration.
+4. **`motion.toastVisible`.** myopay 3 s, Charcoal `_ToastSpec.dismissDuration` 2 s. The pack uses 2 s (library look); myopay can pass its own duration.
 5. **State-invariant roles collapsed.** 18 accessors (`textOnPrimary{Default,Hover,Press}`, `textOnNegative*`, `textOnHud*`, `textOnOnImg*`, `iconOnPrimary*`, `iconOnOnImg*`) have identical values in every state and both brightnesses upstream. They map to one role each (`textOnPrimary`, `textOnNegative`, `textOnHud`, `textOnImage`, `iconOnPrimary`, `iconOnImage`). Pixel-identical today; a pack cannot give them separate hover/press colours until a role is appended.
 6. **`textDefaultText1`.** Maps to `text` (same value as `textDefault`; the name is a Figma leftover).
 7. **Over-image naming.** Upstream `*OnImg*` becomes `fillOnImage*` (translucent container), `textOnImage`, `iconOnImage`. Upstream `borderHud` keeps its name as `borderHud` (it is the outline of the overlay multi-select, equal to the background colour).
@@ -969,4 +979,4 @@ Line numbers are at `de89016` and will drift as phase 2 rewrites the files; the 
 13. **Disabled opacity.** `charcoalDisabledOpacity` (0.32) is `metrics.clickable.disabledOpacity`.
 14. **Tones.** Resolved from colour roles like `MyoTone`; `info` uses `primary` for its dot, as myopay does.
 15. **Pack interpolation.** None: the theme switches at the animation midpoint (as `MyoTheme`).
-16. **Pack (was temporary, generated since batch 1A).** Reads `charcoal_tokens` by field name instead of copying hex; the 55 myopay roles resolve to exactly the values myopay carries today (checked light and dark). Literals only, as `extensions` in the pack JSON (both modes required), for the ten colour roles `barrier`, `pageBackdrop`, `focusRingInner`, `shadow`, `tagBackground`, `iconHint` and the four product tints; plain numbers (also in the JSON) for `space.xxs`, `borders.focusHalo` and the product sizes.
+16. **Pack (generated).** Reads `charcoal_tokens` by field name instead of copying hex; the 55 myopay roles resolve to exactly the values myopay carries today (checked light and dark). Literals only, as `extensions` in the pack JSON (both modes required), for the ten colour roles `barrier`, `pageBackdrop`, `focusRingInner`, `shadow`, `tagBackground`, `iconHint` and the four product tints; plain numbers (also in the JSON) for `space.xxs`, `borders.focusHalo` and the product sizes.

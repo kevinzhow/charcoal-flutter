@@ -40,7 +40,7 @@ void main() {
     for (final role in contract.colors) {
       expect(artifact.contents, contains('    $role: Color(0x'));
     }
-    expect(contract.colors, hasLength(88));
+    expect(contract.colors, hasLength(90));
     expect(contract.textRoles, hasLength(27));
   });
 

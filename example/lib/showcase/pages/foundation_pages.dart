@@ -5,6 +5,7 @@ import 'colors_page.dart';
 import 'dimensions_page.dart';
 import 'icons_page.dart';
 import 'roles_page.dart';
+import 'supporting_page.dart';
 import 'typography_page.dart';
 
 // Owner: batch 2B (fields and text; foundations). Add a ShowcasePage here to
@@ -49,5 +50,13 @@ final List<ShowcasePage> foundationPages = <ShowcasePage>[
     icon: CharcoalIcons.images,
     order: 40,
     builder: (context) => const IconsPage(),
+  ),
+  ShowcasePage(
+    id: 'supporting',
+    title: 'Supporting',
+    section: ShowcaseSection.foundation,
+    icon: CharcoalIcons.setting,
+    order: 60,
+    builder: (context) => const SupportingPage(),
   ),
 ];

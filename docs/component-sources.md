@@ -4,6 +4,12 @@ This document records where each Flutter component obtains its visual and behavi
 public `charcoal_ui` API remains platform-neutral; source provenance is maintained only so changes
 can be reviewed against a concrete implementation.
 
+The measurements below are carried by typed per-family metrics in `charcoal_theme`
+(`theme.metrics.<family>`, listed in [Theme contract](theme-contract.md) section 7), not by
+private constants in widget code, and every colour is a theme role. The library source guard and the
+extreme-theme test fail when a component keeps a value of its own. Where a row names a token such as
+`borderDefault`, read it as the theme role the pack maps from that token.
+
 ## Reference order
 
 1. Use the public SwiftUI component when it exists.
@@ -39,16 +45,33 @@ buttons. No upstream runtime code is embedded in the Flutter package.
 | Carousel and pagination | Charcoal | Navigation visibility, indicators, page states, and keyboard adaptation. |
 | Clickable, field ring, overlay tracker, popup path | Flutter primitive | Shared input, accessibility, painting, and positioning infrastructure. |
 | Navigation bar, tab bar, navigation item, and text ellipsis | Flutter composition | Platform-neutral components built from the same foundations and interaction rules. |
+| Card, list, list row, section header, info rows, stat card, meter, avatar, badge, chip, status dot, banner, empty/loading/error states, code block | Flutter composition | Admin and content surfaces with no pixiv counterpart. Their geometry and tones are theme metrics and roles like every other family; they are checked against the Showcase, not against an upstream source. |
+| Admin shell, sidebar, page frame, batch bar | Flutter composition | Console frame in `package:charcoal_ui/admin.dart`; the shell follows the width it is given. |
 
 Components in the second source group are not branded differently in their public names. They are
 regular `charcoal_ui` components and can graduate without API churn.
+
+## Public supporting types
+
+Six public widgets are building blocks of larger components rather than components an application
+should choose: `CharcoalEditableText`, `CharcoalFieldRing`, `CharcoalSelectionBox`,
+`CharcoalSelectionToolbar`, `CharcoalOverlayAnchorTracker` and `CharcoalTextDefaults`.
+
+Decision: they stay in the generated Catalog, in the `Supporting` category, with curated metadata
+whose summary begins "Supporting building block" and whose `avoidWhen` names the parent component an
+application uses instead. Exact signatures must be discoverable (a library author composing a new
+field needs `CharcoalEditableText`'s parameters), and hiding public API from the Catalog would make
+the Catalog a second, shorter truth. The Showcase shows them on the Supporting page, and
+`showcase_coverage_test` has no exemption list. Types that only parameterize a component (enums
+such as `CharcoalButtonVariant`, value classes such as `CharcoalInset`) are listed as companion
+declarations of the component that takes them, not as components.
 
 ## Verified visual contracts
 
 | Component | Contract |
 | --- | --- |
 | Theme | One coherent light or dark semantic token set per scope, atomic dependent updates, and exact propagation through captured framework overlays. |
-| Typography | Numeric 10/18, 12/20, 14/22, 16/24, and 20/28 component styles retain ambient text scaling; semantic page hierarchy remains in `theme.textStyles`. |
+| Typography | Numeric 10/18, 12/20, 14/22, 16/24, and 20/28 component styles retain ambient text scaling; semantic page hierarchy remains in the type roles (`CharcoalTextRole`, shown with `CharcoalText`). |
 | Text ellipsis | Positive one-or-more-line plain-text clamping, soft wrapping, directional alignment, and complete default spoken content without automatic tooltip behavior. |
 | Buttons | Small 32 px and medium 40 px targets; 16/24 px horizontal padding; bold 14/22 text; capsule shape; 0.32 disabled opacity. |
 | Switching button | Reserves the maximum geometry of two registered buttons while only the active branch paints, ticks, receives focus, and contributes semantics. |
@@ -88,12 +111,14 @@ use `borderSecondary` and do not define component behavior.
 ## Foundation and component boundary
 
 The generated foundation supplies semantic colors, typography families and weights, standard
-spacing, target sizes, radii, and border widths. A component maps those values locally when they are
-an exact match. Source-specific geometry and motion are private component constants.
+spacing, target sizes, radii, and border widths. `tokens/theme/charcoal.pack.json` maps them onto
+theme roles when they are an exact match. Source-specific geometry and motion are metrics of the
+component family in the theme contract: typed, named, `const`, and replaceable through the pack,
+but not upstream tokens.
 
 This deliberately means not every number is a token. Promoting a value to a semantic foundation is
 appropriate only when multiple consumers share a stable meaning; numerical coincidence alone is
-not sufficient.
+not sufficient. What is not allowed anywhere is a number or colour inside component source.
 
 ### Runtime font mapping
 
@@ -101,7 +126,8 @@ The generated `text.font-family/sans` token preserves Charcoal Web's `Sarasa UI 
 Runtime availability is an implementation concern: Apple native targets use the system text/display
 families used by Charcoal SwiftUI, while Web and other native targets defer to Flutter's renderer
 default. Skwasm cannot resolve browser-installed fonts from CSS family names, so a Web application
-that requires exact typography must provide a renderer-supported font asset through its theme.
+that requires exact typography must provide a renderer-supported font asset and set it as the
+pack's `sansFamily` (the Showcase does this in `example/lib/showcase/theme.dart`).
 Charcoal UI does not bundle font assets, so adopting the component package does not add a font
 payload to release builds. Explicit application typography overrides bypass this mapping.
 

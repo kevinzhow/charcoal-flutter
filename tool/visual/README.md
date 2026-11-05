@@ -63,5 +63,6 @@ old-left/new-right PNGs for failing images (`--side-by-side-all true` for all).
 Page ids that do not exist any more (e.g. `app-bloom`) are skipped with
 `--pages`, or reported MISSING otherwise.
 
-Note: every baseline page must exist in the new capture; the Bloom entry is
-planned for deletion, so restrict `--pages` accordingly.
+Note: every baseline page must exist in the new capture. Pages added after the baseline (for
+example `supporting`) have nothing to compare with; capture them for review but they do not appear in
+the parity table. The Bloom entry is still part of the gallery.

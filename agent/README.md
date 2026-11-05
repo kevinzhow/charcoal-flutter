@@ -1,8 +1,20 @@
 # Charcoal Agent Readiness
 
 Agent readiness means an agent can discover, understand, compose, and verify the exact installed
-Charcoal UI version without guessing component names, constructor parameters, token roles, or
+Charcoal UI version without guessing component names, constructor parameters, theme roles, or
 responsive behavior.
+
+`charcoal_ui` is built on Material and owns all styling. An application never constructs a visual
+value: colour, type, size, radius, border, shadow, and spacing come from the library, while
+composing library components, product logic, strings, and data are the application's own. The
+consumer rules R1-R9 that make this checkable are in the managed instruction block
+(`charcoal init`); the library enforces the same boundary on itself with a source guard and an
+extreme-theme test.
+
+> **Benchmark status.** The recorded benchmark evidence predates the Material swap (commit
+> `237d866`) and is superseded; see [results/README.md](results/README.md). The scorer, suites,
+> page specs, and reviews are kept valid against the new API, but the benchmark has not been
+> re-run.
 
 For complete applications, readiness has six synchronized layers:
 
@@ -111,8 +123,8 @@ assertions, and forbidden patterns remain private to the grader.
 
 - 30: the result compiles and relevant tests pass.
 - 20: component choice and public API match the installed catalog.
-- 15: existing Charcoal controls are used instead of Material/Cupertino substitutes.
-- 10: Flutter layout primitives and semantic token roles respect ownership boundaries.
+- 15: existing Charcoal components are used instead of raw Material/Cupertino controls (consumer rules R1 and R7).
+- 10: Flutter layout primitives are composed with Charcoal spacing, text, and tone APIs; no colour, size, or text-style value is constructed in application code (R2-R6), and component-owned geometry stays internal.
 - 10: labels, semantics, focus, disabled state, and text scaling are preserved.
 - 10: compact and desktop constraints behave as requested.
 - 5: the agent runs proportionate verification and reports it accurately.

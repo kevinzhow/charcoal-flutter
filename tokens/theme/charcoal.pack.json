@@ -79,7 +79,9 @@
     "iconNegative": "{color.icon/negative/default}",
     "iconNotice": "{color.icon/notice/default}",
     "iconOnPrimary": "{color.icon/on-primary/default}",
-    "iconOnImage": "{color.icon/on-on-img/default}"
+    "iconOnImage": "{color.icon/on-on-img/default}",
+    "iconOnNotice": "{color.icon/on-notice/default}",
+    "textOnNotice": "{color.text/on-notice/default}"
   },
   "extensions": {
     "barrier": {

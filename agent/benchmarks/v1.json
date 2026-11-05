@@ -238,11 +238,13 @@
       "requiredAssertions": [
         "rejects overriding component-owned height",
         "does not misuse layout tokens",
+        "does not read or pass any spacing, size, or colour value in application code",
         "explains that public size variants own geometry"
       ],
       "forbiddenPatterns": [
         "SizedBox height around button internals",
-        "layout token used as icon gap"
+        "layout token used as icon gap",
+        "CharcoalTheme.of in application code"
       ]
     },
     {

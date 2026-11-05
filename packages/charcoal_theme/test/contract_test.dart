@@ -22,8 +22,8 @@ void main() {
 
     test('contract size is what the review sees', () {
       final flat = charcoalLightPack.toFlatMap();
-      expect(charcoalLightPack.colors.toMap(), hasLength(88));
-      expect(flat.length, 369);
+      expect(charcoalLightPack.colors.toMap(), hasLength(90));
+      expect(flat.length, 371);
     });
 
     test('frozen names are append-only: every one still exists', () {
