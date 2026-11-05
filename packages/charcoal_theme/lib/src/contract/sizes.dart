@@ -44,6 +44,7 @@ class CharcoalSizeScale {
     required this.sidebarBreakpoint,
     required this.pageInsetWide,
     required this.sidebarInset,
+    required this.infoLabelWidthExtraWide,
   });
 
   /// Inline icons: chevrons, button leading icons, field affordances.
@@ -154,6 +155,9 @@ class CharcoalSizeScale {
   /// Padding of the sidebar header.
   final double sidebarInset;
 
+  /// Extra-wide label column of a key/value block.
+  final double infoLabelWidthExtraWide;
+
   /// A copy with the given fields replaced.
   CharcoalSizeScale copyWith({
     double? iconSm,
@@ -192,6 +196,7 @@ class CharcoalSizeScale {
     double? sidebarBreakpoint,
     double? pageInsetWide,
     double? sidebarInset,
+    double? infoLabelWidthExtraWide,
   }) => CharcoalSizeScale(
     iconSm: iconSm ?? this.iconSm,
     iconMd: iconMd ?? this.iconMd,
@@ -229,6 +234,7 @@ class CharcoalSizeScale {
     sidebarBreakpoint: sidebarBreakpoint ?? this.sidebarBreakpoint,
     pageInsetWide: pageInsetWide ?? this.pageInsetWide,
     sidebarInset: sidebarInset ?? this.sidebarInset,
+    infoLabelWidthExtraWide: infoLabelWidthExtraWide ?? this.infoLabelWidthExtraWide,
   );
 
   /// Every field by name, for tests and diagnostics.
@@ -269,6 +275,7 @@ class CharcoalSizeScale {
     'sidebarBreakpoint': sidebarBreakpoint,
     'pageInsetWide': pageInsetWide,
     'sidebarInset': sidebarInset,
+    'infoLabelWidthExtraWide': infoLabelWidthExtraWide,
   };
 
   /// Inverse of [toMap].
@@ -309,6 +316,7 @@ class CharcoalSizeScale {
     sidebarBreakpoint: map['sidebarBreakpoint']! as double,
     pageInsetWide: map['pageInsetWide']! as double,
     sidebarInset: map['sidebarInset']! as double,
+    infoLabelWidthExtraWide: map['infoLabelWidthExtraWide']! as double,
   );
 
   @override
@@ -350,7 +358,8 @@ class CharcoalSizeScale {
           other.sidebarWidth == sidebarWidth &&
           other.sidebarBreakpoint == sidebarBreakpoint &&
           other.pageInsetWide == pageInsetWide &&
-          other.sidebarInset == sidebarInset;
+          other.sidebarInset == sidebarInset &&
+          other.infoLabelWidthExtraWide == infoLabelWidthExtraWide;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
@@ -390,5 +399,6 @@ class CharcoalSizeScale {
     sidebarBreakpoint,
     pageInsetWide,
     sidebarInset,
+    infoLabelWidthExtraWide,
   ]);
 }

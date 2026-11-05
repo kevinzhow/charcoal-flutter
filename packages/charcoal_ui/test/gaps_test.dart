@@ -26,6 +26,7 @@ void main() {
           CharcoalTextTone.negative: c.textNegative,
           CharcoalTextTone.notice: c.textNotice,
           CharcoalTextTone.info: c.textInfo,
+          CharcoalTextTone.accent: c.primary,
           CharcoalTextTone.onPrimary: c.textOnPrimary,
           CharcoalTextTone.onNegative: c.textOnNegative,
           CharcoalTextTone.onPositive: c.textOnPositive,

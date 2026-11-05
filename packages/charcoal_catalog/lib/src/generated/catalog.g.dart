@@ -5,7 +5,7 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 77,
+    "publicComponents": 79,
     "curatedComponents": 34,
     "componentsWithExamples": 34,
     "curatedPatterns": 6,
@@ -586,7 +586,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalAnchoredBalloon",
           "kind": "constructor",
-          "signature": "CharcoalAnchoredBalloon({required this.anchor, required this.message, this.action, this.dismissIcon, this.dismissAfter, this.dismissOnTapOutside = false, this.maxWidth, this.onVisibilityChanged, this.showOnTap = true, this.visible, super.key})",
+          "signature": "CharcoalAnchoredBalloon({required this.anchor, required this.message, this.action, this.dismissIcon, this.dismissLabel = 'Close', this.dismissAfter, this.dismissOnTapOutside = false, this.maxWidth, this.onVisibilityChanged, this.showOnTap = true, this.visible, super.key})",
           "parameters": [
             {
               "name": "anchor",
@@ -611,6 +611,13 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
+            },
+            {
+              "name": "dismissLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Close'"
             },
             {
               "name": "dismissAfter",
@@ -1233,7 +1240,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalBalloon",
           "kind": "constructor",
-          "signature": "CharcoalBalloon({required this.child, this.action, this.arrowCenter, this.dismissIcon, this.maxWidth, this.onDismiss, this.position = CharcoalOverlayPosition.top, this.semanticLabel, super.key})",
+          "signature": "CharcoalBalloon({required this.child, this.action, this.arrowCenter, this.dismissIcon, this.dismissLabel = 'Close', this.maxWidth, this.onDismiss, this.position = CharcoalOverlayPosition.top, this.semanticLabel, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -1258,6 +1265,13 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
+            },
+            {
+              "name": "dismissLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Close'"
             },
             {
               "name": "maxWidth",
@@ -2519,7 +2533,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalDateTimeField",
       "category": "Utility",
-      "summary": "A date-and-time picker rendered as a field.",
+      "summary": "A date, date-and-time or time picker rendered as a field ([mode]).",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/date_time_field.dart",
       "documentationLevel": "generated",
@@ -2539,7 +2553,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalDateTimeField",
           "kind": "constructor",
-          "signature": "CharcoalDateTimeField({required this.label, required this.value, required this.onChanged, this.clearText = 'Clear', this.emptyText = 'Not set', this.hint, this.picker = _pickDateAndTime, super.key})",
+          "signature": "CharcoalDateTimeField({required this.label, required this.value, required this.onChanged, this.clearText = 'Clear', this.emptyText = 'Not set', this.hint, this.mode = CharcoalDateTimeMode.dateTime, this.picker, super.key})",
           "parameters": [
             {
               "name": "label",
@@ -2580,11 +2594,17 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "picker",
-              "type": "CharcoalDateTimePicker",
+              "name": "mode",
+              "type": "CharcoalDateTimeMode",
               "required": false,
               "named": true,
-              "defaultValue": "_pickDateAndTime"
+              "defaultValue": "CharcoalDateTimeMode.dateTime"
+            },
+            {
+              "name": "picker",
+              "type": "CharcoalDateTimePicker?",
+              "required": false,
+              "named": true
             },
             {
               "name": "key",
@@ -3892,6 +3912,69 @@ const String generatedCatalogJson = r'''{
       "examples": []
     },
     {
+      "name": "CharcoalGrid",
+      "category": "Utility",
+      "summary": "A grid of equal-width cells whose column count follows the layout class.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/grid.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalgrid",
+        "grid"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalGrid",
+          "kind": "constructor",
+          "signature": "CharcoalGrid({required this.children, this.columns = const CharcoalGridColumns(), this.runSpacing, this.spacing = CharcoalSpace.md, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "columns",
+              "type": "CharcoalGridColumns",
+              "required": false,
+              "named": true,
+              "defaultValue": "const CharcoalGridColumns()"
+            },
+            {
+              "name": "runSpacing",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "spacing",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.md"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalHintText",
       "category": "Feedback",
       "summary": "Keeps optional page or section guidance visible with an optional, clearly named action.",
@@ -4282,7 +4365,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalInfoRows",
           "kind": "constructor",
-          "signature": "CharcoalInfoRows(this.rows, {this.labelWidth = CharcoalInfoLabelWidth.regular, super.key})",
+          "signature": "CharcoalInfoRows(this.rows, {this.labelWidth = CharcoalInfoLabelWidth.regular, this.mono = false, super.key})",
           "parameters": [
             {
               "name": "rows",
@@ -4296,6 +4379,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "CharcoalInfoLabelWidth.regular"
+            },
+            {
+              "name": "mono",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
             },
             {
               "name": "key",
@@ -6495,6 +6585,49 @@ const String generatedCatalogJson = r'''{
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _FeedMode { recent, popular, saved }\n\n/// A responsive, parent-owned view switcher.\nfinal class AgentSegmentedControlExample extends StatefulWidget {\n  const AgentSegmentedControlExample({super.key});\n\n  @override\n  State<AgentSegmentedControlExample> createState() =>\n      _AgentSegmentedControlExampleState();\n}\n\nfinal class _AgentSegmentedControlExampleState\n    extends State<AgentSegmentedControlExample> {\n  _FeedMode _value = _FeedMode.recent;\n\n  @override\n  Widget build(BuildContext context) {\n    return LayoutBuilder(\n      builder: (context, constraints) => CharcoalSegmentedControl<_FeedMode>(\n        fullWidth: constraints.maxWidth < 480,\n        onChanged: (value) => setState(() => _value = value),\n        segments: const <CharcoalSegment<_FeedMode>>[\n          CharcoalSegment(value: _FeedMode.recent, child: Text('Recent')),\n          CharcoalSegment(value: _FeedMode.popular, child: Text('Popular')),\n          CharcoalSegment(value: _FeedMode.saved, child: Text('Saved')),\n        ],\n        semanticLabel: 'Feed order',\n        value: _value,\n      ),\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalSelectable",
+      "category": "Utility",
+      "summary": "Makes the text below it selectable and copyable with pointer and keyboard.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/selectable.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalselectable",
+        "selectable"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSelectable",
+          "kind": "constructor",
+          "signature": "CharcoalSelectable({required this.child, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalSelectionBox",
