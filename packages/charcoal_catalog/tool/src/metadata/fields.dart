@@ -643,4 +643,226 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       ),
     ],
   ),
+  'CharcoalSearchField': ComponentMetadata(
+    category: 'Forms',
+    summary: 'A single-line text field with a search icon and a clear button.',
+    keywords: <String>['search', 'filter', 'query', 'clear'],
+    useWhen: <String>[
+      'A list or collection is filtered by typed text.',
+      'The query needs a clear affordance without extra caller state.',
+    ],
+    avoidWhen: <String>[
+      'The input is not a query; use CharcoalTextField.',
+      'The value comes from a fixed option set; use CharcoalDropdown.',
+    ],
+    accessibility: <String>[
+      'Pass a localized clearLabel; the clear button is its own semantics button.',
+      'The field uses the search keyboard action and reports submission through onSubmitted.',
+    ],
+    responsiveBehavior: <String>[
+      'The field expands to the width supplied by its parent.',
+      'The field height is identical with and without the clear button.',
+    ],
+    interactionStates: <String>['empty', 'with text', 'focused', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns the icon, the clear affordance and the text-field states; the caller owns querying, debouncing and results.',
+    ],
+    tokenRoles: <String>[
+      'fillSecondary',
+      'focusRing',
+      'textSecondary',
+      'textPlaceholder',
+      'iconTertiary',
+      'metrics.textField',
+    ],
+    relatedComponents: <String>['CharcoalTextField', 'CharcoalDropdown'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'search-field-query',
+        title: 'Search field with clear',
+        description: 'Shows the search field over a controller with a clear button.',
+        sourcePath: 'example/lib/showcase/pages/fields_page.dart',
+      ),
+    ],
+  ),
+  'CharcoalDateTimeField': ComponentMetadata(
+    category: 'Forms',
+    summary:
+        'A labelled field that shows a chosen date and time, opens a picker and can be cleared.',
+    keywords: <String>['date', 'time', 'schedule', 'picker'],
+    useWhen: <String>['A form needs an optional moment such as a publish time.'],
+    avoidWhen: <String>[
+      'Only a date or only a time is needed and a platform picker is preferable in context.',
+    ],
+    accessibility: <String>[
+      'The field is one button whose value is the formatted moment or the localized empty text.',
+      'The clear button has its own label; pass localized emptyText and clearText.',
+    ],
+    responsiveBehavior: <String>[
+      'The picker button and the clear button share a row; the hint wraps below.',
+    ],
+    interactionStates: <String>['empty', 'set', 'pressed', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns display, picker invocation and clearing; the caller owns validation of the allowed range.',
+    ],
+    tokenRoles: <String>[
+      'fillSecondary',
+      'textSecondary',
+      'textPlaceholder',
+      'iconSecondary',
+      'metrics.textField',
+    ],
+    relatedComponents: <String>['CharcoalTextField', 'CharcoalFieldLabel'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'date-time-field',
+        title: 'Date-time field',
+        description: 'Picks a publish time and clears it again.',
+        sourcePath: 'example/lib/showcase/pages/fields_page.dart',
+      ),
+    ],
+  ),
+  'CharcoalSwitchField': ComponentMetadata(
+    category: 'Forms',
+    summary: 'A labelled switch row with an optional hint; the whole row is one toggle.',
+    keywords: <String>['switch', 'toggle', 'setting', 'boolean'],
+    useWhen: <String>['A form has an on/off setting with a sentence of explanation.'],
+    avoidWhen: <String>[
+      'The choice is one of several options; use CharcoalRadio or CharcoalSegmentedControl.',
+    ],
+    accessibility: <String>[
+      'The row exposes a single toggle node; the switch itself is decorative.',
+    ],
+    responsiveBehavior: <String>[
+      'The label shrinks and wraps; the switch keeps its place after the label.',
+    ],
+    interactionStates: <String>['off', 'on', 'pressed', 'disabled'],
+    feedbackResponsibilities: <String>[
+      'Owns the row and the toggle semantics; the caller owns persistence.',
+    ],
+    tokenRoles: <String>['text', 'textDisabled', 'space.md', 'space.xs'],
+    relatedComponents: <String>['CharcoalSwitch', 'CharcoalFormSection'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'switch-field',
+        title: 'Switch field',
+        description: 'Toggles a setting and shows the hint line.',
+        sourcePath: 'example/lib/showcase/pages/fields_page.dart',
+      ),
+    ],
+  ),
+  'CharcoalFormSection': ComponentMetadata(
+    category: 'Forms',
+    summary: 'A titled group of fields with consistent vertical rhythm.',
+    keywords: <String>['form', 'section', 'group', 'heading'],
+    useWhen: <String>['A form groups related fields under a heading.'],
+    avoidWhen: <String>['The group needs a card, a border or collapsing; compose those around it.'],
+    accessibility: <String>['The title is exposed as a header; the caption is plain text.'],
+    responsiveBehavior: <String>[
+      'Children stack with space.md between them and space.xxl after the section.',
+    ],
+    feedbackResponsibilities: <String>['Owns heading and spacing; each field owns its own state.'],
+    tokenRoles: <String>['space.md', 'space.xs', 'space.xxl', 'sectionTitle', 'caption'],
+    relatedComponents: <String>['CharcoalFormField', 'CharcoalTextField'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'form-section',
+        title: 'Form section',
+        description: 'Groups a key field with an application-owned file action under a heading.',
+        sourcePath: 'example/lib/showcase/pages/fields_page.dart',
+      ),
+    ],
+  ),
+  'CharcoalFormField': ComponentMetadata(
+    category: 'Forms',
+    summary: 'The labelled shell for any control: label, required marker, assistive text and an action slot.',
+    keywords: <String>['form', 'field', 'shell', 'label', 'file'],
+    useWhen: <String>[
+      'A control has no label of its own, for example a secret field with a file button the application owns.',
+    ],
+    avoidWhen: <String>[
+      'CharcoalTextField or CharcoalTextArea with showLabel already provides the label.',
+    ],
+    accessibility: <String>[
+      'The shell groups label, control and assistive text; the wrapped control keeps its own semantics.',
+      'Localize requiredText and expose required on the wrapped control as well.',
+    ],
+    responsiveBehavior: <String>[
+      'The label metadata follows CharcoalFieldLabel; the action sits at the start under the control.',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns label, spacing and assistive text; the application owns plugins such as file pickers.',
+    ],
+    tokenRoles: <String>['space.sm', 'space.xs', 'text', 'textSecondary', 'textNegative'],
+    relatedComponents: <String>['CharcoalFieldLabel', 'CharcoalFormSection', 'CharcoalTextArea'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'form-field-shell',
+        title: 'Form field shell',
+        description:
+            'Frames a text area with a required marker, an assistive line and a file action.',
+        sourcePath: 'example/lib/showcase/pages/fields_page.dart',
+      ),
+    ],
+  ),
+  'CharcoalText': ComponentMetadata(
+    category: 'Theme',
+    summary:
+        'A run of text in a Charcoal type role; the one place application code reads typography.',
+    keywords: <String>['text', 'typography', 'role', 'type scale'],
+    useWhen: <String>['Application text needs a type role from the active theme pack.'],
+    avoidWhen: <String>['A subtree of text should share one role; use CharcoalTypography.'],
+    accessibility: <String>[
+      'Text scaling is inherited; use semanticLabel only when the spoken wording must differ.',
+    ],
+    responsiveBehavior: <String>['Wraps by default; pass maxLines and overflow to truncate.'],
+    feedbackResponsibilities: <String>['Owns style resolution only.'],
+    tokenRoles: <String>['typography.*', 'text', 'textTertiary'],
+    relatedComponents: <String>['CharcoalTypography', 'CharcoalTextEllipsis'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'text-roles',
+        title: 'Type roles',
+        description: 'Shows every type role of the active pack.',
+        sourcePath: 'example/lib/showcase/pages/typography_page.dart',
+      ),
+    ],
+  ),
+  'CharcoalSelectionToolbar': ComponentMetadata(
+    category: 'Forms',
+    summary: 'The floating editing menu shown over a text selection.',
+    keywords: <String>['selection', 'toolbar', 'copy', 'paste', 'context menu'],
+    useWhen: <String>[
+      'A custom text field supplies its own contextMenuBuilder with application actions.',
+    ],
+    avoidWhen: <String>[
+      'The default buildCharcoalTextContextMenu already offers the needed actions.',
+    ],
+    accessibility: <String>[
+      'Entries are buttons labelled with their text; labels follow WidgetsLocalizations by default.',
+    ],
+    responsiveBehavior: <String>[
+      'Stays inside the safe area and above the keyboard, prefers the side with room and scrolls at large text scales.',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns placement and styling; Flutter owns which actions the selection allows.',
+    ],
+    tokenRoles: <String>['background', 'borderSubtle', 'fillSecondary', 'metrics.selectionToolbar'],
+    relatedComponents: <String>['CharcoalTextField', 'CharcoalTextArea'],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'selection-toolbar',
+        title: 'Editing menu',
+        description: 'The default menu appears on long press of a text field.',
+        sourcePath: 'example/lib/showcase/pages/fields_page.dart',
+      ),
+    ],
+  ),
 };
