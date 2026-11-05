@@ -2,10 +2,10 @@ import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../admin.dart';
-import '../../next.dart';
-import 'next_preview_support.dart';
+import '../../charcoal_ui.dart';
+import 'preview_support.dart';
 
-@CharcoalNextComponentPreview(name: 'Text and icon tones', size: Size(420, 520))
+@CharcoalComponentPreview(name: 'Text and icon tones', size: Size(420, 520))
 Widget charcoalTonesPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisSize: MainAxisSize.min,
@@ -26,18 +26,20 @@ Widget charcoalTonesPreview() => Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Admin page frame', size: Size(900, 420))
-Widget charcoalPagePreview() => SizedBox(
-  height: 380,
-  child: CharcoalPage(
-    title: 'Users',
-    subtitle: 'Accounts and quotas',
-    showBack: true,
-    actions: <Widget>[CharcoalButton(onPressed: () {}, child: const Text('Invite'))],
-    child: CharcoalList(
-      children: <Widget>[
-        CharcoalListRow(title: 'Alice', subtitle: 'alice@example.com', onPressed: () {}),
-      ],
+@CharcoalComponentPreview(name: 'Admin page frame', size: Size(900, 420))
+Widget charcoalPagePreview() => Builder(
+  builder: (context) => SizedBox(
+    height: CharcoalTheme.of(context).sizes.codeViewportMaxHeight,
+    child: CharcoalPage(
+      title: 'Users',
+      subtitle: 'Accounts and quotas',
+      showBack: true,
+      actions: <Widget>[CharcoalButton(onPressed: () {}, child: const Text('Invite'))],
+      child: CharcoalList(
+        children: <Widget>[
+          CharcoalListRow(title: 'Alice', subtitle: 'alice@example.com', onPressed: () {}),
+        ],
+      ),
     ),
   ),
 );

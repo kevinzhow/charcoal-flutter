@@ -1,6 +1,6 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/admin.dart';
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 

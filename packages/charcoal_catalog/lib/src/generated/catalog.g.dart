@@ -5,7 +5,7 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 68,
+    "publicComponents": 74,
     "curatedComponents": 34,
     "componentsWithExamples": 34,
     "curatedPatterns": 6,
@@ -414,6 +414,61 @@ const String generatedCatalogJson = r'''{
     }
   ],
   "components": [
+    {
+      "name": "CharcoalActionTile",
+      "category": "Utility",
+      "summary": "An outlined button tile with a leading icon and a one-line label: a quick action on a",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/action_tile.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalactiontile",
+        "action tile"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalActionTile",
+          "kind": "constructor",
+          "signature": "CharcoalActionTile({required this.icon, required this.label, required this.onPressed, super.key})",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
     {
       "name": "CharcoalAdminShell",
       "category": "Utility",
@@ -2246,6 +2301,110 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalCodeBlock",
+      "category": "Utility",
+      "summary": "A block of monospace text on `colors.backgroundSecondary`: a log excerpt, a JSON payload, a",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/code_block.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalcodeblock",
+        "code block"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalCodeBlock",
+          "kind": "constructor",
+          "signature": "CharcoalCodeBlock(this.text, {this.maxLines, this.scrollable = false, this.selectable = true, this.tone = CharcoalTextTone.primary, super.key})",
+          "parameters": [
+            {
+              "name": "text",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "maxLines",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "scrollable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "selectable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTextTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextTone.primary"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalCodeBlock.lines",
+          "kind": "constructor",
+          "signature": "CharcoalCodeBlock.lines(List<String> this.lines, {this.selectable = true, this.tone = CharcoalTextTone.primary, super.key})",
+          "parameters": [
+            {
+              "name": "lines",
+              "type": "List<String>",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "selectable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTextTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextTone.primary"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalDateTimeField",
       "category": "Utility",
       "summary": "A date-and-time picker rendered as a field.",
@@ -3834,6 +3993,74 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalIconView",
+      "category": "Utility",
+      "summary": "A [CharcoalIcon] glyph painted in a semantic [tone] and [size] of the active theme.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/icons/icon_view.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaliconview",
+        "icon view"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalIconView",
+          "kind": "constructor",
+          "signature": "CharcoalIconView(this.icon, {this.matchTextDirection = false, this.semanticLabel, this.size, this.tone, super.key})",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "matchTextDirection",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "size",
+              "type": "CharcoalIconSize?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalIconTone?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalInfoRows",
       "category": "Utility",
       "summary": "A key/value table: a tertiary label, and a selectable value, per ruled row.",
@@ -4073,7 +4300,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalListRow",
           "kind": "constructor",
-          "signature": "CharcoalListRow({required this.title, this.crossAxisAlignment = CrossAxisAlignment.center, this.details, this.height = CharcoalListRowHeight.regular, this.leading, this.onPressed, this.selected = false, this.showChevron = true, this.statesController, this.subtitle, this.titleMonospace = false, this.titleTrailing, this.trailing = const <Widget>[], super.key})",
+          "signature": "CharcoalListRow({required this.title, this.crossAxisAlignment = CrossAxisAlignment.center, this.details, this.height = CharcoalListRowHeight.regular, this.body, this.leading, this.onPressed, this.selected = false, this.showChevron = true, this.statesController, this.subtitle, this.subtitleGap, this.subtitleMaxLines = 2, this.subtitleRole = CharcoalTextRole.caption, this.subtitleTone, this.titleMonospace = false, this.titleTrailing, this.trailing = const <Widget>[], this.verticalPadding = CharcoalSpace.sm, super.key})",
           "parameters": [
             {
               "name": "title",
@@ -4100,6 +4327,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "CharcoalListRowHeight.regular"
+            },
+            {
+              "name": "body",
+              "type": "Widget?",
+              "required": false,
+              "named": true
             },
             {
               "name": "leading",
@@ -4140,6 +4373,32 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
+              "name": "subtitleGap",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitleMaxLines",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "2"
+            },
+            {
+              "name": "subtitleRole",
+              "type": "CharcoalTextRole",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextRole.caption"
+            },
+            {
+              "name": "subtitleTone",
+              "type": "CharcoalTextTone?",
+              "required": false,
+              "named": true
+            },
+            {
               "name": "titleMonospace",
               "type": "bool",
               "required": false,
@@ -4158,6 +4417,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "verticalPadding",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.sm"
             },
             {
               "name": "key",
@@ -4298,7 +4564,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalLoadingState",
       "category": "Utility",
-      "summary": "A centred spinner for a loading page region.",
+      "summary": "A centred progress ring for a loading page region.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/loading_state.dart",
       "documentationLevel": "generated",
@@ -4936,6 +5202,139 @@ const String generatedCatalogJson = r'''{
       "examples": []
     },
     {
+      "name": "CharcoalPage",
+      "category": "Utility",
+      "summary": "The chrome and content column of one admin page.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/page.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalpage",
+        "page"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalPage",
+          "kind": "constructor",
+          "signature": "CharcoalPage({required this.title, required this.child, this.actions = const <Widget>[], this.backLabel = 'Back', this.banner, this.busy = false, this.busyLabel = 'Loading', this.compact, this.compactTrailing, this.header, this.maxWidth = CharcoalPageWidth.standard, this.onBack, this.scrollable = true, this.showBack, this.subtitle, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "backLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Back'"
+            },
+            {
+              "name": "banner",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "busy",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "busyLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Loading'"
+            },
+            {
+              "name": "compact",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "compactTrailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "header",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "CharcoalPageWidth",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPageWidth.standard"
+            },
+            {
+              "name": "onBack",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "scrollable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "showBack",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitle",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalPageRoute",
       "category": "Navigation",
       "summary": "Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.",
@@ -5285,6 +5684,56 @@ const String generatedCatalogJson = r'''{
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Controlled paged-result context that remains usable at compact widths.\nfinal class AgentPaginationExample extends StatefulWidget {\n  const AgentPaginationExample({super.key});\n\n  @override\n  State<AgentPaginationExample> createState() => _AgentPaginationExampleState();\n}\n\nfinal class _AgentPaginationExampleState extends State<AgentPaginationExample> {\n  static const _pageCount = 20;\n  static const _pageSize = 10;\n  static const _resultCount = 194;\n\n  int _currentPage = 8;\n\n  int get _firstResult => (_currentPage - 1) * _pageSize + 1;\n\n  int get _lastResult {\n    final candidate = _currentPage * _pageSize;\n    return candidate > _resultCount ? _resultCount : candidate;\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Search results', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            'Results $_firstResult–$_lastResult of $_resultCount. '\n            'Page $_currentPage of $_pageCount.',\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalPagination(\n          currentPage: _currentPage,\n          nextLabel: 'Next result page',\n          onPageChanged: (page) => setState(() => _currentPage = page),\n          pageCount: _pageCount,\n          previousLabel: 'Previous result page',\n          semanticLabel: 'Search result pages',\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalProgressRing",
+      "category": "Utility",
+      "summary": "An indeterminate progress ring: a `sizes.iconLg` circle with a `borders.thick` stroke in the",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/progress_ring.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalprogressring",
+        "progress ring"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalProgressRing",
+          "kind": "constructor",
+          "signature": "CharcoalProgressRing({this.semanticLabel = 'Loading', this.size, super.key})",
+          "parameters": [
+            {
+              "name": "semanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Loading'"
+            },
+            {
+              "name": "size",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalRadio",
@@ -7328,7 +7777,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalText",
           "kind": "constructor",
-          "signature": "CharcoalText(this.data, {this.role = CharcoalTextRole.body, this.bold = false, this.color, this.maxLines, this.mono = false, this.overflow, this.semanticLabel, this.softWrap, this.textAlign, super.key})",
+          "signature": "CharcoalText(this.data, {this.role = CharcoalTextRole.body, this.bold = false, this.color, this.maxLines, this.mono = false, this.overflow, this.semanticLabel, this.softWrap, this.textAlign, this.tone, super.key})",
           "parameters": [
             {
               "name": "data",
@@ -7390,6 +7839,12 @@ const String generatedCatalogJson = r'''{
             {
               "name": "textAlign",
               "type": "TextAlign?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTextTone?",
               "required": false,
               "named": true
             },
@@ -8642,6 +9097,77 @@ const String generatedCatalogJson = r'''{
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/material.dart' show Theme;\nimport 'package:flutter/widgets.dart';\n\n/// A scoped light/dark token specimen with semantic and numeric typography.\nfinal class AgentThemeTypographyExample extends StatefulWidget {\n  const AgentThemeTypographyExample({super.key});\n\n  @override\n  State<AgentThemeTypographyExample> createState() =>\n      _AgentThemeTypographyExampleState();\n}\n\nfinal class _AgentThemeTypographyExampleState\n    extends State<AgentThemeTypographyExample> {\n  static const projectTitle =\n      'Moonlit Garden Archive for the Northern Collection';\n  bool _dark = false;\n\n  @override\n  Widget build(BuildContext context) => Theme(\n    data: buildCharcoalThemeData(_dark ? charcoalDarkPack : charcoalLightPack),\n    child: Builder(\n      builder: (context) {\n        final theme = CharcoalTheme.of(context);\n        final space = theme.space;\n        return DecoratedBox(\n          decoration: BoxDecoration(\n            borderRadius: BorderRadius.circular(theme.radius.md),\n            color: theme.colors.background,\n          ),\n          child: Padding(\n            padding: EdgeInsets.all(space.xl),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              mainAxisSize: MainAxisSize.min,\n              children: <Widget>[\n                Text(\n                  'Project typography',\n                  style: theme\n                      .style(CharcoalTextRole.headingXs)\n                      .copyWith(color: theme.colors.text),\n                ),\n                SizedBox(height: space.sm),\n                const CharcoalTypography(\n                  role: CharcoalTextRole.size12,\n                  bold: true,\n                  child: Text('CURATED COLLECTION'),\n                ),\n                SizedBox(height: space.sm),\n                CharcoalTextEllipsis(\n                  projectTitle,\n                  maxLines: 2,\n                  semanticLabel: 'Complete project title: $projectTitle',\n                  style: theme\n                      .style(CharcoalTextRole.bodyLarge)\n                      .copyWith(color: theme.colors.text),\n                ),\n                SizedBox(height: space.xl),\n                Semantics(\n                  liveRegion: true,\n                  child: Text(\n                    _dark\n                        ? 'Previewing dark theme.'\n                        : 'Previewing light theme.',\n                    style: theme\n                        .style(CharcoalTextRole.captionMedium)\n                        .copyWith(color: theme.colors.textSecondary),\n                  ),\n                ),\n                SizedBox(height: space.lg),\n                CharcoalButton(\n                  fullWidth: true,\n                  onPressed: () => setState(() => _dark = !_dark),\n                  semanticLabel: _dark\n                      ? 'Preview light theme'\n                      : 'Preview dark theme',\n                  variant: CharcoalButtonVariant.primary,\n                  child: Text(_dark ? 'Preview light' : 'Preview dark'),\n                ),\n              ],\n            ),\n          ),\n        );\n      },\n    ),\n  );\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalWrap",
+      "category": "Utility",
+      "summary": "A [Wrap] whose gaps are spacing steps of the active theme.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/foundation/charcoal_wrap.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalwrap",
+        "wrap"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalWrap",
+          "kind": "constructor",
+          "signature": "CharcoalWrap({required this.children, this.alignment = WrapAlignment.start, this.crossAxisAlignment = WrapCrossAlignment.start, this.runSpacing = CharcoalSpace.sm, this.spacing = CharcoalSpace.sm, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "alignment",
+              "type": "WrapAlignment",
+              "required": false,
+              "named": true,
+              "defaultValue": "WrapAlignment.start"
+            },
+            {
+              "name": "crossAxisAlignment",
+              "type": "WrapCrossAlignment",
+              "required": false,
+              "named": true,
+              "defaultValue": "WrapCrossAlignment.start"
+            },
+            {
+              "name": "runSpacing",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.sm"
+            },
+            {
+              "name": "spacing",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.sm"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     }
   ],
   "tokens": [

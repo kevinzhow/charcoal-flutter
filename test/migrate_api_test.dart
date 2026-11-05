@@ -116,5 +116,9 @@ void main() {
     expect(real.direct['ConsoleButton'], 'CharcoalButton');
     expect(real.adminSymbols, contains('CharcoalMeter'));
     expect(real.manual, contains('ConsolePagination'));
+    // gaps.json is applied too; CharcoalPage lives in admin.dart.
+    expect(real.direct['ConsoleScreen'], 'CharcoalPage');
+    expect(real.direct['ConsoleLayoutScope'], 'CharcoalAdminLayout');
+    expect(real.adminSymbols, containsAll(<String>['CharcoalPage', 'CharcoalAdminLayout']));
   });
 }
