@@ -137,6 +137,6 @@ void main() {
     });
   }
 
-  check('light', temporaryLightPack, _myopayLight);
-  check('dark', temporaryDarkPack, _myopayDark);
+  check('light', charcoalLightPack, _myopayLight);
+  check('dark', charcoalDarkPack, _myopayDark);
 }

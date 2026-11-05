@@ -33,6 +33,7 @@ One generation transaction writes:
 - `charcoal_color_tokens.g.dart`;
 - `charcoal_dimension_tokens.g.dart`;
 - `charcoal_typography_tokens.g.dart`;
+- `packages/charcoal_theme/lib/src/packs/charcoal_pack.g.dart` (the theme pack, see below);
 - `tokens/snapshot.json` for semantic diffs; and
 - `tokens/diff.md` for upstream update reviews.
 
@@ -43,6 +44,37 @@ colors, dimensions, and typography.
 Component layout, state mapping, and motion are ordinary reviewed Dart source. This keeps exact
 source behavior close to the widget, avoids pretending every platform measurement is a universal
 token, and prevents application themes from replacing a component's structural contract.
+
+## Theme pack
+
+`tokens/theme/charcoal.pack.json` is the one hand-edited input besides the pinned upstream files. It
+maps the frozen `charcoal_theme` contract to tokens, and the same generation transaction turns it
+into `const CharcoalThemePack charcoalLightPack` / `charcoalDarkPack`:
+
+```json
+{
+  "colors": { "primary": "{color.container/primary/default}", "text": "{color.text/default}" },
+  "extensions": { "positiveSurface": { "light": "#FFEAF8E8", "dark": "#FF14301A" } },
+  "space": { "xxs": 2, "xs": "{space.component/10}" },
+  "motion": { "fast": "120ms", "curve": "cubic(0.2, 0, 0, 1)" },
+  "typography": { "roles": { "body": { "fontSize": 14, "lineHeight": 22, "weight": "{text.font-weight/regular}" } } }
+}
+```
+
+- A `{category.key}` reference resolves per mode against the merged light and dark token trees.
+- `extensions` is the only place for literal colours (product tints and artwork fills that have no
+  upstream token). Each needs both modes, as `{ "light": ..., "dark": ... }`.
+- Plain numbers are library-owned values (e.g. `space.xxs`, product sizes); durations are `"120ms"`,
+  curves `"cubic(a, b, c, d)"`.
+- The names to cover are read from the contract sources in `packages/charcoal_theme/lib/src/contract/`,
+  so there is no second list. Per-family component metrics are not in the JSON; they are hand-written in
+  `packs/charcoal_metrics.dart`.
+- `tokens/manifest.json` carries the JSON's SHA-256 under `pack`, so editing it without running
+  `generate` fails `check`.
+- `tokens/diff.md` gains a "Pack roles affected" section listing the pack names that read a removed or
+  changed token.
+
+Adding a role: add the field to the contract class, add its mapping here, run `generate`.
 
 ## Updating tokens
 
@@ -80,7 +112,12 @@ Generation or CI fails on:
 - different light and dark applied-token keys;
 - an unsupported category, value type, color format, unit, or font weight;
 - Dart identifier collisions;
-- a source file that differs from its manifest hash; or
+- a pack mapping that references an unknown token;
+- a contract role, scale entry, or text role without a pack mapping, or a mapping for one the contract
+  does not have;
+- a `light`/`dark` pair without exactly both keys, a literal colour outside `extensions`, or an
+  extension that does not give both modes;
+- a source file (including the pack JSON) that differs from its manifest hash; or
 - a snapshot or generated artifact that cannot be reproduced exactly.
 
 The scheduled update workflow creates one reviewable change containing pinned sources, generated

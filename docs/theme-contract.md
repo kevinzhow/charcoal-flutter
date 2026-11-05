@@ -17,7 +17,9 @@ packages/charcoal_theme/
   lib/src/pack.dart                CharcoalThemePack (name, brightness + the nine groups below)
   lib/src/contract/                colors space radius borders sizes motion elevation typography tones
   lib/src/contract/metrics/        one typed block per component family + metrics.dart (CharcoalMetrics)
-  lib/src/packs/temporary_pack.dart  hand-written; deleted when batch 1A lands the generated pack
+  lib/src/packs/charcoal_pack.g.dart GENERATED from tokens/theme/charcoal.pack.json (batch 1A; replaced temporary_pack.dart)
+  lib/src/packs/charcoal_metrics.dart hand-written per-family metrics shared by both packs
+  lib/src/build/                   buildCharcoalThemeData, buildCharcoalTextTheme, buildCharcoalButtonStyle (batch 1A)
   test/contract_test.dart          shape, packs, extremePack, CharcoalTheme, hygiene
   test/role_audit_test.dart        proves section 8 covers every read in charcoal_ui and targets exist
   test/frozen_names.txt            the 367 frozen names
@@ -45,9 +47,9 @@ Class names end in `Roles` / `Scale` / `Metrics` so that `charcoal_ui` can re-ex
 ## 2. Colour roles
 
 88 roles: 55 kept from `MyoColors` under their myopay names (all of them), 33 added because the current `charcoal_ui` reads a colour myopay has no role for.
-`CharcoalColorRoles.transparent` is a constant, not a role. Values below are the temporary pack: token references into `charcoal_tokens` (no copied hex), literals only where noted.
+`CharcoalColorRoles.transparent` is a constant, not a role. Values below are the generated pack (`tokens/theme/charcoal.pack.json`): token references into `charcoal_tokens` (no copied hex), literals only where noted.
 
-| Role | Origin | Upstream token (temporary pack) | Light | Dark | Meaning |
+| Role | Origin | Upstream token (pack JSON) | Light | Dark | Meaning |
 | --- | --- | --- | --- | --- | --- |
 | `colors.background` | myopay | `backgroundDefault` | `#FFFFFFFF` | `#FF1F1F1F` | Page and dialog surface. |
 | `colors.backgroundSecondary` | myopay | `backgroundSecondary` | `#FFF3F3F3` | `#FF151515` | Grey card / code-block surface. |
@@ -965,4 +967,4 @@ Line numbers are at `de89016` and will drift as phase 2 rewrites the files; the 
 13. **Disabled opacity.** `charcoalDisabledOpacity` (0.32) is `metrics.clickable.disabledOpacity`.
 14. **Tones.** Resolved from colour roles like `MyoTone`; `info` uses `primary` for its dot, as myopay does.
 15. **Pack interpolation.** None: the theme switches at the animation midpoint (as `MyoTheme`).
-16. **Temporary pack.** Reads `charcoal_tokens` by field name instead of copying hex; the 55 myopay roles resolve to exactly the values myopay carries today (checked light and dark). Literals only for `barrier`, `pageBackdrop`, `focusRingInner`, the four product tints, `tagBackground`, `shadow`, `iconHint`, `space.xxs`, `borders.focusHalo` and the product sizes.
+16. **Pack (was temporary, generated since batch 1A).** Reads `charcoal_tokens` by field name instead of copying hex; the 55 myopay roles resolve to exactly the values myopay carries today (checked light and dark). Literals only, as `extensions` in the pack JSON (both modes required), for the ten colour roles `barrier`, `pageBackdrop`, `focusRingInner`, `shadow`, `tagBackground`, `iconHint` and the four product tints; plain numbers (also in the JSON) for `space.xxs`, `borders.focusHalo` and the product sizes.
