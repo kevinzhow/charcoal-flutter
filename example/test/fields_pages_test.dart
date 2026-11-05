@@ -1,5 +1,4 @@
-import 'package:charcoal_ui/next.dart'
-    show CharcoalDropdown, CharcoalTextArea, CharcoalTextField;
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/showcase/app.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -32,22 +32,72 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
     throw StateError('Could not find packages/charcoal_ui/lib/charcoal_ui.dart.');
   }
 
-  final libraryUnit = parseString(
-    content: libraryFile.readAsStringSync(),
-    path: libraryFile.path,
-    throwIfDiagnostics: false,
-  ).unit;
-  final exportedFiles = libraryUnit.directives
-      .whereType<ExportDirective>()
-      .map((directive) => directive.uri.stringValue)
-      .whereType<String>()
-      .where((uri) => !uri.startsWith('package:'))
-      .map((uri) => File(p.normalize(p.join(uiRoot.path, 'lib', uri))))
-      .toList(growable: false);
+  // Public libraries of charcoal_ui: the main entry and the admin-console entry.
+  final entries = <({String import, File file})>[
+    (import: 'package:charcoal_ui/charcoal_ui.dart', file: libraryFile),
+    (
+      import: 'package:charcoal_ui/admin.dart',
+      file: File(p.join(uiRoot.path, 'lib', 'admin.dart')),
+    ),
+  ];
+  final exportedFiles = <({String import, File file})>[];
+  for (final entry in entries) {
+    if (!entry.file.existsSync()) continue;
+    final libraryUnit = parseString(
+      content: entry.file.readAsStringSync(),
+      path: entry.file.path,
+      throwIfDiagnostics: false,
+    ).unit;
+    for (final uri
+        in libraryUnit.directives
+            .whereType<ExportDirective>()
+            .map((directive) => directive.uri.stringValue)
+            .whereType<String>()
+            .where((uri) => !uri.startsWith('package:'))) {
+      exportedFiles.add((
+        import: entry.import,
+        file: File(p.normalize(p.join(uiRoot.path, 'lib', uri))),
+      ));
+    }
+  }
 
   final declarationIndex = <String, _IndexedDeclaration>{};
   final widgetDeclarations = <_IndexedDeclaration>[];
-  for (final file in exportedFiles) {
+
+  // Supporting types that live in charcoal_theme (CharcoalButtonVariant, CharcoalTone, ...) are
+  // part of the public API of the components and may be named as companion declarations.
+  final themeRoot = Directory(p.join(workspaceRoot.path, 'packages', 'charcoal_theme'));
+  final themeLibrary = File(p.join(themeRoot.path, 'lib', 'charcoal_theme.dart'));
+  if (themeLibrary.existsSync()) {
+    final themeUnit = parseString(
+      content: themeLibrary.readAsStringSync(),
+      path: themeLibrary.path,
+      throwIfDiagnostics: false,
+    ).unit;
+    for (final uri
+        in themeUnit.directives
+            .whereType<ExportDirective>()
+            .map((directive) => directive.uri.stringValue)
+            .whereType<String>()
+            .where((uri) => !uri.startsWith('package:'))) {
+      final file = File(p.normalize(p.join(themeRoot.path, 'lib', uri)));
+      if (!file.existsSync()) continue;
+      final unit = parseString(
+        content: file.readAsStringSync(),
+        path: file.path,
+        throwIfDiagnostics: false,
+      ).unit;
+      final sourcePath = _relativePath(workspaceRoot, file);
+      for (final declaration in unit.declarations) {
+        final name = _declarationName(declaration);
+        if (name == null || name.startsWith('_')) continue;
+        declarationIndex[name] = _IndexedDeclaration(declaration, sourcePath);
+      }
+    }
+  }
+
+  for (final entry in exportedFiles) {
+    final file = entry.file;
     if (!file.existsSync()) {
       throw StateError('Exported file does not exist: ${file.path}');
     }
@@ -64,7 +114,9 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
       if (declaration case final ClassDeclaration classDeclaration) {
         final superclass = classDeclaration.extendsClause?.superclass.name.lexeme;
         if (name.startsWith('Charcoal') && _widgetBaseTypes.contains(superclass)) {
-          widgetDeclarations.add(_IndexedDeclaration(classDeclaration, sourcePath));
+          widgetDeclarations.add(
+            _IndexedDeclaration(classDeclaration, sourcePath, importUri: entry.import),
+          );
         }
       }
     }
@@ -105,7 +157,7 @@ GeneratedCatalog buildCatalog(Directory workspaceRoot) {
         name: name,
         category: metadata?.category ?? _categoryFor(indexed.sourcePath),
         summary: metadata?.summary ?? _summaryFor(declaration, name),
-        import: 'package:charcoal_ui/charcoal_ui.dart',
+        import: indexed.importUri,
         sourcePath: indexed.sourcePath,
         documentationLevel: metadata == null
             ? CharcoalDocumentationLevel.generated
@@ -483,8 +535,13 @@ String _relativePath(Directory root, File file) =>
     p.relative(file.path, from: root.path).replaceAll('\\', '/');
 
 final class _IndexedDeclaration {
-  const _IndexedDeclaration(this.node, this.sourcePath);
+  const _IndexedDeclaration(
+    this.node,
+    this.sourcePath, {
+    this.importUri = 'package:charcoal_ui/charcoal_ui.dart',
+  });
 
   final CompilationUnitMember node;
   final String sourcePath;
+  final String importUri;
 }

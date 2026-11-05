@@ -22,12 +22,9 @@ final class DaylightHabitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoSurface(
-      padding: EdgeInsets.symmetric(
-        horizontal: space.component30,
-        vertical: space.component30,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: space.lg, vertical: space.lg),
       child: SizedBox(
         width: double.infinity,
         child: CharcoalCheckbox(
@@ -36,37 +33,41 @@ final class DaylightHabitCard extends StatelessWidget {
             children: <Widget>[
               CharcoalIcon(
                 _habitIcon(habit.id),
-                color: theme.colors.iconSecondaryDefault,
+                color: theme.colors.iconSecondary,
                 size: 20,
               ),
-              SizedBox(width: space.component25),
+              SizedBox(width: space.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
                       habit.title,
-                      style: theme.textStyles.captionMediumBold.copyWith(
-                        color: theme.colors.textDefault,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.captionMediumBold)
+                          .copyWith(color: theme.colors.text),
                     ),
-                    SizedBox(height: space.component10),
+                    SizedBox(height: space.xs),
                     Text(
                       habit.cue,
-                      style: theme.textStyles.captionSmall.copyWith(
-                        color: theme.colors.textSecondaryDefault,
-                        height: 1.35,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.caption)
+                          .copyWith(
+                            color: theme.colors.textSecondary,
+                            height: 1.35,
+                          ),
                     ),
                     if (showStreak) ...<Widget>[
-                      SizedBox(height: space.component20),
+                      SizedBox(height: space.sm),
                       Text(
                         habit.streak,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textTertiaryDefault,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(
+                              color: theme.colors.textTertiary,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
                     ],
                   ],

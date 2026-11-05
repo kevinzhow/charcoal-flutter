@@ -18,15 +18,18 @@ final class _AgentClickableSurfaceExampleState
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Whole-surface action', style: theme.textStyles.headingS),
-        SizedBox(height: space.component20),
-        Text(_status, style: theme.textStyles.captionMedium),
-        SizedBox(height: space.layout40),
+        Text(
+          'Whole-surface action',
+          style: theme.style(CharcoalTextRole.headingS),
+        ),
+        SizedBox(height: space.sm),
+        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),
+        SizedBox(height: space.xl),
         CharcoalClickable(
           onPressed: () => setState(() => _status = 'Moonlit Lake opened'),
           semanticLabel: 'Open Moonlit Lake project',
@@ -35,62 +38,58 @@ final class _AgentClickableSurfaceExampleState
             final hovered = states.contains(WidgetState.hovered);
             final pressed = states.contains(WidgetState.pressed);
             final background = pressed
-                ? theme.colors.containerSecondaryPressA
+                ? theme.colors.fillSecondaryPress
                 : hovered || focused
-                ? theme.colors.containerSecondaryHoverA
-                : theme.colors.backgroundDefault;
+                ? theme.colors.fillSecondaryHover
+                : theme.colors.background;
             final border = focused
-                ? theme.colors.borderFocus1
+                ? theme.colors.borderFocus
                 : pressed
-                ? theme.colors.borderPress
+                ? theme.colors.border
                 : hovered
-                ? theme.colors.borderHover
-                : theme.colors.borderSecondary;
+                ? theme.colors.border
+                : theme.colors.borderSubtle;
             return AnimatedContainer(
-              curve: CharcoalMotion.standardCurve,
-              duration: CharcoalMotion.resolveDuration(
-                context,
-                CharcoalMotion.fast,
-              ),
-              constraints: BoxConstraints(
-                minHeight: theme.dimensions.space.targetL,
-              ),
-              padding: EdgeInsets.all(space.component30),
+              curve: CharcoalTheme.of(context).motion.curve,
+              duration: CharcoalTheme.of(context)
+                  .duration(context, CharcoalTheme.of(context).motion.fast),
+              constraints: BoxConstraints(minHeight: theme.sizes.controlLg),
+              padding: EdgeInsets.all(space.lg),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: border,
-                  width: theme.dimensions.borderWidth.m,
+                  width: theme.borders.hairline,
                 ),
-                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+                borderRadius: BorderRadius.circular(theme.radius.md),
                 color: background,
               ),
               child: Row(
                 children: <Widget>[
-                  CharcoalIcon(
-                    CharcoalIcons.image,
-                    color: theme.colors.iconDefault,
-                  ),
-                  SizedBox(width: space.component30),
+                  CharcoalIcon(CharcoalIcons.image, color: theme.colors.icon),
+                  SizedBox(width: space.lg),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text('Moonlit Lake', style: theme.textStyles.bodyBold),
-                        SizedBox(height: space.component10),
+                        Text(
+                          'Moonlit Lake',
+                          style: theme.style(CharcoalTextRole.bodyLargeBold),
+                        ),
+                        SizedBox(height: space.xs),
                         Text(
                           'Illustration · updated today',
-                          style: theme.textStyles.captionSmall.copyWith(
-                            color: theme.colors.textSecondaryDefault,
-                          ),
+                          style: theme
+                              .style(CharcoalTextRole.caption)
+                              .copyWith(color: theme.colors.textSecondary),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: space.component20),
+                  SizedBox(width: space.sm),
                   CharcoalIcon(
                     CharcoalIcons.chevronRight,
-                    color: theme.colors.iconTertiaryDefault,
+                    color: theme.colors.iconTertiary,
                     size: 16,
                   ),
                 ],

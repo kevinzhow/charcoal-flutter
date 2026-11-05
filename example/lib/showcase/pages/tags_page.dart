@@ -1,11 +1,4 @@
-import 'package:charcoal_ui/next.dart'
-    show
-        CharcoalChip,
-        CharcoalStatusDot,
-        CharcoalTagItem,
-        CharcoalTagItemSize,
-        CharcoalTagItemStatus,
-        CharcoalTone;
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';

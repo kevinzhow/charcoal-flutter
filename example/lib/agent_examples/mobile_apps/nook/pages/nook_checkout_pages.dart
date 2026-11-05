@@ -13,7 +13,7 @@ final class NookBagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final products = viewModel.bagProducts;
     return AgentDemoPage(
       child: Column(
@@ -29,7 +29,7 @@ final class NookBagPage extends StatelessWidget {
                 ? 'Add a product from the collection to begin.'
                 : '${products.length} ${products.length == 1 ? 'item' : 'items'} · Free delivery',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           if (products.isEmpty)
             AgentDemoEmptyState(
               actionLabel: 'Continue shopping',
@@ -48,16 +48,16 @@ final class NookBagPage extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             product.name,
-                            style: theme.textStyles.captionMediumBold.copyWith(
-                              color: theme.colors.textDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.captionMediumBold)
+                                .copyWith(color: theme.colors.text),
                           ),
-                          SizedBox(height: space.component10),
+                          SizedBox(height: space.xs),
                           Text(
                             formatYen(product.price),
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textSecondaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(color: theme.colors.textSecondary),
                           ),
                         ],
                       ),
@@ -71,10 +71,10 @@ final class NookBagPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: space.component20),
+              SizedBox(height: space.sm),
             ],
             _OrderTotal(label: 'Order total', total: viewModel.bagTotal),
-            SizedBox(height: space.component30),
+            SizedBox(height: space.lg),
             CharcoalButton(
               key: const ValueKey<String>('agent-commerce-checkout'),
               fullWidth: true,
@@ -96,7 +96,7 @@ final class NookCheckoutReviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-commerce-checkout-review'),
@@ -107,17 +107,17 @@ final class NookCheckoutReviewPage extends StatelessWidget {
             title: 'Everything in one place',
             description: 'Check the delivery destination and total before placing this simulated order.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoStatus(
             icon: CharcoalIcons.location,
             message: 'Mina Aoki · 2-8-14 Kichijoji, Tokyo · Standard delivery',
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           _OrderTotal(
             label: '${viewModel.bagCount} item total',
             total: viewModel.bagTotal,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-commerce-place-order'),
             fullWidth: true,
@@ -138,7 +138,7 @@ final class NookOrderConfirmedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-commerce-order-confirmed'),
@@ -149,13 +149,13 @@ final class NookOrderConfirmedPage extends StatelessWidget {
             title: 'Your order is confirmed',
             description: 'The bag is clear and this receipt remains available from Profile.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoStatus(
             positive: true,
             message:
                 '${viewModel.confirmedProducts.length} item · ${formatYen(viewModel.confirmedTotal)} · Preparing for delivery',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             fullWidth: true,
             onPressed: viewModel.continueShopping,
@@ -178,22 +178,22 @@ final class _OrderTotal extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     return AgentDemoSurface(
-      color: theme.colors.containerSecondaryDefault,
+      color: theme.colors.surfaceSecondary,
       child: Row(
         children: <Widget>[
           Expanded(
             child: Text(
               label,
-              style: theme.textStyles.captionMediumBold.copyWith(
-                color: theme.colors.textDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMediumBold)
+                  .copyWith(color: theme.colors.text),
             ),
           ),
           Text(
             formatYen(total),
-            style: theme.textStyles.bodyBold.copyWith(
-              color: theme.colors.textDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.bodyLargeBold)
+                .copyWith(color: theme.colors.text),
           ),
         ],
       ),

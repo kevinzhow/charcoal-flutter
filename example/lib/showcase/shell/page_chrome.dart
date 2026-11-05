@@ -21,23 +21,22 @@ final class ShowcasePageIntro extends StatelessWidget {
         final compact = constraints.maxWidth < 520;
         final eyebrowText = Text(
           eyebrow,
-          style: theme.textStyles.captionMediumBold.copyWith(
-            color: theme.colors.textInfoDefault,
-            letterSpacing: 1.2,
-          ),
+          style: theme
+              .style(CharcoalTextRole.captionMediumBold)
+              .copyWith(color: theme.colors.textInfo, letterSpacing: 1.2),
         );
         final badge = DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
-            color: theme.colors.containerDiscoveryDefault,
+            color: theme.colors.negative,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Text(
               'V2',
-              style: theme.textStyles.captionMediumBold.copyWith(
-                color: theme.colors.textOnDiscoveryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMediumBold)
+                  .copyWith(color: theme.colors.textOnNegative),
             ),
           ),
         );
@@ -48,24 +47,24 @@ final class ShowcasePageIntro extends StatelessWidget {
               title,
               style:
                   (compact
-                          ? theme.textStyles.headingS
-                          : theme.textStyles.headingM)
-                      .copyWith(color: theme.colors.textDefault),
+                          ? theme.style(CharcoalTextRole.headingS)
+                          : theme.style(CharcoalTextRole.headingM))
+                      .copyWith(color: theme.colors.text),
             ),
             const SizedBox(height: 8),
             Text(
               description,
-              style: theme.textStyles.body.copyWith(
-                color: theme.colors.textSecondaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.bodyLarge)
+                  .copyWith(color: theme.colors.textSecondary),
             ),
           ],
         );
         return DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(color: theme.colors.borderSecondary),
+            border: Border.all(color: theme.colors.borderSubtle),
             borderRadius: BorderRadius.circular(18),
-            color: theme.colors.backgroundDefault,
+            color: theme.colors.background,
           ),
           child: Padding(
             padding: EdgeInsets.all(compact ? 20 : 28),
@@ -161,9 +160,9 @@ final class ShowcaseCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) => DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSecondary),
+          border: Border.all(color: theme.colors.borderSubtle),
           borderRadius: BorderRadius.circular(16),
-          color: theme.colors.backgroundDefault,
+          color: theme.colors.background,
         ),
         child: Padding(
           padding: EdgeInsets.all(constraints.maxWidth < 420 ? 20 : 24),
@@ -172,25 +171,27 @@ final class ShowcaseCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 eyebrow,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textInfoDefault,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(
+                      color: theme.colors.textInfo,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                    ),
               ),
               const SizedBox(height: 7),
               Text(
                 title,
-                style: theme.textStyles.headingXs.copyWith(
-                  color: theme.colors.textDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.headingXs)
+                    .copyWith(color: theme.colors.text),
               ),
               const SizedBox(height: 7),
               Text(
                 description,
-                style: theme.textStyles.captionMedium.copyWith(
-                  color: theme.colors.textSecondaryDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.captionMedium)
+                    .copyWith(color: theme.colors.textSecondary),
               ),
               const SizedBox(height: 22),
               child,

@@ -23,7 +23,7 @@ final class ShowcaseMobileNavigationPanel extends StatelessWidget {
       explicitChildNodes: true,
       label: 'Showcase navigation',
       child: ColoredBox(
-        color: theme.colors.backgroundDefault,
+        color: theme.colors.background,
         child: SingleChildScrollView(
           key: const ValueKey<String>('showcase-mobile-navigation-scroll'),
           padding: const EdgeInsets.fromLTRB(16, 18, 16, 28),
@@ -37,16 +37,16 @@ final class ShowcaseMobileNavigationPanel extends StatelessWidget {
                     DecoratedBox(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: theme.colors.containerPrimaryDefault,
+                        color: theme.colors.primary,
                       ),
                       child: SizedBox.square(
                         dimension: 40,
                         child: Center(
                           child: Text(
                             'C',
-                            style: theme.textStyles.headingXxs.copyWith(
-                              color: theme.colors.textOnPrimaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.headingXxs)
+                                .copyWith(color: theme.colors.textOnPrimary),
                           ),
                         ),
                       ),
@@ -58,15 +58,15 @@ final class ShowcaseMobileNavigationPanel extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             'Charcoal UI',
-                            style: theme.textStyles.bodyBold.copyWith(
-                              color: theme.colors.textDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.bodyLargeBold)
+                                .copyWith(color: theme.colors.text),
                           ),
                           Text(
                             'Flutter · V2 Showcase',
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textTertiaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(color: theme.colors.textTertiary),
                           ),
                         ],
                       ),
@@ -81,11 +81,13 @@ final class ShowcaseMobileNavigationPanel extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(12, 15, 12, 7),
                     child: Text(
                       section.$1.label,
-                      style: theme.textStyles.captionSmall.copyWith(
-                        color: theme.colors.textTertiaryDefault,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.caption)
+                          .copyWith(
+                            color: theme.colors.textTertiary,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
                     ),
                   ),
                 for (final item in section.$2) ...<Widget>[
@@ -103,7 +105,7 @@ final class ShowcaseMobileNavigationPanel extends StatelessWidget {
                       child: Text(item.title),
                     ),
                   ),
-                  SizedBox(height: theme.dimensions.space.component10),
+                  SizedBox(height: theme.space.xs),
                 ],
               ],
               const SizedBox(height: 14),

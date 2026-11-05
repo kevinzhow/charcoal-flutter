@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show Material, MaterialType;
 import 'package:flutter/widgets.dart';
 
 import '../showcase_window.dart';
@@ -54,24 +55,20 @@ final class _CharcoalShowcaseAppState extends State<CharcoalShowcaseApp> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      // TODO(P2 end): 1B landed the Material-backed CharcoalApp.router in
-      // package:charcoal_ui/next.dart (lightPack/darkPack). It cannot be used
-      // here yet: next.dart and charcoal_ui.dart both define CharcoalApp,
-      // CharcoalTheme and CharcoalScaffold, and every shell/page widget still
-      // reads the legacy CharcoalTheme. Switch together with the last legacy
-      // component; the router pieces below do not depend on the app class.
-      CharcoalApp.router(
-        title: 'Charcoal UI V2 Showcase',
-        theme: buildShowcaseTheme(Brightness.light),
-        darkTheme: buildShowcaseTheme(Brightness.dark),
-        themeMode: _darkMode ? CharcoalThemeMode.dark : CharcoalThemeMode.light,
-        builder: (context, child) => ShowcaseWindow(
-          brightness: _darkMode ? Brightness.dark : Brightness.light,
-          child: child!,
-        ),
-        routerConfig: _routerConfig,
-      );
+  Widget build(BuildContext context) => CharcoalApp.router(
+    title: 'Charcoal UI V2 Showcase',
+    lightPack: buildShowcasePack(Brightness.light),
+    darkPack: buildShowcasePack(Brightness.dark),
+    themeMode: _darkMode ? CharcoalThemeMode.dark : CharcoalThemeMode.light,
+    builder: (context, child) => Material(
+      type: MaterialType.transparency,
+      child: ShowcaseWindow(
+        brightness: _darkMode ? Brightness.dark : Brightness.light,
+        child: child!,
+      ),
+    ),
+    routerConfig: _routerConfig,
+  );
 }
 
 /// Maps `/<page-id>` to a registered page id; unknown paths show the overview.

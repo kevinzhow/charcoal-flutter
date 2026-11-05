@@ -21,6 +21,7 @@ import 'package:charcoal_ui_showcase/agent_examples/text_field_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/theme_typography_example.dart';
 import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart' show Material, MaterialType;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -594,19 +595,11 @@ void main() {
   );
 }
 
-Widget _testApp(Widget child, {required double width}) {
-  final theme = CharcoalThemeData.light();
-  return WidgetsApp(
-    color: theme.colors.containerPrimaryDefault,
-    home: CharcoalTheme(
-      data: theme,
-      child: Center(
-        child: SizedBox(width: width, child: child),
-      ),
+Widget _testApp(Widget child, {required double width}) => CharcoalApp(
+  home: Material(
+    type: MaterialType.transparency,
+    child: Center(
+      child: SizedBox(width: width, child: child),
     ),
-    pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
-      settings: settings,
-      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
-    ),
-  );
-}
+  ),
+);

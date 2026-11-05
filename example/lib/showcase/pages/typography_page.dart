@@ -2,7 +2,6 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';
-import 'next_island.dart';
 
 final class TypographyPage extends StatelessWidget {
   const TypographyPage({super.key});
@@ -25,56 +24,52 @@ final class TypographyPage extends StatelessWidget {
             description: 'Family and weight primitives behind every role.',
             eyebrow: 'TYPE PRIMITIVES',
             title: 'Font contract',
-            child: NextThemeIsland(child: _FontContract()),
+            child: _FontContract(),
           ),
           ShowcaseCard(
             description: 'The 10/12/14/16/20 ladder, regular and bold, plus monospace and truncation.',
             eyebrow: 'COMPONENT SCALE',
             title: 'CharcoalTypography',
-            child: NextThemeIsland(child: _Ladder()),
+            child: _Ladder(),
           ),
           ShowcaseCard(
             description: 'Application roles for pages, rows and metadata.',
             eyebrow: 'APPLICATION ROLES',
             title: 'Application type roles',
-            child: NextThemeIsland(
-              child: _Roles(
-                roles: <CharcoalTextRole>[
-                  CharcoalTextRole.pageTitle,
-                  CharcoalTextRole.modalTitle,
-                  CharcoalTextRole.sectionTitle,
-                  CharcoalTextRole.body,
-                  CharcoalTextRole.bodyBold,
-                  CharcoalTextRole.caption,
-                  CharcoalTextRole.captionBold,
-                  CharcoalTextRole.captionMono,
-                ],
-              ),
+            child: _Roles(
+              roles: <CharcoalTextRole>[
+                CharcoalTextRole.pageTitle,
+                CharcoalTextRole.modalTitle,
+                CharcoalTextRole.sectionTitle,
+                CharcoalTextRole.body,
+                CharcoalTextRole.bodyBold,
+                CharcoalTextRole.caption,
+                CharcoalTextRole.captionBold,
+                CharcoalTextRole.captionMono,
+              ],
             ),
           ),
           ShowcaseCard(
             description: 'Upstream body, caption and heading tokens.',
             eyebrow: 'UPSTREAM ROLES',
             title: 'Body and heading roles',
-            child: NextThemeIsland(
-              child: _Roles(
-                roles: <CharcoalTextRole>[
-                  CharcoalTextRole.bodyLarge,
-                  CharcoalTextRole.bodyLargeBold,
-                  CharcoalTextRole.paragraph,
-                  CharcoalTextRole.captionMedium,
-                  CharcoalTextRole.captionMediumBold,
-                  CharcoalTextRole.headingXxxs,
-                  CharcoalTextRole.headingXxs,
-                  CharcoalTextRole.headingXs,
-                  CharcoalTextRole.headingS,
-                  CharcoalTextRole.headingM,
-                  CharcoalTextRole.headingL,
-                  CharcoalTextRole.headingXl,
-                  CharcoalTextRole.headingXxl,
-                  CharcoalTextRole.headingXxxl,
-                ],
-              ),
+            child: _Roles(
+              roles: <CharcoalTextRole>[
+                CharcoalTextRole.bodyLarge,
+                CharcoalTextRole.bodyLargeBold,
+                CharcoalTextRole.paragraph,
+                CharcoalTextRole.captionMedium,
+                CharcoalTextRole.captionMediumBold,
+                CharcoalTextRole.headingXxxs,
+                CharcoalTextRole.headingXxs,
+                CharcoalTextRole.headingXs,
+                CharcoalTextRole.headingS,
+                CharcoalTextRole.headingM,
+                CharcoalTextRole.headingL,
+                CharcoalTextRole.headingXl,
+                CharcoalTextRole.headingXxl,
+                CharcoalTextRole.headingXxxl,
+              ],
             ),
           ),
         ],

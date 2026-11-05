@@ -12,7 +12,7 @@ final class LumenReceivePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-receive-page'),
@@ -23,12 +23,12 @@ final class LumenReceivePage extends StatelessWidget {
             title: 'Receive without sharing account details',
             description: 'Anyone with this link can send money to Mina in the simulation.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoStatus(
             icon: CharcoalIcons.link,
             message: 'lumen.me/mina · Payments arrive in your Lumen balance',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             fullWidth: true,
             leading: const CharcoalIcon(CharcoalIcons.copy),
@@ -60,7 +60,7 @@ final class LumenSendEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-send-edit'),
@@ -72,7 +72,7 @@ final class LumenSendEditPage extends StatelessWidget {
             description:
                 '${formatYen(viewModel.balance)} is available. You will review before sending.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalTextField(
             key: const ValueKey<String>('agent-wallet-recipient'),
             assistiveText: viewModel.recipientError,
@@ -83,7 +83,7 @@ final class LumenSendEditPage extends StatelessWidget {
             placeholder: 'Name or handle',
             showLabel: true,
           ),
-          SizedBox(height: space.component25),
+          SizedBox(height: space.md),
           CharcoalTextField(
             key: const ValueKey<String>('agent-wallet-amount'),
             assistiveText: viewModel.sendAmountError,
@@ -96,7 +96,7 @@ final class LumenSendEditPage extends StatelessWidget {
             prefix: const Text('¥'),
             showLabel: true,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-wallet-review-transfer'),
             fullWidth: true,
@@ -127,7 +127,7 @@ final class LumenSendReviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-send-review'),
@@ -138,16 +138,16 @@ final class LumenSendReviewPage extends StatelessWidget {
             title: 'Check the transfer once more',
             description: 'This local simulation completes immediately after confirmation.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoSurface(
-            color: theme.colors.containerSecondaryDefault,
+            color: theme.colors.surfaceSecondary,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 _ReviewRow(label: 'To', value: recipient),
-                SizedBox(height: space.component20),
+                SizedBox(height: space.sm),
                 _ReviewRow(label: 'Amount', value: formatYen(amount)),
-                SizedBox(height: space.component20),
+                SizedBox(height: space.sm),
                 _ReviewRow(
                   label: 'Balance after',
                   value: formatYen(balance - amount),
@@ -155,7 +155,7 @@ final class LumenSendReviewPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-wallet-confirm-transfer'),
             fullWidth: true,
@@ -185,7 +185,7 @@ final class LumenSendConfirmedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-send-confirmed'),
@@ -197,19 +197,19 @@ final class LumenSendConfirmedPage extends StatelessWidget {
             description:
                 'The balance and activity now contain the same durable result.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoStatus(
             positive: true,
             message: '${formatYen(amount)} was sent to $recipient.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             fullWidth: true,
             onPressed: onViewActivity,
             variant: CharcoalButtonVariant.primary,
             child: const Text('View activity'),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           CharcoalButton(
             fullWidth: true,
             onPressed: onDone,
@@ -228,7 +228,7 @@ final class LumenTopUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-top-up'),
@@ -240,7 +240,7 @@ final class LumenTopUpPage extends StatelessWidget {
             description:
                 'Choose an amount from the verified account ending in 2418.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalSegmentedControl<int>(
             fullWidth: true,
             onChanged: viewModel.setTopUpAmount,
@@ -252,7 +252,7 @@ final class LumenTopUpPage extends StatelessWidget {
             semanticLabel: 'Top up amount',
             value: viewModel.topUpAmount,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-wallet-confirm-top-up'),
             fullWidth: true,
@@ -280,7 +280,7 @@ final class LumenTopUpConfirmedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-top-up-confirmed'),
@@ -291,13 +291,13 @@ final class LumenTopUpConfirmedPage extends StatelessWidget {
             title: 'Your balance is updated',
             description: 'The linked-bank top up also appears in Activity.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoStatus(
             positive: true,
             message:
                 '${formatYen(amount)} was added. New balance: ${formatYen(balance)}.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             fullWidth: true,
             onPressed: onDone,
@@ -324,16 +324,16 @@ final class _ReviewRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(color: theme.colors.textSecondary),
           ),
         ),
         Text(
           value,
-          style: theme.textStyles.captionMediumBold.copyWith(
-            color: theme.colors.textDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.captionMediumBold)
+              .copyWith(color: theme.colors.text),
         ),
       ],
     );

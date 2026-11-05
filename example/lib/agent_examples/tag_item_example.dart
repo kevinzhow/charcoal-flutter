@@ -30,27 +30,27 @@ final class _AgentTagItemExampleState extends State<AgentTagItemExample> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final selectedCount = _selectedTags.length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Artwork filters', style: theme.textStyles.headingS),
-        SizedBox(height: space.component20),
+        Text('Artwork filters', style: theme.style(CharcoalTextRole.headingS)),
+        SizedBox(height: space.sm),
         Semantics(
           liveRegion: true,
           child: Text(
             '$selectedCount ${selectedCount == 1 ? 'filter' : 'filters'} selected',
-            style: theme.textStyles.captionMedium.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(color: theme.colors.textSecondary),
           ),
         ),
-        SizedBox(height: space.layout30),
+        SizedBox(height: space.lg),
         Wrap(
-          spacing: space.component20,
-          runSpacing: space.component20,
+          spacing: space.sm,
+          runSpacing: space.sm,
           children: <Widget>[
             for (final tag in _tags)
               CharcoalTagItem(

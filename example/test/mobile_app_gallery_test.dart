@@ -447,7 +447,7 @@ void main() {
           tester,
           const ValueKey<String>('agent-commerce-nav-shop'),
         ),
-        theme.colors.containerSecondaryDefaultA,
+        theme.colors.fillSecondary,
       );
 
       await tester.tap(
@@ -460,14 +460,14 @@ void main() {
           tester,
           const ValueKey<String>('agent-commerce-nav-shop'),
         ),
-        theme.colors.backgroundDefault,
+        theme.colors.background,
       );
       expect(
         _paintedTabBackground(
           tester,
           const ValueKey<String>('agent-commerce-nav-search'),
         ),
-        theme.colors.containerSecondaryDefaultA,
+        theme.colors.fillSecondary,
       );
       final searchPage = find.byKey(
         const ValueKey<String>('agent-commerce-search-page'),
@@ -577,12 +577,12 @@ void main() {
       );
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
-        theme.colors.containerSecondaryDefaultA,
+        theme.colors.fillSecondary,
         reason: scenario.app.name,
       );
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.tabKey)),
-        theme.colors.backgroundDefault,
+        theme.colors.background,
         reason: scenario.app.name,
       );
 
@@ -590,24 +590,24 @@ void main() {
         tester.getCenter(targetTab),
       );
       await tester.pump(kPressTimeout);
-      await tester.pump(CharcoalMotion.fast);
+      await tester.pump(charcoalLightPack.motion.fast);
 
       expect(
         _paintedTabInteractionOverlay(
           tester,
           ValueKey<String>(scenario.tabKey),
         ),
-        theme.colors.containerSecondaryPressA,
+        theme.colors.fillSecondaryPress,
         reason: scenario.app.name,
       );
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
-        theme.colors.containerSecondaryDefaultA,
+        theme.colors.fillSecondary,
         reason: scenario.app.name,
       );
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.tabKey)),
-        theme.colors.backgroundDefault,
+        theme.colors.background,
         reason: scenario.app.name,
       );
       expect(
@@ -650,7 +650,7 @@ void main() {
           tester,
           ValueKey<String>(scenario.tabKey),
         ),
-        theme.colors.containerDefaultA,
+        theme.colors.restOverlay,
         reason: scenario.app.name,
       );
       expect(
@@ -674,18 +674,18 @@ void main() {
         tester.getCenter(targetTab),
       );
       await tester.pump(kPressTimeout);
-      await tester.pump(CharcoalMotion.fast);
+      await tester.pump(charcoalLightPack.motion.fast);
       await acceptedGesture.up();
       await tester.pump();
 
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.initialTabKey)),
-        theme.colors.backgroundDefault,
+        theme.colors.background,
         reason: scenario.app.name,
       );
       expect(
         _paintedTabBackground(tester, ValueKey<String>(scenario.tabKey)),
-        theme.colors.containerSecondaryDefaultA,
+        theme.colors.fillSecondary,
         reason: scenario.app.name,
       );
       expect(

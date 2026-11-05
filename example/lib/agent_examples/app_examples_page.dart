@@ -70,50 +70,50 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
-    final sectionGap = space.layout40;
+    final space = theme.space;
+    final sectionGap = space.xl;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Text(
           'AGENT READY · GENERATED SHOWCASE',
-          style: theme.textStyles.captionSmall.copyWith(
-            color: theme.colors.textInfoDefault,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(
+                color: theme.colors.textInfo,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1,
+              ),
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         Text(
           'Agent Ready app examples',
-          style: theme.textStyles.headingL.copyWith(
-            color: theme.colors.textDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.headingL)
+              .copyWith(color: theme.colors.text),
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         Text(
           'Every interface on this page was composed through the Agent Ready catalog, public Charcoal APIs, and semantic design tokens.',
-          style: theme.textStyles.body.copyWith(
-            color: theme.colors.textSecondaryDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.bodyLarge)
+              .copyWith(color: theme.colors.textSecondary),
         ),
         SizedBox(height: sectionGap),
         const _AgentReadyProductionBanner(),
-        SizedBox(height: space.layout50),
-        SizedBox(key: _exampleBodyKey, height: theme.dimensions.borderWidth.m),
+        SizedBox(height: space.xxl),
+        SizedBox(key: _exampleBodyKey, height: theme.borders.hairline),
         _GalleryContextControls(
           inSimulation: _hasSelectedApp,
           onAllAppsPressed: _closeSelectedApp,
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         AnimatedSwitcher(
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            CharcoalMotion.standard,
-          ),
+          duration: CharcoalTheme.of(context)
+              .duration(context, CharcoalTheme.of(context).motion.standard),
           layoutBuilder: _singleLayerSwitcherLayout,
-          switchInCurve: CharcoalMotion.emphasizedCurve,
-          switchOutCurve: CharcoalMotion.standardCurve,
+          switchInCurve: CharcoalTheme.of(context).motion.emphasizedCurve,
+          switchOutCurve: CharcoalTheme.of(context).motion.curve,
           transitionBuilder: _routeTransition,
           child: _hasSelectedApp
               ? _buildSelectedApp(theme, sectionGap)
@@ -125,7 +125,7 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
 
   bool get _hasSelectedApp => _asterSelected || _selectedMobileApp != null;
 
-  Widget _buildAppCatalog(CharcoalThemeData theme, double sectionGap) => Column(
+  Widget _buildAppCatalog(CharcoalTheme theme, double sectionGap) => Column(
     key: const ValueKey<String>('agent-app-catalog'),
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: <Widget>[
@@ -133,12 +133,12 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
         eyebrow: 'FIVE INDEPENDENT SIMULATIONS',
         title: 'Choose an Agent Ready app to open',
       ),
-      SizedBox(height: theme.dimensions.space.component20),
+      SizedBox(height: theme.space.sm),
       Text(
         'Each tile opens its own live simulation. The previews are only entry points; state and interactions live inside each app.',
-        style: theme.textStyles.body.copyWith(
-          color: theme.colors.textSecondaryDefault,
-        ),
+        style: theme
+            .style(CharcoalTextRole.bodyLarge)
+            .copyWith(color: theme.colors.textSecondary),
       ),
       SizedBox(height: sectionGap),
       AgentExampleTileGrid(
@@ -151,7 +151,7 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
     ],
   );
 
-  Widget _buildSelectedApp(CharcoalThemeData theme, double sectionGap) {
+  Widget _buildSelectedApp(CharcoalTheme theme, double sectionGap) {
     final mobileApp = _selectedMobileApp;
     return Column(
       key: ValueKey<String>(
@@ -169,7 +169,7 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
     );
   }
 
-  Widget _buildAsterSimulation(CharcoalThemeData theme, double sectionGap) =>
+  Widget _buildAsterSimulation(CharcoalTheme theme, double sectionGap) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -213,10 +213,10 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
             onSearch: () => _selectDestination(_ExampleDestination.projects),
             page: _buildDestination(),
           ),
-          SizedBox(height: theme.dimensions.space.component30),
+          SizedBox(height: theme.space.lg),
           Wrap(
-            spacing: theme.dimensions.space.component20,
-            runSpacing: theme.dimensions.space.component20,
+            spacing: theme.space.sm,
+            runSpacing: theme.space.sm,
             children: const <Widget>[
               _CapabilityPill(label: 'Responsive layout'),
               _CapabilityPill(label: 'Keyboard + touch'),
@@ -260,11 +260,9 @@ final class _AgentAppExamplesPageState extends State<AgentAppExamplesPage> {
       Scrollable.ensureVisible(
         bodyContext,
         alignment: 0.12,
-        curve: CharcoalMotion.emphasizedCurve,
-        duration: CharcoalMotion.resolveDuration(
-          context,
-          CharcoalMotion.routeForward,
-        ),
+        curve: CharcoalTheme.of(context).motion.emphasizedCurve,
+        duration: CharcoalTheme.of(context)
+            .duration(context, CharcoalTheme.of(context).motion.routeForward),
       );
     });
   }
@@ -398,14 +396,14 @@ final class _GalleryContextControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return SizedBox(
       key: const ValueKey<String>('agent-app-persistent-navigation'),
       width: double.infinity,
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: space.component20,
-        runSpacing: space.component20,
+        spacing: space.sm,
+        runSpacing: space.sm,
         children: <Widget>[
           CharcoalButton(
             key: const ValueKey<String>('agent-app-back'),
@@ -433,7 +431,7 @@ final class _AsterAppTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return CharcoalClickable(
       key: const ValueKey<String>('agent-app-tile-aster'),
       onPressed: onPressed,
@@ -444,33 +442,29 @@ final class _AsterAppTile extends StatelessWidget {
             states.contains(WidgetState.focused) ||
             states.contains(WidgetState.pressed);
         return AnimatedContainer(
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            CharcoalMotion.fast,
-          ),
+          duration: CharcoalTheme.of(context)
+              .duration(context, CharcoalTheme.of(context).motion.fast),
           decoration: BoxDecoration(
             border: Border.all(
-              color: active
-                  ? theme.colors.borderDefault
-                  : theme.colors.borderSecondary,
+              color: active ? theme.colors.border : theme.colors.borderSubtle,
             ),
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+            borderRadius: BorderRadius.circular(theme.radius.lg),
             color: states.contains(WidgetState.pressed)
-                ? theme.colors.containerSecondaryDefaultA
-                : theme.colors.backgroundDefault,
+                ? theme.colors.fillSecondary
+                : theme.colors.background,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+            borderRadius: BorderRadius.circular(theme.radius.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 const SizedBox(height: 210, child: _AsterTileArtwork()),
                 SizedBox(
-                  height: theme.dimensions.borderWidth.m,
-                  child: ColoredBox(color: theme.colors.borderSecondary),
+                  height: theme.borders.hairline,
+                  child: ColoredBox(color: theme.colors.borderSubtle),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(space.component30),
+                  padding: EdgeInsets.all(space.lg),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -485,49 +479,53 @@ final class _AsterAppTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: space.component20),
+                          SizedBox(width: space.sm),
                           Text(
                             '05',
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textTertiaryDefault,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(
+                                  color: theme.colors.textTertiary,
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
                         ],
                       ),
-                      SizedBox(height: space.component20),
+                      SizedBox(height: space.sm),
                       Text(
                         'Aster · CREATIVE WORKSPACE',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionMediumBold.copyWith(
-                          color: theme.colors.textDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.captionMediumBold)
+                            .copyWith(color: theme.colors.text),
                       ),
-                      SizedBox(height: space.component10),
+                      SizedBox(height: space.xs),
                       Text(
                         'Responsive studio, projects, and profile settings',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textSecondary),
                       ),
-                      SizedBox(height: space.component25),
+                      SizedBox(height: space.md),
                       Row(
                         children: <Widget>[
                           Expanded(
                             child: Text(
                               'Open simulation',
-                              style: theme.textStyles.captionSmall.copyWith(
-                                color: theme.colors.textInfoDefault,
-                                fontWeight: FontWeight.w700,
-                              ),
+                              style: theme
+                                  .style(CharcoalTextRole.caption)
+                                  .copyWith(
+                                    color: theme.colors.textInfo,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                           ),
                           CharcoalIcon(
                             CharcoalIcons.chevronRight,
-                            color: theme.colors.iconDefault,
+                            color: theme.colors.icon,
                             size: 16,
                           ),
                         ],
@@ -550,20 +548,17 @@ final class _AsterTileArtwork extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final onColor = theme.colors.textOnPrimaryDefault;
+    final onColor = theme.colors.textOnPrimary;
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[
-            theme.colors.containerPrimaryDefault,
-            theme.colors.containerDiscoveryDefault,
-          ],
+          colors: <Color>[theme.colors.primary, theme.colors.negative],
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(theme.dimensions.space.component30),
+        padding: EdgeInsets.all(theme.space.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -571,37 +566,33 @@ final class _AsterTileArtwork extends StatelessWidget {
               children: <Widget>[
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      theme.dimensions.radius.m,
-                    ),
-                    color: theme.colors.backgroundDefault.withValues(
-                      alpha: 0.2,
-                    ),
+                    borderRadius: BorderRadius.circular(theme.radius.md),
+                    color: theme.colors.background.withValues(alpha: 0.2),
                   ),
                   child: SizedBox.square(
                     dimension: 40,
                     child: Center(
                       child: Text(
                         'A',
-                        style: theme.textStyles.bodyBold.copyWith(
-                          color: onColor,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.bodyLargeBold)
+                            .copyWith(color: onColor),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: theme.dimensions.space.component20),
+                SizedBox(width: theme.space.sm),
                 Expanded(
                   child: Text(
                     'Aster creative cloud',
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: onColor,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMediumBold)
+                        .copyWith(color: onColor),
                   ),
                 ),
                 CharcoalIcon(
                   CharcoalIcons.layout,
-                  color: theme.colors.iconOnPrimaryDefault,
+                  color: theme.colors.iconOnPrimary,
                 ),
               ],
             ),
@@ -614,7 +605,7 @@ final class _AsterTileArtwork extends StatelessWidget {
                     label: 'Studio',
                   ),
                 ),
-                SizedBox(width: theme.dimensions.space.component20),
+                SizedBox(width: theme.space.sm),
                 const Expanded(
                   child: _AsterMiniPane(
                     icon: CharcoalIcons.folder,
@@ -641,25 +632,27 @@ final class _AsterMiniPane extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-        color: theme.colors.backgroundDefault.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(theme.radius.md),
+        color: theme.colors.background.withValues(alpha: 0.18),
       ),
       child: SizedBox(
         height: 92,
         child: Padding(
-          padding: EdgeInsets.all(theme.dimensions.space.component20),
+          padding: EdgeInsets.all(theme.space.sm),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CharcoalIcon(icon, color: theme.colors.iconOnPrimaryDefault),
-              SizedBox(height: theme.dimensions.space.component20),
+              CharcoalIcon(icon, color: theme.colors.iconOnPrimary),
+              SizedBox(height: theme.space.sm),
               Text(
                 label,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textOnPrimaryDefault,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(
+                      color: theme.colors.textOnPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ],
           ),
@@ -677,31 +670,33 @@ final class _AgentReadyMiniBadge extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-        color: theme.colors.containerPrimaryDefault,
+        borderRadius: BorderRadius.circular(theme.radius.pill),
+        color: theme.colors.primary,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: theme.dimensions.space.component20,
-          vertical: theme.dimensions.space.component10,
+          horizontal: theme.space.sm,
+          vertical: theme.space.xs,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CharcoalIcon(
               CharcoalIcons.check,
-              color: theme.colors.iconOnPrimaryDefault,
+              color: theme.colors.iconOnPrimary,
               size: 12,
             ),
-            SizedBox(width: theme.dimensions.space.component10),
+            SizedBox(width: theme.space.xs),
             Text(
               'MADE WITH AGENT READY',
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textOnPrimaryDefault,
-                fontSize: 9,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(
+                    color: theme.colors.textOnPrimary,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.5,
+                  ),
             ),
           ],
         ),
@@ -719,32 +714,29 @@ final class _AgentReadyProductionBanner extends StatelessWidget {
     return DecoratedBox(
       key: const ValueKey<String>('agent-ready-production-banner'),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+        borderRadius: BorderRadius.circular(theme.radius.lg),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[
-            theme.colors.containerPrimaryDefault,
-            theme.colors.containerDiscoveryDefault,
-          ],
+          colors: <Color>[theme.colors.primary, theme.colors.negative],
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(theme.dimensions.space.layout40),
+        padding: EdgeInsets.all(theme.space.xl),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 620;
             final mark = DecoratedBox(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-                color: theme.colors.backgroundDefault.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                color: theme.colors.background.withValues(alpha: 0.18),
               ),
               child: SizedBox.square(
                 dimension: 52,
                 child: Center(
                   child: CharcoalIcon(
                     CharcoalIcons.checkCircle,
-                    color: theme.colors.iconOnPrimaryDefault,
+                    color: theme.colors.iconOnPrimary,
                   ),
                 ),
               ),
@@ -754,29 +746,33 @@ final class _AgentReadyProductionBanner extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'MADE WITH AGENT READY',
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textOnPrimaryDefault.withValues(
-                      alpha: 0.76,
-                    ),
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(
+                        color: theme.colors.textOnPrimary.withValues(
+                          alpha: 0.76,
+                        ),
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
                 ),
-                SizedBox(height: theme.dimensions.space.component20),
+                SizedBox(height: theme.space.sm),
                 Text(
                   'Discovered, composed, and verified by an agent.',
-                  style: theme.textStyles.headingXs.copyWith(
-                    color: theme.colors.textOnPrimaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.headingXs)
+                      .copyWith(color: theme.colors.textOnPrimary),
                 ),
-                SizedBox(height: theme.dimensions.space.component20),
+                SizedBox(height: theme.space.sm),
                 Text(
                   'No private recipes or copied showcase internals: only indexed public components, semantic tokens, responsive rules, and device verification.',
-                  style: theme.textStyles.captionMedium.copyWith(
-                    color: theme.colors.textOnPrimaryDefault.withValues(
-                      alpha: 0.84,
-                    ),
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMedium)
+                      .copyWith(
+                        color: theme.colors.textOnPrimary.withValues(
+                          alpha: 0.84,
+                        ),
+                      ),
                 ),
               ],
             );
@@ -785,7 +781,7 @@ final class _AgentReadyProductionBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   mark,
-                  SizedBox(height: theme.dimensions.space.component30),
+                  SizedBox(height: theme.space.lg),
                   copy,
                 ],
               );
@@ -793,7 +789,7 @@ final class _AgentReadyProductionBanner extends StatelessWidget {
             return Row(
               children: <Widget>[
                 mark,
-                SizedBox(width: theme.dimensions.space.layout40),
+                SizedBox(width: theme.space.xl),
                 Expanded(child: copy),
               ],
             );
@@ -829,12 +825,12 @@ final class _AppPreviewFrame extends StatelessWidget {
     return DecoratedBox(
       key: const ValueKey<String>('agent-app-preview'),
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSecondary),
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
-        color: theme.colors.backgroundDefault,
+        border: Border.all(color: theme.colors.borderSubtle),
+        borderRadius: BorderRadius.circular(theme.radius.lg),
+        color: theme.colors.background,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+        borderRadius: BorderRadius.circular(theme.radius.lg),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 760;
@@ -848,9 +844,9 @@ final class _AppPreviewFrame extends StatelessWidget {
                     onMenuPressed: onMobileNavigationToggle,
                   ),
                   AnimatedSwitcher(
-                    duration: CharcoalMotion.resolveDuration(
+                    duration: CharcoalTheme.of(context).duration(
                       context,
-                      CharcoalMotion.standard,
+                      CharcoalTheme.of(context).motion.standard,
                     ),
                     child: mobileNavigationOpen
                         ? _CompactAppNavigation(
@@ -877,7 +873,7 @@ final class _AppPreviewFrame extends StatelessWidget {
                   left: 0,
                   top: 0,
                   width: 208,
-                  child: ColoredBox(color: theme.colors.backgroundDefault),
+                  child: ColoredBox(color: theme.colors.background),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -890,7 +886,7 @@ final class _AppPreviewFrame extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: theme.dimensions.borderWidth.m,
+                      width: theme.borders.hairline,
                       child: const SizedBox.shrink(),
                     ),
                     Expanded(
@@ -912,8 +908,8 @@ final class _AppPreviewFrame extends StatelessWidget {
                   bottom: 0,
                   left: 208,
                   top: 0,
-                  width: theme.dimensions.borderWidth.m,
-                  child: ColoredBox(color: theme.colors.borderSecondary),
+                  width: theme.borders.hairline,
+                  child: ColoredBox(color: theme.colors.borderSubtle),
                 ),
               ],
             );
@@ -935,12 +931,10 @@ final class _AnimatedExamplePage extends StatelessWidget {
     return ColoredBox(
       color: theme.colors.backgroundSecondary,
       child: AnimatedSwitcher(
-        duration: CharcoalMotion.resolveDuration(
-          context,
-          CharcoalMotion.standard,
-        ),
+        duration: CharcoalTheme.of(context)
+            .duration(context, CharcoalTheme.of(context).motion.standard),
         layoutBuilder: _singleLayerSwitcherLayout,
-        switchInCurve: CharcoalMotion.emphasizedCurve,
+        switchInCurve: CharcoalTheme.of(context).motion.emphasizedCurve,
         transitionBuilder: _routeTransition,
         child: child,
       ),
@@ -985,25 +979,25 @@ final class _AppTopBar extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colors.borderSecondary)),
-        color: theme.colors.backgroundDefault,
+        border: Border(bottom: BorderSide(color: theme.colors.borderSubtle)),
+        color: theme.colors.background,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: theme.dimensions.space.component30,
-          vertical: theme.dimensions.space.component20,
+          horizontal: theme.space.lg,
+          vertical: theme.space.sm,
         ),
         child: Row(
           children: <Widget>[
             if (compact) ...<Widget>[
               const _BrandMark(size: 34),
-              SizedBox(width: theme.dimensions.space.component20),
+              SizedBox(width: theme.space.sm),
               Expanded(
                 child: Text(
                   'Aster',
-                  style: theme.textStyles.bodyBold.copyWith(
-                    color: theme.colors.textDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.bodyLargeBold)
+                      .copyWith(color: theme.colors.text),
                 ),
               ),
               CharcoalIconButton(
@@ -1022,9 +1016,9 @@ final class _AppTopBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Creator workspace',
-                  style: theme.textStyles.captionMedium.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMedium)
+                      .copyWith(color: theme.colors.textSecondary),
                 ),
               ),
               CharcoalIconButton(
@@ -1033,14 +1027,14 @@ final class _AppTopBar extends StatelessWidget {
                 semanticLabel: 'Search workspace',
                 size: CharcoalIconButtonSize.small,
               ),
-              SizedBox(width: theme.dimensions.space.component20),
+              SizedBox(width: theme.space.sm),
               CharcoalIconButton(
                 icon: const CharcoalIcon(CharcoalIcons.bell),
                 onPressed: onNotifications,
                 semanticLabel: 'Notifications',
                 size: CharcoalIconButtonSize.small,
               ),
-              SizedBox(width: theme.dimensions.space.component20),
+              SizedBox(width: theme.space.sm),
               const _Avatar(initials: 'MA', size: 36),
             ],
           ],
@@ -1060,38 +1054,38 @@ final class _AppSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     return ColoredBox(
-      color: theme.colors.backgroundDefault,
+      color: theme.colors.background,
       child: Padding(
-        padding: EdgeInsets.all(theme.dimensions.space.component30),
+        padding: EdgeInsets.all(theme.space.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: theme.dimensions.space.component20,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: theme.space.sm),
               child: Row(
                 children: <Widget>[
                   const _BrandMark(size: 38),
-                  SizedBox(width: theme.dimensions.space.component20),
+                  SizedBox(width: theme.space.sm),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           'Aster',
-                          style: theme.textStyles.bodyBold.copyWith(
-                            color: theme.colors.textDefault,
-                          ),
+                          style: theme
+                              .style(CharcoalTextRole.bodyLargeBold)
+                              .copyWith(color: theme.colors.text),
                         ),
                         Text(
                           'CREATIVE CLOUD',
-                          style: theme.textStyles.captionSmall.copyWith(
-                            color: theme.colors.textTertiaryDefault,
-                            fontSize: 9,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
-                          ),
+                          style: theme
+                              .style(CharcoalTextRole.caption)
+                              .copyWith(
+                                color: theme.colors.textTertiary,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.8,
+                              ),
                         ),
                       ],
                     ),
@@ -1099,48 +1093,50 @@ final class _AppSidebar extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: theme.dimensions.space.layout40),
+            SizedBox(height: theme.space.xl),
             ..._navigationItems(destination: destination, onChanged: onChanged),
-            SizedBox(height: theme.dimensions.space.layout50),
+            SizedBox(height: theme.space.xxl),
             DecoratedBox(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-                color: theme.colors.containerDiscoveryDefault,
+                borderRadius: BorderRadius.circular(theme.radius.md),
+                color: theme.colors.negative,
               ),
               child: Padding(
-                padding: EdgeInsets.all(theme.dimensions.space.component30),
+                padding: EdgeInsets.all(theme.space.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     CharcoalIcon(
                       CharcoalIcons.bulbShine,
-                      color: theme.colors.iconOnPrimaryDefault,
+                      color: theme.colors.iconOnPrimary,
                     ),
-                    SizedBox(height: theme.dimensions.space.component25),
+                    SizedBox(height: theme.space.md),
                     Text(
                       'Make room for more ideas',
-                      style: theme.textStyles.captionMediumBold.copyWith(
-                        color: theme.colors.textOnDiscoveryDefault,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.captionMediumBold)
+                          .copyWith(color: theme.colors.textOnNegative),
                     ),
-                    SizedBox(height: theme.dimensions.space.component10),
+                    SizedBox(height: theme.space.xs),
                     Text(
                       '12 GB of 20 GB used',
-                      style: theme.textStyles.captionSmall.copyWith(
-                        color: theme.colors.textOnDiscoveryDefault.withValues(
-                          alpha: 0.76,
-                        ),
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.caption)
+                          .copyWith(
+                            color: theme.colors.textOnNegative.withValues(
+                              alpha: 0.76,
+                            ),
+                          ),
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: theme.dimensions.space.layout40),
+            SizedBox(height: theme.space.xl),
             Row(
               children: <Widget>[
                 const _Avatar(initials: 'MA', size: 34),
-                SizedBox(width: theme.dimensions.space.component20),
+                SizedBox(width: theme.space.sm),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1149,15 +1145,15 @@ final class _AppSidebar extends StatelessWidget {
                         'Mina Aoki',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionMediumBold.copyWith(
-                          color: theme.colors.textDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.captionMediumBold)
+                            .copyWith(color: theme.colors.text),
                       ),
                       Text(
                         'Pro plan',
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textSecondary),
                       ),
                     ],
                   ),
@@ -1186,15 +1182,15 @@ final class _CompactAppNavigation extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colors.borderSecondary)),
-        color: theme.colors.backgroundDefault,
+        border: Border(bottom: BorderSide(color: theme.colors.borderSubtle)),
+        color: theme.colors.background,
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-          theme.dimensions.space.component30,
-          theme.dimensions.space.component20,
-          theme.dimensions.space.component30,
-          theme.dimensions.space.component30,
+          theme.space.lg,
+          theme.space.sm,
+          theme.space.lg,
+          theme.space.lg,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1242,7 +1238,7 @@ final class _StudioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _ExamplePagePadding(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1256,33 +1252,37 @@ final class _StudioPage extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'MONDAY, AUGUST 17',
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textOnPrimaryDefault.withValues(
-                        alpha: 0.72,
-                      ),
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.caption)
+                        .copyWith(
+                          color: theme.colors.textOnPrimary.withValues(
+                            alpha: 0.72,
+                          ),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1,
+                        ),
                   ),
-                  SizedBox(height: space.component25),
+                  SizedBox(height: space.md),
                   Text(
                     'Make something only you could imagine.',
                     style:
                         (compact
-                                ? theme.textStyles.headingM
-                                : theme.textStyles.headingL)
-                            .copyWith(color: theme.colors.textOnPrimaryDefault),
+                                ? theme.style(CharcoalTextRole.headingM)
+                                : theme.style(CharcoalTextRole.headingL))
+                            .copyWith(color: theme.colors.textOnPrimary),
                   ),
-                  SizedBox(height: space.component20),
+                  SizedBox(height: space.sm),
                   Text(
                     'Your canvas is ready, and yesterday’s ideas are right where you left them.',
-                    style: theme.textStyles.captionMedium.copyWith(
-                      color: theme.colors.textOnPrimaryDefault.withValues(
-                        alpha: 0.82,
-                      ),
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMedium)
+                        .copyWith(
+                          color: theme.colors.textOnPrimary.withValues(
+                            alpha: 0.82,
+                          ),
+                        ),
                   ),
-                  SizedBox(height: space.component40),
+                  SizedBox(height: space.xl),
                   CharcoalButton(
                     fullWidth: compact,
                     leading: const CharcoalIcon(CharcoalIcons.penAdd),
@@ -1295,37 +1295,31 @@ final class _StudioPage extends StatelessWidget {
               final art = _HeroArtwork(compact: compact);
               return DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    theme.dimensions.radius.l,
-                  ),
+                  borderRadius: BorderRadius.circular(theme.radius.lg),
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: <Color>[
-                      theme.colors.containerPrimaryDefault,
-                      theme.colors.containerDiscoveryDefault,
+                      theme.colors.primary,
+                      theme.colors.negative,
                     ],
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(
-                    compact ? space.component30 : space.layout40,
-                  ),
+                  padding: EdgeInsets.all(compact ? space.lg : space.xl),
                   child: compact
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             copy,
-                            SizedBox(
-                              height: theme.dimensions.space.component40,
-                            ),
+                            SizedBox(height: theme.space.xl),
                             art,
                           ],
                         )
                       : Row(
                           children: <Widget>[
                             Expanded(flex: 5, child: copy),
-                            SizedBox(width: space.layout40),
+                            SizedBox(width: space.xl),
                             Expanded(flex: 4, child: art),
                           ],
                         ),
@@ -1333,14 +1327,14 @@ final class _StudioPage extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: space.layout40),
+          SizedBox(height: space.xl),
           const _SectionHeading(
             eyebrow: 'AT A GLANCE',
             title: 'Your creative rhythm',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const _MetricGrid(),
-          SizedBox(height: space.layout40),
+          SizedBox(height: space.xl),
           _SectionHeading(
             action: CharcoalLinkButton(
               onPressed: onOpenProjects,
@@ -1349,7 +1343,7 @@ final class _StudioPage extends StatelessWidget {
             eyebrow: 'RECENT WORK',
             title: 'Pick up where you left off',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const _ProjectGrid(projects: _recentProjects),
         ],
       ),
@@ -1373,18 +1367,18 @@ final class _HeroArtwork extends StatelessWidget {
           height: compact ? 180 : 236,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-              color: theme.colors.backgroundDefault.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(theme.radius.md),
+              color: theme.colors.background.withValues(alpha: 0.16),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+              borderRadius: BorderRadius.circular(theme.radius.md),
               child: Stack(
                 children: <Widget>[
                   Positioned(
                     left: -28,
                     top: -34,
                     child: _ArtCircle(
-                      color: theme.colors.containerNoticeDefault,
+                      color: theme.colors.notice,
                       size: compact ? 122 : 154,
                     ),
                   ),
@@ -1395,10 +1389,8 @@ final class _HeroArtwork extends StatelessWidget {
                       angle: 0.35,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            theme.dimensions.radius.l,
-                          ),
-                          color: theme.colors.containerPositiveDefault,
+                          borderRadius: BorderRadius.circular(theme.radius.lg),
+                          color: theme.colors.positive,
                         ),
                         child: SizedBox(
                           height: compact ? 108 : 142,
@@ -1414,33 +1406,33 @@ final class _HeroArtwork extends StatelessWidget {
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(999),
-                        color: theme.colors.backgroundDefault.withValues(
-                          alpha: 0.86,
-                        ),
+                        color: theme.colors.background.withValues(alpha: 0.86),
                       ),
                       child: SizedBox(height: compact ? 126 : 166),
                     ),
                   ),
                   Positioned(
-                    bottom: theme.dimensions.space.component30,
-                    left: theme.dimensions.space.component30,
+                    bottom: theme.space.lg,
+                    left: theme.space.lg,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(999),
-                        color: theme.colors.containerOnImgDefault,
+                        color: theme.colors.fillOnImage,
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: theme.dimensions.space.component25,
-                          vertical: theme.dimensions.space.component20,
+                          horizontal: theme.space.md,
+                          vertical: theme.space.sm,
                         ),
                         child: Text(
                           'DAYBREAK · 04',
-                          style: theme.textStyles.captionSmall.copyWith(
-                            color: theme.colors.textOnOnImgDefault,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
-                          ),
+                          style: theme
+                              .style(CharcoalTextRole.caption)
+                              .copyWith(
+                                color: theme.colors.textOnImage,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.8,
+                              ),
                         ),
                       ),
                     ),
@@ -1477,7 +1469,7 @@ final class _MetricGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final gap = theme.dimensions.space.component30;
+    final gap = theme.space.lg;
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = constraints.maxWidth >= 620
@@ -1540,32 +1532,32 @@ final class _MetricCard extends StatelessWidget {
         children: <Widget>[
           DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-              color: theme.colors.containerSecondaryDefault,
+              borderRadius: BorderRadius.circular(theme.radius.md),
+              color: theme.colors.surfaceSecondary,
             ),
             child: SizedBox.square(
-              dimension: theme.dimensions.space.targetL,
+              dimension: theme.sizes.controlLg,
               child: Center(
-                child: CharcoalIcon(icon, color: theme.colors.iconDefault),
+                child: CharcoalIcon(icon, color: theme.colors.icon),
               ),
             ),
           ),
-          SizedBox(width: theme.dimensions.space.component25),
+          SizedBox(width: theme.space.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   value,
-                  style: theme.textStyles.headingXs.copyWith(
-                    color: theme.colors.textDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.headingXs)
+                      .copyWith(color: theme.colors.text),
                 ),
                 Text(
                   label,
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(color: theme.colors.textSecondary),
                 ),
               ],
             ),
@@ -1613,7 +1605,7 @@ final class _ProjectsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final visibleProjects = projects
         .where((project) {
           final matchesQuery = project.title.toLowerCase().contains(
@@ -1636,7 +1628,7 @@ final class _ProjectsPage extends StatelessWidget {
         .take(pageSize)
         .toList(growable: false);
     return Padding(
-      padding: EdgeInsets.all(space.layout40),
+      padding: EdgeInsets.all(space.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -1657,7 +1649,7 @@ final class _ProjectsPage extends StatelessWidget {
             title: 'Projects',
           ),
           if (newProjectOpen) ...<Widget>[
-            SizedBox(height: space.component30),
+            SizedBox(height: space.lg),
             _Surface(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1666,7 +1658,7 @@ final class _ProjectsPage extends StatelessWidget {
                     eyebrow: 'NEW DRAFT',
                     title: 'Name your next idea',
                   ),
-                  SizedBox(height: space.component30),
+                  SizedBox(height: space.lg),
                   CharcoalTextField(
                     key: const ValueKey<String>('agent-project-new-name'),
                     autofocus: true,
@@ -1678,7 +1670,7 @@ final class _ProjectsPage extends StatelessWidget {
                     placeholder: 'e.g. August light studies',
                     showLabel: true,
                   ),
-                  SizedBox(height: space.component20),
+                  SizedBox(height: space.sm),
                   CharcoalButton(
                     key: const ValueKey<String>('agent-project-create'),
                     fullWidth: true,
@@ -1693,14 +1685,14 @@ final class _ProjectsPage extends StatelessWidget {
             ),
           ],
           if (projectStatus != null) ...<Widget>[
-            SizedBox(height: space.component30),
+            SizedBox(height: space.lg),
             CharcoalHintText(
               alignment: Alignment.centerLeft,
               icon: const CharcoalIcon(CharcoalIcons.checkCircle),
               child: Text(projectStatus!),
             ),
           ],
-          SizedBox(height: space.layout40),
+          SizedBox(height: space.xl),
           LayoutBuilder(
             builder: (context, constraints) {
               final compact = constraints.maxWidth < 620;
@@ -1736,7 +1728,7 @@ final class _ProjectsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     search,
-                    SizedBox(height: space.component30),
+                    SizedBox(height: space.lg),
                     filters,
                   ],
                 );
@@ -1744,13 +1736,13 @@ final class _ProjectsPage extends StatelessWidget {
               return Row(
                 children: <Widget>[
                   Expanded(child: search),
-                  SizedBox(width: space.component30),
+                  SizedBox(width: space.lg),
                   filters,
                 ],
               );
             },
           ),
-          SizedBox(height: space.layout40),
+          SizedBox(height: space.xl),
           _SectionHeading(
             eyebrow: '${visibleProjects.length} ITEMS',
             title: switch (filter) {
@@ -1759,7 +1751,7 @@ final class _ProjectsPage extends StatelessWidget {
               _ProjectFilter.archived => 'Archive',
             },
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           if (visibleProjects.isEmpty)
             _EmptyProjects(query: searchQuery)
           else
@@ -1768,7 +1760,7 @@ final class _ProjectsPage extends StatelessWidget {
               projects: pageProjects,
             ),
           if (pageCount > 1) ...<Widget>[
-            SizedBox(height: space.layout40),
+            SizedBox(height: space.xl),
             LayoutBuilder(
               builder: (context, constraints) => constraints.maxWidth < 520
                   ? CharcoalButton(
@@ -1831,7 +1823,7 @@ final class _SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _ExamplePagePadding(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1851,14 +1843,14 @@ final class _SettingsPage extends StatelessWidget {
             eyebrow: 'ACCOUNT',
             title: 'Profile settings',
           ),
-          SizedBox(height: space.layout40),
+          SizedBox(height: space.xl),
           _Surface(
             padding: EdgeInsets.zero,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(theme.dimensions.space.layout40),
+                  padding: EdgeInsets.all(theme.space.xl),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final compact = constraints.maxWidth < 520;
@@ -1872,35 +1864,35 @@ final class _SettingsPage extends StatelessWidget {
                                 ? 'Unnamed creator'
                                 : displayNameController.text.trim(),
                             textAlign: compact ? TextAlign.center : null,
-                            style: theme.textStyles.headingXs.copyWith(
-                              color: theme.colors.textDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.headingXs)
+                                .copyWith(color: theme.colors.text),
                           ),
-                          SizedBox(height: theme.dimensions.space.component10),
+                          SizedBox(height: theme.space.xs),
                           Text(
                             emailController.text.trim().isEmpty
                                 ? 'Add an email address'
                                 : emailController.text.trim(),
                             textAlign: compact ? TextAlign.center : null,
-                            style: theme.textStyles.captionMedium.copyWith(
-                              color: theme.colors.textSecondaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.captionMedium)
+                                .copyWith(color: theme.colors.textSecondary),
                           ),
                         ],
                       );
                       final avatar = DecoratedBox(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(999),
-                          color: theme.colors.containerDiscoveryDefault,
+                          color: theme.colors.negative,
                         ),
                         child: SizedBox.square(
                           dimension: compact ? 72 : 80,
                           child: Center(
                             child: Text(
                               'MA',
-                              style: theme.textStyles.headingS.copyWith(
-                                color: theme.colors.textOnDiscoveryDefault,
-                              ),
+                              style: theme
+                                  .style(CharcoalTextRole.headingS)
+                                  .copyWith(color: theme.colors.textOnNegative),
                             ),
                           ),
                         ),
@@ -1914,13 +1906,9 @@ final class _SettingsPage extends StatelessWidget {
                         return Column(
                           children: <Widget>[
                             avatar,
-                            SizedBox(
-                              height: theme.dimensions.space.component30,
-                            ),
+                            SizedBox(height: theme.space.lg),
                             identity,
-                            SizedBox(
-                              height: theme.dimensions.space.component30,
-                            ),
+                            SizedBox(height: theme.space.lg),
                             changePhoto,
                           ],
                         );
@@ -1928,18 +1916,18 @@ final class _SettingsPage extends StatelessWidget {
                       return Row(
                         children: <Widget>[
                           avatar,
-                          SizedBox(width: theme.dimensions.space.component30),
+                          SizedBox(width: theme.space.lg),
                           Expanded(child: identity),
-                          SizedBox(width: theme.dimensions.space.component30),
+                          SizedBox(width: theme.space.lg),
                           changePhoto,
                         ],
                       );
                     },
                   ),
                 ),
-                _SurfaceDivider(color: theme.colors.borderSecondary),
+                _SurfaceDivider(color: theme.colors.borderSubtle),
                 Padding(
-                  padding: EdgeInsets.all(theme.dimensions.space.layout40),
+                  padding: EdgeInsets.all(theme.space.xl),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -1947,7 +1935,7 @@ final class _SettingsPage extends StatelessWidget {
                         eyebrow: 'PUBLIC PROFILE',
                         title: 'About you',
                       ),
-                      SizedBox(height: space.component30),
+                      SizedBox(height: space.lg),
                       LayoutBuilder(
                         builder: (context, constraints) {
                           final compact = constraints.maxWidth < 560;
@@ -1970,7 +1958,7 @@ final class _SettingsPage extends StatelessWidget {
                             return Column(
                               children: <Widget>[
                                 name,
-                                SizedBox(height: space.component30),
+                                SizedBox(height: space.lg),
                                 email,
                               ],
                             );
@@ -1979,13 +1967,13 @@ final class _SettingsPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Expanded(child: name),
-                              SizedBox(width: space.component30),
+                              SizedBox(width: space.lg),
                               Expanded(child: email),
                             ],
                           );
                         },
                       ),
-                      SizedBox(height: space.component30),
+                      SizedBox(height: space.lg),
                       CharcoalTextArea(
                         controller: bioController,
                         label: 'Bio',
@@ -1994,7 +1982,7 @@ final class _SettingsPage extends StatelessWidget {
                         showCount: true,
                         showLabel: true,
                       ),
-                      SizedBox(height: space.component30),
+                      SizedBox(height: space.lg),
                       CharcoalDropdown<_WorkspaceVisibility>(
                         label: 'Default project visibility',
                         onChanged: onVisibilityChanged,
@@ -2024,9 +2012,9 @@ final class _SettingsPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                _SurfaceDivider(color: theme.colors.borderSecondary),
+                _SurfaceDivider(color: theme.colors.borderSubtle),
                 Padding(
-                  padding: EdgeInsets.all(theme.dimensions.space.layout40),
+                  padding: EdgeInsets.all(theme.space.xl),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -2034,7 +2022,7 @@ final class _SettingsPage extends StatelessWidget {
                         eyebrow: 'NOTIFICATIONS',
                         title: 'Stay in the loop',
                       ),
-                      SizedBox(height: space.component30),
+                      SizedBox(height: space.lg),
                       _PreferenceRow(
                         description:
                             'A calm summary of views, saves, and comments.',
@@ -2042,7 +2030,7 @@ final class _SettingsPage extends StatelessWidget {
                         title: 'Weekly studio digest',
                         value: weeklyDigest,
                       ),
-                      SizedBox(height: space.component30),
+                      SizedBox(height: space.lg),
                       _PreferenceRow(
                         description:
                             'Occasional release notes and feature previews.',
@@ -2078,31 +2066,33 @@ final class _AdaptivePageHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final copy = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           eyebrow,
-          style: theme.textStyles.captionSmall.copyWith(
-            color: theme.colors.textInfoDefault,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(
+                color: theme.colors.textInfo,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1,
+              ),
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         Text(
           title,
-          style: theme.textStyles.headingM.copyWith(
-            color: theme.colors.textDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.headingM)
+              .copyWith(color: theme.colors.text),
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         Text(
           description,
-          style: theme.textStyles.captionMedium.copyWith(
-            color: theme.colors.textSecondaryDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.captionMedium)
+              .copyWith(color: theme.colors.textSecondary),
         ),
       ],
     );
@@ -2114,7 +2104,7 @@ final class _AdaptivePageHeading extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               copy,
-              SizedBox(height: space.component30),
+              SizedBox(height: space.lg),
               action,
             ],
           );
@@ -2123,7 +2113,7 @@ final class _AdaptivePageHeading extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Expanded(child: copy),
-            SizedBox(width: space.layout40),
+            SizedBox(width: space.xl),
             action,
           ],
         );
@@ -2146,7 +2136,7 @@ final class _SectionHeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -2156,26 +2146,25 @@ final class _SectionHeading extends StatelessWidget {
             children: <Widget>[
               Text(
                 eyebrow,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textTertiaryDefault,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.9,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(
+                      color: theme.colors.textTertiary,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.9,
+                    ),
               ),
-              SizedBox(height: space.component10),
+              SizedBox(height: space.xs),
               Text(
                 title,
-                style: theme.textStyles.headingXxs.copyWith(
-                  color: theme.colors.textDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.headingXxs)
+                    .copyWith(color: theme.colors.text),
               ),
             ],
           ),
         ),
-        if (action != null) ...<Widget>[
-          SizedBox(width: space.component20),
-          action!,
-        ],
+        if (action != null) ...<Widget>[SizedBox(width: space.sm), action!],
       ],
     );
   }
@@ -2188,8 +2177,8 @@ final class _ExamplePagePadding extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
-    return Padding(padding: EdgeInsets.all(space.layout40), child: child);
+    final space = CharcoalTheme.of(context).space;
+    return Padding(padding: EdgeInsets.all(space.xl), child: child);
   }
 }
 
@@ -2204,12 +2193,12 @@ final class _Surface extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSecondary),
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-        color: theme.colors.backgroundDefault,
+        border: Border.all(color: theme.colors.borderSubtle),
+        borderRadius: BorderRadius.circular(theme.radius.md),
+        color: theme.colors.background,
       ),
       child: Padding(
-        padding: padding ?? EdgeInsets.all(theme.dimensions.space.component30),
+        padding: padding ?? EdgeInsets.all(theme.space.lg),
         child: child,
       ),
     );
@@ -2223,7 +2212,7 @@ final class _SurfaceDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-    height: CharcoalTheme.of(context).dimensions.borderWidth.m,
+    height: CharcoalTheme.of(context).borders.hairline,
     child: ColoredBox(color: color),
   );
 }
@@ -2244,7 +2233,7 @@ final class _PreferenceRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -2254,21 +2243,21 @@ final class _PreferenceRow extends StatelessWidget {
             children: <Widget>[
               Text(
                 title,
-                style: theme.textStyles.captionMediumBold.copyWith(
-                  color: theme.colors.textDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.captionMediumBold)
+                    .copyWith(color: theme.colors.text),
               ),
-              SizedBox(height: space.component10),
+              SizedBox(height: space.xs),
               Text(
                 description,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textSecondaryDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(color: theme.colors.textSecondary),
               ),
             ],
           ),
         ),
-        SizedBox(width: space.component20),
+        SizedBox(width: space.sm),
         CharcoalSwitch(
           onChanged: onChanged,
           semanticLabel: title,
@@ -2288,7 +2277,7 @@ final class _ProjectGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final gap = theme.dimensions.space.component30;
+    final gap = theme.space.lg;
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = constraints.maxWidth >= 760
@@ -2327,7 +2316,7 @@ final class _ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _Surface(
       padding: EdgeInsets.zero,
       child: Column(
@@ -2335,7 +2324,7 @@ final class _ProjectCard extends StatelessWidget {
         children: <Widget>[
           _ProjectArtwork(tone: project.tone),
           Padding(
-            padding: EdgeInsets.all(space.component30),
+            padding: EdgeInsets.all(space.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -2346,9 +2335,9 @@ final class _ProjectCard extends StatelessWidget {
                         project.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionMediumBold.copyWith(
-                          color: theme.colors.textDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.captionMediumBold)
+                            .copyWith(color: theme.colors.text),
                       ),
                     ),
                     if (onArchiveToggle != null)
@@ -2363,14 +2352,14 @@ final class _ProjectCard extends StatelessWidget {
                       ),
                   ],
                 ),
-                SizedBox(height: space.component10),
+                SizedBox(height: space.xs),
                 Text(
                   project.details,
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(color: theme.colors.textSecondary),
                 ),
-                SizedBox(height: space.component25),
+                SizedBox(height: space.md),
                 _StatusPill(
                   label: project.archived
                       ? 'Archived'
@@ -2397,26 +2386,14 @@ final class _ProjectArtwork extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final palette = switch (tone % 4) {
-      0 => (
-        theme.colors.containerPrimaryDefault,
-        theme.colors.containerNoticeDefault,
-        theme.colors.containerDiscoveryDefault,
-      ),
+      0 => (theme.colors.primary, theme.colors.notice, theme.colors.negative),
       1 => (
-        theme.colors.containerDiscoveryDefault,
-        theme.colors.containerPositiveDefault,
-        theme.colors.backgroundDefault,
+        theme.colors.negative,
+        theme.colors.positive,
+        theme.colors.background,
       ),
-      2 => (
-        theme.colors.containerNoticeDefault,
-        theme.colors.containerPrimaryDefault,
-        theme.colors.containerNegativeDefault,
-      ),
-      _ => (
-        theme.colors.containerPositiveDefault,
-        theme.colors.containerDiscoveryDefault,
-        theme.colors.containerNeutralDefault,
-      ),
+      2 => (theme.colors.notice, theme.colors.primary, theme.colors.negative),
+      _ => (theme.colors.positive, theme.colors.negative, theme.colors.neutral),
     };
     return Semantics(
       image: true,
@@ -2426,7 +2403,7 @@ final class _ProjectArtwork extends StatelessWidget {
           height: 148,
           child: ClipRRect(
             borderRadius: BorderRadius.vertical(
-              top: Radius.circular(theme.dimensions.radius.m),
+              top: Radius.circular(theme.radius.md),
             ),
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -2450,9 +2427,7 @@ final class _ProjectArtwork extends StatelessWidget {
                       angle: -0.32,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            theme.dimensions.radius.m,
-                          ),
+                          borderRadius: BorderRadius.circular(theme.radius.md),
                           color: palette.$3.withValues(alpha: 0.78),
                         ),
                         child: const SizedBox.square(dimension: 72),
@@ -2480,24 +2455,26 @@ final class _StatusPill extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+        borderRadius: BorderRadius.circular(theme.radius.pill),
         color: positive
-            ? theme.colors.containerPositiveDefault.withValues(alpha: 0.18)
-            : theme.colors.containerSecondaryDefault,
+            ? theme.colors.positive.withValues(alpha: 0.18)
+            : theme.colors.surfaceSecondary,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: theme.dimensions.space.component20,
-          vertical: theme.dimensions.space.component10,
+          horizontal: theme.space.sm,
+          vertical: theme.space.xs,
         ),
         child: Text(
           label,
-          style: theme.textStyles.captionSmall.copyWith(
-            color: positive
-                ? theme.colors.textPositiveDefault
-                : theme.colors.textSecondaryDefault,
-            fontWeight: FontWeight.w700,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(
+                color: positive
+                    ? theme.colors.textPositive
+                    : theme.colors.textSecondary,
+                fontWeight: FontWeight.w700,
+              ),
         ),
       ),
     );
@@ -2514,24 +2491,22 @@ final class _EmptyProjects extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return _Surface(
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: theme.dimensions.space.layout40,
-        ),
+        padding: EdgeInsets.symmetric(vertical: theme.space.xl),
         child: Column(
           children: <Widget>[
             CharcoalIcon(
               CharcoalIcons.search,
-              color: theme.colors.iconSecondaryDefault,
+              color: theme.colors.iconSecondary,
             ),
-            SizedBox(height: theme.dimensions.space.component20),
+            SizedBox(height: theme.space.sm),
             Text(
               query.trim().isEmpty
                   ? 'No projects in this view'
                   : 'No results for “${query.trim()}”',
               textAlign: TextAlign.center,
-              style: theme.textStyles.captionMediumBold.copyWith(
-                color: theme.colors.textDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMediumBold)
+                  .copyWith(color: theme.colors.text),
             ),
           ],
         ),
@@ -2550,30 +2525,32 @@ final class _CapabilityPill extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSecondary),
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-        color: theme.colors.backgroundDefault,
+        border: Border.all(color: theme.colors.borderSubtle),
+        borderRadius: BorderRadius.circular(theme.radius.pill),
+        color: theme.colors.background,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: theme.dimensions.space.component25,
-          vertical: theme.dimensions.space.component20,
+          horizontal: theme.space.md,
+          vertical: theme.space.sm,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CharcoalIcon(
               CharcoalIcons.checkCircle,
-              color: theme.colors.iconPositiveDefault,
+              color: theme.colors.iconPositive,
               size: 16,
             ),
-            SizedBox(width: theme.dimensions.space.component20),
+            SizedBox(width: theme.space.sm),
             Text(
               label,
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textSecondaryDefault,
-                fontWeight: FontWeight.w700,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(
+                    color: theme.colors.textSecondary,
+                    fontWeight: FontWeight.w700,
+                  ),
             ),
           ],
         ),
@@ -2592,17 +2569,17 @@ final class _BrandMark extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-        color: theme.colors.containerPrimaryDefault,
+        borderRadius: BorderRadius.circular(theme.radius.md),
+        color: theme.colors.primary,
       ),
       child: SizedBox.square(
         dimension: size,
         child: Center(
           child: Text(
             'A',
-            style: theme.textStyles.captionMediumBold.copyWith(
-              color: theme.colors.textOnPrimaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMediumBold)
+                .copyWith(color: theme.colors.textOnPrimary),
           ),
         ),
       ),
@@ -2621,18 +2598,20 @@ final class _Avatar extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-        color: theme.colors.containerNoticeDefault,
+        borderRadius: BorderRadius.circular(theme.radius.pill),
+        color: theme.colors.notice,
       ),
       child: SizedBox.square(
         dimension: size,
         child: Center(
           child: Text(
             initials,
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textOnNoticeDefault,
-              fontWeight: FontWeight.w700,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(
+                  color: theme.colors.text,
+                  fontWeight: FontWeight.w700,
+                ),
           ),
         ),
       ),

@@ -163,8 +163,8 @@ final class _LumenDemoState extends State<LumenDemo> {
     return AgentDemoAppShell<LumenDestination>(
       appKey: 'wallet',
       appLabel: 'Lumen personal finance app demo',
-      brandColor: theme.colors.containerPositiveDefault,
-      brandForeground: theme.colors.textOnPositiveDefault,
+      brandColor: theme.colors.positive,
+      brandForeground: theme.colors.textOnPositive,
       brandMark: 'L',
       tabItems: const <CharcoalTabItem<LumenDestination>>[
         CharcoalTabItem<LumenDestination>(

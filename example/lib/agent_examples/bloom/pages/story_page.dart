@@ -14,18 +14,13 @@ final class _BloomStoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final creator = viewModel.state.data.creator(creatorId);
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       key: const ValueKey<String>('agent-social-story-page'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(
-            space.component30,
-            space.component20,
-            space.component30,
-            space.component20,
-          ),
+          padding: EdgeInsets.fromLTRB(space.lg, space.sm, space.lg, space.sm),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -33,33 +28,29 @@ final class _BloomStoryPage extends StatelessWidget {
                 label: 'Story 1 of 1',
                 child: ExcludeSemantics(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      theme.dimensions.radius.oval,
-                    ),
+                    borderRadius: BorderRadius.circular(theme.radius.pill),
                     child: SizedBox(
-                      height: theme.dimensions.borderWidth.l,
-                      child: ColoredBox(
-                        color: theme.colors.containerPrimaryDefault,
-                      ),
+                      height: theme.borders.thick,
+                      child: ColoredBox(color: theme.colors.primary),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: space.component20),
+              SizedBox(height: space.sm),
               Text(
                 'One moment from ${creator.location} · 1 of 1',
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textSecondaryDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(color: theme.colors.textSecondary),
               ),
             ],
           ),
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: space.component30),
+            padding: EdgeInsets.symmetric(horizontal: space.lg),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+              borderRadius: BorderRadius.circular(theme.radius.md),
               child: LayoutBuilder(
                 builder: (context, constraints) => _BloomArtwork(
                   altText: '${creator.name} shared an abstract color study.',
@@ -70,7 +61,7 @@ final class _BloomStoryPage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         _BloomReplyBar(
           fieldKey: const ValueKey<String>('agent-social-story-reply-field'),
           fieldSemanticLabel: 'Reply to ${creator.name}',

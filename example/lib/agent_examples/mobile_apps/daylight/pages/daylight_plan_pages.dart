@@ -14,7 +14,7 @@ final class DaylightTomorrowPlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-habits-tomorrow-plan-page'),
@@ -25,7 +25,7 @@ final class DaylightTomorrowPlanPage extends StatelessWidget {
             title: 'Choose tomorrow’s gentle rhythm',
             description: 'Keep what still feels useful. Nothing is carried over until you save.',
           ),
-          SizedBox(height: space.component40),
+          SizedBox(height: space.xl),
           DaylightItemGroup(
             children: <Widget>[
               for (final habit in daylightHabits)
@@ -38,13 +38,13 @@ final class DaylightTomorrowPlanPage extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalSwitch(
             label: const Text('Gentle reminder at 8:30 PM'),
             onChanged: viewModel.setTomorrowReminder,
             value: viewModel.tomorrowReminder,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-habits-save-tomorrow'),
             fullWidth: true,
@@ -71,7 +71,7 @@ final class DaylightPlanSavedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     final count = viewModel.tomorrowHabitIds.length;
     return AgentDemoPage(
       child: Column(
@@ -84,13 +84,13 @@ final class DaylightPlanSavedPage extends StatelessWidget {
             description:
                 'The plan is saved locally and now appears in your Journey.',
           ),
-          SizedBox(height: space.component40),
+          SizedBox(height: space.xl),
           AgentDemoStatus(
             message:
                 '$count ${count == 1 ? 'habit is' : 'habits are'} planned${viewModel.tomorrowReminder ? ' with a gentle evening reminder' : ''}.',
             positive: true,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-habits-continue-journey'),
             fullWidth: true,

@@ -65,7 +65,7 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
     return ShowcaseNavigation(
       select: _select,
       child: CharcoalScaffold(
-        backgroundColor: theme.colors.backgroundDefault,
+        backgroundColor: theme.colors.background,
         body: LayoutBuilder(
           builder: (context, constraints) =>
               constraints.maxWidth >= _desktopLayoutMinWidth
@@ -76,7 +76,7 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
     );
   }
 
-  Widget _buildDesktopShell(BuildContext context, CharcoalThemeData theme) =>
+  Widget _buildDesktopShell(BuildContext context, CharcoalTheme theme) =>
       ColoredBox(
         key: const ValueKey<String>('showcase-desktop-shell'),
         color: theme.colors.backgroundSecondary,
@@ -100,7 +100,7 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
         ),
       );
 
-  Widget _buildMobileShell(BuildContext context, CharcoalThemeData theme) =>
+  Widget _buildMobileShell(BuildContext context, CharcoalTheme theme) =>
       PopScope<void>(
         canPop: !_mobileNavigationOpen,
         onPopInvokedWithResult: (didPop, _) {
@@ -135,9 +135,9 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
                         ),
                       ),
                       AnimatedSwitcher(
-                        duration: CharcoalMotion.resolveDuration(
+                        duration: CharcoalTheme.of(context).duration(
                           context,
-                          CharcoalMotion.standard,
+                          CharcoalTheme.of(context).motion.standard,
                         ),
                         transitionBuilder: (child, animation) => FadeTransition(
                           opacity: animation,
@@ -149,7 +149,9 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
                                 ).animate(
                                   CurvedAnimation(
                                     parent: animation,
-                                    curve: CharcoalMotion.emphasizedCurve,
+                                    curve: CharcoalTheme.of(context)
+                                        .motion
+                                        .emphasizedCurve,
                                   ),
                                 ),
                             child: child,
@@ -182,10 +184,8 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
       ClipRect(
         key: const ValueKey<String>('showcase-page-viewport-clip'),
         child: AnimatedSwitcher(
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            CharcoalMotion.standard,
-          ),
+          duration: CharcoalTheme.of(context)
+              .duration(context, CharcoalTheme.of(context).motion.standard),
           layoutBuilder: (currentChild, previousChildren) => Stack(
             fit: StackFit.expand,
             children: <Widget>[...previousChildren, ?currentChild],
@@ -237,7 +237,8 @@ final class ShowcaseShellState extends State<ShowcaseShell> {
     _retiredScrollControllers.add(outgoingController);
     late final Timer timer;
     timer = Timer(
-      CharcoalMotion.standard + const Duration(milliseconds: 50),
+      CharcoalTheme.of(context).motion.standard +
+          const Duration(milliseconds: 50),
       () {
         _retireTimers.remove(timer);
         if (_retiredScrollControllers.remove(outgoingController)) {

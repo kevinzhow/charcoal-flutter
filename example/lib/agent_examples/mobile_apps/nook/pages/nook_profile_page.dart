@@ -14,7 +14,7 @@ final class NookProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-commerce-profile-page'),
@@ -25,7 +25,7 @@ final class NookProfilePage extends StatelessWidget {
             title: 'Your Nook at a glance',
             description: 'Return to saved ideas, your bag, or the order that needs your attention.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoProfileHeader(
             name: 'Mina Aoki',
             context: 'Nook member · Tokyo',
@@ -33,9 +33,9 @@ final class NookProfilePage extends StatelessWidget {
                 ? 'Free delivery on every order'
                 : 'Latest order is preparing for delivery',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoSectionHeading(title: 'Shopping activity'),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           Row(
             children: <Widget>[
               Expanded(
@@ -48,7 +48,7 @@ final class NookProfilePage extends StatelessWidget {
                   child: Text('Saved · ${viewModel.savedCount}'),
                 ),
               ),
-              SizedBox(width: space.component20),
+              SizedBox(width: space.sm),
               Expanded(
                 child: CharcoalButton(
                   key: const ValueKey<String>('agent-commerce-profile-bag'),
@@ -60,9 +60,9 @@ final class NookProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoSectionHeading(title: 'Latest order'),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           if (viewModel.confirmedProducts.isEmpty)
             AgentDemoEmptyState(
               actionLabel: 'Browse the collection',
@@ -77,23 +77,23 @@ final class NookProfilePage extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'NK-817',
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMediumBold)
+                        .copyWith(color: theme.colors.text),
                   ),
-                  SizedBox(height: space.component10),
+                  SizedBox(height: space.xs),
                   Text(
                     '${viewModel.confirmedProducts.length} ${viewModel.confirmedProducts.length == 1 ? 'item' : 'items'} · ${formatYen(viewModel.confirmedTotal)}',
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.caption)
+                        .copyWith(color: theme.colors.textSecondary),
                   ),
-                  SizedBox(height: space.component20),
+                  SizedBox(height: space.sm),
                   const AgentDemoStatus(
                     icon: CharcoalIcons.shopping,
                     message: 'Preparing for delivery · Estimated August 20–21',
                   ),
-                  SizedBox(height: space.component25),
+                  SizedBox(height: space.md),
                   CharcoalButton(
                     key: const ValueKey<String>(
                       'agent-commerce-view-latest-order',

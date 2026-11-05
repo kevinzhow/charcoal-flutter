@@ -33,14 +33,14 @@ final class _LumenMoneyActionsPreviewState
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return ListenableBuilder(
       listenable: viewModel,
       builder: (context, _) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           LumenBalanceCard(viewModel: viewModel),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

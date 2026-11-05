@@ -56,19 +56,19 @@ final class _AgentMultiSelectExampleState
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Prepare download', style: theme.textStyles.headingS),
-        SizedBox(height: space.layout40),
+        Text('Prepare download', style: theme.style(CharcoalTextRole.headingS)),
+        SizedBox(height: space.xl),
         const CharcoalFieldLabel(
           label: 'Export contents',
           required: true,
           requiredText: 'Required',
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         Semantics(
           container: true,
           explicitChildNodes: true,
@@ -84,27 +84,28 @@ final class _AgentMultiSelectExampleState
                       _setSelected(_options[index].value, selected: selected),
                   selected: _selected.contains(_options[index].value),
                 ),
-                if (index != _options.length - 1)
-                  SizedBox(height: space.component30),
+                if (index != _options.length - 1) SizedBox(height: space.lg),
               ],
             ],
           ),
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         Semantics(
           liveRegion: _invalid || _result != null,
           child: Text(
             _invalid
                 ? 'Select at least one content type.'
                 : _result ?? _selectionSummary,
-            style: theme.textStyles.captionMedium.copyWith(
-              color: _invalid
-                  ? theme.colors.textNegativeDefault
-                  : theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(
+                  color: _invalid
+                      ? theme.colors.textNegative
+                      : theme.colors.textSecondary,
+                ),
           ),
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         CharcoalButton(
           fullWidth: true,
           onPressed: _prepareExport,

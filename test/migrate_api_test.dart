@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 
 import '../tool/src/migrate_api.dart';
 
+
 void main() {
   final table = RenameTable.fromJson([
     {
@@ -91,6 +92,15 @@ void main() {
       'var w = ConsoleInfoRows();\n',
     );
     expect(r.text, 'var w = CharcoalInfoRows();\n');
+  });
+
+  test('rewrites multi-line imports and flags duplicates', () {
+    final r = migrator.migrate(
+      'a.dart',
+      "import 'package:charcoal_ui/charcoal_ui.dart' hide A;\nimport 'package:charcoal_ui/next.dart'\n    show A;\n",
+    );
+    expect(r.text, contains("import 'package:charcoal_ui/charcoal_ui.dart'\n    show A;"));
+    expect(r.findings.single.message, contains('more than once'));
   });
 
   test('leaves a clean file alone', () {

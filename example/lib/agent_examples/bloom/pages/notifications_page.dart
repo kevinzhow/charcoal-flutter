@@ -14,7 +14,7 @@ final class _BloomNotificationsPage extends StatelessWidget {
     final earlier = state.data.notifications
         .where((notification) => !notification.unread)
         .toList(growable: false);
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return _bloomPagePadding(
       context,
       Column(
@@ -30,13 +30,13 @@ final class _BloomNotificationsPage extends StatelessWidget {
           else ...<Widget>[
             if (unread.isNotEmpty) ...<Widget>[
               const _BloomSectionTitle(title: 'New'),
-              SizedBox(height: space.component20),
+              SizedBox(height: space.sm),
               _notificationList(unread, space),
             ],
             if (earlier.isNotEmpty) ...<Widget>[
-              if (unread.isNotEmpty) SizedBox(height: space.component30),
+              if (unread.isNotEmpty) SizedBox(height: space.lg),
               const _BloomSectionTitle(title: 'Earlier'),
-              SizedBox(height: space.component20),
+              SizedBox(height: space.sm),
               _notificationList(earlier, space),
             ],
           ],
@@ -47,7 +47,7 @@ final class _BloomNotificationsPage extends StatelessWidget {
 
   Widget _notificationList(
     List<BloomNotification> notifications,
-    CharcoalSpaceTokens space,
+    CharcoalSpaceScale space,
   ) => Column(
     children: <Widget>[
       for (var index = 0; index < notifications.length; index++) ...<Widget>[
@@ -55,8 +55,7 @@ final class _BloomNotificationsPage extends StatelessWidget {
           notification: notifications[index],
           onPressed: () => viewModel.openNotification(notifications[index]),
         ),
-        if (index + 1 < notifications.length)
-          SizedBox(height: space.component20),
+        if (index + 1 < notifications.length) SizedBox(height: space.sm),
       ],
     ],
   );

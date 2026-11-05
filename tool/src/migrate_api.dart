@@ -114,7 +114,7 @@ class ApiMigrator {
 
   static final _tripleQuotes = RegExp("'''|\"\"\"");
   static final _importLine = RegExp(
-    r'''^(\s*)(import|export)\s+(['"])package:charcoal_ui/([\w/]+\.dart)\3([^;]*);''',
+    r'''^(\s*)(import|export)\s+(['"])package:charcoal_ui/([\w/]+\.dart)\3([^;]*);?\s*$''',
   );
 
   /// Rewrites [source]; [path] only labels findings.
@@ -145,11 +145,15 @@ class ApiMigrator {
         final target = m.group(4)!;
         if (target == 'next.dart' || target == 'charcoal_ui.dart') {
           if (target == 'next.dart') replacements++;
-          if (hasLibrary && m.group(2) == 'import' && m.group(5)!.trim().isEmpty) {
+          if (hasLibrary &&
+              m.group(2) == 'import' &&
+              m.group(5)!.trim().isEmpty &&
+              line.trimRight().endsWith(';')) {
             replacements++;
             continue; // duplicate import after next.dart -> charcoal_ui.dart
           }
-          line = "${m.group(1)}${m.group(2)} '$_library'${m.group(5)};";
+          line =
+              "${m.group(1)}${m.group(2)} '$_library'${m.group(5)}${line.trimRight().endsWith(';') ? ';' : ''}";
           if (m.group(2) == 'import') hasLibrary = true;
         } else if (target == 'admin.dart') {
           hasAdmin = true;
@@ -211,6 +215,16 @@ class ApiMigrator {
     }
 
     final insideLibrary = path.replaceAll(r'\', '/').contains('packages/charcoal_ui/lib/');
+    final libraryImports = out.where((l) => l.contains("'$_library'")).length;
+    if (libraryImports > 1) {
+      findings.add(
+        MigrationFinding(
+          path,
+          1,
+          'imports $_library more than once (show/hide combinators): merge the directives by hand',
+        ),
+      );
+    }
     if (usesAdmin && !hasAdmin && !insideLibrary) {
       final at = lastImport >= 0 ? lastImport + 1 : 0;
       out.insert(at, "import '$_admin';");

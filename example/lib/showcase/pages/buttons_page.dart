@@ -1,24 +1,5 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:charcoal_ui/charcoal_ui.dart'
-    hide
-        CharcoalButton,
-        CharcoalButtonSize,
-        CharcoalButtonVariant,
-        CharcoalIconButton,
-        CharcoalIconButtonSize,
-        CharcoalIconButtonVariant,
-        CharcoalLinkButton,
-        CharcoalSwitchingButton;
-import 'package:charcoal_ui/next.dart'
-    show
-        CharcoalButton,
-        CharcoalButtonSize,
-        CharcoalButtonVariant,
-        CharcoalIconButton,
-        CharcoalIconButtonSize,
-        CharcoalIconButtonVariant,
-        CharcoalLinkButton,
-        CharcoalSwitchingButton;
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';
@@ -173,10 +154,7 @@ final class _ButtonVariantCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 gradient: LinearGradient(
-                  colors: <Color>[
-                    theme.colors.containerDiscoveryDefault,
-                    theme.colors.containerPrimaryDefault,
-                  ],
+                  colors: <Color>[theme.colors.negative, theme.colors.primary],
                 ),
               ),
               child: Padding(padding: const EdgeInsets.all(20), child: content),
@@ -230,7 +208,7 @@ final class _IconButtonVariantCard extends StatelessWidget {
           ? DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: theme.colors.containerDiscoveryDefault,
+                color: theme.colors.negative,
               ),
               child: Padding(padding: const EdgeInsets.all(20), child: content),
             )
@@ -261,23 +239,23 @@ final class _ClickableCard extends StatelessWidget {
               ? 'Hovered'
               : 'Interactive surface';
           return AnimatedContainer(
-            duration: CharcoalMotion.standard,
+            duration: CharcoalTheme.of(context).motion.standard,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              border: Border.all(color: theme.colors.borderSecondary),
+              border: Border.all(color: theme.colors.borderSubtle),
               borderRadius: BorderRadius.circular(12),
               color: pressed
-                  ? theme.colors.containerSecondaryPress
+                  ? theme.colors.surfaceSecondaryPress
                   : hovered
-                  ? theme.colors.containerSecondaryHover
-                  : theme.colors.containerSecondaryDefault,
+                  ? theme.colors.surfaceSecondaryHover
+                  : theme.colors.surfaceSecondary,
             ),
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: theme.textStyles.bodyBold.copyWith(
-                color: theme.colors.textDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.bodyLargeBold)
+                  .copyWith(color: theme.colors.text),
             ),
           );
         },

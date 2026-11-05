@@ -2,72 +2,9 @@ import 'index.dart';
 
 /// Catalog metadata fragment: theme.
 const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>{
-  'CharcoalTheme': ComponentMetadata(
-    category: 'Foundation',
-    summary: 'Propagates one coherent Charcoal token set through a Widgets-layer subtree.',
-    keywords: <String>[
-      'dark theme',
-      'inherited theme',
-      'light theme',
-      'scoped theme',
-      'semantic tokens',
-      'theme data',
-    ],
-    useWhen: <String>[
-      'A package-level subtree needs Charcoal colors, dimensions, typography, and brightness without Material or Cupertino dependencies.',
-      'An isolated specimen or audited section needs one scoped token override while the rest of the application keeps its current theme.',
-    ],
-    avoidWhen: <String>[
-      'CharcoalApp already owns the application root; pass lightTheme, darkTheme, and themeMode there instead of adding a duplicate root wrapper.',
-      'One component needs an ad hoc visual tweak; prefer its semantic API or a narrowly audited token override rather than nesting themes throughout the tree.',
-      'Only brightness is changing while colors and typography remain from another mode; construct a coherent light or dark data set instead.',
-      'User preference persistence or platform-mode observation is required; those remain application state owned by CharcoalApp and its caller.',
-    ],
-    accessibility: <String>[
-      'The theme adds no semantics by itself; components remain responsible for labels, roles, states, focus, and feedback.',
-      'Any custom token set must preserve readable color relationships and perceivable interaction states in every supported mode.',
-      'Keep ambient MediaQuery text scaling, reduced motion, directionality, and platform accessibility settings outside the token object intact.',
-    ],
-    responsiveBehavior: <String>[
-      'CharcoalTheme owns no layout; descendants resolve dimensions and typography from the nearest scoped data.',
-      'As an InheritedTheme it is captured across framework overlay boundaries so menus, dialogs, and other captured subtrees retain the exact scope.',
-      'Replace data atomically when a mode or scoped override changes so all dependents rebuild from one consistent frame.',
-    ],
-    interactionStates: <String>[
-      'light data',
-      'dark data',
-      'scoped override',
-      'captured overlay',
-      'data replacement',
-    ],
-    feedbackResponsibilities: <String>[
-      'Owns dependency propagation and captured-theme continuity for colors, dimensions, typography, and brightness.',
-      'The caller owns mode selection, preference persistence, system observation, override audits, and any transition between data sets.',
-    ],
-    tokenRoles: <String>[
-      'backgroundDefault',
-      'textDefault',
-      'space.layout40',
-      'text.font-family/sans',
-    ],
-    relatedComponents: <String>[
-      'CharcoalApp',
-      'CharcoalTypography',
-      'CharcoalTextEllipsis',
-    ],
-    companionDeclarations: <String>['CharcoalThemeData'],
-    examples: <ExampleMetadata>[
-      ExampleMetadata(
-        id: 'theme-scoped-typography',
-        title: 'Scoped coherent light and dark token sets',
-        description: 'Replaces one complete scoped theme while semantic and numeric typography resolve from the same frame.',
-        sourcePath: 'example/lib/agent_examples/theme_typography_example.dart',
-      ),
-    ],
-  ),
   'CharcoalTypography': ComponentMetadata(
     category: 'Content',
-    summary: 'Applies Charcoal’s audited numeric component type scale without suppressing ambient text scaling.',
+    summary: 'Applies Charcoal’s numeric component type roles (size10 to size20) from the active theme pack without suppressing ambient text scaling.',
     keywords: <String>[
       'component typography',
       'dynamic type',
@@ -81,7 +18,7 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'A short code-like value needs the upstream single-line monospace variant.',
     ],
     avoidWhen: <String>[
-      'A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalTheme.of(context).textStyles instead.',
+      'A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalText or CharcoalTheme.of(context).style(CharcoalTextRole...) instead.',
       'Text has a product-specific visual style unrelated to a reviewed Charcoal component; compose an audited TextStyle from semantic theme roles.',
       'Content must remain multiline while monospace is true; the upstream monospace variant is deliberately single-line.',
     ],
@@ -115,15 +52,11 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'textDefaultText1',
     ],
     relatedComponents: <String>[
-      'CharcoalTheme',
+      'CharcoalApp',
       'CharcoalTextEllipsis',
       'CharcoalFieldLabel',
     ],
-    companionDeclarations: <String>[
-      'CharcoalTypographySize',
-      'CharcoalTypographyWeight',
-      'charcoalTypographyStyle',
-    ],
+    companionDeclarations: <String>['CharcoalTextRole'],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'typography-semantic-and-numeric',
@@ -210,7 +143,7 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'Declarative routing or deep links need the same Charcoal infrastructure as imperative Navigator routes.',
     ],
     avoidWhen: <String>[
-      'Only a subtree needs a theme override; wrap that subtree in CharcoalTheme instead.',
+      'Only a subtree needs a theme override; wrap that subtree in a Theme built with buildCharcoalThemeData.',
       'A nested flow needs its own Navigator; keep the application shell at the root and add a nested Navigator locally.',
     ],
     accessibility: <String>[
@@ -234,7 +167,7 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
     ],
     relatedComponents: <String>[
       'CharcoalPageRoute',
-      'CharcoalTheme',
+      'CharcoalScaffold',
       'CharcoalNavigationBar',
       'CharcoalTabBar',
     ],

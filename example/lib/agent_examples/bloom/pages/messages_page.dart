@@ -14,7 +14,7 @@ final class _BloomMessagesPage extends StatelessWidget {
         return left.unread ? -1 : 1;
       });
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -27,18 +27,18 @@ final class _BloomMessagesPage extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Pick up the conversations that need you first.',
-                  style: theme.textStyles.captionMedium.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMedium)
+                      .copyWith(color: theme.colors.textSecondary),
                 ),
               ),
               if (state.unreadConversationCount > 0) ...<Widget>[
-                SizedBox(width: space.component20),
+                SizedBox(width: space.sm),
                 _BloomCountBadge(count: state.unreadConversationCount),
               ],
             ],
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           for (
             var index = 0;
             index < conversations.length;
@@ -53,8 +53,7 @@ final class _BloomMessagesPage extends StatelessWidget {
               onPressed: () =>
                   viewModel.openConversation(conversations[index].id),
             ),
-            if (index + 1 < conversations.length)
-              SizedBox(height: space.component20),
+            if (index + 1 < conversations.length) SizedBox(height: space.sm),
           ],
         ],
       ),
@@ -92,18 +91,16 @@ final class _BloomConversationPageState extends State<_BloomConversationPage> {
     final conversation = state.data.conversation(widget.conversationId);
     final creator = state.data.creator(conversation.creatorId);
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     if (_lastMessageCount != conversation.messages.length) {
       _lastMessageCount = conversation.messages.length;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || !_scrollController.hasClients) return;
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: CharcoalMotion.resolveDuration(
-            context,
-            const Duration(milliseconds: 220),
-          ),
-          curve: CharcoalMotion.standardCurve,
+          duration: CharcoalTheme.of(context)
+              .duration(context, const Duration(milliseconds: 220)),
+          curve: CharcoalTheme.of(context).motion.curve,
         );
       });
     }
@@ -115,21 +112,21 @@ final class _BloomConversationPageState extends State<_BloomConversationPage> {
           child: ListView(
             controller: _scrollController,
             padding: EdgeInsets.fromLTRB(
-              space.component30,
-              space.component25,
-              space.component30,
-              space.component30,
+              space.lg,
+              space.md,
+              space.lg,
+              space.lg,
             ),
             children: <Widget>[
               Center(
                 child: Text(
                   'Today',
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textTertiaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(color: theme.colors.textTertiary),
                 ),
               ),
-              SizedBox(height: space.component30),
+              SizedBox(height: space.lg),
               for (
                 var index = 0;
                 index < conversation.messages.length;
@@ -145,7 +142,7 @@ final class _BloomConversationPageState extends State<_BloomConversationPage> {
                   ),
                 ),
                 if (index + 1 < conversation.messages.length)
-                  SizedBox(height: space.component20),
+                  SizedBox(height: space.sm),
               ],
             ],
           ),
@@ -183,7 +180,7 @@ final class _BloomMessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Align(
       alignment: message.own
           ? AlignmentDirectional.centerEnd
@@ -198,36 +195,38 @@ final class _BloomMessageBubble extends StatelessWidget {
             if (!message.own) ...<Widget>[
               Text(
                 creatorName,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textTertiaryDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(color: theme.colors.textTertiary),
               ),
-              SizedBox(height: space.component10),
+              SizedBox(height: space.xs),
             ],
             DecoratedBox(
               decoration: BoxDecoration(
                 border: message.own
                     ? null
-                    : Border.all(color: theme.colors.borderSecondary),
-                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+                    : Border.all(color: theme.colors.borderSubtle),
+                borderRadius: BorderRadius.circular(theme.radius.md),
                 color: message.own
-                    ? theme.colors.containerPrimaryDefault
-                    : theme.colors.backgroundDefault,
+                    ? theme.colors.primary
+                    : theme.colors.background,
               ),
               child: Padding(
-                padding: EdgeInsets.all(space.component20),
+                padding: EdgeInsets.all(space.sm),
                 child: Text(
                   message.text,
-                  style: theme.textStyles.captionMedium.copyWith(
-                    color: message.own
-                        ? theme.colors.textOnPrimaryDefault
-                        : theme.colors.textDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMedium)
+                      .copyWith(
+                        color: message.own
+                            ? theme.colors.textOnPrimary
+                            : theme.colors.text,
+                      ),
                 ),
               ),
             ),
             if (message.own) ...<Widget>[
-              SizedBox(height: space.component10),
+              SizedBox(height: space.xs),
               _BloomDeliveryStatus(message: message, onRetry: onRetry),
             ],
           ],
@@ -246,24 +245,26 @@ final class _BloomDeliveryStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final textStyle = theme.textStyles.captionSmall.copyWith(
-      color: message.delivery == BloomMessageDelivery.failed
-          ? theme.colors.textNegativeDefault
-          : theme.colors.textTertiaryDefault,
-      fontSize: 10,
-    );
+    final textStyle = theme
+        .style(CharcoalTextRole.caption)
+        .copyWith(
+          color: message.delivery == BloomMessageDelivery.failed
+              ? theme.colors.textNegative
+              : theme.colors.textTertiary,
+          fontSize: 10,
+        );
     return switch (message.delivery) {
       BloomMessageDelivery.sending => Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           CharcoalLoadingSpinner(
-            color: theme.colors.iconTertiaryDefault,
+            color: theme.colors.iconTertiary,
             padding: 0,
             semanticLabel: 'Sending message',
             size: 8,
             transparent: true,
           ),
-          SizedBox(width: theme.dimensions.space.component10),
+          SizedBox(width: theme.space.xs),
           Text('Sending…', style: textStyle),
         ],
       ),

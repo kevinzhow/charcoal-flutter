@@ -2,7 +2,6 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';
-import 'next_island.dart';
 
 /// The theme contract of the active pack: colour roles, scales and metric groups.
 final class RolesPage extends StatelessWidget {
@@ -20,7 +19,7 @@ final class RolesPage extends StatelessWidget {
         title: 'Theme roles',
       ),
       SizedBox(height: 24),
-      NextThemeIsland(child: _RoleCards()),
+      _RoleCards(),
     ],
   );
 }

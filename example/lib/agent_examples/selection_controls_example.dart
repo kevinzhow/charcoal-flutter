@@ -21,21 +21,24 @@ final class _AgentSelectionControlsExampleState
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Publishing preferences', style: theme.textStyles.headingS),
-        SizedBox(height: space.component30),
+        Text(
+          'Publishing preferences',
+          style: theme.style(CharcoalTextRole.headingS),
+        ),
+        SizedBox(height: space.lg),
         CharcoalCheckbox(
           value: _saveDrafts,
           onChanged: (value) => setState(() => _saveDrafts = value),
           label: const Text('Save drafts automatically'),
         ),
-        SizedBox(height: space.layout40),
-        Text('Audience', style: theme.textStyles.bodyBold),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.xl),
+        Text('Audience', style: theme.style(CharcoalTextRole.bodyLargeBold)),
+        SizedBox(height: space.sm),
         Semantics(
           container: true,
           explicitChildNodes: true,
@@ -49,14 +52,14 @@ final class _AgentSelectionControlsExampleState
                 onChanged: (value) => setState(() => _audience = value),
                 label: const Text('Everyone'),
               ),
-              SizedBox(height: space.component30),
+              SizedBox(height: space.lg),
               CharcoalRadio<_Audience>(
                 value: _Audience.followers,
                 groupValue: _audience,
                 onChanged: (value) => setState(() => _audience = value),
                 label: const Text('Followers'),
               ),
-              SizedBox(height: space.component30),
+              SizedBox(height: space.lg),
               CharcoalRadio<_Audience>(
                 value: _Audience.private,
                 groupValue: _audience,
@@ -66,7 +69,7 @@ final class _AgentSelectionControlsExampleState
             ],
           ),
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         CharcoalSwitch(
           value: _releaseNotifications,
           onChanged: (value) => setState(() => _releaseNotifications = value),

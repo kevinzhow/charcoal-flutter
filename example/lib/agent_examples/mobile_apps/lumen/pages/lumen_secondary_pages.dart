@@ -12,7 +12,7 @@ final class LumenActivityPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-activity-page'),
@@ -23,10 +23,10 @@ final class LumenActivityPage extends StatelessWidget {
             title: 'Every movement, in one place',
             description: 'Transfers and top-ups remain here after transient task feedback ends.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           for (final item in viewModel.activity)
             Padding(
-              padding: EdgeInsets.only(bottom: space.component20),
+              padding: EdgeInsets.only(bottom: space.sm),
               child: LumenActivityRow(activity: item),
             ),
         ],
@@ -40,7 +40,7 @@ final class LumenPlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-plan-page'),
@@ -51,11 +51,11 @@ final class LumenPlanPage extends StatelessWidget {
             title: 'Spend with a little more intention',
             description: 'Category context supports decisions without competing with Wallet actions.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoStatus(
             message: '¥68,420 of your ¥120,000 flexible budget remains.',
           ),
-          SizedBox(height: space.component25),
+          SizedBox(height: space.md),
           for (final item in const <(String, String)>[
             ('Home and groceries', '¥31,200 left'),
             ('Creative supplies', '¥18,900 left'),
@@ -69,7 +69,7 @@ final class LumenPlanPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: space.component20),
+            SizedBox(height: space.sm),
           ],
         ],
       ),
@@ -84,7 +84,7 @@ final class LumenProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-profile-page'),
@@ -95,7 +95,7 @@ final class LumenProfilePage extends StatelessWidget {
             title: 'Privacy and everyday choices',
             description: 'Control what is visible at a glance and how small card purchases are handled.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoProfileHeader(
             name: 'Mina Aoki',
             context: 'Personal wallet · Linked bank •••• 2418',
@@ -103,9 +103,9 @@ final class LumenProfilePage extends StatelessWidget {
                 ? 'Wallet balance is private'
                 : 'Wallet balance is visible',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoSectionHeading(title: 'Privacy'),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           AgentDemoPreferenceSwitch(
             key: const ValueKey<String>('agent-wallet-profile-balance'),
             description: 'Keep the amount private when Wallet opens. You can still reveal it from the balance card.',
@@ -116,9 +116,9 @@ final class LumenProfilePage extends StatelessWidget {
                 : 'Balance is visible on Wallet',
             value: viewModel.balanceHidden,
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoSectionHeading(title: 'Everyday automation'),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           AgentDemoPreferenceSwitch(
             key: const ValueKey<String>('agent-wallet-profile-round-ups'),
             description: 'Set aside the small difference to the next ¥100 after future card purchases.',

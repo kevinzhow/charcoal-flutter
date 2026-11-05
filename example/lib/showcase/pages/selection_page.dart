@@ -1,13 +1,4 @@
-import 'package:charcoal_ui/next.dart'
-    show
-        CharcoalCheckbox,
-        CharcoalMultiSelect,
-        CharcoalMultiSelectVariant,
-        CharcoalRadio,
-        CharcoalSegment,
-        CharcoalSegmentedControl,
-        CharcoalSlider,
-        CharcoalSwitch;
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';

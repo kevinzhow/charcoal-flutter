@@ -21,7 +21,7 @@ final class ShowcaseSidebar extends StatelessWidget {
     return SizedBox(
       width: 247,
       child: DecoratedBox(
-        decoration: BoxDecoration(color: theme.colors.backgroundDefault),
+        decoration: BoxDecoration(color: theme.colors.background),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18, 22, 18, 20),
           child: Column(
@@ -34,16 +34,16 @@ final class ShowcaseSidebar extends StatelessWidget {
                     DecoratedBox(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: theme.colors.containerPrimaryDefault,
+                        color: theme.colors.primary,
                       ),
                       child: SizedBox.square(
                         dimension: 40,
                         child: Center(
                           child: Text(
                             'C',
-                            style: theme.textStyles.headingXxs.copyWith(
-                              color: theme.colors.textOnPrimaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.headingXxs)
+                                .copyWith(color: theme.colors.textOnPrimary),
                           ),
                         ),
                       ),
@@ -55,15 +55,15 @@ final class ShowcaseSidebar extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             'Charcoal UI',
-                            style: theme.textStyles.bodyBold.copyWith(
-                              color: theme.colors.textDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.bodyLargeBold)
+                                .copyWith(color: theme.colors.text),
                           ),
                           Text(
                             'Flutter · V2',
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textTertiaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(color: theme.colors.textTertiary),
                           ),
                         ],
                       ),
@@ -83,11 +83,13 @@ final class ShowcaseSidebar extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(12, 13, 12, 7),
                             child: Text(
                               section.$1.label,
-                              style: theme.textStyles.captionSmall.copyWith(
-                                color: theme.colors.textTertiaryDefault,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1,
-                              ),
+                              style: theme
+                                  .style(CharcoalTextRole.caption)
+                                  .copyWith(
+                                    color: theme.colors.textTertiary,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1,
+                                  ),
                             ),
                           ),
                         ],
@@ -100,7 +102,7 @@ final class ShowcaseSidebar extends StatelessWidget {
                             onPressed: () => onSelected(item.id),
                             child: Text(item.title),
                           ),
-                          SizedBox(height: theme.dimensions.space.component10),
+                          SizedBox(height: theme.space.xs),
                         ],
                       ],
                     ],
@@ -140,7 +142,7 @@ final class ShowcaseSidebarStatusCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: theme.colors.containerSecondaryDefault,
+        color: theme.colors.surfaceSecondary,
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -152,7 +154,7 @@ final class ShowcaseSidebarStatusCard extends StatelessWidget {
                 DecoratedBox(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(999),
-                    color: theme.colors.containerPositiveDefault,
+                    color: theme.colors.positive,
                   ),
                   child: const SizedBox.square(dimension: 8),
                 ),
@@ -162,9 +164,9 @@ final class ShowcaseSidebarStatusCard extends StatelessWidget {
                     'Tokens synchronized',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMediumBold)
+                        .copyWith(color: theme.colors.text),
                   ),
                 ),
               ],
@@ -172,17 +174,17 @@ final class ShowcaseSidebarStatusCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Rendering backend',
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textSecondaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(color: theme.colors.textSecondary),
             ),
             const SizedBox(height: 2),
             Text(
               renderingBackend,
               key: const ValueKey<String>('showcase-rendering-backend'),
-              style: theme.textStyles.captionMediumBold.copyWith(
-                color: theme.colors.textDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMediumBold)
+                  .copyWith(color: theme.colors.text),
             ),
           ],
         ),
@@ -202,7 +204,7 @@ final class ShowcaseSidebarDivider extends StatelessWidget {
       child: SizedBox(
         width: 1,
         height: double.infinity,
-        child: ColoredBox(color: theme.colors.borderSecondary),
+        child: ColoredBox(color: theme.colors.borderSubtle),
       ),
     );
   }

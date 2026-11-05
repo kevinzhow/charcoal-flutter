@@ -6,13 +6,13 @@ import '../../showcase/theme.dart';
 
 Widget agentComponentPreviewWrapper(Widget child) => CharcoalApp(
   title: 'Agent Ready component preview',
-  theme: buildShowcaseTheme(Brightness.light),
-  darkTheme: buildShowcaseTheme(Brightness.dark),
+  lightPack: buildShowcasePack(Brightness.light),
+  darkPack: buildShowcasePack(Brightness.dark),
   home: Builder(
     builder: (context) {
       final theme = CharcoalTheme.of(context);
       return ColoredBox(
-        color: theme.colors.backgroundDefault,
+        color: theme.colors.background,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: child,
@@ -24,11 +24,11 @@ Widget agentComponentPreviewWrapper(Widget child) => CharcoalApp(
 
 Widget agentPagePreviewWrapper(Widget child) => CharcoalApp(
   title: 'Agent Ready page preview',
-  theme: buildShowcaseTheme(Brightness.light),
-  darkTheme: buildShowcaseTheme(Brightness.dark),
+  lightPack: buildShowcasePack(Brightness.light),
+  darkPack: buildShowcasePack(Brightness.dark),
   home: Builder(
     builder: (context) => ColoredBox(
-      color: CharcoalTheme.of(context).colors.backgroundDefault,
+      color: CharcoalTheme.of(context).colors.background,
       child: child,
     ),
   ),

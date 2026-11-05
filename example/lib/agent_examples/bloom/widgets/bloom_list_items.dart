@@ -9,23 +9,24 @@ final class _BloomTopicTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return CharcoalClickable(
       onPressed: onPressed,
       semanticLabel: 'Open ${topic.label} collection',
       builder: (context, states) => AnimatedContainer(
-        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
-        padding: EdgeInsets.all(space.component25),
+        duration: CharcoalTheme.of(context)
+            .duration(context, CharcoalTheme.of(context).motion.fast),
+        padding: EdgeInsets.all(space.md),
         decoration: BoxDecoration(
           border: Border.all(
             color: states.contains(WidgetState.hovered)
-                ? theme.colors.borderDefault
-                : theme.colors.borderSecondary,
+                ? theme.colors.border
+                : theme.colors.borderSubtle,
           ),
-          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+          borderRadius: BorderRadius.circular(theme.radius.md),
           color: states.contains(WidgetState.pressed)
-              ? theme.colors.containerSecondaryPressA
-              : theme.colors.backgroundDefault,
+              ? theme.colors.fillSecondaryPress
+              : theme.colors.background,
         ),
         child: Row(
           children: <Widget>[
@@ -35,24 +36,24 @@ final class _BloomTopicTile extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     topic.label,
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMediumBold)
+                        .copyWith(color: theme.colors.text),
                   ),
-                  SizedBox(height: space.component10),
+                  SizedBox(height: space.xs),
                   Text(
                     topic.description,
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.caption)
+                        .copyWith(color: theme.colors.textSecondary),
                   ),
                 ],
               ),
             ),
-            SizedBox(width: space.component20),
+            SizedBox(width: space.sm),
             CharcoalIcon(
               CharcoalIcons.chevronRight,
-              color: theme.colors.iconSecondaryDefault,
+              color: theme.colors.iconSecondary,
               size: 16,
             ),
           ],
@@ -78,7 +79,7 @@ final class _BloomCreatorTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _BloomSurface(
       child: Row(
         children: <Widget>[
@@ -87,10 +88,8 @@ final class _BloomCreatorTile extends StatelessWidget {
               onPressed: onOpen,
               semanticLabel: 'Open ${creator.name} profile',
               builder: (context, states) => AnimatedOpacity(
-                duration: CharcoalMotion.resolveDuration(
-                  context,
-                  CharcoalMotion.fast,
-                ),
+                duration: CharcoalTheme.of(context)
+                    .duration(context, CharcoalTheme.of(context).motion.fast),
                 opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
                 child: Row(
                   children: <Widget>[
@@ -99,7 +98,7 @@ final class _BloomCreatorTile extends StatelessWidget {
                       tone: creator.tone,
                       size: 42,
                     ),
-                    SizedBox(width: space.component20),
+                    SizedBox(width: space.sm),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,17 +107,17 @@ final class _BloomCreatorTile extends StatelessWidget {
                             creator.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textStyles.captionMediumBold.copyWith(
-                              color: theme.colors.textDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.captionMediumBold)
+                                .copyWith(color: theme.colors.text),
                           ),
                           Text(
                             creator.handle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textStyles.captionSmall.copyWith(
-                              color: theme.colors.textSecondaryDefault,
-                            ),
+                            style: theme
+                                .style(CharcoalTextRole.caption)
+                                .copyWith(color: theme.colors.textSecondary),
                           ),
                         ],
                       ),
@@ -128,7 +127,7 @@ final class _BloomCreatorTile extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: space.component20),
+          SizedBox(width: space.sm),
           CharcoalButton(
             onPressed: onFollow,
             selected: followed,
@@ -156,22 +155,23 @@ final class _BloomConversationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return CharcoalClickable(
       onPressed: onPressed,
       semanticLabel:
           '${creator.name}, ${conversation.unread ? 'unread, ' : ''}${conversation.preview}',
       builder: (context, states) => AnimatedContainer(
-        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
-        padding: EdgeInsets.all(space.component25),
+        duration: CharcoalTheme.of(context)
+            .duration(context, CharcoalTheme.of(context).motion.fast),
+        padding: EdgeInsets.all(space.md),
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSecondary),
-          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+          border: Border.all(color: theme.colors.borderSubtle),
+          borderRadius: BorderRadius.circular(theme.radius.md),
           color: states.contains(WidgetState.pressed)
-              ? theme.colors.containerSecondaryPressA
+              ? theme.colors.fillSecondaryPress
               : conversation.unread
-              ? theme.colors.containerSecondaryDefault
-              : theme.colors.backgroundDefault,
+              ? theme.colors.surfaceSecondary
+              : theme.colors.background,
         ),
         child: Row(
           children: <Widget>[
@@ -180,7 +180,7 @@ final class _BloomConversationTile extends StatelessWidget {
               tone: creator.tone,
               size: 44,
             ),
-            SizedBox(width: space.component20),
+            SizedBox(width: space.sm),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,30 +192,32 @@ final class _BloomConversationTile extends StatelessWidget {
                           creator.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textStyles.captionMediumBold.copyWith(
-                            color: theme.colors.textDefault,
-                          ),
+                          style: theme
+                              .style(CharcoalTextRole.captionMediumBold)
+                              .copyWith(color: theme.colors.text),
                         ),
                       ),
                       Text(
                         conversation.time,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textTertiaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textTertiary),
                       ),
                     ],
                   ),
-                  SizedBox(height: space.component10),
+                  SizedBox(height: space.xs),
                   Text(
                     conversation.preview,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                      fontWeight: conversation.unread
-                          ? FontWeight.w700
-                          : FontWeight.w400,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.caption)
+                        .copyWith(
+                          color: theme.colors.textSecondary,
+                          fontWeight: conversation.unread
+                              ? FontWeight.w700
+                              : FontWeight.w400,
+                        ),
                   ),
                 ],
               ),
@@ -239,22 +241,23 @@ final class _BloomNotificationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return CharcoalClickable(
       onPressed: onPressed,
       semanticLabel:
           '${notification.unread ? 'Unread. ' : ''}${notification.description}',
       builder: (context, states) => AnimatedContainer(
-        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
-        padding: EdgeInsets.all(space.component25),
+        duration: CharcoalTheme.of(context)
+            .duration(context, CharcoalTheme.of(context).motion.fast),
+        padding: EdgeInsets.all(space.md),
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSecondary),
-          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+          border: Border.all(color: theme.colors.borderSubtle),
+          borderRadius: BorderRadius.circular(theme.radius.md),
           color: states.contains(WidgetState.pressed)
-              ? theme.colors.containerSecondaryPressA
+              ? theme.colors.fillSecondaryPress
               : notification.unread
-              ? theme.colors.containerSecondaryDefault
-              : theme.colors.backgroundDefault,
+              ? theme.colors.surfaceSecondary
+              : theme.colors.background,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,27 +266,29 @@ final class _BloomNotificationTile extends StatelessWidget {
               notification.kind == BloomNotificationKind.likedPost
                   ? CharcoalIcons.heart
                   : CharcoalIcons.personAdd,
-              color: theme.colors.iconSecondaryDefault,
+              color: theme.colors.iconSecondary,
               size: 20,
             ),
-            SizedBox(width: space.component20),
+            SizedBox(width: space.sm),
             Expanded(
               child: Text(
                 notification.description,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textDefault,
-                  fontWeight: notification.unread
-                      ? FontWeight.w700
-                      : FontWeight.w400,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(
+                      color: theme.colors.text,
+                      fontWeight: notification.unread
+                          ? FontWeight.w700
+                          : FontWeight.w400,
+                    ),
               ),
             ),
-            SizedBox(width: space.component20),
+            SizedBox(width: space.sm),
             Text(
               notification.time,
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textTertiaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(color: theme.colors.textTertiary),
             ),
           ],
         ),

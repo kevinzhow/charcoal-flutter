@@ -1,3 +1,4 @@
+import 'package:charcoal_tokens/charcoal_tokens.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
@@ -11,6 +12,9 @@ final class DimensionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    final tokens = theme.brightness == Brightness.dark
+        ? CharcoalGeneratedDimensionTokens.dark
+        : CharcoalGeneratedDimensionTokens.light;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -24,25 +28,25 @@ final class DimensionsPage extends StatelessWidget {
           children: <Widget>[
             _DimensionCatalog(
               description: 'Component, layout, padding, and target values.',
-              entries: theme.dimensions.space.entries,
+              entries: tokens.space.entries,
               kind: _DimensionKind.space,
               title: 'Space',
             ),
             _DimensionCatalog(
               description: 'Corner geometry including the oval primitive.',
-              entries: theme.dimensions.radius.entries,
+              entries: tokens.radius.entries,
               kind: _DimensionKind.radius,
               title: 'Radius',
             ),
             _DimensionCatalog(
               description: 'Standard and focus-ring stroke widths.',
-              entries: theme.dimensions.borderWidth.entries,
+              entries: tokens.borderWidth.entries,
               kind: _DimensionKind.borderWidth,
               title: 'Border width',
             ),
             _DimensionCatalog(
               description: 'Compact, regular, and cozy reading measures.',
-              entries: theme.dimensions.paragraphWidth.entries,
+              entries: tokens.paragraphWidth.entries,
               kind: _DimensionKind.paragraphWidth,
               title: 'Paragraph width',
             ),
@@ -95,9 +99,9 @@ final class _DimensionTokenTile extends StatelessWidget {
       width: 180,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSecondary),
+          border: Border.all(color: theme.colors.borderSubtle),
           borderRadius: BorderRadius.circular(10),
-          color: theme.colors.backgroundDefault,
+          color: theme.colors.background,
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -116,18 +120,22 @@ final class _DimensionTokenTile extends StatelessWidget {
                 entry.path,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textSecondaryDefault,
-                  fontFamily: 'monospace',
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(
+                      color: theme.colors.textSecondary,
+                      fontFamily: 'monospace',
+                    ),
               ),
               const SizedBox(height: 2),
               Text(
                 '${formatShowcaseNumber(entry.value)} px',
-                style: theme.textStyles.captionMediumBold.copyWith(
-                  color: theme.colors.textDefault,
-                  fontFamily: 'monospace',
-                ),
+                style: theme
+                    .style(CharcoalTextRole.captionMediumBold)
+                    .copyWith(
+                      color: theme.colors.text,
+                      fontFamily: 'monospace',
+                    ),
               ),
             ],
           ),
@@ -136,12 +144,12 @@ final class _DimensionTokenTile extends StatelessWidget {
     );
   }
 
-  Widget _visual(CharcoalThemeData theme) => switch (kind) {
+  Widget _visual(CharcoalTheme theme) => switch (kind) {
     _DimensionKind.radius => DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(color: theme.colors.borderSelected),
         borderRadius: BorderRadius.circular(entry.value.clamp(0, 28)),
-        color: theme.colors.containerSecondaryDefaultA,
+        color: theme.colors.fillSecondary,
       ),
       child: const SizedBox(width: 72, height: 48),
     ),
@@ -161,14 +169,14 @@ final class _DimensionTokenTile extends StatelessWidget {
     _DimensionKind.paragraphWidth => DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
-        color: theme.colors.containerDiscoveryDefault,
+        color: theme.colors.negative,
       ),
       child: SizedBox(width: (entry.value / 5).clamp(24, 150), height: 14),
     ),
     _DimensionKind.space => DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
-        color: theme.colors.containerPrimaryDefault,
+        color: theme.colors.primary,
       ),
       child: SizedBox(width: (entry.value * 2).clamp(2, 150), height: 14),
     ),
