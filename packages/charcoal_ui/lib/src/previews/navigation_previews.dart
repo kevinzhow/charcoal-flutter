@@ -2,10 +2,10 @@ import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../admin.dart';
-import '../../next.dart';
-import 'next_preview_support.dart';
+import '../../charcoal_ui.dart';
+import 'preview_support.dart';
 
-@CharcoalNextComponentPreview(name: 'Navigation', size: Size(420, 360))
+@CharcoalComponentPreview(name: 'Navigation', size: Size(420, 360))
 Widget charcoalNavigationPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,
@@ -49,7 +49,7 @@ Widget charcoalNavigationPreview() => Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Tab bar', size: Size(420, 180))
+@CharcoalComponentPreview(name: 'Tab bar', size: Size(420, 180))
 Widget charcoalTabBarPreview() => const _TabBarPreview();
 
 final class _TabBarPreview extends StatefulWidget {
@@ -94,7 +94,7 @@ final class _TabBarPreviewState extends State<_TabBarPreview> {
   );
 }
 
-@CharcoalNextComponentPreview(name: 'Pagination', size: Size(420, 220))
+@CharcoalComponentPreview(name: 'Pagination', size: Size(420, 220))
 Widget charcoalPaginationPreview() => const _PaginationPreview();
 
 final class _PaginationPreview extends StatefulWidget {
@@ -127,7 +127,7 @@ final class _PaginationPreviewState extends State<_PaginationPreview> {
   );
 }
 
-@CharcoalNextComponentPreview(name: 'List and cards', size: Size(480, 560))
+@CharcoalComponentPreview(name: 'List and cards', size: Size(480, 560))
 Widget charcoalLayoutPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,
@@ -166,7 +166,7 @@ Widget charcoalLayoutPreview() => Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Interaction primitive', size: Size(420, 220))
+@CharcoalComponentPreview(name: 'Interaction primitive', size: Size(420, 220))
 Widget charcoalClickablePreview() => Builder(
   builder: (context) {
     final theme = CharcoalTheme.of(context);

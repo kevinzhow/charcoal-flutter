@@ -1,10 +1,10 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../next.dart';
-import 'next_preview_support.dart';
+import '../../charcoal_ui.dart';
+import 'preview_support.dart';
 
-@CharcoalNextComponentPreview(name: 'Buttons', size: Size(420, 460))
+@CharcoalComponentPreview(name: 'Buttons', size: Size(420, 460))
 Widget charcoalButtonGalleryPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,
@@ -17,7 +17,7 @@ Widget charcoalButtonGalleryPreview() => Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Icon actions', size: Size(420, 180))
+@CharcoalComponentPreview(name: 'Icon actions', size: Size(420, 180))
 Widget charcoalIconActionsPreview() => Row(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -33,7 +33,7 @@ Widget charcoalIconActionsPreview() => Row(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Selection controls', size: Size(420, 440))
+@CharcoalComponentPreview(name: 'Selection controls', size: Size(420, 440))
 Widget charcoalSelectionControlsPreview() => const _SelectionControlsPreview();
 
 final class _SelectionControlsPreview extends StatefulWidget {
@@ -87,19 +87,16 @@ final class _SelectionControlsPreviewState extends State<_SelectionControlsPrevi
           ],
         ),
         const CharcoalGap(CharcoalSpace.md),
-        SizedBox(
-          width: 280,
-          child: CharcoalSlider(
-            value: slider,
-            onChanged: (value) => setState(() => slider = value),
-          ),
+        CharcoalSlider(
+          value: slider,
+          onChanged: (value) => setState(() => slider = value),
         ),
       ],
     );
   }
 }
 
-@CharcoalNextComponentPreview(name: 'Multi-select', size: Size(420, 300))
+@CharcoalComponentPreview(name: 'Multi-select', size: Size(420, 300))
 Widget charcoalMultiSelectPreview() => const _MultiSelectPreview();
 
 final class _MultiSelectPreview extends StatefulWidget {
@@ -139,7 +136,7 @@ final class _MultiSelectPreviewState extends State<_MultiSelectPreview> {
             gradient: LinearGradient(colors: <Color>[theme.colors.primary, theme.colors.neutral]),
           ),
           child: SizedBox(
-            height: 96,
+            height: theme.sizes.rowMinHeightTall * 2,
             child: Align(
               alignment: AlignmentDirectional.topStart,
               child: Padding(
@@ -159,10 +156,10 @@ final class _MultiSelectPreviewState extends State<_MultiSelectPreview> {
   }
 }
 
-@CharcoalNextComponentPreview(name: 'Tag item · Controlled states', size: Size(520, 220))
+@CharcoalComponentPreview(name: 'Tag item · Controlled states', size: Size(520, 220))
 Widget charcoalTagItemStatesPreview() => const _TagItemPreview();
 
-@CharcoalNextComponentPreview(name: 'Tag item · Compact translation', size: Size(240, 220))
+@CharcoalComponentPreview(name: 'Tag item · Compact translation', size: Size(240, 220))
 Widget charcoalCompactTagItemPreview() => const _TagItemPreview(compact: true);
 
 final class _TagItemPreview extends StatefulWidget {
@@ -192,9 +189,10 @@ final class _TagItemPreviewState extends State<_TagItemPreview> {
         ),
       );
     }
+    final theme = CharcoalTheme.of(context);
     return Wrap(
-      spacing: 12,
-      runSpacing: 12,
+      spacing: theme.space.md,
+      runSpacing: theme.space.md,
       children: <Widget>[
         CharcoalTagItem(label: '#landscape', onPressed: () {}),
         CharcoalTagItem(

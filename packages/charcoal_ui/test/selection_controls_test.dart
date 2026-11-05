@@ -1,6 +1,6 @@
 import 'dart:ui' show CheckedState, Tristate;
 
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/services.dart';

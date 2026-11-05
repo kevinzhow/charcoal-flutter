@@ -83,7 +83,7 @@ final _literalRules = <GuardRule>[
   ),
 ];
 
-/// Library rules, applied to `packages/charcoal_ui/lib/src/**` (minus [libraryExcluded]).
+/// Library rules, applied to `packages/charcoal_ui/lib/src/**`.
 ///
 /// Everything in [_literalRules] plus: no theme reads except through `CharcoalTheme.of`, no
 /// Cupertino import, no unnamed ratios (a divisor or multiplier other than 0, 1 or 2 is a metric).

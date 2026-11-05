@@ -1,4 +1,4 @@
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 

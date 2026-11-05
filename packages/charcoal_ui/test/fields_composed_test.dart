@@ -1,6 +1,6 @@
 import 'dart:ui' show SemanticsFlag, Tristate;
 
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 

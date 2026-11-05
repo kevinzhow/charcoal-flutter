@@ -42,7 +42,7 @@ final class _AgentThemeTypographyExampleState
                 ),
                 SizedBox(height: space.component20),
                 const CharcoalTypography(
-                  size: CharcoalTypographySize.size12,
+                  size: CharcoalTextRole.size12,
                   weight: CharcoalTypographyWeight.bold,
                   child: Text('CURATED COLLECTION'),
                 ),
