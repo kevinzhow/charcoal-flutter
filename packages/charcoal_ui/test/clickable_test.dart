@@ -1,11 +1,10 @@
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/next.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show Material, MaterialType;
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'test_helpers.dart';
 
 void main() {
   testWidgets('keyboard activation exposes a bounded pressed pulse', (
@@ -17,7 +16,7 @@ void main() {
     addTearDown(focusNode.dispose);
     addTearDown(statesController.dispose);
     await tester.pumpWidget(
-      charcoalTestApp(
+      _app(
         CharcoalClickable(
           focusNode: focusNode,
           onPressed: () => activations += 1,
@@ -60,7 +59,7 @@ void main() {
     var activations = 0;
     addTearDown(focusNode.dispose);
     await tester.pumpWidget(
-      charcoalTestApp(
+      _app(
         CharcoalClickable(
           focusNode: focusNode,
           keyboardActivationEnabled: false,
@@ -97,7 +96,7 @@ void main() {
     const nonButtonKey = ValueKey<String>('non-button-action');
     const tabKey = ValueKey<String>('tab-action');
     await tester.pumpWidget(
-      charcoalTestApp(
+      _app(
         Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -165,7 +164,7 @@ void main() {
       addTearDown(checkFocus.dispose);
       addTearDown(tabFocus.dispose);
       await tester.pumpWidget(
-        charcoalTestApp(
+        _app(
           Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -227,3 +226,10 @@ void main() {
     skip: !kIsWeb,
   );
 }
+
+Widget _app(Widget child) => CharcoalApp(
+  home: Material(
+    type: MaterialType.transparency,
+    child: Center(child: child),
+  ),
+);

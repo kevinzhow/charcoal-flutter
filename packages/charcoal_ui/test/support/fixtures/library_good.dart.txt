@@ -1,0 +1,14 @@
+// Color(0xFF112233) in a comment
+final a = Text('size: 12 Colors.red 0xFF112233');
+final b = const EdgeInsets.all(0);
+final c = SizedBox(width: theme.sizes.avatar);
+final d = EdgeInsets.zero;
+final e = CharcoalGap(CharcoalSpace.md);
+final f = CharcoalTheme.of(context).space.md;
+final g = x / 2;
+final h = x * 2;
+final i = 1.0 - t;
+/* Color(0xFF000000)
+   Colors.red */
+final j = CharcoalColorRoles.transparent;
+final k = size.width * theme.metrics.pageRoute.commitThreshold;

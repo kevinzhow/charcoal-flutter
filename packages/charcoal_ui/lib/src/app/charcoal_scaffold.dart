@@ -1,10 +1,17 @@
 import 'dart:math' as math;
 
+import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../components/navigation_bar.dart';
-import '../theme/charcoal_theme.dart';
+/// A navigation bar whose height depends on the context (text scale, safe area).
+///
+/// [CharcoalScaffold] asks for [heightFor] when the bar implements this; otherwise it uses
+/// `preferredSize.height`.
+abstract interface class CharcoalContextualHeight {
+  /// The bar's height in [context].
+  double heightFor(BuildContext context);
+}
 
 /// Coordinates a page's navigation, content, system insets, and keyboard.
 ///
@@ -58,15 +65,17 @@ final class CharcoalScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
+    const transparent = CharcoalColorRoles.transparent;
     final media = MediaQuery.of(context);
-    final background = backgroundColor ?? theme.colors.backgroundDefault;
-    final darkBackground = background.computeLuminance() < 0.179;
+    final background = backgroundColor ?? theme.colors.background;
+    final darkBackground =
+        background.computeLuminance() < theme.metrics.scaffold.darkLuminanceThreshold;
     final style =
         systemOverlayStyle ??
         (darkBackground ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark).copyWith(
-          statusBarColor: const Color(0x00000000),
-          systemNavigationBarColor: const Color(0x00000000),
-          systemNavigationBarDividerColor: const Color(0x00000000),
+          statusBarColor: transparent,
+          systemNavigationBarColor: transparent,
+          systemNavigationBarDividerColor: transparent,
           systemStatusBarContrastEnforced: false,
           systemNavigationBarContrastEnforced: false,
         );
@@ -78,9 +87,10 @@ final class CharcoalScaffold extends StatelessWidget {
       // A keyboard consumes the bottom safe area; do not reserve it twice.
       padding: media.padding.copyWith(bottom: math.max(0, media.padding.bottom - keyboard)),
     );
-    final barHeight = navigationBar is CharcoalNavigationBar
-        ? (navigationBar! as CharcoalNavigationBar).heightFor(context)
-        : navigationBar?.preferredSize.height ?? 0;
+    final bar = navigationBar;
+    final barHeight = bar is CharcoalContextualHeight
+        ? (bar as CharcoalContextualHeight).heightFor(context)
+        : bar?.preferredSize.height ?? 0;
     final topExtent = navigationBar == null ? 0.0 : media.padding.top + barHeight;
     Widget content = body;
     if (bodySafeArea) {

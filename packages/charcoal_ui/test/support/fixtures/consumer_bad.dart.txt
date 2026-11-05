@@ -1,0 +1,11 @@
+import 'package:flutter/material.dart'; // expect: R1
+import 'package:charcoal_theme/charcoal_theme.dart'; // expect: R1
+final a = Theme.of(context); // expect: R2
+final b = TextStyle(fontSize: 14); // expect: R3
+final c = Colors.red; // expect: R4
+final d = BoxDecoration(); // expect: R5
+final e = SizedBox(width: 24); // expect: R6
+final f = ElevatedButton(onPressed: null, child: x); // expect: R7
+final g = Text('x', style: s); // expect: R3
+final h = Duration(milliseconds: 5); // expect: R6
+final i = showDialog<void>(context: c); // expect: R7

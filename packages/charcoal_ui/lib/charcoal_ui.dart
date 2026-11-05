@@ -3,9 +3,6 @@ library;
 
 export 'package:charcoal_tokens/charcoal_tokens.dart';
 
-export 'src/app/charcoal_app.dart';
-export 'src/app/charcoal_page_route.dart';
-export 'src/app/charcoal_scaffold.dart';
 export 'src/components/balloon.dart';
 export 'src/components/button.dart';
 export 'src/components/carousel.dart';
@@ -34,6 +31,9 @@ export 'src/components/text_selection_toolbar.dart';
 export 'src/components/toast.dart';
 export 'src/components/tooltip.dart';
 export 'src/components/typography.dart';
+export 'src/legacy/app/charcoal_app.dart';
+export 'src/legacy/app/charcoal_page_route.dart';
+export 'src/legacy/app/charcoal_scaffold.dart';
 export 'src/theme/charcoal_motion.dart';
 export 'src/theme/charcoal_text_styles.dart';
 export 'src/theme/charcoal_theme.dart';

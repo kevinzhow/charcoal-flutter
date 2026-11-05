@@ -1,0 +1,8 @@
+import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/widgets.dart';
+// Colors.red, ElevatedButton( and Theme.of( in a comment
+final a = Text('Colors.red ElevatedButton(');
+final b = CharcoalGap(CharcoalSpace.md);
+final c = CharcoalText.body('hello');
+final d = EdgeInsets.zero;
+final e = CharcoalCard(child: x);
