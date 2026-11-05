@@ -55,8 +55,12 @@ final class _CharcoalShowcaseAppState extends State<CharcoalShowcaseApp> {
 
   @override
   Widget build(BuildContext context) =>
-      // TODO(1B): switch to the Material-backed CharcoalApp.router once 1B
-      // lands; the router parts below do not depend on its internals.
+      // TODO(P2 end): 1B landed the Material-backed CharcoalApp.router in
+      // package:charcoal_ui/next.dart (lightPack/darkPack). It cannot be used
+      // here yet: next.dart and charcoal_ui.dart both define CharcoalApp,
+      // CharcoalTheme and CharcoalScaffold, and every shell/page widget still
+      // reads the legacy CharcoalTheme. Switch together with the last legacy
+      // component; the router pieces below do not depend on the app class.
       CharcoalApp.router(
         title: 'Charcoal UI V2 Showcase',
         theme: buildShowcaseTheme(Brightness.light),

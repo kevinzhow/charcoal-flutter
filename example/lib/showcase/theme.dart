@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 const _showcaseWebFontFamily = 'Noto Sans';
 
-// TODO(1B): once CharcoalApp consumes buildCharcoalThemeData, derive this from
+// TODO(P2 end): once the showcase uses next.dart's CharcoalApp (lightPack/darkPack), derive this from
 // charcoalLightPack/charcoalDarkPack: copyWith the pack typography (Web font)
 // instead of CharcoalThemeData.
 
