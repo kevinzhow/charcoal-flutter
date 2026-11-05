@@ -21,6 +21,11 @@ void main() {
     '/lib/testing.dart',
     // 2A: a themed Material Slider.
     '/src/components/selection/slider.dart',
+    // 2C: Material surface for dialogs (a Material ancestor for the inputs inside), the dialog
+    // route, and selectable text in the code viewer.
+    '/src/components/overlays/dialog.dart',
+    '/src/components/overlays/modal.dart',
+    '/src/components/overlays/code_dialog.dart',
     // 2B: the only fields file that wraps Material widgets.
     '/src/components/fields/date_time_field.dart',
   ];

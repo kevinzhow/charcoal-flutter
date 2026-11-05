@@ -461,6 +461,7 @@ Toast and snack bar.
 | `metrics.toast.dragDismissDistance` | double | 50 | `toast:dragDismissDistance` | Drag distance that dismisses. |
 | `metrics.toast.dragDismissVelocity` | double | 100 | `toast:dragDismissVelocity` | Fling velocity that dismisses. |
 | `metrics.toast.rubberBandLimit` | double | 60 | `toast:rubberBandLimit` | Asymptote of the rubber-band drag. |
+| `metrics.toast.thumbnailSize` | double | 64 | `dimensions.space.layout60` | Edge of a snack bar's square thumbnail (appended in 2C). |
 
 ### 7.17 `metrics.tooltip` (CharcoalTooltipMetrics)
 

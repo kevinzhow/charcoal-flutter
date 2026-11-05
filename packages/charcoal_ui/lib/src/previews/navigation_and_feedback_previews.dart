@@ -38,25 +38,3 @@ Widget charcoalNavigationPreview() => Column(
     ),
   ],
 );
-
-@CharcoalComponentPreview(name: 'Toast and snackbar', size: Size(520, 300))
-Widget charcoalFeedbackPreview() => Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: <Widget>[
-    const CharcoalToast(
-      leading: CharcoalIcon(CharcoalIcons.checkCircle),
-      message: 'Changes saved',
-    ),
-    const SizedBox(height: 24),
-    CharcoalToast(
-      action: CharcoalLinkButton(onPressed: () {}, child: const Text('Retry')),
-      message: 'Could not finish the action',
-      variant: CharcoalToastVariant.error,
-    ),
-    const SizedBox(height: 24),
-    CharcoalSnackBar(
-      action: CharcoalLinkButton(onPressed: () {}, child: const Text('Undo')),
-      message: 'Item removed',
-    ),
-  ],
-);

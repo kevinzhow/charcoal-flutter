@@ -100,6 +100,7 @@ const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
     dragDismissDistance: 50,
     dragDismissVelocity: 100,
     rubberBandLimit: 60,
+    thumbnailSize: 64,
   ),
   tooltip: CharcoalTooltipMetrics(
     defaultWaitDuration: Duration(milliseconds: 500),
