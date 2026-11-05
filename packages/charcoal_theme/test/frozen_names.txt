@@ -366,3 +366,4 @@ metrics.pageRoute.predictiveScaleDrop
 metrics.pageRoute.predictiveCornerRadius
 metrics.pageRoute.predictiveExitOffsetFraction
 metrics.scaffold.darkLuminanceThreshold
+metrics.toast.thumbnailSize

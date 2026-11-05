@@ -1,12 +1,11 @@
 import 'dart:ui' show PointerDeviceKind;
 
-import 'package:charcoal_ui/charcoal_ui.dart';
-import 'package:charcoal_ui/src/components/popup_shape.dart';
+import 'package:charcoal_ui/next.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/overlay_app.dart';
 
 void main() {
   testWidgets('tooltip opens on hover and closes when the pointer leaves', (
@@ -285,6 +284,7 @@ void main() {
         arrowHeight: 4,
         position: position,
         radius: 16,
+        seamOverlap: 0.5,
         size: const Size(160, 64),
       );
 
@@ -349,7 +349,7 @@ void main() {
   testWidgets('toast and snackbar preserve the iOS outline and elevation contract', (
     tester,
   ) async {
-    final theme = CharcoalThemeData.light();
+    final theme = CharcoalTheme(charcoalLightPack);
 
     await tester.pumpWidget(
       charcoalTestApp(
@@ -360,7 +360,6 @@ void main() {
             CharcoalSnackBar(message: 'Bookmarked'),
           ],
         ),
-        theme: theme,
       ),
     );
 
@@ -374,14 +373,15 @@ void main() {
 
     final toast = surfaceDecoration(find.byType(CharcoalToast));
     final toastBorder = toast.border! as Border;
-    expect(toastBorder.top.color, theme.colors.backgroundDefault);
-    expect(toastBorder.top.width, theme.dimensions.borderWidth.l);
+    expect(toastBorder.top.color, theme.colors.background);
+    expect(toastBorder.top.width, theme.borders.thick);
+    expect(toast.color, theme.colors.positive);
     expect(toast.boxShadow, isNull);
 
     final snackBar = surfaceDecoration(find.byType(CharcoalSnackBar));
     final snackBarBorder = snackBar.border! as Border;
-    expect(snackBarBorder.top.color, theme.colors.borderDefault);
-    expect(snackBarBorder.top.width, theme.dimensions.borderWidth.m);
+    expect(snackBarBorder.top.color, theme.colors.border);
+    expect(snackBarBorder.top.width, theme.borders.hairline);
     expect(snackBar.boxShadow, isNull);
   });
 

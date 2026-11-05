@@ -25,6 +25,10 @@ const libraryGuarded = <String>[
   // 2B fields and text
   'components/fields/',
   'components/text/',
+  // 2C overlays and feedback
+  'components/overlays/',
+  'components/feedback/',
+  'components/carousel/',
 ];
 
 void main() {

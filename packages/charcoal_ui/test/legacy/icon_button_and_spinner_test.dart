@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import '../test_helpers.dart';
 
 void main() {
   testWidgets('distinguishes regular actions from controlled toggles', (

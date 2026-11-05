@@ -16,6 +16,7 @@ class CharcoalToastMetrics {
     required this.dragDismissDistance,
     required this.dragDismissVelocity,
     required this.rubberBandLimit,
+    required this.thumbnailSize,
   });
 
   /// Widest toast.
@@ -42,6 +43,9 @@ class CharcoalToastMetrics {
   /// Asymptote of the rubber-band drag.
   final double rubberBandLimit;
 
+  /// Edge of a snack bar's square thumbnail.
+  final double thumbnailSize;
+
   /// A copy with the given fields replaced.
   CharcoalToastMetrics copyWith({
     double? maxWidth,
@@ -52,6 +56,7 @@ class CharcoalToastMetrics {
     double? dragDismissDistance,
     double? dragDismissVelocity,
     double? rubberBandLimit,
+    double? thumbnailSize,
   }) => CharcoalToastMetrics(
     maxWidth: maxWidth ?? this.maxWidth,
     cornerRadius: cornerRadius ?? this.cornerRadius,
@@ -61,6 +66,7 @@ class CharcoalToastMetrics {
     dragDismissDistance: dragDismissDistance ?? this.dragDismissDistance,
     dragDismissVelocity: dragDismissVelocity ?? this.dragDismissVelocity,
     rubberBandLimit: rubberBandLimit ?? this.rubberBandLimit,
+    thumbnailSize: thumbnailSize ?? this.thumbnailSize,
   );
 
   /// Every field by name, for tests and diagnostics.
@@ -73,6 +79,7 @@ class CharcoalToastMetrics {
     'dragDismissDistance': dragDismissDistance,
     'dragDismissVelocity': dragDismissVelocity,
     'rubberBandLimit': rubberBandLimit,
+    'thumbnailSize': thumbnailSize,
   };
 
   /// Inverse of [toMap].
@@ -85,6 +92,7 @@ class CharcoalToastMetrics {
     dragDismissDistance: map['dragDismissDistance']! as double,
     dragDismissVelocity: map['dragDismissVelocity']! as double,
     rubberBandLimit: map['rubberBandLimit']! as double,
+    thumbnailSize: map['thumbnailSize']! as double,
   );
 
   @override
@@ -98,7 +106,8 @@ class CharcoalToastMetrics {
           other.snackBarScreenEdgeSpacing == snackBarScreenEdgeSpacing &&
           other.dragDismissDistance == dragDismissDistance &&
           other.dragDismissVelocity == dragDismissVelocity &&
-          other.rubberBandLimit == rubberBandLimit;
+          other.rubberBandLimit == rubberBandLimit &&
+          other.thumbnailSize == thumbnailSize;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
@@ -110,5 +119,6 @@ class CharcoalToastMetrics {
     dragDismissDistance,
     dragDismissVelocity,
     rubberBandLimit,
+    thumbnailSize,
   ]);
 }
