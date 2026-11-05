@@ -173,7 +173,20 @@ final class _AdminPageState extends State<AdminPage> {
                       _selecting = !_selecting;
                       _selectedCount = 0;
                     }),
-                    onDelete: showcaseNoop,
+                    onDelete: () async {
+                      final ok = await showCharcoalConfirm(
+                        context,
+                        title: 'Delete $_selectedCount notices',
+                        message: 'This cannot be undone.',
+                        danger: true,
+                      );
+                      if (ok && mounted) {
+                        setState(() {
+                          _selecting = false;
+                          _selectedCount = 0;
+                        });
+                      }
+                    },
                     restActions: <Widget>[
                       CharcoalButton(
                         size: CharcoalButtonSize.small,
