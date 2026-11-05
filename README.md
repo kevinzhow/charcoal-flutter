@@ -57,7 +57,7 @@ Public components, by family (the Catalog is the authoritative list):
   tooltip, balloon, `CharcoalBanner`, empty, loading and error states, `CharcoalLoadingSpinner`
 - Layout and content: `CharcoalCard`, `CharcoalList`, `CharcoalListRow`, `CharcoalSectionHeader`,
   `CharcoalAvatar`, `CharcoalBadge`, `CharcoalChip`, `CharcoalStatusDot`, `CharcoalText`,
-  `CharcoalIconView`, `CharcoalCodeBlock`, and the spacing helpers `CharcoalGap`, `CharcoalInset`,
+  `CharcoalIconView`, `CharcoalCodeBlock`, `CharcoalGrid`, `CharcoalSelectable`, and the spacing helpers `CharcoalGap`, `CharcoalInset`,
   `CharcoalPadding`, `CharcoalWrap`
 - Admin console (`admin.dart`): `CharcoalAdminShell`, `CharcoalSidebar`, `CharcoalPage`,
   `CharcoalStatCard`, `CharcoalMeter`, `CharcoalInfoRows`, `CharcoalBatchBar`

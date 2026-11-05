@@ -713,4 +713,101 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ),
     ],
   ),
+  'CharcoalGrid': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A grid of equal-width cells whose column count follows the layout class (wide or compact), with theme-step gaps.',
+    keywords: <String>[
+      'grid',
+      'columns',
+      'cards',
+      'dashboard',
+      'responsive grid',
+    ],
+    useWhen: <String>[
+      'Cards or tiles of the same kind should sit in rows on wide layouts and stack on compact ones.',
+      'Cells in a row should be the same height (stat cards, summary cards).',
+    ],
+    avoidWhen: <String>[
+      'Content flows freely at its own width; use CharcoalWrap.',
+      'A cell contains a LayoutBuilder; equal row heights measure intrinsic height and cannot support it.',
+    ],
+    accessibility: <String>[
+      'Reading and focus order follow the children order row by row; put the most important cell first.',
+    ],
+    responsiveBehavior: <String>[
+      'Columns come from CharcoalGridColumns for the enclosing admin shell layout, or the grid width against the sidebar breakpoint outside a shell; the count never exceeds the number of children.',
+    ],
+    interactionStates: <String>[
+      'static',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns column counts, gaps, equal row heights and padding of the last row.',
+      'The caller owns the cells and their content.',
+    ],
+    tokenRoles: <String>[
+      'space.md',
+      'sizes.sidebarBreakpoint',
+    ],
+    relatedComponents: <String>[
+      'CharcoalWrap',
+      'CharcoalCard',
+      'CharcoalStatCard',
+    ],
+    companionDeclarations: <String>[
+      'CharcoalGridColumns',
+      'CharcoalGridRowHeight',
+    ],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'grid-cells',
+        title: 'Two-column summary cells',
+        description: 'Cards laid out by a grid with equal heights.',
+        sourcePath: 'example/lib/agent_examples/layout_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalSelectable': ComponentMetadata(
+    category: 'Content',
+    summary: 'Makes the text below it selectable and copyable with pointer and keyboard, without platform handles or toolbar.',
+    keywords: <String>[
+      'selectable',
+      'copy',
+      'select text',
+      'identifier',
+    ],
+    useWhen: <String>[
+      'Identifiers, keys and values in dense admin views should be copyable.',
+    ],
+    avoidWhen: <String>[
+      'The text is inside an editable field; fields already handle selection.',
+      'Touch-first reading screens that need platform selection handles.',
+    ],
+    accessibility: <String>[
+      'Selection is exposed through the platform selection region; keep the visible text the copied text.',
+    ],
+    responsiveBehavior: <String>[
+      'No layout of its own.',
+    ],
+    interactionStates: <String>[
+      'static',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the selection region.',
+      'The caller owns what is selectable.',
+    ],
+    tokenRoles: <String>[],
+    relatedComponents: <String>[
+      'CharcoalInfoRows',
+      'CharcoalCodeBlock',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'selectable-value',
+        title: 'Copyable value',
+        description: 'A selectable member count.',
+        sourcePath: 'example/lib/agent_examples/layout_example.dart',
+      ),
+    ],
+  ),
 };

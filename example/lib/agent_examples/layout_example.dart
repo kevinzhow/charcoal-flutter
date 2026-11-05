@@ -76,6 +76,24 @@ final class AgentLayoutExample extends StatelessWidget {
             ],
           ),
         ),
+        CharcoalGrid(
+          columns: const CharcoalGridColumns(wide: 2, compact: 1),
+          children: <Widget>[
+            for (final member in _members.take(2))
+              CharcoalCard(
+                outlined: true,
+                child: CharcoalText(
+                  member.role,
+                  role: CharcoalTextRole.sectionTitle,
+                ),
+              ),
+          ],
+        ),
+        const CharcoalGap(CharcoalSpace.md),
+        const CharcoalSelectable(
+          child: CharcoalText('member-4821', mono: true),
+        ),
+        const CharcoalGap(CharcoalSpace.md),
         const CharcoalFieldBox(
           width: CharcoalFieldWidth.compact,
           child: CharcoalText('Aligned to a field width class'),
