@@ -4,6 +4,7 @@ import '../registry.dart';
 import 'admin_page.dart';
 import 'layout_page.dart';
 import 'navigation_page.dart';
+import 'page_frame_page.dart';
 import 'next_island.dart';
 
 // Owner: batch 2D (navigation and layout). Add a ShowcasePage here to
@@ -32,5 +33,13 @@ final List<ShowcasePage> navigationPages = <ShowcasePage>[
     icon: CharcoalIcons.setting,
     order: 46,
     builder: (context) => const NextThemeIsland(child: AdminPage()),
+  ),
+  ShowcasePage(
+    id: 'page-frame',
+    title: 'Page frame',
+    section: ShowcaseSection.components,
+    icon: CharcoalIcons.layer,
+    order: 47,
+    builder: (context) => const NextThemeIsland(child: PageFramePage()),
   ),
 ];

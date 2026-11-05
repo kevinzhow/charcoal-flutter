@@ -1,0 +1,21 @@
+{
+  "family": "gaps",
+  "note": "Old name -> new name for the p3-gaps batch (library features found while migrating myopay). Library: package:charcoal_ui/next.dart; CharcoalPage is in package:charcoal_ui/admin.dart. Callers of ConsoleText/MyoTheme read helpers are listed under 'patterns'.",
+  "symbols": {
+    "ConsoleScreen": "CharcoalPage (admin.dart)",
+    "ConsoleLayoutScope": "CharcoalAdminLayout (admin.dart; provided by CharcoalAdminShell)",
+    "ConsoleLoading": "CharcoalLoadingState",
+    "ConsoleSpinner": "CharcoalProgressRing",
+    "ConsoleBusyOverlay": "CharcoalPage(busy: true) for a page, CharcoalSpinnerOverlay(dimBackground: true) elsewhere"
+  },
+  "patterns": {
+    "Text(s, style: text.body(color: myo.colors.textSecondary))": "CharcoalText(s, tone: CharcoalTextTone.secondary)",
+    "Text(s, style: text.caption(color: myo.colors.textNegative))": "CharcoalText(s, role: CharcoalTextRole.caption, tone: CharcoalTextTone.negative)",
+    "CharcoalIcon(i, size: myo.sizes.iconSm, color: myo.colors.iconSecondary)": "CharcoalIconView(i, size: CharcoalIconSize.sm, tone: CharcoalIconTone.secondary)",
+    "Container(color: backgroundSecondary, radius md, padding md) + SelectableText(captionMono)": "CharcoalCodeBlock(text)",
+    "ListView.builder of SelectableText(captionMono) on backgroundSecondary": "CharcoalCodeBlock.lines(lines)",
+    "Wrap(spacing: space.sm, runSpacing: space.xs)": "CharcoalWrap(spacing: CharcoalSpace.sm, runSpacing: CharcoalSpace.xs)",
+    "bordered ConsoleClickable tile with icon + label": "CharcoalActionTile",
+    "hand-painted hover/press row with chips below the text": "CharcoalListRow(crossAxisAlignment: start, verticalPadding:, subtitleRole:, subtitleTone:, body:)"
+  }
+}

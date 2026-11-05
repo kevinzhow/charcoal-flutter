@@ -1,6 +1,8 @@
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
+import 'text_tone.dart';
+
 /// A run of text in a Charcoal type role.
 ///
 /// The one place application code reads typography from: it resolves [role] against the active
@@ -18,8 +20,10 @@ class CharcoalText extends StatelessWidget {
     this.semanticLabel,
     this.softWrap,
     this.textAlign,
+    this.tone,
     super.key,
   }) : assert(maxLines == null || maxLines > 0),
+       assert(color == null || tone == null, 'Pass either color or tone, not both'),
        assert(semanticLabel == null || semanticLabel != '');
 
   /// The text.
@@ -31,7 +35,8 @@ class CharcoalText extends StatelessWidget {
   /// Whether to use the pack's bold weight.
   final bool bold;
 
-  /// Colour; defaults to the role's colour in the pack.
+  /// Colour; defaults to the role's colour in the pack. For the library's own components;
+  /// applications name a [tone] instead.
   final Color? color;
 
   /// Maximum number of lines.
@@ -52,14 +57,20 @@ class CharcoalText extends StatelessWidget {
   /// Alignment of the text.
   final TextAlign? textAlign;
 
+  /// The semantic colour; defaults to the role's colour in the pack. Exclusive with [color].
+  final CharcoalTextTone? tone;
+
   @override
-  Widget build(BuildContext context) => Text(
-    data,
-    maxLines: maxLines,
-    overflow: overflow,
-    semanticsLabel: semanticLabel,
-    softWrap: softWrap,
-    style: CharcoalTheme.of(context).style(role, color: color, bold: bold, mono: mono),
-    textAlign: textAlign,
-  );
+  Widget build(BuildContext context) {
+    final theme = CharcoalTheme.of(context);
+    return Text(
+      data,
+      maxLines: maxLines,
+      overflow: overflow,
+      semanticsLabel: semanticLabel,
+      softWrap: softWrap,
+      style: theme.style(role, color: tone?.resolve(theme.colors) ?? color, bold: bold, mono: mono),
+      textAlign: textAlign,
+    );
+  }
 }

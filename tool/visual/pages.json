@@ -22,6 +22,7 @@
     { "id": "navigation", "nav": "Navigation" },
     { "id": "layout", "nav": "Layout" },
     { "id": "admin", "nav": "Admin" },
+    { "id": "page-frame", "nav": "Page frame" },
     { "id": "content", "nav": "Content" },
     { "id": "feedback", "nav": "Feedback" },
     { "id": "token-pipeline", "nav": "Token pipeline" },
