@@ -15,7 +15,7 @@
     "ConsoleLoading": "CharcoalLoadingState",
     "ConsoleErrorState": "CharcoalErrorState",
     "ConsoleBusyOverlay": "CharcoalPage(busy: true) for a page, CharcoalSpinnerOverlay(dimBackground: true) elsewhere",
-    "ConsoleSpinner": "CharcoalProgressRing",
+    "ConsoleSpinner": "CharcoalLoadingSpinner",
     "CharcoalDialog": "CharcoalDialog",
     "CharcoalDialogSize": "CharcoalDialogSize",
     "CharcoalModalStyle": "CharcoalModalStyle",

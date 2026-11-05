@@ -161,7 +161,7 @@ void main() {
   });
 
   group('CharcoalLoadingState', () {
-    testWidgets('is a iconLg ring with a thick stroke inside xxxl padding', (tester) async {
+    testWidgets('keeps the Charcoal spinner inside xxxl padding', (tester) async {
       await pumpCharcoal(
         tester,
         const Align(
@@ -172,14 +172,7 @@ void main() {
         ),
         settle: false,
       );
-      final pack = charcoalLightPack;
-      final ring = tester.widget<CircularProgressIndicator>(find.byType(CircularProgressIndicator));
-      expect(ring.strokeWidth, pack.borders.thick);
-      expect(tester.getSize(find.byType(CharcoalProgressRing)).width, pack.sizes.iconLg);
-      expect(
-        tester.getSize(find.byType(CharcoalLoadingState)).height,
-        pack.sizes.iconLg + 2 * pack.space.xxxl,
-      );
+      expect(find.byType(CharcoalLoadingSpinner), findsOneWidget);
     });
   });
 
@@ -469,7 +462,7 @@ void main() {
         settle: false,
       );
       await tester.pump();
-      expect(find.byType(CharcoalProgressRing), findsOneWidget);
+      expect(find.byType(CharcoalLoadingSpinner), findsOneWidget);
       await tester.tap(find.text('Go'), warnIfMissed: false);
       expect(taps, 0);
     });

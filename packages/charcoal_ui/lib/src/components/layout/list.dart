@@ -14,17 +14,26 @@ import 'package:flutter/widgets.dart';
 /// ```
 final class CharcoalList extends StatelessWidget {
   /// Creates a list of [children], normally `CharcoalListRow`s.
-  const CharcoalList({required this.children, this.topBorder = true, super.key});
+  const CharcoalList({required List<Widget> this.children, this.topBorder = true, super.key})
+    : child = null;
+
+  /// Draws the list's top rule around any [child], such as a reorderable or lazily built list
+  /// of `CharcoalListRow`s.
+  const CharcoalList.around(Widget this.child, {this.topBorder = true, super.key})
+    : children = null;
 
   /// The rows.
-  final List<Widget> children;
+  final List<Widget>? children;
+
+  /// The wrapped list of [CharcoalList.around].
+  final Widget? child;
 
   /// Whether a rule is drawn above the first row.
   final bool topBorder;
 
   @override
   Widget build(BuildContext context) {
-    if (children.isEmpty) return const SizedBox.shrink();
+    if (children != null && children!.isEmpty) return const SizedBox.shrink();
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -34,7 +43,7 @@ final class CharcoalList extends StatelessWidget {
               )
             : null,
       ),
-      child: Column(children: children),
+      child: child ?? Column(children: children!),
     );
   }
 }

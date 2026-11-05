@@ -24,6 +24,8 @@ final class CharcoalCodeBlock extends StatelessWidget {
     this.scrollable = false,
     this.selectable = true,
     this.tone = CharcoalTextTone.primary,
+    this.trailing,
+    this.field = false,
     super.key,
   }) : lines = null,
        assert(maxLines == null || maxLines > 0);
@@ -37,6 +39,8 @@ final class CharcoalCodeBlock extends StatelessWidget {
     this.tone = CharcoalTextTone.primary,
     super.key,
   }) : text = '',
+       trailing = null,
+       field = false,
        maxLines = null,
        scrollable = true;
 
@@ -58,6 +62,13 @@ final class CharcoalCodeBlock extends StatelessWidget {
   /// The text colour.
   final CharcoalTextTone tone;
 
+  /// Actions at the end of the block (copy, reveal, edit), beside the text.
+  final Widget? trailing;
+
+  /// The tighter look of a single value box, e.g. a secret key: `radius.sm`, and `space.sm`
+  /// padding except `space.md` before the text.
+  final bool field;
+
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
@@ -68,7 +79,7 @@ final class CharcoalCodeBlock extends StatelessWidget {
     final rows = lines;
     final decoration = BoxDecoration(
       color: theme.colors.backgroundSecondary,
-      borderRadius: BorderRadius.circular(theme.radius.md),
+      borderRadius: BorderRadius.circular(field ? theme.radius.sm : theme.radius.md),
     );
     if (rows != null) {
       return DecoratedBox(
@@ -95,9 +106,19 @@ final class CharcoalCodeBlock extends StatelessWidget {
             style: style,
           );
     if (scrollable) body = SingleChildScrollView(child: body);
+    if (trailing != null) {
+      body = Row(
+        children: <Widget>[
+          Expanded(child: body),
+          trailing!,
+        ],
+      );
+    }
     final block = Container(
       width: double.infinity,
-      padding: EdgeInsets.all(theme.space.md),
+      padding: field
+          ? EdgeInsets.fromLTRB(theme.space.md, theme.space.sm, theme.space.sm, theme.space.sm)
+          : EdgeInsets.all(theme.space.md),
       decoration: decoration,
       child: body,
     );

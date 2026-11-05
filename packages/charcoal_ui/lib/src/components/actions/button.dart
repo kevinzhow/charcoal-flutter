@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../foundation/charcoal_clickable.dart';
 import '../../foundation/interaction_state.dart';
 import '../../foundation/layout.dart';
+import '../text/text_tone.dart';
 import 'control_support.dart';
 
 /// Visual weight of a [CharcoalButton] is chosen with [CharcoalButtonVariant]; this enum picks its
@@ -42,6 +43,7 @@ final class CharcoalButton extends StatelessWidget {
     this.autofocus = false,
     this.focusNode,
     this.fullWidth = false,
+    this.labelTone,
     this.leading,
     this.primaryColor,
     this.semanticLabel,
@@ -67,6 +69,10 @@ final class CharcoalButton extends StatelessWidget {
 
   /// Whether the button fills the width its parent offers.
   final bool fullWidth;
+
+  /// Colours the label and icons in a semantic text tone (a destructive row action, say) instead
+  /// of the variant's foreground. Meant for the normal variant; a disabled button still fades.
+  final CharcoalTextTone? labelTone;
 
   /// An icon before the label.
   final Widget? leading;
@@ -128,13 +134,15 @@ final class CharcoalButton extends StatelessWidget {
                     pressed: palette.press,
                     disabled: palette.rest,
                   );
-            final foreground = resolveCharcoalStateColor(
-              visualStates,
-              normal: palette.foreground,
-              hovered: palette.foregroundHover,
-              pressed: palette.foregroundPress,
-              disabled: palette.foreground,
-            );
+            final foreground =
+                labelTone?.resolve(theme.colors) ??
+                resolveCharcoalStateColor(
+                  visualStates,
+                  normal: palette.foreground,
+                  hovered: palette.foregroundHover,
+                  pressed: palette.foregroundPress,
+                  disabled: palette.foreground,
+                );
             final isDisabled = states.contains(WidgetState.disabled);
             final isFocused = states.contains(WidgetState.focused);
             final iconTheme = IconThemeData(color: foreground, size: theme.metrics.button.iconSize);
