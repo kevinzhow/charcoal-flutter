@@ -19,6 +19,8 @@ void main() {
     '/src/foundation/',
     '/lib/next.dart',
     '/lib/testing.dart',
+    // 2A: a themed Material Slider.
+    '/src/components/selection/slider.dart',
   ];
 
   test('pre-Material charcoal_ui code has no Material or Cupertino imports', () async {

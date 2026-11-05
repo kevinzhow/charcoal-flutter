@@ -1,0 +1,49 @@
+{
+  "family": "actions",
+  "note": "Old name -> new name for batch 2A. Identical names keep their symbol but change signature or enum values, see 'changes'. Library: package:charcoal_ui/next.dart.",
+  "symbols": {
+    "ConsoleButton": "CharcoalButton",
+    "MyoButtonVariant": "CharcoalButtonVariant",
+    "ConsoleIconButton": "CharcoalIconButton",
+    "ConsoleSegmentedControl": "CharcoalSegmentedControl",
+    "ConsoleSegment": "CharcoalSegment",
+    "ConsoleRadio": "CharcoalRadio",
+    "ConsoleSwitch": "CharcoalSwitch",
+    "ConsoleCheckbox": "CharcoalCheckbox",
+    "ConsoleSlider": "CharcoalSlider",
+    "ConsoleSelectionBox": "CharcoalSelectionBox",
+    "ConsoleChip": "CharcoalChip",
+    "ConsoleStatusDot": "CharcoalStatusDot",
+    "ConsoleTone": "CharcoalTone",
+    "CharcoalButton": "CharcoalButton",
+    "CharcoalButtonVariant": "CharcoalButtonVariant",
+    "CharcoalButtonSize": "CharcoalButtonSize",
+    "CharcoalLinkButton": "CharcoalLinkButton",
+    "CharcoalSwitchingButton": "CharcoalSwitchingButton",
+    "CharcoalIconButton": "CharcoalIconButton",
+    "CharcoalIconButtonVariant": "CharcoalIconButtonVariant",
+    "CharcoalIconButtonSize": "CharcoalIconButtonSize",
+    "CharcoalCheckbox": "CharcoalCheckbox",
+    "CharcoalRadio": "CharcoalRadio",
+    "CharcoalSwitch": "CharcoalSwitch",
+    "CharcoalMultiSelect": "CharcoalMultiSelect",
+    "CharcoalMultiSelectVariant": "CharcoalMultiSelectVariant",
+    "CharcoalSegmentedControl": "CharcoalSegmentedControl",
+    "CharcoalSegment": "CharcoalSegment",
+    "CharcoalTagItem": "CharcoalTagItem",
+    "CharcoalTagItemStatus": "CharcoalTagItemStatus",
+    "CharcoalTagItemSize": "CharcoalTagItemSize"
+  },
+  "members": {
+    "ConsoleButton.small": "CharcoalButton.size (CharcoalButtonSize.small)",
+    "ConsoleIconButton.selected": "CharcoalIconButton.selected (bool?; null is a plain action)",
+    "ConsoleRadio.label": "CharcoalRadio.label",
+    "MyoButtonVariant.normal|primary|danger": "CharcoalButtonVariant.normal|primary|danger"
+  },
+  "changes": [
+    "CharcoalButtonVariant moved to charcoal_theme (exported by next.dart) with the same five values.",
+    "ConsoleSlider.label (bubble text) is CharcoalSlider.label; add semanticLabel for the accessible name.",
+    "CharcoalCheckbox/Radio/Switch/MultiSelect: colour and geometry now come from the CharcoalTheme pack; no theme parameters exist.",
+    "CharcoalTagItem.backgroundColor stays for authored tag colours; the default is colors.tagBackground."
+  ]
+}

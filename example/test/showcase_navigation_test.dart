@@ -18,6 +18,7 @@ const _destinationHeadings = <String, String>{
   'Icons': 'Icon catalog',
   'Buttons': 'Content slots',
   'Selection': 'Selection controls',
+  'Tags': 'Tags and status',
   'Fields': 'Fields and menus',
   'Navigation': 'Navigation and paging',
   'Content': 'Content presentation',

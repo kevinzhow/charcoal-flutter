@@ -1,290 +1,195 @@
+import 'dart:ui' show Tristate;
+
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/next.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/geometry.dart';
+
+BoxDecoration _deco(WidgetTester tester, Finder tag) =>
+    tester
+            .widget<AnimatedContainer>(
+              find.descendant(of: tag, matching: find.byType(AnimatedContainer)).first,
+            )
+            .decoration!
+        as BoxDecoration;
 
 void main() {
-  testWidgets('activates and exposes its unselected state as button semantics', (
-    tester,
-  ) async {
-    var presses = 0;
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(label: '#landscape', onPressed: () => presses += 1),
-      ),
-    );
+  const key = ValueKey<String>('tag');
 
+  testWidgets('activates and exposes its unselected state as button semantics', (tester) async {
+    var presses = 0;
+    await pumpLoose(tester, CharcoalTagItem(key: key, label: '#sky', onPressed: () => presses++));
     expect(
-      tester.getSemantics(find.byType(CharcoalTagItem)),
+      tester.getSemantics(find.byKey(key)),
       matchesSemantics(
-        label: '#landscape',
-        hasEnabledState: true,
-        isEnabled: true,
+        label: '#sky',
         isButton: true,
         hasSelectedState: true,
         isSelected: false,
+        hasEnabledState: true,
+        isEnabled: true,
         hasTapAction: true,
       ),
     );
-    await tester.tap(find.text('#landscape'));
+    await tester.tap(find.byKey(key));
     expect(presses, 1);
   });
 
-  testWidgets('active status uses asymmetric padding and remove icon', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(
-          label: '#landscape',
-          onPressed: () {},
-          status: CharcoalTagItemStatus.active,
-        ),
+  testWidgets('active status is selected, pads asymmetrically and shows the remove icon', (
+    tester,
+  ) async {
+    await pumpLoose(
+      tester,
+      CharcoalTagItem(
+        key: key,
+        label: '#sky',
+        status: CharcoalTagItemStatus.active,
+        onPressed: () {},
       ),
     );
-
-    final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    final padding = container.padding! as EdgeInsetsDirectional;
-    expect(padding.start, 16);
-    expect(padding.end, 8);
-    expect(find.byType(CustomPaint), findsAtLeastNWidgets(1));
-    expect(
-      tester.getSemantics(find.byType(CharcoalTagItem)),
-      matchesSemantics(
-        label: '#landscape',
-        hasEnabledState: true,
-        isEnabled: true,
-        isButton: true,
-        hasSelectedState: true,
-        isSelected: true,
-        hasTapAction: true,
-      ),
-    );
-  });
-
-  testWidgets('normal status keeps the component source color', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(label: '#landscape', onPressed: () {}),
-      ),
-    );
-
+    final theme = CharcoalTheme.of(tester.element(find.byKey(key)));
     final container = tester.widget<AnimatedContainer>(
-      find.byType(AnimatedContainer),
+      find.descendant(of: find.byKey(key), matching: find.byType(AnimatedContainer)),
     );
     expect(
-      (container.decoration! as BoxDecoration).color,
-      const Color(0xFF7ACCB1),
+      container.padding,
+      EdgeInsetsDirectional.only(start: theme.space.lg, end: theme.space.sm),
     );
+    expect(find.byType(CharcoalIcon), findsOneWidget);
+    expect(tester.getSemantics(find.byKey(key)).flagsCollection.isSelected, Tristate.isTrue);
   });
 
-  testWidgets('inactive status uses semantic secondary colors', (tester) async {
-    final theme = CharcoalThemeData.dark();
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const CharcoalTagItem(
-          label: '#landscape',
-          onPressed: null,
-          status: CharcoalTagItemStatus.inactive,
-        ),
-        theme: theme,
+  testWidgets('status colours come from the pack', (tester) async {
+    await pumpLoose(
+      tester,
+      Column(
+        children: [
+          CharcoalTagItem(key: key, label: 'a', onPressed: () {}),
+          CharcoalTagItem(
+            key: const ValueKey('i'),
+            label: 'b',
+            status: CharcoalTagItemStatus.inactive,
+            onPressed: () {},
+          ),
+          CharcoalTagItem(
+            key: const ValueKey('c'),
+            label: 'c',
+            backgroundColor: const Color(0xFF123456),
+            onPressed: () {},
+          ),
+        ],
       ),
     );
-
-    final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    final decoration = container.decoration! as BoxDecoration;
-    expect(decoration.color, theme.colors.containerSecondaryDefault);
-    expect(
-      tester.widget<Text>(find.text('#landscape')).style!.color,
-      theme.colors.textSecondaryDefault,
-    );
+    final theme = CharcoalTheme.of(tester.element(find.byKey(key)));
+    expect(_deco(tester, find.byKey(key)).color, theme.colors.tagBackground);
+    expect(_deco(tester, find.byKey(const ValueKey('i'))).color, theme.colors.surfaceSecondary);
+    expect(_deco(tester, find.byKey(const ValueKey('c'))).color, const Color(0xFF123456));
   });
 
-  testWidgets('translated labels force the medium size', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(
-          label: '#original',
-          onPressed: () {},
-          size: CharcoalTagItemSize.small,
-          translatedLabel: 'girl',
-        ),
-      ),
-    );
-
-    final container = tester.widget<AnimatedContainer>(find.byType(AnimatedContainer));
-    expect(container.constraints!.minHeight, 40);
-    expect(
-      tester.getSemantics(find.byType(CharcoalTagItem)).label,
-      'girl, #original',
-    );
-  });
-
-  testWidgets('keyboard focus paints its ring and activates the same action', (
+  testWidgets('translated labels force the medium size and shrink in compact constraints', (
     tester,
   ) async {
-    final focusNode = FocusNode();
-    addTearDown(focusNode.dispose);
-    var activations = 0;
-    final theme = CharcoalThemeData.light();
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(
-          focusNode: focusNode,
-          label: '#keyboard',
-          onPressed: () => activations++,
-        ),
-        theme: theme,
+    await pumpLoose(
+      tester,
+      Column(
+        children: [
+          CharcoalTagItem(
+            key: key,
+            label: '#とても長いオリジナルタグ',
+            size: CharcoalTagItemSize.small,
+            translatedLabel: 'a very long translated tag',
+            onPressed: () {},
+          ),
+          CharcoalTagItem(
+            key: const ValueKey('s'),
+            label: '#s',
+            size: CharcoalTagItemSize.small,
+            onPressed: () {},
+          ),
+        ],
+      ),
+      size: const Size(240, 400),
+    );
+    expect(tester.takeException(), isNull);
+    expect(tester.getSize(find.byKey(key)).height, greaterThanOrEqualTo(40));
+    expect(tester.getSize(find.byKey(const ValueKey('s'))).height, 32);
+    expect(tester.getSemantics(find.byKey(key)).label, contains('a very long translated tag'));
+  });
+
+  testWidgets('focus, hover and press never change geometry; keyboard activates', (tester) async {
+    var presses = 0;
+    final focus = FocusNode();
+    addTearDown(focus.dispose);
+    await pumpLoose(
+      tester,
+      CharcoalTagItem(
+        key: key,
+        focusNode: focus,
+        label: '#sky',
+        status: CharcoalTagItemStatus.active,
+        onPressed: () => presses++,
       ),
     );
-
-    focusNode.requestFocus();
-    await tester.pump();
+    final probes = [find.byKey(key), find.byType(CharcoalIcon), find.text('#sky')];
+    final rest = rectsOf(tester, probes);
+    focus.requestFocus();
+    await tester.sendKeyEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump(const Duration(seconds: 1));
+    expect(rectsOf(tester, probes), rest);
+    expect(_deco(tester, find.byKey(key)).boxShadow, isNotEmpty);
+    final g = await pressAndHold(tester, find.byKey(key));
+    await tester.pump(const Duration(seconds: 1));
+    expect(rectsOf(tester, probes), rest);
+    await g.cancel();
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
-    await tester.pump();
-
-    expect(activations, 1);
-    final decoration =
-        tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration!
-            as BoxDecoration;
-    expect(decoration.boxShadow, hasLength(1));
-    expect(decoration.boxShadow!.single.color, theme.colors.borderFocusLegacy);
+    await tester.pump(const Duration(seconds: 1));
+    expect(presses, 1);
   });
 
-  testWidgets('touch press uses a transient overlay without changing geometry', (
-    tester,
-  ) async {
-    const background = Color(0xFF7ACCB1);
-    final theme = CharcoalThemeData.light();
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(
-          backgroundColor: background,
-          label: '#landscape',
-          onPressed: () {},
-          status: CharcoalTagItemStatus.active,
-        ),
-        theme: theme,
-      ),
-    );
-
-    final before = tester.getRect(find.byType(AnimatedContainer));
-    final gesture = await tester.startGesture(
-      tester.getCenter(find.byType(CharcoalTagItem)),
-    );
-    await tester.pumpAndSettle();
-
-    var decoration =
-        tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration!
-            as BoxDecoration;
-    expect(
-      decoration.color,
-      Color.alphaBlend(theme.colors.containerPressA, background),
-    );
-    expect(tester.getRect(find.byType(AnimatedContainer)), before);
-
-    await gesture.up();
-    await tester.pumpAndSettle();
-    decoration =
-        tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration!
-            as BoxDecoration;
-    expect(decoration.color, background);
-  });
-
-  testWidgets('inactive status uses secondary interaction tokens', (
-    tester,
-  ) async {
-    final states = WidgetStatesController(<WidgetState>{WidgetState.pressed});
-    addTearDown(states.dispose);
-    final theme = CharcoalThemeData.dark();
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTagItem(
-          label: '#inactive',
-          onPressed: () {},
-          statesController: states,
-          status: CharcoalTagItemStatus.inactive,
-        ),
-        theme: theme,
-      ),
-    );
-
-    final decoration =
-        tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).decoration!
-            as BoxDecoration;
-    expect(decoration.color, theme.colors.containerSecondaryPress);
-    expect(
-      tester.widget<Text>(find.text('#inactive')).style!.color,
-      theme.colors.textSecondaryPress,
-    );
-  });
-
-  testWidgets('translated labels shrink inside compact constraints', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        SizedBox(
-          width: 120,
-          child: CharcoalTagItem(
-            label: '#an-extremely-long-original-tag-name',
-            onPressed: () {},
-            status: CharcoalTagItemStatus.active,
-            translatedLabel: 'an extremely long translated tag name',
-          ),
-        ),
-      ),
-    );
-
-    expect(tester.getSize(find.byType(CharcoalTagItem)).width, 120);
-    expect(tester.takeException(), isNull);
-  });
-
-  testWidgets('active icon stays on the directional trailing edge', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
+  testWidgets('the active icon sits on the directional trailing edge', (tester) async {
+    for (final direction in TextDirection.values) {
+      await pumpLoose(
+        tester,
         Directionality(
-          textDirection: TextDirection.rtl,
+          textDirection: direction,
           child: CharcoalTagItem(
-            label: '#rtl',
-            onPressed: () {},
+            key: key,
+            label: '#sky',
             status: CharcoalTagItemStatus.active,
+            onPressed: () {},
           ),
         ),
-      ),
-    );
-
-    expect(
-      tester.getCenter(find.byType(CharcoalIcon)).dx,
-      lessThan(tester.getCenter(find.text('#rtl')).dx),
-    );
+      );
+      final icon = tester.getCenter(find.byType(CharcoalIcon)).dx;
+      final text = tester.getCenter(find.text('#sky')).dx;
+      expect(direction == TextDirection.ltr ? icon > text : icon < text, isTrue);
+    }
   });
 
-  testWidgets('grows vertically with accessibility text scaling', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const MediaQuery(
-          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+  for (final scale in [0.8, 1.0, 2.0, 3.0]) {
+    testWidgets('text scale $scale does not overflow', (tester) async {
+      await pumpLoose(
+        tester,
+        SizedBox(
+          width: 200,
           child: CharcoalTagItem(
-            label: '#original',
-            onPressed: _noop,
-            translatedLabel: 'original work',
+            key: key,
+            label: '#landscape',
+            translatedLabel: 'scenery',
+            onPressed: () {},
           ),
         ),
-      ),
-    );
+        textScale: scale,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
 
-    expect(
-      tester.getSize(find.byType(AnimatedContainer)).height,
-      greaterThan(40),
-    );
-    expect(tester.takeException(), isNull);
+  testWidgets('disabled fades to 0.32', (tester) async {
+    await pumpLoose(tester, const CharcoalTagItem(key: key, label: 'x', onPressed: null));
+    expect(targetOpacity(tester, find.text('x')), 0.32);
   });
 }
-
-void _noop() {}

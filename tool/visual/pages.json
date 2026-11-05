@@ -16,6 +16,7 @@
     { "id": "icons", "nav": "Icons" },
     { "id": "buttons", "nav": "Buttons" },
     { "id": "selection", "nav": "Selection" },
+    { "id": "tags", "nav": "Tags" },
     { "id": "fields", "nav": "Fields" },
     { "id": "navigation", "nav": "Navigation" },
     { "id": "content", "nav": "Content" },
