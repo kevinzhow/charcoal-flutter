@@ -18,9 +18,8 @@ final class ShowcaseDirectionalPageTransition extends StatelessWidget {
     animation: animation,
     child: child,
     builder: (context, child) {
-      final progress = CharcoalMotion.emphasizedCurve.transform(
-        animation.value,
-      );
+      final progress = CharcoalTheme.of(context).motion.emphasizedCurve
+          .transform(animation.value);
       final exiting = animation.status == AnimationStatus.reverse;
       final distance = exiting ? -0.006 : 0.012;
       return FractionalTranslation(
@@ -54,11 +53,11 @@ final class ShowcasePageViewport extends StatelessWidget {
         child: RawScrollbar(
           controller: controller,
           crossAxisMargin: compact ? 2 : 4,
-          fadeDuration: CharcoalMotion.standard,
+          fadeDuration: CharcoalTheme.of(context).motion.standard,
           interactive: !compact,
-          radius: Radius.circular(theme.dimensions.radius.oval),
+          radius: Radius.circular(theme.radius.pill),
           thickness: compact ? 3 : 6,
-          thumbColor: theme.colors.containerTertiaryDefault,
+          thumbColor: theme.colors.surfaceTertiary,
           child: SingleChildScrollView(
             key: ValueKey<String>('page-scroll-$page'),
             controller: controller,

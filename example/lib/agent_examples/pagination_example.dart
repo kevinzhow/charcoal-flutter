@@ -26,24 +26,24 @@ final class _AgentPaginationExampleState extends State<AgentPaginationExample> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Search results', style: theme.textStyles.headingS),
-        SizedBox(height: space.component20),
+        Text('Search results', style: theme.style(CharcoalTextRole.headingS)),
+        SizedBox(height: space.sm),
         Semantics(
           liveRegion: true,
           child: Text(
             'Results $_firstResult–$_lastResult of $_resultCount. '
             'Page $_currentPage of $_pageCount.',
-            style: theme.textStyles.captionMedium.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(color: theme.colors.textSecondary),
           ),
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         CharcoalPagination(
           currentPage: _currentPage,
           nextLabel: 'Next result page',

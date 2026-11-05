@@ -40,7 +40,7 @@ final class _IconsPageState extends State<IconsPage> {
           eyebrow: 'FOUNDATION · ICONS',
           title: 'Icon catalog',
         ),
-        SizedBox(height: theme.dimensions.space.layout40),
+        SizedBox(height: theme.space.xl),
         LayoutBuilder(
           builder: (context, constraints) {
             final canFitFourUniformSegments = constraints.maxWidth >= 320;
@@ -90,17 +90,17 @@ final class _IconsPageState extends State<IconsPage> {
                   );
           },
         ),
-        SizedBox(height: theme.dimensions.space.layout30),
+        SizedBox(height: theme.space.lg),
         Text(
           '${icons.length} generated assets',
-          style: theme.textStyles.captionMediumBold.copyWith(
-            color: theme.colors.textSecondaryDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.captionMediumBold)
+              .copyWith(color: theme.colors.textSecondary),
         ),
-        SizedBox(height: theme.dimensions.space.component30),
+        SizedBox(height: theme.space.lg),
         Wrap(
-          spacing: theme.dimensions.space.component25,
-          runSpacing: theme.dimensions.space.component25,
+          spacing: theme.space.md,
+          runSpacing: theme.space.md,
           children: <Widget>[
             for (final icon in icons) _IconCatalogTile(icon: icon),
           ],
@@ -122,44 +122,44 @@ final class _IconCatalogTile extends StatelessWidget {
       width: 156,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSecondary),
-          borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-          color: theme.colors.backgroundDefault,
+          border: Border.all(color: theme.colors.borderSubtle),
+          borderRadius: BorderRadius.circular(theme.radius.md),
+          color: theme.colors.background,
         ),
         child: Padding(
-          padding: EdgeInsets.all(theme.dimensions.space.component25),
+          padding: EdgeInsets.all(theme.space.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(
-                height: theme.dimensions.space.targetL,
+                height: theme.sizes.controlLg,
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: CharcoalIcon(
                     icon,
                     color: icon.style == CharcoalIconStyle.color
                         ? null
-                        : theme.colors.iconDefault,
-                    size: theme.dimensions.space.component50,
+                        : theme.colors.icon,
+                    size: theme.space.xxl,
                   ),
                 ),
               ),
-              SizedBox(height: theme.dimensions.space.component20),
+              SizedBox(height: theme.space.sm),
               Text(
                 icon.name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textStyles.captionMediumBold.copyWith(
-                  color: theme.colors.textDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.captionMediumBold)
+                    .copyWith(color: theme.colors.text),
               ),
               Text(
                 '${formatShowcaseNumber(icon.nativeSize)} px · ${icon.style.name}',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textStyles.captionSmall.copyWith(
-                  color: theme.colors.textTertiaryDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.caption)
+                    .copyWith(color: theme.colors.textTertiary),
               ),
             ],
           ),

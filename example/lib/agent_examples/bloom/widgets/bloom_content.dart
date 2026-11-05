@@ -1,14 +1,9 @@
 part of '../bloom.dart';
 
 Widget _bloomPagePadding(BuildContext context, Widget child) {
-  final space = CharcoalTheme.of(context).dimensions.space;
+  final space = CharcoalTheme.of(context).space;
   return Padding(
-    padding: EdgeInsets.fromLTRB(
-      space.component30,
-      space.component25,
-      space.component30,
-      space.component30,
-    ),
+    padding: EdgeInsets.fromLTRB(space.lg, space.md, space.lg, space.lg),
     child: child,
   );
 }
@@ -45,12 +40,12 @@ final class _BloomSurface extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSecondary),
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-        color: theme.colors.backgroundDefault,
+        border: Border.all(color: theme.colors.borderSubtle),
+        borderRadius: BorderRadius.circular(theme.radius.md),
+        color: theme.colors.background,
       ),
       child: Padding(
-        padding: padding ?? EdgeInsets.all(theme.dimensions.space.component25),
+        padding: padding ?? EdgeInsets.all(theme.space.md),
         child: child,
       ),
     );
@@ -67,9 +62,9 @@ final class _BloomSectionTitle extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return Text(
       title,
-      style: theme.textStyles.captionMediumBold.copyWith(
-        color: theme.colors.textDefault,
-      ),
+      style: theme
+          .style(CharcoalTextRole.captionMediumBold)
+          .copyWith(color: theme.colors.text),
     );
   }
 }
@@ -89,20 +84,20 @@ final class _BloomAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final background = switch (tone % 4) {
-      0 => theme.colors.containerPrimaryDefault,
-      1 => theme.colors.containerDiscoveryDefault,
-      2 => theme.colors.containerNoticeDefault,
-      _ => theme.colors.containerPositiveDefault,
+      0 => theme.colors.primary,
+      1 => theme.colors.negative,
+      2 => theme.colors.notice,
+      _ => theme.colors.positive,
     };
     final foreground = switch (tone % 4) {
-      0 => theme.colors.textOnPrimaryDefault,
-      1 => theme.colors.textOnDiscoveryDefault,
-      2 => theme.colors.textOnNoticeDefault,
-      _ => theme.colors.textOnPositiveDefault,
+      0 => theme.colors.textOnPrimary,
+      1 => theme.colors.textOnNegative,
+      2 => theme.colors.text,
+      _ => theme.colors.textOnPositive,
     };
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
+        borderRadius: BorderRadius.circular(theme.radius.pill),
         color: background,
       ),
       child: SizedBox.square(
@@ -110,10 +105,9 @@ final class _BloomAvatar extends StatelessWidget {
         child: Center(
           child: Text(
             initials,
-            style: theme.textStyles.captionSmall.copyWith(
-              color: foreground,
-              fontWeight: FontWeight.w700,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(color: foreground, fontWeight: FontWeight.w700),
           ),
         ),
       ),
@@ -136,26 +130,14 @@ final class _BloomArtwork extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final palette = switch (tone % 4) {
-      0 => (
-        theme.colors.containerPrimaryDefault,
-        theme.colors.containerDiscoveryDefault,
-        theme.colors.containerNoticeDefault,
-      ),
+      0 => (theme.colors.primary, theme.colors.negative, theme.colors.notice),
       1 => (
-        theme.colors.containerDiscoveryDefault,
-        theme.colors.containerPositiveDefault,
-        theme.colors.backgroundDefault,
+        theme.colors.negative,
+        theme.colors.positive,
+        theme.colors.background,
       ),
-      2 => (
-        theme.colors.containerNoticeDefault,
-        theme.colors.containerPrimaryDefault,
-        theme.colors.containerNegativeDefault,
-      ),
-      _ => (
-        theme.colors.containerPositiveDefault,
-        theme.colors.containerDiscoveryDefault,
-        theme.colors.containerNeutralDefault,
-      ),
+      2 => (theme.colors.notice, theme.colors.primary, theme.colors.negative),
+      _ => (theme.colors.positive, theme.colors.negative, theme.colors.neutral),
     };
     return Semantics(
       image: true,
@@ -186,9 +168,7 @@ final class _BloomArtwork extends StatelessWidget {
                       angle: -0.28,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            theme.dimensions.radius.m,
-                          ),
+                          borderRadius: BorderRadius.circular(theme.radius.md),
                           color: palette.$3.withValues(alpha: 0.76),
                         ),
                         child: const SizedBox.square(dimension: 78),
@@ -235,25 +215,25 @@ final class _BloomEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return _BloomSurface(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          CharcoalIcon(icon, color: theme.colors.iconSecondaryDefault),
-          SizedBox(height: space.component20),
+          CharcoalIcon(icon, color: theme.colors.iconSecondary),
+          SizedBox(height: space.sm),
           Text(
             title,
-            style: theme.textStyles.captionMediumBold.copyWith(
-              color: theme.colors.textDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMediumBold)
+                .copyWith(color: theme.colors.text),
           ),
-          SizedBox(height: space.component10),
+          SizedBox(height: space.xs),
           Text(
             description,
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(color: theme.colors.textSecondary),
           ),
         ],
       ),
@@ -271,20 +251,22 @@ final class _BloomCountBadge extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-        color: theme.colors.containerPrimaryDefault,
+        borderRadius: BorderRadius.circular(theme.radius.pill),
+        color: theme.colors.primary,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: theme.dimensions.space.component20,
-          vertical: theme.dimensions.space.component10,
+          horizontal: theme.space.sm,
+          vertical: theme.space.xs,
         ),
         child: Text(
           '$count unread',
-          style: theme.textStyles.captionSmall.copyWith(
-            color: theme.colors.textOnPrimaryDefault,
-            fontWeight: FontWeight.w700,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(
+                color: theme.colors.textOnPrimary,
+                fontWeight: FontWeight.w700,
+              ),
         ),
       ),
     );
@@ -301,9 +283,9 @@ final class _BloomCompactBadge extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.backgroundDefault),
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.oval),
-        color: theme.colors.containerNegativeDefault,
+        border: Border.all(color: theme.colors.background),
+        borderRadius: BorderRadius.circular(theme.radius.pill),
+        color: theme.colors.negative,
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 16, minWidth: 16),
@@ -312,11 +294,13 @@ final class _BloomCompactBadge extends StatelessWidget {
           child: Center(
             child: Text(
               '$count',
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textOnNegativeDefault,
-                fontSize: 9,
-                fontWeight: FontWeight.w700,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(
+                    color: theme.colors.textOnNegative,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                  ),
             ),
           ),
         ),
@@ -338,16 +322,16 @@ final class _BloomMetric extends StatelessWidget {
       children: <Widget>[
         Text(
           value,
-          style: theme.textStyles.captionMediumBold.copyWith(
-            color: theme.colors.textDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.captionMediumBold)
+              .copyWith(color: theme.colors.text),
         ),
-        SizedBox(height: theme.dimensions.space.component10),
+        SizedBox(height: theme.space.xs),
         Text(
           label,
-          style: theme.textStyles.captionSmall.copyWith(
-            color: theme.colors.textSecondaryDefault,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(color: theme.colors.textSecondary),
         ),
       ],
     );
@@ -362,17 +346,17 @@ final class _BloomBrandMark extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-        color: theme.colors.containerDiscoveryDefault,
+        borderRadius: BorderRadius.circular(theme.radius.md),
+        color: theme.colors.negative,
       ),
       child: SizedBox.square(
-        dimension: theme.dimensions.space.targetS,
+        dimension: theme.sizes.controlSm,
         child: Center(
           child: Text(
             'B',
-            style: theme.textStyles.captionMediumBold.copyWith(
-              color: theme.colors.textOnDiscoveryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMediumBold)
+                .copyWith(color: theme.colors.textOnNegative),
           ),
         ),
       ),

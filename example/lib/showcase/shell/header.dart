@@ -19,8 +19,8 @@ final class ShowcaseHeader extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colors.borderSecondary)),
-        color: theme.colors.backgroundDefault,
+        border: Border(bottom: BorderSide(color: theme.colors.borderSubtle)),
+        color: theme.colors.background,
       ),
       child: SizedBox(
         height: 72,
@@ -30,9 +30,9 @@ final class ShowcaseHeader extends StatelessWidget {
             children: <Widget>[
               Text(
                 title,
-                style: theme.textStyles.headingXxs.copyWith(
-                  color: theme.colors.textDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.headingXxs)
+                    .copyWith(color: theme.colors.text),
               ),
               const Spacer(),
               CharcoalSwitch(
@@ -45,17 +45,19 @@ final class ShowcaseHeader extends StatelessWidget {
               DecoratedBox(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(999),
-                  color: theme.colors.containerDiscoveryDefault,
+                  color: theme.colors.negative,
                 ),
                 child: SizedBox.square(
                   dimension: 36,
                   child: Center(
                     child: Text(
                       'V2',
-                      style: theme.textStyles.captionSmall.copyWith(
-                        color: theme.colors.textOnDiscoveryDefault,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.caption)
+                          .copyWith(
+                            color: theme.colors.textOnNegative,
+                            fontWeight: FontWeight.w700,
+                          ),
                     ),
                   ),
                 ),
@@ -89,8 +91,8 @@ final class ShowcaseMobileHeader extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: theme.colors.borderSecondary)),
-        color: theme.colors.backgroundDefault,
+        border: Border(bottom: BorderSide(color: theme.colors.borderSubtle)),
+        color: theme.colors.background,
       ),
       child: SizedBox(
         height: 64,
@@ -122,9 +124,9 @@ final class ShowcaseMobileHeader extends StatelessWidget {
                   key: const ValueKey<String>('showcase-mobile-title'),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textStyles.bodyBold.copyWith(
-                    color: theme.colors.textDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.bodyLargeBold)
+                      .copyWith(color: theme.colors.text),
                 ),
               ),
               const SizedBox(width: 10),

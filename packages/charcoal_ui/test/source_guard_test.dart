@@ -4,37 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/guard.dart';
 
-/// The library's source guard: nothing in `lib/src` outside the paths below may contain a literal
+/// The library's source guard: nothing in `lib/src` (no exclusions) may contain a literal
 /// colour, type or size, read `ThemeData` directly, import Cupertino, or use an unnamed ratio.
 /// Every value belongs in `packages/charcoal_theme/lib/src/{contract,packs}` or the tokens.
 ///
 /// The rule set is tested against fixtures (one bad file hitting every rule, one good file hitting
 /// none), and the consumer rule set R1-R9 that applications adopt is versioned and tested here too.
-
-/// Pre-Material code that is being replaced family by family. Shrinks to empty; each entry must
-/// exist (a stale entry fails the test, so the list cannot rot).
-const libraryExcluded = <String>['components/', 'legacy/', 'previews/', 'theme/'];
-
-/// Family folders inside an excluded directory that are already migrated and so ARE guarded.
-/// Each Phase 2 batch appends its folders here.
-const libraryGuarded = <String>[
-  // 2A actions and selection
-  'components/actions/',
-  'components/selection/',
-  'components/status/',
-  // 2B fields and text
-  'components/fields/',
-  'components/text/',
-  // 2C overlays and feedback
-  'components/overlays/',
-  'components/feedback/',
-  'components/carousel/',
-  // 2D navigation and layout
-  'components/navigation/',
-  'components/layout/',
-  // p3 gaps
-  'components/icons/',
-];
 
 void main() {
   final root = Directory.current.path; // packages/charcoal_ui
@@ -77,22 +52,9 @@ void main() {
       final hits = <GuardHit>[];
       for (final file in dartFiles(src)) {
         final relative = file.path.substring(src.length + 1);
-        if (libraryExcluded.any(relative.startsWith) && !libraryGuarded.any(relative.startsWith)) {
-          continue;
-        }
         hits.addAll(scanText('lib/src/$relative', file.readAsStringSync(), libraryRules));
       }
       expect(hits, isEmpty, reason: hits.join('\n'));
-    });
-
-    test('exclusions are real directories', () {
-      for (final dir in libraryExcluded) {
-        expect(
-          Directory('$src/$dir').existsSync(),
-          isTrue,
-          reason: '$dir no longer exists; remove it from libraryExcluded',
-        );
-      }
     });
 
     test('the allow pragma is not used and does not exempt anything', () {

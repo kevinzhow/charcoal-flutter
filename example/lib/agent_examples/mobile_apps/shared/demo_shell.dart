@@ -43,7 +43,7 @@ final class AgentDemoAppShell<T> extends StatelessWidget {
     container: true,
     label: appLabel,
     child: ColoredBox(
-      color: CharcoalTheme.of(context).colors.backgroundDefault,
+      color: CharcoalTheme.of(context).colors.background,
       child: Column(
         children: <Widget>[
           CharcoalNavigationBar(
@@ -112,7 +112,7 @@ final class _BrandMark extends StatelessWidget {
   Widget build(BuildContext context) => DecoratedBox(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(
-        CharcoalTheme.of(context).dimensions.radius.oval,
+        CharcoalTheme.of(context).radius.pill,
       ),
       color: background,
     ),
@@ -121,7 +121,8 @@ final class _BrandMark extends StatelessWidget {
       child: Center(
         child: Text(
           mark,
-          style: CharcoalTheme.of(context).textStyles.captionSmall
+          style: CharcoalTheme.of(context)
+              .style(CharcoalTextRole.caption)
               .copyWith(color: foreground, fontWeight: FontWeight.w700),
         ),
       ),

@@ -22,7 +22,7 @@ final class NookProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoSurface(
       padding: EdgeInsets.zero,
       child: Column(
@@ -32,14 +32,12 @@ final class NookProductCard extends StatelessWidget {
             onPressed: onOpen,
             semanticLabel: 'Open ${product.name}',
             builder: (context, states) => AnimatedOpacity(
-              duration: CharcoalMotion.resolveDuration(
-                context,
-                CharcoalMotion.fast,
-              ),
+              duration: CharcoalTheme.of(context)
+                  .duration(context, CharcoalTheme.of(context).motion.fast),
               opacity: states.contains(WidgetState.pressed) ? 0.72 : 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(theme.dimensions.radius.m),
+                  top: Radius.circular(theme.radius.md),
                 ),
                 child: AgentDemoArtwork(height: 84, tone: product.tone),
               ),
@@ -47,10 +45,10 @@ final class NookProductCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(
-              space.component20,
-              space.component20,
-              space.component10,
-              space.component20,
+              space.sm,
+              space.sm,
+              space.xs,
+              space.sm,
             ),
             child: Row(
               children: <Widget>[
@@ -62,16 +60,18 @@ final class NookProductCard extends StatelessWidget {
                         product.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textDefault,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(
+                              color: theme.colors.text,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
                       Text(
                         formatYen(product.price),
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textSecondary),
                       ),
                     ],
                   ),

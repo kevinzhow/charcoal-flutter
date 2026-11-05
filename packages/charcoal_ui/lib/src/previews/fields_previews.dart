@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 
-import '../../next.dart';
-import 'next_preview_support.dart';
+import '../../charcoal_ui.dart';
+import 'preview_support.dart';
 
 // Previews for the Material-based fields and text family (batch 2B). They run in the new
 // CharcoalApp in both brightnesses; the legacy previews next to this file stay until the legacy
 // components are removed.
 
-@CharcoalNextComponentPreview(name: 'Field label · Metadata', size: Size(420, 180))
+@CharcoalComponentPreview(name: 'Field label · Metadata', size: Size(420, 180))
 Widget charcoalNextFieldLabelPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -22,7 +22,7 @@ Widget charcoalNextFieldLabelPreview() => const Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Text fields', size: Size(420, 460))
+@CharcoalComponentPreview(name: 'Text fields', size: Size(420, 460))
 Widget charcoalNextTextFieldPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -48,7 +48,7 @@ Widget charcoalNextTextFieldPreview() => const Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Hint text · Advisory action', size: Size(420, 240))
+@CharcoalComponentPreview(name: 'Hint text · Advisory action', size: Size(420, 240))
 Widget charcoalNextHintTextPreview() => const CharcoalHintText(
   action: Text('Review'),
   maxWidth: double.infinity,
@@ -56,7 +56,7 @@ Widget charcoalNextHintTextPreview() => const CharcoalHintText(
   child: Text('Changes are saved automatically.'),
 );
 
-@CharcoalNextComponentPreview(name: 'Form section', size: Size(420, 560))
+@CharcoalComponentPreview(name: 'Form section', size: Size(420, 560))
 Widget charcoalNextFormGuidancePreview() => const CharcoalFormSection(
   caption: 'Credentials are stored encrypted',
   title: 'Signing key',
@@ -72,7 +72,7 @@ Widget charcoalNextFormGuidancePreview() => const CharcoalFormSection(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Typography · Roles', size: Size(420, 520))
+@CharcoalComponentPreview(name: 'Typography · Roles', size: Size(420, 520))
 Widget charcoalNextTypographyPreview() => const Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisSize: MainAxisSize.min,

@@ -1,7 +1,7 @@
 import 'dart:ui' show Tristate;
 
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';

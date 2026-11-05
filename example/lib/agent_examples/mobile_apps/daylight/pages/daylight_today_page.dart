@@ -16,7 +16,7 @@ final class DaylightTodayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-habits-today-page'),
@@ -27,11 +27,11 @@ final class DaylightTodayPage extends StatelessWidget {
             title: 'A gentle day is still progress.',
             description: 'Three small commitments are enough. Move through them at your own pace.',
           ),
-          SizedBox(height: space.component40),
+          SizedBox(height: space.xl),
           _TodayProgress(viewModel: viewModel),
-          SizedBox(height: space.component40),
+          SizedBox(height: space.xl),
           const AgentDemoSectionHeading(title: 'Your habits'),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           DaylightItemGroup(
             children: <Widget>[
               for (final habit in daylightHabits)
@@ -44,13 +44,13 @@ final class DaylightTodayPage extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           if (viewModel.isTodayComplete) ...<Widget>[
             const AgentDemoStatus(
               message: 'Everything is complete. Today’s three commitments remain here if you need to undo one.',
               positive: true,
             ),
-            SizedBox(height: space.component25),
+            SizedBox(height: space.md),
             CharcoalButton(
               key: const ValueKey<String>('agent-habits-plan-tomorrow'),
               fullWidth: true,
@@ -77,65 +77,61 @@ final class _TodayProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final remaining = daylightHabits.length - viewModel.completedCount;
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
-        color: theme.colors.containerNoticeDefault,
+        borderRadius: BorderRadius.circular(theme.radius.lg),
+        color: theme.colors.notice,
       ),
       child: Padding(
-        padding: EdgeInsets.all(space.component30),
+        padding: EdgeInsets.all(space.lg),
         child: Row(
           children: <Widget>[
             DecoratedBox(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: theme.colors.iconOnNoticeDefault.withValues(
-                    alpha: 0.32,
-                  ),
+                  color: theme.colors.icon.withValues(alpha: 0.32),
                   width: 6,
                 ),
-                borderRadius: BorderRadius.circular(
-                  theme.dimensions.radius.oval,
-                ),
-                color: theme.colors.backgroundDefault.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(theme.radius.pill),
+                color: theme.colors.background.withValues(alpha: 0.18),
               ),
               child: SizedBox.square(
                 dimension: 60,
                 child: Center(
                   child: Text(
                     '${viewModel.completedCount}/${daylightHabits.length}',
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textOnNoticeDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMediumBold)
+                        .copyWith(color: theme.colors.text),
                   ),
                 ),
               ),
             ),
-            SizedBox(width: space.component30),
+            SizedBox(width: space.lg),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
                     'Today’s rhythm',
-                    style: theme.textStyles.captionMediumBold.copyWith(
-                      color: theme.colors.textOnNoticeDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMediumBold)
+                        .copyWith(color: theme.colors.text),
                   ),
-                  SizedBox(height: space.component10),
+                  SizedBox(height: space.xs),
                   Text(
                     remaining == 0
                         ? 'Everything is complete.'
                         : remaining == 1
                         ? '1 small step remaining'
                         : '$remaining small steps remaining',
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textOnNoticeDefault.withValues(
-                        alpha: 0.76,
-                      ),
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.caption)
+                        .copyWith(
+                          color: theme.colors.text.withValues(alpha: 0.76),
+                        ),
                   ),
                 ],
               ),

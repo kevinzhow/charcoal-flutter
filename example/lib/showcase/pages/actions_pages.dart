@@ -1,7 +1,6 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 
 import '../registry.dart';
-import 'actions_next_host.dart';
 import 'buttons_page.dart';
 import 'selection_page.dart';
 import 'tags_page.dart';
@@ -15,7 +14,7 @@ final List<ShowcasePage> actionsPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.click,
     order: 10,
-    builder: (context) => const ActionsNextHost(child: ButtonsPage()),
+    builder: (context) => ButtonsPage(),
   ),
   ShowcasePage(
     id: 'selection',
@@ -23,7 +22,7 @@ final List<ShowcasePage> actionsPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.checkCircle,
     order: 20,
-    builder: (context) => const ActionsNextHost(child: SelectionPage()),
+    builder: (context) => SelectionPage(),
   ),
   ShowcasePage(
     id: 'tags',
@@ -31,6 +30,6 @@ final List<ShowcasePage> actionsPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.hashTag,
     order: 25,
-    builder: (context) => const ActionsNextHost(child: TagsPage()),
+    builder: (context) => TagsPage(),
   ),
 ];

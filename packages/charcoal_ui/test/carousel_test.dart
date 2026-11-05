@@ -1,7 +1,7 @@
 import 'dart:ui' show PointerDeviceKind;
 
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';

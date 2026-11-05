@@ -11,6 +11,8 @@ resolution: workspace
 dependencies:
   charcoal_icons:
     path: ../packages/charcoal_icons
+  charcoal_tokens:
+    path: ../packages/charcoal_tokens
   charcoal_ui:
     path: ../packages/charcoal_ui
   flutter:

@@ -1,8 +1,7 @@
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 import '../shell/page_chrome.dart';
-import 'next_island.dart';
 
 /// The carousel specimens, shared by the Content page and the Navigation page.
 final class CarouselGallery extends StatelessWidget {
@@ -15,12 +14,8 @@ final class CarouselGallery extends StatelessWidget {
     title: 'Carousel sizes',
     child: ShowcaseCatalogGrid(
       children: const <Widget>[
-        NextThemeIsland(
-          child: _CarouselExample(size: CharcoalCarouselSize.small),
-        ),
-        NextThemeIsland(
-          child: _CarouselExample(size: CharcoalCarouselSize.medium),
-        ),
+        _CarouselExample(size: CharcoalCarouselSize.small),
+        _CarouselExample(size: CharcoalCarouselSize.medium),
       ],
     ),
   );

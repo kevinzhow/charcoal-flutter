@@ -19,7 +19,7 @@ final class NookProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final saved = viewModel.isSaved(product);
     final inBag = viewModel.isInBag(product);
     return AgentDemoPage(
@@ -28,38 +28,38 @@ final class NookProductPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           ClipRRect(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+            borderRadius: BorderRadius.circular(theme.radius.lg),
             child: AgentDemoArtwork(height: 220, tone: product.tone),
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           Text(
             product.name,
-            style: theme.textStyles.headingXs.copyWith(
-              color: theme.colors.textDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.headingXs)
+                .copyWith(color: theme.colors.text),
           ),
-          SizedBox(height: space.component10),
+          SizedBox(height: space.xs),
           Text(
             product.subtitle,
-            style: theme.textStyles.captionMedium.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(color: theme.colors.textSecondary),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           Text(
             formatYen(product.price),
-            style: theme.textStyles.bodyBold.copyWith(
-              color: theme.colors.textDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.bodyLargeBold)
+                .copyWith(color: theme.colors.text),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           Text(
             'Made in a small workshop and packed with recyclable paper. Ships in 2–3 days.',
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(color: theme.colors.textSecondary),
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-commerce-add-to-bag'),
             fullWidth: true,
@@ -69,7 +69,7 @@ final class NookProductPage extends StatelessWidget {
             variant: CharcoalButtonVariant.primary,
             child: Text(inBag ? 'Added to bag' : 'Add to bag'),
           ),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           CharcoalButton(
             fullWidth: true,
             leading: const CharcoalIcon(CharcoalIcons.bookmark),
@@ -78,7 +78,7 @@ final class NookProductPage extends StatelessWidget {
             child: Text(saved ? 'Saved' : 'Save for later'),
           ),
           if (inBag) ...<Widget>[
-            SizedBox(height: space.component25),
+            SizedBox(height: space.md),
             AgentDemoStatus(
               positive: true,
               message:

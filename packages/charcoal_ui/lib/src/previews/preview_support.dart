@@ -3,17 +3,17 @@ import 'package:flutter/widgets.dart';
 
 import '../../charcoal_ui.dart';
 
-/// Runs component previews inside the same Widgets-layer app, theme, overlay,
-/// and typography environment used by consumers.
+/// Runs component previews inside the `CharcoalApp`, with the pack's page
+/// background, so they render exactly as in an application.
 Widget charcoalPreviewWrapper(Widget child) => CharcoalApp(
   title: 'Charcoal component preview',
   home: Builder(
     builder: (context) {
       final theme = CharcoalTheme.of(context);
       return ColoredBox(
-        color: theme.colors.backgroundDefault,
+        color: theme.colors.background,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(theme.space.xl),
           child: child,
         ),
       );
@@ -21,11 +21,15 @@ Widget charcoalPreviewWrapper(Widget child) => CharcoalApp(
   ),
 );
 
-/// Publishes the same isolated component in both supported brightness modes.
+/// Publishes a Material-based Charcoal component preview in both brightness modes.
 final class CharcoalComponentPreview extends MultiPreview {
+  /// Creates the annotation for a preview named [name] of the given [size].
   const CharcoalComponentPreview({required this.name, required this.size});
 
+  /// Display name.
   final String name;
+
+  /// Logical size of the preview surface.
   final Size size;
 
   @override

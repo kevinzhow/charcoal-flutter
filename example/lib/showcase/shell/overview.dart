@@ -27,19 +27,19 @@ final class ShowcaseOverviewPage extends StatelessWidget {
               runSpacing: 20,
               children: <Widget>[
                 _OverviewMetric(
-                  accent: theme.colors.containerPrimaryDefault,
+                  accent: theme.colors.primary,
                   label: 'Compatibility layers',
                   value: '0',
                   width: metricWidth,
                 ),
                 _OverviewMetric(
-                  accent: theme.colors.containerDiscoveryDefault,
+                  accent: theme.colors.negative,
                   label: 'Theme modes',
                   value: '2',
                   width: metricWidth,
                 ),
                 _OverviewMetric(
-                  accent: theme.colors.containerPositiveDefault,
+                  accent: theme.colors.positive,
                   label: 'Token source',
                   value: 'V2',
                   width: metricWidth,
@@ -113,9 +113,9 @@ final class _OverviewMetric extends StatelessWidget {
       width: width,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSecondary),
+          border: Border.all(color: theme.colors.borderSubtle),
           borderRadius: BorderRadius.circular(16),
-          color: theme.colors.backgroundDefault,
+          color: theme.colors.background,
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -135,15 +135,15 @@ final class _OverviewMetric extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       value,
-                      style: theme.textStyles.headingS.copyWith(
-                        color: theme.colors.textDefault,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.headingS)
+                          .copyWith(color: theme.colors.text),
                     ),
                     Text(
                       label,
-                      style: theme.textStyles.captionSmall.copyWith(
-                        color: theme.colors.textSecondaryDefault,
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.caption)
+                          .copyWith(color: theme.colors.textSecondary),
                     ),
                   ],
                 ),
@@ -183,16 +183,14 @@ final class _OverviewLink extends StatelessWidget {
           final pressed = states.contains(WidgetState.pressed);
           final hovered = states.contains(WidgetState.hovered);
           final background = pressed
-              ? theme.colors.containerSecondaryPress
+              ? theme.colors.surfaceSecondaryPress
               : hovered
-              ? theme.colors.containerSecondaryHover
-              : theme.colors.containerSecondaryDefault;
+              ? theme.colors.surfaceSecondaryHover
+              : theme.colors.surfaceSecondary;
           return AnimatedContainer(
-            curve: CharcoalMotion.standardCurve,
-            duration: CharcoalMotion.resolveDuration(
-              context,
-              CharcoalMotion.standard,
-            ),
+            curve: CharcoalTheme.of(context).motion.curve,
+            duration: CharcoalTheme.of(context)
+                .duration(context, CharcoalTheme.of(context).motion.standard),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
@@ -203,8 +201,8 @@ final class _OverviewLink extends StatelessWidget {
               children: <Widget>[
                 CharcoalIcon(
                   icon,
-                  color: theme.colors.iconNoticeDefault,
-                  size: theme.dimensions.space.component40,
+                  color: theme.colors.iconNotice,
+                  size: theme.space.xl,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -213,24 +211,24 @@ final class _OverviewLink extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         title,
-                        style: theme.textStyles.bodyBold.copyWith(
-                          color: theme.colors.textDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.bodyLargeBold)
+                            .copyWith(color: theme.colors.text),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         description,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textSecondary),
                       ),
                     ],
                   ),
                 ),
                 CharcoalIcon(
                   CharcoalIcons.arrowRight,
-                  color: theme.colors.iconTertiaryDefault,
-                  size: theme.dimensions.space.component30,
+                  color: theme.colors.iconTertiary,
+                  size: theme.space.lg,
                 ),
               ],
             ),
@@ -255,28 +253,30 @@ final class _Hero extends StatelessWidget {
           children: <Widget>[
             Text(
               'CHARCOAL UI · FLUTTER',
-              style: theme.textStyles.captionMediumBold.copyWith(
-                color: theme.colors.textOnPrimaryDefault,
-                letterSpacing: 1.2,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMediumBold)
+                  .copyWith(
+                    color: theme.colors.textOnPrimary,
+                    letterSpacing: 1.2,
+                  ),
             ),
             const SizedBox(height: 12),
             Text(
               'Source-backed components,\npowered by shared foundations.',
               style:
                   (compact
-                          ? theme.textStyles.headingS
-                          : theme.textStyles.headingM)
-                      .copyWith(color: theme.colors.textOnPrimaryDefault),
+                          ? theme.style(CharcoalTextRole.headingS)
+                          : theme.style(CharcoalTextRole.headingM))
+                      .copyWith(color: theme.colors.textOnPrimary),
             ),
             const SizedBox(height: 12),
             Text(
               'Pure Flutter Widgets. No Material or Cupertino dependency.',
-              style: theme.textStyles.body.copyWith(
-                color: theme.colors.textOnPrimaryDefault.withValues(
-                  alpha: 0.82,
-                ),
-              ),
+              style: theme
+                  .style(CharcoalTextRole.bodyLarge)
+                  .copyWith(
+                    color: theme.colors.textOnPrimary.withValues(alpha: 0.82),
+                  ),
             ),
             const SizedBox(height: 22),
             const Wrap(
@@ -293,19 +293,19 @@ final class _Hero extends StatelessWidget {
         final mark = DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
-              color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.2),
+              color: theme.colors.textOnPrimary.withValues(alpha: 0.2),
             ),
             borderRadius: BorderRadius.circular(20),
-            color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.1),
+            color: theme.colors.textOnPrimary.withValues(alpha: 0.1),
           ),
           child: SizedBox.square(
             dimension: 130,
             child: Center(
               child: Text(
                 'V2',
-                style: theme.textStyles.headingXxl.copyWith(
-                  color: theme.colors.textOnPrimaryDefault,
-                ),
+                style: theme
+                    .style(CharcoalTextRole.headingXxl)
+                    .copyWith(color: theme.colors.textOnPrimary),
               ),
             ),
           ),
@@ -316,10 +316,7 @@ final class _Hero extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[
-                theme.colors.containerPrimaryDefault,
-                theme.colors.containerDiscoveryDefault,
-              ],
+              colors: <Color>[theme.colors.primary, theme.colors.negative],
             ),
           ),
           child: Padding(
@@ -351,16 +348,18 @@ final class _HeroPill extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.14),
+        color: theme.colors.textOnPrimary.withValues(alpha: 0.14),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         child: Text(
           label,
-          style: theme.textStyles.captionSmall.copyWith(
-            color: theme.colors.textOnPrimaryDefault,
-            fontWeight: FontWeight.w600,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(
+                color: theme.colors.textOnPrimary,
+                fontWeight: FontWeight.w600,
+              ),
         ),
       ),
     );

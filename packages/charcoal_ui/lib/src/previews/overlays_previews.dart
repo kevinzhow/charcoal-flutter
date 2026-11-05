@@ -1,10 +1,10 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../next.dart';
-import 'next_preview_support.dart';
+import '../../charcoal_ui.dart';
+import 'preview_support.dart';
 
-@CharcoalNextComponentPreview(name: 'Toast and snack bar', size: Size(520, 300))
+@CharcoalComponentPreview(name: 'Toast and snack bar', size: Size(520, 300))
 Widget charcoalToastPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisSize: MainAxisSize.min,
@@ -24,7 +24,7 @@ Widget charcoalToastPreview() => Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Banners and states', size: Size(480, 640))
+@CharcoalComponentPreview(name: 'Banners and states', size: Size(480, 640))
 Widget charcoalBannerPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,
@@ -43,7 +43,7 @@ Widget charcoalBannerPreview() => Column(
   ],
 );
 
-@CharcoalNextComponentPreview(name: 'Loading', size: Size(420, 360))
+@CharcoalComponentPreview(name: 'Loading', size: Size(420, 360))
 Widget charcoalLoadingPreview() => const _LoadingPreview();
 
 final class _LoadingPreview extends StatefulWidget {
@@ -61,10 +61,10 @@ final class _LoadingPreviewState extends State<_LoadingPreview> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
-      const Wrap(
-        spacing: 16,
-        runSpacing: 16,
-        children: <Widget>[
+      Wrap(
+        spacing: CharcoalTheme.of(context).space.lg,
+        runSpacing: CharcoalTheme.of(context).space.lg,
+        children: const <Widget>[
           CharcoalLoadingSpinner(),
           CharcoalLoadingSpinner(transparent: true),
         ],
@@ -82,30 +82,29 @@ final class _LoadingPreviewState extends State<_LoadingPreview> {
   );
 }
 
-@CharcoalNextComponentPreview(name: 'Dialog', size: Size(520, 420))
-Widget charcoalDialogPreview() => SizedBox(
-  height: 340,
-  child: CharcoalDialog(
-    title: 'Delete key',
-    showCloseButton: true,
-    onDismiss: () {},
-    actions: <Widget>[
-      CharcoalButton(
-        variant: CharcoalButtonVariant.danger,
-        fullWidth: true,
-        onPressed: () {},
-        child: const Text('Delete'),
-      ),
-      CharcoalButton(fullWidth: true, onPressed: () {}, child: const Text('Cancel')),
-    ],
-    child: const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Text('Apps using this key stop working.'),
+@CharcoalComponentPreview(name: 'Dialog', size: Size(520, 420))
+Widget charcoalDialogPreview() => Builder(
+  builder: (context) => SizedBox(
+    height: CharcoalTheme.of(context).sizes.codeViewportMaxHeight,
+    child: CharcoalDialog(
+      title: 'Delete key',
+      showCloseButton: true,
+      onDismiss: () {},
+      actions: <Widget>[
+        CharcoalButton(
+          variant: CharcoalButtonVariant.danger,
+          fullWidth: true,
+          onPressed: () {},
+          child: const Text('Delete'),
+        ),
+        CharcoalButton(fullWidth: true, onPressed: () {}, child: const Text('Cancel')),
+      ],
+      child: const Text('Apps using this key stop working.'),
     ),
   ),
 );
 
-@CharcoalNextComponentPreview(name: 'Tooltip and balloons', size: Size(420, 380))
+@CharcoalComponentPreview(name: 'Tooltip and balloons', size: Size(420, 380))
 Widget charcoalAnchoredOverlayPreview() => const _AnchoredOverlayPreview();
 
 final class _AnchoredOverlayPreview extends StatefulWidget {
@@ -131,8 +130,8 @@ final class _AnchoredOverlayPreviewState extends State<_AnchoredOverlayPreview> 
       const CharcoalGap(CharcoalSpace.xl),
       Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 16,
-        runSpacing: 16,
+        spacing: CharcoalTheme.of(context).space.lg,
+        runSpacing: CharcoalTheme.of(context).space.lg,
         children: <Widget>[
           CharcoalTooltip(
             message: 'Brief, non-interactive context',
@@ -159,13 +158,13 @@ final class _AnchoredOverlayPreviewState extends State<_AnchoredOverlayPreview> 
   );
 }
 
-@CharcoalNextComponentPreview(name: 'Carousel', size: Size(620, 560))
+@CharcoalComponentPreview(name: 'Carousel', size: Size(620, 560))
 Widget charcoalCarouselPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
-    SizedBox(height: 240, child: _CarouselDemo(size: CharcoalCarouselSize.medium)),
+    _CarouselDemo(size: CharcoalCarouselSize.medium),
     CharcoalGap(CharcoalSpace.lg),
-    SizedBox(height: 260, child: _CarouselDemo(size: CharcoalCarouselSize.small)),
+    _CarouselDemo(size: CharcoalCarouselSize.small),
   ],
 );
 
@@ -182,19 +181,25 @@ final class _CarouselDemo extends StatelessWidget {
       theme.colors.surfaceTertiary,
       theme.colors.neutral,
     ];
-    return CharcoalCarousel(
-      size: size,
-      gap: theme.space.md,
-      children: <Widget>[
-        for (var i = 0; i < 4; i++)
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: fills[i % fills.length],
-              borderRadius: BorderRadius.circular(theme.radius.lg),
+    return SizedBox(
+      height: switch (size) {
+        CharcoalCarouselSize.medium => theme.sizes.codeViewportMaxHeight,
+        CharcoalCarouselSize.small => theme.sizes.rowMinHeightTall * 2,
+      },
+      child: CharcoalCarousel(
+        size: size,
+        gap: theme.space.md,
+        children: <Widget>[
+          for (var i = 0; i < 4; i++)
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: fills[i % fills.length],
+                borderRadius: BorderRadius.circular(theme.radius.lg),
+              ),
+              child: Center(child: Text('Slide ${i + 1}')),
             ),
-            child: Center(child: Text('Slide ${i + 1}')),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

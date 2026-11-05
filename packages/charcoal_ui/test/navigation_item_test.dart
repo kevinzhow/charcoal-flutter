@@ -1,6 +1,6 @@
 import 'dart:ui' show Tristate;
 
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';

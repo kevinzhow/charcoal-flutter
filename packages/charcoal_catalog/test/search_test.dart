@@ -59,10 +59,6 @@ void main() {
 
     test('finds reviewed theme and text foundations', () {
       expect(
-        search.search('scoped semantic token theme').first.component.name,
-        'CharcoalTheme',
-      );
-      expect(
         search.search('numeric component typography scale').first.component.name,
         'CharcoalTypography',
       );

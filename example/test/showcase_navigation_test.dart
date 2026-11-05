@@ -367,10 +367,10 @@ void main() {
     final dividerColor = tester.widget<ColoredBox>(
       find.descendant(of: divider, matching: find.byType(ColoredBox)),
     );
-    final theme = CharcoalThemeData.light();
+    final theme = CharcoalTheme(charcoalLightPack);
 
     expect(tester.getSize(divider).width, 1);
-    expect(dividerColor.color, theme.colors.borderSecondary);
+    expect(dividerColor.color, theme.colors.borderSubtle);
 
     final feedback = find.byKey(const ValueKey<String>('nav-Feedback'));
     await tester.ensureVisible(feedback);

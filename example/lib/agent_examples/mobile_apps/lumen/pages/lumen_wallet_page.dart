@@ -14,7 +14,7 @@ final class LumenWalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-wallet-home-page'),
@@ -25,9 +25,9 @@ final class LumenWalletPage extends StatelessWidget {
             title: 'Your money, clearly held',
             description: 'Available balance and recent movement lead; money actions stay close but secondary.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           LumenBalanceCard(viewModel: viewModel),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -57,12 +57,12 @@ final class LumenWalletPage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: space.component40),
+          SizedBox(height: space.xl),
           const AgentDemoSectionHeading(title: 'Recent activity'),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           for (final item in viewModel.activity.take(3))
             Padding(
-              padding: EdgeInsets.only(bottom: space.component20),
+              padding: EdgeInsets.only(bottom: space.sm),
               child: LumenActivityRow(activity: item),
             ),
         ],

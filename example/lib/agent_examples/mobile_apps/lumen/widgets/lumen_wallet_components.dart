@@ -14,21 +14,18 @@ final class LumenBalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.l),
+        borderRadius: BorderRadius.circular(theme.radius.lg),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[
-            theme.colors.containerPrimaryDefault,
-            theme.colors.containerDiscoveryDefault,
-          ],
+          colors: <Color>[theme.colors.primary, theme.colors.negative],
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(space.component30),
+        padding: EdgeInsets.all(space.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -37,13 +34,15 @@ final class LumenBalanceCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'AVAILABLE BALANCE',
-                    style: theme.textStyles.captionSmall.copyWith(
-                      color: theme.colors.textOnPrimaryDefault.withValues(
-                        alpha: 0.72,
-                      ),
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.caption)
+                        .copyWith(
+                          color: theme.colors.textOnPrimary.withValues(
+                            alpha: 0.72,
+                          ),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.8,
+                        ),
                   ),
                 ),
                 CharcoalIconButton(
@@ -62,21 +61,23 @@ final class LumenBalanceCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: space.component25),
+            SizedBox(height: space.md),
             Text(
               viewModel.balanceHidden
                   ? '¥ ••••••'
                   : formatYen(viewModel.balance),
-              style: theme.textStyles.headingS.copyWith(
-                color: theme.colors.textOnPrimaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.headingS)
+                  .copyWith(color: theme.colors.textOnPrimary),
             ),
-            SizedBox(height: space.component10),
+            SizedBox(height: space.xs),
             Text(
               '+ ¥42,800 this month',
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textOnPrimaryDefault.withValues(alpha: 0.8),
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(
+                    color: theme.colors.textOnPrimary.withValues(alpha: 0.8),
+                  ),
             ),
           ],
         ),
@@ -108,13 +109,12 @@ final class LumenQuickAction extends StatelessWidget {
           semanticLabel: label,
           size: CharcoalIconButtonSize.small,
         ),
-        SizedBox(height: theme.dimensions.space.component10),
+        SizedBox(height: theme.space.xs),
         Text(
           label,
-          style: theme.textStyles.captionSmall.copyWith(
-            color: theme.colors.textSecondaryDefault,
-            fontSize: 10,
-          ),
+          style: theme
+              .style(CharcoalTextRole.caption)
+              .copyWith(color: theme.colors.textSecondary, fontSize: 10),
         ),
       ],
     );
@@ -129,7 +129,7 @@ final class LumenActivityRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final positive = activity.amount > 0;
     final icon = switch (activity.kind) {
       LumenActivityKind.card => CharcoalIcons.shopping,
@@ -138,45 +138,44 @@ final class LumenActivityRow extends StatelessWidget {
       LumenActivityKind.topUp => CharcoalIcons.addCircle,
     };
     return AgentDemoSurface(
-      padding: EdgeInsets.all(space.component20),
+      padding: EdgeInsets.all(space.sm),
       child: Row(
         children: <Widget>[
-          CharcoalIcon(
-            icon,
-            color: theme.colors.iconSecondaryDefault,
-            size: 18,
-          ),
-          SizedBox(width: space.component20),
+          CharcoalIcon(icon, color: theme.colors.iconSecondary, size: 18),
+          SizedBox(width: space.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   activity.title,
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textDefault,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(
+                        color: theme.colors.text,
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
                 Text(
                   activity.subtitle,
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textTertiaryDefault,
-                    fontSize: 10,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(color: theme.colors.textTertiary, fontSize: 10),
                 ),
               ],
             ),
           ),
-          SizedBox(width: space.component20),
+          SizedBox(width: space.sm),
           Text(
             '${positive ? '+ ' : ''}${formatYen(activity.amount)}',
-            style: theme.textStyles.captionSmall.copyWith(
-              color: positive
-                  ? theme.colors.textPositiveDefault
-                  : theme.colors.textDefault,
-              fontWeight: FontWeight.w700,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(
+                  color: positive
+                      ? theme.colors.textPositive
+                      : theme.colors.text,
+                  fontWeight: FontWeight.w700,
+                ),
           ),
         ],
       ),

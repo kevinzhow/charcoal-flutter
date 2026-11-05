@@ -9,56 +9,50 @@ void main() {
       .where((file) => file.path.endsWith('.dart'))
       .toList();
 
-  // The Material rebuild reverses this rule file by file: new code under src/app and
-  // src/foundation (and next.dart/testing.dart) is built on Material. Everything still on the
-  // pre-Material API stays Widgets-only until it is replaced and deleted. Cupertino is never
-  // imported (the guard in packages/charcoal_ui/test/source_guard_test.dart enforces that for the
-  // new code as well).
-  const materialBased = <String>[
-    '/src/app/',
-    '/src/foundation/',
-    '/lib/next.dart',
-    '/lib/testing.dart',
-    // 2A: a themed Material Slider.
+  // charcoal_ui is built on Material, but only the files below touch Material widgets; everything
+  // else composes Charcoal widgets and Flutter's widgets layer. Cupertino is never imported (the
+  // guard in packages/charcoal_ui/test/source_guard_test.dart enforces that as well).
+  const materialImporters = <String>[
+    // The app shell: MaterialApp.router with the pack-built ThemeData.
+    '/src/app/charcoal_app.dart',
+    // A themed Material Slider.
     '/src/components/selection/slider.dart',
-    // 2C: Material surface for dialogs (a Material ancestor for the inputs inside) and the dialog
-    // route.
+    // Material surface for dialogs (a Material ancestor for the inputs inside), the dialog route,
+    // and selectable text in the code viewer.
     '/src/components/overlays/dialog.dart',
     '/src/components/overlays/modal.dart',
-    // p3 gaps: selectable text in the code block (shared with the code dialog).
     '/src/components/overlays/code_block.dart',
-    // 2B: the only fields file that wraps Material widgets.
+    // The only fields file that wraps Material pickers.
     '/src/components/fields/date_time_field.dart',
   ];
 
-  test('pre-Material charcoal_ui code has no Material or Cupertino imports', () async {
+  test('only the listed charcoal_ui files import Material; none import Cupertino', () async {
+    for (final allowed in materialImporters) {
+      expect(
+        libraryFiles.any((file) => file.path.endsWith(allowed)),
+        isTrue,
+        reason: '$allowed no longer exists; remove it from materialImporters',
+      );
+    }
     final violations = <String>[];
     for (final file in libraryFiles) {
-      if (materialBased.any(file.path.contains)) continue;
       final source = await file.readAsString();
-      if (source.contains("package:flutter/material.dart") ||
-          source.contains("package:flutter/cupertino.dart") ||
-          source.contains("package:material_ui/") ||
-          source.contains("package:cupertino_ui/")) {
-        violations.add(file.path);
+      if (source.contains('package:flutter/cupertino.dart') ||
+          source.contains('package:cupertino_ui/')) {
+        violations.add('${file.path} imports Cupertino');
+      }
+      if (materialImporters.any(file.path.endsWith)) continue;
+      if (source.contains('package:flutter/material.dart') ||
+          source.contains('package:material_ui/')) {
+        violations.add('${file.path} imports Material');
       }
     }
     expect(violations, isEmpty, reason: violations.join('\n'));
   });
 
-  test('raw component colors are limited to audited source constants', () async {
-    const allowed = <String, Set<String>>{
-      'checkbox.dart': <String>{'0x00000000', '0xFFFFFFFF'},
-      // Authored fill from Charcoal iOS 16/Info.pdf.
-      'hint_text.dart': <String>{'0xFF858585'},
-      'loading_spinner.dart': <String>{'0x1A000000'},
-      'modal.dart': <String>{'0x99000000'},
-      'tag_item.dart': <String>{'0xFF7ACCB1'},
-    };
+  test('charcoal_ui source contains no colour constants', () async {
     final actual = <String, Set<String>>{};
-    for (final file in libraryFiles.where(
-      (file) => file.path.contains('/src/components/') && !file.path.endsWith('.g.dart'),
-    )) {
+    for (final file in libraryFiles.where((file) => !file.path.endsWith('.g.dart'))) {
       final source = await file.readAsString();
       final values = RegExp(
         r'\bColor\s*\(\s*(0x[0-9A-Fa-f]{8})',
@@ -67,7 +61,7 @@ void main() {
         actual[file.uri.pathSegments.last] = values;
       }
     }
-    expect(actual, allowed);
+    expect(actual, isEmpty);
   });
 
   test('charcoal_ui does not bundle runtime fonts', () async {

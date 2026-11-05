@@ -35,23 +35,23 @@ final class _AgentAsyncActionExampleState
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Publishing', style: theme.textStyles.headingS),
-        SizedBox(height: space.component20),
+        Text('Publishing', style: theme.style(CharcoalTextRole.headingS)),
+        SizedBox(height: space.sm),
         Semantics(
           liveRegion: true,
           child: Text(
             _status,
-            style: theme.textStyles.captionMedium.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(color: theme.colors.textSecondary),
           ),
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         CharcoalSpinnerOverlay(
           semanticLabel: _pendingPublished
               ? 'Publishing draft'
@@ -59,19 +59,19 @@ final class _AgentAsyncActionExampleState
           visible: _saving,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-              color: theme.colors.containerSecondaryDefault,
+              borderRadius: BorderRadius.circular(theme.radius.md),
+              color: theme.colors.surfaceSecondary,
             ),
             child: Padding(
-              padding: EdgeInsets.all(space.layout40),
+              padding: EdgeInsets.all(space.xl),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
                     _published ? 'Published' : 'Private draft',
-                    style: theme.textStyles.bodyBold,
+                    style: theme.style(CharcoalTextRole.bodyLargeBold),
                   ),
-                  SizedBox(height: space.component30),
+                  SizedBox(height: space.lg),
                   CharcoalSwitchingButton(
                     isOn: _published,
                     offButton: CharcoalButton(

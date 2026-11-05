@@ -1,4 +1,5 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/widgets.dart';
 
 /// A scoped light/dark token specimen with semantic and numeric typography.
@@ -17,57 +18,57 @@ final class _AgentThemeTypographyExampleState
   bool _dark = false;
 
   @override
-  Widget build(BuildContext context) => CharcoalTheme(
-    data: _dark ? CharcoalThemeData.dark() : CharcoalThemeData.light(),
+  Widget build(BuildContext context) => Theme(
+    data: buildCharcoalThemeData(_dark ? charcoalDarkPack : charcoalLightPack),
     child: Builder(
       builder: (context) {
         final theme = CharcoalTheme.of(context);
-        final space = theme.dimensions.space;
+        final space = theme.space;
         return DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
-            color: theme.colors.backgroundDefault,
+            borderRadius: BorderRadius.circular(theme.radius.md),
+            color: theme.colors.background,
           ),
           child: Padding(
-            padding: EdgeInsets.all(space.layout40),
+            padding: EdgeInsets.all(space.xl),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
                   'Project typography',
-                  style: theme.textStyles.headingXs.copyWith(
-                    color: theme.colors.textDefaultText1,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.headingXs)
+                      .copyWith(color: theme.colors.text),
                 ),
-                SizedBox(height: space.component20),
+                SizedBox(height: space.sm),
                 const CharcoalTypography(
-                  size: CharcoalTypographySize.size12,
-                  weight: CharcoalTypographyWeight.bold,
+                  role: CharcoalTextRole.size12,
+                  bold: true,
                   child: Text('CURATED COLLECTION'),
                 ),
-                SizedBox(height: space.component20),
+                SizedBox(height: space.sm),
                 CharcoalTextEllipsis(
                   projectTitle,
                   maxLines: 2,
                   semanticLabel: 'Complete project title: $projectTitle',
-                  style: theme.textStyles.body.copyWith(
-                    color: theme.colors.textDefaultText1,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.bodyLarge)
+                      .copyWith(color: theme.colors.text),
                 ),
-                SizedBox(height: space.layout40),
+                SizedBox(height: space.xl),
                 Semantics(
                   liveRegion: true,
                   child: Text(
                     _dark
                         ? 'Previewing dark theme.'
                         : 'Previewing light theme.',
-                    style: theme.textStyles.captionMedium.copyWith(
-                      color: theme.colors.textSecondaryDefault,
-                    ),
+                    style: theme
+                        .style(CharcoalTextRole.captionMedium)
+                        .copyWith(color: theme.colors.textSecondary),
                   ),
                 ),
-                SizedBox(height: space.component30),
+                SizedBox(height: space.lg),
                 CharcoalButton(
                   fullWidth: true,
                   onPressed: () => setState(() => _dark = !_dark),

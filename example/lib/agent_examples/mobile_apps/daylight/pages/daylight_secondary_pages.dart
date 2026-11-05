@@ -14,7 +14,7 @@ final class DaylightJourneyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final days = <(String, String)>[
       (
         'Monday',
@@ -37,7 +37,7 @@ final class DaylightJourneyPage extends StatelessWidget {
             description:
                 'Completed days and future plans share one calm timeline.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           DaylightItemGroup(
             children: <Widget>[
               for (final day in days)
@@ -46,22 +46,22 @@ final class DaylightJourneyPage extends StatelessWidget {
                     builder: (context, constraints) {
                       final dayLabel = Text(
                         day.$1,
-                        style: theme.textStyles.captionMediumBold.copyWith(
-                          color: theme.colors.textDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.captionMediumBold)
+                            .copyWith(color: theme.colors.text),
                       );
                       final statusLabel = Text(
                         day.$2,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textSecondaryDefault,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(color: theme.colors.textSecondary),
                       );
                       if (constraints.maxWidth < 300) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             dayLabel,
-                            SizedBox(height: space.component10),
+                            SizedBox(height: space.xs),
                             statusLabel,
                           ],
                         );
@@ -69,7 +69,7 @@ final class DaylightJourneyPage extends StatelessWidget {
                       return Row(
                         children: <Widget>[
                           Expanded(child: dayLabel),
-                          SizedBox(width: space.component20),
+                          SizedBox(width: space.sm),
                           Flexible(child: statusLabel),
                         ],
                       );
@@ -78,7 +78,7 @@ final class DaylightJourneyPage extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           CharcoalButton(
             key: const ValueKey<String>('agent-habits-return-today'),
             fullWidth: true,
@@ -98,7 +98,7 @@ final class DaylightInsightsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-habits-insights-page'),
@@ -109,7 +109,7 @@ final class DaylightInsightsPage extends StatelessWidget {
             title: 'Notice what is already working',
             description: 'Signals support reflection; they never compete with today’s checklist.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           DaylightItemGroup(
             children: <Widget>[
               _DaylightInsight(
@@ -139,7 +139,7 @@ final class DaylightProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return AgentDemoPage(
       child: Column(
         key: const ValueKey<String>('agent-habits-profile-page'),
@@ -150,16 +150,16 @@ final class DaylightProfilePage extends StatelessWidget {
             title: 'Shape your daily support',
             description: 'Choose how Daylight encourages you without changing the habits you committed to.',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           AgentDemoProfileHeader(
             name: 'Mina Aoki',
             context: 'Daylight journey · Week 4',
             summary:
                 '${14 + viewModel.completedCount} habits completed this week',
           ),
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           const AgentDemoSectionHeading(title: 'Support style'),
-          SizedBox(height: space.component20),
+          SizedBox(height: space.sm),
           DaylightItemGroup(
             children: <Widget>[
               AgentDemoPreferenceSwitch(
@@ -199,26 +199,28 @@ final class _DaylightInsight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return AgentDemoSurface(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             label.toUpperCase(),
-            style: theme.textStyles.captionSmall.copyWith(
-              color: theme.colors.textTertiaryDefault,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.7,
-            ),
+            style: theme
+                .style(CharcoalTextRole.caption)
+                .copyWith(
+                  color: theme.colors.textTertiary,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.7,
+                ),
           ),
-          SizedBox(height: space.component10),
+          SizedBox(height: space.xs),
           Text(
             value,
-            style: theme.textStyles.captionMediumBold.copyWith(
-              color: theme.colors.textDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMediumBold)
+                .copyWith(color: theme.colors.text),
           ),
         ],
       ),

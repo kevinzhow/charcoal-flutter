@@ -1,4 +1,4 @@
-import 'package:charcoal_ui/next.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/material.dart';
 
 /// Wraps [child] in a [CharcoalApp] with the light pack (or [pack]) and centres it, in the shape

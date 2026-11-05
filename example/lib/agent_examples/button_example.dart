@@ -14,7 +14,7 @@ final class AgentButtonExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gap = CharcoalTheme.of(context).dimensions.space.component20;
+    final gap = CharcoalTheme.of(context).space.sm;
     return LayoutBuilder(
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 420;

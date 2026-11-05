@@ -31,9 +31,9 @@ final class _ComposedUiPreviewState extends State<_ComposedUiPreview> {
             CharcoalSegment<String>(value: 'list', child: Text('List')),
           ],
         ),
-        const SizedBox(height: 24),
+        const CharcoalGap(CharcoalSpace.xl),
         const CharcoalHintText(child: Text('Changes are saved automatically.')),
-        const SizedBox(height: 24),
+        const CharcoalGap(CharcoalSpace.xl),
         CharcoalButton(
           variant: CharcoalButtonVariant.primary,
           onPressed: () => showCharcoalDialog<void>(

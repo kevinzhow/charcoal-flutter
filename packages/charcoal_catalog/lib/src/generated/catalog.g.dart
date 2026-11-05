@@ -5,9 +5,9 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 35,
-    "curatedComponents": 35,
-    "componentsWithExamples": 35,
+    "publicComponents": 77,
+    "curatedComponents": 34,
+    "componentsWithExamples": 34,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 226
@@ -415,11 +415,121 @@ const String generatedCatalogJson = r'''{
   ],
   "components": [
     {
+      "name": "CharcoalActionTile",
+      "category": "Utility",
+      "summary": "An outlined button tile with a leading icon and a one-line label: a quick action on a",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/action_tile.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalactiontile",
+        "action tile"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalActionTile",
+          "kind": "constructor",
+          "signature": "CharcoalActionTile({required this.icon, required this.label, required this.onPressed, super.key})",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalAdminShell",
+      "category": "Utility",
+      "summary": "The responsive frame of an admin app: a permanent [sidebar] beside [body] at or above",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/admin_shell.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaladminshell",
+        "admin shell"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalAdminShell",
+          "kind": "constructor",
+          "signature": "CharcoalAdminShell({required this.body, required this.sidebar, this.bottomBar, super.key})",
+          "parameters": [
+            {
+              "name": "body",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "sidebar",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "bottomBar",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalAnchoredBalloon",
       "category": "Overlays",
       "summary": "Tracks an anchor and presents persistent details or actions with controlled or internal visibility.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/balloon.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/balloon.dart",
       "documentationLevel": "curated",
       "keywords": [
         "anchored callout",
@@ -568,7 +678,7 @@ const String generatedCatalogJson = r'''{
           "title": "Brief and persistent anchored context",
           "description": "Separates non-interactive tooltip help from persistent and controlled balloon content.",
           "sourcePath": "example/lib/agent_examples/overlay_controls_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Separates brief tooltip context, persistent callouts, and anchored details.\nfinal class AgentOverlayControlsExample extends StatefulWidget {\n  const AgentOverlayControlsExample({super.key});\n\n  @override\n  State<AgentOverlayControlsExample> createState() =>\n      _AgentOverlayControlsExampleState();\n}\n\nfinal class _AgentOverlayControlsExampleState\n    extends State<AgentOverlayControlsExample> {\n  bool _detailsVisible = false;\n  String _status = 'No overlay action yet';\n\n  void _setDetailsVisible(bool visible) {\n    if (_detailsVisible == visible) return;\n    setState(() {\n      _detailsVisible = visible;\n      _status = visible\n          ? 'Publishing details open'\n          : 'Publishing details closed';\n    });\n  }\n\n  void _reviewSettings() {\n    setState(() {\n      _detailsVisible = false;\n      _status = 'Settings review requested';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Anchored context', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Text(_status, style: theme.textStyles.captionMedium),\n        SizedBox(height: space.layout40),\n        const Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalBalloon(\n            position: CharcoalOverlayPosition.left,\n            semanticLabel: 'Publishing guidance',\n            child: Text('Drafts remain private until you publish.'),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.component30,\n          runSpacing: space.component30,\n          children: <Widget>[\n            CharcoalTooltip(\n              message: 'Copies a shareable link',\n              child: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.link),\n                onPressed: () => setState(() => _status = 'Share link copied'),\n                semanticLabel: 'Copy share link',\n              ),\n            ),\n            CharcoalAnchoredBalloon(\n              action: CharcoalLinkButton(\n                onPressed: _reviewSettings,\n                child: const Text('Review settings'),\n              ),\n              anchor: CharcoalButton(\n                leading: const CharcoalIcon(CharcoalIcons.questionCircle),\n                onPressed: () => _setDetailsVisible(!_detailsVisible),\n                semanticLabel: _detailsVisible\n                    ? 'Hide publishing details'\n                    : 'Show publishing details',\n                child: const Text('Publishing details'),\n              ),\n              dismissOnTapOutside: true,\n              message: 'Only workspace owners can publish this draft.',\n              onVisibilityChanged: _setDetailsVisible,\n              showOnTap: false,\n              visible: _detailsVisible,\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Separates brief tooltip context, persistent callouts, and anchored details.\nfinal class AgentOverlayControlsExample extends StatefulWidget {\n  const AgentOverlayControlsExample({super.key});\n\n  @override\n  State<AgentOverlayControlsExample> createState() =>\n      _AgentOverlayControlsExampleState();\n}\n\nfinal class _AgentOverlayControlsExampleState\n    extends State<AgentOverlayControlsExample> {\n  bool _detailsVisible = false;\n  String _status = 'No overlay action yet';\n\n  void _setDetailsVisible(bool visible) {\n    if (_detailsVisible == visible) return;\n    setState(() {\n      _detailsVisible = visible;\n      _status = visible\n          ? 'Publishing details open'\n          : 'Publishing details closed';\n    });\n  }\n\n  void _reviewSettings() {\n    setState(() {\n      _detailsVisible = false;\n      _status = 'Settings review requested';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Anchored context', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),\n        SizedBox(height: space.xl),\n        const Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalBalloon(\n            position: CharcoalOverlayPosition.left,\n            semanticLabel: 'Publishing guidance',\n            child: Text('Drafts remain private until you publish.'),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.lg,\n          runSpacing: space.lg,\n          children: <Widget>[\n            CharcoalTooltip(\n              message: 'Copies a shareable link',\n              child: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.link),\n                onPressed: () => setState(() => _status = 'Share link copied'),\n                semanticLabel: 'Copy share link',\n              ),\n            ),\n            CharcoalAnchoredBalloon(\n              action: CharcoalLinkButton(\n                onPressed: _reviewSettings,\n                child: const Text('Review settings'),\n              ),\n              anchor: CharcoalButton(\n                leading: const CharcoalIcon(CharcoalIcons.questionCircle),\n                onPressed: () => _setDetailsVisible(!_detailsVisible),\n                semanticLabel: _detailsVisible\n                    ? 'Hide publishing details'\n                    : 'Show publishing details',\n                child: const Text('Publishing details'),\n              ),\n              dismissOnTapOutside: true,\n              message: 'Only workspace owners can publish this draft.',\n              onVisibilityChanged: _setDetailsVisible,\n              showOnTap: false,\n              visible: _detailsVisible,\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -577,7 +687,7 @@ const String generatedCatalogJson = r'''{
       "category": "Application",
       "summary": "Hosts a Charcoal application with Navigator or Router navigation and shared platform infrastructure.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/legacy/app/charcoal_app.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_app.dart",
       "documentationLevel": "curated",
       "keywords": [
         "app shell",
@@ -593,7 +703,7 @@ const String generatedCatalogJson = r'''{
         "Declarative routing or deep links need the same Charcoal infrastructure as imperative Navigator routes."
       ],
       "avoidWhen": [
-        "Only a subtree needs a theme override; wrap that subtree in CharcoalTheme instead.",
+        "Only a subtree needs a theme override; wrap that subtree in a Theme built with buildCharcoalThemeData.",
         "A nested flow needs its own Navigator; keep the application shell at the root and add a nested Navigator locally."
       ],
       "accessibility": [
@@ -621,7 +731,7 @@ const String generatedCatalogJson = r'''{
       ],
       "relatedComponents": [
         "CharcoalPageRoute",
-        "CharcoalTheme",
+        "CharcoalScaffold",
         "CharcoalNavigationBar",
         "CharcoalTabBar"
       ],
@@ -629,7 +739,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalApp",
           "kind": "constructor",
-          "signature": "CharcoalApp({this.navigatorKey, this.home, this.routes = const <String, WidgetBuilder>{}, this.initialRoute, this.onGenerateRoute, this.onGenerateInitialRoutes, this.onUnknownRoute, this.navigatorObservers = const <NavigatorObserver>[], this.builder, this.title = '', this.onGenerateTitle, this.theme, this.darkTheme, this.themeMode = CharcoalThemeMode.system, this.locale, this.localizationsDelegates, this.localeListResolutionCallback, this.localeResolutionCallback, this.supportedLocales = const <Locale>[Locale('en', 'US')], this.debugShowCheckedModeBanner = false, this.shortcuts, this.actions, this.restorationScopeId, this.scrollBehavior, this.pageRouteBuilder, super.key})",
+          "signature": "CharcoalApp({this.navigatorKey, this.home, this.routes = const <String, WidgetBuilder>{}, this.initialRoute, this.onGenerateRoute, this.onGenerateInitialRoutes, this.onUnknownRoute, this.navigatorObservers = const <NavigatorObserver>[], this.builder, this.title = '', this.onGenerateTitle, this.lightPack, this.darkPack, this.themeMode = CharcoalThemeMode.system, this.locale, this.localizationsDelegates, this.localeListResolutionCallback, this.localeResolutionCallback, this.supportedLocales = const <Locale>[Locale('en', 'US')], this.debugShowCheckedModeBanner = false, this.shortcuts, this.actions, this.restorationScopeId, this.scrollBehavior, super.key})",
           "parameters": [
             {
               "name": "navigatorKey",
@@ -701,14 +811,14 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "theme",
-              "type": "CharcoalThemeData?",
+              "name": "lightPack",
+              "type": "CharcoalThemePack?",
               "required": false,
               "named": true
             },
             {
-              "name": "darkTheme",
-              "type": "CharcoalThemeData?",
+              "name": "darkPack",
+              "type": "CharcoalThemePack?",
               "required": false,
               "named": true
             },
@@ -782,12 +892,6 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "pageRouteBuilder",
-              "type": "PageRouteFactory?",
-              "required": false,
-              "named": true
-            },
-            {
               "name": "key",
               "type": "Key?",
               "required": false,
@@ -799,7 +903,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalApp.router",
           "kind": "constructor",
-          "signature": "CharcoalApp.router({this.routeInformationProvider, this.routeInformationParser, this.routerDelegate, this.routerConfig, this.backButtonDispatcher, this.builder, this.title = '', this.onGenerateTitle, this.theme, this.darkTheme, this.themeMode = CharcoalThemeMode.system, this.locale, this.localizationsDelegates, this.localeListResolutionCallback, this.localeResolutionCallback, this.supportedLocales = const <Locale>[Locale('en', 'US')], this.debugShowCheckedModeBanner = false, this.shortcuts, this.actions, this.restorationScopeId, this.scrollBehavior, super.key})",
+          "signature": "CharcoalApp.router({this.routeInformationProvider, this.routeInformationParser, this.routerDelegate, this.routerConfig, this.backButtonDispatcher, this.builder, this.title = '', this.onGenerateTitle, this.lightPack, this.darkPack, this.themeMode = CharcoalThemeMode.system, this.locale, this.localizationsDelegates, this.localeListResolutionCallback, this.localeResolutionCallback, this.supportedLocales = const <Locale>[Locale('en', 'US')], this.debugShowCheckedModeBanner = false, this.shortcuts, this.actions, this.restorationScopeId, this.scrollBehavior, super.key})",
           "parameters": [
             {
               "name": "routeInformationProvider",
@@ -851,14 +955,14 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "theme",
-              "type": "CharcoalThemeData?",
+              "name": "lightPack",
+              "type": "CharcoalThemePack?",
               "required": false,
               "named": true
             },
             {
-              "name": "darkTheme",
-              "type": "CharcoalThemeData?",
+              "name": "darkPack",
+              "type": "CharcoalThemePack?",
               "required": false,
               "named": true
             },
@@ -963,11 +1067,118 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalAvatar",
+      "category": "Utility",
+      "summary": "A square or circular avatar showing the first letter of [source].",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/avatar.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalavatar",
+        "avatar"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalAvatar",
+          "kind": "constructor",
+          "signature": "CharcoalAvatar(this.source, {this.circular = false, this.size = CharcoalAvatarSize.regular, super.key})",
+          "parameters": [
+            {
+              "name": "source",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "circular",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalAvatarSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalAvatarSize.regular"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalBadge",
+      "category": "Utility",
+      "summary": "A small solid label: a count, a role, \"new\".",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/status/badge.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalbadge",
+        "badge"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBadge",
+          "kind": "constructor",
+          "signature": "CharcoalBadge(this.label, {this.tone = CharcoalBadgeTone.primary, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalBadgeTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalBadgeTone.primary"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalBalloon",
       "category": "Overlays",
       "summary": "Renders a persistent speech surface when the caller already owns its layout and directional relationship.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/balloon.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/balloon.dart",
       "documentationLevel": "curated",
       "keywords": [
         "callout",
@@ -1101,16 +1312,236 @@ const String generatedCatalogJson = r'''{
           "title": "Brief and persistent anchored context",
           "description": "Separates non-interactive tooltip help from persistent and controlled balloon content.",
           "sourcePath": "example/lib/agent_examples/overlay_controls_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Separates brief tooltip context, persistent callouts, and anchored details.\nfinal class AgentOverlayControlsExample extends StatefulWidget {\n  const AgentOverlayControlsExample({super.key});\n\n  @override\n  State<AgentOverlayControlsExample> createState() =>\n      _AgentOverlayControlsExampleState();\n}\n\nfinal class _AgentOverlayControlsExampleState\n    extends State<AgentOverlayControlsExample> {\n  bool _detailsVisible = false;\n  String _status = 'No overlay action yet';\n\n  void _setDetailsVisible(bool visible) {\n    if (_detailsVisible == visible) return;\n    setState(() {\n      _detailsVisible = visible;\n      _status = visible\n          ? 'Publishing details open'\n          : 'Publishing details closed';\n    });\n  }\n\n  void _reviewSettings() {\n    setState(() {\n      _detailsVisible = false;\n      _status = 'Settings review requested';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Anchored context', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Text(_status, style: theme.textStyles.captionMedium),\n        SizedBox(height: space.layout40),\n        const Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalBalloon(\n            position: CharcoalOverlayPosition.left,\n            semanticLabel: 'Publishing guidance',\n            child: Text('Drafts remain private until you publish.'),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.component30,\n          runSpacing: space.component30,\n          children: <Widget>[\n            CharcoalTooltip(\n              message: 'Copies a shareable link',\n              child: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.link),\n                onPressed: () => setState(() => _status = 'Share link copied'),\n                semanticLabel: 'Copy share link',\n              ),\n            ),\n            CharcoalAnchoredBalloon(\n              action: CharcoalLinkButton(\n                onPressed: _reviewSettings,\n                child: const Text('Review settings'),\n              ),\n              anchor: CharcoalButton(\n                leading: const CharcoalIcon(CharcoalIcons.questionCircle),\n                onPressed: () => _setDetailsVisible(!_detailsVisible),\n                semanticLabel: _detailsVisible\n                    ? 'Hide publishing details'\n                    : 'Show publishing details',\n                child: const Text('Publishing details'),\n              ),\n              dismissOnTapOutside: true,\n              message: 'Only workspace owners can publish this draft.',\n              onVisibilityChanged: _setDetailsVisible,\n              showOnTap: false,\n              visible: _detailsVisible,\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Separates brief tooltip context, persistent callouts, and anchored details.\nfinal class AgentOverlayControlsExample extends StatefulWidget {\n  const AgentOverlayControlsExample({super.key});\n\n  @override\n  State<AgentOverlayControlsExample> createState() =>\n      _AgentOverlayControlsExampleState();\n}\n\nfinal class _AgentOverlayControlsExampleState\n    extends State<AgentOverlayControlsExample> {\n  bool _detailsVisible = false;\n  String _status = 'No overlay action yet';\n\n  void _setDetailsVisible(bool visible) {\n    if (_detailsVisible == visible) return;\n    setState(() {\n      _detailsVisible = visible;\n      _status = visible\n          ? 'Publishing details open'\n          : 'Publishing details closed';\n    });\n  }\n\n  void _reviewSettings() {\n    setState(() {\n      _detailsVisible = false;\n      _status = 'Settings review requested';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Anchored context', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),\n        SizedBox(height: space.xl),\n        const Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalBalloon(\n            position: CharcoalOverlayPosition.left,\n            semanticLabel: 'Publishing guidance',\n            child: Text('Drafts remain private until you publish.'),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.lg,\n          runSpacing: space.lg,\n          children: <Widget>[\n            CharcoalTooltip(\n              message: 'Copies a shareable link',\n              child: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.link),\n                onPressed: () => setState(() => _status = 'Share link copied'),\n                semanticLabel: 'Copy share link',\n              ),\n            ),\n            CharcoalAnchoredBalloon(\n              action: CharcoalLinkButton(\n                onPressed: _reviewSettings,\n                child: const Text('Review settings'),\n              ),\n              anchor: CharcoalButton(\n                leading: const CharcoalIcon(CharcoalIcons.questionCircle),\n                onPressed: () => _setDetailsVisible(!_detailsVisible),\n                semanticLabel: _detailsVisible\n                    ? 'Hide publishing details'\n                    : 'Show publishing details',\n                child: const Text('Publishing details'),\n              ),\n              dismissOnTapOutside: true,\n              message: 'Only workspace owners can publish this draft.',\n              onVisibilityChanged: _setDetailsVisible,\n              showOnTap: false,\n              visible: _detailsVisible,\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalBanner",
+      "category": "Utility",
+      "summary": "An inline banner: tone icon, message, optional trailing action.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/banner.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalbanner",
+        "banner"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBanner",
+          "kind": "constructor",
+          "signature": "CharcoalBanner({required this.message, this.action, this.filled = true, this.icon, this.title, this.tone = CharcoalTone.neutral, super.key})",
+          "parameters": [
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "filled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "icon",
+              "type": "CharcoalIconData?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTone.neutral"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalBatchBar",
+      "category": "Utility",
+      "summary": "The toolbar above a batch-selectable list.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/batch_bar.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalbatchbar",
+        "batch bar"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBatchBar",
+          "kind": "constructor",
+          "signature": "CharcoalBatchBar({required this.onDelete, required this.onToggleMode, required this.restLabel, required this.selectedCount, required this.selectionMode, this.cancelLabel = 'Cancel', this.deleteLabel = 'Delete selected', this.restActions = const <Widget>[], this.selectLabel = 'Select', this.selectedCountLabel = _defaultSelectedCountLabel, super.key})",
+          "parameters": [
+            {
+              "name": "onDelete",
+              "type": "VoidCallback",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onToggleMode",
+              "type": "VoidCallback",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "restLabel",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "selectedCount",
+              "type": "int",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "selectionMode",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "cancelLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Cancel'"
+            },
+            {
+              "name": "deleteLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Delete selected'"
+            },
+            {
+              "name": "restActions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "selectLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Select'"
+            },
+            {
+              "name": "selectedCountLabel",
+              "type": "String Function(int count)",
+              "required": false,
+              "named": true,
+              "defaultValue": "_defaultSelectedCountLabel"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalBrandMark",
+      "category": "Utility",
+      "summary": "The product mark: a `sizes.brandMark` square in the primary colour with one letter.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/brand_mark.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalbrandmark",
+        "brand mark"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBrandMark",
+          "kind": "constructor",
+          "signature": "CharcoalBrandMark(this.mark, {super.key})",
+          "parameters": [
+            {
+              "name": "mark",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalButton",
       "category": "Actions",
       "summary": "Runs an action with Charcoal interaction states, sizing, and visual variants.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/button.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/actions/button.dart",
       "documentationLevel": "curated",
       "keywords": [
         "action",
@@ -1164,7 +1595,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalButton",
           "kind": "constructor",
-          "signature": "CharcoalButton({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.fullWidth = false, this.leading, this.primaryColor, this.semanticLabel, this.selected, this.size = CharcoalButtonSize.medium, this.statesController, this.trailing, this.variant = CharcoalButtonVariant.normal, super.key})",
+          "signature": "CharcoalButton({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.fullWidth = false, this.labelTone, this.leading, this.primaryColor, this.semanticLabel, this.selected, this.size = CharcoalButtonSize.medium, this.statesController, this.trailing, this.variant = CharcoalButtonVariant.normal, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -1197,6 +1628,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "labelTone",
+              "type": "CharcoalTextTone?",
+              "required": false,
+              "named": true
             },
             {
               "name": "leading",
@@ -1260,13 +1697,13 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalButtonVariant",
           "kind": "enum",
-          "signature": "enum CharcoalButtonVariant { normal, primary, overlay, danger, navigation }",
+          "signature": "enum CharcoalButtonVariant { normal, primary, danger, overlay, navigation }",
           "parameters": [],
           "enumValues": [
             "normal",
             "primary",
-            "overlay",
             "danger",
+            "overlay",
             "navigation"
           ]
         },
@@ -1287,16 +1724,73 @@ const String generatedCatalogJson = r'''{
           "title": "Primary and secondary actions",
           "description": "A compact action row that becomes full-width when constrained.",
           "sourcePath": "example/lib/agent_examples/button_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A responsive pair of primary and secondary actions.\nfinal class AgentButtonExample extends StatelessWidget {\n  const AgentButtonExample({\n    required this.onContinue,\n    required this.onCancel,\n    super.key,\n  });\n\n  final VoidCallback onContinue;\n  final VoidCallback onCancel;\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).dimensions.space.component20;\n    return LayoutBuilder(\n      builder: (context, constraints) {\n        final compact = constraints.maxWidth < 420;\n        final cancel = CharcoalButton(\n          fullWidth: compact,\n          onPressed: onCancel,\n          child: const Text('Cancel'),\n        );\n        final submit = CharcoalButton(\n          fullWidth: compact,\n          onPressed: onContinue,\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Continue'),\n        );\n        if (compact) {\n          return Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            mainAxisSize: MainAxisSize.min,\n            children: <Widget>[\n              submit,\n              SizedBox(height: gap),\n              cancel,\n            ],\n          );\n        }\n        return Row(\n          mainAxisSize: MainAxisSize.min,\n          children: <Widget>[\n            cancel,\n            SizedBox(width: gap),\n            submit,\n          ],\n        );\n      },\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A responsive pair of primary and secondary actions.\nfinal class AgentButtonExample extends StatelessWidget {\n  const AgentButtonExample({\n    required this.onContinue,\n    required this.onCancel,\n    super.key,\n  });\n\n  final VoidCallback onContinue;\n  final VoidCallback onCancel;\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).space.sm;\n    return LayoutBuilder(\n      builder: (context, constraints) {\n        final compact = constraints.maxWidth < 420;\n        final cancel = CharcoalButton(\n          fullWidth: compact,\n          onPressed: onCancel,\n          child: const Text('Cancel'),\n        );\n        final submit = CharcoalButton(\n          fullWidth: compact,\n          onPressed: onContinue,\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Continue'),\n        );\n        if (compact) {\n          return Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            mainAxisSize: MainAxisSize.min,\n            children: <Widget>[\n              submit,\n              SizedBox(height: gap),\n              cancel,\n            ],\n          );\n        }\n        return Row(\n          mainAxisSize: MainAxisSize.min,\n          children: <Widget>[\n            cancel,\n            SizedBox(width: gap),\n            submit,\n          ],\n        );\n      },\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalCard",
+      "category": "Utility",
+      "summary": "A grey filled card, the surface for stats and grouped information.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/card.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalcard",
+        "card"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalCard",
+          "kind": "constructor",
+          "signature": "CharcoalCard({required this.child, this.outlined = false, this.padding = const CharcoalInset.all(CharcoalSpace.lg), super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "outlined",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "padding",
+              "type": "CharcoalInset",
+              "required": false,
+              "named": true,
+              "defaultValue": "const CharcoalInset.all(CharcoalSpace.lg)"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalCarousel",
       "category": "Navigation",
       "summary": "Presents a short, non-auto-rotating horizontal sequence across touch, pointer, keyboard, and assistive input.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/carousel.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/carousel/carousel.dart",
       "documentationLevel": "curated",
       "keywords": [
         "carousel",
@@ -1498,7 +1992,7 @@ const String generatedCatalogJson = r'''{
           "title": "Responsive featured guides",
           "description": "Preserves reported page context while the same carousel moves between compact full-page and wide neighboring-page layouts.",
           "sourcePath": "example/lib/agent_examples/carousel_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A responsive featured-content carousel with caller-owned page context.\nfinal class AgentCarouselExample extends StatefulWidget {\n  const AgentCarouselExample({super.key});\n\n  @override\n  State<AgentCarouselExample> createState() => _AgentCarouselExampleState();\n}\n\nfinal class _AgentCarouselExampleState extends State<AgentCarouselExample> {\n  static const _guides = <({String title, String description})>[\n    (\n      title: 'Build a calm first run',\n      description: 'Introduce one decision before revealing advanced tools.',\n    ),\n    (\n      title: 'Keep navigation truthful',\n      description: 'Stable destinations switch state; detail work uses routes.',\n    ),\n    (\n      title: 'Make recovery explicit',\n      description:\n          'Errors explain what remains safe and the next useful action.',\n    ),\n    (\n      title: 'Verify every input path',\n      description:\n          'Touch, pointer, keyboard, and assistive actions share outcomes.',\n    ),\n  ];\n\n  int _currentPage = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    final colors = <Color>[\n      theme.colors.containerSecondaryDefault,\n      theme.colors.containerNeutralDefault,\n      theme.colors.containerTertiaryDefault,\n      theme.colors.containerSecondaryDefaultA,\n    ];\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Featured guides', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            'Guide ${_currentPage + 1} of ${_guides.length}: '\n            '${_guides[_currentPage].title}',\n            style: theme.textStyles.captionMedium.copyWith(\n              color: theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        LayoutBuilder(\n          builder: (context, constraints) {\n            final compact = constraints.maxWidth < 480;\n            return SizedBox(\n              height: 200,\n              child: CharcoalCarousel(\n                gap: compact ? 0 : space.component20,\n                onPageChanged: (page) => setState(() => _currentPage = page),\n                semanticLabel: 'Featured guides',\n                semanticLabelBuilder: (index, itemCount) =>\n                    'Guide ${index + 1} of $itemCount: ${_guides[index].title}',\n                showIndicators: true,\n                size: compact\n                    ? CharcoalCarouselSize.small\n                    : CharcoalCarouselSize.medium,\n                children: <Widget>[\n                  for (var index = 0; index < _guides.length; index++)\n                    _GuideSlide(\n                      color: colors[index],\n                      description: _guides[index].description,\n                      title: _guides[index].title,\n                    ),\n                ],\n              ),\n            );\n          },\n        ),\n      ],\n    );\n  }\n}\n\nfinal class _GuideSlide extends StatelessWidget {\n  const _GuideSlide({\n    required this.color,\n    required this.description,\n    required this.title,\n  });\n\n  final Color color;\n  final String description;\n  final String title;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return DecoratedBox(\n      decoration: BoxDecoration(\n        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n        color: color,\n      ),\n      child: Padding(\n        padding: EdgeInsets.all(space.layout30),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.start,\n          mainAxisAlignment: MainAxisAlignment.center,\n          children: <Widget>[\n            Text(title, style: theme.textStyles.bodyBold),\n            SizedBox(height: space.component20),\n            Text(\n              description,\n              maxLines: 3,\n              overflow: TextOverflow.ellipsis,\n              style: theme.textStyles.captionMedium.copyWith(\n                color: theme.colors.textSecondaryDefault,\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A responsive featured-content carousel with caller-owned page context.\nfinal class AgentCarouselExample extends StatefulWidget {\n  const AgentCarouselExample({super.key});\n\n  @override\n  State<AgentCarouselExample> createState() => _AgentCarouselExampleState();\n}\n\nfinal class _AgentCarouselExampleState extends State<AgentCarouselExample> {\n  static const _guides = <({String title, String description})>[\n    (\n      title: 'Build a calm first run',\n      description: 'Introduce one decision before revealing advanced tools.',\n    ),\n    (\n      title: 'Keep navigation truthful',\n      description: 'Stable destinations switch state; detail work uses routes.',\n    ),\n    (\n      title: 'Make recovery explicit',\n      description:\n          'Errors explain what remains safe and the next useful action.',\n    ),\n    (\n      title: 'Verify every input path',\n      description:\n          'Touch, pointer, keyboard, and assistive actions share outcomes.',\n    ),\n  ];\n\n  int _currentPage = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    final colors = <Color>[\n      theme.colors.surfaceSecondary,\n      theme.colors.neutral,\n      theme.colors.surfaceTertiary,\n      theme.colors.fillSecondary,\n    ];\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Featured guides', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            'Guide ${_currentPage + 1} of ${_guides.length}: '\n            '${_guides[_currentPage].title}',\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        LayoutBuilder(\n          builder: (context, constraints) {\n            final compact = constraints.maxWidth < 480;\n            return SizedBox(\n              height: 200,\n              child: CharcoalCarousel(\n                gap: compact ? 0 : space.sm,\n                onPageChanged: (page) => setState(() => _currentPage = page),\n                semanticLabel: 'Featured guides',\n                semanticLabelBuilder: (index, itemCount) =>\n                    'Guide ${index + 1} of $itemCount: ${_guides[index].title}',\n                showIndicators: true,\n                size: compact\n                    ? CharcoalCarouselSize.small\n                    : CharcoalCarouselSize.medium,\n                children: <Widget>[\n                  for (var index = 0; index < _guides.length; index++)\n                    _GuideSlide(\n                      color: colors[index],\n                      description: _guides[index].description,\n                      title: _guides[index].title,\n                    ),\n                ],\n              ),\n            );\n          },\n        ),\n      ],\n    );\n  }\n}\n\nfinal class _GuideSlide extends StatelessWidget {\n  const _GuideSlide({\n    required this.color,\n    required this.description,\n    required this.title,\n  });\n\n  final Color color;\n  final String description;\n  final String title;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return DecoratedBox(\n      decoration: BoxDecoration(\n        borderRadius: BorderRadius.circular(theme.radius.md),\n        color: color,\n      ),\n      child: Padding(\n        padding: EdgeInsets.all(space.lg),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.start,\n          mainAxisAlignment: MainAxisAlignment.center,\n          children: <Widget>[\n            Text(title, style: theme.style(CharcoalTextRole.bodyLargeBold)),\n            SizedBox(height: space.sm),\n            Text(\n              description,\n              maxLines: 3,\n              overflow: TextOverflow.ellipsis,\n              style: theme\n                  .style(CharcoalTextRole.captionMedium)\n                  .copyWith(color: theme.colors.textSecondary),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
         }
       ]
     },
@@ -1507,7 +2001,7 @@ const String generatedCatalogJson = r'''{
       "category": "Forms",
       "summary": "Toggles one independent boolean choice in a controlled form or checklist.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/checkbox.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/checkbox.dart",
       "documentationLevel": "curated",
       "keywords": [
         "boolean input",
@@ -1639,16 +2133,73 @@ const String generatedCatalogJson = r'''{
           "title": "Independent controlled choice",
           "description": "Keeps an optional form choice in parent-owned state alongside related selection controls.",
           "sourcePath": "example/lib/agent_examples/selection_controls_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing preferences', style: theme.textStyles.headingS),\n        SizedBox(height: space.component30),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.layout40),\n        Text('Audience', style: theme.textStyles.bodyBold),\n        SizedBox(height: space.component20),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text(\n          'Publishing preferences',\n          style: theme.style(CharcoalTextRole.headingS),\n        ),\n        SizedBox(height: space.lg),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.xl),\n        Text('Audience', style: theme.style(CharcoalTextRole.bodyLargeBold)),\n        SizedBox(height: space.sm),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.lg),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.lg),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalChip",
+      "category": "Utility",
+      "summary": "A small status chip: caption text on a pale tone surface.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/status/chip.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalchip",
+        "chip"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalChip",
+          "kind": "constructor",
+          "signature": "CharcoalChip(this.label, {this.tone = CharcoalTone.neutral, this.monospace = false, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTone.neutral"
+            },
+            {
+              "name": "monospace",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalClickable",
       "category": "Actions",
       "summary": "Supplies platform-aware pointer, keyboard, focus, semantics, and state plumbing for an audited custom control.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/clickable.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/foundation/charcoal_clickable.dart",
       "documentationLevel": "curated",
       "keywords": [
         "custom control",
@@ -1844,16 +2395,215 @@ const String generatedCatalogJson = r'''{
           "title": "Audited whole-surface action",
           "description": "Uses the interaction primitive only after higher-level controls cannot express a single custom project surface.",
           "sourcePath": "example/lib/agent_examples/clickable_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An audited whole-surface action for a case with no higher-level component.\nfinal class AgentClickableSurfaceExample extends StatefulWidget {\n  const AgentClickableSurfaceExample({super.key});\n\n  @override\n  State<AgentClickableSurfaceExample> createState() =>\n      _AgentClickableSurfaceExampleState();\n}\n\nfinal class _AgentClickableSurfaceExampleState\n    extends State<AgentClickableSurfaceExample> {\n  String _status = 'No project opened';\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Whole-surface action', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Text(_status, style: theme.textStyles.captionMedium),\n        SizedBox(height: space.layout40),\n        CharcoalClickable(\n          onPressed: () => setState(() => _status = 'Moonlit Lake opened'),\n          semanticLabel: 'Open Moonlit Lake project',\n          builder: (context, states) {\n            final focused = states.contains(WidgetState.focused);\n            final hovered = states.contains(WidgetState.hovered);\n            final pressed = states.contains(WidgetState.pressed);\n            final background = pressed\n                ? theme.colors.containerSecondaryPressA\n                : hovered || focused\n                ? theme.colors.containerSecondaryHoverA\n                : theme.colors.backgroundDefault;\n            final border = focused\n                ? theme.colors.borderFocus1\n                : pressed\n                ? theme.colors.borderPress\n                : hovered\n                ? theme.colors.borderHover\n                : theme.colors.borderSecondary;\n            return AnimatedContainer(\n              curve: CharcoalMotion.standardCurve,\n              duration: CharcoalMotion.resolveDuration(\n                context,\n                CharcoalMotion.fast,\n              ),\n              constraints: BoxConstraints(\n                minHeight: theme.dimensions.space.targetL,\n              ),\n              padding: EdgeInsets.all(space.component30),\n              decoration: BoxDecoration(\n                border: Border.all(\n                  color: border,\n                  width: theme.dimensions.borderWidth.m,\n                ),\n                borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n                color: background,\n              ),\n              child: Row(\n                children: <Widget>[\n                  CharcoalIcon(\n                    CharcoalIcons.image,\n                    color: theme.colors.iconDefault,\n                  ),\n                  SizedBox(width: space.component30),\n                  Expanded(\n                    child: Column(\n                      crossAxisAlignment: CrossAxisAlignment.start,\n                      mainAxisSize: MainAxisSize.min,\n                      children: <Widget>[\n                        Text('Moonlit Lake', style: theme.textStyles.bodyBold),\n                        SizedBox(height: space.component10),\n                        Text(\n                          'Illustration · updated today',\n                          style: theme.textStyles.captionSmall.copyWith(\n                            color: theme.colors.textSecondaryDefault,\n                          ),\n                        ),\n                      ],\n                    ),\n                  ),\n                  SizedBox(width: space.component20),\n                  CharcoalIcon(\n                    CharcoalIcons.chevronRight,\n                    color: theme.colors.iconTertiaryDefault,\n                    size: 16,\n                  ),\n                ],\n              ),\n            );\n          },\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An audited whole-surface action for a case with no higher-level component.\nfinal class AgentClickableSurfaceExample extends StatefulWidget {\n  const AgentClickableSurfaceExample({super.key});\n\n  @override\n  State<AgentClickableSurfaceExample> createState() =>\n      _AgentClickableSurfaceExampleState();\n}\n\nfinal class _AgentClickableSurfaceExampleState\n    extends State<AgentClickableSurfaceExample> {\n  String _status = 'No project opened';\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text(\n          'Whole-surface action',\n          style: theme.style(CharcoalTextRole.headingS),\n        ),\n        SizedBox(height: space.sm),\n        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),\n        SizedBox(height: space.xl),\n        CharcoalClickable(\n          onPressed: () => setState(() => _status = 'Moonlit Lake opened'),\n          semanticLabel: 'Open Moonlit Lake project',\n          builder: (context, states) {\n            final focused = states.contains(WidgetState.focused);\n            final hovered = states.contains(WidgetState.hovered);\n            final pressed = states.contains(WidgetState.pressed);\n            final background = pressed\n                ? theme.colors.fillSecondaryPress\n                : hovered || focused\n                ? theme.colors.fillSecondaryHover\n                : theme.colors.background;\n            final border = focused\n                ? theme.colors.borderFocus\n                : pressed\n                ? theme.colors.border\n                : hovered\n                ? theme.colors.border\n                : theme.colors.borderSubtle;\n            return AnimatedContainer(\n              curve: CharcoalTheme.of(context).motion.curve,\n              duration: CharcoalTheme.of(context)\n                  .duration(context, CharcoalTheme.of(context).motion.fast),\n              constraints: BoxConstraints(minHeight: theme.sizes.controlLg),\n              padding: EdgeInsets.all(space.lg),\n              decoration: BoxDecoration(\n                border: Border.all(\n                  color: border,\n                  width: theme.borders.hairline,\n                ),\n                borderRadius: BorderRadius.circular(theme.radius.md),\n                color: background,\n              ),\n              child: Row(\n                children: <Widget>[\n                  CharcoalIcon(CharcoalIcons.image, color: theme.colors.icon),\n                  SizedBox(width: space.lg),\n                  Expanded(\n                    child: Column(\n                      crossAxisAlignment: CrossAxisAlignment.start,\n                      mainAxisSize: MainAxisSize.min,\n                      children: <Widget>[\n                        Text(\n                          'Moonlit Lake',\n                          style: theme.style(CharcoalTextRole.bodyLargeBold),\n                        ),\n                        SizedBox(height: space.xs),\n                        Text(\n                          'Illustration · updated today',\n                          style: theme\n                              .style(CharcoalTextRole.caption)\n                              .copyWith(color: theme.colors.textSecondary),\n                        ),\n                      ],\n                    ),\n                  ),\n                  SizedBox(width: space.sm),\n                  CharcoalIcon(\n                    CharcoalIcons.chevronRight,\n                    color: theme.colors.iconTertiary,\n                    size: 16,\n                  ),\n                ],\n              ),\n            );\n          },\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalCodeBlock",
+      "category": "Utility",
+      "summary": "A block of monospace text on `colors.backgroundSecondary`: a log excerpt, a JSON payload, a",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/code_block.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalcodeblock",
+        "code block"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalCodeBlock",
+          "kind": "constructor",
+          "signature": "CharcoalCodeBlock(this.text, {this.maxLines, this.scrollable = false, this.selectable = true, this.tone = CharcoalTextTone.primary, this.trailing, this.field = false, super.key})",
+          "parameters": [
+            {
+              "name": "text",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "maxLines",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "scrollable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "selectable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTextTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextTone.primary"
+            },
+            {
+              "name": "trailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "field",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalCodeBlock.lines",
+          "kind": "constructor",
+          "signature": "CharcoalCodeBlock.lines(List<String> this.lines, {this.selectable = true, this.tone = CharcoalTextTone.primary, super.key})",
+          "parameters": [
+            {
+              "name": "lines",
+              "type": "List<String>",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "selectable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTextTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextTone.primary"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalDateTimeField",
+      "category": "Utility",
+      "summary": "A date-and-time picker rendered as a field.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/date_time_field.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaldatetimefield",
+        "date time field"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalDateTimeField",
+          "kind": "constructor",
+          "signature": "CharcoalDateTimeField({required this.label, required this.value, required this.onChanged, this.clearText = 'Clear', this.emptyText = 'Not set', this.hint, this.picker = _pickDateAndTime, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "DateTime?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<DateTime?>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "clearText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Clear'"
+            },
+            {
+              "name": "emptyText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Not set'"
+            },
+            {
+              "name": "hint",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "picker",
+              "type": "CharcoalDateTimePicker",
+              "required": false,
+              "named": true,
+              "defaultValue": "_pickDateAndTime"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalDialog",
       "category": "Overlays",
       "summary": "Presents a short, blocking decision in a centered dialog or adaptive bottom-sheet surface.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/modal.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/dialog.dart",
       "documentationLevel": "curated",
       "keywords": [
         "bottom sheet",
@@ -1906,7 +2656,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalDialog",
           "kind": "constructor",
-          "signature": "CharcoalDialog({required this.child, this.actions = const <Widget>[], this.closeIcon, this.contentPadding = EdgeInsets.zero, this.maxWidth, this.onDismiss, this.showCloseButton = false, this.size = CharcoalDialogSize.medium, this.style = CharcoalModalStyle.center, this.title, super.key})",
+          "signature": "CharcoalDialog({required this.child, this.actions = const <Widget>[], this.closeIcon, this.closeLabel = 'Close', this.contentPadding = EdgeInsets.zero, this.maxWidth, this.onDismiss, this.showCloseButton = false, this.size = CharcoalDialogSize.medium, this.style = CharcoalModalStyle.center, this.title, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -1926,6 +2676,13 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
+            },
+            {
+              "name": "closeLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Close'"
             },
             {
               "name": "contentPadding",
@@ -2148,11 +2905,48 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalDivider",
+      "category": "Utility",
+      "summary": "A hairline rule across the width it is given, in `colors.borderSubtle`.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/divider.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaldivider",
+        "divider"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalDivider",
+          "kind": "constructor",
+          "signature": "CharcoalDivider({super.key})",
+          "parameters": [
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalDropdown",
       "category": "Forms",
       "summary": "Selects one value from a controlled list using a Charcoal popup menu.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/dropdown.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/dropdown.dart",
       "documentationLevel": "curated",
       "keywords": [
         "combobox",
@@ -2353,11 +3147,336 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalEditableText",
+      "category": "Utility",
+      "summary": "Shared editing behaviour for single-line and multiline Charcoal fields.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text/text_editing.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaleditabletext",
+        "editable text"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalEditableText",
+          "kind": "constructor",
+          "signature": "CharcoalEditableText({required this.controller, required this.focusNode, required this.style, this.selectionColor, this.autofocus = false, this.readOnly = false, this.obscureText = false, this.keyboardType, this.textInputAction, this.inputFormatters, this.onChanged, this.onSubmitted, this.maxLines = 1, this.minLines, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.scrollPadding, this.undoController, this.restorationId, super.key})",
+          "parameters": [
+            {
+              "name": "controller",
+              "type": "TextEditingController",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "style",
+              "type": "TextStyle",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "selectionColor",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "readOnly",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "obscureText",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "keyboardType",
+              "type": "TextInputType?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "textInputAction",
+              "type": "TextInputAction?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "inputFormatters",
+              "type": "List<TextInputFormatter>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onSubmitted",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxLines",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "1"
+            },
+            {
+              "name": "minLines",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "autofillHints",
+              "type": "Iterable<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "contextMenuBuilder",
+              "type": "EditableTextContextMenuBuilder?",
+              "required": false,
+              "named": true,
+              "defaultValue": "buildCharcoalTextContextMenu"
+            },
+            {
+              "name": "enableInteractiveSelection",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "scrollPadding",
+              "type": "EdgeInsets?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "undoController",
+              "type": "UndoHistoryController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "restorationId",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalEmptyState",
+      "category": "Utility",
+      "summary": "A centred empty state: a large muted icon, a message and optional actions.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/empty_state.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalemptystate",
+        "empty state"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalEmptyState",
+          "kind": "constructor",
+          "signature": "CharcoalEmptyState({required this.message, this.actions = const <Widget>[], this.icon, super.key})",
+          "parameters": [
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "icon",
+              "type": "CharcoalIconData?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalErrorState",
+      "category": "Utility",
+      "summary": "An error banner with a retry affordance.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/error_state.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalerrorstate",
+        "error state"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalErrorState",
+          "kind": "constructor",
+          "signature": "CharcoalErrorState({required this.message, this.onRetry, this.retryLabel = 'Retry', super.key})",
+          "parameters": [
+            {
+              "name": "message",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onRetry",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "retryLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Retry'"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalFieldBox",
+      "category": "Utility",
+      "summary": "Gives a field (`CharcoalTextField`, `CharcoalDropdown`, `CharcoalSearchField`...) a width class.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/field_box.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalfieldbox",
+        "field box"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalFieldBox",
+          "kind": "constructor",
+          "signature": "CharcoalFieldBox({required this.child, this.width = CharcoalFieldWidth.full, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "width",
+              "type": "CharcoalFieldWidth",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalFieldWidth.full"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalFieldLabel",
       "category": "Forms",
       "summary": "Composes visible field naming, required copy, and trailing metadata without owning input semantics.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/field_label.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/field_label.dart",
       "documentationLevel": "curated",
       "keywords": [
         "character count",
@@ -2418,13 +3537,20 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalFieldLabel",
           "kind": "constructor",
-          "signature": "CharcoalFieldLabel({required this.label, this.required = false, this.requiredText = '*Required', this.subLabel, this.weight = CharcoalTypographyWeight.bold, super.key})",
+          "signature": "CharcoalFieldLabel({required this.label, this.bold = true, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
           "parameters": [
             {
               "name": "label",
               "type": "String",
               "required": true,
               "named": true
+            },
+            {
+              "name": "bold",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
             },
             {
               "name": "required",
@@ -2447,13 +3573,6 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "weight",
-              "type": "CharcoalTypographyWeight",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalTypographyWeight.bold"
-            },
-            {
               "name": "key",
               "type": "Key?",
               "required": false,
@@ -2469,16 +3588,315 @@ const String generatedCatalogJson = r'''{
           "title": "Visible field metadata with semantic input ownership",
           "description": "Keeps required and trailing metadata visible while the associated input owns required semantics and value.",
           "sourcePath": "example/lib/agent_examples/form_guidance_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Visible field metadata and optional guidance with one controlled outcome.\nfinal class AgentFormGuidanceExample extends StatefulWidget {\n  const AgentFormGuidanceExample({super.key});\n\n  @override\n  State<AgentFormGuidanceExample> createState() =>\n      _AgentFormGuidanceExampleState();\n}\n\nfinal class _AgentFormGuidanceExampleState\n    extends State<AgentFormGuidanceExample> {\n  final TextEditingController _controller = TextEditingController();\n  bool _showGuidance = true;\n  String? _status;\n\n  @override\n  void dispose() {\n    _controller.dispose();\n    super.dispose();\n  }\n\n  void _applyExample() {\n    setState(() {\n      _controller.text = 'https://example.com/portfolio';\n      _showGuidance = false;\n      _status = 'Example portfolio URL applied.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Public profile', style: theme.textStyles.headingS),\n        SizedBox(height: space.layout40),\n        const CharcoalFieldLabel(\n          label: 'Portfolio URL',\n          required: true,\n          requiredText: 'Required',\n          subLabel: Text('Public'),\n        ),\n        SizedBox(height: space.component20),\n        CharcoalTextField(\n          controller: _controller,\n          label: 'Portfolio URL',\n          placeholder: 'https://example.com/your-name',\n          required: true,\n        ),\n        SizedBox(height: space.component20),\n        CharcoalHintText(\n          action: CharcoalButton(\n            onPressed: _applyExample,\n            size: CharcoalButtonSize.small,\n            variant: CharcoalButtonVariant.primary,\n            child: const Text('Use example'),\n          ),\n          alignment: Alignment.centerLeft,\n          maxWidth: double.infinity,\n          subtitle: const Text('You can replace it before publishing.'),\n          visible: _showGuidance,\n          child: const Text('Add a complete URL including https://.'),\n        ),\n        if (_status case final status?) ...<Widget>[\n          SizedBox(height: space.component20),\n          Semantics(\n            liveRegion: true,\n            child: Text(\n              status,\n              style: theme.textStyles.captionMedium.copyWith(\n                color: theme.colors.textSecondaryDefault,\n              ),\n            ),\n          ),\n        ],\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Visible field metadata and optional guidance with one controlled outcome.\nfinal class AgentFormGuidanceExample extends StatefulWidget {\n  const AgentFormGuidanceExample({super.key});\n\n  @override\n  State<AgentFormGuidanceExample> createState() =>\n      _AgentFormGuidanceExampleState();\n}\n\nfinal class _AgentFormGuidanceExampleState\n    extends State<AgentFormGuidanceExample> {\n  final TextEditingController _controller = TextEditingController();\n  bool _showGuidance = true;\n  String? _status;\n\n  @override\n  void dispose() {\n    _controller.dispose();\n    super.dispose();\n  }\n\n  void _applyExample() {\n    setState(() {\n      _controller.text = 'https://example.com/portfolio';\n      _showGuidance = false;\n      _status = 'Example portfolio URL applied.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Public profile', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.xl),\n        const CharcoalFieldLabel(\n          label: 'Portfolio URL',\n          required: true,\n          requiredText: 'Required',\n          subLabel: Text('Public'),\n        ),\n        SizedBox(height: space.sm),\n        CharcoalTextField(\n          controller: _controller,\n          label: 'Portfolio URL',\n          placeholder: 'https://example.com/your-name',\n          required: true,\n        ),\n        SizedBox(height: space.sm),\n        CharcoalHintText(\n          action: CharcoalButton(\n            onPressed: _applyExample,\n            size: CharcoalButtonSize.small,\n            variant: CharcoalButtonVariant.primary,\n            child: const Text('Use example'),\n          ),\n          alignment: Alignment.centerLeft,\n          maxWidth: double.infinity,\n          subtitle: const Text('You can replace it before publishing.'),\n          visible: _showGuidance,\n          child: const Text('Add a complete URL including https://.'),\n        ),\n        if (_status case final status?) ...<Widget>[\n          SizedBox(height: space.sm),\n          Semantics(\n            liveRegion: true,\n            child: Text(\n              status,\n              style: theme\n                  .style(CharcoalTextRole.captionMedium)\n                  .copyWith(color: theme.colors.textSecondary),\n            ),\n          ),\n        ],\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalFieldRing",
+      "category": "Utility",
+      "summary": "Paints a focus or validation ring entirely outside [child], fading it in and out.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/field_ring.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalfieldring",
+        "field ring"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalFieldRing",
+          "kind": "constructor",
+          "signature": "CharcoalFieldRing({required this.child, required this.color, required this.radius, required this.visible, this.duration, this.width, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "color",
+              "type": "Color",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "radius",
+              "type": "double",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "visible",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "duration",
+              "type": "Duration?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "width",
+              "type": "double?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalFormField",
+      "category": "Utility",
+      "summary": "The styled shell around any control that needs a label, a helper line and an optional action.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/form_field.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalformfield",
+        "form field"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalFormField",
+          "kind": "constructor",
+          "signature": "CharcoalFormField({required this.label, required this.child, this.action, this.assistiveText, this.invalid = false, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "assistiveText",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "invalid",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "required",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "requiredText",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'*Required'"
+            },
+            {
+              "name": "subLabel",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalFormSection",
+      "category": "Utility",
+      "summary": "A titled group of fields with consistent vertical rhythm.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/form_section.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalformsection",
+        "form section"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalFormSection",
+          "kind": "constructor",
+          "signature": "CharcoalFormSection({required this.title, required this.children, this.caption, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "caption",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalGap",
+      "category": "Utility",
+      "summary": "An empty box of one spacing step, in the main axis of its parent flex.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/foundation/layout.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalgap",
+        "gap"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalGap",
+          "kind": "constructor",
+          "signature": "CharcoalGap(this.step, {super.key})",
+          "parameters": [
+            {
+              "name": "step",
+              "type": "CharcoalSpace",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalGap.horizontal",
+          "kind": "constructor",
+          "signature": "CharcoalGap.horizontal(this.step, {super.key})",
+          "parameters": [
+            {
+              "name": "step",
+              "type": "CharcoalSpace",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalGap.vertical",
+          "kind": "constructor",
+          "signature": "CharcoalGap.vertical(this.step, {super.key})",
+          "parameters": [
+            {
+              "name": "step",
+              "type": "CharcoalSpace",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalHintText",
       "category": "Feedback",
       "summary": "Keeps optional page or section guidance visible with an optional, clearly named action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/hint_text.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/hint_text.dart",
       "documentationLevel": "curated",
       "keywords": [
         "advisory message",
@@ -2605,7 +4023,7 @@ const String generatedCatalogJson = r'''{
           "title": "Optional advisory guidance with one outcome",
           "description": "Keeps advice separate from validation and removes the complete hint after its controlled action succeeds.",
           "sourcePath": "example/lib/agent_examples/form_guidance_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Visible field metadata and optional guidance with one controlled outcome.\nfinal class AgentFormGuidanceExample extends StatefulWidget {\n  const AgentFormGuidanceExample({super.key});\n\n  @override\n  State<AgentFormGuidanceExample> createState() =>\n      _AgentFormGuidanceExampleState();\n}\n\nfinal class _AgentFormGuidanceExampleState\n    extends State<AgentFormGuidanceExample> {\n  final TextEditingController _controller = TextEditingController();\n  bool _showGuidance = true;\n  String? _status;\n\n  @override\n  void dispose() {\n    _controller.dispose();\n    super.dispose();\n  }\n\n  void _applyExample() {\n    setState(() {\n      _controller.text = 'https://example.com/portfolio';\n      _showGuidance = false;\n      _status = 'Example portfolio URL applied.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Public profile', style: theme.textStyles.headingS),\n        SizedBox(height: space.layout40),\n        const CharcoalFieldLabel(\n          label: 'Portfolio URL',\n          required: true,\n          requiredText: 'Required',\n          subLabel: Text('Public'),\n        ),\n        SizedBox(height: space.component20),\n        CharcoalTextField(\n          controller: _controller,\n          label: 'Portfolio URL',\n          placeholder: 'https://example.com/your-name',\n          required: true,\n        ),\n        SizedBox(height: space.component20),\n        CharcoalHintText(\n          action: CharcoalButton(\n            onPressed: _applyExample,\n            size: CharcoalButtonSize.small,\n            variant: CharcoalButtonVariant.primary,\n            child: const Text('Use example'),\n          ),\n          alignment: Alignment.centerLeft,\n          maxWidth: double.infinity,\n          subtitle: const Text('You can replace it before publishing.'),\n          visible: _showGuidance,\n          child: const Text('Add a complete URL including https://.'),\n        ),\n        if (_status case final status?) ...<Widget>[\n          SizedBox(height: space.component20),\n          Semantics(\n            liveRegion: true,\n            child: Text(\n              status,\n              style: theme.textStyles.captionMedium.copyWith(\n                color: theme.colors.textSecondaryDefault,\n              ),\n            ),\n          ),\n        ],\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Visible field metadata and optional guidance with one controlled outcome.\nfinal class AgentFormGuidanceExample extends StatefulWidget {\n  const AgentFormGuidanceExample({super.key});\n\n  @override\n  State<AgentFormGuidanceExample> createState() =>\n      _AgentFormGuidanceExampleState();\n}\n\nfinal class _AgentFormGuidanceExampleState\n    extends State<AgentFormGuidanceExample> {\n  final TextEditingController _controller = TextEditingController();\n  bool _showGuidance = true;\n  String? _status;\n\n  @override\n  void dispose() {\n    _controller.dispose();\n    super.dispose();\n  }\n\n  void _applyExample() {\n    setState(() {\n      _controller.text = 'https://example.com/portfolio';\n      _showGuidance = false;\n      _status = 'Example portfolio URL applied.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Public profile', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.xl),\n        const CharcoalFieldLabel(\n          label: 'Portfolio URL',\n          required: true,\n          requiredText: 'Required',\n          subLabel: Text('Public'),\n        ),\n        SizedBox(height: space.sm),\n        CharcoalTextField(\n          controller: _controller,\n          label: 'Portfolio URL',\n          placeholder: 'https://example.com/your-name',\n          required: true,\n        ),\n        SizedBox(height: space.sm),\n        CharcoalHintText(\n          action: CharcoalButton(\n            onPressed: _applyExample,\n            size: CharcoalButtonSize.small,\n            variant: CharcoalButtonVariant.primary,\n            child: const Text('Use example'),\n          ),\n          alignment: Alignment.centerLeft,\n          maxWidth: double.infinity,\n          subtitle: const Text('You can replace it before publishing.'),\n          visible: _showGuidance,\n          child: const Text('Add a complete URL including https://.'),\n        ),\n        if (_status case final status?) ...<Widget>[\n          SizedBox(height: space.sm),\n          Semantics(\n            liveRegion: true,\n            child: Text(\n              status,\n              style: theme\n                  .style(CharcoalTextRole.captionMedium)\n                  .copyWith(color: theme.colors.textSecondary),\n            ),\n          ),\n        ],\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -2614,7 +4032,7 @@ const String generatedCatalogJson = r'''{
       "category": "Actions",
       "summary": "Runs a compact icon-only action or controlled toggle with explicit accessible naming.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/icon_button.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/actions/icon_button.dart",
       "documentationLevel": "curated",
       "keywords": [
         "icon action",
@@ -2769,16 +4187,134 @@ const String generatedCatalogJson = r'''{
           "title": "Named icon actions and toggle",
           "description": "Separates a one-shot icon action from a parent-owned save toggle with action-oriented labels.",
           "sourcePath": "example/lib/agent_examples/action_controls_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Named one-shot actions, a controlled icon toggle, and a text-only action.\nfinal class AgentActionControlsExample extends StatefulWidget {\n  const AgentActionControlsExample({super.key});\n\n  @override\n  State<AgentActionControlsExample> createState() =>\n      _AgentActionControlsExampleState();\n}\n\nfinal class _AgentActionControlsExampleState\n    extends State<AgentActionControlsExample> {\n  bool _saved = false;\n  String _status = 'No action yet';\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Item actions', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Text(_status, style: theme.textStyles.captionMedium),\n        SizedBox(height: space.layout40),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.component30,\n          runSpacing: space.component30,\n          children: <Widget>[\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.bookmark),\n              onPressed: () {\n                setState(() {\n                  _saved = !_saved;\n                  _status = _saved ? 'Item saved' : 'Item removed from saved';\n                });\n              },\n              selected: _saved,\n              semanticLabel: _saved ? 'Remove saved item' : 'Save item',\n            ),\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.search),\n              onPressed: () => setState(() => _status = 'Search opened'),\n              semanticLabel: 'Search related items',\n            ),\n            const CharcoalIconButton(\n              icon: CharcoalIcon(CharcoalIcons.dotsHorizontal),\n              onPressed: null,\n              semanticLabel: 'More actions unavailable',\n            ),\n          ],\n        ),\n        SizedBox(height: space.layout40),\n        Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalLinkButton(\n            onPressed: () => setState(() => _status = 'Filters cleared'),\n            child: const Text('Clear filters'),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Named one-shot actions, a controlled icon toggle, and a text-only action.\nfinal class AgentActionControlsExample extends StatefulWidget {\n  const AgentActionControlsExample({super.key});\n\n  @override\n  State<AgentActionControlsExample> createState() =>\n      _AgentActionControlsExampleState();\n}\n\nfinal class _AgentActionControlsExampleState\n    extends State<AgentActionControlsExample> {\n  bool _saved = false;\n  String _status = 'No action yet';\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Item actions', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),\n        SizedBox(height: space.xl),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.lg,\n          runSpacing: space.lg,\n          children: <Widget>[\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.bookmark),\n              onPressed: () {\n                setState(() {\n                  _saved = !_saved;\n                  _status = _saved ? 'Item saved' : 'Item removed from saved';\n                });\n              },\n              selected: _saved,\n              semanticLabel: _saved ? 'Remove saved item' : 'Save item',\n            ),\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.search),\n              onPressed: () => setState(() => _status = 'Search opened'),\n              semanticLabel: 'Search related items',\n            ),\n            const CharcoalIconButton(\n              icon: CharcoalIcon(CharcoalIcons.dotsHorizontal),\n              onPressed: null,\n              semanticLabel: 'More actions unavailable',\n            ),\n          ],\n        ),\n        SizedBox(height: space.xl),\n        Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalLinkButton(\n            onPressed: () => setState(() => _status = 'Filters cleared'),\n            child: const Text('Clear filters'),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalIconView",
+      "category": "Utility",
+      "summary": "A [CharcoalIcon] glyph painted in a semantic [tone] and [size] of the active theme.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/icons/icon_view.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaliconview",
+        "icon view"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalIconView",
+          "kind": "constructor",
+          "signature": "CharcoalIconView(this.icon, {this.matchTextDirection = false, this.semanticLabel, this.size, this.tone, super.key})",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "matchTextDirection",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "size",
+              "type": "CharcoalIconSize?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalIconTone?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalInfoRows",
+      "category": "Utility",
+      "summary": "A key/value table: a tertiary label, and a selectable value, per ruled row.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/info_rows.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalinforows",
+        "info rows"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalInfoRows",
+          "kind": "constructor",
+          "signature": "CharcoalInfoRows(this.rows, {this.labelWidth = CharcoalInfoLabelWidth.regular, super.key})",
+          "parameters": [
+            {
+              "name": "rows",
+              "type": "List<(String, String)>",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "labelWidth",
+              "type": "CharcoalInfoLabelWidth",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalInfoLabelWidth.regular"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalLinkButton",
       "category": "Actions",
       "summary": "Runs a low-emphasis text action with intrinsic width and a stable interaction target.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/button.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/actions/link_button.dart",
       "documentationLevel": "curated",
       "keywords": [
         "clear action",
@@ -2886,16 +4422,253 @@ const String generatedCatalogJson = r'''{
           "title": "Low-emphasis text action",
           "description": "Runs a clear action without turning application behavior into hyperlink semantics.",
           "sourcePath": "example/lib/agent_examples/action_controls_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Named one-shot actions, a controlled icon toggle, and a text-only action.\nfinal class AgentActionControlsExample extends StatefulWidget {\n  const AgentActionControlsExample({super.key});\n\n  @override\n  State<AgentActionControlsExample> createState() =>\n      _AgentActionControlsExampleState();\n}\n\nfinal class _AgentActionControlsExampleState\n    extends State<AgentActionControlsExample> {\n  bool _saved = false;\n  String _status = 'No action yet';\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Item actions', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Text(_status, style: theme.textStyles.captionMedium),\n        SizedBox(height: space.layout40),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.component30,\n          runSpacing: space.component30,\n          children: <Widget>[\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.bookmark),\n              onPressed: () {\n                setState(() {\n                  _saved = !_saved;\n                  _status = _saved ? 'Item saved' : 'Item removed from saved';\n                });\n              },\n              selected: _saved,\n              semanticLabel: _saved ? 'Remove saved item' : 'Save item',\n            ),\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.search),\n              onPressed: () => setState(() => _status = 'Search opened'),\n              semanticLabel: 'Search related items',\n            ),\n            const CharcoalIconButton(\n              icon: CharcoalIcon(CharcoalIcons.dotsHorizontal),\n              onPressed: null,\n              semanticLabel: 'More actions unavailable',\n            ),\n          ],\n        ),\n        SizedBox(height: space.layout40),\n        Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalLinkButton(\n            onPressed: () => setState(() => _status = 'Filters cleared'),\n            child: const Text('Clear filters'),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Named one-shot actions, a controlled icon toggle, and a text-only action.\nfinal class AgentActionControlsExample extends StatefulWidget {\n  const AgentActionControlsExample({super.key});\n\n  @override\n  State<AgentActionControlsExample> createState() =>\n      _AgentActionControlsExampleState();\n}\n\nfinal class _AgentActionControlsExampleState\n    extends State<AgentActionControlsExample> {\n  bool _saved = false;\n  String _status = 'No action yet';\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Item actions', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),\n        SizedBox(height: space.xl),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.lg,\n          runSpacing: space.lg,\n          children: <Widget>[\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.bookmark),\n              onPressed: () {\n                setState(() {\n                  _saved = !_saved;\n                  _status = _saved ? 'Item saved' : 'Item removed from saved';\n                });\n              },\n              selected: _saved,\n              semanticLabel: _saved ? 'Remove saved item' : 'Save item',\n            ),\n            CharcoalIconButton(\n              icon: const CharcoalIcon(CharcoalIcons.search),\n              onPressed: () => setState(() => _status = 'Search opened'),\n              semanticLabel: 'Search related items',\n            ),\n            const CharcoalIconButton(\n              icon: CharcoalIcon(CharcoalIcons.dotsHorizontal),\n              onPressed: null,\n              semanticLabel: 'More actions unavailable',\n            ),\n          ],\n        ),\n        SizedBox(height: space.xl),\n        Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalLinkButton(\n            onPressed: () => setState(() => _status = 'Filters cleared'),\n            child: const Text('Clear filters'),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalList",
+      "category": "Utility",
+      "summary": "A divided list, the main content shape of data screens.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/list.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoallist",
+        "list"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalList",
+          "kind": "constructor",
+          "signature": "CharcoalList({required List<Widget> this.children, this.topBorder = true, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "topBorder",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalList.around",
+          "kind": "constructor",
+          "signature": "CharcoalList.around(Widget this.child, {this.topBorder = true, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "topBorder",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalListRow",
+      "category": "Utility",
+      "summary": "One row of a `CharcoalList`.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/list_row.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoallistrow",
+        "list row"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalListRow",
+          "kind": "constructor",
+          "signature": "CharcoalListRow({required this.title, this.crossAxisAlignment = CrossAxisAlignment.center, this.details, this.height = CharcoalListRowHeight.regular, this.body, this.leading, this.onPressed, this.selected = false, this.showChevron = true, this.statesController, this.subtitle, this.subtitleGap, this.subtitleMaxLines = 2, this.subtitleRole = CharcoalTextRole.caption, this.subtitleTone, this.titleMonospace = false, this.titleTrailing, this.trailing = const <Widget>[], this.verticalPadding = CharcoalSpace.sm, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "crossAxisAlignment",
+              "type": "CrossAxisAlignment",
+              "required": false,
+              "named": true,
+              "defaultValue": "CrossAxisAlignment.center"
+            },
+            {
+              "name": "details",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "height",
+              "type": "CharcoalListRowHeight",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalListRowHeight.regular"
+            },
+            {
+              "name": "body",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "leading",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "showChevron",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "statesController",
+              "type": "WidgetStatesController?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitle",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitleGap",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitleMaxLines",
+              "type": "int",
+              "required": false,
+              "named": true,
+              "defaultValue": "2"
+            },
+            {
+              "name": "subtitleRole",
+              "type": "CharcoalTextRole",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextRole.caption"
+            },
+            {
+              "name": "subtitleTone",
+              "type": "CharcoalTextTone?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "titleMonospace",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "titleTrailing",
+              "type": "List<Widget>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "trailing",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "verticalPadding",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.sm"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalLoadingSpinner",
       "category": "Utility",
       "summary": "Announces and renders an indeterminate wait with Charcoal source geometry and motion.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/loading_spinner.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/loading_spinner.dart",
       "documentationLevel": "curated",
       "keywords": [
         "busy indicator",
@@ -3010,16 +4783,115 @@ const String generatedCatalogJson = r'''{
           "title": "Named indeterminate publish progress",
           "description": "Announces a bounded wait while the owning example records completion as durable page state.",
           "sourcePath": "example/lib/agent_examples/async_action_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A bounded asynchronous action with blocking progress and a durable result.\nfinal class AgentAsyncActionExample extends StatefulWidget {\n  const AgentAsyncActionExample({super.key});\n\n  @override\n  State<AgentAsyncActionExample> createState() =>\n      _AgentAsyncActionExampleState();\n}\n\nfinal class _AgentAsyncActionExampleState\n    extends State<AgentAsyncActionExample> {\n  bool _published = false;\n  bool _saving = false;\n  bool _pendingPublished = false;\n  String _status = 'This draft is private.';\n\n  Future<void> _setPublished(bool published) async {\n    if (_saving || _published == published) return;\n    setState(() {\n      _pendingPublished = published;\n      _saving = true;\n    });\n    await Future<void>.delayed(const Duration(milliseconds: 300));\n    if (!mounted) return;\n    setState(() {\n      _published = published;\n      _saving = false;\n      _status = published ? 'Draft published.' : 'Draft returned to private.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            _status,\n            style: theme.textStyles.captionMedium.copyWith(\n              color: theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSpinnerOverlay(\n          semanticLabel: _pendingPublished\n              ? 'Publishing draft'\n              : 'Returning draft to private',\n          visible: _saving,\n          child: DecoratedBox(\n            decoration: BoxDecoration(\n              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n              color: theme.colors.containerSecondaryDefault,\n            ),\n            child: Padding(\n              padding: EdgeInsets.all(space.layout40),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                children: <Widget>[\n                  Text(\n                    _published ? 'Published' : 'Private draft',\n                    style: theme.textStyles.bodyBold,\n                  ),\n                  SizedBox(height: space.component30),\n                  CharcoalSwitchingButton(\n                    isOn: _published,\n                    offButton: CharcoalButton(\n                      onPressed: () => _setPublished(true),\n                      semanticLabel: 'Publish draft',\n                      variant: CharcoalButtonVariant.primary,\n                      child: const Text('Publish'),\n                    ),\n                    onButton: CharcoalButton(\n                      onPressed: () => _setPublished(false),\n                      semanticLabel: 'Return published item to draft',\n                      child: const Text('Unpublish'),\n                    ),\n                  ),\n                ],\n              ),\n            ),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A bounded asynchronous action with blocking progress and a durable result.\nfinal class AgentAsyncActionExample extends StatefulWidget {\n  const AgentAsyncActionExample({super.key});\n\n  @override\n  State<AgentAsyncActionExample> createState() =>\n      _AgentAsyncActionExampleState();\n}\n\nfinal class _AgentAsyncActionExampleState\n    extends State<AgentAsyncActionExample> {\n  bool _published = false;\n  bool _saving = false;\n  bool _pendingPublished = false;\n  String _status = 'This draft is private.';\n\n  Future<void> _setPublished(bool published) async {\n    if (_saving || _published == published) return;\n    setState(() {\n      _pendingPublished = published;\n      _saving = true;\n    });\n    await Future<void>.delayed(const Duration(milliseconds: 300));\n    if (!mounted) return;\n    setState(() {\n      _published = published;\n      _saving = false;\n      _status = published ? 'Draft published.' : 'Draft returned to private.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            _status,\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalSpinnerOverlay(\n          semanticLabel: _pendingPublished\n              ? 'Publishing draft'\n              : 'Returning draft to private',\n          visible: _saving,\n          child: DecoratedBox(\n            decoration: BoxDecoration(\n              borderRadius: BorderRadius.circular(theme.radius.md),\n              color: theme.colors.surfaceSecondary,\n            ),\n            child: Padding(\n              padding: EdgeInsets.all(space.xl),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                children: <Widget>[\n                  Text(\n                    _published ? 'Published' : 'Private draft',\n                    style: theme.style(CharcoalTextRole.bodyLargeBold),\n                  ),\n                  SizedBox(height: space.lg),\n                  CharcoalSwitchingButton(\n                    isOn: _published,\n                    offButton: CharcoalButton(\n                      onPressed: () => _setPublished(true),\n                      semanticLabel: 'Publish draft',\n                      variant: CharcoalButtonVariant.primary,\n                      child: const Text('Publish'),\n                    ),\n                    onButton: CharcoalButton(\n                      onPressed: () => _setPublished(false),\n                      semanticLabel: 'Return published item to draft',\n                      child: const Text('Unpublish'),\n                    ),\n                  ),\n                ],\n              ),\n            ),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalLoadingState",
+      "category": "Utility",
+      "summary": "A centred spinner for a loading page region.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/loading_state.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalloadingstate",
+        "loading state"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalLoadingState",
+          "kind": "constructor",
+          "signature": "CharcoalLoadingState({this.semanticLabel = 'Loading', super.key})",
+          "parameters": [
+            {
+              "name": "semanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Loading'"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalMeter",
+      "category": "Utility",
+      "summary": "A labelled progress meter on a card, such as a quota report.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/meter.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalmeter",
+        "meter"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalMeter",
+          "kind": "constructor",
+          "signature": "CharcoalMeter({required this.label, required this.value, required this.fraction, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "fraction",
+              "type": "double",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalMultiSelect",
       "category": "Forms",
       "summary": "Toggles one option in a visibly named, parent-controlled multi-selection group.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/multi_select.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/multi_select.dart",
       "documentationLevel": "curated",
       "keywords": [
         "batch selection",
@@ -3168,7 +5040,7 @@ const String generatedCatalogJson = r'''{
           "title": "Named controlled multi-selection group",
           "description": "Owns one selected set, keeps every option explicit, and exposes actionable group validation.",
           "sourcePath": "example/lib/agent_examples/multi_select_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _ExportContent { originalFiles, sourceMetadata, previewImages }\n\n/// A named, validated multi-selection group with one parent-owned value set.\nfinal class AgentMultiSelectExample extends StatefulWidget {\n  const AgentMultiSelectExample({super.key});\n\n  @override\n  State<AgentMultiSelectExample> createState() =>\n      _AgentMultiSelectExampleState();\n}\n\nfinal class _AgentMultiSelectExampleState\n    extends State<AgentMultiSelectExample> {\n  static const _options = <({String label, _ExportContent value})>[\n    (label: 'Original files', value: _ExportContent.originalFiles),\n    (label: 'Source metadata', value: _ExportContent.sourceMetadata),\n    (label: 'Preview images', value: _ExportContent.previewImages),\n  ];\n\n  Set<_ExportContent> _selected = <_ExportContent>{\n    _ExportContent.originalFiles,\n  };\n  bool _reviewed = false;\n  String? _result;\n\n  bool get _invalid => _reviewed && _selected.isEmpty;\n\n  String get _selectionSummary {\n    final count = _selected.length;\n    return '$count content ${count == 1 ? 'type' : 'types'} selected.';\n  }\n\n  void _setSelected(_ExportContent value, {required bool selected}) {\n    final next = Set<_ExportContent>.of(_selected);\n    selected ? next.add(value) : next.remove(value);\n    setState(() {\n      _selected = next;\n      _reviewed = false;\n      _result = null;\n    });\n  }\n\n  void _prepareExport() {\n    setState(() {\n      _reviewed = true;\n      _result = _selected.isEmpty\n          ? null\n          : 'Export prepared with ${_selected.length} content '\n                '${_selected.length == 1 ? 'type' : 'types'}.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Prepare download', style: theme.textStyles.headingS),\n        SizedBox(height: space.layout40),\n        const CharcoalFieldLabel(\n          label: 'Export contents',\n          required: true,\n          requiredText: 'Required',\n        ),\n        SizedBox(height: space.component20),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Export content options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              for (var index = 0; index < _options.length; index++) ...<Widget>[\n                CharcoalMultiSelect(\n                  invalid: _invalid,\n                  label: Text(_options[index].label),\n                  onChanged: (selected) =>\n                      _setSelected(_options[index].value, selected: selected),\n                  selected: _selected.contains(_options[index].value),\n                ),\n                if (index != _options.length - 1)\n                  SizedBox(height: space.component30),\n              ],\n            ],\n          ),\n        ),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: _invalid || _result != null,\n          child: Text(\n            _invalid\n                ? 'Select at least one content type.'\n                : _result ?? _selectionSummary,\n            style: theme.textStyles.captionMedium.copyWith(\n              color: _invalid\n                  ? theme.colors.textNegativeDefault\n                  : theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalButton(\n          fullWidth: true,\n          onPressed: _prepareExport,\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Prepare export'),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _ExportContent { originalFiles, sourceMetadata, previewImages }\n\n/// A named, validated multi-selection group with one parent-owned value set.\nfinal class AgentMultiSelectExample extends StatefulWidget {\n  const AgentMultiSelectExample({super.key});\n\n  @override\n  State<AgentMultiSelectExample> createState() =>\n      _AgentMultiSelectExampleState();\n}\n\nfinal class _AgentMultiSelectExampleState\n    extends State<AgentMultiSelectExample> {\n  static const _options = <({String label, _ExportContent value})>[\n    (label: 'Original files', value: _ExportContent.originalFiles),\n    (label: 'Source metadata', value: _ExportContent.sourceMetadata),\n    (label: 'Preview images', value: _ExportContent.previewImages),\n  ];\n\n  Set<_ExportContent> _selected = <_ExportContent>{\n    _ExportContent.originalFiles,\n  };\n  bool _reviewed = false;\n  String? _result;\n\n  bool get _invalid => _reviewed && _selected.isEmpty;\n\n  String get _selectionSummary {\n    final count = _selected.length;\n    return '$count content ${count == 1 ? 'type' : 'types'} selected.';\n  }\n\n  void _setSelected(_ExportContent value, {required bool selected}) {\n    final next = Set<_ExportContent>.of(_selected);\n    selected ? next.add(value) : next.remove(value);\n    setState(() {\n      _selected = next;\n      _reviewed = false;\n      _result = null;\n    });\n  }\n\n  void _prepareExport() {\n    setState(() {\n      _reviewed = true;\n      _result = _selected.isEmpty\n          ? null\n          : 'Export prepared with ${_selected.length} content '\n                '${_selected.length == 1 ? 'type' : 'types'}.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Prepare download', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.xl),\n        const CharcoalFieldLabel(\n          label: 'Export contents',\n          required: true,\n          requiredText: 'Required',\n        ),\n        SizedBox(height: space.sm),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Export content options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              for (var index = 0; index < _options.length; index++) ...<Widget>[\n                CharcoalMultiSelect(\n                  invalid: _invalid,\n                  label: Text(_options[index].label),\n                  onChanged: (selected) =>\n                      _setSelected(_options[index].value, selected: selected),\n                  selected: _selected.contains(_options[index].value),\n                ),\n                if (index != _options.length - 1) SizedBox(height: space.lg),\n              ],\n            ],\n          ),\n        ),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: _invalid || _result != null,\n          child: Text(\n            _invalid\n                ? 'Select at least one content type.'\n                : _result ?? _selectionSummary,\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(\n                  color: _invalid\n                      ? theme.colors.textNegative\n                      : theme.colors.textSecondary,\n                ),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalButton(\n          fullWidth: true,\n          onPressed: _prepareExport,\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Prepare export'),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -3177,7 +5049,7 @@ const String generatedCatalogJson = r'''{
       "category": "Navigation",
       "summary": "Provides page-level title context with balanced leading and trailing navigation slots.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation_bar.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation/navigation_bar.dart",
       "documentationLevel": "curated",
       "keywords": [
         "app bar",
@@ -3283,7 +5155,7 @@ const String generatedCatalogJson = r'''{
       "category": "Navigation",
       "summary": "Selects one stable top-level destination in a sidebar, drawer, or navigation list.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation_item.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation/navigation_item.dart",
       "documentationLevel": "curated",
       "keywords": [
         "destination",
@@ -3346,7 +5218,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalNavigationItem",
           "kind": "constructor",
-          "signature": "CharcoalNavigationItem({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.leading, this.selected = false, this.semanticLabel, this.statesController, this.trailing, super.key})",
+          "signature": "CharcoalNavigationItem({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.leading, this.selected = false, this.semanticLabel, this.statesController, this.trailing, this.variant = CharcoalNavigationItemVariant.standard, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -3405,6 +5277,13 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
+              "name": "variant",
+              "type": "CharcoalNavigationItemVariant",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalNavigationItemVariant.standard"
+            },
+            {
               "name": "key",
               "type": "Key?",
               "required": false,
@@ -3420,16 +5299,273 @@ const String generatedCatalogJson = r'''{
           "title": "Adaptive controlled destinations",
           "description": "Shares one destination owner between a wide sidebar and compact tab bar without changing the route stack.",
           "sourcePath": "example/lib/agent_examples/navigation_item_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/semantics.dart' show SemanticsRole;\nimport 'package:flutter/widgets.dart';\n\nenum _NavigationDestination { home, discover, messages }\n\n/// One destination owner shared by wide sidebar and compact tab-bar layouts.\n///\n/// Top-level selection updates content in place. Details and transient tasks\n/// still belong on the Navigator stack outside this example.\nfinal class AgentNavigationItemExample extends StatefulWidget {\n  const AgentNavigationItemExample({super.key});\n\n  @override\n  State<AgentNavigationItemExample> createState() =>\n      _AgentNavigationItemExampleState();\n}\n\nfinal class _AgentNavigationItemExampleState\n    extends State<AgentNavigationItemExample> {\n  _NavigationDestination _destination = _NavigationDestination.home;\n\n  void _select(_NavigationDestination destination) {\n    setState(() => _destination = destination);\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return SizedBox(\n      height: 320,\n      child: LayoutBuilder(\n        builder: (context, constraints) {\n          final content = ColoredBox(\n            color: theme.colors.containerSecondaryDefaultA,\n            child: Center(\n              child: Text(\n                'Current destination: ${_destination.name}',\n                style: theme.textStyles.bodyBold,\n              ),\n            ),\n          );\n          if (constraints.maxWidth < 600) {\n            return Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              children: <Widget>[\n                Expanded(child: content),\n                CharcoalTabBar<_NavigationDestination>(\n                  items: const <CharcoalTabItem<_NavigationDestination>>[\n                    CharcoalTabItem<_NavigationDestination>(\n                      icon: CharcoalIcon(CharcoalIcons.home),\n                      label: 'Home',\n                      value: _NavigationDestination.home,\n                    ),\n                    CharcoalTabItem<_NavigationDestination>(\n                      icon: CharcoalIcon(CharcoalIcons.compass),\n                      label: 'Discover',\n                      value: _NavigationDestination.discover,\n                    ),\n                    CharcoalTabItem<_NavigationDestination>(\n                      badge: '3',\n                      icon: CharcoalIcon(CharcoalIcons.message),\n                      label: 'Messages',\n                      semanticLabel: 'Messages, 3 unread',\n                      value: _NavigationDestination.messages,\n                    ),\n                  ],\n                  onChanged: _select,\n                  semanticLabel: 'Primary destinations',\n                  value: _destination,\n                ),\n              ],\n            );\n          }\n\n          return Row(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              SizedBox(\n                width: 240,\n                child: Semantics(\n                  container: true,\n                  explicitChildNodes: true,\n                  label: 'Primary destinations',\n                  role: SemanticsRole.navigation,\n                  child: Padding(\n                    padding: EdgeInsets.all(space.component20),\n                    child: Column(\n                      crossAxisAlignment: CrossAxisAlignment.stretch,\n                      children: <Widget>[\n                        CharcoalNavigationItem(\n                          leading: const CharcoalIcon(CharcoalIcons.home),\n                          onPressed: () => _select(_NavigationDestination.home),\n                          selected: _destination == _NavigationDestination.home,\n                          child: const Text('Home'),\n                        ),\n                        SizedBox(height: space.component20),\n                        CharcoalNavigationItem(\n                          leading: const CharcoalIcon(CharcoalIcons.compass),\n                          onPressed: () =>\n                              _select(_NavigationDestination.discover),\n                          selected:\n                              _destination == _NavigationDestination.discover,\n                          child: const Text('Discover'),\n                        ),\n                        SizedBox(height: space.component20),\n                        CharcoalNavigationItem(\n                          leading: const CharcoalIcon(CharcoalIcons.message),\n                          onPressed: () =>\n                              _select(_NavigationDestination.messages),\n                          selected:\n                              _destination == _NavigationDestination.messages,\n                          semanticLabel: 'Messages, 3 unread',\n                          trailing: const Text('3'),\n                          child: const Text('Messages'),\n                        ),\n                      ],\n                    ),\n                  ),\n                ),\n              ),\n              SizedBox(width: space.layout40),\n              Expanded(child: content),\n            ],\n          );\n        },\n      ),\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/semantics.dart' show SemanticsRole;\nimport 'package:flutter/widgets.dart';\n\nenum _NavigationDestination { home, discover, messages }\n\n/// One destination owner shared by wide sidebar and compact tab-bar layouts.\n///\n/// Top-level selection updates content in place. Details and transient tasks\n/// still belong on the Navigator stack outside this example.\nfinal class AgentNavigationItemExample extends StatefulWidget {\n  const AgentNavigationItemExample({super.key});\n\n  @override\n  State<AgentNavigationItemExample> createState() =>\n      _AgentNavigationItemExampleState();\n}\n\nfinal class _AgentNavigationItemExampleState\n    extends State<AgentNavigationItemExample> {\n  _NavigationDestination _destination = _NavigationDestination.home;\n\n  void _select(_NavigationDestination destination) {\n    setState(() => _destination = destination);\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return SizedBox(\n      height: 320,\n      child: LayoutBuilder(\n        builder: (context, constraints) {\n          final content = ColoredBox(\n            color: theme.colors.fillSecondary,\n            child: Center(\n              child: Text(\n                'Current destination: ${_destination.name}',\n                style: theme.style(CharcoalTextRole.bodyLargeBold),\n              ),\n            ),\n          );\n          if (constraints.maxWidth < 600) {\n            return Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              children: <Widget>[\n                Expanded(child: content),\n                CharcoalTabBar<_NavigationDestination>(\n                  items: const <CharcoalTabItem<_NavigationDestination>>[\n                    CharcoalTabItem<_NavigationDestination>(\n                      icon: CharcoalIcon(CharcoalIcons.home),\n                      label: 'Home',\n                      value: _NavigationDestination.home,\n                    ),\n                    CharcoalTabItem<_NavigationDestination>(\n                      icon: CharcoalIcon(CharcoalIcons.compass),\n                      label: 'Discover',\n                      value: _NavigationDestination.discover,\n                    ),\n                    CharcoalTabItem<_NavigationDestination>(\n                      badge: '3',\n                      icon: CharcoalIcon(CharcoalIcons.message),\n                      label: 'Messages',\n                      semanticLabel: 'Messages, 3 unread',\n                      value: _NavigationDestination.messages,\n                    ),\n                  ],\n                  onChanged: _select,\n                  semanticLabel: 'Primary destinations',\n                  value: _destination,\n                ),\n              ],\n            );\n          }\n\n          return Row(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              SizedBox(\n                width: 240,\n                child: Semantics(\n                  container: true,\n                  explicitChildNodes: true,\n                  label: 'Primary destinations',\n                  role: SemanticsRole.navigation,\n                  child: Padding(\n                    padding: EdgeInsets.all(space.sm),\n                    child: Column(\n                      crossAxisAlignment: CrossAxisAlignment.stretch,\n                      children: <Widget>[\n                        CharcoalNavigationItem(\n                          leading: const CharcoalIcon(CharcoalIcons.home),\n                          onPressed: () => _select(_NavigationDestination.home),\n                          selected: _destination == _NavigationDestination.home,\n                          child: const Text('Home'),\n                        ),\n                        SizedBox(height: space.sm),\n                        CharcoalNavigationItem(\n                          leading: const CharcoalIcon(CharcoalIcons.compass),\n                          onPressed: () =>\n                              _select(_NavigationDestination.discover),\n                          selected:\n                              _destination == _NavigationDestination.discover,\n                          child: const Text('Discover'),\n                        ),\n                        SizedBox(height: space.sm),\n                        CharcoalNavigationItem(\n                          leading: const CharcoalIcon(CharcoalIcons.message),\n                          onPressed: () =>\n                              _select(_NavigationDestination.messages),\n                          selected:\n                              _destination == _NavigationDestination.messages,\n                          semanticLabel: 'Messages, 3 unread',\n                          trailing: const Text('3'),\n                          child: const Text('Messages'),\n                        ),\n                      ],\n                    ),\n                  ),\n                ),\n              ),\n              SizedBox(width: space.xl),\n              Expanded(child: content),\n            ],\n          );\n        },\n      ),\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalOverlayAnchorTracker",
+      "category": "Utility",
+      "summary": "Reports the global bounds of [child] whenever layout or painting moves it.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/overlay_anchor_tracker.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaloverlayanchortracker",
+        "overlay anchor tracker"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalOverlayAnchorTracker",
+          "kind": "constructor",
+          "signature": "CharcoalOverlayAnchorTracker({required this.onRectChanged, required super.child, super.key})",
+          "parameters": [
+            {
+              "name": "onRectChanged",
+              "type": "ValueChanged<Rect>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "dynamic",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalPadding",
+      "category": "Utility",
+      "summary": "[Padding] whose insets are spacing steps of the active theme.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/foundation/layout.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalpadding",
+        "padding"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalPadding",
+          "kind": "constructor",
+          "signature": "CharcoalPadding({required this.padding, this.child, super.key})",
+          "parameters": [
+            {
+              "name": "padding",
+              "type": "CharcoalInset",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalPadding.all",
+          "kind": "constructor",
+          "signature": "CharcoalPadding.all(CharcoalSpace step, {this.child, super.key})",
+          "parameters": [
+            {
+              "name": "step",
+              "type": "CharcoalSpace",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "child",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalPage",
+      "category": "Utility",
+      "summary": "The chrome and content column of one admin page.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/page.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalpage",
+        "page"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalPage",
+          "kind": "constructor",
+          "signature": "CharcoalPage({required this.title, required this.child, this.actions = const <Widget>[], this.backLabel = 'Back', this.banner, this.busy = false, this.busyLabel = 'Loading', this.compact, this.compactTrailing, this.header, this.maxWidth = CharcoalPageWidth.standard, this.onBack, this.scrollable = true, this.showBack, this.subtitle, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "backLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Back'"
+            },
+            {
+              "name": "banner",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "busy",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "busyLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Loading'"
+            },
+            {
+              "name": "compact",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "compactTrailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "header",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxWidth",
+              "type": "CharcoalPageWidth",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPageWidth.standard"
+            },
+            {
+              "name": "onBack",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "scrollable",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "showBack",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "subtitle",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalPageRoute",
       "category": "Navigation",
       "summary": "Pushes an opaque Charcoal page with native iOS edge-back and Android predictive-back behavior.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/legacy/app/charcoal_page_route.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_page_route.dart",
       "documentationLevel": "curated",
       "keywords": [
         "android predictive back",
@@ -3481,7 +5617,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalPageRoute",
           "kind": "constructor",
-          "signature": "CharcoalPageRoute({required this.builder, this.axis = CharcoalPageTransitionAxis.horizontal, super.fullscreenDialog = false, this.maintainState = true, super.requestFocus, this.reverseTransitionDuration = CharcoalMotion.routeReverse, super.settings, this.transitionDuration = CharcoalMotion.routeForward})",
+          "signature": "CharcoalPageRoute({required this.builder, this.axis = CharcoalPageTransitionAxis.horizontal, super.fullscreenDialog = false, this.maintainState = true, super.requestFocus, this._reverseTransitionDuration, super.settings, this._transitionDuration})",
           "parameters": [
             {
               "name": "builder",
@@ -3517,11 +5653,10 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "reverseTransitionDuration",
-              "type": "Duration",
+              "name": "_reverseTransitionDuration",
+              "type": "Duration?",
               "required": false,
-              "named": true,
-              "defaultValue": "CharcoalMotion.routeReverse"
+              "named": true
             },
             {
               "name": "settings",
@@ -3530,11 +5665,10 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "transitionDuration",
-              "type": "Duration",
+              "name": "_transitionDuration",
+              "type": "Duration?",
               "required": false,
-              "named": true,
-              "defaultValue": "CharcoalMotion.routeForward"
+              "named": true
             }
           ],
           "enumValues": []
@@ -3556,7 +5690,7 @@ const String generatedCatalogJson = r'''{
           "title": "Platform-adaptive detail route",
           "description": "Pushes a real detail page whose back interaction follows iOS and Android platform gestures.",
           "sourcePath": "example/lib/agent_examples/page_route_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Pushes a real detail route with Charcoal's platform-adaptive back gesture.\nfinal class AgentPageRouteExample extends StatelessWidget {\n  const AgentPageRouteExample({super.key});\n\n  @override\n  Widget build(BuildContext context) => CharcoalButton(\n    onPressed: () => Navigator.of(context).push<void>(\n      CharcoalPageRoute<void>(builder: (_) => const _AccountDetailPage()),\n    ),\n    variant: CharcoalButtonVariant.primary,\n    child: const Text('Open account details'),\n  );\n}\n\nfinal class _AccountDetailPage extends StatelessWidget {\n  const _AccountDetailPage();\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    return ColoredBox(\n      color: theme.colors.backgroundDefault,\n      child: SafeArea(\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalNavigationBar(\n              leading: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.chevronLeft),\n                onPressed: () => Navigator.of(context).pop(),\n                semanticLabel: 'Back to account',\n                size: CharcoalIconButtonSize.small,\n              ),\n              title: const Text('Account details'),\n            ),\n            Padding(\n              padding: EdgeInsets.all(theme.dimensions.space.layout40),\n              child: const Text(\n                'Your profile and security settings are up to date.',\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Pushes a real detail route with Charcoal's platform-adaptive back gesture.\nfinal class AgentPageRouteExample extends StatelessWidget {\n  const AgentPageRouteExample({super.key});\n\n  @override\n  Widget build(BuildContext context) => CharcoalButton(\n    onPressed: () => Navigator.of(context).push<void>(\n      CharcoalPageRoute<void>(builder: (_) => const _AccountDetailPage()),\n    ),\n    variant: CharcoalButtonVariant.primary,\n    child: const Text('Open account details'),\n  );\n}\n\nfinal class _AccountDetailPage extends StatelessWidget {\n  const _AccountDetailPage();\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    return ColoredBox(\n      color: theme.colors.background,\n      child: SafeArea(\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalNavigationBar(\n              leading: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.chevronLeft),\n                onPressed: () => Navigator.of(context).pop(),\n                semanticLabel: 'Back to account',\n                size: CharcoalIconButtonSize.small,\n              ),\n              title: const Text('Account details'),\n            ),\n            Padding(\n              padding: EdgeInsets.all(theme.space.xl),\n              child: const Text(\n                'Your profile and security settings are up to date.',\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
         }
       ]
     },
@@ -3565,7 +5699,7 @@ const String generatedCatalogJson = r'''{
       "category": "Navigation",
       "summary": "Requests a page from a finite ordered collection while the caller owns results and navigation state.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/pagination.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation/pagination.dart",
       "documentationLevel": "curated",
       "keywords": [
         "current page",
@@ -3625,7 +5759,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalPagination",
           "kind": "constructor",
-          "signature": "CharcoalPagination({required this.currentPage, required this.pageCount, required this.onPageChanged, this.maxVisiblePages = 7, this.nextLabel = 'Next page', this.previousLabel = 'Previous page', this.semanticLabel = 'Pagination', this.size = CharcoalPaginationSize.medium, super.key})",
+          "signature": "CharcoalPagination({required this.currentPage, required this.pageCount, required this.onPageChanged, this.maxVisiblePages = 7, this.nextLabel = 'Next page', this.pageLabel = _defaultPageLabel, this.previousLabel = 'Previous page', this.semanticLabel = 'Pagination', this.size = CharcoalPaginationSize.medium, super.key})",
           "parameters": [
             {
               "name": "currentPage",
@@ -3651,6 +5785,73 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "7"
+            },
+            {
+              "name": "nextLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Next page'"
+            },
+            {
+              "name": "pageLabel",
+              "type": "String Function(int page)",
+              "required": false,
+              "named": true,
+              "defaultValue": "_defaultPageLabel"
+            },
+            {
+              "name": "previousLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Previous page'"
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Pagination'"
+            },
+            {
+              "name": "size",
+              "type": "CharcoalPaginationSize",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPaginationSize.medium"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalPagination.compact",
+          "kind": "constructor",
+          "signature": "CharcoalPagination.compact({required this.currentPage, required this.pageCount, required this.onPageChanged, this.nextLabel = 'Next page', this.previousLabel = 'Previous page', this.semanticLabel = 'Pagination', this.size = CharcoalPaginationSize.medium, super.key})",
+          "parameters": [
+            {
+              "name": "currentPage",
+              "type": "int",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "pageCount",
+              "type": "int",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPageChanged",
+              "type": "ValueChanged<int>?",
+              "required": true,
+              "named": true
             },
             {
               "name": "nextLabel",
@@ -3706,7 +5907,7 @@ const String generatedCatalogJson = r'''{
           "title": "Adaptive controlled result pages",
           "description": "Keeps result context and the accepted page in one parent while the page window adapts to compact constraints.",
           "sourcePath": "example/lib/agent_examples/pagination_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Controlled paged-result context that remains usable at compact widths.\nfinal class AgentPaginationExample extends StatefulWidget {\n  const AgentPaginationExample({super.key});\n\n  @override\n  State<AgentPaginationExample> createState() => _AgentPaginationExampleState();\n}\n\nfinal class _AgentPaginationExampleState extends State<AgentPaginationExample> {\n  static const _pageCount = 20;\n  static const _pageSize = 10;\n  static const _resultCount = 194;\n\n  int _currentPage = 8;\n\n  int get _firstResult => (_currentPage - 1) * _pageSize + 1;\n\n  int get _lastResult {\n    final candidate = _currentPage * _pageSize;\n    return candidate > _resultCount ? _resultCount : candidate;\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Search results', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            'Results $_firstResult–$_lastResult of $_resultCount. '\n            'Page $_currentPage of $_pageCount.',\n            style: theme.textStyles.captionMedium.copyWith(\n              color: theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalPagination(\n          currentPage: _currentPage,\n          nextLabel: 'Next result page',\n          onPageChanged: (page) => setState(() => _currentPage = page),\n          pageCount: _pageCount,\n          previousLabel: 'Previous result page',\n          semanticLabel: 'Search result pages',\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Controlled paged-result context that remains usable at compact widths.\nfinal class AgentPaginationExample extends StatefulWidget {\n  const AgentPaginationExample({super.key});\n\n  @override\n  State<AgentPaginationExample> createState() => _AgentPaginationExampleState();\n}\n\nfinal class _AgentPaginationExampleState extends State<AgentPaginationExample> {\n  static const _pageCount = 20;\n  static const _pageSize = 10;\n  static const _resultCount = 194;\n\n  int _currentPage = 8;\n\n  int get _firstResult => (_currentPage - 1) * _pageSize + 1;\n\n  int get _lastResult {\n    final candidate = _currentPage * _pageSize;\n    return candidate > _resultCount ? _resultCount : candidate;\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Search results', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            'Results $_firstResult–$_lastResult of $_resultCount. '\n            'Page $_currentPage of $_pageCount.',\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalPagination(\n          currentPage: _currentPage,\n          nextLabel: 'Next result page',\n          onPageChanged: (page) => setState(() => _currentPage = page),\n          pageCount: _pageCount,\n          previousLabel: 'Previous result page',\n          semanticLabel: 'Search result pages',\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -3715,7 +5916,7 @@ const String generatedCatalogJson = r'''{
       "category": "Forms",
       "summary": "Selects one controlled value from a mutually exclusive group.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/radio.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/radio.dart",
       "documentationLevel": "curated",
       "keywords": [
         "exclusive choice",
@@ -3845,7 +6046,7 @@ const String generatedCatalogJson = r'''{
           "title": "Named controlled option group",
           "description": "Keeps one audience value in a parent and exposes the related options as a named group.",
           "sourcePath": "example/lib/agent_examples/selection_controls_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing preferences', style: theme.textStyles.headingS),\n        SizedBox(height: space.component30),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.layout40),\n        Text('Audience', style: theme.textStyles.bodyBold),\n        SizedBox(height: space.component20),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text(\n          'Publishing preferences',\n          style: theme.style(CharcoalTextRole.headingS),\n        ),\n        SizedBox(height: space.lg),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.xl),\n        Text('Audience', style: theme.style(CharcoalTextRole.bodyLargeBold)),\n        SizedBox(height: space.sm),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.lg),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.lg),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -3854,7 +6055,7 @@ const String generatedCatalogJson = r'''{
       "category": "Layout",
       "summary": "Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/legacy/app/charcoal_scaffold.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_scaffold.dart",
       "documentationLevel": "curated",
       "keywords": [
         "scaffold",
@@ -3991,11 +6192,174 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalSearchField",
+      "category": "Utility",
+      "summary": "A text field with a search icon and a clear affordance.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/search_field.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalsearchfield",
+        "search field"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSearchField",
+          "kind": "constructor",
+          "signature": "CharcoalSearchField({required this.controller, this.autofocus = false, this.clearLabel = 'Clear', this.disabled = false, this.focusNode, this.icon = CharcoalIcons.search, this.label = '', this.onChanged, this.onClear, this.onSubmitted, this.placeholder, super.key})",
+          "parameters": [
+            {
+              "name": "controller",
+              "type": "TextEditingController",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "autofocus",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "clearLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Clear'"
+            },
+            {
+              "name": "disabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "focusNode",
+              "type": "FocusNode?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalIcons.search"
+            },
+            {
+              "name": "label",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "''"
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onClear",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onSubmitted",
+              "type": "ValueChanged<String>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "placeholder",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSectionHeader",
+      "category": "Utility",
+      "summary": "A section heading with an optional caption and trailing action.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_header.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalsectionheader",
+        "section header"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSectionHeader",
+          "kind": "constructor",
+          "signature": "CharcoalSectionHeader(this.title, {this.action, this.caption, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "caption",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalSegmentedControl",
       "category": "Selection",
       "summary": "Switches between a small set of mutually exclusive values.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/segmented_control.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/segmented_control.dart",
       "documentationLevel": "curated",
       "keywords": [
         "filter",
@@ -4133,11 +6497,337 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalSelectionBox",
+      "category": "Utility",
+      "summary": "The square, non-interactive checkbox indicator for a list's batch-selection mode.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/selection_box.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalselectionbox",
+        "selection box"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSelectionBox",
+          "kind": "constructor",
+          "signature": "CharcoalSelectionBox({required this.selected, super.key})",
+          "parameters": [
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSelectionToolbar",
+      "category": "Utility",
+      "summary": "The floating editing menu shown over a text selection.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text/selection_toolbar.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalselectiontoolbar",
+        "selection toolbar"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSelectionToolbar",
+          "kind": "constructor",
+          "signature": "CharcoalSelectionToolbar({required this.anchors, required this.entries, super.key})",
+          "parameters": [
+            {
+              "name": "anchors",
+              "type": "TextSelectionToolbarAnchors",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "entries",
+              "type": "List<CharcoalSelectionToolbarEntry>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSidebar",
+      "category": "Utility",
+      "summary": "The fixed-width sidebar of an admin shell: a [brand] header, a scrolling list of destination",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/sidebar.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalsidebar",
+        "sidebar"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSidebar",
+          "kind": "constructor",
+          "signature": "CharcoalSidebar({required this.brand, required this.children, this.footer, super.key})",
+          "parameters": [
+            {
+              "name": "brand",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "footer",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSidebarBrand",
+      "category": "Utility",
+      "summary": "The brand header of a [CharcoalSidebar]: a primary-coloured mark with one letter, and the",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/sidebar.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalsidebarbrand",
+        "sidebar brand"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSidebarBrand",
+          "kind": "constructor",
+          "signature": "CharcoalSidebarBrand({required this.mark, required this.title, super.key})",
+          "parameters": [
+            {
+              "name": "mark",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSidebarGroup",
+      "category": "Utility",
+      "summary": "A titled group of sidebar destinations with the design's tight gap between items.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/sidebar.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalsidebargroup",
+        "sidebar group"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSidebarGroup",
+          "kind": "constructor",
+          "signature": "CharcoalSidebarGroup({required this.children, this.title, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalSlider",
+      "category": "Utility",
+      "summary": "A slider in the theme's primary colour.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/slider.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalslider",
+        "slider"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSlider",
+          "kind": "constructor",
+          "signature": "CharcoalSlider({required this.value, required this.onChanged, this.min = 0, this.max = 1, this.divisions, this.label, this.semanticLabel, super.key})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "double",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<double>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "min",
+              "type": "double",
+              "required": false,
+              "named": true,
+              "defaultValue": "0"
+            },
+            {
+              "name": "max",
+              "type": "double",
+              "required": false,
+              "named": true,
+              "defaultValue": "1"
+            },
+            {
+              "name": "divisions",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "label",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalSnackBar",
       "category": "Feedback",
       "summary": "Shows a bordered, optionally illustrated transient notification.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/toast.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/snack_bar.dart",
       "documentationLevel": "curated",
       "keywords": [
         "alert",
@@ -4359,7 +7049,7 @@ const String generatedCatalogJson = r'''{
           "title": "Transient feedback",
           "description": "Shows toast and snackbar overlays from a context with an Overlay.",
           "sourcePath": "example/lib/agent_examples/feedback_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Launches transient feedback from a context that owns an Overlay.\nfinal class AgentFeedbackExample extends StatelessWidget {\n  const AgentFeedbackExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).dimensions.space.component20;\n    return Wrap(\n      spacing: gap,\n      runSpacing: gap,\n      children: <Widget>[\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalToast(context: context, message: 'Changes saved'),\n          child: const Text('Show toast'),\n        ),\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalSnackBar(context: context, message: 'Draft restored'),\n          child: const Text('Show snackbar'),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Launches transient feedback from a context that owns an Overlay.\nfinal class AgentFeedbackExample extends StatelessWidget {\n  const AgentFeedbackExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).space.sm;\n    return Wrap(\n      spacing: gap,\n      runSpacing: gap,\n      children: <Widget>[\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalToast(context: context, message: 'Changes saved'),\n          child: const Text('Show toast'),\n        ),\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalSnackBar(context: context, message: 'Draft restored'),\n          child: const Text('Show snackbar'),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -4368,7 +7058,7 @@ const String generatedCatalogJson = r'''{
       "category": "Utility",
       "summary": "Centers named loading feedback over a subtree with explicit blocking or passthrough behavior.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/loading_spinner.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/spinner_overlay.dart",
       "documentationLevel": "curated",
       "keywords": [
         "blocking loading",
@@ -4418,7 +7108,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalSpinnerOverlay",
           "kind": "constructor",
-          "signature": "CharcoalSpinnerOverlay({required this.child, required this.visible, this.interactionPassthrough = false, this.semanticLabel = 'Loading', this.spinnerSize, this.transparentBackground = false, super.key})",
+          "signature": "CharcoalSpinnerOverlay({required this.child, required this.visible, this.dimBackground = false, this.interactionPassthrough = false, this.semanticLabel = 'Loading', this.spinnerSize, this.transparentBackground = false, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -4431,6 +7121,13 @@ const String generatedCatalogJson = r'''{
               "type": "bool",
               "required": true,
               "named": true
+            },
+            {
+              "name": "dimBackground",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
             },
             {
               "name": "interactionPassthrough",
@@ -4475,16 +7172,133 @@ const String generatedCatalogJson = r'''{
           "title": "Blocking publish progress with durable result",
           "description": "Blocks stale publish actions, announces the operation, then restores the correct next action after completion.",
           "sourcePath": "example/lib/agent_examples/async_action_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A bounded asynchronous action with blocking progress and a durable result.\nfinal class AgentAsyncActionExample extends StatefulWidget {\n  const AgentAsyncActionExample({super.key});\n\n  @override\n  State<AgentAsyncActionExample> createState() =>\n      _AgentAsyncActionExampleState();\n}\n\nfinal class _AgentAsyncActionExampleState\n    extends State<AgentAsyncActionExample> {\n  bool _published = false;\n  bool _saving = false;\n  bool _pendingPublished = false;\n  String _status = 'This draft is private.';\n\n  Future<void> _setPublished(bool published) async {\n    if (_saving || _published == published) return;\n    setState(() {\n      _pendingPublished = published;\n      _saving = true;\n    });\n    await Future<void>.delayed(const Duration(milliseconds: 300));\n    if (!mounted) return;\n    setState(() {\n      _published = published;\n      _saving = false;\n      _status = published ? 'Draft published.' : 'Draft returned to private.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            _status,\n            style: theme.textStyles.captionMedium.copyWith(\n              color: theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSpinnerOverlay(\n          semanticLabel: _pendingPublished\n              ? 'Publishing draft'\n              : 'Returning draft to private',\n          visible: _saving,\n          child: DecoratedBox(\n            decoration: BoxDecoration(\n              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n              color: theme.colors.containerSecondaryDefault,\n            ),\n            child: Padding(\n              padding: EdgeInsets.all(space.layout40),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                children: <Widget>[\n                  Text(\n                    _published ? 'Published' : 'Private draft',\n                    style: theme.textStyles.bodyBold,\n                  ),\n                  SizedBox(height: space.component30),\n                  CharcoalSwitchingButton(\n                    isOn: _published,\n                    offButton: CharcoalButton(\n                      onPressed: () => _setPublished(true),\n                      semanticLabel: 'Publish draft',\n                      variant: CharcoalButtonVariant.primary,\n                      child: const Text('Publish'),\n                    ),\n                    onButton: CharcoalButton(\n                      onPressed: () => _setPublished(false),\n                      semanticLabel: 'Return published item to draft',\n                      child: const Text('Unpublish'),\n                    ),\n                  ),\n                ],\n              ),\n            ),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A bounded asynchronous action with blocking progress and a durable result.\nfinal class AgentAsyncActionExample extends StatefulWidget {\n  const AgentAsyncActionExample({super.key});\n\n  @override\n  State<AgentAsyncActionExample> createState() =>\n      _AgentAsyncActionExampleState();\n}\n\nfinal class _AgentAsyncActionExampleState\n    extends State<AgentAsyncActionExample> {\n  bool _published = false;\n  bool _saving = false;\n  bool _pendingPublished = false;\n  String _status = 'This draft is private.';\n\n  Future<void> _setPublished(bool published) async {\n    if (_saving || _published == published) return;\n    setState(() {\n      _pendingPublished = published;\n      _saving = true;\n    });\n    await Future<void>.delayed(const Duration(milliseconds: 300));\n    if (!mounted) return;\n    setState(() {\n      _published = published;\n      _saving = false;\n      _status = published ? 'Draft published.' : 'Draft returned to private.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            _status,\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalSpinnerOverlay(\n          semanticLabel: _pendingPublished\n              ? 'Publishing draft'\n              : 'Returning draft to private',\n          visible: _saving,\n          child: DecoratedBox(\n            decoration: BoxDecoration(\n              borderRadius: BorderRadius.circular(theme.radius.md),\n              color: theme.colors.surfaceSecondary,\n            ),\n            child: Padding(\n              padding: EdgeInsets.all(space.xl),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                children: <Widget>[\n                  Text(\n                    _published ? 'Published' : 'Private draft',\n                    style: theme.style(CharcoalTextRole.bodyLargeBold),\n                  ),\n                  SizedBox(height: space.lg),\n                  CharcoalSwitchingButton(\n                    isOn: _published,\n                    offButton: CharcoalButton(\n                      onPressed: () => _setPublished(true),\n                      semanticLabel: 'Publish draft',\n                      variant: CharcoalButtonVariant.primary,\n                      child: const Text('Publish'),\n                    ),\n                    onButton: CharcoalButton(\n                      onPressed: () => _setPublished(false),\n                      semanticLabel: 'Return published item to draft',\n                      child: const Text('Unpublish'),\n                    ),\n                  ),\n                ],\n              ),\n            ),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalStatCard",
+      "category": "Utility",
+      "summary": "A stat tile: small label, large value, optional status, footnote and action.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/stat_card.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalstatcard",
+        "stat card"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalStatCard",
+          "kind": "constructor",
+          "signature": "CharcoalStatCard({required this.label, required this.value, this.action, this.footnote, this.status, this.statusTone = CharcoalTone.neutral, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "footnote",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "status",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "statusTone",
+              "type": "CharcoalTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTone.neutral"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalStatusDot",
+      "category": "Utility",
+      "summary": "The leading dot that marks row status when not in selection mode.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/status/status_dot.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalstatusdot",
+        "status dot"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalStatusDot",
+          "kind": "constructor",
+          "signature": "CharcoalStatusDot(this.tone, {super.key})",
+          "parameters": [
+            {
+              "name": "tone",
+              "type": "CharcoalTone",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalSwitch",
       "category": "Forms",
       "summary": "Changes one controlled on/off setting with immediate effect.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/switch.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/switch.dart",
       "documentationLevel": "curated",
       "keywords": [
         "boolean setting",
@@ -4601,16 +7415,77 @@ const String generatedCatalogJson = r'''{
           "title": "Immediate controlled setting",
           "description": "Keeps an immediate notification preference in the same parent-owned settings model.",
           "sourcePath": "example/lib/agent_examples/selection_controls_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing preferences', style: theme.textStyles.headingS),\n        SizedBox(height: space.component30),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.layout40),\n        Text('Audience', style: theme.textStyles.bodyBold),\n        SizedBox(height: space.component20),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.component30),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Audience { everyone, followers, private }\n\n/// Parent-owned checkbox, radio, and switch state with distinct responsibilities.\nfinal class AgentSelectionControlsExample extends StatefulWidget {\n  const AgentSelectionControlsExample({super.key});\n\n  @override\n  State<AgentSelectionControlsExample> createState() =>\n      _AgentSelectionControlsExampleState();\n}\n\nfinal class _AgentSelectionControlsExampleState\n    extends State<AgentSelectionControlsExample> {\n  _Audience _audience = _Audience.followers;\n  bool _saveDrafts = true;\n  bool _releaseNotifications = true;\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text(\n          'Publishing preferences',\n          style: theme.style(CharcoalTextRole.headingS),\n        ),\n        SizedBox(height: space.lg),\n        CharcoalCheckbox(\n          value: _saveDrafts,\n          onChanged: (value) => setState(() => _saveDrafts = value),\n          label: const Text('Save drafts automatically'),\n        ),\n        SizedBox(height: space.xl),\n        Text('Audience', style: theme.style(CharcoalTextRole.bodyLargeBold)),\n        SizedBox(height: space.sm),\n        Semantics(\n          container: true,\n          explicitChildNodes: true,\n          label: 'Audience options',\n          child: Column(\n            crossAxisAlignment: CrossAxisAlignment.stretch,\n            children: <Widget>[\n              CharcoalRadio<_Audience>(\n                value: _Audience.everyone,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Everyone'),\n              ),\n              SizedBox(height: space.lg),\n              CharcoalRadio<_Audience>(\n                value: _Audience.followers,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Followers'),\n              ),\n              SizedBox(height: space.lg),\n              CharcoalRadio<_Audience>(\n                value: _Audience.private,\n                groupValue: _audience,\n                onChanged: (value) => setState(() => _audience = value),\n                label: const Text('Only me'),\n              ),\n            ],\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalSwitch(\n          value: _releaseNotifications,\n          onChanged: (value) => setState(() => _releaseNotifications = value),\n          label: const Text('Release notifications'),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalSwitchField",
+      "category": "Utility",
+      "summary": "A labelled switch with an optional hint line.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/switch_field.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalswitchfield",
+        "switch field"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalSwitchField",
+          "kind": "constructor",
+          "signature": "CharcoalSwitchField({required this.label, required this.value, required this.onChanged, this.hint, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "value",
+              "type": "bool",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<bool>?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "hint",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalSwitchingButton",
       "category": "Actions",
       "summary": "Keeps two action variants at one stable size while exposing only the active button.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/button.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/actions/switching_button.dart",
       "documentationLevel": "curated",
       "keywords": [
         "action state",
@@ -4695,7 +7570,7 @@ const String generatedCatalogJson = r'''{
           "title": "Stable publish and unpublish actions",
           "description": "Keeps the two action variants stable while asynchronous progress and durable state remain caller-owned.",
           "sourcePath": "example/lib/agent_examples/async_action_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A bounded asynchronous action with blocking progress and a durable result.\nfinal class AgentAsyncActionExample extends StatefulWidget {\n  const AgentAsyncActionExample({super.key});\n\n  @override\n  State<AgentAsyncActionExample> createState() =>\n      _AgentAsyncActionExampleState();\n}\n\nfinal class _AgentAsyncActionExampleState\n    extends State<AgentAsyncActionExample> {\n  bool _published = false;\n  bool _saving = false;\n  bool _pendingPublished = false;\n  String _status = 'This draft is private.';\n\n  Future<void> _setPublished(bool published) async {\n    if (_saving || _published == published) return;\n    setState(() {\n      _pendingPublished = published;\n      _saving = true;\n    });\n    await Future<void>.delayed(const Duration(milliseconds: 300));\n    if (!mounted) return;\n    setState(() {\n      _published = published;\n      _saving = false;\n      _status = published ? 'Draft published.' : 'Draft returned to private.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            _status,\n            style: theme.textStyles.captionMedium.copyWith(\n              color: theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        CharcoalSpinnerOverlay(\n          semanticLabel: _pendingPublished\n              ? 'Publishing draft'\n              : 'Returning draft to private',\n          visible: _saving,\n          child: DecoratedBox(\n            decoration: BoxDecoration(\n              borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n              color: theme.colors.containerSecondaryDefault,\n            ),\n            child: Padding(\n              padding: EdgeInsets.all(space.layout40),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                children: <Widget>[\n                  Text(\n                    _published ? 'Published' : 'Private draft',\n                    style: theme.textStyles.bodyBold,\n                  ),\n                  SizedBox(height: space.component30),\n                  CharcoalSwitchingButton(\n                    isOn: _published,\n                    offButton: CharcoalButton(\n                      onPressed: () => _setPublished(true),\n                      semanticLabel: 'Publish draft',\n                      variant: CharcoalButtonVariant.primary,\n                      child: const Text('Publish'),\n                    ),\n                    onButton: CharcoalButton(\n                      onPressed: () => _setPublished(false),\n                      semanticLabel: 'Return published item to draft',\n                      child: const Text('Unpublish'),\n                    ),\n                  ),\n                ],\n              ),\n            ),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A bounded asynchronous action with blocking progress and a durable result.\nfinal class AgentAsyncActionExample extends StatefulWidget {\n  const AgentAsyncActionExample({super.key});\n\n  @override\n  State<AgentAsyncActionExample> createState() =>\n      _AgentAsyncActionExampleState();\n}\n\nfinal class _AgentAsyncActionExampleState\n    extends State<AgentAsyncActionExample> {\n  bool _published = false;\n  bool _saving = false;\n  bool _pendingPublished = false;\n  String _status = 'This draft is private.';\n\n  Future<void> _setPublished(bool published) async {\n    if (_saving || _published == published) return;\n    setState(() {\n      _pendingPublished = published;\n      _saving = true;\n    });\n    await Future<void>.delayed(const Duration(milliseconds: 300));\n    if (!mounted) return;\n    setState(() {\n      _published = published;\n      _saving = false;\n      _status = published ? 'Draft published.' : 'Draft returned to private.';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Publishing', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            _status,\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalSpinnerOverlay(\n          semanticLabel: _pendingPublished\n              ? 'Publishing draft'\n              : 'Returning draft to private',\n          visible: _saving,\n          child: DecoratedBox(\n            decoration: BoxDecoration(\n              borderRadius: BorderRadius.circular(theme.radius.md),\n              color: theme.colors.surfaceSecondary,\n            ),\n            child: Padding(\n              padding: EdgeInsets.all(space.xl),\n              child: Column(\n                mainAxisSize: MainAxisSize.min,\n                children: <Widget>[\n                  Text(\n                    _published ? 'Published' : 'Private draft',\n                    style: theme.style(CharcoalTextRole.bodyLargeBold),\n                  ),\n                  SizedBox(height: space.lg),\n                  CharcoalSwitchingButton(\n                    isOn: _published,\n                    offButton: CharcoalButton(\n                      onPressed: () => _setPublished(true),\n                      semanticLabel: 'Publish draft',\n                      variant: CharcoalButtonVariant.primary,\n                      child: const Text('Publish'),\n                    ),\n                    onButton: CharcoalButton(\n                      onPressed: () => _setPublished(false),\n                      semanticLabel: 'Return published item to draft',\n                      child: const Text('Unpublish'),\n                    ),\n                  ),\n                ],\n              ),\n            ),\n          ),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -4704,7 +7579,7 @@ const String generatedCatalogJson = r'''{
       "category": "Navigation",
       "summary": "Switches between stable top-level destinations without owning or mutating the route stack.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/tab_bar.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/navigation/tab_bar.dart",
       "documentationLevel": "curated",
       "keywords": [
         "bottom navigation",
@@ -4855,7 +7730,7 @@ const String generatedCatalogJson = r'''{
           "title": "Controlled top-level destinations",
           "description": "A stable destination value updates app-shell content without prescribing a route push.",
           "sourcePath": "example/lib/agent_examples/tab_bar_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Destination { home, discover, messages, profile }\n\n/// A controlled top-level destination selector.\n///\n/// Selection updates the app shell in place. Detail and task actions should\n/// still use a real Navigator push, replace, or pop outside this component.\nfinal class AgentTabBarExample extends StatefulWidget {\n  const AgentTabBarExample({super.key});\n\n  @override\n  State<AgentTabBarExample> createState() => _AgentTabBarExampleState();\n}\n\nfinal class _AgentTabBarExampleState extends State<AgentTabBarExample> {\n  _Destination destination = _Destination.home;\n\n  @override\n  Widget build(BuildContext context) => Column(\n    mainAxisSize: MainAxisSize.min,\n    children: <Widget>[\n      SizedBox(\n        height: CharcoalTheme.of(context).dimensions.space.layout60,\n        child: Center(\n          child: Text(\n            'Current destination: ${destination.name}',\n            style: CharcoalTheme.of(context).textStyles.captionMedium,\n          ),\n        ),\n      ),\n      CharcoalTabBar<_Destination>(\n        items: const <CharcoalTabItem<_Destination>>[\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Home',\n            value: _Destination.home,\n          ),\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.compass),\n            label: 'Discover',\n            value: _Destination.discover,\n          ),\n          CharcoalTabItem<_Destination>(\n            badge: '3',\n            icon: CharcoalIcon(CharcoalIcons.message),\n            label: 'Messages',\n            semanticLabel: 'Messages, 3 unread',\n            value: _Destination.messages,\n          ),\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.personCircle),\n            label: 'Profile',\n            value: _Destination.profile,\n          ),\n        ],\n        onChanged: (value) => setState(() => destination = value),\n        semanticLabel: 'Primary destinations',\n        value: destination,\n      ),\n    ],\n  );\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\nenum _Destination { home, discover, messages, profile }\n\n/// A controlled top-level destination selector.\n///\n/// Selection updates the app shell in place. Detail and task actions should\n/// still use a real Navigator push, replace, or pop outside this component.\nfinal class AgentTabBarExample extends StatefulWidget {\n  const AgentTabBarExample({super.key});\n\n  @override\n  State<AgentTabBarExample> createState() => _AgentTabBarExampleState();\n}\n\nfinal class _AgentTabBarExampleState extends State<AgentTabBarExample> {\n  _Destination destination = _Destination.home;\n\n  @override\n  Widget build(BuildContext context) => Column(\n    mainAxisSize: MainAxisSize.min,\n    children: <Widget>[\n      SizedBox(\n        height: CharcoalTheme.of(context).space.xxxl,\n        child: Center(\n          child: Text(\n            'Current destination: ${destination.name}',\n            style: CharcoalTheme.of(context)\n                .style(CharcoalTextRole.captionMedium),\n          ),\n        ),\n      ),\n      CharcoalTabBar<_Destination>(\n        items: const <CharcoalTabItem<_Destination>>[\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Home',\n            value: _Destination.home,\n          ),\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.compass),\n            label: 'Discover',\n            value: _Destination.discover,\n          ),\n          CharcoalTabItem<_Destination>(\n            badge: '3',\n            icon: CharcoalIcon(CharcoalIcons.message),\n            label: 'Messages',\n            semanticLabel: 'Messages, 3 unread',\n            value: _Destination.messages,\n          ),\n          CharcoalTabItem<_Destination>(\n            icon: CharcoalIcon(CharcoalIcons.personCircle),\n            label: 'Profile',\n            value: _Destination.profile,\n          ),\n        ],\n        onChanged: (value) => setState(() => destination = value),\n        semanticLabel: 'Primary destinations',\n        value: destination,\n      ),\n    ],\n  );\n}\n"
         }
       ]
     },
@@ -4864,7 +7739,7 @@ const String generatedCatalogJson = r'''{
       "category": "Selection",
       "summary": "Toggles one compact topic or filter while the caller owns the selected tag set.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/tag_item.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/status/tag_item.dart",
       "documentationLevel": "curated",
       "keywords": [
         "active tag",
@@ -5051,16 +7926,122 @@ const String generatedCatalogJson = r'''{
           "title": "Controlled tag filter collection",
           "description": "Keeps one selected set in the parent while translated and compact tags remain whole, reversible actions.",
           "sourcePath": "example/lib/agent_examples/tag_item_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A compact, caller-controlled tag filter collection.\nfinal class AgentTagItemExample extends StatefulWidget {\n  const AgentTagItemExample({super.key});\n\n  @override\n  State<AgentTagItemExample> createState() => _AgentTagItemExampleState();\n}\n\nfinal class _AgentTagItemExampleState extends State<AgentTagItemExample> {\n  static const _tags = <({String id, String label, String? translation})>[\n    (id: 'landscape', label: '#landscape', translation: null),\n    (id: 'original', label: '#オリジナル', translation: 'original work'),\n    (id: 'character', label: '#character', translation: null),\n    (id: 'background', label: '#background-art', translation: null),\n  ];\n\n  final Set<String> _selectedTags = <String>{'landscape'};\n\n  void _toggleTag(String id) {\n    setState(() {\n      if (!_selectedTags.add(id)) {\n        _selectedTags.remove(id);\n      }\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    final selectedCount = _selectedTags.length;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Artwork filters', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            '$selectedCount ${selectedCount == 1 ? 'filter' : 'filters'} selected',\n            style: theme.textStyles.captionMedium.copyWith(\n              color: theme.colors.textSecondaryDefault,\n            ),\n          ),\n        ),\n        SizedBox(height: space.layout30),\n        Wrap(\n          spacing: space.component20,\n          runSpacing: space.component20,\n          children: <Widget>[\n            for (final tag in _tags)\n              CharcoalTagItem(\n                label: tag.label,\n                onPressed: () => _toggleTag(tag.id),\n                semanticLabel: '${tag.id} tag filter',\n                status: _selectedTags.contains(tag.id)\n                    ? CharcoalTagItemStatus.active\n                    : CharcoalTagItemStatus.normal,\n                translatedLabel: tag.translation,\n              ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A compact, caller-controlled tag filter collection.\nfinal class AgentTagItemExample extends StatefulWidget {\n  const AgentTagItemExample({super.key});\n\n  @override\n  State<AgentTagItemExample> createState() => _AgentTagItemExampleState();\n}\n\nfinal class _AgentTagItemExampleState extends State<AgentTagItemExample> {\n  static const _tags = <({String id, String label, String? translation})>[\n    (id: 'landscape', label: '#landscape', translation: null),\n    (id: 'original', label: '#オリジナル', translation: 'original work'),\n    (id: 'character', label: '#character', translation: null),\n    (id: 'background', label: '#background-art', translation: null),\n  ];\n\n  final Set<String> _selectedTags = <String>{'landscape'};\n\n  void _toggleTag(String id) {\n    setState(() {\n      if (!_selectedTags.add(id)) {\n        _selectedTags.remove(id);\n      }\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    final selectedCount = _selectedTags.length;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Artwork filters', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            '$selectedCount ${selectedCount == 1 ? 'filter' : 'filters'} selected',\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.lg),\n        Wrap(\n          spacing: space.sm,\n          runSpacing: space.sm,\n          children: <Widget>[\n            for (final tag in _tags)\n              CharcoalTagItem(\n                label: tag.label,\n                onPressed: () => _toggleTag(tag.id),\n                semanticLabel: '${tag.id} tag filter',\n                status: _selectedTags.contains(tag.id)\n                    ? CharcoalTagItemStatus.active\n                    : CharcoalTagItemStatus.normal,\n                translatedLabel: tag.translation,\n              ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalText",
+      "category": "Utility",
+      "summary": "A run of text in a Charcoal type role.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text/charcoal_text.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltext",
+        "text"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalText",
+          "kind": "constructor",
+          "signature": "CharcoalText(this.data, {this.role = CharcoalTextRole.body, this.bold = false, this.color, this.maxLines, this.mono = false, this.overflow, this.semanticLabel, this.softWrap, this.textAlign, this.tone, super.key})",
+          "parameters": [
+            {
+              "name": "data",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "role",
+              "type": "CharcoalTextRole",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextRole.body"
+            },
+            {
+              "name": "bold",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "color",
+              "type": "Color?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "maxLines",
+              "type": "int?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "mono",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "overflow",
+              "type": "TextOverflow?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "semanticLabel",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "softWrap",
+              "type": "bool?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "textAlign",
+              "type": "TextAlign?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTextTone?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalTextArea",
       "category": "Forms",
       "summary": "Collects fixed-row multiline text with labels, validation, and character guidance.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/text_area.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/text_area.dart",
       "documentationLevel": "curated",
       "keywords": [
         "description",
@@ -5118,7 +8099,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTextArea",
           "kind": "constructor",
-          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding = const EdgeInsets.all(20), this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows = 4, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
+          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -5161,10 +8142,9 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "scrollPadding",
-              "type": "EdgeInsets",
+              "type": "EdgeInsets?",
               "required": false,
-              "named": true,
-              "defaultValue": "const EdgeInsets.all(20)"
+              "named": true
             },
             {
               "name": "undoController",
@@ -5246,10 +8226,9 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "rows",
-              "type": "int",
+              "type": "int?",
               "required": false,
-              "named": true,
-              "defaultValue": "4"
+              "named": true
             },
             {
               "name": "showCount",
@@ -5292,11 +8271,54 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalTextDefaults",
+      "category": "Application",
+      "summary": "Installs the theme's ambient text and icon defaults.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_text_defaults.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaltextdefaults",
+        "text defaults"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalTextDefaults",
+          "kind": "constructor",
+          "signature": "CharcoalTextDefaults({required this.child, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalTextEllipsis",
       "category": "Content",
       "summary": "Truncates plain text to a positive line limit while preserving complete spoken content.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/text_ellipsis.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text/text_ellipsis.dart",
       "documentationLevel": "curated",
       "keywords": [
         "clamp text",
@@ -5396,7 +8418,7 @@ const String generatedCatalogJson = r'''{
           "title": "Scaled multiline project title",
           "description": "Limits a long localized title to two lines while retaining its complete spoken form.",
           "sourcePath": "example/lib/agent_examples/theme_typography_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A scoped light/dark token specimen with semantic and numeric typography.\nfinal class AgentThemeTypographyExample extends StatefulWidget {\n  const AgentThemeTypographyExample({super.key});\n\n  @override\n  State<AgentThemeTypographyExample> createState() =>\n      _AgentThemeTypographyExampleState();\n}\n\nfinal class _AgentThemeTypographyExampleState\n    extends State<AgentThemeTypographyExample> {\n  static const projectTitle =\n      'Moonlit Garden Archive for the Northern Collection';\n  bool _dark = false;\n\n  @override\n  Widget build(BuildContext context) => CharcoalTheme(\n    data: _dark ? CharcoalThemeData.dark() : CharcoalThemeData.light(),\n    child: Builder(\n      builder: (context) {\n        final theme = CharcoalTheme.of(context);\n        final space = theme.dimensions.space;\n        return DecoratedBox(\n          decoration: BoxDecoration(\n            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n            color: theme.colors.backgroundDefault,\n          ),\n          child: Padding(\n            padding: EdgeInsets.all(space.layout40),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              mainAxisSize: MainAxisSize.min,\n              children: <Widget>[\n                Text(\n                  'Project typography',\n                  style: theme.textStyles.headingXs.copyWith(\n                    color: theme.colors.textDefaultText1,\n                  ),\n                ),\n                SizedBox(height: space.component20),\n                const CharcoalTypography(\n                  size: CharcoalTypographySize.size12,\n                  weight: CharcoalTypographyWeight.bold,\n                  child: Text('CURATED COLLECTION'),\n                ),\n                SizedBox(height: space.component20),\n                CharcoalTextEllipsis(\n                  projectTitle,\n                  maxLines: 2,\n                  semanticLabel: 'Complete project title: $projectTitle',\n                  style: theme.textStyles.body.copyWith(\n                    color: theme.colors.textDefaultText1,\n                  ),\n                ),\n                SizedBox(height: space.layout40),\n                Semantics(\n                  liveRegion: true,\n                  child: Text(\n                    _dark\n                        ? 'Previewing dark theme.'\n                        : 'Previewing light theme.',\n                    style: theme.textStyles.captionMedium.copyWith(\n                      color: theme.colors.textSecondaryDefault,\n                    ),\n                  ),\n                ),\n                SizedBox(height: space.component30),\n                CharcoalButton(\n                  fullWidth: true,\n                  onPressed: () => setState(() => _dark = !_dark),\n                  semanticLabel: _dark\n                      ? 'Preview light theme'\n                      : 'Preview dark theme',\n                  variant: CharcoalButtonVariant.primary,\n                  child: Text(_dark ? 'Preview light' : 'Preview dark'),\n                ),\n              ],\n            ),\n          ),\n        );\n      },\n    ),\n  );\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/material.dart' show Theme;\nimport 'package:flutter/widgets.dart';\n\n/// A scoped light/dark token specimen with semantic and numeric typography.\nfinal class AgentThemeTypographyExample extends StatefulWidget {\n  const AgentThemeTypographyExample({super.key});\n\n  @override\n  State<AgentThemeTypographyExample> createState() =>\n      _AgentThemeTypographyExampleState();\n}\n\nfinal class _AgentThemeTypographyExampleState\n    extends State<AgentThemeTypographyExample> {\n  static const projectTitle =\n      'Moonlit Garden Archive for the Northern Collection';\n  bool _dark = false;\n\n  @override\n  Widget build(BuildContext context) => Theme(\n    data: buildCharcoalThemeData(_dark ? charcoalDarkPack : charcoalLightPack),\n    child: Builder(\n      builder: (context) {\n        final theme = CharcoalTheme.of(context);\n        final space = theme.space;\n        return DecoratedBox(\n          decoration: BoxDecoration(\n            borderRadius: BorderRadius.circular(theme.radius.md),\n            color: theme.colors.background,\n          ),\n          child: Padding(\n            padding: EdgeInsets.all(space.xl),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              mainAxisSize: MainAxisSize.min,\n              children: <Widget>[\n                Text(\n                  'Project typography',\n                  style: theme\n                      .style(CharcoalTextRole.headingXs)\n                      .copyWith(color: theme.colors.text),\n                ),\n                SizedBox(height: space.sm),\n                const CharcoalTypography(\n                  role: CharcoalTextRole.size12,\n                  bold: true,\n                  child: Text('CURATED COLLECTION'),\n                ),\n                SizedBox(height: space.sm),\n                CharcoalTextEllipsis(\n                  projectTitle,\n                  maxLines: 2,\n                  semanticLabel: 'Complete project title: $projectTitle',\n                  style: theme\n                      .style(CharcoalTextRole.bodyLarge)\n                      .copyWith(color: theme.colors.text),\n                ),\n                SizedBox(height: space.xl),\n                Semantics(\n                  liveRegion: true,\n                  child: Text(\n                    _dark\n                        ? 'Previewing dark theme.'\n                        : 'Previewing light theme.',\n                    style: theme\n                        .style(CharcoalTextRole.captionMedium)\n                        .copyWith(color: theme.colors.textSecondary),\n                  ),\n                ),\n                SizedBox(height: space.lg),\n                CharcoalButton(\n                  fullWidth: true,\n                  onPressed: () => setState(() => _dark = !_dark),\n                  semanticLabel: _dark\n                      ? 'Preview light theme'\n                      : 'Preview dark theme',\n                  variant: CharcoalButtonVariant.primary,\n                  child: Text(_dark ? 'Preview light' : 'Preview dark'),\n                ),\n              ],\n            ),\n          ),\n        );\n      },\n    ),\n  );\n}\n"
         }
       ]
     },
@@ -5405,7 +8427,7 @@ const String generatedCatalogJson = r'''{
       "category": "Forms",
       "summary": "Collects a single line of text with Charcoal labels, validation, and assistive text.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/text_field.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/fields/text_field.dart",
       "documentationLevel": "curated",
       "keywords": [
         "field",
@@ -5459,7 +8481,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTextField",
           "kind": "constructor",
-          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding = const EdgeInsets.all(20), this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
+          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -5502,10 +8524,9 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "scrollPadding",
-              "type": "EdgeInsets",
+              "type": "EdgeInsets?",
               "required": false,
-              "named": true,
-              "defaultValue": "const EdgeInsets.all(20)"
+              "named": true
             },
             {
               "name": "undoController",
@@ -5663,158 +8684,11 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
-      "name": "CharcoalTheme",
-      "category": "Foundation",
-      "summary": "Propagates one coherent Charcoal token set through a Widgets-layer subtree.",
-      "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/theme/charcoal_theme.dart",
-      "documentationLevel": "curated",
-      "keywords": [
-        "dark theme",
-        "inherited theme",
-        "light theme",
-        "scoped theme",
-        "semantic tokens",
-        "theme data"
-      ],
-      "useWhen": [
-        "A package-level subtree needs Charcoal colors, dimensions, typography, and brightness without Material or Cupertino dependencies.",
-        "An isolated specimen or audited section needs one scoped token override while the rest of the application keeps its current theme."
-      ],
-      "avoidWhen": [
-        "CharcoalApp already owns the application root; pass lightTheme, darkTheme, and themeMode there instead of adding a duplicate root wrapper.",
-        "One component needs an ad hoc visual tweak; prefer its semantic API or a narrowly audited token override rather than nesting themes throughout the tree.",
-        "Only brightness is changing while colors and typography remain from another mode; construct a coherent light or dark data set instead.",
-        "User preference persistence or platform-mode observation is required; those remain application state owned by CharcoalApp and its caller."
-      ],
-      "accessibility": [
-        "The theme adds no semantics by itself; components remain responsible for labels, roles, states, focus, and feedback.",
-        "Any custom token set must preserve readable color relationships and perceivable interaction states in every supported mode.",
-        "Keep ambient MediaQuery text scaling, reduced motion, directionality, and platform accessibility settings outside the token object intact."
-      ],
-      "responsiveBehavior": [
-        "CharcoalTheme owns no layout; descendants resolve dimensions and typography from the nearest scoped data.",
-        "As an InheritedTheme it is captured across framework overlay boundaries so menus, dialogs, and other captured subtrees retain the exact scope.",
-        "Replace data atomically when a mode or scoped override changes so all dependents rebuild from one consistent frame."
-      ],
-      "interactionStates": [
-        "light data",
-        "dark data",
-        "scoped override",
-        "captured overlay",
-        "data replacement"
-      ],
-      "feedbackResponsibilities": [
-        "Owns dependency propagation and captured-theme continuity for colors, dimensions, typography, and brightness.",
-        "The caller owns mode selection, preference persistence, system observation, override audits, and any transition between data sets."
-      ],
-      "tokenRoles": [
-        "backgroundDefault",
-        "textDefault",
-        "space.layout40",
-        "text.font-family/sans"
-      ],
-      "relatedComponents": [
-        "CharcoalApp",
-        "CharcoalTypography",
-        "CharcoalTextEllipsis"
-      ],
-      "apis": [
-        {
-          "name": "CharcoalTheme",
-          "kind": "constructor",
-          "signature": "CharcoalTheme({required this.data, required super.child, super.key})",
-          "parameters": [
-            {
-              "name": "data",
-              "type": "CharcoalThemeData",
-              "required": true,
-              "named": true
-            },
-            {
-              "name": "child",
-              "type": "dynamic",
-              "required": true,
-              "named": true
-            },
-            {
-              "name": "key",
-              "type": "Key?",
-              "required": false,
-              "named": true
-            }
-          ],
-          "enumValues": []
-        },
-        {
-          "name": "CharcoalThemeData.light",
-          "kind": "supportingType",
-          "signature": "CharcoalThemeData.light({CharcoalColorTokens? colors, CharcoalDimensionTokens? dimensions, CharcoalTypographyTokens? typography})",
-          "parameters": [
-            {
-              "name": "colors",
-              "type": "CharcoalColorTokens?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "dimensions",
-              "type": "CharcoalDimensionTokens?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "typography",
-              "type": "CharcoalTypographyTokens?",
-              "required": false,
-              "named": true
-            }
-          ],
-          "enumValues": []
-        },
-        {
-          "name": "CharcoalThemeData.dark",
-          "kind": "supportingType",
-          "signature": "CharcoalThemeData.dark({CharcoalColorTokens? colors, CharcoalDimensionTokens? dimensions, CharcoalTypographyTokens? typography})",
-          "parameters": [
-            {
-              "name": "colors",
-              "type": "CharcoalColorTokens?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "dimensions",
-              "type": "CharcoalDimensionTokens?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "typography",
-              "type": "CharcoalTypographyTokens?",
-              "required": false,
-              "named": true
-            }
-          ],
-          "enumValues": []
-        }
-      ],
-      "examples": [
-        {
-          "id": "theme-scoped-typography",
-          "title": "Scoped coherent light and dark token sets",
-          "description": "Replaces one complete scoped theme while semantic and numeric typography resolve from the same frame.",
-          "sourcePath": "example/lib/agent_examples/theme_typography_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A scoped light/dark token specimen with semantic and numeric typography.\nfinal class AgentThemeTypographyExample extends StatefulWidget {\n  const AgentThemeTypographyExample({super.key});\n\n  @override\n  State<AgentThemeTypographyExample> createState() =>\n      _AgentThemeTypographyExampleState();\n}\n\nfinal class _AgentThemeTypographyExampleState\n    extends State<AgentThemeTypographyExample> {\n  static const projectTitle =\n      'Moonlit Garden Archive for the Northern Collection';\n  bool _dark = false;\n\n  @override\n  Widget build(BuildContext context) => CharcoalTheme(\n    data: _dark ? CharcoalThemeData.dark() : CharcoalThemeData.light(),\n    child: Builder(\n      builder: (context) {\n        final theme = CharcoalTheme.of(context);\n        final space = theme.dimensions.space;\n        return DecoratedBox(\n          decoration: BoxDecoration(\n            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n            color: theme.colors.backgroundDefault,\n          ),\n          child: Padding(\n            padding: EdgeInsets.all(space.layout40),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              mainAxisSize: MainAxisSize.min,\n              children: <Widget>[\n                Text(\n                  'Project typography',\n                  style: theme.textStyles.headingXs.copyWith(\n                    color: theme.colors.textDefaultText1,\n                  ),\n                ),\n                SizedBox(height: space.component20),\n                const CharcoalTypography(\n                  size: CharcoalTypographySize.size12,\n                  weight: CharcoalTypographyWeight.bold,\n                  child: Text('CURATED COLLECTION'),\n                ),\n                SizedBox(height: space.component20),\n                CharcoalTextEllipsis(\n                  projectTitle,\n                  maxLines: 2,\n                  semanticLabel: 'Complete project title: $projectTitle',\n                  style: theme.textStyles.body.copyWith(\n                    color: theme.colors.textDefaultText1,\n                  ),\n                ),\n                SizedBox(height: space.layout40),\n                Semantics(\n                  liveRegion: true,\n                  child: Text(\n                    _dark\n                        ? 'Previewing dark theme.'\n                        : 'Previewing light theme.',\n                    style: theme.textStyles.captionMedium.copyWith(\n                      color: theme.colors.textSecondaryDefault,\n                    ),\n                  ),\n                ),\n                SizedBox(height: space.component30),\n                CharcoalButton(\n                  fullWidth: true,\n                  onPressed: () => setState(() => _dark = !_dark),\n                  semanticLabel: _dark\n                      ? 'Preview light theme'\n                      : 'Preview dark theme',\n                  variant: CharcoalButtonVariant.primary,\n                  child: Text(_dark ? 'Preview light' : 'Preview dark'),\n                ),\n              ],\n            ),\n          ),\n        );\n      },\n    ),\n  );\n}\n"
-        }
-      ]
-    },
-    {
       "name": "CharcoalToast",
       "category": "Feedback",
       "summary": "Shows a compact positive or negative live-region notification.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/toast.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/toast.dart",
       "documentationLevel": "curated",
       "keywords": [
         "alert",
@@ -6059,7 +8933,7 @@ const String generatedCatalogJson = r'''{
           "title": "Transient feedback",
           "description": "Shows toast and snackbar overlays from a context with an Overlay.",
           "sourcePath": "example/lib/agent_examples/feedback_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Launches transient feedback from a context that owns an Overlay.\nfinal class AgentFeedbackExample extends StatelessWidget {\n  const AgentFeedbackExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).dimensions.space.component20;\n    return Wrap(\n      spacing: gap,\n      runSpacing: gap,\n      children: <Widget>[\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalToast(context: context, message: 'Changes saved'),\n          child: const Text('Show toast'),\n        ),\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalSnackBar(context: context, message: 'Draft restored'),\n          child: const Text('Show snackbar'),\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Launches transient feedback from a context that owns an Overlay.\nfinal class AgentFeedbackExample extends StatelessWidget {\n  const AgentFeedbackExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    final gap = CharcoalTheme.of(context).space.sm;\n    return Wrap(\n      spacing: gap,\n      runSpacing: gap,\n      children: <Widget>[\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalToast(context: context, message: 'Changes saved'),\n          child: const Text('Show toast'),\n        ),\n        CharcoalButton(\n          onPressed: () =>\n              showCharcoalSnackBar(context: context, message: 'Draft restored'),\n          child: const Text('Show snackbar'),\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -6068,7 +8942,7 @@ const String generatedCatalogJson = r'''{
       "category": "Overlays",
       "summary": "Adds brief, non-interactive context to an anchored control across pointer, focus, and touch input.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/tooltip.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/tooltip.dart",
       "documentationLevel": "curated",
       "keywords": [
         "anchored help",
@@ -6125,7 +8999,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTooltip",
           "kind": "constructor",
-          "signature": "CharcoalTooltip({required this.child, required this.message, this.dismissAfter, this.dismissOnTapOutside = true, this.maxWidth, this.onVisibilityChanged, this.position, this.showOnFocus = true, this.showOnHover = true, this.showOnTap = true, this.visible, this.waitDuration = _TooltipSpec.defaultWaitDuration, super.key})",
+          "signature": "CharcoalTooltip({required this.child, required this.message, this.dismissAfter, this.dismissOnTapOutside = true, this.maxWidth, this.onVisibilityChanged, this.position, this.showOnFocus = true, this.showOnHover = true, this.showOnTap = true, this.visible, this.waitDuration, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -6199,10 +9073,9 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "waitDuration",
-              "type": "Duration",
+              "type": "Duration?",
               "required": false,
-              "named": true,
-              "defaultValue": "_TooltipSpec.defaultWaitDuration"
+              "named": true
             },
             {
               "name": "key",
@@ -6232,16 +9105,16 @@ const String generatedCatalogJson = r'''{
           "title": "Brief and persistent anchored context",
           "description": "Separates non-interactive tooltip help from persistent and controlled balloon content.",
           "sourcePath": "example/lib/agent_examples/overlay_controls_example.dart",
-          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Separates brief tooltip context, persistent callouts, and anchored details.\nfinal class AgentOverlayControlsExample extends StatefulWidget {\n  const AgentOverlayControlsExample({super.key});\n\n  @override\n  State<AgentOverlayControlsExample> createState() =>\n      _AgentOverlayControlsExampleState();\n}\n\nfinal class _AgentOverlayControlsExampleState\n    extends State<AgentOverlayControlsExample> {\n  bool _detailsVisible = false;\n  String _status = 'No overlay action yet';\n\n  void _setDetailsVisible(bool visible) {\n    if (_detailsVisible == visible) return;\n    setState(() {\n      _detailsVisible = visible;\n      _status = visible\n          ? 'Publishing details open'\n          : 'Publishing details closed';\n    });\n  }\n\n  void _reviewSettings() {\n    setState(() {\n      _detailsVisible = false;\n      _status = 'Settings review requested';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.dimensions.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Anchored context', style: theme.textStyles.headingS),\n        SizedBox(height: space.component20),\n        Text(_status, style: theme.textStyles.captionMedium),\n        SizedBox(height: space.layout40),\n        const Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalBalloon(\n            position: CharcoalOverlayPosition.left,\n            semanticLabel: 'Publishing guidance',\n            child: Text('Drafts remain private until you publish.'),\n          ),\n        ),\n        SizedBox(height: space.layout40),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.component30,\n          runSpacing: space.component30,\n          children: <Widget>[\n            CharcoalTooltip(\n              message: 'Copies a shareable link',\n              child: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.link),\n                onPressed: () => setState(() => _status = 'Share link copied'),\n                semanticLabel: 'Copy share link',\n              ),\n            ),\n            CharcoalAnchoredBalloon(\n              action: CharcoalLinkButton(\n                onPressed: _reviewSettings,\n                child: const Text('Review settings'),\n              ),\n              anchor: CharcoalButton(\n                leading: const CharcoalIcon(CharcoalIcons.questionCircle),\n                onPressed: () => _setDetailsVisible(!_detailsVisible),\n                semanticLabel: _detailsVisible\n                    ? 'Hide publishing details'\n                    : 'Show publishing details',\n                child: const Text('Publishing details'),\n              ),\n              dismissOnTapOutside: true,\n              message: 'Only workspace owners can publish this draft.',\n              onVisibilityChanged: _setDetailsVisible,\n              showOnTap: false,\n              visible: _detailsVisible,\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Separates brief tooltip context, persistent callouts, and anchored details.\nfinal class AgentOverlayControlsExample extends StatefulWidget {\n  const AgentOverlayControlsExample({super.key});\n\n  @override\n  State<AgentOverlayControlsExample> createState() =>\n      _AgentOverlayControlsExampleState();\n}\n\nfinal class _AgentOverlayControlsExampleState\n    extends State<AgentOverlayControlsExample> {\n  bool _detailsVisible = false;\n  String _status = 'No overlay action yet';\n\n  void _setDetailsVisible(bool visible) {\n    if (_detailsVisible == visible) return;\n    setState(() {\n      _detailsVisible = visible;\n      _status = visible\n          ? 'Publishing details open'\n          : 'Publishing details closed';\n    });\n  }\n\n  void _reviewSettings() {\n    setState(() {\n      _detailsVisible = false;\n      _status = 'Settings review requested';\n    });\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Anchored context', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),\n        SizedBox(height: space.xl),\n        const Align(\n          alignment: AlignmentDirectional.centerStart,\n          child: CharcoalBalloon(\n            position: CharcoalOverlayPosition.left,\n            semanticLabel: 'Publishing guidance',\n            child: Text('Drafts remain private until you publish.'),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        Wrap(\n          crossAxisAlignment: WrapCrossAlignment.center,\n          spacing: space.lg,\n          runSpacing: space.lg,\n          children: <Widget>[\n            CharcoalTooltip(\n              message: 'Copies a shareable link',\n              child: CharcoalIconButton(\n                icon: const CharcoalIcon(CharcoalIcons.link),\n                onPressed: () => setState(() => _status = 'Share link copied'),\n                semanticLabel: 'Copy share link',\n              ),\n            ),\n            CharcoalAnchoredBalloon(\n              action: CharcoalLinkButton(\n                onPressed: _reviewSettings,\n                child: const Text('Review settings'),\n              ),\n              anchor: CharcoalButton(\n                leading: const CharcoalIcon(CharcoalIcons.questionCircle),\n                onPressed: () => _setDetailsVisible(!_detailsVisible),\n                semanticLabel: _detailsVisible\n                    ? 'Hide publishing details'\n                    : 'Show publishing details',\n                child: const Text('Publishing details'),\n              ),\n              dismissOnTapOutside: true,\n              message: 'Only workspace owners can publish this draft.',\n              onVisibilityChanged: _setDetailsVisible,\n              showOnTap: false,\n              visible: _detailsVisible,\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
     {
       "name": "CharcoalTypography",
       "category": "Content",
-      "summary": "Applies Charcoal’s audited numeric component type scale without suppressing ambient text scaling.",
+      "summary": "Applies Charcoal’s numeric component type roles (size10 to size20) from the active theme pack without suppressing ambient text scaling.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/typography.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text/typography.dart",
       "documentationLevel": "curated",
       "keywords": [
         "component typography",
@@ -6256,7 +9129,7 @@ const String generatedCatalogJson = r'''{
         "A short code-like value needs the upstream single-line monospace variant."
       ],
       "avoidWhen": [
-        "A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalTheme.of(context).textStyles instead.",
+        "A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalText or CharcoalTheme.of(context).style(CharcoalTextRole...) instead.",
         "Text has a product-specific visual style unrelated to a reviewed Charcoal component; compose an audited TextStyle from semantic theme roles.",
         "Content must remain multiline while monospace is true; the upstream monospace variant is deliberately single-line."
       ],
@@ -6290,7 +9163,7 @@ const String generatedCatalogJson = r'''{
         "textDefaultText1"
       ],
       "relatedComponents": [
-        "CharcoalTheme",
+        "CharcoalApp",
         "CharcoalTextEllipsis",
         "CharcoalFieldLabel"
       ],
@@ -6298,13 +9171,27 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTypography",
           "kind": "constructor",
-          "signature": "CharcoalTypography({required this.child, this.color, this.monospace = false, this.singleLine = false, this.size = CharcoalTypographySize.size14, this.textAlign, this.weight = CharcoalTypographyWeight.regular, super.key})",
+          "signature": "CharcoalTypography({required this.child, this.role = CharcoalTextRole.size14, this.bold = false, this.color, this.monospace = false, this.singleLine = false, this.textAlign, super.key})",
           "parameters": [
             {
               "name": "child",
               "type": "Widget",
               "required": true,
               "named": true
+            },
+            {
+              "name": "role",
+              "type": "CharcoalTextRole",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTextRole.size14"
+            },
+            {
+              "name": "bold",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
             },
             {
               "name": "color",
@@ -6327,24 +9214,10 @@ const String generatedCatalogJson = r'''{
               "defaultValue": "false"
             },
             {
-              "name": "size",
-              "type": "CharcoalTypographySize",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalTypographySize.size14"
-            },
-            {
               "name": "textAlign",
               "type": "TextAlign?",
               "required": false,
               "named": true
-            },
-            {
-              "name": "weight",
-              "type": "CharcoalTypographyWeight",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalTypographyWeight.regular"
             },
             {
               "name": "key",
@@ -6356,68 +9229,39 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         },
         {
-          "name": "CharcoalTypographySize",
+          "name": "CharcoalTextRole",
           "kind": "enum",
-          "signature": "enum CharcoalTypographySize { size10, size12, size14, size16, size20 }",
+          "signature": "enum CharcoalTextRole { pageTitle, modalTitle, sectionTitle, body, bodyBold, caption, captionBold, captionMono, size10, size12, size14, size16, size20, bodyLarge, bodyLargeBold, paragraph, captionMedium, captionMediumBold, headingXxxs, headingXxs, headingXs, headingS, headingM, headingL, headingXl, headingXxl, headingXxxl }",
           "parameters": [],
           "enumValues": [
+            "pageTitle",
+            "modalTitle",
+            "sectionTitle",
+            "body",
+            "bodyBold",
+            "caption",
+            "captionBold",
+            "captionMono",
             "size10",
             "size12",
             "size14",
             "size16",
-            "size20"
+            "size20",
+            "bodyLarge",
+            "bodyLargeBold",
+            "paragraph",
+            "captionMedium",
+            "captionMediumBold",
+            "headingXxxs",
+            "headingXxs",
+            "headingXs",
+            "headingS",
+            "headingM",
+            "headingL",
+            "headingXl",
+            "headingXxl",
+            "headingXxxl"
           ]
-        },
-        {
-          "name": "CharcoalTypographyWeight",
-          "kind": "enum",
-          "signature": "enum CharcoalTypographyWeight { regular, bold }",
-          "parameters": [],
-          "enumValues": [
-            "regular",
-            "bold"
-          ]
-        },
-        {
-          "name": "charcoalTypographyStyle",
-          "kind": "function",
-          "signature": "TextStyle charcoalTypographyStyle(BuildContext context, {Color? color, bool monospace = false, CharcoalTypographySize size = CharcoalTypographySize.size14, CharcoalTypographyWeight weight = CharcoalTypographyWeight.regular})",
-          "parameters": [
-            {
-              "name": "context",
-              "type": "BuildContext",
-              "required": true,
-              "named": false
-            },
-            {
-              "name": "color",
-              "type": "Color?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "monospace",
-              "type": "bool",
-              "required": false,
-              "named": true,
-              "defaultValue": "false"
-            },
-            {
-              "name": "size",
-              "type": "CharcoalTypographySize",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalTypographySize.size14"
-            },
-            {
-              "name": "weight",
-              "type": "CharcoalTypographyWeight",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalTypographyWeight.regular"
-            }
-          ],
-          "enumValues": []
         }
       ],
       "examples": [
@@ -6426,9 +9270,80 @@ const String generatedCatalogJson = r'''{
           "title": "Semantic hierarchy with a numeric component label",
           "description": "Keeps page hierarchy on semantic theme styles while a reviewed component label uses the numeric scale.",
           "sourcePath": "example/lib/agent_examples/theme_typography_example.dart",
-          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A scoped light/dark token specimen with semantic and numeric typography.\nfinal class AgentThemeTypographyExample extends StatefulWidget {\n  const AgentThemeTypographyExample({super.key});\n\n  @override\n  State<AgentThemeTypographyExample> createState() =>\n      _AgentThemeTypographyExampleState();\n}\n\nfinal class _AgentThemeTypographyExampleState\n    extends State<AgentThemeTypographyExample> {\n  static const projectTitle =\n      'Moonlit Garden Archive for the Northern Collection';\n  bool _dark = false;\n\n  @override\n  Widget build(BuildContext context) => CharcoalTheme(\n    data: _dark ? CharcoalThemeData.dark() : CharcoalThemeData.light(),\n    child: Builder(\n      builder: (context) {\n        final theme = CharcoalTheme.of(context);\n        final space = theme.dimensions.space;\n        return DecoratedBox(\n          decoration: BoxDecoration(\n            borderRadius: BorderRadius.circular(theme.dimensions.radius.m),\n            color: theme.colors.backgroundDefault,\n          ),\n          child: Padding(\n            padding: EdgeInsets.all(space.layout40),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              mainAxisSize: MainAxisSize.min,\n              children: <Widget>[\n                Text(\n                  'Project typography',\n                  style: theme.textStyles.headingXs.copyWith(\n                    color: theme.colors.textDefaultText1,\n                  ),\n                ),\n                SizedBox(height: space.component20),\n                const CharcoalTypography(\n                  size: CharcoalTypographySize.size12,\n                  weight: CharcoalTypographyWeight.bold,\n                  child: Text('CURATED COLLECTION'),\n                ),\n                SizedBox(height: space.component20),\n                CharcoalTextEllipsis(\n                  projectTitle,\n                  maxLines: 2,\n                  semanticLabel: 'Complete project title: $projectTitle',\n                  style: theme.textStyles.body.copyWith(\n                    color: theme.colors.textDefaultText1,\n                  ),\n                ),\n                SizedBox(height: space.layout40),\n                Semantics(\n                  liveRegion: true,\n                  child: Text(\n                    _dark\n                        ? 'Previewing dark theme.'\n                        : 'Previewing light theme.',\n                    style: theme.textStyles.captionMedium.copyWith(\n                      color: theme.colors.textSecondaryDefault,\n                    ),\n                  ),\n                ),\n                SizedBox(height: space.component30),\n                CharcoalButton(\n                  fullWidth: true,\n                  onPressed: () => setState(() => _dark = !_dark),\n                  semanticLabel: _dark\n                      ? 'Preview light theme'\n                      : 'Preview dark theme',\n                  variant: CharcoalButtonVariant.primary,\n                  child: Text(_dark ? 'Preview light' : 'Preview dark'),\n                ),\n              ],\n            ),\n          ),\n        );\n      },\n    ),\n  );\n}\n"
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/material.dart' show Theme;\nimport 'package:flutter/widgets.dart';\n\n/// A scoped light/dark token specimen with semantic and numeric typography.\nfinal class AgentThemeTypographyExample extends StatefulWidget {\n  const AgentThemeTypographyExample({super.key});\n\n  @override\n  State<AgentThemeTypographyExample> createState() =>\n      _AgentThemeTypographyExampleState();\n}\n\nfinal class _AgentThemeTypographyExampleState\n    extends State<AgentThemeTypographyExample> {\n  static const projectTitle =\n      'Moonlit Garden Archive for the Northern Collection';\n  bool _dark = false;\n\n  @override\n  Widget build(BuildContext context) => Theme(\n    data: buildCharcoalThemeData(_dark ? charcoalDarkPack : charcoalLightPack),\n    child: Builder(\n      builder: (context) {\n        final theme = CharcoalTheme.of(context);\n        final space = theme.space;\n        return DecoratedBox(\n          decoration: BoxDecoration(\n            borderRadius: BorderRadius.circular(theme.radius.md),\n            color: theme.colors.background,\n          ),\n          child: Padding(\n            padding: EdgeInsets.all(space.xl),\n            child: Column(\n              crossAxisAlignment: CrossAxisAlignment.stretch,\n              mainAxisSize: MainAxisSize.min,\n              children: <Widget>[\n                Text(\n                  'Project typography',\n                  style: theme\n                      .style(CharcoalTextRole.headingXs)\n                      .copyWith(color: theme.colors.text),\n                ),\n                SizedBox(height: space.sm),\n                const CharcoalTypography(\n                  role: CharcoalTextRole.size12,\n                  bold: true,\n                  child: Text('CURATED COLLECTION'),\n                ),\n                SizedBox(height: space.sm),\n                CharcoalTextEllipsis(\n                  projectTitle,\n                  maxLines: 2,\n                  semanticLabel: 'Complete project title: $projectTitle',\n                  style: theme\n                      .style(CharcoalTextRole.bodyLarge)\n                      .copyWith(color: theme.colors.text),\n                ),\n                SizedBox(height: space.xl),\n                Semantics(\n                  liveRegion: true,\n                  child: Text(\n                    _dark\n                        ? 'Previewing dark theme.'\n                        : 'Previewing light theme.',\n                    style: theme\n                        .style(CharcoalTextRole.captionMedium)\n                        .copyWith(color: theme.colors.textSecondary),\n                  ),\n                ),\n                SizedBox(height: space.lg),\n                CharcoalButton(\n                  fullWidth: true,\n                  onPressed: () => setState(() => _dark = !_dark),\n                  semanticLabel: _dark\n                      ? 'Preview light theme'\n                      : 'Preview dark theme',\n                  variant: CharcoalButtonVariant.primary,\n                  child: Text(_dark ? 'Preview light' : 'Preview dark'),\n                ),\n              ],\n            ),\n          ),\n        );\n      },\n    ),\n  );\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalWrap",
+      "category": "Utility",
+      "summary": "A [Wrap] whose gaps are spacing steps of the active theme.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/foundation/charcoal_wrap.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalwrap",
+        "wrap"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalWrap",
+          "kind": "constructor",
+          "signature": "CharcoalWrap({required this.children, this.alignment = WrapAlignment.start, this.crossAxisAlignment = WrapCrossAlignment.start, this.runSpacing = CharcoalSpace.sm, this.spacing = CharcoalSpace.sm, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "alignment",
+              "type": "WrapAlignment",
+              "required": false,
+              "named": true,
+              "defaultValue": "WrapAlignment.start"
+            },
+            {
+              "name": "crossAxisAlignment",
+              "type": "WrapCrossAlignment",
+              "required": false,
+              "named": true,
+              "defaultValue": "WrapCrossAlignment.start"
+            },
+            {
+              "name": "runSpacing",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.sm"
+            },
+            {
+              "name": "spacing",
+              "type": "CharcoalSpace",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalSpace.sm"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     }
   ],
   "tokens": [

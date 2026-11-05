@@ -27,7 +27,7 @@ final class TokenPipelinePage extends StatelessWidget {
               DecoratedBox(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(999),
-                  color: theme.colors.containerPositiveDefault,
+                  color: theme.colors.positive,
                 ),
                 child: const SizedBox.square(dimension: 12),
               ),
@@ -35,10 +35,12 @@ final class TokenPipelinePage extends StatelessWidget {
               Expanded(
                 child: Text(
                   'tokens/upstream/*.json',
-                  style: theme.textStyles.captionMedium.copyWith(
-                    color: theme.colors.textDefault,
-                    fontFamily: 'monospace',
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMedium)
+                      .copyWith(
+                        color: theme.colors.text,
+                        fontFamily: 'monospace',
+                      ),
                 ),
               ),
             ],
@@ -118,16 +120,16 @@ final class _PipelineStep extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
-              color: theme.colors.containerPrimaryDefault,
+              color: theme.colors.primary,
             ),
             child: SizedBox.square(
               dimension: 36,
               child: Center(
                 child: Text(
                   number,
-                  style: theme.textStyles.captionMediumBold.copyWith(
-                    color: theme.colors.textOnPrimaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMediumBold)
+                      .copyWith(color: theme.colors.textOnPrimary),
                 ),
               ),
             ),
@@ -139,22 +141,22 @@ final class _PipelineStep extends StatelessWidget {
               children: <Widget>[
                 Text(
                   title,
-                  style: theme.textStyles.bodyBold.copyWith(
-                    color: theme.colors.textDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.bodyLargeBold)
+                      .copyWith(color: theme.colors.text),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: theme.textStyles.captionMedium.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.captionMedium)
+                      .copyWith(color: theme.colors.textSecondary),
                 ),
                 const SizedBox(height: 10),
                 DecoratedBox(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: theme.colors.containerSecondaryDefault,
+                    color: theme.colors.surfaceSecondary,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -163,10 +165,12 @@ final class _PipelineStep extends StatelessWidget {
                     ),
                     child: Text(
                       command,
-                      style: theme.textStyles.captionSmall.copyWith(
-                        color: theme.colors.textDefault,
-                        fontFamily: 'monospace',
-                      ),
+                      style: theme
+                          .style(CharcoalTextRole.caption)
+                          .copyWith(
+                            color: theme.colors.text,
+                            fontFamily: 'monospace',
+                          ),
                     ),
                   ),
                 ),

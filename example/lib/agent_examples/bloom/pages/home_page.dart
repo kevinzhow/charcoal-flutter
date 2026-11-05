@@ -9,7 +9,7 @@ final class _BloomHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = viewModel.state;
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final posts = state.data.posts
         .where((post) {
           if (state.data.hiddenPostIds.contains(post.id)) return false;
@@ -44,19 +44,19 @@ final class _BloomHomePage extends StatelessWidget {
             value: state.feed,
           ),
           if (state.feed == BloomFeed.following) ...<Widget>[
-            SizedBox(height: space.component30),
+            SizedBox(height: space.lg),
             Row(
               children: <Widget>[
                 const Expanded(child: _BloomSectionTitle(title: 'Your circle')),
                 Text(
                   '${state.data.conversations.length} new moments',
-                  style: theme.textStyles.captionSmall.copyWith(
-                    color: theme.colors.textSecondaryDefault,
-                  ),
+                  style: theme
+                      .style(CharcoalTextRole.caption)
+                      .copyWith(color: theme.colors.textSecondary),
                 ),
               ],
             ),
-            SizedBox(height: space.component20),
+            SizedBox(height: space.sm),
             Row(
               children: <Widget>[
                 for (final creator in state.data.creators) ...<Widget>[
@@ -67,20 +67,20 @@ final class _BloomHomePage extends StatelessWidget {
                     ),
                   ),
                   if (creator != state.data.creators.last)
-                    SizedBox(width: space.component20),
+                    SizedBox(width: space.sm),
                 ],
               ],
             ),
           ] else ...<Widget>[
-            SizedBox(height: space.component25),
+            SizedBox(height: space.md),
             Text(
               'Ideas selected from the topics and creators you explore.',
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textSecondaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(color: theme.colors.textSecondary),
             ),
           ],
-          SizedBox(height: space.component30),
+          SizedBox(height: space.lg),
           if (posts.isEmpty)
             const _BloomEmptyState(
               description: 'Try the other feed or restore a hidden post from the latest message.',
@@ -103,7 +103,7 @@ final class _BloomHomePage extends StatelessWidget {
                 showFollow: state.feed == BloomFeed.forYou,
                 state: state,
               ),
-              if (index + 1 < posts.length) SizedBox(height: space.component30),
+              if (index + 1 < posts.length) SizedBox(height: space.lg),
             ],
         ],
       ),
@@ -124,7 +124,8 @@ final class _BloomStoryAvatar extends StatelessWidget {
       onPressed: onPressed,
       semanticLabel: 'View ${creator.name} story',
       builder: (context, states) => AnimatedOpacity(
-        duration: CharcoalMotion.resolveDuration(context, CharcoalMotion.fast),
+        duration: CharcoalTheme.of(context)
+            .duration(context, CharcoalTheme.of(context).motion.fast),
         opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
         child: Column(
           children: <Widget>[
@@ -133,15 +134,14 @@ final class _BloomStoryAvatar extends StatelessWidget {
               tone: creator.tone,
               size: 46,
             ),
-            SizedBox(height: theme.dimensions.space.component10),
+            SizedBox(height: theme.space.xs),
             Text(
               creator.name.split(' ').first,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme.textStyles.captionSmall.copyWith(
-                color: theme.colors.textSecondaryDefault,
-                fontSize: 10,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.caption)
+                  .copyWith(color: theme.colors.textSecondary, fontSize: 10),
             ),
           ],
         ),

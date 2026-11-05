@@ -40,14 +40,14 @@ final class _BloomReplyBarState extends State<_BloomReplyBar> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: theme.colors.borderSecondary)),
-        color: theme.colors.backgroundDefault,
+        border: Border(top: BorderSide(color: theme.colors.borderSubtle)),
+        color: theme.colors.background,
       ),
       child: Padding(
-        padding: EdgeInsets.all(space.component20),
+        padding: EdgeInsets.all(space.sm),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -63,7 +63,7 @@ final class _BloomReplyBarState extends State<_BloomReplyBar> {
                 textInputAction: TextInputAction.send,
               ),
             ),
-            SizedBox(width: space.component20),
+            SizedBox(width: space.sm),
             CharcoalIconButton(
               key: widget.sendKey,
               icon: const CharcoalIcon(CharcoalIcons.send),

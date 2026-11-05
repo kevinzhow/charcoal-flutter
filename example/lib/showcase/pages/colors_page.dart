@@ -1,3 +1,4 @@
+import 'package:charcoal_tokens/charcoal_tokens.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
@@ -19,7 +20,11 @@ final class _ColorsPageState extends State<ColorsPage> {
     final entries = switch (_catalog) {
       'primitive' => CharcoalPrimitiveColors.entries,
       'brand' => CharcoalBrandColors.entries,
-      _ => theme.colors.entries,
+      _ =>
+        (theme.brightness == Brightness.dark
+                ? CharcoalGeneratedColorTokens.dark
+                : CharcoalGeneratedColorTokens.light)
+            .entries,
     };
     final groups = _group(entries);
     return Column(
@@ -109,9 +114,9 @@ final class _ColorTokenTile extends StatelessWidget {
         width: 180,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(color: theme.colors.borderSecondary),
+            border: Border.all(color: theme.colors.borderSubtle),
             borderRadius: BorderRadius.circular(10),
-            color: theme.colors.backgroundDefault,
+            color: theme.colors.background,
           ),
           child: Padding(
             padding: const EdgeInsets.all(10),
@@ -119,7 +124,7 @@ final class _ColorTokenTile extends StatelessWidget {
               children: <Widget>[
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    border: Border.all(color: theme.colors.borderSecondary),
+                    border: Border.all(color: theme.colors.borderSubtle),
                     borderRadius: BorderRadius.circular(8),
                     color: entry.value,
                   ),
@@ -134,19 +139,23 @@ final class _ColorTokenTile extends StatelessWidget {
                         shortPath,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textDefault,
-                          fontFamily: 'monospace',
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(
+                              color: theme.colors.text,
+                              fontFamily: 'monospace',
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         '#$argb',
-                        style: theme.textStyles.captionSmall.copyWith(
-                          color: theme.colors.textTertiaryDefault,
-                          fontFamily: 'monospace',
-                        ),
+                        style: theme
+                            .style(CharcoalTextRole.caption)
+                            .copyWith(
+                              color: theme.colors.textTertiary,
+                              fontFamily: 'monospace',
+                            ),
                       ),
                     ],
                   ),

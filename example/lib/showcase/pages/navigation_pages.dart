@@ -5,7 +5,6 @@ import 'admin_page.dart';
 import 'layout_page.dart';
 import 'navigation_page.dart';
 import 'page_frame_page.dart';
-import 'next_island.dart';
 
 // Owner: batch 2D (navigation and layout). Add a ShowcasePage here to
 // register it; do not edit registry.dart.
@@ -16,7 +15,7 @@ final List<ShowcasePage> navigationPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.compass,
     order: 40,
-    builder: (context) => const NextThemeIsland(child: NavigationPage()),
+    builder: (context) => NavigationPage(),
   ),
   ShowcasePage(
     id: 'layout',
@@ -24,7 +23,7 @@ final List<ShowcasePage> navigationPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.layer,
     order: 45,
-    builder: (context) => const NextThemeIsland(child: LayoutPage()),
+    builder: (context) => LayoutPage(),
   ),
   ShowcasePage(
     id: 'admin',
@@ -32,7 +31,7 @@ final List<ShowcasePage> navigationPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.setting,
     order: 46,
-    builder: (context) => const NextThemeIsland(child: AdminPage()),
+    builder: (context) => AdminPage(),
   ),
   ShowcasePage(
     id: 'page-frame',
@@ -40,6 +39,6 @@ final List<ShowcasePage> navigationPages = <ShowcasePage>[
     section: ShowcaseSection.components,
     icon: CharcoalIcons.layer,
     order: 47,
-    builder: (context) => const NextThemeIsland(child: PageFramePage()),
+    builder: (context) => const PageFramePage(),
   ),
 ];

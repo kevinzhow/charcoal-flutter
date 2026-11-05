@@ -140,8 +140,8 @@ final class _NookDemoState extends State<NookDemo> {
     return AgentDemoAppShell<NookDestination>(
       appKey: 'commerce',
       appLabel: 'Nook commerce app demo',
-      brandColor: theme.colors.containerNoticeDefault,
-      brandForeground: theme.colors.textOnNoticeDefault,
+      brandColor: theme.colors.notice,
+      brandForeground: theme.colors.text,
       brandMark: 'N',
       tabItems: const <CharcoalTabItem<NookDestination>>[
         CharcoalTabItem<NookDestination>(

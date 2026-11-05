@@ -89,7 +89,7 @@ Widget agentCompactThemeTypographyPreview() =>
 )
 Widget agentPageHierarchyPreview() => Builder(
   builder: (context) {
-    final space = CharcoalTheme.of(context).dimensions.space;
+    final space = CharcoalTheme.of(context).space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -99,13 +99,13 @@ Widget agentPageHierarchyPreview() => Builder(
           description:
               'Supporting information stays close to the decision it explains.',
         ),
-        SizedBox(height: space.component30),
+        SizedBox(height: space.lg),
         const AgentDemoSectionHeading(title: 'Immediate status'),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         const AgentDemoStatus(
           message: 'The current state remains visible and reversible.',
         ),
-        SizedBox(height: space.component20),
+        SizedBox(height: space.sm),
         const AgentDemoStatus(
           message: 'The durable result is now part of the page.',
           positive: true,

@@ -718,7 +718,7 @@ import 'package:flutter/widgets.dart';
 import 'candidate.dart';
 
 void main() {
-  runApp(CharcoalApp(home: buildBenchmarkCandidate()));
+  runApp(CharcoalApp(home: CharcoalScaffold(body: buildBenchmarkCandidate())));
 }
 ''';
 
@@ -736,9 +736,11 @@ void main() {
       await tester.binding.setSurfaceSize(size);
       await tester.pumpWidget(
         CharcoalApp(
-          home: Align(
-            alignment: Alignment.topLeft,
-            child: SizedBox(width: size.width, child: buildBenchmarkCandidate()),
+          home: CharcoalScaffold(
+            body: Align(
+              alignment: Alignment.topLeft,
+              child: SizedBox(width: size.width, child: buildBenchmarkCandidate()),
+            ),
           ),
         ),
       );
@@ -749,17 +751,18 @@ void main() {
 }
 ''';
 
-void _copyDirectory(Directory source, Directory destination) {
+void _copyDirectory(Directory source, Directory destination, {bool packageRoot = true}) {
   if (!source.existsSync()) {
     throw CharcoalBenchmarkRunException('Required package does not exist: ${source.path}.');
   }
   destination.createSync(recursive: true);
   for (final entity in source.listSync(followLinks: false)) {
     final name = p.basename(entity.path);
-    if (name == '.dart_tool' || name == 'build') continue;
+    // `build/` is Flutter output at a package root, but a source folder under lib/ (charcoal_theme).
+    if (name == '.dart_tool' || (packageRoot && name == 'build')) continue;
     final target = p.join(destination.path, name);
     if (entity is Directory) {
-      _copyDirectory(entity, Directory(target));
+      _copyDirectory(entity, Directory(target), packageRoot: false);
     } else if (entity is File) {
       File(target)
         ..parent.createSync(recursive: true)

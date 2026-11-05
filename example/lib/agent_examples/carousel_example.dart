@@ -36,37 +36,37 @@ final class _AgentCarouselExampleState extends State<AgentCarouselExample> {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     final colors = <Color>[
-      theme.colors.containerSecondaryDefault,
-      theme.colors.containerNeutralDefault,
-      theme.colors.containerTertiaryDefault,
-      theme.colors.containerSecondaryDefaultA,
+      theme.colors.surfaceSecondary,
+      theme.colors.neutral,
+      theme.colors.surfaceTertiary,
+      theme.colors.fillSecondary,
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Featured guides', style: theme.textStyles.headingS),
-        SizedBox(height: space.component20),
+        Text('Featured guides', style: theme.style(CharcoalTextRole.headingS)),
+        SizedBox(height: space.sm),
         Semantics(
           liveRegion: true,
           child: Text(
             'Guide ${_currentPage + 1} of ${_guides.length}: '
             '${_guides[_currentPage].title}',
-            style: theme.textStyles.captionMedium.copyWith(
-              color: theme.colors.textSecondaryDefault,
-            ),
+            style: theme
+                .style(CharcoalTextRole.captionMedium)
+                .copyWith(color: theme.colors.textSecondary),
           ),
         ),
-        SizedBox(height: space.layout40),
+        SizedBox(height: space.xl),
         LayoutBuilder(
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 480;
             return SizedBox(
               height: 200,
               child: CharcoalCarousel(
-                gap: compact ? 0 : space.component20,
+                gap: compact ? 0 : space.sm,
                 onPageChanged: (page) => setState(() => _currentPage = page),
                 semanticLabel: 'Featured guides',
                 semanticLabelBuilder: (index, itemCount) =>
@@ -106,27 +106,27 @@ final class _GuideSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final space = theme.dimensions.space;
+    final space = theme.space;
     return DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.dimensions.radius.m),
+        borderRadius: BorderRadius.circular(theme.radius.md),
         color: color,
       ),
       child: Padding(
-        padding: EdgeInsets.all(space.layout30),
+        padding: EdgeInsets.all(space.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(title, style: theme.textStyles.bodyBold),
-            SizedBox(height: space.component20),
+            Text(title, style: theme.style(CharcoalTextRole.bodyLargeBold)),
+            SizedBox(height: space.sm),
             Text(
               description,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: theme.textStyles.captionMedium.copyWith(
-                color: theme.colors.textSecondaryDefault,
-              ),
+              style: theme
+                  .style(CharcoalTextRole.captionMedium)
+                  .copyWith(color: theme.colors.textSecondary),
             ),
           ],
         ),
