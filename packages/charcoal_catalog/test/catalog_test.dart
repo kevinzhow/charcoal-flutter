@@ -515,7 +515,7 @@ void main() {
 
     test('indexes public tokens with semantic ownership guidance', () {
       final search = CharcoalCatalogSearch(charcoalCatalog);
-      final spacing = search.exactToken('theme.dimensions.space.component20')!;
+      final spacing = search.exactToken('CharcoalTheme.of(context).space.sm')!;
       final semanticResults = search.searchTokens(
         'primary container',
         kind: CharcoalTokenKind.color,
@@ -528,15 +528,104 @@ void main() {
 
       expect(charcoalCatalog.coverage.publicTokens, charcoalCatalog.tokens.length);
       expect(charcoalCatalog.coverage.semanticTokens, greaterThan(100));
+      expect(spacing.dartAccessor, 'CharcoalTheme.of(context).space.sm');
       expect(spacing.path, 'space.component/20');
       expect(spacing.lightValue, '8px');
-      expect(spacing.guidance, contains('internal gaps'));
+      expect(spacing.guidance, contains('never read the number'));
       expect(semanticResults, isNotEmpty);
       expect(
         semanticResults.every((result) => result.token.tier == CharcoalTokenTier.semantic),
         isTrue,
       );
       expect(primitiveResults, isNotEmpty);
+    });
+
+    test('semantic token accessors are theme roles and name the application route', () {
+      final semantic = charcoalCatalog.tokens.where(
+        (token) => token.tier == CharcoalTokenTier.semantic,
+      );
+      expect(semantic, isNotEmpty);
+      for (final token in semantic) {
+        expect(
+          token.dartAccessor,
+          startsWith('CharcoalTheme.of(context).'),
+          reason: token.path,
+        );
+        expect(token.guidance, contains('Theme role'), reason: token.path);
+      }
+      final search = CharcoalCatalogSearch(charcoalCatalog);
+      final tertiary = search.exactToken('CharcoalTheme.of(context).colors.textTertiary')!;
+      expect(tertiary.guidance, contains('CharcoalTextTone.tertiary'));
+      expect(
+        search.exactToken('CharcoalTheme.of(context).space.md')!.guidance,
+        contains('CharcoalGap(CharcoalSpace.md)'),
+      );
+      // Upstream tokens that no theme role references are not addressable from applications.
+      final hover = charcoalCatalog.tokens.firstWhere(
+        (token) => token.path == 'color.border/hover',
+      );
+      expect(hover.tier, CharcoalTokenTier.primitive);
+      expect(hover.dartAccessor, startsWith('CharcoalGeneratedColorTokens.'));
+      expect(hover.guidance, contains('no theme role'));
+      for (final token in charcoalCatalog.tokens) {
+        expect(token.dartAccessor, isNot(contains('theme.dimensions')), reason: token.path);
+        expect(token.dartAccessor, isNot(startsWith('theme.')), reason: token.path);
+      }
+    });
+
+    test('every public component is curated and supporting types are labelled', () {
+      expect(
+        charcoalCatalog.components.where(
+          (component) => component.documentationLevel != CharcoalDocumentationLevel.curated,
+        ),
+        isEmpty,
+      );
+      const supporting = <String>{
+        'CharcoalEditableText',
+        'CharcoalFieldRing',
+        'CharcoalOverlayAnchorTracker',
+        'CharcoalSelectionBox',
+        'CharcoalSelectionToolbar',
+        'CharcoalTextDefaults',
+      };
+      for (final component in charcoalCatalog.components) {
+        expect(
+          component.category == 'Supporting',
+          supporting.contains(component.name),
+          reason: component.name,
+        );
+        expect(component.useWhen, isNotEmpty, reason: component.name);
+        expect(component.avoidWhen, isNotEmpty, reason: component.name);
+        if (component.category != 'Supporting') {
+          expect(component.examples, isNotEmpty, reason: component.name);
+        } else {
+          expect(component.summary, startsWith('Supporting building block'));
+        }
+      }
+    });
+
+    test('guidance never teaches application code to style or bypass Charcoal', () {
+      final text = charcoalCatalog.components
+          .expand(
+            (component) => <String>[
+              component.summary,
+              ...component.useWhen,
+              ...component.avoidWhen,
+              ...component.accessibility,
+              ...component.responsiveBehavior,
+              ...component.feedbackResponsibilities,
+            ],
+          )
+          .join('\n');
+      for (final forbidden in <String>[
+        'independent Widgets',
+        'without Material',
+        'compose an audited TextStyle',
+        'buildCharcoalThemeData',
+        'theme.dimensions',
+      ]) {
+        expect(text, isNot(contains(forbidden)), reason: forbidden);
+      }
     });
   });
 }

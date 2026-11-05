@@ -24,8 +24,8 @@ dart run packages/charcoal_cli/bin/charcoal.dart benchmark --results path/to/res
 ```
 
 Every JSON response uses `apiVersion: 1`. Failed commands use stable error codes and a non-zero
-process exit code. Token search defaults to semantic roles; primitive lookup requires an explicit
-`--tier primitive`. The benchmark command validates exact package/catalog versions, complete case
+process exit code. Token search defaults to tokens that have a theme role; primitive lookup (palette and role-less
+upstream tokens, for library work) requires an explicit `--tier primitive`. The benchmark command validates exact package/catalog versions, complete case
 coverage, score bounds, hard failures, and referenced evidence files before reporting a score.
 
 `agent install` is the normal project bootstrap. It installs the version-matched

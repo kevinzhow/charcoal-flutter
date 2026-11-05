@@ -39,11 +39,11 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller owns the anchor action, durable guidance, errors, progress, and results.',
     ],
     tokenRoles: <String>[
-      'containerHudDefault',
-      'textOnHudDefault',
-      'space.component10',
-      'space.component25',
-      'radius.s',
+      'colors.hud',
+      'colors.textOnHud',
+      'space.xs',
+      'space.md',
+      'radius.sm',
     ],
     relatedComponents: <String>[
       'CharcoalAnchoredBalloon',
@@ -96,13 +96,13 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller owns visibility, placement in the surrounding layout, action outcomes, and durable state.',
     ],
     tokenRoles: <String>[
-      'containerPrimaryDefault',
-      'textOnPrimaryDefault',
-      'containerOnImgDefault',
-      'space.component25',
-      'space.component30',
+      'colors.primary',
+      'colors.textOnPrimary',
+      'colors.fillOnImage',
+      'space.md',
+      'space.lg',
       'radius.xl',
-      'borderFocusLegacy',
+      'colors.focusRing',
     ],
     relatedComponents: <String>[
       'CharcoalAnchoredBalloon',
@@ -160,12 +160,11 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'In controlled usage the caller owns the visible value, trigger activation, dynamic label, action result, and durable state.',
     ],
     tokenRoles: <String>[
-      'containerPrimaryDefault',
-      'textOnPrimaryDefault',
-      'containerOnImgDefault',
-      'space.layout30',
+      'colors.primary',
+      'colors.textOnPrimary',
+      'colors.fillOnImage',
       'radius.xl',
-      'borderFocusLegacy',
+      'colors.focusRing',
     ],
     relatedComponents: <String>[
       'CharcoalBalloon',
@@ -223,11 +222,8 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller owns task validation, progress, success, failure, and returned result.',
     ],
     tokenRoles: <String>[
-      'paragraphWidth.s',
-      'paragraphWidth.l',
-      'space.layout40',
-      'space.layout100',
-      'space.targetL',
+      'sizes.dialogMaxWidth',
+      'sizes.controlLg',
     ],
     relatedComponents: <String>['CharcoalToast', 'CharcoalSnackBar'],
     companionDeclarations: <String>[
@@ -246,7 +242,7 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
     ],
   ),
   'CharcoalLoadingSpinner': ComponentMetadata(
-    category: 'Utility',
+    category: 'Feedback',
     summary:
         'Announces and renders an indeterminate wait with Charcoal source geometry and motion.',
     keywords: <String>[
@@ -290,11 +286,11 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller owns operation state, blocking policy, cancellation, timeout, error, retry, completion, and durable result.',
     ],
     tokenRoles: <String>[
-      'space.targetL',
-      'space.component30',
-      'radius.m',
-      'backgroundDefault',
-      'iconTertiaryDefault',
+      'sizes.controlLg',
+      'space.lg',
+      'radius.md',
+      'colors.background',
+      'colors.iconTertiary',
     ],
     relatedComponents: <String>[
       'CharcoalSpinnerOverlay',
@@ -312,7 +308,7 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
     ],
   ),
   'CharcoalSpinnerOverlay': ComponentMetadata(
-    category: 'Utility',
+    category: 'Feedback',
     summary: 'Centers named loading feedback over a subtree with explicit blocking or passthrough behavior.',
     keywords: <String>[
       'blocking loading',
@@ -417,13 +413,13 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller owns visible state, action outcome, live or durable result feedback, validation, persistence, and recovery.',
     ],
     tokenRoles: <String>[
-      'space.component10',
-      'space.component25',
-      'space.component30',
-      'radius.m',
-      'containerSecondaryDefault',
-      'textDefault',
-      'iconDefault',
+      'space.xs',
+      'space.md',
+      'space.lg',
+      'radius.md',
+      'colors.surfaceSecondary',
+      'colors.text',
+      'colors.icon',
     ],
     relatedComponents: <String>[
       'CharcoalFieldLabel',
@@ -468,11 +464,11 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller must keep durable or corrective information in the page rather than only in a toast.',
     ],
     tokenRoles: <String>[
-      'containerPositiveDefault',
-      'containerNegativeDefault',
-      'space.component20',
-      'space.component40',
-      'borderWidth.l',
+      'colors.positive',
+      'colors.negative',
+      'space.sm',
+      'space.xl',
+      'borders.thick',
     ],
     relatedComponents: <String>['CharcoalSnackBar', 'CharcoalDialog'],
     companionDeclarations: <String>[
@@ -529,11 +525,11 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The caller owns the action outcome and information that must remain after dismissal.',
     ],
     tokenRoles: <String>[
-      'borderDefault',
-      'borderWidth.m',
-      'space.component25',
-      'space.component30',
-      'space.layout60',
+      'colors.border',
+      'borders.hairline',
+      'space.md',
+      'space.lg',
+      'space.xxxl',
     ],
     relatedComponents: <String>['CharcoalToast', 'CharcoalDialog'],
     companionDeclarations: <String>[

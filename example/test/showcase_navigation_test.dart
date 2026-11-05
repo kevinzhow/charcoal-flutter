@@ -16,6 +16,7 @@ const _destinationHeadings = <String, String>{
   'Typography': 'Typography catalog',
   'Dimensions': 'Dimension catalog',
   'Roles': 'Theme roles',
+  'Supporting': 'Supporting components',
   'Icons': 'Icon catalog',
   'Buttons': 'Content slots',
   'Selection': 'Selection controls',

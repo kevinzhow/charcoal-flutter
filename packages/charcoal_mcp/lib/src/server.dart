@@ -472,7 +472,7 @@ const List<Map<String, Object?>> _toolDefinitions = <Map<String, Object?>>[
     'title': 'Search Charcoal components',
     'description':
         'Find public charcoal_ui components by product intent, name, category, or keyword. Call '
-        'this before inventing a component or substituting Material/Cupertino UI.',
+        'this before inventing a component, constructing a raw Material/Cupertino control, or styling locally.',
     'inputSchema': <String, Object?>{
       'type': 'object',
       'properties': <String, Object?>{
@@ -517,8 +517,9 @@ const List<Map<String, Object?>> _toolDefinitions = <Map<String, Object?>>[
     'name': 'charcoal.search_tokens',
     'title': 'Search Charcoal tokens',
     'description':
-        'Find generated token accessors by semantic role. Defaults to semantic tokens; request '
-        'primitive tier only for audited foundation work.',
+        'Find theme roles and their accessors by meaning. Defaults to tokens that have a theme role; '
+        'request primitive tier only for library and theme-pack work. Application code never reads '
+        'colour, size, or type values.',
     'inputSchema': <String, Object?>{
       'type': 'object',
       'properties': <String, Object?>{

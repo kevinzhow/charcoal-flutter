@@ -88,6 +88,49 @@ final class ShowcaseOverviewPage extends StatelessWidget {
             },
           ),
         ),
+        const SizedBox(height: 20),
+        const ShowcaseCatalogGrid(
+          children: <Widget>[
+            ShowcaseCard(
+              eyebrow: 'ARCHITECTURE',
+              title: 'Theme contract and packs',
+              description:
+                  'charcoal_theme defines the contract: colour roles, spacing, radius, border, '
+                  'size, motion and type scales, and per-family metrics. Generated packs fill it '
+                  'from the Charcoal V2 tokens, and a builder turns a pack into a Material '
+                  'ThemeData plus a CharcoalTheme ThemeExtension for everything Material has no slot for.',
+              child: SizedBox.shrink(),
+            ),
+            ShowcaseCard(
+              eyebrow: 'ARCHITECTURE',
+              title: 'Components on Material',
+              description:
+                  'charcoal_ui is hosted by Material (CharcoalApp wraps MaterialApp) and owns all '
+                  'styling: components read the theme, never literals. '
+                  'Admin-console pieces (sidebar shell, stat cards, meters, batch bar) live in '
+                  'the secondary entry package:charcoal_ui/admin.dart.',
+              child: SizedBox.shrink(),
+            ),
+            ShowcaseCard(
+              eyebrow: 'GUARDS',
+              title: 'Nothing bypasses the theme',
+              description:
+                  'A source guard rejects colour, size, duration and text-style literals and '
+                  'theme reads in library code. An extreme-theme test swaps in a pack of '
+                  'unrelated colours and sizes and fails when any component keeps its own.',
+              child: SizedBox.shrink(),
+            ),
+            ShowcaseCard(
+              eyebrow: 'FOR APPLICATIONS',
+              title: 'Compose, never style',
+              description:
+                  'Apps compose Charcoal components and supply strings, data and logic. Visual '
+                  'values come from the library: no ThemeData, TextStyle, Color or raw Material '
+                  'controls in application code.',
+              child: SizedBox.shrink(),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -271,7 +314,7 @@ final class _Hero extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Pure Flutter Widgets. No Material or Cupertino dependency.',
+              'Built on Material. The library owns every colour, size and type style.',
               style: theme
                   .style(CharcoalTextRole.bodyLarge)
                   .copyWith(

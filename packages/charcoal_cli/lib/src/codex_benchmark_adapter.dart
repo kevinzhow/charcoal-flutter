@@ -345,7 +345,7 @@ Task [$caseId]: $task
 
 Implement the best complete solution you can in `$candidatePath` while preserving the existing `Widget buildBenchmarkCandidate()` entry point. Inspect the installed packages and use any project instructions or discovery capabilities that are actually available. Do not assume undocumented APIs.
 
-You may write only: ${allowedWrites.join(', ')}. Do not modify any other file. Keep the fixture independent from Material and Cupertino unless the task explicitly requires a missing-component decision. Preserve accessibility and behavior at both compact and desktop constraints.
+You may write only: ${allowedWrites.join(', ')}. Do not modify any other file. Use Charcoal components only: do not construct raw Material or Cupertino controls, ThemeData, TextStyle, colours, or numeric size literals, unless the task explicitly requires a missing-component decision. Preserve accessibility and behavior at both compact and desktop constraints.
 
 The harness will run these commands after you finish:
 ${verificationCommands.map((command) => '- ${(command as List<Object?>).join(' ')}').join('\n')}

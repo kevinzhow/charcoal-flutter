@@ -11,7 +11,7 @@ final class TokenCommand extends CharcoalCommand {
         'tier',
         allowed: CharcoalTokenTier.values.map((value) => value.name),
         defaultsTo: CharcoalTokenTier.semantic.name,
-        help: 'Semantic roles by default; primitive values require explicit opt-in.',
+        help: 'Tokens with a theme role by default; palette and role-less upstream tokens are primitive and need explicit opt-in.',
       )
       ..addOption(
         'kind',
@@ -22,7 +22,7 @@ final class TokenCommand extends CharcoalCommand {
   }
 
   @override
-  String get description => 'Find exact generated token accessors by role or token path.';
+  String get description => 'Find theme roles and their accessors by meaning or token path.';
 
   @override
   String get name => 'token';

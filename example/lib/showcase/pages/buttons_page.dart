@@ -224,7 +224,7 @@ final class _ClickableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     return ShowcaseCard(
-      description: 'The Widgets-layer primitive exposes hover, focus, press, and disabled states.',
+      description: 'The interaction primitive exposes hover, focus, press, and disabled states to a custom control.',
       eyebrow: 'PRIMITIVE',
       title: 'Clickable',
       child: CharcoalClickable(

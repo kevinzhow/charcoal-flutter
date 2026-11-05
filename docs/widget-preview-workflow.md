@@ -31,7 +31,7 @@ cd packages/charcoal_ui
 fvm flutter widget-preview start
 ```
 
-`CharcoalComponentPreview` expands every target into light and dark previews inside a real `CharcoalApp`, so typography, themes, Navigator, and Overlay match consumer behavior. Public component previews live in `lib/src/previews/` and must use production widgets rather than preview-only copies.
+`CharcoalComponentPreview` expands every target into light and dark previews inside a real `CharcoalApp` (a `MaterialApp` with the pack-built `ThemeData` and the `CharcoalTheme` extension), so typography, themes, Navigator, Overlay and localization match consumer behavior. Public component previews live in `lib/src/previews/<family>_previews.dart`; they must use production widgets rather than preview-only copies and, being under `lib/src`, are covered by the library source guard like any component (no literal colours, sizes or text styles).
 
 Exit this gate when the relevant component states, wrapping, focus behavior, and semantic sizing are correct in isolation.
 

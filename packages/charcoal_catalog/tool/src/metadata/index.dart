@@ -1,9 +1,14 @@
 import 'actions.dart';
+import 'admin.dart';
+import 'feedback.dart';
 import 'fields.dart';
+import 'forms.dart';
+import 'layout.dart';
 import 'navigation.dart';
 import 'overlays.dart';
 import 'patterns.dart';
 import 'rules.dart';
+import 'supporting.dart';
 import 'theme.dart';
 
 final class ComponentMetadata {
@@ -56,6 +61,11 @@ final class ExampleMetadata {
 const Map<String, ComponentMetadata> componentMetadata = <String, ComponentMetadata>{
   ...themeMetadata,
   ...actionsMetadata,
+  ...adminMetadata,
+  ...feedbackMetadata,
+  ...formsMetadata,
+  ...layoutMetadata,
+  ...supportingMetadata,
   ...fieldsMetadata,
   ...navigationMetadata,
   ...overlaysMetadata,

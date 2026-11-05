@@ -4,7 +4,7 @@ import 'index.dart';
 const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>{
   'CharcoalTypography': ComponentMetadata(
     category: 'Content',
-    summary: 'Applies Charcoal’s numeric component type roles (size10 to size20) from the active theme pack without suppressing ambient text scaling.',
+    summary: 'Applies Charcoal’s numeric component type roles (size10 to size20) from the active theme pack without suppressing ambient text scaling. Used inside library components; applications use CharcoalText.',
     keywords: <String>[
       'component typography',
       'dynamic type',
@@ -18,14 +18,14 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'A short code-like value needs the upstream single-line monospace variant.',
     ],
     avoidWhen: <String>[
-      'A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalText or CharcoalTheme.of(context).style(CharcoalTextRole...) instead.',
-      'Text has a product-specific visual style unrelated to a reviewed Charcoal component; compose an audited TextStyle from semantic theme roles.',
+      'A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalText with a CharcoalTextRole and, for colour, a CharcoalTextTone.',
+      'Text needs a size, weight, family or colour that no role provides; applications never build a TextStyle. Ask for a new role in the theme contract instead.',
       'Content must remain multiline while monospace is true; the upstream monospace variant is deliberately single-line.',
     ],
     accessibility: <String>[
       'Ambient MediaQuery text scaling remains active; never pre-scale fontSize or wrap the subtree in a fixed TextScaler.',
       'singleLine and monospace truncate visually, so keep the complete spoken label available and provide a visible route to essential hidden content.',
-      'Choose color from a semantic text role that remains readable on the actual surface instead of selecting a raw palette value.',
+      'Choose colour with a semantic CharcoalTextTone that remains readable on the actual surface; applications never pass a raw colour or palette value.',
     ],
     responsiveBehavior: <String>[
       'The authored font and line measurements remain 10/18, 12/20, 14/22, 16/24, and 20/28 before ambient scaling.',
@@ -46,10 +46,9 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'The caller owns semantic hierarchy, copy, localization, surface color selection, truncation recovery, and content changes.',
     ],
     tokenRoles: <String>[
-      'text.font-family/sans',
-      'text.font-weight/regular',
-      'text.font-weight/bold',
-      'textDefaultText1',
+      'typography.weightRegular',
+      'typography.weightBold',
+      'colors.text',
     ],
     relatedComponents: <String>[
       'CharcoalApp',
@@ -143,7 +142,7 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'Declarative routing or deep links need the same Charcoal infrastructure as imperative Navigator routes.',
     ],
     avoidWhen: <String>[
-      'Only a subtree needs a theme override; wrap that subtree in a Theme built with buildCharcoalThemeData.',
+      'A different look is wanted: pass a CharcoalThemePack as lightPack or darkPack. Applications never build ThemeData, ColorScheme or TextStyle themselves.',
       'A nested flow needs its own Navigator; keep the application shell at the root and add a nested Navigator locally.',
     ],
     accessibility: <String>[
@@ -161,9 +160,9 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       'The application owns route definitions, deep-link parsing, durable destination state, and product localization resources.',
     ],
     tokenRoles: <String>[
-      'backgroundDefault',
-      'containerPrimaryDefault',
-      'textDefault',
+      'colors.background',
+      'colors.primary',
+      'colors.text',
     ],
     relatedComponents: <String>[
       'CharcoalPageRoute',

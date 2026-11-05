@@ -47,7 +47,7 @@ final class _ComposedUiPreviewState extends State<_ComposedUiPreview> {
                   child: const Text('Close'),
                 ),
               ],
-              child: const Text('This surface is built without Material or Cupertino.'),
+              child: const Text('Every value of this surface comes from the active Charcoal theme.'),
             ),
           ),
           child: const Text('Open dialog'),

@@ -2,8 +2,10 @@
 
 This Flutter app is the exhaustive Charcoal V2 visual catalog for generated colors, typography,
 dimensions, every generated icon asset, component variants, interaction states, and overlays. It is
-built from `charcoal_ui`, `charcoal_icons`, and Flutter's Widgets layer, and intentionally imports
-neither Material nor Cupertino.
+built from `charcoal_ui` (a Material-based library that owns all styling) and `charcoal_icons`. It
+is the library's own demo, so unlike application code it may read the theme directly
+(`CharcoalTheme.of(context)`) to draw its chrome. The Overview page describes the architecture and the
+Supporting page shows the building blocks that larger components are made of.
 
 The Web Showcase self-hosts a subsetted Google Fonts Noto Sans variable WOFF2 for stable Skwasm
 metrics at weights 400 and 700. The asset belongs to this application only; native Showcase builds

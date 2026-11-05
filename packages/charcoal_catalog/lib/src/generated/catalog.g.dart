@@ -5,12 +5,12 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 79,
-    "curatedComponents": 34,
-    "componentsWithExamples": 34,
+    "publicComponents": 77,
+    "curatedComponents": 77,
+    "componentsWithExamples": 71,
     "curatedPatterns": 6,
     "publicTokens": 502,
-    "semanticTokens": 226
+    "semanticTokens": 126
   },
   "designRules": [
     {
@@ -416,23 +416,53 @@ const String generatedCatalogJson = r'''{
   "components": [
     {
       "name": "CharcoalActionTile",
-      "category": "Utility",
-      "summary": "An outlined button tile with a leading icon and a one-line label: a quick action on a",
+      "category": "Actions",
+      "summary": "An outlined tile with a leading icon and a one-line label for a quick action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/action_tile.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalactiontile",
-        "action tile"
+        "quick action",
+        "tile",
+        "shortcut",
+        "outlined button"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Two to four quick actions are offered side by side on a dashboard or card.",
+        "The action is recognised by an icon plus a short label."
+      ],
+      "avoidWhen": [
+        "The action is the primary call to action; use CharcoalButton.",
+        "The label needs more than one line; use a CharcoalListRow."
+      ],
+      "accessibility": [
+        "The label is the spoken name; the icon is decorative.",
+        "A null onPressed removes interaction and exposes the disabled state."
+      ],
+      "responsiveBehavior": [
+        "Tiles keep a stable size class and wrap with CharcoalWrap on narrow screens."
+      ],
+      "interactionStates": [
+        "idle",
+        "hovered",
+        "focused",
+        "pressed",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns outline, hover, focus and pressed presentation.",
+        "The caller owns what the action does and its result feedback."
+      ],
+      "tokenRoles": [
+        "colors.border",
+        "colors.pressOverlay",
+        "radius.sm"
+      ],
+      "relatedComponents": [
+        "CharcoalButton",
+        "CharcoalListRow",
+        "CharcoalWrap"
+      ],
       "apis": [
         {
           "name": "CharcoalActionTile",
@@ -467,27 +497,62 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "action-tile",
+          "title": "Invite and settings tiles",
+          "description": "Two quick actions on a card.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalAdminShell",
-      "category": "Utility",
-      "summary": "The responsive frame of an admin app: a permanent [sidebar] beside [body] at or above",
+      "category": "Admin",
+      "summary": "The responsive frame of an admin app: a permanent sidebar at or above the breakpoint, otherwise the body above a bottom tab bar.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/admin_shell.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaladminshell",
-        "admin shell"
+        "admin",
+        "shell",
+        "sidebar",
+        "layout",
+        "console"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "An admin or dashboard app has destinations that fit a sidebar on desktop and a tab bar on phones.",
+        "The layout should follow the width of the pane, not the window."
+      ],
+      "avoidWhen": [
+        "A simple linear flow with a single page; use CharcoalScaffold.",
+        "More than five phone destinations; reduce or restructure first."
+      ],
+      "accessibility": [
+        "Sidebar and tab bar are two views of one selection; update both from one state owner in the same frame.",
+        "Landmarks: each navigation is exposed as navigation with its own label."
+      ],
+      "responsiveBehavior": [
+        "The decision follows the width the shell receives at sizes.sidebarBreakpoint; body keeps its state across layouts."
+      ],
+      "interactionStates": [
+        "wide",
+        "compact"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the breakpoint decision and arrangement of sidebar, body and bottom bar.",
+        "The caller owns the destinations, selection and routing."
+      ],
+      "tokenRoles": [
+        "colors.background",
+        "sizes.sidebarBreakpoint"
+      ],
+      "relatedComponents": [
+        "CharcoalSidebar",
+        "CharcoalTabBar",
+        "CharcoalPage"
+      ],
       "apis": [
         {
           "name": "CharcoalAdminShell",
@@ -522,7 +587,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "admin-shell",
+          "title": "Console frame",
+          "description": "Shell with sidebar, tab bar and a page.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalAnchoredBalloon",
@@ -569,12 +642,11 @@ const String generatedCatalogJson = r'''{
         "In controlled usage the caller owns the visible value, trigger activation, dynamic label, action result, and durable state."
       ],
       "tokenRoles": [
-        "containerPrimaryDefault",
-        "textOnPrimaryDefault",
-        "containerOnImgDefault",
-        "space.layout30",
+        "colors.primary",
+        "colors.textOnPrimary",
+        "colors.fillOnImage",
         "radius.xl",
-        "borderFocusLegacy"
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalBalloon",
@@ -586,7 +658,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalAnchoredBalloon",
           "kind": "constructor",
-          "signature": "CharcoalAnchoredBalloon({required this.anchor, required this.message, this.action, this.dismissIcon, this.dismissLabel = 'Close', this.dismissAfter, this.dismissOnTapOutside = false, this.maxWidth, this.onVisibilityChanged, this.showOnTap = true, this.visible, super.key})",
+          "signature": "CharcoalAnchoredBalloon({required this.anchor, required this.message, this.action, this.dismissIcon, this.dismissAfter, this.dismissOnTapOutside = false, this.maxWidth, this.onVisibilityChanged, this.showOnTap = true, this.visible, super.key})",
           "parameters": [
             {
               "name": "anchor",
@@ -611,13 +683,6 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
-            },
-            {
-              "name": "dismissLabel",
-              "type": "String",
-              "required": false,
-              "named": true,
-              "defaultValue": "'Close'"
             },
             {
               "name": "dismissAfter",
@@ -710,7 +775,7 @@ const String generatedCatalogJson = r'''{
         "Declarative routing or deep links need the same Charcoal infrastructure as imperative Navigator routes."
       ],
       "avoidWhen": [
-        "Only a subtree needs a theme override; wrap that subtree in a Theme built with buildCharcoalThemeData.",
+        "A different look is wanted: pass a CharcoalThemePack as lightPack or darkPack. Applications never build ThemeData, ColorScheme or TextStyle themselves.",
         "A nested flow needs its own Navigator; keep the application shell at the root and add a nested Navigator locally."
       ],
       "accessibility": [
@@ -732,9 +797,9 @@ const String generatedCatalogJson = r'''{
         "The application owns route definitions, deep-link parsing, durable destination state, and product localization resources."
       ],
       "tokenRoles": [
-        "backgroundDefault",
-        "containerPrimaryDefault",
-        "textDefault"
+        "colors.background",
+        "colors.primary",
+        "colors.text"
       ],
       "relatedComponents": [
         "CharcoalPageRoute",
@@ -1075,23 +1140,48 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalAvatar",
-      "category": "Utility",
-      "summary": "A square or circular avatar showing the first letter of [source].",
+      "category": "Layout",
+      "summary": "A square or circular avatar showing the first letter of a name or address.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/avatar.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalavatar",
-        "avatar"
+        "avatar",
+        "initial",
+        "user",
+        "profile picture",
+        "account"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A list row, account tile or comment needs a compact identity mark without a photo.",
+        "Only a name or email is known."
+      ],
+      "avoidWhen": [
+        "A real photo must be shown; use an image widget inside the owning component.",
+        "The identity is decorative next to the name already shown; keep it excluded from semantics."
+      ],
+      "accessibility": [
+        "The letter is decorative; the row or tile must expose the full name as its label."
+      ],
+      "responsiveBehavior": [
+        "Three sizes (CharcoalAvatarSize); the glyph scales with text."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns letter extraction, size classes, shape and colour.",
+        "The caller owns the identity string."
+      ],
+      "tokenRoles": [
+        "colors.fillSecondary",
+        "colors.text",
+        "radius.sm"
+      ],
+      "relatedComponents": [
+        "CharcoalListRow",
+        "CharcoalSidebar"
+      ],
       "apis": [
         {
           "name": "CharcoalAvatar",
@@ -1126,29 +1216,75 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalAvatarSize",
+          "kind": "enum",
+          "signature": "enum CharcoalAvatarSize { small, regular, large }",
+          "parameters": [],
+          "enumValues": [
+            "small",
+            "regular",
+            "large"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "avatar-row",
+          "title": "Circular avatar in a row",
+          "description": "Members listed with circular avatars.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalBadge",
-      "category": "Utility",
-      "summary": "A small solid label: a count, a role, \"new\".",
+      "category": "Status",
+      "summary": "A small solid label: a count, a role or a \"new\" marker.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/status/badge.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalbadge",
-        "badge"
+        "badge",
+        "count",
+        "role",
+        "new",
+        "label"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A short label or count must stand out next to a title or avatar.",
+        "A role (Owner, Editor) is shown in a row."
+      ],
+      "avoidWhen": [
+        "The status is a state of an item with a dot; use CharcoalChip or CharcoalStatusDot.",
+        "The label is long; use text."
+      ],
+      "accessibility": [
+        "The label is read as text; for a count describe what it counts in the surrounding label."
+      ],
+      "responsiveBehavior": [
+        "It keeps one line; very long labels are not supported."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns fill, shape and text styling for each tone.",
+        "The caller owns the label and meaning."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.negative",
+        "colors.positive",
+        "colors.textOnPrimary"
+      ],
+      "relatedComponents": [
+        "CharcoalChip",
+        "CharcoalStatusDot",
+        "CharcoalTagItem"
+      ],
       "apis": [
         {
           "name": "CharcoalBadge",
@@ -1176,9 +1312,28 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalBadgeTone",
+          "kind": "enum",
+          "signature": "enum CharcoalBadgeTone { primary, positive, negative }",
+          "parameters": [],
+          "enumValues": [
+            "primary",
+            "positive",
+            "negative"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "badge-count",
+          "title": "Count and role badges",
+          "description": "A negative count badge among chips.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalBalloon",
@@ -1223,13 +1378,13 @@ const String generatedCatalogJson = r'''{
         "The caller owns visibility, placement in the surrounding layout, action outcomes, and durable state."
       ],
       "tokenRoles": [
-        "containerPrimaryDefault",
-        "textOnPrimaryDefault",
-        "containerOnImgDefault",
-        "space.component25",
-        "space.component30",
+        "colors.primary",
+        "colors.textOnPrimary",
+        "colors.fillOnImage",
+        "space.md",
+        "space.lg",
         "radius.xl",
-        "borderFocusLegacy"
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalAnchoredBalloon",
@@ -1240,7 +1395,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalBalloon",
           "kind": "constructor",
-          "signature": "CharcoalBalloon({required this.child, this.action, this.arrowCenter, this.dismissIcon, this.dismissLabel = 'Close', this.maxWidth, this.onDismiss, this.position = CharcoalOverlayPosition.top, this.semanticLabel, super.key})",
+          "signature": "CharcoalBalloon({required this.child, this.action, this.arrowCenter, this.dismissIcon, this.maxWidth, this.onDismiss, this.position = CharcoalOverlayPosition.top, this.semanticLabel, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -1265,13 +1420,6 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
-            },
-            {
-              "name": "dismissLabel",
-              "type": "String",
-              "required": false,
-              "named": true,
-              "defaultValue": "'Close'"
             },
             {
               "name": "maxWidth",
@@ -1332,23 +1480,51 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalBanner",
-      "category": "Utility",
-      "summary": "An inline banner: tone icon, message, optional trailing action.",
+      "category": "Feedback",
+      "summary": "An inline banner with a tone icon, message, optional title and optional trailing action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/banner.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalbanner",
-        "banner"
+        "banner",
+        "alert",
+        "notice",
+        "inline message",
+        "warning"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A page or form needs a persistent message tied to its content, such as a pause, warning or error summary.",
+        "The message may offer one recovery action."
+      ],
+      "avoidWhen": [
+        "The feedback is transient confirmation; use CharcoalToast or CharcoalSnackBar.",
+        "An error blocks only one field; use the field assistive text."
+      ],
+      "accessibility": [
+        "The title and message are announced together as one live message; keep them concise.",
+        "The tone icon is decorative; the message must state the meaning in words."
+      ],
+      "responsiveBehavior": [
+        "The message wraps; the action moves below the text on narrow widths."
+      ],
+      "interactionStates": [
+        "static",
+        "with action"
+      ],
+      "feedbackResponsibilities": [
+        "Owns tone presentation, icon, layout and the action slot.",
+        "The caller owns when it appears, the wording and the action result."
+      ],
+      "tokenRoles": [
+        "colors.noticeSurface",
+        "colors.textNotice",
+        "colors.iconNotice"
+      ],
+      "relatedComponents": [
+        "CharcoalErrorState",
+        "CharcoalToast",
+        "CharcoalChip"
+      ],
       "apis": [
         {
           "name": "CharcoalBanner",
@@ -1403,27 +1579,58 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "banner-notice",
+          "title": "Notice banner",
+          "description": "A notice banner at the top of a status panel.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalBatchBar",
-      "category": "Utility",
-      "summary": "The toolbar above a batch-selectable list.",
+      "category": "Admin",
+      "summary": "The toolbar above a batch-selectable list: select mode toggle, selected count and delete.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/batch_bar.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalbatchbar",
-        "batch bar"
+        "batch",
+        "bulk",
+        "selection mode",
+        "delete",
+        "toolbar"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A list supports selecting several records and acting on them."
+      ],
+      "avoidWhen": [
+        "A single-record action; use a button in the row."
+      ],
+      "accessibility": [
+        "Toggling mode and the selected count are announced; destructive delete is a labelled button."
+      ],
+      "responsiveBehavior": [
+        "Actions collapse to the available width; labels are localised through parameters."
+      ],
+      "interactionStates": [
+        "browsing",
+        "selecting"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the bar layout and mode presentation.",
+        "The caller owns the selection state, deletion and its result."
+      ],
+      "tokenRoles": [
+        "colors.surfaceSecondary",
+        "space.md"
+      ],
+      "relatedComponents": [
+        "CharcoalList",
+        "CharcoalSelectionBox"
+      ],
       "apis": [
         {
           "name": "CharcoalBatchBar",
@@ -1505,27 +1712,57 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "batch-bar",
+          "title": "Batch toolbar",
+          "description": "Toggle select mode and delete.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalBrandMark",
-      "category": "Utility",
-      "summary": "The product mark: a `sizes.brandMark` square in the primary colour with one letter.",
+      "category": "Admin",
+      "summary": "The product mark: a primary-coloured square with one letter.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/brand_mark.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalbrandmark",
-        "brand mark"
+        "brand",
+        "logo",
+        "mark",
+        "product"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A header or sign-in needs the product mark at the standard size."
+      ],
+      "avoidWhen": [
+        "A custom logo image is required; render the image inside the owning layout."
+      ],
+      "accessibility": [
+        "The letter is decorative; pair with the product name as text."
+      ],
+      "responsiveBehavior": [
+        "Fixed size from the theme."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns size, fill and letter styling.",
+        "The caller owns the letter."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.textOnPrimary",
+        "sizes.brandMark"
+      ],
+      "relatedComponents": [
+        "CharcoalSidebarBrand",
+        "CharcoalPage"
+      ],
       "apis": [
         {
           "name": "CharcoalBrandMark",
@@ -1548,7 +1785,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "brand-mark",
+          "title": "Page header mark",
+          "description": "The brand mark beside the page title.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalButton",
@@ -1594,12 +1839,12 @@ const String generatedCatalogJson = r'''{
         "The caller owns progress, success, failure, recovery, and the durable action result."
       ],
       "tokenRoles": [
-        "space.targetS",
-        "space.targetM",
-        "space.component10",
-        "space.component30",
-        "space.component40",
-        "radius.oval"
+        "sizes.controlSm",
+        "sizes.controlMd",
+        "space.xs",
+        "space.lg",
+        "space.xl",
+        "radius.pill"
       ],
       "relatedComponents": [
         "CharcoalIconButton",
@@ -1744,23 +1989,52 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalCard",
-      "category": "Utility",
-      "summary": "A grey filled card, the surface for stats and grouped information.",
+      "category": "Layout",
+      "summary": "A filled surface that groups related content such as stats or a settings block; the library owns its fill, radius and border.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/card.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalcard",
-        "card"
+        "card",
+        "surface",
+        "group",
+        "panel",
+        "container"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Related content needs one visible grouping that stands apart from the page background.",
+        "A stat, summary or settings block should read as a single unit."
+      ],
+      "avoidWhen": [
+        "A divided list of repeated rows is clearer; use CharcoalList.",
+        "Cards would nest inside cards; flatten the hierarchy with CharcoalSectionHeader instead."
+      ],
+      "accessibility": [
+        "A card adds no semantics of its own; give the content inside a heading or label so the group is announced.",
+        "Interactive content keeps its own focus and semantics; do not make the whole card a hidden button."
+      ],
+      "responsiveBehavior": [
+        "The card fills the width its parent gives it; choose columns in the parent, not a fixed card width.",
+        "Padding is a spacing step (CharcoalInset), so it follows the active theme and text scale."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the surface fill, corner radius, outline option and inner padding.",
+        "The caller owns the content, its hierarchy, and any action it exposes."
+      ],
+      "tokenRoles": [
+        "colors.surfaceSecondary",
+        "colors.borderSubtle",
+        "radius.md",
+        "space.lg"
+      ],
+      "relatedComponents": [
+        "CharcoalList",
+        "CharcoalSectionHeader",
+        "CharcoalStatCard"
+      ],
       "apis": [
         {
           "name": "CharcoalCard",
@@ -1797,7 +2071,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "card-group",
+          "title": "Grouped actions on a card",
+          "description": "Wraps action tiles in a padded card inside a section.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalCarousel",
@@ -1852,13 +2134,13 @@ const String generatedCatalogJson = r'''{
         "The caller owns slide loading, errors, action outcomes, live page context when needed, routes, and durable product state."
       ],
       "tokenRoles": [
-        "space.targetM",
-        "space.component20",
-        "radius.oval",
-        "borderFocusLegacy",
-        "borderFocus1",
-        "textDefault",
-        "textTertiaryDefault"
+        "sizes.controlMd",
+        "space.sm",
+        "radius.pill",
+        "colors.focusRing",
+        "colors.borderFocus",
+        "colors.text",
+        "colors.textTertiary"
       ],
       "relatedComponents": [
         "CharcoalIconButton",
@@ -2055,13 +2337,13 @@ const String generatedCatalogJson = r'''{
         "Reports the proposed inverse value; the caller owns controlled state, validation timing, persistence, and recovery."
       ],
       "tokenRoles": [
-        "space.component10",
-        "radius.s",
-        "radius.oval",
-        "containerPrimaryDefault",
-        "borderDefault",
-        "borderFocusLegacy",
-        "borderNegative"
+        "space.xs",
+        "radius.sm",
+        "radius.pill",
+        "colors.primary",
+        "colors.border",
+        "colors.focusRing",
+        "colors.borderNegative"
       ],
       "relatedComponents": [
         "CharcoalRadio",
@@ -2153,23 +2435,49 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalChip",
-      "category": "Utility",
+      "category": "Status",
       "summary": "A small status chip: caption text on a pale tone surface.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/status/chip.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalchip",
-        "chip"
+        "chip",
+        "status",
+        "tone",
+        "label",
+        "state"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A record has a status (Synced, Retrying) that should be scannable in a list.",
+        "An identifier is shown in monospace beside other metadata."
+      ],
+      "avoidWhen": [
+        "The item must be selected or filtered by the user; use CharcoalTagItem.",
+        "A count needs emphasis; use CharcoalBadge."
+      ],
+      "accessibility": [
+        "Colour is never the only signal; the label states the status in words."
+      ],
+      "responsiveBehavior": [
+        "Chips keep one line and wrap in CharcoalWrap when several sit together."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns tone surface, text and shape.",
+        "The caller owns the status vocabulary and its mapping to tone."
+      ],
+      "tokenRoles": [
+        "colors.positiveSurface",
+        "colors.noticeSurface",
+        "colors.textPositive"
+      ],
+      "relatedComponents": [
+        "CharcoalStatusDot",
+        "CharcoalBadge",
+        "CharcoalTagItem"
+      ],
       "apis": [
         {
           "name": "CharcoalChip",
@@ -2206,7 +2514,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "chip-status",
+          "title": "Status chips",
+          "description": "Synced, retrying and monospace chips.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalClickable",
@@ -2415,23 +2731,48 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalCodeBlock",
-      "category": "Utility",
-      "summary": "A block of monospace text on `colors.backgroundSecondary`: a log excerpt, a JSON payload, a",
+      "category": "Content",
+      "summary": "A block of monospace text on a secondary surface: a log excerpt, JSON payload or key.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/code_block.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalcodeblock",
-        "code block"
+        "code",
+        "log",
+        "json",
+        "monospace",
+        "snippet"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A machine-readable value or log excerpt should be shown verbatim and optionally copied.",
+        "Several lines of output need a scrollable region."
+      ],
+      "avoidWhen": [
+        "The text is prose; use CharcoalText.",
+        "The user edits the text; use CharcoalTextArea."
+      ],
+      "accessibility": [
+        "Enable selectable so users can copy; long text stays reachable by scrolling and keyboard."
+      ],
+      "responsiveBehavior": [
+        "Long lines scroll horizontally or wrap per the scrollable option; maxLines limits height."
+      ],
+      "interactionStates": [
+        "static",
+        "selectable"
+      ],
+      "feedbackResponsibilities": [
+        "Owns monospace styling, surface and selection.",
+        "The caller owns the content and truncation policy."
+      ],
+      "tokenRoles": [
+        "colors.backgroundSecondary",
+        "colors.text"
+      ],
+      "relatedComponents": [
+        "CharcoalText",
+        "CharcoalTextArea"
+      ],
       "apis": [
         {
           "name": "CharcoalCodeBlock",
@@ -2528,32 +2869,67 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "code-block",
+          "title": "Log excerpt",
+          "description": "A two-line selectable code block.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalDateTimeField",
-      "category": "Utility",
-      "summary": "A date, date-and-time or time picker rendered as a field ([mode]).",
+      "category": "Forms",
+      "summary": "A date-and-time picker rendered as a field.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/date_time_field.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaldatetimefield",
-        "date time field"
+        "date",
+        "time",
+        "picker",
+        "schedule",
+        "datetime"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A moment (publish time, expiry) is chosen from calendar and clock dialogs.",
+        "The value may be cleared."
+      ],
+      "avoidWhen": [
+        "Free text; use CharcoalTextField.",
+        "Only a duration or count; use a number field."
+      ],
+      "accessibility": [
+        "The field exposes its label and current value as a button; opening the dialog moves focus to it."
+      ],
+      "responsiveBehavior": [
+        "The field width follows its parent; long dates wrap."
+      ],
+      "interactionStates": [
+        "empty",
+        "filled",
+        "focused",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the field chrome, formatting and clear action.",
+        "The caller owns the value, time zone semantics and validation."
+      ],
+      "tokenRoles": [
+        "colors.fillSecondary",
+        "colors.text"
+      ],
+      "relatedComponents": [
+        "CharcoalFormField",
+        "CharcoalTextField"
+      ],
       "apis": [
         {
           "name": "CharcoalDateTimeField",
           "kind": "constructor",
-          "signature": "CharcoalDateTimeField({required this.label, required this.value, required this.onChanged, this.clearText = 'Clear', this.emptyText = 'Not set', this.hint, this.mode = CharcoalDateTimeMode.dateTime, this.picker, super.key})",
+          "signature": "CharcoalDateTimeField({required this.label, required this.value, required this.onChanged, this.clearText = 'Clear', this.emptyText = 'Not set', this.hint, this.picker = _pickDateAndTime, super.key})",
           "parameters": [
             {
               "name": "label",
@@ -2594,17 +2970,11 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
-              "name": "mode",
-              "type": "CharcoalDateTimeMode",
+              "name": "picker",
+              "type": "CharcoalDateTimePicker",
               "required": false,
               "named": true,
-              "defaultValue": "CharcoalDateTimeMode.dateTime"
-            },
-            {
-              "name": "picker",
-              "type": "CharcoalDateTimePicker?",
-              "required": false,
-              "named": true
+              "defaultValue": "_pickDateAndTime"
             },
             {
               "name": "key",
@@ -2616,7 +2986,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "date-time-field",
+          "title": "Publish time",
+          "description": "An optional publish time field.",
+          "sourcePath": "example/lib/agent_examples/form_section_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalDialog",
@@ -2662,11 +3040,8 @@ const String generatedCatalogJson = r'''{
         "The caller owns task validation, progress, success, failure, and returned result."
       ],
       "tokenRoles": [
-        "paragraphWidth.s",
-        "paragraphWidth.l",
-        "space.layout40",
-        "space.layout100",
-        "space.targetL"
+        "sizes.dialogMaxWidth",
+        "sizes.controlLg"
       ],
       "relatedComponents": [
         "CharcoalToast",
@@ -2926,23 +3301,47 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalDivider",
-      "category": "Utility",
-      "summary": "A hairline rule across the width it is given, in `colors.borderSubtle`.",
+      "category": "Layout",
+      "summary": "A hairline rule across the width it is given.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/divider.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaldivider",
-        "divider"
+        "divider",
+        "separator",
+        "rule",
+        "hairline"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Two groups in a column need a visible break that a gap alone does not give.",
+        "A custom list-like layout needs the same rule colour the library lists use."
+      ],
+      "avoidWhen": [
+        "Rows already sit in a CharcoalList, which draws its own dividers.",
+        "Whitespace (CharcoalGap) is enough to separate the groups."
+      ],
+      "accessibility": [
+        "The divider is decorative and excluded from semantics.",
+        "Do not rely on the rule alone to convey a grouping that matters; label the groups."
+      ],
+      "responsiveBehavior": [
+        "It stretches to the available width and has a fixed hairline thickness from the theme."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the rule colour and thickness.",
+        "The caller owns where the break is meaningful."
+      ],
+      "tokenRoles": [
+        "colors.borderSubtle",
+        "borders.hairline"
+      ],
+      "relatedComponents": [
+        "CharcoalList",
+        "CharcoalGap"
+      ],
       "apis": [
         {
           "name": "CharcoalDivider",
@@ -2959,7 +3358,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "divider-rule",
+          "title": "Rule between groups",
+          "description": "A divider under a list before a footer line.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalDropdown",
@@ -3007,10 +3414,9 @@ const String generatedCatalogJson = r'''{
         "The caller owns selected-value persistence and downstream results or validation."
       ],
       "tokenRoles": [
-        "space.component10",
-        "space.layout30",
-        "radius.s",
-        "containerSecondaryDefaultA"
+        "space.xs",
+        "radius.sm",
+        "colors.fillSecondary"
       ],
       "relatedComponents": [
         "CharcoalMultiSelect",
@@ -3168,23 +3574,48 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalEditableText",
-      "category": "Utility",
-      "summary": "Shared editing behaviour for single-line and multiline Charcoal fields.",
+      "category": "Supporting",
+      "summary": "Supporting building block: the editing surface inside CharcoalTextField and CharcoalTextArea (caret, selection, context menu). Applications use those fields instead.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/text/text_editing.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaleditabletext",
-        "editable text"
+        "editable text",
+        "input engine",
+        "caret",
+        "selection",
+        "supporting"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A library author builds a new field and needs the audited Charcoal editing behaviour without decoration."
+      ],
+      "avoidWhen": [
+        "Any application screen: use CharcoalTextField, CharcoalTextArea or CharcoalSearchField, which add the label, ring, counter and semantics."
+      ],
+      "accessibility": [
+        "It supplies caret, selection and the Charcoal context menu; the owning field must supply label and semantics."
+      ],
+      "responsiveBehavior": [
+        "Wraps and scrolls per maxLines; scroll padding comes from the theme."
+      ],
+      "interactionStates": [
+        "focused",
+        "selecting",
+        "read only",
+        "obscured"
+      ],
+      "feedbackResponsibilities": [
+        "Owns text editing behaviour.",
+        "The owning field owns decoration, label, validation and counter."
+      ],
+      "tokenRoles": [
+        "colors.focusRing"
+      ],
+      "relatedComponents": [
+        "CharcoalTextField",
+        "CharcoalTextArea",
+        "CharcoalSelectionToolbar"
+      ],
       "apis": [
         {
           "name": "CharcoalEditableText",
@@ -3331,23 +3762,49 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalEmptyState",
-      "category": "Utility",
-      "summary": "A centred empty state: a large muted icon, a message and optional actions.",
+      "category": "Feedback",
+      "summary": "A centred empty state: a muted icon, a message and optional actions.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/empty_state.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalemptystate",
-        "empty state"
+        "empty",
+        "no results",
+        "blank slate",
+        "zero state"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A list, search or page region has no content and should say why and what to do next.",
+        "A first-run screen needs one clear next step."
+      ],
+      "avoidWhen": [
+        "The region failed to load; use CharcoalErrorState.",
+        "Content is loading; use CharcoalLoadingState."
+      ],
+      "accessibility": [
+        "The message is the spoken content; the icon is decorative.",
+        "Actions keep their own labels and focus order."
+      ],
+      "responsiveBehavior": [
+        "It centres within the space it is given and wraps the message on narrow widths."
+      ],
+      "interactionStates": [
+        "static",
+        "with action"
+      ],
+      "feedbackResponsibilities": [
+        "Owns icon, message layout and spacing.",
+        "The caller owns the wording, the actions and the path out of emptiness."
+      ],
+      "tokenRoles": [
+        "colors.iconTertiary",
+        "colors.textSecondary",
+        "space.lg"
+      ],
+      "relatedComponents": [
+        "CharcoalErrorState",
+        "CharcoalLoadingState"
+      ],
       "apis": [
         {
           "name": "CharcoalEmptyState",
@@ -3383,27 +3840,62 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "empty-state",
+          "title": "Empty region",
+          "description": "A folder icon and a no-jobs message.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalErrorState",
-      "category": "Utility",
-      "summary": "An error banner with a retry affordance.",
+      "category": "Feedback",
+      "summary": "An error message for a failed page region with a retry affordance.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/error_state.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalerrorstate",
+        "error",
+        "failed to load",
+        "retry",
         "error state"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A region could not load and the user can retry.",
+        "A recoverable failure needs both an explanation and an action."
+      ],
+      "avoidWhen": [
+        "The error is a form validation message; use CharcoalFormField assistive text.",
+        "A short confirmation after an action; use CharcoalToast."
+      ],
+      "accessibility": [
+        "The message is announced as it appears; keep it specific and free of codes the user cannot act on.",
+        "The retry action is a labelled button and receives focus order after the message."
+      ],
+      "responsiveBehavior": [
+        "It fills the width given and wraps long messages."
+      ],
+      "interactionStates": [
+        "static",
+        "retryable"
+      ],
+      "feedbackResponsibilities": [
+        "Owns tone, icon and retry button presentation.",
+        "The caller owns the cause, wording and the retry result."
+      ],
+      "tokenRoles": [
+        "colors.negativeSurface",
+        "colors.textNegative",
+        "colors.iconNegative"
+      ],
+      "relatedComponents": [
+        "CharcoalBanner",
+        "CharcoalEmptyState",
+        "CharcoalLoadingState"
+      ],
       "apis": [
         {
           "name": "CharcoalErrorState",
@@ -3439,27 +3931,59 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "error-state",
+          "title": "Retryable error",
+          "description": "A failed list with a retry that returns to ready.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalFieldBox",
-      "category": "Utility",
-      "summary": "Gives a field (`CharcoalTextField`, `CharcoalDropdown`, `CharcoalSearchField`...) a width class.",
+      "category": "Layout",
+      "summary": "Gives a field (text field, dropdown, search field) a width class so form rows align without hard-coded widths.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/field_box.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalfieldbox",
-        "field box"
+        "field width",
+        "form width",
+        "field box",
+        "input width"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A field should be compact, standard or full width relative to its form, not as wide as the page.",
+        "Several fields in a form need consistent widths."
+      ],
+      "avoidWhen": [
+        "The field is already inside a CharcoalFormField that stretches it; do not constrain it twice.",
+        "A control is not a field (button, switch); size it with its own API."
+      ],
+      "accessibility": [
+        "The box does not change semantics; the wrapped field keeps its label, value and focus.",
+        "Make sure the compact width still fits the field label and value at large text scales."
+      ],
+      "responsiveBehavior": [
+        "Width classes cap at the container width; on narrow screens every class falls back to full width."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the width classes (CharcoalFieldWidth) and their narrow-screen fallback.",
+        "The caller owns which class fits the data being entered."
+      ],
+      "tokenRoles": [
+        "sizes.controlLg"
+      ],
+      "relatedComponents": [
+        "CharcoalTextField",
+        "CharcoalDropdown",
+        "CharcoalFormField"
+      ],
       "apis": [
         {
           "name": "CharcoalFieldBox",
@@ -3487,9 +4011,28 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalFieldWidth",
+          "kind": "enum",
+          "signature": "enum CharcoalFieldWidth { compact, standard, full }",
+          "parameters": [],
+          "enumValues": [
+            "compact",
+            "standard",
+            "full"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "field-box-width",
+          "title": "Field width class",
+          "description": "A compact field box inside a layout.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalFieldLabel",
@@ -3541,11 +4084,11 @@ const String generatedCatalogJson = r'''{
         "The associated control owns semantic labeling, required and invalid state, focus, value, correction, and submission feedback."
       ],
       "tokenRoles": [
-        "space.component10",
-        "space.component20",
-        "textDefaultText1",
-        "textSecondaryDefault",
-        "textTertiaryDefault"
+        "space.xs",
+        "space.sm",
+        "colors.text",
+        "colors.textSecondary",
+        "colors.textTertiary"
       ],
       "relatedComponents": [
         "CharcoalTextField",
@@ -3614,23 +4157,45 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalFieldRing",
-      "category": "Utility",
-      "summary": "Paints a focus or validation ring entirely outside [child], fading it in and out.",
+      "category": "Supporting",
+      "summary": "Supporting building block: the outside focus or validation ring drawn around a field. Fields draw it themselves; applications do not.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/field_ring.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalfieldring",
-        "field ring"
+        "focus ring",
+        "validation ring",
+        "halo",
+        "supporting"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A library author builds a custom field that needs the standard external ring."
+      ],
+      "avoidWhen": [
+        "Any application screen: the Charcoal fields already show the ring."
+      ],
+      "accessibility": [
+        "The ring is decorative; focus and invalid state must also be exposed through semantics."
+      ],
+      "responsiveBehavior": [
+        "It paints outside the child bounds and never changes layout."
+      ],
+      "interactionStates": [
+        "hidden",
+        "visible"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the ring painting and fade.",
+        "The owner decides when it is visible."
+      ],
+      "tokenRoles": [
+        "colors.focusRing",
+        "borders.focusHalo"
+      ],
+      "relatedComponents": [
+        "CharcoalTextField",
+        "CharcoalDropdown"
+      ],
       "apis": [
         {
           "name": "CharcoalFieldRing",
@@ -3687,23 +4252,53 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalFormField",
-      "category": "Utility",
-      "summary": "The styled shell around any control that needs a label, a helper line and an optional action.",
+      "category": "Forms",
+      "summary": "The styled shell around any control that needs a label, helper line, required or invalid state and an optional action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/form_field.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalformfield",
-        "form field"
+        "form field",
+        "label",
+        "helper",
+        "required",
+        "invalid",
+        "shell"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A control (text field, slider, dropdown) needs a visible label and assistive text.",
+        "A field has a required marker or an inline correction message."
+      ],
+      "avoidWhen": [
+        "The control already has its own label slot (CharcoalSwitchField, CharcoalSearchField).",
+        "A free-standing label without a control; use CharcoalText."
+      ],
+      "accessibility": [
+        "The label is associated with the child control; pass invalid and assistiveText so the error is announced.",
+        "Required is conveyed in words (requiredText) as well as by the marker."
+      ],
+      "responsiveBehavior": [
+        "The label wraps on narrow widths and the helper line grows with text scale."
+      ],
+      "interactionStates": [
+        "idle",
+        "invalid",
+        "required"
+      ],
+      "feedbackResponsibilities": [
+        "Owns label, helper, required and invalid presentation.",
+        "The caller owns the control value, validation rule and submit."
+      ],
+      "tokenRoles": [
+        "colors.text",
+        "colors.textNegative",
+        "space.xs"
+      ],
+      "relatedComponents": [
+        "CharcoalFormSection",
+        "CharcoalFieldLabel",
+        "CharcoalTextField"
+      ],
       "apis": [
         {
           "name": "CharcoalFormField",
@@ -3771,27 +4366,59 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "form-field",
+          "title": "Validated name field",
+          "description": "A required name field that turns invalid when empty.",
+          "sourcePath": "example/lib/agent_examples/form_section_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalFormSection",
-      "category": "Utility",
-      "summary": "A titled group of fields with consistent vertical rhythm.",
+      "category": "Forms",
+      "summary": "A titled group of fields with consistent vertical rhythm and an optional caption.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/form_section.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalformsection",
-        "form section"
+        "form",
+        "section",
+        "group",
+        "settings",
+        "fields"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Several related fields belong together under one heading.",
+        "A settings page splits into labelled groups."
+      ],
+      "avoidWhen": [
+        "One field only; use CharcoalFormField.",
+        "The group is a list of navigable rows; use CharcoalList."
+      ],
+      "accessibility": [
+        "The title is a heading for the group; keep it unique on the page."
+      ],
+      "responsiveBehavior": [
+        "Fields stack in one column and take the width given; use CharcoalFieldBox for width classes."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns heading, caption and rhythm between children.",
+        "The caller owns the fields, their values and validation."
+      ],
+      "tokenRoles": [
+        "typography.roles.sectionTitle.fontSize",
+        "space.lg"
+      ],
+      "relatedComponents": [
+        "CharcoalFormField",
+        "CharcoalSectionHeader"
+      ],
       "apis": [
         {
           "name": "CharcoalFormSection",
@@ -3826,27 +4453,65 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "form-section",
+          "title": "Project settings sections",
+          "description": "Two titled sections with fields, switch, date and search.",
+          "sourcePath": "example/lib/agent_examples/form_section_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalGap",
-      "category": "Utility",
-      "summary": "An empty box of one spacing step, in the main axis of its parent flex.",
+      "category": "Layout",
+      "summary": "An empty box of one spacing step along the main axis of its parent Row or Column.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/foundation/layout.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalgap",
-        "gap"
+        "gap",
+        "spacing",
+        "space",
+        "spacer",
+        "margin"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Siblings in a Row or Column need breathing room that matches the theme scale.",
+        "A page-level layout needs vertical rhythm without writing a number."
+      ],
+      "avoidWhen": [
+        "Space must surround one widget on several sides; use CharcoalPadding.",
+        "Gaps would need to flex; use Spacer or Expanded."
+      ],
+      "accessibility": [
+        "A gap is excluded from semantics and focus."
+      ],
+      "responsiveBehavior": [
+        "The step is resolved from the active pack, so spacing follows density changes; it does not scale with text."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the mapping from step to logical pixels.",
+        "The caller owns where rhythm changes."
+      ],
+      "tokenRoles": [
+        "space.xxs",
+        "space.xs",
+        "space.sm",
+        "space.md",
+        "space.lg",
+        "space.xl",
+        "space.xxl",
+        "space.xxxl"
+      ],
+      "relatedComponents": [
+        "CharcoalPadding",
+        "CharcoalWrap"
+      ],
       "apis": [
         {
           "name": "CharcoalGap",
@@ -3907,79 +4572,33 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
-        }
-      ],
-      "examples": []
-    },
-    {
-      "name": "CharcoalGrid",
-      "category": "Utility",
-      "summary": "A grid of equal-width cells whose column count follows the layout class.",
-      "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/grid.dart",
-      "documentationLevel": "generated",
-      "keywords": [
-        "charcoalgrid",
-        "grid"
-      ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
-      "apis": [
+        },
         {
-          "name": "CharcoalGrid",
-          "kind": "constructor",
-          "signature": "CharcoalGrid({required this.children, this.columns = const CharcoalGridColumns(), this.rowHeight = CharcoalGridRowHeight.equal, this.runSpacing, this.spacing = CharcoalSpace.md, super.key})",
-          "parameters": [
-            {
-              "name": "children",
-              "type": "List<Widget>",
-              "required": true,
-              "named": true
-            },
-            {
-              "name": "columns",
-              "type": "CharcoalGridColumns",
-              "required": false,
-              "named": true,
-              "defaultValue": "const CharcoalGridColumns()"
-            },
-            {
-              "name": "rowHeight",
-              "type": "CharcoalGridRowHeight",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalGridRowHeight.equal"
-            },
-            {
-              "name": "runSpacing",
-              "type": "CharcoalSpace?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "spacing",
-              "type": "CharcoalSpace",
-              "required": false,
-              "named": true,
-              "defaultValue": "CharcoalSpace.md"
-            },
-            {
-              "name": "key",
-              "type": "Key?",
-              "required": false,
-              "named": true
-            }
-          ],
-          "enumValues": []
+          "name": "CharcoalSpace",
+          "kind": "enum",
+          "signature": "enum CharcoalSpace { xxs, xs, sm, md, lg, xl, xxl, xxxl }",
+          "parameters": [],
+          "enumValues": [
+            "xxs",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "xxl",
+            "xxxl"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "gap-steps",
+          "title": "Gap steps",
+          "description": "Gaps between a header, a card and a list.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalHintText",
@@ -4033,13 +4652,13 @@ const String generatedCatalogJson = r'''{
         "The caller owns visible state, action outcome, live or durable result feedback, validation, persistence, and recovery."
       ],
       "tokenRoles": [
-        "space.component10",
-        "space.component25",
-        "space.component30",
-        "radius.m",
-        "containerSecondaryDefault",
-        "textDefault",
-        "iconDefault"
+        "space.xs",
+        "space.md",
+        "space.lg",
+        "radius.md",
+        "colors.surfaceSecondary",
+        "colors.text",
+        "colors.icon"
       ],
       "relatedComponents": [
         "CharcoalFieldLabel",
@@ -4163,13 +4782,13 @@ const String generatedCatalogJson = r'''{
         "Reports activation without mutating the toggle value; the caller owns atomic state, action progress, failure, recovery, and durable results."
       ],
       "tokenRoles": [
-        "space.targetS",
-        "space.targetM",
-        "radius.oval",
-        "containerHoverA",
-        "containerPressA",
-        "containerOnImgDefault",
-        "borderFocusLegacy"
+        "sizes.controlSm",
+        "sizes.controlMd",
+        "radius.pill",
+        "colors.hoverOverlay",
+        "colors.pressOverlay",
+        "colors.fillOnImage",
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalButton",
@@ -4283,23 +4902,47 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalIconView",
-      "category": "Utility",
-      "summary": "A [CharcoalIcon] glyph painted in a semantic [tone] and [size] of the active theme.",
+      "category": "Content",
+      "summary": "A Charcoal icon glyph painted in a semantic tone and size of the active theme.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/icons/icon_view.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaliconview",
-        "icon view"
+        "icon",
+        "glyph",
+        "tone",
+        "symbol"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "An icon must follow meaning (secondary, negative, on primary) without naming a colour.",
+        "The icon size should follow the theme scale."
+      ],
+      "avoidWhen": [
+        "An icon inside a Charcoal component slot already gets its style from the component.",
+        "The glyph is the only label; add semanticLabel or use an icon button."
+      ],
+      "accessibility": [
+        "Decorative icons are excluded from semantics; supply semanticLabel when the icon carries meaning alone."
+      ],
+      "responsiveBehavior": [
+        "Sizes come from CharcoalIconSize and do not shrink with text scale; pair with labelled text."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns tone-to-colour resolution and size classes.",
+        "The caller owns the glyph choice and its meaning."
+      ],
+      "tokenRoles": [
+        "colors.icon",
+        "colors.iconSecondary",
+        "sizes.iconMd"
+      ],
+      "relatedComponents": [
+        "CharcoalIconButton",
+        "CharcoalText"
+      ],
       "apis": [
         {
           "name": "CharcoalIconView",
@@ -4345,34 +4988,94 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalIconTone",
+          "kind": "enum",
+          "signature": "enum CharcoalIconTone { primary, secondary, tertiary, disabled, hint, positive, negative, notice, onPrimary, onImage }",
+          "parameters": [],
+          "enumValues": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "disabled",
+            "hint",
+            "positive",
+            "negative",
+            "notice",
+            "onPrimary",
+            "onImage"
+          ]
+        },
+        {
+          "name": "CharcoalIconSize",
+          "kind": "enum",
+          "signature": "enum CharcoalIconSize { sm, md, lg, xl }",
+          "parameters": [],
+          "enumValues": [
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "icon-view",
+          "title": "Toned icon beside text",
+          "description": "A secondary info icon before a caption.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalInfoRows",
-      "category": "Utility",
-      "summary": "A key/value table: a tertiary label, and a selectable value, per ruled row.",
+      "category": "Admin",
+      "summary": "A key/value table: a tertiary label and a selectable value per ruled row.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/info_rows.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalinforows",
-        "info rows"
+        "info",
+        "key value",
+        "details",
+        "properties",
+        "table"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "The facts of one record are shown as label/value pairs."
+      ],
+      "avoidWhen": [
+        "Many records of the same shape; use CharcoalList."
+      ],
+      "accessibility": [
+        "Values are selectable so users can copy; each label is read before its value."
+      ],
+      "responsiveBehavior": [
+        "labelWidth chooses narrow, regular or wide; values wrap."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns rows, rules and label/value layout.",
+        "The caller owns the pairs."
+      ],
+      "tokenRoles": [
+        "colors.textTertiary",
+        "colors.borderSubtle"
+      ],
+      "relatedComponents": [
+        "CharcoalList",
+        "CharcoalCard"
+      ],
       "apis": [
         {
           "name": "CharcoalInfoRows",
           "kind": "constructor",
-          "signature": "CharcoalInfoRows(this.rows, {this.labelWidth = CharcoalInfoLabelWidth.regular, this.mono = false, super.key})",
+          "signature": "CharcoalInfoRows(this.rows, {this.labelWidth = CharcoalInfoLabelWidth.regular, super.key})",
           "parameters": [
             {
               "name": "rows",
@@ -4388,13 +5091,6 @@ const String generatedCatalogJson = r'''{
               "defaultValue": "CharcoalInfoLabelWidth.regular"
             },
             {
-              "name": "mono",
-              "type": "bool",
-              "required": false,
-              "named": true,
-              "defaultValue": "false"
-            },
-            {
               "name": "key",
               "type": "Key?",
               "required": false,
@@ -4402,9 +5098,28 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalInfoLabelWidth",
+          "kind": "enum",
+          "signature": "enum CharcoalInfoLabelWidth { narrow, regular, wide }",
+          "parameters": [],
+          "enumValues": [
+            "narrow",
+            "regular",
+            "wide"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "info-rows",
+          "title": "Plan details",
+          "description": "Two key/value rows.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalLinkButton",
@@ -4448,13 +5163,13 @@ const String generatedCatalogJson = r'''{
         "The caller owns progress, success, failure, navigation effects, and durable action results."
       ],
       "tokenRoles": [
-        "space.targetM",
-        "space.component30",
-        "radius.s",
-        "textDefault",
-        "textHover",
-        "textTertiaryDefault",
-        "borderFocusLegacy"
+        "sizes.controlMd",
+        "space.lg",
+        "radius.sm",
+        "colors.text",
+        "colors.textHover",
+        "colors.textTertiary",
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalButton",
@@ -4525,23 +5240,55 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalList",
-      "category": "Utility",
-      "summary": "A divided list, the main content shape of data screens.",
+      "category": "Layout",
+      "summary": "A divided list, the main content shape of data screens; rows are CharcoalListRow.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/list.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoallist",
-        "list"
+        "list",
+        "rows",
+        "table",
+        "divided list",
+        "records"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Several records of the same shape are scanned and opened one by one.",
+        "A settings or navigation screen needs ruled rows with leading and trailing content."
+      ],
+      "avoidWhen": [
+        "Two or three facts about one record; use CharcoalInfoRows.",
+        "Rows need free-form layouts or inline editing; compose a dedicated surface instead."
+      ],
+      "accessibility": [
+        "Each row exposes its title as its label and its tap as one action; keep row titles unique and meaningful.",
+        "Do not put several independent actions inside one row without separate semantics."
+      ],
+      "responsiveBehavior": [
+        "The list takes the width it is given and rows grow in height with text scale.",
+        "Use CharcoalListRowHeight to pick row density; never fix a row height in the caller."
+      ],
+      "interactionStates": [
+        "idle",
+        "hovered",
+        "focused",
+        "pressed",
+        "selected"
+      ],
+      "feedbackResponsibilities": [
+        "Owns row dividers, row height classes, selection and pointer feedback.",
+        "The caller owns the data, ordering, paging, selection state and what a row opens."
+      ],
+      "tokenRoles": [
+        "colors.borderSubtle",
+        "borders.hairline",
+        "space.lg"
+      ],
+      "relatedComponents": [
+        "CharcoalListRow",
+        "CharcoalSectionHeader",
+        "CharcoalBatchBar"
+      ],
       "apis": [
         {
           "name": "CharcoalList",
@@ -4596,29 +5343,83 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalListRowHeight",
+          "kind": "enum",
+          "signature": "enum CharcoalListRowHeight { compact, regular, tall }",
+          "parameters": [],
+          "enumValues": [
+            "compact",
+            "regular",
+            "tall"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "list-members",
+          "title": "Member list with badges",
+          "description": "Rows with avatar, role badge and an open action.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalListRow",
-      "category": "Utility",
-      "summary": "One row of a `CharcoalList`.",
+      "category": "Layout",
+      "summary": "One row of a CharcoalList: title, optional subtitle and details, leading and trailing content, optional chevron and press action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/list_row.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoallistrow",
+        "row",
+        "list item",
+        "record",
+        "tile",
         "list row"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A record is shown in a list and may open a detail page.",
+        "The row needs a leading avatar or icon and trailing status, badge or action."
+      ],
+      "avoidWhen": [
+        "The row is not part of a list; use CharcoalNavigationItem for navigation or CharcoalCard for a standalone tile.",
+        "Several actions compete inside one row; split them into the detail page."
+      ],
+      "accessibility": [
+        "The title (and subtitle) form the spoken label; an onPressed row is announced as a button.",
+        "Hover, focus and pressed paint states never move the row bounds, so keyboard and pointer users see a stable layout."
+      ],
+      "responsiveBehavior": [
+        "Long titles wrap or ellipsize inside the row; text scale grows the row instead of clipping.",
+        "Select a CharcoalListRowHeight class for density rather than padding by hand."
+      ],
+      "interactionStates": [
+        "idle",
+        "hovered",
+        "focused",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns pointer, focus, pressed and selected presentation, chevron and trailing alignment.",
+        "The caller owns the navigation or action, selection state and the meaning of trailing content."
+      ],
+      "tokenRoles": [
+        "colors.text",
+        "colors.textSecondary",
+        "colors.hoverOverlay",
+        "colors.pressOverlay",
+        "space.lg"
+      ],
+      "relatedComponents": [
+        "CharcoalList",
+        "CharcoalAvatar",
+        "CharcoalBadge"
+      ],
       "apis": [
         {
           "name": "CharcoalListRow",
@@ -4756,13 +5557,32 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalListRowHeight",
+          "kind": "enum",
+          "signature": "enum CharcoalListRowHeight { compact, regular, tall }",
+          "parameters": [],
+          "enumValues": [
+            "compact",
+            "regular",
+            "tall"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "list-row-member",
+          "title": "Row with avatar and role",
+          "description": "A tappable member row with a trailing badge.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalLoadingSpinner",
-      "category": "Utility",
+      "category": "Feedback",
       "summary": "Announces and renders an indeterminate wait with Charcoal source geometry and motion.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/loading_spinner.dart",
@@ -4808,11 +5628,11 @@ const String generatedCatalogJson = r'''{
         "The caller owns operation state, blocking policy, cancellation, timeout, error, retry, completion, and durable result."
       ],
       "tokenRoles": [
-        "space.targetL",
-        "space.component30",
-        "radius.m",
-        "backgroundDefault",
-        "iconTertiaryDefault"
+        "sizes.controlLg",
+        "space.lg",
+        "radius.md",
+        "colors.background",
+        "colors.iconTertiary"
       ],
       "relatedComponents": [
         "CharcoalSpinnerOverlay",
@@ -4886,23 +5706,46 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalLoadingState",
-      "category": "Utility",
+      "category": "Feedback",
       "summary": "A centred spinner for a loading page region.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/loading_state.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalloadingstate",
-        "loading state"
+        "loading",
+        "spinner",
+        "busy",
+        "progress"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A region fetches its first content and has nothing to show yet.",
+        "The wait is short and indeterminate."
+      ],
+      "avoidWhen": [
+        "The whole page is blocked by a running action; use CharcoalSpinnerOverlay.",
+        "Progress is known; show a meter or progress text."
+      ],
+      "accessibility": [
+        "Provide semanticLabel so the busy state is announced; update to a result when loading ends."
+      ],
+      "responsiveBehavior": [
+        "It centres in the space given; give the region a stable minimum height to avoid layout jumps."
+      ],
+      "interactionStates": [
+        "loading"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the spinner and its centring.",
+        "The caller owns when loading starts, ends or fails."
+      ],
+      "tokenRoles": [
+        "colors.primary"
+      ],
+      "relatedComponents": [
+        "CharcoalSpinnerOverlay",
+        "CharcoalLoadingSpinner",
+        "CharcoalEmptyState"
+      ],
       "apis": [
         {
           "name": "CharcoalLoadingState",
@@ -4926,27 +5769,57 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "loading-state",
+          "title": "Loading region",
+          "description": "A loading region swapped with ready, empty and failed.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalMeter",
-      "category": "Utility",
+      "category": "Admin",
       "summary": "A labelled progress meter on a card, such as a quota report.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/meter.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalmeter",
-        "meter"
+        "meter",
+        "quota",
+        "progress",
+        "usage"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A usage against a limit should be visible as a bar."
+      ],
+      "avoidWhen": [
+        "Unknown progress; use CharcoalLoadingSpinner.",
+        "Exact values matter more than proportion; add them as text."
+      ],
+      "accessibility": [
+        "The label and value text carry the meaning; the bar is decorative."
+      ],
+      "responsiveBehavior": [
+        "The bar fills the card width; the fraction is clamped to 0 to 1."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns bar rendering and fraction clamping.",
+        "The caller owns the label, value text and fraction."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.fillSecondary"
+      ],
+      "relatedComponents": [
+        "CharcoalStatCard",
+        "CharcoalCard"
+      ],
       "apis": [
         {
           "name": "CharcoalMeter",
@@ -4981,7 +5854,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "meter",
+          "title": "Quota meter",
+          "description": "A monthly quota meter.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalMultiSelect",
@@ -5032,15 +5913,15 @@ const String generatedCatalogJson = r'''{
         "Reports the proposed inverse value; the caller owns the selected set, group label, validation timing, persistence, and durable result."
       ],
       "tokenRoles": [
-        "space.component10",
-        "radius.oval",
-        "containerPrimaryDefault",
-        "containerNeutralDefault",
-        "containerOnImgDefault",
-        "borderHud",
-        "borderFocusLegacy",
-        "borderNegative",
-        "iconOnPrimaryDefault"
+        "space.xs",
+        "radius.pill",
+        "colors.primary",
+        "colors.neutral",
+        "colors.fillOnImage",
+        "colors.borderHud",
+        "colors.focusRing",
+        "colors.borderNegative",
+        "colors.iconOnPrimary"
       ],
       "relatedComponents": [
         "CharcoalCheckbox",
@@ -5181,10 +6062,10 @@ const String generatedCatalogJson = r'''{
         "The caller owns back, close, destination, and contextual-action outcomes."
       ],
       "tokenRoles": [
-        "space.targetL",
-        "space.component30",
-        "borderSecondary",
-        "backgroundDefault"
+        "sizes.controlLg",
+        "space.lg",
+        "colors.borderSubtle",
+        "colors.background"
       ],
       "relatedComponents": [
         "CharcoalIconButton",
@@ -5296,15 +6177,15 @@ const String generatedCatalogJson = r'''{
         "The caller owns destination state preservation and all detail, task, replacement, pop, and back effects."
       ],
       "tokenRoles": [
-        "space.targetM",
-        "space.targetXs",
-        "space.component20",
-        "space.component25",
-        "radius.m",
-        "containerSecondaryDefault",
-        "containerSecondaryHoverA",
-        "containerSecondaryPressA",
-        "borderFocusLegacy"
+        "sizes.controlMd",
+        "sizes.controlXs",
+        "space.sm",
+        "space.md",
+        "radius.md",
+        "colors.surfaceSecondary",
+        "colors.fillSecondaryHover",
+        "colors.fillSecondaryPress",
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalTabBar",
@@ -5402,23 +6283,41 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalOverlayAnchorTracker",
-      "category": "Utility",
-      "summary": "Reports the global bounds of [child] whenever layout or painting moves it.",
+      "category": "Supporting",
+      "summary": "Supporting building block: reports the global rectangle of its child after layout so a balloon or tooltip can follow it.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/overlays/overlay_anchor_tracker.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaloverlayanchortracker",
-        "overlay anchor tracker"
+        "anchor",
+        "tracker",
+        "overlay position",
+        "supporting"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
+      "useWhen": [
+        "A library overlay must follow the position of its trigger while the page scrolls."
+      ],
+      "avoidWhen": [
+        "Any application screen: use CharcoalTooltip or CharcoalBalloon, which track their anchor."
+      ],
+      "accessibility": [
+        "It adds no semantics."
+      ],
+      "responsiveBehavior": [
+        "Reports only when the rectangle changes."
+      ],
+      "interactionStates": [
+        "tracking"
+      ],
+      "feedbackResponsibilities": [
+        "Owns rectangle tracking.",
+        "The owner owns what the rectangle drives."
+      ],
       "tokenRoles": [],
-      "relatedComponents": [],
+      "relatedComponents": [
+        "CharcoalBalloon",
+        "CharcoalTooltip"
+      ],
       "apis": [
         {
           "name": "CharcoalOverlayAnchorTracker",
@@ -5451,23 +6350,52 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalPadding",
-      "category": "Utility",
-      "summary": "[Padding] whose insets are spacing steps of the active theme.",
+      "category": "Layout",
+      "summary": "Padding whose insets are spacing steps of the active theme (CharcoalInset), the app-level replacement for EdgeInsets.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/foundation/layout.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalpadding",
-        "padding"
+        "padding",
+        "inset",
+        "margin",
+        "spacing"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A widget needs space on one or more sides expressed as theme steps.",
+        "A page body needs horizontal and vertical insets that match the library."
+      ],
+      "avoidWhen": [
+        "Only a gap between siblings is needed; use CharcoalGap.",
+        "The inset is zero; omit the padding."
+      ],
+      "accessibility": [
+        "Padding is invisible to semantics and does not change focus order."
+      ],
+      "responsiveBehavior": [
+        "Insets use theme steps, so a different pack changes spacing everywhere at once."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns resolving CharcoalInset steps to pixels.",
+        "The caller owns which steps fit the content."
+      ],
+      "tokenRoles": [
+        "space.xxs",
+        "space.xs",
+        "space.sm",
+        "space.md",
+        "space.lg",
+        "space.xl",
+        "space.xxl",
+        "space.xxxl"
+      ],
+      "relatedComponents": [
+        "CharcoalGap",
+        "CharcoalWrap"
+      ],
       "apis": [
         {
           "name": "CharcoalPadding",
@@ -5520,29 +6448,144 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalInset.all",
+          "kind": "supportingType",
+          "signature": "CharcoalInset.all(CharcoalSpace step)",
+          "parameters": [
+            {
+              "name": "step",
+              "type": "CharcoalSpace",
+              "required": true,
+              "named": false
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalInset.symmetric",
+          "kind": "supportingType",
+          "signature": "CharcoalInset.symmetric({CharcoalSpace? horizontal, CharcoalSpace? vertical})",
+          "parameters": [
+            {
+              "name": "horizontal",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "vertical",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalInset.only",
+          "kind": "supportingType",
+          "signature": "CharcoalInset.only({this.left, this.top, this.right, this.bottom})",
+          "parameters": [
+            {
+              "name": "left",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "top",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "right",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "bottom",
+              "type": "CharcoalSpace?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalSpace",
+          "kind": "enum",
+          "signature": "enum CharcoalSpace { xxs, xs, sm, md, lg, xl, xxl, xxxl }",
+          "parameters": [],
+          "enumValues": [
+            "xxs",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "xxl",
+            "xxxl"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "padding-inset",
+          "title": "Symmetric inset",
+          "description": "A caption row padded with a vertical spacing step.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalPage",
-      "category": "Utility",
-      "summary": "The chrome and content column of one admin page.",
+      "category": "Admin",
+      "summary": "The chrome and content column of one admin page: back link, title, subtitle, actions, optional banner and a busy overlay.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/page.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalpage",
-        "page"
+        "page",
+        "admin page",
+        "header",
+        "title",
+        "content column"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "An admin destination needs a titled page with actions and a width-limited content column.",
+        "A busy action should block the page and announce progress."
+      ],
+      "avoidWhen": [
+        "A mobile app page with a navigation bar; use CharcoalScaffold and CharcoalNavigationBar."
+      ],
+      "accessibility": [
+        "The title is a heading; busyLabel is announced while busy; the back control is labelled with backLabel."
+      ],
+      "responsiveBehavior": [
+        "maxWidth chooses standard, wide or full; compact mode moves actions to the title row end."
+      ],
+      "interactionStates": [
+        "idle",
+        "busy"
+      ],
+      "feedbackResponsibilities": [
+        "Owns title block, content width, scrolling and busy blocking.",
+        "The caller owns the content, actions and the busy state."
+      ],
+      "tokenRoles": [
+        "space.xl",
+        "colors.background"
+      ],
+      "relatedComponents": [
+        "CharcoalAdminShell",
+        "CharcoalSectionHeader",
+        "CharcoalBanner"
+      ],
       "apis": [
         {
           "name": "CharcoalPage",
@@ -5653,9 +6696,28 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalPageWidth",
+          "kind": "enum",
+          "signature": "enum CharcoalPageWidth { standard, wide, full }",
+          "parameters": [],
+          "enumValues": [
+            "standard",
+            "wide",
+            "full"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "admin-page",
+          "title": "Overview page",
+          "description": "A titled page with a brand header, stat card and meter.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalPageRoute",
@@ -5840,12 +6902,12 @@ const String generatedCatalogJson = r'''{
         "The caller owns the accepted current page, loading and error feedback, result replacement, scroll or focus restoration, and URL history."
       ],
       "tokenRoles": [
-        "space.targetS",
-        "space.targetM",
-        "radius.oval",
-        "containerHudDefault",
-        "containerSecondaryDefault",
-        "borderFocusLegacy"
+        "sizes.controlSm",
+        "sizes.controlMd",
+        "radius.pill",
+        "colors.hud",
+        "colors.surfaceSecondary",
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalCarousel",
@@ -6053,12 +7115,12 @@ const String generatedCatalogJson = r'''{
         "Reports its value without mutating the group; the caller owns the single groupValue, validation, and downstream result."
       ],
       "tokenRoles": [
-        "space.component10",
-        "radius.oval",
-        "containerPrimaryDefault",
-        "borderDefault",
-        "borderFocusLegacy",
-        "borderNegative"
+        "space.xs",
+        "radius.pill",
+        "colors.primary",
+        "colors.border",
+        "colors.focusRing",
+        "colors.borderNegative"
       ],
       "relatedComponents": [
         "CharcoalCheckbox",
@@ -6188,7 +7250,7 @@ const String generatedCatalogJson = r'''{
         "The host owns display mode and native window chrome; the application owns navigation and persistence."
       ],
       "tokenRoles": [
-        "backgroundDefault"
+        "colors.background"
       ],
       "relatedComponents": [
         "CharcoalApp",
@@ -6290,23 +7352,51 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalSearchField",
-      "category": "Utility",
+      "category": "Forms",
       "summary": "A text field with a search icon and a clear affordance.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/search_field.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalsearchfield",
-        "search field"
+        "search",
+        "filter",
+        "find",
+        "query"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A list or page can be filtered by typed text.",
+        "A search box needs a built-in clear button."
+      ],
+      "avoidWhen": [
+        "General text entry; use CharcoalTextField.",
+        "A choice among known options; use CharcoalDropdown."
+      ],
+      "accessibility": [
+        "Provide a visible label and clearLabel; the icon is decorative.",
+        "Focus returns to the field after clear."
+      ],
+      "responsiveBehavior": [
+        "The field takes the width given; place it in a CharcoalFieldBox to cap it."
+      ],
+      "interactionStates": [
+        "idle",
+        "focused",
+        "filled",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the field chrome, search icon and clear button.",
+        "The caller owns the controller, filtering and result feedback."
+      ],
+      "tokenRoles": [
+        "colors.fillSecondary",
+        "colors.focusRing",
+        "colors.iconTertiary"
+      ],
+      "relatedComponents": [
+        "CharcoalTextField",
+        "CharcoalDropdown"
+      ],
       "apis": [
         {
           "name": "CharcoalSearchField",
@@ -6394,27 +7484,63 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "search-field",
+          "title": "Preset search",
+          "description": "A search field with clear in a form section.",
+          "sourcePath": "example/lib/agent_examples/form_section_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSectionHeader",
-      "category": "Utility",
-      "summary": "A section heading with an optional caption and trailing action.",
+      "category": "Layout",
+      "summary": "A section heading with an optional caption and a trailing action, used to title a block of a page.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_header.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalsectionheader",
-        "section header"
+        "section",
+        "heading",
+        "title",
+        "caption",
+        "group title"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A page has several blocks that each need a visible title and optional explanation.",
+        "A block has one related action such as Add or View all."
+      ],
+      "avoidWhen": [
+        "The title is the page title; use CharcoalPage or CharcoalNavigationBar.",
+        "A form needs a titled group of fields; CharcoalFormSection includes its own heading."
+      ],
+      "accessibility": [
+        "The title is exposed as a heading to assistive technology; keep it short and unique on the page.",
+        "The trailing action keeps its own label and focus order after the title."
+      ],
+      "responsiveBehavior": [
+        "The action wraps below the title when width is tight instead of overflowing.",
+        "Spacing between title, caption and action follows theme steps and text scale."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns heading typography, caption styling and action alignment.",
+        "The caller owns the wording and what the action does."
+      ],
+      "tokenRoles": [
+        "typography.roles.sectionTitle.fontSize",
+        "colors.textSecondary",
+        "space.xs"
+      ],
+      "relatedComponents": [
+        "CharcoalFormSection",
+        "CharcoalCard",
+        "CharcoalList"
+      ],
       "apis": [
         {
           "name": "CharcoalSectionHeader",
@@ -6449,7 +7575,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "section-header",
+          "title": "Titled block",
+          "description": "A section header with caption above grouped actions.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSegmentedControl",
@@ -6492,11 +7626,11 @@ const String generatedCatalogJson = r'''{
         "The caller owns loading, empty results, and persistence caused by selection."
       ],
       "tokenRoles": [
-        "space.targetS",
-        "space.component30",
+        "sizes.controlSm",
+        "space.lg",
         "radius.xl",
-        "containerSecondaryDefaultA",
-        "containerPrimaryDefault"
+        "colors.fillSecondary",
+        "colors.primary"
       ],
       "relatedComponents": [
         "CharcoalDropdown",
@@ -6594,67 +7728,47 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
-      "name": "CharcoalSelectable",
-      "category": "Utility",
-      "summary": "Makes the text below it selectable and copyable with pointer and keyboard.",
-      "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/selectable.dart",
-      "documentationLevel": "generated",
-      "keywords": [
-        "charcoalselectable",
-        "selectable"
-      ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
-      "apis": [
-        {
-          "name": "CharcoalSelectable",
-          "kind": "constructor",
-          "signature": "CharcoalSelectable({required this.child, super.key})",
-          "parameters": [
-            {
-              "name": "child",
-              "type": "Widget",
-              "required": true,
-              "named": true
-            },
-            {
-              "name": "key",
-              "type": "Key?",
-              "required": false,
-              "named": true
-            }
-          ],
-          "enumValues": []
-        }
-      ],
-      "examples": []
-    },
-    {
       "name": "CharcoalSelectionBox",
-      "category": "Utility",
-      "summary": "The square, non-interactive checkbox indicator for a list's batch-selection mode.",
+      "category": "Supporting",
+      "summary": "Supporting building block: the non-interactive checkbox glyph used by batch selection and multi-select rows. Applications use CharcoalCheckbox or CharcoalMultiSelect.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/selection/selection_box.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalselectionbox",
-        "selection box"
+        "selection box",
+        "check glyph",
+        "supporting"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A library list row needs the check indicator in selection mode."
+      ],
+      "avoidWhen": [
+        "Any interactive checkbox: use CharcoalCheckbox, which adds semantics and focus."
+      ],
+      "accessibility": [
+        "It is decorative; the owning row exposes the selected state."
+      ],
+      "responsiveBehavior": [
+        "Fixed indicator slot from the theme."
+      ],
+      "interactionStates": [
+        "unselected",
+        "selected"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the glyph and its states.",
+        "The owner owns tap handling and semantics."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.border",
+        "sizes.indicatorSlot"
+      ],
+      "relatedComponents": [
+        "CharcoalCheckbox",
+        "CharcoalMultiSelect",
+        "CharcoalBatchBar"
+      ],
       "apis": [
         {
           "name": "CharcoalSelectionBox",
@@ -6681,23 +7795,44 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalSelectionToolbar",
-      "category": "Utility",
-      "summary": "The floating editing menu shown over a text selection.",
+      "category": "Supporting",
+      "summary": "Supporting building block: the floating Cut / Copy / Paste menu over a text selection. The Charcoal fields install it as their context menu.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/text/selection_toolbar.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalselectiontoolbar",
-        "selection toolbar"
+        "selection toolbar",
+        "context menu",
+        "cut copy paste",
+        "supporting"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A library author builds a custom editing surface that needs the Charcoal context menu."
+      ],
+      "avoidWhen": [
+        "Any application screen: the Charcoal text fields already show it."
+      ],
+      "accessibility": [
+        "Entries are buttons with their label; disabled entries are announced as disabled."
+      ],
+      "responsiveBehavior": [
+        "It stays in the safe area above the keyboard and scrolls when large text does not fit."
+      ],
+      "interactionStates": [
+        "visible"
+      ],
+      "feedbackResponsibilities": [
+        "Owns placement and entry presentation.",
+        "The owner owns the entries and their actions."
+      ],
+      "tokenRoles": [
+        "colors.background",
+        "colors.borderSubtle"
+      ],
+      "relatedComponents": [
+        "CharcoalEditableText",
+        "CharcoalTextField"
+      ],
       "apis": [
         {
           "name": "CharcoalSelectionToolbar",
@@ -6730,23 +7865,47 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalSidebar",
-      "category": "Utility",
-      "summary": "The fixed-width sidebar of an admin shell: a [brand] header, a scrolling list of destination",
+      "category": "Admin",
+      "summary": "The fixed-width sidebar of an admin shell: a brand header, a scrolling list of grouped destinations and an optional pinned footer.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/sidebar.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalsidebar",
-        "sidebar"
+        "sidebar",
+        "navigation",
+        "menu",
+        "console"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A wide layout needs permanent destinations.",
+        "An account tile should stay pinned at the bottom."
+      ],
+      "avoidWhen": [
+        "A phone layout; use CharcoalTabBar in the shell bottom bar."
+      ],
+      "accessibility": [
+        "Destinations are navigation items; exactly one is selected at a time."
+      ],
+      "responsiveBehavior": [
+        "Width comes from the theme; the middle section scrolls when the window is short."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns width, divider, scroll behaviour and brand/footer placement.",
+        "The caller owns the destinations and selection."
+      ],
+      "tokenRoles": [
+        "colors.background",
+        "colors.borderSubtle",
+        "sizes.sidebarWidth"
+      ],
+      "relatedComponents": [
+        "CharcoalSidebarBrand",
+        "CharcoalSidebarGroup",
+        "CharcoalNavigationItem"
+      ],
       "apis": [
         {
           "name": "CharcoalSidebar",
@@ -6781,27 +7940,56 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "sidebar",
+          "title": "Console sidebar",
+          "description": "Two destinations in a group under a brand.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSidebarBrand",
-      "category": "Utility",
-      "summary": "The brand header of a [CharcoalSidebar]: a primary-coloured mark with one letter, and the",
+      "category": "Admin",
+      "summary": "The brand header of a CharcoalSidebar: a primary-coloured mark with one letter and the product name.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/sidebar.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalsidebarbrand",
-        "sidebar brand"
+        "brand",
+        "logo",
+        "sidebar header"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A sidebar needs the product identity at the top."
+      ],
+      "avoidWhen": [
+        "A standalone logo; use CharcoalBrandMark."
+      ],
+      "accessibility": [
+        "The title is exposed as text; the mark letter is decorative."
+      ],
+      "responsiveBehavior": [
+        "Long names ellipsize within the sidebar width."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns mark and title layout.",
+        "The caller owns the name and letter."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.textOnPrimary",
+        "sizes.brandMark"
+      ],
+      "relatedComponents": [
+        "CharcoalSidebar",
+        "CharcoalBrandMark"
+      ],
       "apis": [
         {
           "name": "CharcoalSidebarBrand",
@@ -6830,27 +8018,55 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "sidebar-brand",
+          "title": "Sidebar brand",
+          "description": "The brand header of the console sidebar.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSidebarGroup",
-      "category": "Utility",
-      "summary": "A titled group of sidebar destinations with the design's tight gap between items.",
+      "category": "Admin",
+      "summary": "A titled group of sidebar destinations with the design tight gap between items.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/sidebar.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalsidebargroup",
-        "sidebar group"
+        "sidebar group",
+        "menu group",
+        "section"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Sidebar destinations fall into named groups such as Operations."
+      ],
+      "avoidWhen": [
+        "Only one short list of destinations; omit the title."
+      ],
+      "accessibility": [
+        "The group title labels the items that follow; keep it short."
+      ],
+      "responsiveBehavior": [
+        "Items stack with theme gaps; the group grows with text scale."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns title styling and item gap.",
+        "The caller owns the items."
+      ],
+      "tokenRoles": [
+        "colors.textTertiary",
+        "space.xxs"
+      ],
+      "relatedComponents": [
+        "CharcoalSidebar",
+        "CharcoalNavigationItem"
+      ],
       "apis": [
         {
           "name": "CharcoalSidebarGroup",
@@ -6879,27 +8095,63 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "sidebar-group",
+          "title": "Sidebar group",
+          "description": "A group of destination items.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSlider",
-      "category": "Utility",
-      "summary": "A slider in the theme's primary colour.",
+      "category": "Selection",
+      "summary": "A slider in the theme primary colour for choosing a value in a range.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/selection/slider.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalslider",
-        "slider"
+        "slider",
+        "range",
+        "quality",
+        "volume"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A continuous or stepped numeric value is adjusted by dragging.",
+        "Exact values are not required."
+      ],
+      "avoidWhen": [
+        "An exact number must be typed; use CharcoalTextField.",
+        "Choosing one of a few named modes; use CharcoalSegmentedControl."
+      ],
+      "accessibility": [
+        "Provide semanticLabel; the value is exposed to assistive technology with increase and decrease actions.",
+        "Keyboard arrows adjust the value."
+      ],
+      "responsiveBehavior": [
+        "It stretches to the width given; give it at least a target-size height."
+      ],
+      "interactionStates": [
+        "idle",
+        "hovered",
+        "focused",
+        "dragging",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns track, thumb and value label presentation.",
+        "The caller owns the value, range and what changing it does."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.fillSecondary"
+      ],
+      "relatedComponents": [
+        "CharcoalFormField",
+        "CharcoalSegmentedControl"
+      ],
       "apis": [
         {
           "name": "CharcoalSlider",
@@ -6960,7 +8212,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "slider-quality",
+          "title": "Export quality",
+          "description": "A slider in a form field.",
+          "sourcePath": "example/lib/agent_examples/form_section_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSnackBar",
@@ -7004,11 +8264,11 @@ const String generatedCatalogJson = r'''{
         "The caller owns the action outcome and information that must remain after dismissal."
       ],
       "tokenRoles": [
-        "borderDefault",
-        "borderWidth.m",
-        "space.component25",
-        "space.component30",
-        "space.layout60"
+        "colors.border",
+        "borders.hairline",
+        "space.md",
+        "space.lg",
+        "space.xxxl"
       ],
       "relatedComponents": [
         "CharcoalToast",
@@ -7195,7 +8455,7 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalSpinnerOverlay",
-      "category": "Utility",
+      "category": "Feedback",
       "summary": "Centers named loading feedback over a subtree with explicit blocking or passthrough behavior.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/spinner_overlay.dart",
@@ -7318,23 +8578,48 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalStatCard",
-      "category": "Utility",
+      "category": "Admin",
       "summary": "A stat tile: small label, large value, optional status, footnote and action.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/stat_card.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalstatcard",
-        "stat card"
+        "stat",
+        "metric",
+        "kpi",
+        "dashboard",
+        "card"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A dashboard shows a headline number with context.",
+        "A change in the value needs a toned status."
+      ],
+      "avoidWhen": [
+        "A quota with a fraction; use CharcoalMeter.",
+        "A series of values; use a table."
+      ],
+      "accessibility": [
+        "Label, value and status are read together; write the status in words."
+      ],
+      "responsiveBehavior": [
+        "Cards fill the width given; arrange them in a CharcoalWrap or grid."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns label/value hierarchy, status tone and layout.",
+        "The caller owns the numbers, their period and formatting."
+      ],
+      "tokenRoles": [
+        "colors.surfaceSecondary",
+        "colors.textPositive",
+        "typography.roles.headingS.fontSize"
+      ],
+      "relatedComponents": [
+        "CharcoalMeter",
+        "CharcoalCard"
+      ],
       "apis": [
         {
           "name": "CharcoalStatCard",
@@ -7388,27 +8673,58 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "stat-card",
+          "title": "Requests stat",
+          "description": "A requests stat with a positive status.",
+          "sourcePath": "example/lib/agent_examples/admin_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalStatusDot",
-      "category": "Utility",
-      "summary": "The leading dot that marks row status when not in selection mode.",
+      "category": "Status",
+      "summary": "A leading dot that marks row status with a semantic tone.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/status/status_dot.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalstatusdot",
-        "status dot"
+        "dot",
+        "status",
+        "indicator",
+        "presence"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A row or label needs an at-a-glance status marker alongside text.",
+        "A list row uses a dot instead of a selection box outside selection mode."
+      ],
+      "avoidWhen": [
+        "The status must be understood without colour; add a word or use CharcoalChip."
+      ],
+      "accessibility": [
+        "The dot is decorative; the row must state the status in its label."
+      ],
+      "responsiveBehavior": [
+        "It is a fixed size and does not scale with text."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns dot size and tone colour.",
+        "The caller owns the status meaning."
+      ],
+      "tokenRoles": [
+        "colors.positive",
+        "colors.negative",
+        "colors.neutral"
+      ],
+      "relatedComponents": [
+        "CharcoalChip",
+        "CharcoalListRow"
+      ],
       "apis": [
         {
           "name": "CharcoalStatusDot",
@@ -7431,7 +8747,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "status-dot",
+          "title": "Status dot",
+          "description": "A positive dot beside chips.",
+          "sourcePath": "example/lib/agent_examples/status_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSwitch",
@@ -7478,12 +8802,12 @@ const String generatedCatalogJson = r'''{
         "Reports the proposed inverse value; the caller owns immediate persistence, failure recovery, and any dependent content."
       ],
       "tokenRoles": [
-        "space.component10",
-        "space.component20",
-        "radius.oval",
-        "containerPrimaryDefault",
-        "containerNeutralDefault",
-        "borderFocusLegacy"
+        "space.xs",
+        "space.sm",
+        "radius.pill",
+        "colors.primary",
+        "colors.neutral",
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalCheckbox",
@@ -7561,23 +8885,51 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalSwitchField",
-      "category": "Utility",
+      "category": "Forms",
       "summary": "A labelled switch with an optional hint line.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/switch_field.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalswitchfield",
-        "switch field"
+        "switch",
+        "toggle",
+        "setting",
+        "on off"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A boolean setting needs a label and optional explanation.",
+        "The change takes effect immediately."
+      ],
+      "avoidWhen": [
+        "Several independent options; use CharcoalCheckbox or CharcoalMultiSelect.",
+        "A choice between named modes; use CharcoalSegmentedControl."
+      ],
+      "accessibility": [
+        "The label and state (on/off) are exposed together; keep the label a noun phrase.",
+        "A null onChanged exposes the disabled state."
+      ],
+      "responsiveBehavior": [
+        "The label wraps; the switch stays aligned at the end."
+      ],
+      "interactionStates": [
+        "off",
+        "on",
+        "focused",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns label, hint and switch layout and state presentation.",
+        "The caller owns the value, persistence and failure feedback."
+      ],
+      "tokenRoles": [
+        "colors.primary",
+        "colors.text",
+        "colors.textSecondary"
+      ],
+      "relatedComponents": [
+        "CharcoalSwitch",
+        "CharcoalCheckbox"
+      ],
       "apis": [
         {
           "name": "CharcoalSwitchField",
@@ -7618,7 +8970,15 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "switch-field",
+          "title": "Public toggle",
+          "description": "A switch field with a hint.",
+          "sourcePath": "example/lib/agent_examples/form_section_example.dart",
+          "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalSwitchingButton",
@@ -7761,12 +9121,12 @@ const String generatedCatalogJson = r'''{
         "The caller owns one destination state source plus route-stack effects, state preservation, and back behavior."
       ],
       "tokenRoles": [
-        "space.layout60",
-        "containerSecondaryDefaultA",
-        "containerSecondaryHoverA",
-        "containerSecondaryPressA",
-        "borderFocusLegacy",
-        "containerNegativeDefault"
+        "space.xxxl",
+        "colors.fillSecondary",
+        "colors.fillSecondaryHover",
+        "colors.fillSecondaryPress",
+        "colors.focusRing",
+        "colors.negative"
       ],
       "relatedComponents": [
         "CharcoalNavigationBar",
@@ -7927,20 +9287,20 @@ const String generatedCatalogJson = r'''{
         "The caller owns the selected tag set, accepted add or remove outcome, filter results, loading and error feedback, and any route or URL synchronization."
       ],
       "tokenRoles": [
-        "space.targetS",
-        "space.targetM",
-        "space.component20",
-        "space.component30",
-        "space.component40",
-        "radius.s",
-        "containerSecondaryDefault",
-        "containerOnImgDefault",
-        "containerHoverA",
-        "containerPressA",
-        "textOnPrimaryDefault",
-        "textOnOnImgDefault",
-        "textSecondaryDefault",
-        "borderFocusLegacy"
+        "sizes.controlSm",
+        "sizes.controlMd",
+        "space.sm",
+        "space.lg",
+        "space.xl",
+        "radius.sm",
+        "colors.surfaceSecondary",
+        "colors.fillOnImage",
+        "colors.hoverOverlay",
+        "colors.pressOverlay",
+        "colors.textOnPrimary",
+        "colors.textOnImage",
+        "colors.textSecondary",
+        "colors.focusRing"
       ],
       "relatedComponents": [
         "CharcoalMultiSelect",
@@ -8072,23 +9432,55 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalText",
-      "category": "Utility",
-      "summary": "A run of text in a Charcoal type role.",
+      "category": "Content",
+      "summary": "A run of text in a Charcoal type role and semantic tone; the one place applications read typography from.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/text/charcoal_text.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaltext",
-        "text"
+        "text",
+        "typography",
+        "heading",
+        "label",
+        "caption",
+        "tone"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Any visible string in application code: titles, labels, captions, paragraphs.",
+        "Colour must change with meaning (secondary, negative, on primary); pass a CharcoalTextTone."
+      ],
+      "avoidWhen": [
+        "A numeric component label that follows a reviewed component spec; use CharcoalTypography inside the library.",
+        "Plain Text is acceptable only inside a Charcoal component slot (a child label), where the component supplies the style."
+      ],
+      "accessibility": [
+        "Text scales with the system setting; do not clamp it.",
+        "Use semanticLabel only to add spoken context; never to replace meaningful visible text."
+      ],
+      "responsiveBehavior": [
+        "Roles carry size and a line-height ratio so wrapped lines stay balanced under text scale.",
+        "Use maxLines with overflow rather than fixed heights."
+      ],
+      "interactionStates": [
+        "regular",
+        "bold",
+        "mono",
+        "toned"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the role, weight, family and colour resolution from the theme.",
+        "The caller owns the string, its localisation and the role choice."
+      ],
+      "tokenRoles": [
+        "typography.roles.body.fontSize",
+        "colors.text",
+        "colors.textSecondary"
+      ],
+      "relatedComponents": [
+        "CharcoalTypography",
+        "CharcoalTextEllipsis",
+        "CharcoalSectionHeader"
+      ],
       "apis": [
         {
           "name": "CharcoalText",
@@ -8172,9 +9564,74 @@ const String generatedCatalogJson = r'''{
             }
           ],
           "enumValues": []
+        },
+        {
+          "name": "CharcoalTextRole",
+          "kind": "enum",
+          "signature": "enum CharcoalTextRole { pageTitle, modalTitle, sectionTitle, body, bodyBold, caption, captionBold, captionMono, size10, size12, size14, size16, size20, bodyLarge, bodyLargeBold, paragraph, captionMedium, captionMediumBold, headingXxxs, headingXxs, headingXs, headingS, headingM, headingL, headingXl, headingXxl, headingXxxl }",
+          "parameters": [],
+          "enumValues": [
+            "pageTitle",
+            "modalTitle",
+            "sectionTitle",
+            "body",
+            "bodyBold",
+            "caption",
+            "captionBold",
+            "captionMono",
+            "size10",
+            "size12",
+            "size14",
+            "size16",
+            "size20",
+            "bodyLarge",
+            "bodyLargeBold",
+            "paragraph",
+            "captionMedium",
+            "captionMediumBold",
+            "headingXxxs",
+            "headingXxs",
+            "headingXs",
+            "headingS",
+            "headingM",
+            "headingL",
+            "headingXl",
+            "headingXxl",
+            "headingXxxl"
+          ]
+        },
+        {
+          "name": "CharcoalTextTone",
+          "kind": "enum",
+          "signature": "enum CharcoalTextTone { primary, secondary, tertiary, placeholder, disabled, positive, negative, notice, info, onPrimary, onNegative, onPositive, onHud, onImage }",
+          "parameters": [],
+          "enumValues": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "placeholder",
+            "disabled",
+            "positive",
+            "negative",
+            "notice",
+            "info",
+            "onPrimary",
+            "onNegative",
+            "onPositive",
+            "onHud",
+            "onImage"
+          ]
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "text-tones",
+          "title": "Roles and tones",
+          "description": "Caption text in secondary tone beside an icon.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     },
     {
       "name": "CharcoalTextArea",
@@ -8223,12 +9680,12 @@ const String generatedCatalogJson = r'''{
         "The caller owns validation timing, submission progress, persistence, and recovery."
       ],
       "tokenRoles": [
-        "space.component10",
-        "space.component20",
-        "radius.s",
-        "containerSecondaryDefaultA",
-        "borderFocusLegacy",
-        "borderNegative"
+        "space.xs",
+        "space.sm",
+        "radius.sm",
+        "colors.fillSecondary",
+        "colors.focusRing",
+        "colors.borderNegative"
       ],
       "relatedComponents": [
         "CharcoalTextField",
@@ -8412,23 +9869,44 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalTextDefaults",
-      "category": "Application",
-      "summary": "Installs the theme's ambient text and icon defaults.",
+      "category": "Supporting",
+      "summary": "Supporting building block: installs the theme default text and icon style for a subtree. CharcoalApp already applies it at the root.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/app/charcoal_text_defaults.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoaltextdefaults",
-        "text defaults"
+        "text defaults",
+        "default text style",
+        "icon theme",
+        "supporting"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "Charcoal widgets are embedded under a host that has its own text defaults."
+      ],
+      "avoidWhen": [
+        "A normal Charcoal application: CharcoalApp installs the defaults."
+      ],
+      "accessibility": [
+        "Text still follows the system text scale."
+      ],
+      "responsiveBehavior": [
+        "No layout of its own."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the ambient text and icon defaults.",
+        "The host owns where Charcoal content begins."
+      ],
+      "tokenRoles": [
+        "colors.text",
+        "colors.icon"
+      ],
+      "relatedComponents": [
+        "CharcoalApp",
+        "CharcoalText"
+      ],
       "apis": [
         {
           "name": "CharcoalTextDefaults",
@@ -8606,11 +10084,11 @@ const String generatedCatalogJson = r'''{
         "The caller owns validation timing, submission progress, persistence, and recovery."
       ],
       "tokenRoles": [
-        "space.component20",
-        "radius.s",
-        "containerSecondaryDefaultA",
-        "borderFocusLegacy",
-        "borderNegative"
+        "space.sm",
+        "radius.sm",
+        "colors.fillSecondary",
+        "colors.focusRing",
+        "colors.borderNegative"
       ],
       "relatedComponents": [
         "CharcoalTextArea",
@@ -8864,11 +10342,11 @@ const String generatedCatalogJson = r'''{
         "The caller must keep durable or corrective information in the page rather than only in a toast."
       ],
       "tokenRoles": [
-        "containerPositiveDefault",
-        "containerNegativeDefault",
-        "space.component20",
-        "space.component40",
-        "borderWidth.l"
+        "colors.positive",
+        "colors.negative",
+        "space.sm",
+        "space.xl",
+        "borders.thick"
       ],
       "relatedComponents": [
         "CharcoalSnackBar",
@@ -9123,11 +10601,11 @@ const String generatedCatalogJson = r'''{
         "The caller owns the anchor action, durable guidance, errors, progress, and results."
       ],
       "tokenRoles": [
-        "containerHudDefault",
-        "textOnHudDefault",
-        "space.component10",
-        "space.component25",
-        "radius.s"
+        "colors.hud",
+        "colors.textOnHud",
+        "space.xs",
+        "space.md",
+        "radius.sm"
       ],
       "relatedComponents": [
         "CharcoalAnchoredBalloon",
@@ -9252,7 +10730,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalTypography",
       "category": "Content",
-      "summary": "Applies Charcoal’s numeric component type roles (size10 to size20) from the active theme pack without suppressing ambient text scaling.",
+      "summary": "Applies Charcoal’s numeric component type roles (size10 to size20) from the active theme pack without suppressing ambient text scaling. Used inside library components; applications use CharcoalText.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/text/typography.dart",
       "documentationLevel": "curated",
@@ -9269,14 +10747,14 @@ const String generatedCatalogJson = r'''{
         "A short code-like value needs the upstream single-line monospace variant."
       ],
       "avoidWhen": [
-        "A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalText or CharcoalTheme.of(context).style(CharcoalTextRole...) instead.",
-        "Text has a product-specific visual style unrelated to a reviewed Charcoal component; compose an audited TextStyle from semantic theme roles.",
+        "A page heading, paragraph, caption, or information hierarchy needs a semantic role; use CharcoalText with a CharcoalTextRole and, for colour, a CharcoalTextTone.",
+        "Text needs a size, weight, family or colour that no role provides; applications never build a TextStyle. Ask for a new role in the theme contract instead.",
         "Content must remain multiline while monospace is true; the upstream monospace variant is deliberately single-line."
       ],
       "accessibility": [
         "Ambient MediaQuery text scaling remains active; never pre-scale fontSize or wrap the subtree in a fixed TextScaler.",
         "singleLine and monospace truncate visually, so keep the complete spoken label available and provide a visible route to essential hidden content.",
-        "Choose color from a semantic text role that remains readable on the actual surface instead of selecting a raw palette value."
+        "Choose colour with a semantic CharcoalTextTone that remains readable on the actual surface; applications never pass a raw colour or palette value."
       ],
       "responsiveBehavior": [
         "The authored font and line measurements remain 10/18, 12/20, 14/22, 16/24, and 20/28 before ambient scaling.",
@@ -9297,10 +10775,9 @@ const String generatedCatalogJson = r'''{
         "The caller owns semantic hierarchy, copy, localization, surface color selection, truncation recovery, and content changes."
       ],
       "tokenRoles": [
-        "text.font-family/sans",
-        "text.font-weight/regular",
-        "text.font-weight/bold",
-        "textDefaultText1"
+        "typography.weightRegular",
+        "typography.weightBold",
+        "colors.text"
       ],
       "relatedComponents": [
         "CharcoalApp",
@@ -9416,23 +10893,48 @@ const String generatedCatalogJson = r'''{
     },
     {
       "name": "CharcoalWrap",
-      "category": "Utility",
-      "summary": "A [Wrap] whose gaps are spacing steps of the active theme.",
+      "category": "Layout",
+      "summary": "A Wrap whose gaps are spacing steps of the active theme; lays out chips, tags or tiles that flow onto several lines.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/foundation/charcoal_wrap.dart",
-      "documentationLevel": "generated",
+      "documentationLevel": "curated",
       "keywords": [
-        "charcoalwrap",
-        "wrap"
+        "wrap",
+        "flow",
+        "chips",
+        "tags",
+        "tiles"
       ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
+      "useWhen": [
+        "A set of small controls or chips should flow to a new line when the row is full.",
+        "Action tiles sit side by side on wide screens and stack on narrow ones."
+      ],
+      "avoidWhen": [
+        "Items form a strict grid or table; use a Row/Column layout.",
+        "A single-line scroller is intended; use a horizontal list."
+      ],
+      "accessibility": [
+        "Reading and focus order follow the children order; place the most important item first."
+      ],
+      "responsiveBehavior": [
+        "Wrapping depends on available width and text scale; test narrow widths and 200% text."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the theme-step spacing between items and runs.",
+        "The caller owns the items and their order."
+      ],
+      "tokenRoles": [
+        "space.sm",
+        "space.md"
+      ],
+      "relatedComponents": [
+        "CharcoalGap",
+        "CharcoalChip",
+        "CharcoalTagItem"
+      ],
       "apis": [
         {
           "name": "CharcoalWrap",
@@ -9483,49 +10985,57 @@ const String generatedCatalogJson = r'''{
           "enumValues": []
         }
       ],
-      "examples": []
+      "examples": [
+        {
+          "id": "wrap-tiles",
+          "title": "Wrapping action tiles",
+          "description": "Action tiles that reflow under a narrow width.",
+          "sourcePath": "example/lib/agent_examples/layout_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A settings overview composed only from Charcoal layout components.\n///\n/// Spacing is named with `CharcoalSpace` steps, text with `CharcoalText` roles and tones, and the\n/// surfaces come from `CharcoalCard` and `CharcoalList`; the example contains no colour, size or\n/// text-style value.\nfinal class AgentLayoutExample extends StatelessWidget {\n  const AgentLayoutExample({super.key});\n\n  static const _members = <({String name, String role})>[\n    (name: 'Alice Chen', role: 'Owner'),\n    (name: 'Bao Lin', role: 'Editor'),\n    (name: 'Chika Mori', role: 'Viewer'),\n  ];\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalSectionHeader(\n          'Workspace',\n          caption: 'People who can open this project',\n        ),\n        const CharcoalGap(CharcoalSpace.md),\n        CharcoalCard(\n          padding: const CharcoalInset.all(CharcoalSpace.lg),\n          child: CharcoalWrap(\n            spacing: CharcoalSpace.md,\n            runSpacing: CharcoalSpace.md,\n            children: <Widget>[\n              CharcoalActionTile(\n                icon: CharcoalIcons.add,\n                label: 'Invite',\n                onPressed: () {},\n              ),\n              CharcoalActionTile(\n                icon: CharcoalIcons.setting,\n                label: 'Settings',\n                onPressed: () {},\n              ),\n            ],\n          ),\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalList(\n          children: <Widget>[\n            for (final member in _members)\n              CharcoalListRow(\n                title: member.name,\n                leading: CharcoalAvatar(member.name, circular: true),\n                trailing: <Widget>[CharcoalBadge(member.role)],\n                onPressed: () {},\n              ),\n          ],\n        ),\n        const CharcoalDivider(),\n        const CharcoalPadding(\n          padding: CharcoalInset.symmetric(vertical: CharcoalSpace.md),\n          child: Row(\n            children: <Widget>[\n              CharcoalIconView(\n                CharcoalIcons.infoCircle,\n                tone: CharcoalIconTone.secondary,\n              ),\n              CharcoalGap(CharcoalSpace.xs),\n              CharcoalText(\n                '3 members',\n                role: CharcoalTextRole.caption,\n                tone: CharcoalTextTone.secondary,\n              ),\n            ],\n          ),\n        ),\n        const CharcoalFieldBox(\n          width: CharcoalFieldWidth.compact,\n          child: CharcoalText('Aligned to a field width class'),\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
     }
   ],
   "tokens": [
     {
       "path": "border-width.focus/1",
-      "dartAccessor": "theme.dimensions.borderWidth.focus1",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.borderWidth.focus1",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "1px",
       "darkValue": "1px",
-      "guidance": "Semantic border or focus-ring width."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "border-width.focus/2",
-      "dartAccessor": "theme.dimensions.borderWidth.focus2",
+      "dartAccessor": "CharcoalTheme.of(context).borders.focusRing",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "2px",
       "darkValue": "2px",
-      "guidance": "Semantic border or focus-ring width."
+      "guidance": "Theme role borders.focusRing, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "border-width.l",
-      "dartAccessor": "theme.dimensions.borderWidth.l",
+      "dartAccessor": "CharcoalTheme.of(context).borders.thick",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "2px",
       "darkValue": "2px",
-      "guidance": "Semantic border or focus-ring width."
+      "guidance": "Theme role borders.thick, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "border-width.m",
-      "dartAccessor": "theme.dimensions.borderWidth.m",
+      "dartAccessor": "CharcoalTheme.of(context).borders.hairline",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "1px",
       "darkValue": "1px",
-      "guidance": "Semantic border or focus-ring width."
+      "guidance": "Theme role borders.hairline, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "brand-color.booth",
@@ -9535,7 +11045,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 77, 80, 1)",
       "darkValue": "rgba(252, 77, 80, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "brand-color.comic",
@@ -9545,7 +11055,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 196, 0, 1)",
       "darkValue": "rgba(255, 196, 0, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "brand-color.factory",
@@ -9555,7 +11065,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 184, 205, 1)",
       "darkValue": "rgba(0, 184, 205, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "brand-color.pixiv",
@@ -9565,7 +11075,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 150, 250, 1)",
       "darkValue": "rgba(0, 150, 250, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "brand-color.premium",
@@ -9575,7 +11085,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 158, 22, 1)",
       "darkValue": "rgba(253, 158, 22, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Cyan/50",
@@ -9585,7 +11095,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(1, 162, 187, 1)",
       "darkValue": "rgba(1, 162, 187, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/10",
@@ -9595,7 +11105,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(193, 247, 230, 1)",
       "darkValue": "rgba(193, 247, 230, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/20",
@@ -9605,7 +11115,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(138, 234, 206, 1)",
       "darkValue": "rgba(138, 234, 206, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/30",
@@ -9615,7 +11125,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(88, 211, 179, 1)",
       "darkValue": "rgba(88, 211, 179, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/40",
@@ -9625,7 +11135,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(61, 189, 157, 1)",
       "darkValue": "rgba(61, 189, 157, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/5",
@@ -9635,7 +11145,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(229, 251, 244, 1)",
       "darkValue": "rgba(229, 251, 244, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/50",
@@ -9645,7 +11155,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(22, 165, 135, 1)",
       "darkValue": "rgba(22, 165, 135, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/60",
@@ -9655,7 +11165,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(20, 131, 107, 1)",
       "darkValue": "rgba(20, 131, 107, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/70",
@@ -9665,7 +11175,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(13, 89, 72, 1)",
       "darkValue": "rgba(13, 89, 72, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/80",
@@ -9675,7 +11185,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(5, 62, 49, 1)",
       "darkValue": "rgba(5, 62, 49, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.Light/Emerald/90",
@@ -9685,637 +11195,637 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(1, 38, 29, 1)",
       "darkValue": "rgba(1, 38, 29, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.background/default",
-      "dartAccessor": "theme.colors.backgroundDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.background",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.background, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.background/overlay",
-      "dartAccessor": "theme.colors.backgroundOverlay",
+      "dartAccessor": "CharcoalTheme.of(context).colors.scrim",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.325)",
       "darkValue": "rgba(0, 0, 0, 0.32)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.scrim, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.background/secondary",
-      "dartAccessor": "theme.colors.backgroundSecondary",
+      "dartAccessor": "CharcoalTheme.of(context).colors.backgroundSecondary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(243, 243, 243, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.backgroundSecondary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.background/tertiary",
-      "dartAccessor": "theme.colors.backgroundTertiary",
+      "dartAccessor": "CharcoalTheme.of(context).colors.backgroundTertiary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.backgroundTertiary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/default",
-      "dartAccessor": "theme.colors.borderDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.border",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.42)",
       "darkValue": "rgba(255, 255, 255, 0.36)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.border, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/default-text3",
-      "dartAccessor": "theme.colors.borderDefaultText3",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.borderDefaultText3",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.42)",
       "darkValue": "rgba(255, 255, 255, 0.36)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.border/disable",
-      "dartAccessor": "theme.colors.borderDisable",
+      "dartAccessor": "CharcoalTheme.of(context).colors.borderDisabled",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.09)",
       "darkValue": "rgba(255, 255, 255, 0.045)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.borderDisabled, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/focus/1",
-      "dartAccessor": "theme.colors.borderFocus1",
+      "dartAccessor": "CharcoalTheme.of(context).colors.borderFocus",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 117, 188, 1)",
       "darkValue": "rgba(114, 181, 245, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.borderFocus, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/focus/2",
-      "dartAccessor": "theme.colors.borderFocus2",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.borderFocus2",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(188, 222, 252, 1)",
       "darkValue": "rgba(39, 84, 126, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.border/focus/legacy",
-      "dartAccessor": "theme.colors.borderFocusLegacy",
+      "dartAccessor": "CharcoalTheme.of(context).colors.focusRing",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 150, 250, 0.32)",
       "darkValue": "rgba(0, 150, 250, 0.32)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.focusRing, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/hover",
-      "dartAccessor": "theme.colors.borderHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.borderHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.555)",
       "darkValue": "rgba(255, 255, 255, 0.44)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.border/hover-text3",
-      "dartAccessor": "theme.colors.borderHoverText3",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.borderHoverText3",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.555)",
       "darkValue": "rgba(255, 255, 255, 0.44)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.border/hud",
-      "dartAccessor": "theme.colors.borderHud",
+      "dartAccessor": "CharcoalTheme.of(context).colors.borderHud",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.borderHud, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/negative",
-      "dartAccessor": "theme.colors.borderNegative",
+      "dartAccessor": "CharcoalTheme.of(context).colors.borderNegative",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(253, 206, 199, 1)",
       "darkValue": "rgba(136, 54, 46, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.borderNegative, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/press",
-      "dartAccessor": "theme.colors.borderPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.borderPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.683)",
       "darkValue": "rgba(255, 255, 255, 0.535)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.border/press-text3",
-      "dartAccessor": "theme.colors.borderPressText3",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.borderPressText3",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.683)",
       "darkValue": "rgba(255, 255, 255, 0.535)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.border/secondary",
-      "dartAccessor": "theme.colors.borderSecondary",
+      "dartAccessor": "CharcoalTheme.of(context).colors.borderSubtle",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.09)",
       "darkValue": "rgba(255, 255, 255, 0.09)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.borderSubtle, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.border/selected",
-      "dartAccessor": "theme.colors.borderSelected",
+      "dartAccessor": "CharcoalTheme.of(context).colors.borderSelected",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 150, 250, 1)",
       "darkValue": "rgba(8, 114, 190, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.borderSelected, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/default",
-      "dartAccessor": "theme.colors.containerDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surface",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surface, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/default-a",
-      "dartAccessor": "theme.colors.containerDefaultA",
+      "dartAccessor": "CharcoalTheme.of(context).colors.restOverlay",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0)",
       "darkValue": "rgba(255, 255, 255, 0)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.restOverlay, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/disable",
-      "dartAccessor": "theme.colors.containerDisable",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceDisabled",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(51, 51, 51, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceDisabled, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/discovery/default",
-      "dartAccessor": "theme.colors.containerDiscoveryDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerDiscoveryDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(253, 91, 78, 1)",
       "darkValue": "rgba(197, 60, 51, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/discovery/hover",
-      "dartAccessor": "theme.colors.containerDiscoveryHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerDiscoveryHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(206, 54, 46, 1)",
       "darkValue": "rgba(217, 88, 76, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/discovery/press",
-      "dartAccessor": "theme.colors.containerDiscoveryPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerDiscoveryPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(147, 33, 28, 1)",
       "darkValue": "rgba(233, 114, 102, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/hover",
-      "dartAccessor": "theme.colors.containerHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(243, 243, 243, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/hover-a",
-      "dartAccessor": "theme.colors.containerHoverA",
+      "dartAccessor": "CharcoalTheme.of(context).colors.hoverOverlay",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.047)",
       "darkValue": "rgba(255, 255, 255, 0.045)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.hoverOverlay, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/hud/default",
-      "dartAccessor": "theme.colors.containerHudDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.hud",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.hud, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/hud/hover",
-      "dartAccessor": "theme.colors.containerHudHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.hudHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(202, 202, 202, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.hudHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/hud/press",
-      "dartAccessor": "theme.colors.containerHudPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.hudPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(113, 113, 113, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.hudPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/negative/default",
-      "dartAccessor": "theme.colors.containerNegativeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.negative",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(253, 91, 78, 1)",
       "darkValue": "rgba(197, 60, 51, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.negative, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/negative/hover",
-      "dartAccessor": "theme.colors.containerNegativeHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.negativeHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(206, 54, 46, 1)",
       "darkValue": "rgba(217, 88, 76, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.negativeHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/negative/press",
-      "dartAccessor": "theme.colors.containerNegativePress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.negativePress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(147, 33, 28, 1)",
       "darkValue": "rgba(233, 114, 102, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.negativePress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/neutral/default",
-      "dartAccessor": "theme.colors.containerNeutralDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.neutral",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(148, 148, 148, 1)",
       "darkValue": "rgba(112, 112, 112, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.neutral, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/neutral/hover",
-      "dartAccessor": "theme.colors.containerNeutralHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.neutralHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(113, 113, 113, 1)",
       "darkValue": "rgba(130, 130, 130, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.neutralHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/neutral/press",
-      "dartAccessor": "theme.colors.containerNeutralPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.neutralPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(151, 151, 151, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.neutralPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/notice/default",
-      "dartAccessor": "theme.colors.containerNoticeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.notice",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(254, 214, 61, 1)",
       "darkValue": "rgba(235, 178, 19, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.notice, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/notice/hover",
-      "dartAccessor": "theme.colors.containerNoticeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerNoticeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(245, 183, 17, 1)",
       "darkValue": "rgba(238, 195, 92, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/notice/press",
-      "dartAccessor": "theme.colors.containerNoticePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerNoticePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(231, 157, 20, 1)",
       "darkValue": "rgba(252, 225, 167, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/on-img/default",
-      "dartAccessor": "theme.colors.containerOnImgDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.fillOnImage",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.325)",
       "darkValue": "rgba(0, 0, 0, 0.325)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.fillOnImage, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/on-img/hover",
-      "dartAccessor": "theme.colors.containerOnImgHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.fillOnImageHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.42)",
       "darkValue": "rgba(0, 0, 0, 0.42)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.fillOnImageHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/on-img/press",
-      "dartAccessor": "theme.colors.containerOnImgPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.fillOnImagePress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.555)",
       "darkValue": "rgba(0, 0, 0, 0.555)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.fillOnImagePress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/positive/default",
-      "dartAccessor": "theme.colors.containerPositiveDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.positive",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(37, 170, 28, 1)",
       "darkValue": "rgba(13, 129, 5, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.positive, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/positive/hover",
-      "dartAccessor": "theme.colors.containerPositiveHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerPositiveHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(17, 131, 8, 1)",
       "darkValue": "rgba(58, 150, 52, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/positive/press",
-      "dartAccessor": "theme.colors.containerPositivePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerPositivePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(4, 93, 0, 1)",
       "darkValue": "rgba(86, 169, 79, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/press",
-      "dartAccessor": "theme.colors.containerPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfacePress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(51, 51, 51, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfacePress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/press-a",
-      "dartAccessor": "theme.colors.containerPressA",
+      "dartAccessor": "CharcoalTheme.of(context).colors.pressOverlay",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.09)",
       "darkValue": "rgba(255, 255, 255, 0.09)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.pressOverlay, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/primary/default",
-      "dartAccessor": "theme.colors.containerPrimaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.primary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 150, 250, 1)",
       "darkValue": "rgba(8, 114, 190, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.primary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/primary/hover",
-      "dartAccessor": "theme.colors.containerPrimaryHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.primaryHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 117, 188, 1)",
       "darkValue": "rgba(55, 136, 208, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.primaryHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/primary/press",
-      "dartAccessor": "theme.colors.containerPrimaryPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.primaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(24, 81, 130, 1)",
       "darkValue": "rgba(83, 156, 224, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.primaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/secondary/default",
-      "dartAccessor": "theme.colors.containerSecondaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceSecondary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(243, 243, 243, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceSecondary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/secondary/default-a",
-      "dartAccessor": "theme.colors.containerSecondaryDefaultA",
+      "dartAccessor": "CharcoalTheme.of(context).colors.fillSecondary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.047)",
       "darkValue": "rgba(255, 255, 255, 0.045)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.fillSecondary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/secondary/hover",
-      "dartAccessor": "theme.colors.containerSecondaryHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceSecondaryHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(51, 51, 51, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceSecondaryHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/secondary/hover-a",
-      "dartAccessor": "theme.colors.containerSecondaryHoverA",
+      "dartAccessor": "CharcoalTheme.of(context).colors.fillSecondaryHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.09)",
       "darkValue": "rgba(255, 255, 255, 0.09)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.fillSecondaryHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/secondary/press",
-      "dartAccessor": "theme.colors.containerSecondaryPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceSecondaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(217, 217, 217, 1)",
       "darkValue": "rgba(81, 81, 81, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceSecondaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/secondary/press-a",
-      "dartAccessor": "theme.colors.containerSecondaryPressA",
+      "dartAccessor": "CharcoalTheme.of(context).colors.fillSecondaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.15)",
       "darkValue": "rgba(255, 255, 255, 0.225)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.fillSecondaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/skeleton",
-      "dartAccessor": "theme.colors.containerSkeleton",
+      "dartAccessor": "CharcoalTheme.of(context).colors.skeleton",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.047)",
       "darkValue": "rgba(255, 255, 255, 0.045)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.skeleton, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/subtle",
-      "dartAccessor": "theme.colors.containerSubtle",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerSubtle",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 0.02)",
       "darkValue": "rgba(228, 228, 228, 0.02)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/tertiary/default",
-      "dartAccessor": "theme.colors.containerTertiaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceTertiary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(51, 51, 51, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceTertiary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/tertiary/default-a",
-      "dartAccessor": "theme.colors.containerTertiaryDefaultA",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerTertiaryDefaultA",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.09)",
       "darkValue": "rgba(255, 255, 255, 0.09)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/tertiary/hover",
-      "dartAccessor": "theme.colors.containerTertiaryHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerTertiaryHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(217, 217, 217, 1)",
       "darkValue": "rgba(81, 81, 81, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/tertiary/hover-a",
-      "dartAccessor": "theme.colors.containerTertiaryHoverA",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerTertiaryHoverA",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.15)",
       "darkValue": "rgba(255, 255, 255, 0.225)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.container/tertiary/press",
-      "dartAccessor": "theme.colors.containerTertiaryPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.surfaceTertiaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(194, 194, 194, 1)",
       "darkValue": "rgba(112, 112, 112, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.surfaceTertiaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.container/tertiary/press-a",
-      "dartAccessor": "theme.colors.containerTertiaryPressA",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.containerTertiaryPressA",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.24)",
       "darkValue": "rgba(255, 255, 255, 0.36)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.dark/blue/-10",
@@ -10325,7 +11835,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/-5",
@@ -10335,7 +11845,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/0",
@@ -10345,7 +11855,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/10",
@@ -10355,7 +11865,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(36, 55, 73, 1)",
       "darkValue": "rgba(36, 55, 73, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/20",
@@ -10365,7 +11875,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(39, 84, 126, 1)",
       "darkValue": "rgba(39, 84, 126, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/30",
@@ -10375,7 +11885,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(8, 114, 190, 1)",
       "darkValue": "rgba(8, 114, 190, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/40",
@@ -10385,7 +11895,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(55, 136, 208, 1)",
       "darkValue": "rgba(55, 136, 208, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/5",
@@ -10395,7 +11905,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(33, 41, 50, 1)",
       "darkValue": "rgba(33, 41, 50, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/50",
@@ -10405,7 +11915,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(83, 156, 224, 1)",
       "darkValue": "rgba(83, 156, 224, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/60",
@@ -10415,7 +11925,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(114, 181, 245, 1)",
       "darkValue": "rgba(114, 181, 245, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/70",
@@ -10425,7 +11935,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(139, 193, 248, 1)",
       "darkValue": "rgba(139, 193, 248, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/80",
@@ -10435,7 +11945,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(166, 205, 245, 1)",
       "darkValue": "rgba(166, 205, 245, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/blue/90",
@@ -10445,7 +11955,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(207, 230, 253, 1)",
       "darkValue": "rgba(207, 230, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/-10",
@@ -10455,7 +11965,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/-5",
@@ -10465,7 +11975,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/0",
@@ -10475,7 +11985,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/10",
@@ -10485,7 +11995,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(41, 59, 40, 1)",
       "darkValue": "rgba(41, 59, 40, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/20",
@@ -10495,7 +12005,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(39, 92, 35, 1)",
       "darkValue": "rgba(39, 92, 35, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/30",
@@ -10505,7 +12015,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(13, 129, 5, 1)",
       "darkValue": "rgba(13, 129, 5, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/40",
@@ -10515,7 +12025,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(58, 150, 52, 1)",
       "darkValue": "rgba(58, 150, 52, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/5",
@@ -10525,7 +12035,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(37, 43, 37, 1)",
       "darkValue": "rgba(37, 43, 37, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/50",
@@ -10535,7 +12045,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(86, 169, 79, 1)",
       "darkValue": "rgba(86, 169, 79, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/60",
@@ -10545,7 +12055,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(120, 194, 113, 1)",
       "darkValue": "rgba(120, 194, 113, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/70",
@@ -10555,7 +12065,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(141, 204, 135, 1)",
       "darkValue": "rgba(141, 204, 135, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/80",
@@ -10565,7 +12075,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(161, 215, 155, 1)",
       "darkValue": "rgba(161, 215, 155, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/green/90",
@@ -10575,7 +12085,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(191, 241, 186, 1)",
       "darkValue": "rgba(191, 241, 186, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/-10",
@@ -10585,7 +12095,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/-5",
@@ -10595,7 +12105,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/0",
@@ -10605,7 +12115,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/10",
@@ -10615,7 +12125,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(48, 51, 74, 1)",
       "darkValue": "rgba(48, 51, 74, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/20",
@@ -10625,7 +12135,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(72, 76, 134, 1)",
       "darkValue": "rgba(72, 76, 134, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/30",
@@ -10635,7 +12145,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(96, 100, 199, 1)",
       "darkValue": "rgba(96, 100, 199, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/40",
@@ -10645,7 +12155,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(115, 123, 219, 1)",
       "darkValue": "rgba(115, 123, 219, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/5",
@@ -10655,7 +12165,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(39, 40, 46, 1)",
       "darkValue": "rgba(39, 40, 46, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/50",
@@ -10665,7 +12175,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(135, 143, 231, 1)",
       "darkValue": "rgba(135, 143, 231, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/60",
@@ -10675,7 +12185,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(160, 170, 249, 1)",
       "darkValue": "rgba(160, 170, 249, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/70",
@@ -10685,7 +12195,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(175, 184, 254, 1)",
       "darkValue": "rgba(175, 184, 254, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/80",
@@ -10695,7 +12205,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(192, 199, 248, 1)",
       "darkValue": "rgba(192, 199, 248, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/indigo/90",
@@ -10705,7 +12215,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(222, 227, 255, 1)",
       "darkValue": "rgba(222, 227, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/-10",
@@ -10715,7 +12225,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/-5",
@@ -10725,7 +12235,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/0",
@@ -10735,7 +12245,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/10",
@@ -10745,7 +12255,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(69, 44, 56, 1)",
       "darkValue": "rgba(69, 44, 56, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/20",
@@ -10755,7 +12265,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(124, 58, 91, 1)",
       "darkValue": "rgba(124, 58, 91, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/30",
@@ -10765,7 +12275,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(185, 64, 130, 1)",
       "darkValue": "rgba(185, 64, 130, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/40",
@@ -10775,7 +12285,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(202, 91, 149, 1)",
       "darkValue": "rgba(202, 91, 149, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/5",
@@ -10785,7 +12295,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(48, 36, 42, 1)",
       "darkValue": "rgba(48, 36, 42, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/50",
@@ -10795,7 +12305,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(220, 114, 168, 1)",
       "darkValue": "rgba(220, 114, 168, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/60",
@@ -10805,7 +12315,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(240, 146, 191, 1)",
       "darkValue": "rgba(240, 146, 191, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/70",
@@ -10815,7 +12325,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(243, 163, 200, 1)",
       "darkValue": "rgba(243, 163, 200, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/80",
@@ -10825,7 +12335,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(247, 184, 213, 1)",
       "darkValue": "rgba(247, 184, 213, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/magenta/90",
@@ -10835,7 +12345,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 217, 233, 1)",
       "darkValue": "rgba(253, 217, 233, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/-10",
@@ -10845,7 +12355,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.8)",
       "darkValue": "rgba(0, 0, 0, 0.8)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/-5",
@@ -10855,7 +12365,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.32)",
       "darkValue": "rgba(0, 0, 0, 0.32)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/0",
@@ -10865,7 +12375,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0)",
       "darkValue": "rgba(255, 255, 255, 0)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/10",
@@ -10875,7 +12385,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.09)",
       "darkValue": "rgba(255, 255, 255, 0.09)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/20",
@@ -10885,7 +12395,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.225)",
       "darkValue": "rgba(255, 255, 255, 0.225)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/30",
@@ -10895,7 +12405,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.36)",
       "darkValue": "rgba(255, 255, 255, 0.36)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/40",
@@ -10905,7 +12415,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.44)",
       "darkValue": "rgba(255, 255, 255, 0.44)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/5",
@@ -10915,7 +12425,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.045)",
       "darkValue": "rgba(255, 255, 255, 0.045)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/50",
@@ -10925,7 +12435,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.535)",
       "darkValue": "rgba(255, 255, 255, 0.535)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/60",
@@ -10935,7 +12445,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.645)",
       "darkValue": "rgba(255, 255, 255, 0.645)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/70",
@@ -10945,7 +12455,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.7)",
       "darkValue": "rgba(255, 255, 255, 0.7)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/80",
@@ -10955,7 +12465,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.765)",
       "darkValue": "rgba(255, 255, 255, 0.765)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral-a/90",
@@ -10965,7 +12475,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 0.88)",
       "darkValue": "rgba(255, 255, 255, 0.88)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/-10",
@@ -10975,7 +12485,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/-5",
@@ -10985,7 +12495,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/0",
@@ -10995,7 +12505,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/10",
@@ -11005,7 +12515,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(51, 51, 51, 1)",
       "darkValue": "rgba(51, 51, 51, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/20",
@@ -11015,7 +12525,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(81, 81, 81, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/30",
@@ -11025,7 +12535,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(112, 112, 112, 1)",
       "darkValue": "rgba(112, 112, 112, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/40",
@@ -11035,7 +12545,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(130, 130, 130, 1)",
       "darkValue": "rgba(130, 130, 130, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/5",
@@ -11045,7 +12555,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(41, 41, 41, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/50",
@@ -11055,7 +12565,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(151, 151, 151, 1)",
       "darkValue": "rgba(151, 151, 151, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/60",
@@ -11065,7 +12575,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(175, 175, 175, 1)",
       "darkValue": "rgba(175, 175, 175, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/70",
@@ -11075,7 +12585,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(188, 188, 188, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/80",
@@ -11085,7 +12595,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(202, 202, 202, 1)",
       "darkValue": "rgba(202, 202, 202, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/neutral/90",
@@ -11095,7 +12605,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(228, 228, 228, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/-10",
@@ -11105,7 +12615,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/-5",
@@ -11115,7 +12625,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/0",
@@ -11125,7 +12635,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/10",
@@ -11135,7 +12645,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(72, 48, 38, 1)",
       "darkValue": "rgba(72, 48, 38, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/20",
@@ -11145,7 +12655,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(134, 58, 22, 1)",
       "darkValue": "rgba(134, 58, 22, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/30",
@@ -11155,7 +12665,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(188, 74, 14, 1)",
       "darkValue": "rgba(188, 74, 14, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/40",
@@ -11165,7 +12675,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(212, 97, 41, 1)",
       "darkValue": "rgba(212, 97, 41, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/5",
@@ -11175,7 +12685,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(48, 39, 34, 1)",
       "darkValue": "rgba(48, 39, 34, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/50",
@@ -11185,7 +12695,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(229, 121, 68, 1)",
       "darkValue": "rgba(229, 121, 68, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/60",
@@ -11195,7 +12705,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(246, 151, 107, 1)",
       "darkValue": "rgba(246, 151, 107, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/70",
@@ -11205,7 +12715,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(248, 170, 135, 1)",
       "darkValue": "rgba(248, 170, 135, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/80",
@@ -11215,7 +12725,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(245, 188, 163, 1)",
       "darkValue": "rgba(245, 188, 163, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/orange/90",
@@ -11225,7 +12735,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 221, 207, 1)",
       "darkValue": "rgba(252, 221, 207, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/-10",
@@ -11235,7 +12745,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/-5",
@@ -11245,7 +12755,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/0",
@@ -11255,7 +12765,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/10",
@@ -11265,7 +12775,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(56, 48, 71, 1)",
       "darkValue": "rgba(56, 48, 71, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/20",
@@ -11275,7 +12785,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(93, 68, 132, 1)",
       "darkValue": "rgba(93, 68, 132, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/30",
@@ -11285,7 +12795,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(131, 88, 194, 1)",
       "darkValue": "rgba(131, 88, 194, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/40",
@@ -11295,7 +12805,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(149, 110, 210, 1)",
       "darkValue": "rgba(149, 110, 210, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/5",
@@ -11305,7 +12815,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(42, 38, 49, 1)",
       "darkValue": "rgba(42, 38, 49, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/50",
@@ -11315,7 +12825,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(169, 133, 229, 1)",
       "darkValue": "rgba(169, 133, 229, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/60",
@@ -11325,7 +12835,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(191, 160, 246, 1)",
       "darkValue": "rgba(191, 160, 246, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/70",
@@ -11335,7 +12845,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(201, 176, 249, 1)",
       "darkValue": "rgba(201, 176, 249, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/80",
@@ -11345,7 +12855,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(210, 192, 245, 1)",
       "darkValue": "rgba(210, 192, 245, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/purple/90",
@@ -11355,7 +12865,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(233, 223, 255, 1)",
       "darkValue": "rgba(233, 223, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/-10",
@@ -11365,7 +12875,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/-5",
@@ -11375,7 +12885,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/0",
@@ -11385,7 +12895,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/10",
@@ -11395,7 +12905,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(73, 47, 43, 1)",
       "darkValue": "rgba(73, 47, 43, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/20",
@@ -11405,7 +12915,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(136, 54, 46, 1)",
       "darkValue": "rgba(136, 54, 46, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/30",
@@ -11415,7 +12925,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(197, 60, 51, 1)",
       "darkValue": "rgba(197, 60, 51, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/40",
@@ -11425,7 +12935,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(217, 88, 76, 1)",
       "darkValue": "rgba(217, 88, 76, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/5",
@@ -11435,7 +12945,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(47, 39, 38, 1)",
       "darkValue": "rgba(47, 39, 38, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/50",
@@ -11445,7 +12955,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(233, 114, 102, 1)",
       "darkValue": "rgba(233, 114, 102, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/60",
@@ -11455,7 +12965,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 147, 134, 1)",
       "darkValue": "rgba(252, 147, 134, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/70",
@@ -11465,7 +12975,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(254, 167, 155, 1)",
       "darkValue": "rgba(254, 167, 155, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/80",
@@ -11475,7 +12985,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(249, 186, 177, 1)",
       "darkValue": "rgba(249, 186, 177, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/red/90",
@@ -11485,7 +12995,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(254, 219, 214, 1)",
       "darkValue": "rgba(254, 219, 214, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/-10",
@@ -11495,7 +13005,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/-5",
@@ -11505,7 +13015,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/0",
@@ -11515,7 +13025,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/10",
@@ -11525,7 +13035,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(26, 60, 58, 1)",
       "darkValue": "rgba(26, 60, 58, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/20",
@@ -11535,7 +13045,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 91, 88, 1)",
       "darkValue": "rgba(0, 91, 88, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/30",
@@ -11545,7 +13055,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 123, 118, 1)",
       "darkValue": "rgba(0, 123, 118, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/40",
@@ -11555,7 +13065,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 147, 142, 1)",
       "darkValue": "rgba(0, 147, 142, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/5",
@@ -11565,7 +13075,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(35, 42, 41, 1)",
       "darkValue": "rgba(35, 42, 41, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/50",
@@ -11575,7 +13085,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(32, 170, 164, 1)",
       "darkValue": "rgba(32, 170, 164, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/60",
@@ -11585,7 +13095,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(84, 193, 186, 1)",
       "darkValue": "rgba(84, 193, 186, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/70",
@@ -11595,7 +13105,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(118, 205, 199, 1)",
       "darkValue": "rgba(118, 205, 199, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/80",
@@ -11605,7 +13115,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(144, 213, 207, 1)",
       "darkValue": "rgba(144, 213, 207, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/turquoise/90",
@@ -11615,7 +13125,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(180, 239, 234, 1)",
       "darkValue": "rgba(180, 239, 234, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/-10",
@@ -11625,7 +13135,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(6, 6, 6, 1)",
       "darkValue": "rgba(6, 6, 6, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/-5",
@@ -11635,7 +13145,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(21, 21, 21, 1)",
       "darkValue": "rgba(21, 21, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/0",
@@ -11645,7 +13155,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/10",
@@ -11655,7 +13165,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(66, 51, 30, 1)",
       "darkValue": "rgba(66, 51, 30, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/20",
@@ -11665,7 +13175,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(109, 75, 31, 1)",
       "darkValue": "rgba(109, 75, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/30",
@@ -11675,7 +13185,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(153, 99, 8, 1)",
       "darkValue": "rgba(153, 99, 8, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/40",
@@ -11685,7 +13195,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(174, 121, 14, 1)",
       "darkValue": "rgba(174, 121, 14, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/5",
@@ -11695,7 +13205,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(44, 40, 35, 1)",
       "darkValue": "rgba(44, 40, 35, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/50",
@@ -11705,7 +13215,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(199, 140, 10, 1)",
       "darkValue": "rgba(199, 140, 10, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/60",
@@ -11715,7 +13225,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(222, 167, 29, 1)",
       "darkValue": "rgba(222, 167, 29, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/70",
@@ -11725,7 +13235,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(235, 178, 19, 1)",
       "darkValue": "rgba(235, 178, 19, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/80",
@@ -11735,7 +13245,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(238, 195, 92, 1)",
       "darkValue": "rgba(238, 195, 92, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.dark/yellow/90",
@@ -11745,377 +13255,377 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 225, 167, 1)",
       "darkValue": "rgba(252, 225, 167, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.icon/default",
-      "dartAccessor": "theme.colors.iconDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.icon",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.icon, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/disable",
-      "dartAccessor": "theme.colors.iconDisable",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconDisabled",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(194, 194, 194, 1)",
       "darkValue": "rgba(130, 130, 130, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconDisabled, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/hover",
-      "dartAccessor": "theme.colors.iconHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(202, 202, 202, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/negative/default",
-      "dartAccessor": "theme.colors.iconNegativeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconNegative",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(206, 54, 46, 1)",
       "darkValue": "rgba(252, 147, 134, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconNegative, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/negative/hover",
-      "dartAccessor": "theme.colors.iconNegativeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconNegativeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(147, 33, 28, 1)",
       "darkValue": "rgba(249, 186, 177, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/negative/press",
-      "dartAccessor": "theme.colors.iconNegativePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconNegativePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(103, 22, 17, 1)",
       "darkValue": "rgba(254, 219, 214, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/notice/default",
-      "dartAccessor": "theme.colors.iconNoticeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconNotice",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(161, 99, 9, 1)",
       "darkValue": "rgba(222, 167, 29, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconNotice, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/notice/hover",
-      "dartAccessor": "theme.colors.iconNoticeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconNoticeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(110, 72, 5, 1)",
       "darkValue": "rgba(238, 195, 92, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/notice/press",
-      "dartAccessor": "theme.colors.iconNoticePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconNoticePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(74, 51, 7, 1)",
       "darkValue": "rgba(252, 225, 167, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-negative/default",
-      "dartAccessor": "theme.colors.iconOnNegativeDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNegativeDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-negative/hover",
-      "dartAccessor": "theme.colors.iconOnNegativeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNegativeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-negative/press",
-      "dartAccessor": "theme.colors.iconOnNegativePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNegativePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-neutral/default",
-      "dartAccessor": "theme.colors.iconOnNeutralDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNeutralDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-neutral/hover",
-      "dartAccessor": "theme.colors.iconOnNeutralHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNeutralHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(243, 243, 243, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-neutral/press",
-      "dartAccessor": "theme.colors.iconOnNeutralPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNeutralPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-notice/default",
-      "dartAccessor": "theme.colors.iconOnNoticeDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNoticeDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-notice/hover",
-      "dartAccessor": "theme.colors.iconOnNoticeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNoticeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-notice/press",
-      "dartAccessor": "theme.colors.iconOnNoticePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnNoticePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-on-img/default",
-      "dartAccessor": "theme.colors.iconOnOnImgDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconOnImage",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconOnImage, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/on-on-img/hover",
-      "dartAccessor": "theme.colors.iconOnOnImgHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnOnImgHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-on-img/press",
-      "dartAccessor": "theme.colors.iconOnOnImgPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnOnImgPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-positive/default",
-      "dartAccessor": "theme.colors.iconOnPositiveDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnPositiveDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-positive/hover",
-      "dartAccessor": "theme.colors.iconOnPositiveHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnPositiveHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-positive/press",
-      "dartAccessor": "theme.colors.iconOnPositivePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnPositivePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-primary/default",
-      "dartAccessor": "theme.colors.iconOnPrimaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconOnPrimary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconOnPrimary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/on-primary/hover",
-      "dartAccessor": "theme.colors.iconOnPrimaryHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnPrimaryHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/on-primary/press",
-      "dartAccessor": "theme.colors.iconOnPrimaryPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconOnPrimaryPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/positive/default",
-      "dartAccessor": "theme.colors.iconPositiveDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconPositive",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(17, 131, 8, 1)",
       "darkValue": "rgba(120, 194, 113, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconPositive, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/positive/hover",
-      "dartAccessor": "theme.colors.iconPositiveHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconPositiveHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(4, 93, 0, 1)",
       "darkValue": "rgba(161, 215, 155, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/positive/press",
-      "dartAccessor": "theme.colors.iconPositivePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconPositivePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(4, 93, 0, 1)",
       "darkValue": "rgba(191, 241, 186, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/press",
-      "dartAccessor": "theme.colors.iconPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/secondary/default",
-      "dartAccessor": "theme.colors.iconSecondaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconSecondary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(175, 175, 175, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconSecondary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/secondary/hover",
-      "dartAccessor": "theme.colors.iconSecondaryHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconSecondaryHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/secondary/press",
-      "dartAccessor": "theme.colors.iconSecondaryPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.iconSecondaryPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(202, 202, 202, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.icon/tertiary/default",
-      "dartAccessor": "theme.colors.iconTertiaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconTertiary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(113, 113, 113, 1)",
       "darkValue": "rgba(130, 130, 130, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconTertiary, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/tertiary/hover",
-      "dartAccessor": "theme.colors.iconTertiaryHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconTertiaryHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(175, 175, 175, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconTertiaryHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.icon/tertiary/press",
-      "dartAccessor": "theme.colors.iconTertiaryPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.iconTertiaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.iconTertiaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.light/blue/0",
@@ -12125,7 +13635,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(255, 255, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/10",
@@ -12135,7 +13645,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(216, 235, 251, 1)",
       "darkValue": "rgba(216, 235, 251, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/20",
@@ -12145,7 +13655,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(188, 222, 252, 1)",
       "darkValue": "rgba(188, 222, 252, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/30",
@@ -12155,7 +13665,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(137, 200, 253, 1)",
       "darkValue": "rgba(137, 200, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/40",
@@ -12165,7 +13675,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(85, 178, 253, 1)",
       "darkValue": "rgba(85, 178, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/5",
@@ -12175,7 +13685,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(236, 244, 253, 1)",
       "darkValue": "rgba(236, 244, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/50",
@@ -12185,7 +13695,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 150, 250, 1)",
       "darkValue": "rgba(0, 150, 250, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/60",
@@ -12195,7 +13705,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 117, 188, 1)",
       "darkValue": "rgba(31, 117, 188, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/70",
@@ -12205,7 +13715,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(24, 81, 130, 1)",
       "darkValue": "rgba(24, 81, 130, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/80",
@@ -12215,7 +13725,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(19, 58, 93, 1)",
       "darkValue": "rgba(19, 58, 93, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/blue/90",
@@ -12225,7 +13735,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(3, 35, 63, 1)",
       "darkValue": "rgba(3, 35, 63, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/0",
@@ -12235,7 +13745,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(255, 255, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/10",
@@ -12245,7 +13755,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(204, 243, 200, 1)",
       "darkValue": "rgba(204, 243, 200, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/20",
@@ -12255,7 +13765,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(164, 234, 157, 1)",
       "darkValue": "rgba(164, 234, 157, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/30",
@@ -12265,7 +13775,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(121, 214, 112, 1)",
       "darkValue": "rgba(121, 214, 112, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/40",
@@ -12275,7 +13785,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(80, 192, 72, 1)",
       "darkValue": "rgba(80, 192, 72, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/5",
@@ -12285,7 +13795,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(234, 248, 232, 1)",
       "darkValue": "rgba(234, 248, 232, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/50",
@@ -12295,7 +13805,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(37, 170, 28, 1)",
       "darkValue": "rgba(37, 170, 28, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/60",
@@ -12305,7 +13815,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(17, 131, 8, 1)",
       "darkValue": "rgba(17, 131, 8, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/70",
@@ -12315,7 +13825,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(4, 93, 0, 1)",
       "darkValue": "rgba(4, 93, 0, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/80",
@@ -12325,7 +13835,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(7, 64, 4, 1)",
       "darkValue": "rgba(7, 64, 4, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/green/90",
@@ -12335,7 +13845,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(1, 40, 0, 1)",
       "darkValue": "rgba(1, 40, 0, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/10",
@@ -12345,7 +13855,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(226, 231, 253, 1)",
       "darkValue": "rgba(226, 231, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/20",
@@ -12355,7 +13865,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(210, 216, 252, 1)",
       "darkValue": "rgba(210, 216, 252, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/30",
@@ -12365,7 +13875,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(181, 189, 253, 1)",
       "darkValue": "rgba(181, 189, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/40",
@@ -12375,7 +13885,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(156, 165, 252, 1)",
       "darkValue": "rgba(156, 165, 252, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/5",
@@ -12385,7 +13895,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(241, 242, 253, 1)",
       "darkValue": "rgba(241, 242, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/50",
@@ -12395,7 +13905,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(129, 136, 253, 1)",
       "darkValue": "rgba(129, 136, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/60",
@@ -12405,7 +13915,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(95, 97, 222, 1)",
       "darkValue": "rgba(95, 97, 222, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/70",
@@ -12415,7 +13925,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(68, 70, 155, 1)",
       "darkValue": "rgba(68, 70, 155, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/80",
@@ -12425,7 +13935,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(45, 47, 109, 1)",
       "darkValue": "rgba(45, 47, 109, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/indigo/90",
@@ -12435,7 +13945,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(24, 24, 70, 1)",
       "darkValue": "rgba(24, 24, 70, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/10",
@@ -12445,7 +13955,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(251, 226, 237, 1)",
       "darkValue": "rgba(251, 226, 237, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/20",
@@ -12455,7 +13965,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 204, 226, 1)",
       "darkValue": "rgba(255, 204, 226, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/30",
@@ -12465,7 +13975,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(245, 173, 206, 1)",
       "darkValue": "rgba(245, 173, 206, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/40",
@@ -12475,7 +13985,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(250, 131, 192, 1)",
       "darkValue": "rgba(250, 131, 192, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/5",
@@ -12485,7 +13995,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 239, 244, 1)",
       "darkValue": "rgba(252, 239, 244, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/50",
@@ -12495,7 +14005,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(235, 95, 170, 1)",
       "darkValue": "rgba(235, 95, 170, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/60",
@@ -12505,7 +14015,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(196, 53, 135, 1)",
       "darkValue": "rgba(196, 53, 135, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/70",
@@ -12515,7 +14025,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(141, 33, 96, 1)",
       "darkValue": "rgba(141, 33, 96, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/80",
@@ -12525,7 +14035,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(98, 27, 67, 1)",
       "darkValue": "rgba(98, 27, 67, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/magenta/90",
@@ -12535,7 +14045,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(59, 5, 37, 1)",
       "darkValue": "rgba(59, 5, 37, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/0",
@@ -12545,7 +14055,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0)",
       "darkValue": "rgba(0, 0, 0, 0)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/10",
@@ -12555,7 +14065,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.09)",
       "darkValue": "rgba(0, 0, 0, 0.09)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/20",
@@ -12565,7 +14075,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.15)",
       "darkValue": "rgba(0, 0, 0, 0.15)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/30",
@@ -12575,7 +14085,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.24)",
       "darkValue": "rgba(0, 0, 0, 0.24)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/40",
@@ -12585,7 +14095,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.325)",
       "darkValue": "rgba(0, 0, 0, 0.325)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/5",
@@ -12595,7 +14105,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.047)",
       "darkValue": "rgba(0, 0, 0, 0.047)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/50",
@@ -12605,7 +14115,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.42)",
       "darkValue": "rgba(0, 0, 0, 0.42)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/60",
@@ -12615,7 +14125,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.555)",
       "darkValue": "rgba(0, 0, 0, 0.555)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/70",
@@ -12625,7 +14135,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.683)",
       "darkValue": "rgba(0, 0, 0, 0.683)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/80",
@@ -12635,7 +14145,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.78)",
       "darkValue": "rgba(0, 0, 0, 0.78)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral-a/90",
@@ -12645,7 +14155,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(0, 0, 0, 0.88)",
       "darkValue": "rgba(0, 0, 0, 0.88)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/0",
@@ -12655,7 +14165,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(255, 255, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/10",
@@ -12665,7 +14175,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(232, 232, 232, 1)",
       "darkValue": "rgba(232, 232, 232, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/20",
@@ -12675,7 +14185,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(217, 217, 217, 1)",
       "darkValue": "rgba(217, 217, 217, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/30",
@@ -12685,7 +14195,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(194, 194, 194, 1)",
       "darkValue": "rgba(194, 194, 194, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/40",
@@ -12695,7 +14205,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(172, 172, 172, 1)",
       "darkValue": "rgba(172, 172, 172, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/5",
@@ -12705,7 +14215,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(243, 243, 243, 1)",
       "darkValue": "rgba(243, 243, 243, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/50",
@@ -12715,7 +14225,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(148, 148, 148, 1)",
       "darkValue": "rgba(148, 148, 148, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/60",
@@ -12725,7 +14235,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(113, 113, 113, 1)",
       "darkValue": "rgba(113, 113, 113, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/70",
@@ -12735,7 +14245,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(81, 81, 81, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/80",
@@ -12745,7 +14255,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(56, 56, 56, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/neutral/90",
@@ -12755,7 +14265,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/10",
@@ -12765,7 +14275,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 229, 211, 1)",
       "darkValue": "rgba(252, 229, 211, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/20",
@@ -12775,7 +14285,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 209, 177, 1)",
       "darkValue": "rgba(253, 209, 177, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/30",
@@ -12785,7 +14295,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(254, 176, 121, 1)",
       "darkValue": "rgba(254, 176, 121, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/40",
@@ -12795,7 +14305,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 143, 53, 1)",
       "darkValue": "rgba(253, 143, 53, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/5",
@@ -12805,7 +14315,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 241, 229, 1)",
       "darkValue": "rgba(253, 241, 229, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/50",
@@ -12815,7 +14325,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(242, 105, 21, 1)",
       "darkValue": "rgba(242, 105, 21, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/60",
@@ -12825,7 +14335,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(190, 79, 4, 1)",
       "darkValue": "rgba(190, 79, 4, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/70",
@@ -12835,7 +14345,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(132, 54, 7, 1)",
       "darkValue": "rgba(132, 54, 7, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/80",
@@ -12845,7 +14355,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(91, 38, 13, 1)",
       "darkValue": "rgba(91, 38, 13, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/orange/90",
@@ -12855,7 +14365,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(55, 18, 2, 1)",
       "darkValue": "rgba(55, 18, 2, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/10",
@@ -12865,7 +14375,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(236, 229, 251, 1)",
       "darkValue": "rgba(236, 229, 251, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/20",
@@ -12875,7 +14385,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(224, 210, 253, 1)",
       "darkValue": "rgba(224, 210, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/30",
@@ -12885,7 +14395,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(207, 183, 253, 1)",
       "darkValue": "rgba(207, 183, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/40",
@@ -12895,7 +14405,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(190, 153, 253, 1)",
       "darkValue": "rgba(190, 153, 253, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/5",
@@ -12905,7 +14415,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(244, 241, 252, 1)",
       "darkValue": "rgba(244, 241, 252, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/50",
@@ -12915,7 +14425,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(173, 120, 252, 1)",
       "darkValue": "rgba(173, 120, 252, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/60",
@@ -12925,7 +14435,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(143, 77, 225, 1)",
       "darkValue": "rgba(143, 77, 225, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/70",
@@ -12935,7 +14445,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(103, 39, 171, 1)",
       "darkValue": "rgba(103, 39, 171, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/80",
@@ -12945,7 +14455,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(70, 32, 115, 1)",
       "darkValue": "rgba(70, 32, 115, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/purple/90",
@@ -12955,7 +14465,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(40, 16, 70, 1)",
       "darkValue": "rgba(40, 16, 70, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/0",
@@ -12965,7 +14475,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(255, 255, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/10",
@@ -12975,7 +14485,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(250, 228, 225, 1)",
       "darkValue": "rgba(250, 228, 225, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/20",
@@ -12985,7 +14495,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 206, 199, 1)",
       "darkValue": "rgba(253, 206, 199, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/30",
@@ -12995,7 +14505,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 174, 163, 1)",
       "darkValue": "rgba(253, 174, 163, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/40",
@@ -13005,7 +14515,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(252, 138, 124, 1)",
       "darkValue": "rgba(252, 138, 124, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/5",
@@ -13015,7 +14525,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 240, 237, 1)",
       "darkValue": "rgba(253, 240, 237, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/50",
@@ -13025,7 +14535,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(253, 91, 78, 1)",
       "darkValue": "rgba(253, 91, 78, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/60",
@@ -13035,7 +14545,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(206, 54, 46, 1)",
       "darkValue": "rgba(206, 54, 46, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/70",
@@ -13045,7 +14555,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(147, 33, 28, 1)",
       "darkValue": "rgba(147, 33, 28, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/80",
@@ -13055,7 +14565,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(103, 22, 17, 1)",
       "darkValue": "rgba(103, 22, 17, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/red/90",
@@ -13065,7 +14575,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(66, 0, 1, 1)",
       "darkValue": "rgba(66, 0, 1, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/0",
@@ -13075,7 +14585,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(255, 255, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/10",
@@ -13085,7 +14595,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(196, 240, 241, 1)",
       "darkValue": "rgba(196, 240, 241, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/20",
@@ -13095,7 +14605,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(152, 228, 229, 1)",
       "darkValue": "rgba(152, 228, 229, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/30",
@@ -13105,7 +14615,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(109, 204, 205, 1)",
       "darkValue": "rgba(109, 204, 205, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/40",
@@ -13115,7 +14625,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(63, 184, 186, 1)",
       "darkValue": "rgba(63, 184, 186, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/5",
@@ -13125,7 +14635,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(225, 249, 249, 1)",
       "darkValue": "rgba(225, 249, 249, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/50",
@@ -13135,7 +14645,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(27, 161, 163, 1)",
       "darkValue": "rgba(27, 161, 163, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/60",
@@ -13145,7 +14655,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(11, 126, 128, 1)",
       "darkValue": "rgba(11, 126, 128, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/70",
@@ -13155,7 +14665,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(3, 87, 89, 1)",
       "darkValue": "rgba(3, 87, 89, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/80",
@@ -13165,7 +14675,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(1, 61, 62, 1)",
       "darkValue": "rgba(1, 61, 62, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/turquoise/90",
@@ -13175,7 +14685,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(1, 37, 37, 1)",
       "darkValue": "rgba(1, 37, 37, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/0",
@@ -13185,7 +14695,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(255, 255, 255, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/10",
@@ -13195,7 +14705,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(246, 232, 176, 1)",
       "darkValue": "rgba(246, 232, 176, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/20",
@@ -13205,7 +14715,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(254, 214, 61, 1)",
       "darkValue": "rgba(254, 214, 61, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/30",
@@ -13215,7 +14725,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(245, 183, 17, 1)",
       "darkValue": "rgba(245, 183, 17, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/40",
@@ -13225,7 +14735,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(231, 157, 20, 1)",
       "darkValue": "rgba(231, 157, 20, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/5",
@@ -13235,7 +14745,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(250, 243, 221, 1)",
       "darkValue": "rgba(250, 243, 221, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/50",
@@ -13245,7 +14755,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(205, 131, 2, 1)",
       "darkValue": "rgba(205, 131, 2, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/60",
@@ -13255,7 +14765,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(161, 99, 9, 1)",
       "darkValue": "rgba(161, 99, 9, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/70",
@@ -13265,7 +14775,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(110, 72, 5, 1)",
       "darkValue": "rgba(110, 72, 5, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/80",
@@ -13275,7 +14785,7 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(74, 51, 7, 1)",
       "darkValue": "rgba(74, 51, 7, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.light/yellow/90",
@@ -13285,1227 +14795,1227 @@ const String generatedCatalogJson = r'''{
       "valueType": "Color",
       "lightValue": "rgba(44, 28, 0, 1)",
       "darkValue": "rgba(44, 28, 0, 1)",
-      "guidance": "Palette primitive. Prefer a semantic theme role; use directly only for audited foundation work that cannot be expressed semantically."
+      "guidance": "Palette primitive. Library and theme-pack authors only; applications never read palette values. Choose a theme role instead."
     },
     {
       "path": "color.text/default",
-      "dartAccessor": "theme.colors.textDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.text",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.text, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.primary); they never read or pass a colour."
     },
     {
       "path": "color.text/default-text1",
-      "dartAccessor": "theme.colors.textDefaultText1",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textDefaultText1",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/disable",
-      "dartAccessor": "theme.colors.textDisable",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textDisabled",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(194, 194, 194, 1)",
       "darkValue": "rgba(130, 130, 130, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textDisabled, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.disabled); they never read or pass a colour."
     },
     {
       "path": "color.text/hover",
-      "dartAccessor": "theme.colors.textHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(202, 202, 202, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/hover-text1",
-      "dartAccessor": "theme.colors.textHoverText1",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textHoverText1",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/info/default",
-      "dartAccessor": "theme.colors.textInfoDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textInfo",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 117, 188, 1)",
       "darkValue": "rgba(114, 181, 245, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textInfo, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.info); they never read or pass a colour."
     },
     {
       "path": "color.text/info/hover",
-      "dartAccessor": "theme.colors.textInfoHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textInfoHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(24, 81, 130, 1)",
       "darkValue": "rgba(166, 205, 245, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/info/press",
-      "dartAccessor": "theme.colors.textInfoPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textInfoPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(19, 58, 93, 1)",
       "darkValue": "rgba(207, 230, 253, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/negative/default",
-      "dartAccessor": "theme.colors.textNegativeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textNegative",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(206, 54, 46, 1)",
       "darkValue": "rgba(252, 147, 134, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textNegative, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.negative); they never read or pass a colour."
     },
     {
       "path": "color.text/negative/hover",
-      "dartAccessor": "theme.colors.textNegativeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textNegativeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(147, 33, 28, 1)",
       "darkValue": "rgba(249, 186, 177, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/negative/press",
-      "dartAccessor": "theme.colors.textNegativePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textNegativePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(103, 22, 17, 1)",
       "darkValue": "rgba(254, 219, 214, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/notice/default",
-      "dartAccessor": "theme.colors.textNoticeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textNotice",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(161, 99, 9, 1)",
       "darkValue": "rgba(222, 167, 29, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textNotice, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.notice); they never read or pass a colour."
     },
     {
       "path": "color.text/notice/hover",
-      "dartAccessor": "theme.colors.textNoticeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textNoticeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(110, 72, 5, 1)",
       "darkValue": "rgba(238, 195, 92, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/notice/press",
-      "dartAccessor": "theme.colors.textNoticePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textNoticePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(74, 51, 7, 1)",
       "darkValue": "rgba(252, 225, 167, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-discovery/default",
-      "dartAccessor": "theme.colors.textOnDiscoveryDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnDiscoveryDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-discovery/hover",
-      "dartAccessor": "theme.colors.textOnDiscoveryHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnDiscoveryHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-discovery/press",
-      "dartAccessor": "theme.colors.textOnDiscoveryPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnDiscoveryPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-hud/default",
-      "dartAccessor": "theme.colors.textOnHudDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textOnHud",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(228, 228, 228, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textOnHud, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.onHud); they never read or pass a colour."
     },
     {
       "path": "color.text/on-hud/hover",
-      "dartAccessor": "theme.colors.textOnHudHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnHudHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(228, 228, 228, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-hud/press",
-      "dartAccessor": "theme.colors.textOnHudPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnHudPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(228, 228, 228, 1)",
       "darkValue": "rgba(31, 31, 31, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-negative/default",
-      "dartAccessor": "theme.colors.textOnNegativeDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textOnNegative",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textOnNegative, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.onNegative); they never read or pass a colour."
     },
     {
       "path": "color.text/on-negative/hover",
-      "dartAccessor": "theme.colors.textOnNegativeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnNegativeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-negative/press",
-      "dartAccessor": "theme.colors.textOnNegativePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnNegativePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-notice/default",
-      "dartAccessor": "theme.colors.textOnNoticeDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnNoticeDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-notice/hover",
-      "dartAccessor": "theme.colors.textOnNoticeHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnNoticeHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-notice/press",
-      "dartAccessor": "theme.colors.textOnNoticePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnNoticePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(41, 41, 41, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-on-img/default",
-      "dartAccessor": "theme.colors.textOnOnImgDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textOnImage",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textOnImage, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.onImage); they never read or pass a colour."
     },
     {
       "path": "color.text/on-on-img/hover",
-      "dartAccessor": "theme.colors.textOnOnImgHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnOnImgHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-on-img/press",
-      "dartAccessor": "theme.colors.textOnOnImgPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnOnImgPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-positive/default",
-      "dartAccessor": "theme.colors.textOnPositiveDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textOnPositive",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textOnPositive, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.onPositive); they never read or pass a colour."
     },
     {
       "path": "color.text/on-positive/hover",
-      "dartAccessor": "theme.colors.textOnPositiveHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnPositiveHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-positive/press",
-      "dartAccessor": "theme.colors.textOnPositivePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnPositivePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-primary/default",
-      "dartAccessor": "theme.colors.textOnPrimaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textOnPrimary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textOnPrimary, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.onPrimary); they never read or pass a colour."
     },
     {
       "path": "color.text/on-primary/hover",
-      "dartAccessor": "theme.colors.textOnPrimaryHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnPrimaryHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/on-primary/press",
-      "dartAccessor": "theme.colors.textOnPrimaryPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textOnPrimaryPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(255, 255, 255, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/placeholder/default",
-      "dartAccessor": "theme.colors.textPlaceholderDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textPlaceholder",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(148, 148, 148, 1)",
       "darkValue": "rgba(112, 112, 112, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textPlaceholder, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.placeholder); they never read or pass a colour."
     },
     {
       "path": "color.text/placeholder/hover",
-      "dartAccessor": "theme.colors.textPlaceholderHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textPlaceholderHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(148, 148, 148, 1)",
       "darkValue": "rgba(112, 112, 112, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/placeholder/press",
-      "dartAccessor": "theme.colors.textPlaceholderPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textPlaceholderPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(148, 148, 148, 1)",
       "darkValue": "rgba(112, 112, 112, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/positive/default",
-      "dartAccessor": "theme.colors.textPositiveDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textPositive",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(17, 131, 8, 1)",
       "darkValue": "rgba(120, 194, 113, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textPositive, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.positive); they never read or pass a colour."
     },
     {
       "path": "color.text/positive/hover",
-      "dartAccessor": "theme.colors.textPositiveHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textPositiveHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(4, 93, 0, 1)",
       "darkValue": "rgba(161, 215, 155, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/positive/press",
-      "dartAccessor": "theme.colors.textPositivePress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textPositivePress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(7, 64, 4, 1)",
       "darkValue": "rgba(191, 241, 186, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/press",
-      "dartAccessor": "theme.colors.textPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/press-text1",
-      "dartAccessor": "theme.colors.textPressText1",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textPressText1",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(228, 228, 228, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/secondary/default",
-      "dartAccessor": "theme.colors.textSecondaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textSecondary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(175, 175, 175, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textSecondary, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.secondary); they never read or pass a colour."
     },
     {
       "path": "color.text/secondary/hover",
-      "dartAccessor": "theme.colors.textSecondaryHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textSecondaryHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textSecondaryHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/secondary/press",
-      "dartAccessor": "theme.colors.textSecondaryPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textSecondaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(31, 31, 31, 1)",
       "darkValue": "rgba(202, 202, 202, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textSecondaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/tertiary/default",
-      "dartAccessor": "theme.colors.textTertiaryDefault",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textTertiary",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(113, 113, 113, 1)",
       "darkValue": "rgba(130, 130, 130, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textTertiary, for library code that reads the theme. Applications reach this colour with CharcoalText(..., tone: CharcoalTextTone.tertiary); they never read or pass a colour."
     },
     {
       "path": "color.text/tertiary/hover",
-      "dartAccessor": "theme.colors.textTertiaryHover",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textTertiaryHover",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(81, 81, 81, 1)",
       "darkValue": "rgba(175, 175, 175, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textTertiaryHover, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/tertiary/press",
-      "dartAccessor": "theme.colors.textTertiaryPress",
+      "dartAccessor": "CharcoalTheme.of(context).colors.textTertiaryPress",
       "kind": "color",
       "tier": "semantic",
       "valueType": "Color",
       "lightValue": "rgba(56, 56, 56, 1)",
       "darkValue": "rgba(188, 188, 188, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Theme role colors.textTertiaryPress, for library code that reads the theme. Applied by Charcoal components (or via CharcoalTone / a tone parameter); applications never read or pass a colour."
     },
     {
       "path": "color.text/visited/default",
-      "dartAccessor": "theme.colors.textVisitedDefault",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textVisitedDefault",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(103, 39, 171, 1)",
       "darkValue": "rgba(191, 160, 246, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/visited/hover",
-      "dartAccessor": "theme.colors.textVisitedHover",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textVisitedHover",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(70, 32, 115, 1)",
       "darkValue": "rgba(210, 192, 245, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "color.text/visited/press",
-      "dartAccessor": "theme.colors.textVisitedPress",
+      "dartAccessor": "CharcoalGeneratedColorTokens.light.textVisitedPress",
       "kind": "color",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "Color",
       "lightValue": "rgba(40, 16, 70, 1)",
       "darkValue": "rgba(233, 223, 255, 1)",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.l",
-      "dartAccessor": "theme.dimensions.paragraphWidth.l",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.l",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "672px",
       "darkValue": "672px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.l-compact",
-      "dartAccessor": "theme.dimensions.paragraphWidth.lCompact",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.lCompact",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "588px",
       "darkValue": "588px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.l-cozy",
-      "dartAccessor": "theme.dimensions.paragraphWidth.lCozy",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.lCozy",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "924px",
       "darkValue": "924px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.m",
-      "dartAccessor": "theme.dimensions.paragraphWidth.m",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.m",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "448px",
       "darkValue": "448px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.m-compact",
-      "dartAccessor": "theme.dimensions.paragraphWidth.mCompact",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.mCompact",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "392px",
       "darkValue": "392px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.m-cozy",
-      "dartAccessor": "theme.dimensions.paragraphWidth.mCozy",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.mCozy",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "616px",
       "darkValue": "616px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.s",
-      "dartAccessor": "theme.dimensions.paragraphWidth.s",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.s",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "320px",
       "darkValue": "320px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.s-compact",
-      "dartAccessor": "theme.dimensions.paragraphWidth.sCompact",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.sCompact",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "280px",
       "darkValue": "280px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "paragraph-width.s-cozy",
-      "dartAccessor": "theme.dimensions.paragraphWidth.sCozy",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.paragraphWidth.sCozy",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "588px",
       "darkValue": "588px",
-      "guidance": "Readable content-width constraint selected by layout density and available space."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "radius.0",
-      "dartAccessor": "theme.dimensions.radius.value0",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.radius.value0",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "0px",
       "darkValue": "0px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "radius.l",
-      "dartAccessor": "theme.dimensions.radius.l",
+      "dartAccessor": "CharcoalTheme.of(context).radius.lg",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "12px",
       "darkValue": "12px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.lg, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "radius.m",
-      "dartAccessor": "theme.dimensions.radius.m",
+      "dartAccessor": "CharcoalTheme.of(context).radius.md",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "8px",
       "darkValue": "8px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.md, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "radius.oval",
-      "dartAccessor": "theme.dimensions.radius.oval",
+      "dartAccessor": "CharcoalTheme.of(context).radius.pill",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "999999px",
       "darkValue": "999999px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.pill, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "radius.s",
-      "dartAccessor": "theme.dimensions.radius.s",
+      "dartAccessor": "CharcoalTheme.of(context).radius.sm",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "4px",
       "darkValue": "4px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.sm, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "radius.xl",
-      "dartAccessor": "theme.dimensions.radius.xl",
+      "dartAccessor": "CharcoalTheme.of(context).radius.xl",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "16px",
       "darkValue": "16px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.xl, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "radius.xs",
-      "dartAccessor": "theme.dimensions.radius.xs",
+      "dartAccessor": "CharcoalTheme.of(context).radius.xs",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "2px",
       "darkValue": "2px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.xs, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "radius.xxl",
-      "dartAccessor": "theme.dimensions.radius.xxl",
+      "dartAccessor": "CharcoalTheme.of(context).radius.xxl",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Semantic corner radius for authored Charcoal surfaces."
+      "guidance": "Theme role radius.xxl, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "space.component/0",
-      "dartAccessor": "theme.dimensions.space.component0",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.component0",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "0px",
       "darkValue": "0px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.component/10",
-      "dartAccessor": "theme.dimensions.space.component10",
+      "dartAccessor": "CharcoalTheme.of(context).space.xs",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "4px",
       "darkValue": "4px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Theme role space.xs, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.xs), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.component/20",
-      "dartAccessor": "theme.dimensions.space.component20",
+      "dartAccessor": "CharcoalTheme.of(context).space.sm",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "8px",
       "darkValue": "8px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Theme role space.sm, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.sm), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.component/25",
-      "dartAccessor": "theme.dimensions.space.component25",
+      "dartAccessor": "CharcoalTheme.of(context).space.md",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "12px",
       "darkValue": "12px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Theme role space.md, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.md), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.component/30",
-      "dartAccessor": "theme.dimensions.space.component30",
+      "dartAccessor": "CharcoalTheme.of(context).space.lg",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "16px",
       "darkValue": "16px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Theme role space.lg, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.lg), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.component/40",
-      "dartAccessor": "theme.dimensions.space.component40",
+      "dartAccessor": "CharcoalTheme.of(context).space.xl",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Theme role space.xl, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.xl), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.component/50",
-      "dartAccessor": "theme.dimensions.space.component50",
+      "dartAccessor": "CharcoalTheme.of(context).space.xxl",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "40px",
       "darkValue": "40px",
-      "guidance": "Component-scale spacing. Use for custom compositions; existing Charcoal components own their internal gaps."
+      "guidance": "Theme role space.xxl, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.xxl), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.layout/0",
-      "dartAccessor": "theme.dimensions.space.layout0",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout0",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "0px",
       "darkValue": "0px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/10",
-      "dartAccessor": "theme.dimensions.space.layout10",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout10",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "4px",
       "darkValue": "4px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/100",
-      "dartAccessor": "theme.dimensions.space.layout100",
+      "dartAccessor": "CharcoalTheme.of(context).sizes.dialogMaxWidth",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "440px",
       "darkValue": "440px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Theme role sizes.dialogMaxWidth, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "space.layout/20",
-      "dartAccessor": "theme.dimensions.space.layout20",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout20",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "8px",
       "darkValue": "8px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/25",
-      "dartAccessor": "theme.dimensions.space.layout25",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout25",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "12px",
       "darkValue": "12px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/30",
-      "dartAccessor": "theme.dimensions.space.layout30",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout30",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "16px",
       "darkValue": "16px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/40",
-      "dartAccessor": "theme.dimensions.space.layout40",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout40",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/50",
-      "dartAccessor": "theme.dimensions.space.layout50",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout50",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "40px",
       "darkValue": "40px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/60",
-      "dartAccessor": "theme.dimensions.space.layout60",
+      "dartAccessor": "CharcoalTheme.of(context).space.xxxl",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "64px",
       "darkValue": "64px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Theme role space.xxxl, for library code that reads the theme. Applications name a step with CharcoalGap(CharcoalSpace.xxxl), CharcoalInset or CharcoalPadding and never read the number."
     },
     {
       "path": "space.layout/70",
-      "dartAccessor": "theme.dimensions.space.layout70",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout70",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "104px",
       "darkValue": "104px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/80",
-      "dartAccessor": "theme.dimensions.space.layout80",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout80",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "168px",
       "darkValue": "168px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.layout/90",
-      "dartAccessor": "theme.dimensions.space.layout90",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.layout90",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "272px",
       "darkValue": "272px",
-      "guidance": "Layout spacing for page, section, and responsive composition outside component internals."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.padding/padding-card",
-      "dartAccessor": "theme.dimensions.space.paddingPaddingCard",
+      "dartAccessor": "CharcoalGeneratedDimensionTokens.light.space.paddingPaddingCard",
       "kind": "dimension",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Semantic color role. Select by UI meaning and state, not by its resolved light/dark value."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "space.target/l",
-      "dartAccessor": "theme.dimensions.space.targetL",
+      "dartAccessor": "CharcoalTheme.of(context).sizes.controlLg",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "48px",
       "darkValue": "48px",
-      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+      "guidance": "Theme role sizes.controlLg, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "space.target/m",
-      "dartAccessor": "theme.dimensions.space.targetM",
+      "dartAccessor": "CharcoalTheme.of(context).sizes.controlMd",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "40px",
       "darkValue": "40px",
-      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+      "guidance": "Theme role sizes.controlMd, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "space.target/s",
-      "dartAccessor": "theme.dimensions.space.targetS",
+      "dartAccessor": "CharcoalTheme.of(context).sizes.controlSm",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "32px",
       "darkValue": "32px",
-      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+      "guidance": "Theme role sizes.controlSm, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "space.target/xs",
-      "dartAccessor": "theme.dimensions.space.targetXs",
+      "dartAccessor": "CharcoalTheme.of(context).sizes.controlXs",
       "kind": "dimension",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Standard interaction target measurement. Do not force it onto a component with its own size API."
+      "guidance": "Theme role sizes.controlXs, for library code that reads the theme. Applied by Charcoal components; applications never read it."
     },
     {
       "path": "text.font-family/sans",
-      "dartAccessor": "theme.typography.fontFamily.sans",
+      "dartAccessor": "CharcoalGeneratedTypographyTokens.light.fontFamily.sans",
       "kind": "typography",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "String",
       "lightValue": "Sarasa UI J",
       "darkValue": "Sarasa UI J",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "text.font-size/body",
-      "dartAccessor": "theme.typography.fontSize.body",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.bodyLarge).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "16px",
       "darkValue": "16px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role bodyLarge.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle. Also used by: typography.roles.bodyLargeBold.fontSize."
     },
     {
       "path": "text.font-size/caption/m",
-      "dartAccessor": "theme.typography.fontSize.captionM",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.captionMedium).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "14px",
       "darkValue": "14px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role captionMedium.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle. Also used by: typography.roles.captionMediumBold.fontSize."
     },
     {
       "path": "text.font-size/caption/s",
-      "dartAccessor": "theme.typography.fontSize.captionS",
+      "dartAccessor": "CharcoalGeneratedTypographyTokens.light.fontSize.captionS",
       "kind": "typography",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "12px",
       "darkValue": "12px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "text.font-size/heading/l",
-      "dartAccessor": "theme.typography.fontSize.headingL",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingL).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "28px",
       "darkValue": "28px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingL.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/m",
-      "dartAccessor": "theme.typography.fontSize.headingM",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingM).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "25px",
       "darkValue": "25px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingM.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/s",
-      "dartAccessor": "theme.typography.fontSize.headingS",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingS).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "22px",
       "darkValue": "22px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingS.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/xl",
-      "dartAccessor": "theme.typography.fontSize.headingXl",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXl).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "32px",
       "darkValue": "32px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXl.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/xs",
-      "dartAccessor": "theme.typography.fontSize.headingXs",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXs).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "20px",
       "darkValue": "20px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXs.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/xxl",
-      "dartAccessor": "theme.typography.fontSize.headingXxl",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxl).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "36px",
       "darkValue": "36px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxl.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/xxs",
-      "dartAccessor": "theme.typography.fontSize.headingXxs",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxs).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "18px",
       "darkValue": "18px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxs.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/xxxl",
-      "dartAccessor": "theme.typography.fontSize.headingXxxl",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxxl).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "40px",
       "darkValue": "40px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxxl.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/heading/xxxs",
-      "dartAccessor": "theme.typography.fontSize.headingXxxs",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxxs).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "14px",
       "darkValue": "14px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxxs.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-size/paragraph",
-      "dartAccessor": "theme.typography.fontSize.paragraph",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.paragraph).fontSize",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "16px",
       "darkValue": "16px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role paragraph.fontSize, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.font-weight/bold",
-      "dartAccessor": "theme.typography.fontWeight.bold",
+      "dartAccessor": "CharcoalTheme.of(context).typography.weightBold",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "FontWeight",
       "lightValue": "700",
       "darkValue": "700",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography.weightBold, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle. Also used by: typography.roles.pageTitle.weight, typography.roles.modalTitle.weight, typography.roles.sectionTitle.weight and 13 more."
     },
     {
       "path": "text.font-weight/regular",
-      "dartAccessor": "theme.typography.fontWeight.regular",
+      "dartAccessor": "CharcoalTheme.of(context).typography.weightRegular",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "FontWeight",
       "lightValue": "400",
       "darkValue": "400",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography.weightRegular, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle. Also used by: typography.roles.body.weight, typography.roles.caption.weight, typography.roles.captionMono.weight and 8 more."
     },
     {
       "path": "text.line-height/body",
-      "dartAccessor": "theme.typography.lineHeight.body",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.bodyLarge).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role bodyLarge.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle. Also used by: typography.roles.bodyLargeBold.lineHeight."
     },
     {
       "path": "text.line-height/caption/m",
-      "dartAccessor": "theme.typography.lineHeight.captionM",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.captionMedium).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "20px",
       "darkValue": "20px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role captionMedium.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle. Also used by: typography.roles.captionMediumBold.lineHeight."
     },
     {
       "path": "text.line-height/caption/s",
-      "dartAccessor": "theme.typography.lineHeight.captionS",
+      "dartAccessor": "CharcoalGeneratedTypographyTokens.light.lineHeight.captionS",
       "kind": "typography",
-      "tier": "semantic",
+      "tier": "primitive",
       "valueType": "logicalPixels",
       "lightValue": "18px",
       "darkValue": "18px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Upstream token with no theme role: components resolve state variants themselves and applications cannot read it. If a role is missing, add it to the theme contract (tokens/theme/charcoal.pack.json) instead of reading this directly."
     },
     {
       "path": "text.line-height/heading/l",
-      "dartAccessor": "theme.typography.lineHeight.headingL",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingL).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "36px",
       "darkValue": "36px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingL.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/m",
-      "dartAccessor": "theme.typography.lineHeight.headingM",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingM).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "32px",
       "darkValue": "32px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingM.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/s",
-      "dartAccessor": "theme.typography.lineHeight.headingS",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingS).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "28px",
       "darkValue": "28px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingS.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/xl",
-      "dartAccessor": "theme.typography.lineHeight.headingXl",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXl).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "40px",
       "darkValue": "40px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXl.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/xs",
-      "dartAccessor": "theme.typography.lineHeight.headingXs",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXs).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "28px",
       "darkValue": "28px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXs.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/xxl",
-      "dartAccessor": "theme.typography.lineHeight.headingXxl",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxl).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "44px",
       "darkValue": "44px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxl.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/xxs",
-      "dartAccessor": "theme.typography.lineHeight.headingXxs",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxs).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "24px",
       "darkValue": "24px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxs.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/xxxl",
-      "dartAccessor": "theme.typography.lineHeight.headingXxxl",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxxl).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "52px",
       "darkValue": "52px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxxl.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/heading/xxxs",
-      "dartAccessor": "theme.typography.lineHeight.headingXxxs",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.headingXxxs).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "20px",
       "darkValue": "20px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role headingXxxs.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     },
     {
       "path": "text.line-height/paragraph",
-      "dartAccessor": "theme.typography.lineHeight.paragraph",
+      "dartAccessor": "CharcoalTheme.of(context).typography.spec(CharcoalTextRole.paragraph).lineHeight",
       "kind": "typography",
       "tier": "semantic",
       "valueType": "logicalPixels",
       "lightValue": "28px",
       "darkValue": "28px",
-      "guidance": "Typography foundation. Prefer CharcoalTypography or charcoalTypographyStyle for text."
+      "guidance": "Theme role typography role paragraph.lineHeight, for library code that reads the theme. Applications choose a CharcoalTextRole through CharcoalText; they never build a TextStyle."
     }
   ]
 }''';

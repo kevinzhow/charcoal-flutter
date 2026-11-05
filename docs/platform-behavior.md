@@ -1,8 +1,11 @@
 # Platform behavior
 
-Charcoal uses Flutter's Widgets/services layer for editing and platform behavior.
-It does not import Material or Cupertino. Visual source parity alone is not an
-acceptance test for these capabilities.
+`charcoal_ui` is hosted by Material (`CharcoalApp` wraps `MaterialApp`) and takes editing and
+platform behavior from Flutter's Widgets/services layer: the shared text editor is built on
+`EditableText`, page routes and system-bar handling are Charcoal's own, and Material widgets are
+wrapped only where they supply the behavior (dialog routes, date and time pickers, `Slider`,
+selectable code text). Cupertino is never imported by the library. Visual source parity alone is
+not an acceptance test for these capabilities.
 
 ## Ownership
 
@@ -14,7 +17,7 @@ acceptance test for these capabilities.
 | Keyboard avoidance | `CharcoalScaffold`, `CharcoalDialog` | Shrink content above the keyboard, keep bottom actions reachable, and remove consumed viewInsets. Scrollable form bodies remain an application responsibility. |
 | Full-bleed content | Page | Set `bodySafeArea: false`. Protect interactive controls with SafeArea. `extendBodyBehindNavigationBar` exposes the covered top extent through the body's MediaQuery padding for scrollable content. |
 | Selection gestures | Shared internal editor | Flutter's `TextSelectionGestureDetectorBuilder` owns platform taps, long presses, floating cursor, double/triple taps and pointer dragging. |
-| Selection UI | Shared internal editor | Charcoal handles and magnifier; native iOS editing menu where supported, localized Charcoal toolbar elsewhere. Flutter determines permitted clipboard actions, including password/read-only restrictions. |
+| Selection UI | Shared internal editor | Charcoal handles and magnifier; native iOS editing menu where supported, localized Charcoal toolbar (`CharcoalSelectionToolbar`) elsewhere. Flutter determines permitted clipboard actions, including password/read-only restrictions. |
 | Editing extensions | Field / area API | `contextMenuBuilder`, `enableInteractiveSelection`, `autofillHints`, `inputFormatters`, `scrollPadding`, and `undoController`. Pass null to disable the menu. |
 | Character count | Field / area | Grapheme clusters, matching Flutter's length limiter for emoji and combining sequences. |
 | Desktop native caption | Host runner | Preserve OS window buttons, drag, zoom, and fullscreen. This cannot be implemented by a page navigation bar. |
@@ -36,9 +39,10 @@ Future<void> main() async {
 }
 ```
 
-Use `GlobalWidgetsLocalizations.delegate` from Flutter's localization package in
-`CharcoalApp.localizationsDelegates` for localized editing labels. The default
-Widgets localization is English. Custom menu items should carry their own labels.
+`CharcoalApp` appends the Material, Widgets and Cupertino global localization delegates after the
+ones the application passes in `localizationsDelegates`, so any supported locale also receives the
+framework's editing labels (the default is English). Custom menu items should carry their own
+labels.
 Clipboard permissions on Web and system menu availability remain platform-owned.
 
 ## macOS host
