@@ -32,6 +32,8 @@ const libraryGuarded = <String>[
   // 2D navigation and layout
   'components/navigation/',
   'components/layout/',
+  // p3 gaps
+  'components/icons/',
 ];
 
 void main() {

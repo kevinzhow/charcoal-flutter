@@ -1,6 +1,26 @@
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
+/// Tells the pages inside a [CharcoalAdminShell] whether the shell is in its compact layout
+/// (bottom bar, no sidebar).
+///
+/// The shell decides, because it is what moves the navigation chrome; a `CharcoalPage` reads it
+/// so its own header matches. Outside a shell, [compactOf] is null.
+final class CharcoalAdminLayout extends InheritedWidget {
+  /// Creates a scope.
+  const CharcoalAdminLayout({required this.compact, required super.child, super.key});
+
+  /// Whether the shell shows the bottom bar instead of the sidebar.
+  final bool compact;
+
+  /// The nearest shell's layout, or null when there is none.
+  static bool? compactOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<CharcoalAdminLayout>()?.compact;
+
+  @override
+  bool updateShouldNotify(CharcoalAdminLayout oldWidget) => oldWidget.compact != compact;
+}
+
 /// The responsive frame of an admin app: a permanent [sidebar] beside [body] at or above
 /// `sizes.sidebarBreakpoint`, and [body] above a [bottomBar] (a `CharcoalTabBar`) below it.
 ///
@@ -32,14 +52,17 @@ final class CharcoalAdminShell extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= theme.sizes.sidebarBreakpoint;
-          return Flex(
-            direction: wide ? Axis.horizontal : Axis.vertical,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              if (wide) sidebar,
-              Expanded(child: body),
-              if (!wide && bottomBar != null) bottomBar!,
-            ],
+          return CharcoalAdminLayout(
+            compact: !wide,
+            child: Flex(
+              direction: wide ? Axis.horizontal : Axis.vertical,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                if (wide) sidebar,
+                Expanded(child: body),
+                if (!wide && bottomBar != null) bottomBar!,
+              ],
+            ),
           );
         },
       ),

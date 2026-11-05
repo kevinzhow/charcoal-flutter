@@ -21,11 +21,14 @@ void main() {
     '/lib/testing.dart',
     // 2A: a themed Material Slider.
     '/src/components/selection/slider.dart',
-    // 2C: Material surface for dialogs (a Material ancestor for the inputs inside), the dialog
-    // route, and selectable text in the code viewer.
+    // 2C: Material surface for dialogs (a Material ancestor for the inputs inside) and the dialog
+    // route.
     '/src/components/overlays/dialog.dart',
     '/src/components/overlays/modal.dart',
-    '/src/components/overlays/code_dialog.dart',
+    // p3 gaps: selectable text in the code block (shared with the code dialog) and the themed
+    // Material progress ring.
+    '/src/components/overlays/code_block.dart',
+    '/src/components/feedback/progress_ring.dart',
     // 2B: the only fields file that wraps Material widgets.
     '/src/components/fields/date_time_field.dart',
   ];

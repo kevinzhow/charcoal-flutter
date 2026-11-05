@@ -1,12 +1,12 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_theme/charcoal_theme.dart';
-import 'package:flutter/material.dart' show SelectableText;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../foundation/layout.dart';
 import '../actions/button.dart';
 import '../fields/search_field.dart';
+import 'code_block.dart';
 import 'dialog.dart';
 import 'modal.dart';
 import 'toast.dart';
@@ -184,22 +184,9 @@ class _CodeBodyState extends State<_CodeBody> {
           ),
         ),
         CharcoalGap.vertical(CharcoalSpace.xs),
-        ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: theme.sizes.codeViewportMaxHeight),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(theme.space.md),
-            decoration: BoxDecoration(
-              color: theme.colors.backgroundSecondary,
-              borderRadius: BorderRadius.circular(theme.radius.md),
-            ),
-            child: SingleChildScrollView(
-              child: SelectableText(
-                matched.isEmpty ? widget.noMatchLabel : matched,
-                style: theme.style(CharcoalTextRole.captionMono, color: theme.colors.text),
-              ),
-            ),
-          ),
+        CharcoalCodeBlock(
+          matched.isEmpty ? widget.noMatchLabel : matched,
+          scrollable: true,
         ),
       ],
     );
