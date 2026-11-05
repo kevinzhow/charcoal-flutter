@@ -5,7 +5,7 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 74,
+    "publicComponents": 77,
     "curatedComponents": 34,
     "componentsWithExamples": 34,
     "curatedPatterns": 6,
@@ -1124,6 +1124,56 @@ const String generatedCatalogJson = r'''{
       "examples": []
     },
     {
+      "name": "CharcoalBadge",
+      "category": "Utility",
+      "summary": "A small solid label: a count, a role, \"new\".",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/status/badge.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalbadge",
+        "badge"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBadge",
+          "kind": "constructor",
+          "signature": "CharcoalBadge(this.label, {this.tone = CharcoalBadgeTone.primary, super.key})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalBadgeTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalBadgeTone.primary"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalBalloon",
       "category": "Overlays",
       "summary": "Renders a persistent speech surface when the caller already owns its layout and directional relationship.",
@@ -1444,6 +1494,49 @@ const String generatedCatalogJson = r'''{
       "examples": []
     },
     {
+      "name": "CharcoalBrandMark",
+      "category": "Utility",
+      "summary": "The product mark: a `sizes.brandMark` square in the primary colour with one letter.",
+      "import": "package:charcoal_ui/admin.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/admin/brand_mark.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalbrandmark",
+        "brand mark"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalBrandMark",
+          "kind": "constructor",
+          "signature": "CharcoalBrandMark(this.mark, {super.key})",
+          "parameters": [
+            {
+              "name": "mark",
+              "type": "String",
+              "required": true,
+              "named": false
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
       "name": "CharcoalButton",
       "category": "Actions",
       "summary": "Runs an action with Charcoal interaction states, sizing, and visual variants.",
@@ -1502,7 +1595,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalButton",
           "kind": "constructor",
-          "signature": "CharcoalButton({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.fullWidth = false, this.leading, this.primaryColor, this.semanticLabel, this.selected, this.size = CharcoalButtonSize.medium, this.statesController, this.trailing, this.variant = CharcoalButtonVariant.normal, super.key})",
+          "signature": "CharcoalButton({required this.child, required this.onPressed, this.autofocus = false, this.focusNode, this.fullWidth = false, this.labelTone, this.leading, this.primaryColor, this.semanticLabel, this.selected, this.size = CharcoalButtonSize.medium, this.statesController, this.trailing, this.variant = CharcoalButtonVariant.normal, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -1535,6 +1628,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "labelTone",
+              "type": "CharcoalTextTone?",
+              "required": false,
+              "named": true
             },
             {
               "name": "leading",
@@ -2323,7 +2422,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalCodeBlock",
           "kind": "constructor",
-          "signature": "CharcoalCodeBlock(this.text, {this.maxLines, this.scrollable = false, this.selectable = true, this.tone = CharcoalTextTone.primary, super.key})",
+          "signature": "CharcoalCodeBlock(this.text, {this.maxLines, this.scrollable = false, this.selectable = true, this.tone = CharcoalTextTone.primary, this.trailing, this.field = false, super.key})",
           "parameters": [
             {
               "name": "text",
@@ -2357,6 +2456,19 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "CharcoalTextTone.primary"
+            },
+            {
+              "name": "trailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "field",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
             },
             {
               "name": "key",
@@ -2791,6 +2903,43 @@ const String generatedCatalogJson = r'''{
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Opens the same modal task as a dialog or bottom sheet based on available width.\nfinal class AgentModalExample extends StatelessWidget {\n  const AgentModalExample({super.key});\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalButton(\n      onPressed: () => _openModal(context),\n      variant: CharcoalButtonVariant.primary,\n      child: const Text('Review changes'),\n    );\n  }\n\n  Future<void> _openModal(BuildContext context) async {\n    final compact = MediaQuery.sizeOf(context).width < 600;\n    await showCharcoalModal<void>(\n      actions: <Widget>[\n        CharcoalButton(\n          onPressed: () => Navigator.of(context).pop(),\n          variant: CharcoalButtonVariant.primary,\n          child: const Text('Done'),\n        ),\n      ],\n      child: const CharcoalTypography(\n        child: Text(\n          'Your profile and visibility changes are ready to publish.',\n        ),\n      ),\n      context: context,\n      style: compact\n          ? CharcoalModalStyle.bottomSheet\n          : CharcoalModalStyle.center,\n      title: 'Review changes',\n    );\n  }\n}\n"
         }
       ]
+    },
+    {
+      "name": "CharcoalDivider",
+      "category": "Utility",
+      "summary": "A hairline rule across the width it is given, in `colors.borderSubtle`.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/divider.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoaldivider",
+        "divider"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalDivider",
+          "kind": "constructor",
+          "signature": "CharcoalDivider({super.key})",
+          "parameters": [
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
     },
     {
       "name": "CharcoalDropdown",
@@ -3259,6 +3408,56 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "'Retry'"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": []
+    },
+    {
+      "name": "CharcoalFieldBox",
+      "category": "Utility",
+      "summary": "Gives a field (`CharcoalTextField`, `CharcoalDropdown`, `CharcoalSearchField`...) a width class.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/field_box.dart",
+      "documentationLevel": "generated",
+      "keywords": [
+        "charcoalfieldbox",
+        "field box"
+      ],
+      "useWhen": [],
+      "avoidWhen": [],
+      "accessibility": [],
+      "responsiveBehavior": [],
+      "interactionStates": [],
+      "feedbackResponsibilities": [],
+      "tokenRoles": [],
+      "relatedComponents": [],
+      "apis": [
+        {
+          "name": "CharcoalFieldBox",
+          "kind": "constructor",
+          "signature": "CharcoalFieldBox({required this.child, this.width = CharcoalFieldWidth.full, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "width",
+              "type": "CharcoalFieldWidth",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalFieldWidth.full"
             },
             {
               "name": "key",
@@ -4250,13 +4449,40 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalList",
           "kind": "constructor",
-          "signature": "CharcoalList({required this.children, this.topBorder = true, super.key})",
+          "signature": "CharcoalList({required List<Widget> this.children, this.topBorder = true, super.key})",
           "parameters": [
             {
               "name": "children",
               "type": "List<Widget>",
               "required": true,
               "named": true
+            },
+            {
+              "name": "topBorder",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalList.around",
+          "kind": "constructor",
+          "signature": "CharcoalList.around(Widget this.child, {this.topBorder = true, super.key})",
+          "parameters": [
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": false
             },
             {
               "name": "topBorder",
@@ -4564,7 +4790,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalLoadingState",
       "category": "Utility",
-      "summary": "A centred progress ring for a loading page region.",
+      "summary": "A centred spinner for a loading page region.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/loading_state.dart",
       "documentationLevel": "generated",
@@ -5684,56 +5910,6 @@ const String generatedCatalogJson = r'''{
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Controlled paged-result context that remains usable at compact widths.\nfinal class AgentPaginationExample extends StatefulWidget {\n  const AgentPaginationExample({super.key});\n\n  @override\n  State<AgentPaginationExample> createState() => _AgentPaginationExampleState();\n}\n\nfinal class _AgentPaginationExampleState extends State<AgentPaginationExample> {\n  static const _pageCount = 20;\n  static const _pageSize = 10;\n  static const _resultCount = 194;\n\n  int _currentPage = 8;\n\n  int get _firstResult => (_currentPage - 1) * _pageSize + 1;\n\n  int get _lastResult {\n    final candidate = _currentPage * _pageSize;\n    return candidate > _resultCount ? _resultCount : candidate;\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    final theme = CharcoalTheme.of(context);\n    final space = theme.space;\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        Text('Search results', style: theme.style(CharcoalTextRole.headingS)),\n        SizedBox(height: space.sm),\n        Semantics(\n          liveRegion: true,\n          child: Text(\n            'Results $_firstResult–$_lastResult of $_resultCount. '\n            'Page $_currentPage of $_pageCount.',\n            style: theme\n                .style(CharcoalTextRole.captionMedium)\n                .copyWith(color: theme.colors.textSecondary),\n          ),\n        ),\n        SizedBox(height: space.xl),\n        CharcoalPagination(\n          currentPage: _currentPage,\n          nextLabel: 'Next result page',\n          onPageChanged: (page) => setState(() => _currentPage = page),\n          pageCount: _pageCount,\n          previousLabel: 'Previous result page',\n          semanticLabel: 'Search result pages',\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
-    },
-    {
-      "name": "CharcoalProgressRing",
-      "category": "Utility",
-      "summary": "An indeterminate progress ring: a `sizes.iconLg` circle with a `borders.thick` stroke in the",
-      "import": "package:charcoal_ui/charcoal_ui.dart",
-      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/progress_ring.dart",
-      "documentationLevel": "generated",
-      "keywords": [
-        "charcoalprogressring",
-        "progress ring"
-      ],
-      "useWhen": [],
-      "avoidWhen": [],
-      "accessibility": [],
-      "responsiveBehavior": [],
-      "interactionStates": [],
-      "feedbackResponsibilities": [],
-      "tokenRoles": [],
-      "relatedComponents": [],
-      "apis": [
-        {
-          "name": "CharcoalProgressRing",
-          "kind": "constructor",
-          "signature": "CharcoalProgressRing({this.semanticLabel = 'Loading', this.size, super.key})",
-          "parameters": [
-            {
-              "name": "semanticLabel",
-              "type": "String",
-              "required": false,
-              "named": true,
-              "defaultValue": "'Loading'"
-            },
-            {
-              "name": "size",
-              "type": "double?",
-              "required": false,
-              "named": true
-            },
-            {
-              "name": "key",
-              "type": "Key?",
-              "required": false,
-              "named": true
-            }
-          ],
-          "enumValues": []
-        }
-      ],
-      "examples": []
     },
     {
       "name": "CharcoalRadio",

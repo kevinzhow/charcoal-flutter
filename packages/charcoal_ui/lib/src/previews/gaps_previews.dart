@@ -44,7 +44,7 @@ Widget charcoalPagePreview() => Builder(
   ),
 );
 
-@CharcoalNextComponentPreview(name: 'Brand, badge, secret box', size: Size(420, 360))
+@CharcoalComponentPreview(name: 'Brand, badge, secret box', size: Size(420, 360))
 Widget charcoalBadgePreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,

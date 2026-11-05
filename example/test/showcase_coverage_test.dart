@@ -35,7 +35,7 @@ void main() {
   });
 
   // Building blocks that became public when the Material API replaced the legacy one and are
-  // exercised through their parents. TODO(3C): give the admin shell, progress ring and padding
+  // exercised through their parents. TODO(3C): give the admin shell and padding
   // helper their own showcase sections and shrink this list.
   const supporting = <String>{
     'CharcoalAdminShell',
@@ -43,7 +43,6 @@ void main() {
     'CharcoalFieldRing',
     'CharcoalOverlayAnchorTracker',
     'CharcoalPadding',
-    'CharcoalProgressRing',
     'CharcoalSelectionBox',
     'CharcoalSelectionToolbar',
     'CharcoalTextDefaults',
