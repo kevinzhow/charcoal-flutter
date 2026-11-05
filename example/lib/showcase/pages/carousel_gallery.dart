@@ -69,7 +69,7 @@ final class _CarouselSlide extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     final colors = <Color>[
       theme.colors.primary,
-      theme.colors.tagBackground,
+      theme.colors.negative,
       theme.colors.positive,
     ];
     return Padding(

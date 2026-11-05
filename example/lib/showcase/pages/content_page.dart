@@ -41,7 +41,7 @@ final class ContentPage extends StatelessWidget {
                     CharcoalTagItem(
                       backgroundColor: CharcoalTheme.of(context)
                           .colors
-                          .tagBackground,
+                          .negative,
                       label: '#discovery',
                       onPressed: showcaseNoop,
                     ),
