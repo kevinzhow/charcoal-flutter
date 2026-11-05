@@ -29,6 +29,9 @@ const libraryGuarded = <String>[
   'components/overlays/',
   'components/feedback/',
   'components/carousel/',
+  // 2D navigation and layout
+  'components/navigation/',
+  'components/layout/',
 ];
 
 void main() {

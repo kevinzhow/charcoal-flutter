@@ -1,21 +1,21 @@
 import 'dart:ui' show Tristate;
 
 import 'package:charcoal_icons/charcoal_icons.dart';
-import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:charcoal_ui/next.dart';
 import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helpers.dart';
+import 'support/geometry.dart';
 
 const _homeKey = ValueKey<String>('home-tab');
 const _messagesKey = ValueKey<String>('messages-tab');
 
 void main() {
   testWidgets('reports selection and updates controlled selected semantics', (tester) async {
-    await tester.pumpWidget(charcoalTestApp(const _TabBarHarness()));
+    await pumpLoose(tester, const _TabBarHarness());
 
     expect(
       tester.getSemantics(find.byKey(_homeKey)).flagsCollection.isSelected,
@@ -42,7 +42,7 @@ void main() {
   testWidgets('switches persistent selection in one painted frame', (
     tester,
   ) async {
-    await tester.pumpWidget(charcoalTestApp(const _TabBarHarness()));
+    await pumpLoose(tester, const _TabBarHarness());
 
     final theme = CharcoalTheme.of(
       tester.element(find.byType(CharcoalTabBar<String>)),
@@ -50,30 +50,30 @@ void main() {
 
     expect(
       _persistentTabBackground(tester, _homeKey),
-      theme.colors.containerSecondaryDefaultA,
+      theme.colors.fillSecondary,
     );
     expect(
       _persistentTabBackground(tester, _messagesKey),
-      theme.colors.backgroundDefault,
+      theme.colors.background,
     );
 
     final gesture = await tester.startGesture(
       tester.getCenter(find.byKey(_messagesKey)),
     );
     await tester.pump(kPressTimeout);
-    await tester.pump(CharcoalMotion.fast);
+    await tester.pump(charcoalLightPack.motion.fast);
 
     expect(
       _persistentTabBackground(tester, _homeKey),
-      theme.colors.containerSecondaryDefaultA,
+      theme.colors.fillSecondary,
     );
     expect(
       _persistentTabBackground(tester, _messagesKey),
-      theme.colors.backgroundDefault,
+      theme.colors.background,
     );
     expect(
       _paintedTabInteractionOverlay(tester, _messagesKey),
-      theme.colors.containerSecondaryPressA,
+      theme.colors.fillSecondaryPress,
     );
 
     await gesture.up();
@@ -81,11 +81,11 @@ void main() {
 
     expect(
       _persistentTabBackground(tester, _homeKey),
-      theme.colors.backgroundDefault,
+      theme.colors.background,
     );
     expect(
       _persistentTabBackground(tester, _messagesKey),
-      theme.colors.containerSecondaryDefaultA,
+      theme.colors.fillSecondary,
     );
     expect(
       tester.getSemantics(find.byKey(_homeKey)).flagsCollection.isSelected,
@@ -100,7 +100,7 @@ void main() {
   testWidgets('keeps destination centers stable through press and selection', (
     tester,
   ) async {
-    await tester.pumpWidget(charcoalTestApp(const _TabBarHarness()));
+    await pumpLoose(tester, const _TabBarHarness());
 
     final homeBefore = _tabGeometry(tester, _homeKey, 'Home');
     final messagesBefore = _tabGeometry(tester, _messagesKey, 'Messages');
@@ -123,7 +123,7 @@ void main() {
       tester.getCenter(find.byKey(_messagesKey)),
     );
     await tester.pump(kPressTimeout);
-    await tester.pump(CharcoalMotion.fast);
+    await tester.pump(charcoalLightPack.motion.fast);
 
     _expectSameTabCenters(
       homeBefore,
@@ -148,7 +148,7 @@ void main() {
   testWidgets('touch cancellation clears press without changing selection', (
     tester,
   ) async {
-    await tester.pumpWidget(charcoalTestApp(const _TabBarHarness()));
+    await pumpLoose(tester, const _TabBarHarness());
 
     final theme = CharcoalTheme.of(
       tester.element(find.byType(CharcoalTabBar<String>)),
@@ -157,11 +157,11 @@ void main() {
       tester.getCenter(find.byKey(_messagesKey)),
     );
     await tester.pump(kPressTimeout);
-    await tester.pump(CharcoalMotion.fast);
+    await tester.pump(charcoalLightPack.motion.fast);
 
     expect(
       _paintedTabInteractionOverlay(tester, _messagesKey),
-      theme.colors.containerSecondaryPressA,
+      theme.colors.fillSecondaryPress,
     );
     expect(
       tester.getSemantics(find.byKey(_homeKey)).flagsCollection.isSelected,
@@ -173,15 +173,15 @@ void main() {
 
     expect(
       _paintedTabInteractionOverlay(tester, _messagesKey),
-      theme.colors.containerDefaultA,
+      theme.colors.restOverlay,
     );
     expect(
       _persistentTabBackground(tester, _homeKey),
-      theme.colors.containerSecondaryDefaultA,
+      theme.colors.fillSecondary,
     );
     expect(
       _persistentTabBackground(tester, _messagesKey),
-      theme.colors.backgroundDefault,
+      theme.colors.background,
     );
     expect(
       tester.getSemantics(find.byKey(_homeKey)).flagsCollection.isSelected,
@@ -194,7 +194,7 @@ void main() {
   });
 
   testWidgets('exposes tab and tab-bar semantic roles with badge context', (tester) async {
-    await tester.pumpWidget(charcoalTestApp(const _TabBarHarness()));
+    await pumpLoose(tester, const _TabBarHarness());
 
     final bar = tester.getSemantics(find.byType(CharcoalTabBar<String>));
     final messages = tester.getSemantics(find.byKey(_messagesKey));
@@ -206,26 +206,25 @@ void main() {
 
   testWidgets('disabled destinations do not report selection', (tester) async {
     var changes = 0;
-    await tester.pumpWidget(
-      charcoalTestApp(
-        CharcoalTabBar<String>(
-          items: const <CharcoalTabItem<String>>[
-            CharcoalTabItem<String>(
-              icon: CharcoalIcon(CharcoalIcons.home),
-              label: 'Home',
-              value: 'home',
-            ),
-            CharcoalTabItem<String>(
-              enabled: false,
-              icon: CharcoalIcon(CharcoalIcons.personCircle),
-              key: ValueKey<String>('disabled-tab'),
-              label: 'Profile',
-              value: 'profile',
-            ),
-          ],
-          onChanged: (_) => changes += 1,
-          value: 'home',
-        ),
+    await pumpLoose(
+      tester,
+      CharcoalTabBar<String>(
+        items: const <CharcoalTabItem<String>>[
+          CharcoalTabItem<String>(
+            icon: CharcoalIcon(CharcoalIcons.home),
+            label: 'Home',
+            value: 'home',
+          ),
+          CharcoalTabItem<String>(
+            enabled: false,
+            icon: CharcoalIcon(CharcoalIcons.personCircle),
+            key: ValueKey<String>('disabled-tab'),
+            label: 'Profile',
+            value: 'profile',
+          ),
+        ],
+        onChanged: (_) => changes += 1,
+        value: 'home',
       ),
     );
 
@@ -243,7 +242,7 @@ void main() {
   testWidgets('supports keyboard focus and activation in destination order', (
     tester,
   ) async {
-    await tester.pumpWidget(charcoalTestApp(const _TabBarHarness()));
+    await pumpLoose(tester, const _TabBarHarness());
 
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
@@ -257,12 +256,11 @@ void main() {
   });
 
   testWidgets('removes interaction motion when animations are disabled', (tester) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const MediaQuery(
-          data: MediaQueryData(disableAnimations: true),
-          child: _TabBarHarness(),
-        ),
+    await pumpLoose(
+      tester,
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: _TabBarHarness(),
       ),
     );
 
@@ -277,12 +275,11 @@ void main() {
   testWidgets('grows beyond its baseline for accessibility text scaling', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      charcoalTestApp(
-        const MediaQuery(
-          data: MediaQueryData(textScaler: TextScaler.linear(3)),
-          child: SizedBox(width: 320, child: _TabBarHarness()),
-        ),
+    await pumpLoose(
+      tester,
+      const MediaQuery(
+        data: MediaQueryData(textScaler: TextScaler.linear(3)),
+        child: SizedBox(width: 320, child: _TabBarHarness()),
       ),
     );
 
