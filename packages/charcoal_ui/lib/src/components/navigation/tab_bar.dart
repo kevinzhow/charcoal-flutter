@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../foundation/charcoal_clickable.dart';
 import '../actions/control_support.dart';
+import '../status/count_badge.dart';
 
 /// One stable, top-level destination displayed by [CharcoalTabBar].
 ///
@@ -236,7 +237,7 @@ final class _Destination<T> extends StatelessWidget {
                         PositionedDirectional(
                           end: metrics.badgeOffsetEnd,
                           top: metrics.badgeOffsetTop,
-                          child: ExcludeSemantics(child: _Badge(label: badge)),
+                          child: ExcludeSemantics(child: CharcoalCountBadge(label: badge)),
                         ),
                     ],
                   ),
@@ -259,47 +260,6 @@ final class _Destination<T> extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-final class _Badge extends StatelessWidget {
-  const _Badge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final metrics = theme.metrics.tabBar;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.background, width: theme.borders.hairline),
-        borderRadius: BorderRadius.circular(theme.radius.pill),
-        color: theme.colors.negative,
-      ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: metrics.badgeMinExtent,
-          minWidth: metrics.badgeMinExtent,
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: theme.space.xs),
-          child: Center(
-            child: Text(
-              label,
-              maxLines: 1,
-              style: _sized(
-                theme,
-                CharcoalTextRole.size10,
-                metrics.badgeFontSize,
-                color: theme.colors.textOnNegative,
-                bold: true,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

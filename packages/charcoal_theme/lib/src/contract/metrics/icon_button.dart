@@ -11,6 +11,8 @@ class CharcoalIconButtonMetrics {
     required this.extraSmallSize,
     required this.smallIconSize,
     required this.regularIconSize,
+    required this.badgeOffsetEnd,
+    required this.badgeOffsetTop,
   });
 
   /// Edge of the extra-small icon button.
@@ -22,15 +24,25 @@ class CharcoalIconButtonMetrics {
   /// Glyph size of the regular icon button.
   final double regularIconSize;
 
+  /// Count badge position from the button end edge (negative: outside).
+  final double badgeOffsetEnd;
+
+  /// Count badge position from the button top edge (negative: outside).
+  final double badgeOffsetTop;
+
   /// A copy with the given fields replaced.
   CharcoalIconButtonMetrics copyWith({
     double? extraSmallSize,
     double? smallIconSize,
     double? regularIconSize,
+    double? badgeOffsetEnd,
+    double? badgeOffsetTop,
   }) => CharcoalIconButtonMetrics(
     extraSmallSize: extraSmallSize ?? this.extraSmallSize,
     smallIconSize: smallIconSize ?? this.smallIconSize,
     regularIconSize: regularIconSize ?? this.regularIconSize,
+    badgeOffsetEnd: badgeOffsetEnd ?? this.badgeOffsetEnd,
+    badgeOffsetTop: badgeOffsetTop ?? this.badgeOffsetTop,
   );
 
   /// Every field by name, for tests and diagnostics.
@@ -38,6 +50,8 @@ class CharcoalIconButtonMetrics {
     'extraSmallSize': extraSmallSize,
     'smallIconSize': smallIconSize,
     'regularIconSize': regularIconSize,
+    'badgeOffsetEnd': badgeOffsetEnd,
+    'badgeOffsetTop': badgeOffsetTop,
   };
 
   /// Inverse of [toMap].
@@ -45,6 +59,8 @@ class CharcoalIconButtonMetrics {
     extraSmallSize: map['extraSmallSize']! as double,
     smallIconSize: map['smallIconSize']! as double,
     regularIconSize: map['regularIconSize']! as double,
+    badgeOffsetEnd: map['badgeOffsetEnd']! as double,
+    badgeOffsetTop: map['badgeOffsetTop']! as double,
   );
 
   @override
@@ -53,12 +69,16 @@ class CharcoalIconButtonMetrics {
       other is CharcoalIconButtonMetrics &&
           other.extraSmallSize == extraSmallSize &&
           other.smallIconSize == smallIconSize &&
-          other.regularIconSize == regularIconSize;
+          other.regularIconSize == regularIconSize &&
+          other.badgeOffsetEnd == badgeOffsetEnd &&
+          other.badgeOffsetTop == badgeOffsetTop;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
     extraSmallSize,
     smallIconSize,
     regularIconSize,
+    badgeOffsetEnd,
+    badgeOffsetTop,
   ]);
 }

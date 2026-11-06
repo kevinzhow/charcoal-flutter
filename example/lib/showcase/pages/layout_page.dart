@@ -80,8 +80,7 @@ final class _LayoutPageState extends State<LayoutPage> {
             ),
           ),
           ShowcaseCard(
-            description:
-                'Filled and outlined cards, and the avatar in its three sizes.',
+            description: 'Filled and outlined cards, and the avatar in its four sizes and with a tone.',
             eyebrow: 'CARD · AVATAR',
             title: 'Card and avatar',
             child: Column(
@@ -94,13 +93,20 @@ final class _LayoutPageState extends State<LayoutPage> {
                   child: Text('Outlined card'),
                 ),
                 const CharcoalGap(CharcoalSpace.lg),
-                Row(
+                CharcoalWrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: CharcoalSpace.md,
+                  runSpacing: CharcoalSpace.md,
                   children: <Widget>[
-                    for (final size in CharcoalAvatarSize.values) ...<Widget>[
+                    for (final size in CharcoalAvatarSize.values)
                       CharcoalAvatar('Name', size: size),
-                      const CharcoalGap.horizontal(CharcoalSpace.md),
-                    ],
                     const CharcoalAvatar('Round', circular: true),
+                    const CharcoalAvatar(
+                      'Aki Kondo',
+                      circular: true,
+                      initials: 'AK',
+                      tone: CharcoalTone.info,
+                    ),
                   ],
                 ),
               ],

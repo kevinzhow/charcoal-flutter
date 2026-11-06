@@ -3,6 +3,10 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 /// An audited whole-surface action for a case with no higher-level component.
+///
+/// `CharcoalClickable` owns activation, focus and semantics and hands its states to a raised
+/// `CharcoalCard`, which paints hover, press and focus from the theme. The example draws nothing
+/// itself.
 final class AgentClickableSurfaceExample extends StatefulWidget {
   const AgentClickableSurfaceExample({super.key});
 
@@ -17,85 +21,57 @@ final class _AgentClickableSurfaceExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(
+        const CharcoalText(
           'Whole-surface action',
-          style: theme.style(CharcoalTextRole.headingS),
+          role: CharcoalTextRole.headingS,
         ),
-        SizedBox(height: space.sm),
-        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),
-        SizedBox(height: space.xl),
+        const CharcoalGap(CharcoalSpace.sm),
+        CharcoalText(_status, role: CharcoalTextRole.captionMedium),
+        const CharcoalGap(CharcoalSpace.xl),
         CharcoalClickable(
           onPressed: () => setState(() => _status = 'Moonlit Lake opened'),
           semanticLabel: 'Open Moonlit Lake project',
-          builder: (context, states) {
-            final focused = states.contains(WidgetState.focused);
-            final hovered = states.contains(WidgetState.hovered);
-            final pressed = states.contains(WidgetState.pressed);
-            final background = pressed
-                ? theme.colors.fillSecondaryPress
-                : hovered || focused
-                ? theme.colors.fillSecondaryHover
-                : theme.colors.background;
-            final border = focused
-                ? theme.colors.borderFocus
-                : pressed
-                ? theme.colors.border
-                : hovered
-                ? theme.colors.border
-                : theme.colors.borderSubtle;
-            return AnimatedContainer(
-              curve: CharcoalTheme.of(context).motion.curve,
-              duration: CharcoalTheme.of(context)
-                  .duration(context, CharcoalTheme.of(context).motion.fast),
-              constraints: BoxConstraints(minHeight: theme.sizes.controlLg),
-              padding: EdgeInsets.all(space.lg),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: border,
-                  width: theme.borders.hairline,
+          builder: (context, states) => CharcoalCard(
+            raised: true,
+            states: states,
+            child: const Row(
+              children: <Widget>[
+                CharcoalIconView(
+                  CharcoalIcons.image,
+                  tone: CharcoalIconTone.primary,
                 ),
-                borderRadius: BorderRadius.circular(theme.radius.md),
-                color: background,
-              ),
-              child: Row(
-                children: <Widget>[
-                  CharcoalIcon(CharcoalIcons.image, color: theme.colors.icon),
-                  SizedBox(width: space.lg),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          'Moonlit Lake',
-                          style: theme.style(CharcoalTextRole.bodyLargeBold),
-                        ),
-                        SizedBox(height: space.xs),
-                        Text(
-                          'Illustration · updated today',
-                          style: theme
-                              .style(CharcoalTextRole.caption)
-                              .copyWith(color: theme.colors.textSecondary),
-                        ),
-                      ],
-                    ),
+                CharcoalGap(CharcoalSpace.lg),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      CharcoalText(
+                        'Moonlit Lake',
+                        role: CharcoalTextRole.bodyLargeBold,
+                      ),
+                      CharcoalGap(CharcoalSpace.xs),
+                      CharcoalText(
+                        'Illustration · updated today',
+                        role: CharcoalTextRole.caption,
+                        tone: CharcoalTextTone.secondary,
+                      ),
+                    ],
                   ),
-                  SizedBox(width: space.sm),
-                  CharcoalIcon(
-                    CharcoalIcons.chevronRight,
-                    color: theme.colors.iconTertiary,
-                    size: 16,
-                  ),
-                ],
-              ),
-            );
-          },
+                ),
+                CharcoalGap(CharcoalSpace.sm),
+                CharcoalIconView(
+                  CharcoalIcons.chevronRight,
+                  size: CharcoalIconSize.sm,
+                  tone: CharcoalIconTone.tertiary,
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );

@@ -13,8 +13,6 @@ final class _BloomMessagesPage extends StatelessWidget {
         if (left.unread == right.unread) return 0;
         return left.unread ? -1 : 1;
       });
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -25,20 +23,19 @@ final class _BloomMessagesPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child: Text(
+                child: CharcoalText(
                   'Pick up the conversations that need you first.',
-                  style: theme
-                      .style(CharcoalTextRole.captionMedium)
-                      .copyWith(color: theme.colors.textSecondary),
+                  role: CharcoalTextRole.captionMedium,
+                  tone: CharcoalTextTone.secondary,
                 ),
               ),
               if (state.unreadConversationCount > 0) ...<Widget>[
-                SizedBox(width: space.sm),
-                _BloomCountBadge(count: state.unreadConversationCount),
+                const CharcoalGap(CharcoalSpace.sm),
+                CharcoalBadge('${state.unreadConversationCount} unread'),
               ],
             ],
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           for (
             var index = 0;
             index < conversations.length;
@@ -53,7 +50,8 @@ final class _BloomMessagesPage extends StatelessWidget {
               onPressed: () =>
                   viewModel.openConversation(conversations[index].id),
             ),
-            if (index + 1 < conversations.length) SizedBox(height: space.sm),
+            if (index + 1 < conversations.length)
+              const CharcoalGap(CharcoalSpace.sm),
           ],
         ],
       ),
@@ -90,17 +88,14 @@ final class _BloomConversationPageState extends State<_BloomConversationPage> {
     final state = widget.viewModel.state;
     final conversation = state.data.conversation(widget.conversationId);
     final creator = state.data.creator(conversation.creatorId);
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     if (_lastMessageCount != conversation.messages.length) {
       _lastMessageCount = conversation.messages.length;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || !_scrollController.hasClients) return;
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: CharcoalTheme.of(context)
-              .duration(context, const Duration(milliseconds: 220)),
-          curve: CharcoalTheme.of(context).motion.curve,
+          duration: CharcoalMotion.standard.resolve(context),
+          curve: CharcoalMotion.curveOf(context),
         );
       });
     }
@@ -111,22 +106,16 @@ final class _BloomConversationPageState extends State<_BloomConversationPage> {
         Expanded(
           child: ListView(
             controller: _scrollController,
-            padding: EdgeInsets.fromLTRB(
-              space.lg,
-              space.md,
-              space.lg,
-              space.lg,
-            ),
+            padding: _bloomPageInset.resolve(context),
             children: <Widget>[
               Center(
-                child: Text(
+                child: CharcoalText(
                   'Today',
-                  style: theme
-                      .style(CharcoalTextRole.caption)
-                      .copyWith(color: theme.colors.textTertiary),
+                  role: CharcoalTextRole.caption,
+                  tone: CharcoalTextTone.tertiary,
                 ),
               ),
-              SizedBox(height: space.lg),
+              const CharcoalGap(CharcoalSpace.lg),
               for (
                 var index = 0;
                 index < conversation.messages.length;
@@ -142,7 +131,7 @@ final class _BloomConversationPageState extends State<_BloomConversationPage> {
                   ),
                 ),
                 if (index + 1 < conversation.messages.length)
-                  SizedBox(height: space.sm),
+                  const CharcoalGap(CharcoalSpace.sm),
               ],
             ],
           ),
@@ -179,58 +168,29 @@ final class _BloomMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Align(
       alignment: message.own
           ? AlignmentDirectional.centerEnd
           : AlignmentDirectional.centerStart,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 260),
-        child: Column(
-          crossAxisAlignment: message.own
-              ? CrossAxisAlignment.end
-              : CrossAxisAlignment.start,
-          children: <Widget>[
-            if (!message.own) ...<Widget>[
-              Text(
-                creatorName,
-                style: theme
-                    .style(CharcoalTextRole.caption)
-                    .copyWith(color: theme.colors.textTertiary),
-              ),
-              SizedBox(height: space.xs),
-            ],
-            DecoratedBox(
-              decoration: BoxDecoration(
-                border: message.own
-                    ? null
-                    : Border.all(color: theme.colors.borderSubtle),
-                borderRadius: BorderRadius.circular(theme.radius.md),
-                color: message.own
-                    ? theme.colors.primary
-                    : theme.colors.background,
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(space.sm),
-                child: Text(
-                  message.text,
-                  style: theme
-                      .style(CharcoalTextRole.captionMedium)
-                      .copyWith(
-                        color: message.own
-                            ? theme.colors.textOnPrimary
-                            : theme.colors.text,
-                      ),
-                ),
-              ),
+      child: Column(
+        crossAxisAlignment: message.own
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
+        children: <Widget>[
+          if (!message.own) ...<Widget>[
+            CharcoalText(
+              creatorName,
+              role: CharcoalTextRole.caption,
+              tone: CharcoalTextTone.tertiary,
             ),
-            if (message.own) ...<Widget>[
-              SizedBox(height: space.xs),
-              _BloomDeliveryStatus(message: message, onRetry: onRetry),
-            ],
+            const CharcoalGap(CharcoalSpace.xs),
           ],
-        ),
+          CharcoalMessageBubble(message.text, outgoing: message.own),
+          if (message.own) ...<Widget>[
+            const CharcoalGap(CharcoalSpace.xs),
+            _BloomDeliveryStatus(message: message, onRetry: onRetry),
+          ],
+        ],
       ),
     );
   }
@@ -244,31 +204,24 @@ final class _BloomDeliveryStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final textStyle = theme
-        .style(CharcoalTextRole.caption)
-        .copyWith(
-          color: message.delivery == BloomMessageDelivery.failed
-              ? theme.colors.textNegative
-              : theme.colors.textTertiary,
-          fontSize: 10,
-        );
     return switch (message.delivery) {
-      BloomMessageDelivery.sending => Row(
+      BloomMessageDelivery.sending => const Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          CharcoalLoadingSpinner(
-            color: theme.colors.iconTertiary,
-            padding: 0,
-            semanticLabel: 'Sending message',
-            size: 8,
-            transparent: true,
+          CharcoalLoadingSpinner.inline(semanticLabel: 'Sending message'),
+          CharcoalGap(CharcoalSpace.xs),
+          CharcoalText(
+            'Sending…',
+            role: CharcoalTextRole.size10,
+            tone: CharcoalTextTone.tertiary,
           ),
-          SizedBox(width: theme.space.xs),
-          Text('Sending…', style: textStyle),
         ],
       ),
-      BloomMessageDelivery.sent => Text('Sent', style: textStyle),
+      BloomMessageDelivery.sent => const CharcoalText(
+        'Sent',
+        role: CharcoalTextRole.size10,
+        tone: CharcoalTextTone.tertiary,
+      ),
       BloomMessageDelivery.failed => CharcoalButton(
         onPressed: onRetry,
         size: CharcoalButtonSize.small,

@@ -8,8 +8,6 @@ final class _BloomHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = viewModel.state;
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     final posts = state.data.posts
         .where((post) {
           if (state.data.hiddenPostIds.contains(post.id)) return false;
@@ -44,19 +42,18 @@ final class _BloomHomePage extends StatelessWidget {
             value: state.feed,
           ),
           if (state.feed == BloomFeed.following) ...<Widget>[
-            SizedBox(height: space.lg),
+            const CharcoalGap(CharcoalSpace.lg),
             Row(
               children: <Widget>[
                 const Expanded(child: _BloomSectionTitle(title: 'Your circle')),
-                Text(
+                CharcoalText(
                   '${state.data.conversations.length} new moments',
-                  style: theme
-                      .style(CharcoalTextRole.caption)
-                      .copyWith(color: theme.colors.textSecondary),
+                  role: CharcoalTextRole.caption,
+                  tone: CharcoalTextTone.secondary,
                 ),
               ],
             ),
-            SizedBox(height: space.sm),
+            const CharcoalGap(CharcoalSpace.sm),
             Row(
               children: <Widget>[
                 for (final creator in state.data.creators) ...<Widget>[
@@ -67,20 +64,19 @@ final class _BloomHomePage extends StatelessWidget {
                     ),
                   ),
                   if (creator != state.data.creators.last)
-                    SizedBox(width: space.sm),
+                    const CharcoalGap(CharcoalSpace.sm),
                 ],
               ],
             ),
           ] else ...<Widget>[
-            SizedBox(height: space.md),
-            Text(
+            const CharcoalGap(CharcoalSpace.md),
+            CharcoalText(
               'Ideas selected from the topics and creators you explore.',
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(color: theme.colors.textSecondary),
+              role: CharcoalTextRole.caption,
+              tone: CharcoalTextTone.secondary,
             ),
           ],
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           if (posts.isEmpty)
             const _BloomEmptyState(
               description: 'Try the other feed or restore a hidden post from the latest message.',
@@ -103,7 +99,7 @@ final class _BloomHomePage extends StatelessWidget {
                 showFollow: state.feed == BloomFeed.forYou,
                 state: state,
               ),
-              if (index + 1 < posts.length) SizedBox(height: space.lg),
+              if (index + 1 < posts.length) const CharcoalGap(CharcoalSpace.lg),
             ],
         ],
       ),
@@ -119,29 +115,25 @@ final class _BloomStoryAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
     return CharcoalClickable(
       onPressed: onPressed,
       semanticLabel: 'View ${creator.name} story',
-      builder: (context, states) => AnimatedOpacity(
-        duration: CharcoalTheme.of(context)
-            .duration(context, CharcoalTheme.of(context).motion.fast),
-        opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
+      builder: (context, states) => CharcoalPressFeedback(
+        states: states,
         child: Column(
           children: <Widget>[
             _BloomAvatar(
               initials: creator.initials,
               tone: creator.tone,
-              size: 46,
+              size: CharcoalAvatarSize.large,
             ),
-            SizedBox(height: theme.space.xs),
-            Text(
+            const CharcoalGap(CharcoalSpace.xs),
+            CharcoalText(
               creator.name.split(' ').first,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(color: theme.colors.textSecondary, fontSize: 10),
+              role: CharcoalTextRole.size10,
+              tone: CharcoalTextTone.secondary,
             ),
           ],
         ),
@@ -169,7 +161,6 @@ Future<void> showBloomPostActions(
       'You will stop seeing this post. You can undo this immediately.',
     ),
     context: context,
-    maxWidth: 360,
     style: CharcoalModalStyle.bottomSheet,
     title: 'Post options',
     useRootNavigator: false,
@@ -183,7 +174,6 @@ Future<void> showBloomPostActions(
       child: const Text('Undo'),
     ),
     context: context,
-    maxWidth: 360,
     message: 'Post hidden from this feed',
     useRootOverlay: false,
   );

@@ -84,7 +84,7 @@ const Map<String, ComponentMetadata> actionsMetadata = <String, ComponentMetadat
       'Render an unmistakable focus state and a bounded pressed response without moving, resizing, or replacing the control.',
     ],
     responsiveBehavior: <String>[
-      'CharcoalClickable intentionally owns no geometry or color; the authored control must enforce a suitable semantic target and use role-appropriate tokens.',
+      'CharcoalClickable intentionally owns no geometry or color; in application code the builder returns a component that paints the states it is given (CharcoalCard with states, CharcoalPressFeedback), and a library control reads role-appropriate tokens.',
       'Keep target bounds, child alignment, and text baselines stable through pointer down, cancellation, keyboard activation, focus, hover, selection, and disablement.',
       'Let labels wrap or truncate according to the authored component contract and verify supported text scaling and compact constraints.',
     ],
@@ -102,7 +102,7 @@ const Map<String, ComponentMetadata> actionsMetadata = <String, ComponentMetadat
     ],
     feedbackResponsibilities: <String>[
       'Owns state dispatch, pointer cancellation, platform keyboard intents, a perceivable keyboard press pulse, focus visibility, cursor, and semantics actions.',
-      'The builder owns all visual geometry and state styling; the caller owns controlled values, action progress, failure, recovery, and durable results.',
+      'The builder owns the state visuals by passing the states to a component (CharcoalCard, CharcoalPressFeedback); the caller owns controlled values, action progress, failure, recovery, and durable results.',
     ],
     tokenRoles: <String>[],
     relatedComponents: <String>[
@@ -111,14 +111,63 @@ const Map<String, ComponentMetadata> actionsMetadata = <String, ComponentMetadat
       'CharcoalNavigationItem',
       'CharcoalCheckbox',
       'CharcoalTabBar',
+      'CharcoalCard',
+      'CharcoalPressFeedback',
     ],
     companionDeclarations: <String>[],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'clickable-whole-surface-action',
         title: 'Audited whole-surface action',
-        description: 'Uses the interaction primitive only after higher-level controls cannot express a single custom project surface.',
+        description: 'Uses the interaction primitive only after higher-level controls cannot express a single custom project surface, and hands its states to a raised CharcoalCard.',
         sourcePath: 'example/lib/agent_examples/clickable_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalPressFeedback': ComponentMetadata(
+    category: 'Actions',
+    summary: 'Fades a CharcoalClickable region while it is pressed: the tap feedback of an author header, a story avatar or an artwork tile.',
+    keywords: <String>[
+      'press feedback',
+      'tap feedback',
+      'pressed opacity',
+      'tappable region',
+    ],
+    useWhen: <String>[
+      'A CharcoalClickable region that is not a card or a control needs visible press feedback.',
+    ],
+    avoidWhen: <String>[
+      'The region is a card; pass the states to CharcoalCard instead.',
+      'A Charcoal control already expresses the action; it has its own feedback.',
+    ],
+    accessibility: <String>[
+      'Adds no semantics; the enclosing CharcoalClickable names the action.',
+    ],
+    responsiveBehavior: <String>[
+      'Changes only opacity, so bounds, alignment and baselines stay put; the fade is instant when animations are disabled.',
+    ],
+    interactionStates: <String>[
+      'idle',
+      'pressed',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the pressed opacity and its timing.',
+      'The caller owns the clickable, its label and the action.',
+    ],
+    tokenRoles: <String>[
+      'motion.fast',
+    ],
+    relatedComponents: <String>[
+      'CharcoalClickable',
+      'CharcoalCard',
+    ],
+    companionDeclarations: <String>['CharcoalMotion'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'press-feedback-author-header',
+        title: 'Tappable author header',
+        description: 'Opens a profile from a post header and fades it while pressed.',
+        sourcePath: 'example/lib/agent_examples/social_content_example.dart',
       ),
     ],
   ),
@@ -145,11 +194,13 @@ const Map<String, ComponentMetadata> actionsMetadata = <String, ComponentMetadat
       'Update semanticLabel when a toggle changes so it continues to describe the next action, such as Save item and Remove saved item.',
       'Leave selected null for a regular action; pass false or true for a controlled toggle so both states are explicit.',
       'A null onPressed value exposes the disabled state and removes pointer and keyboard activation.',
+      'A badge count is decorative and excluded from semantics; include the count in semanticLabel, such as Notifications, 3 unread.',
     ],
     responsiveBehavior: <String>[
       'Use medium for standalone mobile actions; smaller source-authored sizes are dense secondary affordances and require audited target separation.',
       'The icon stays centered in fixed 20, 32, or 40 logical-pixel circular geometry.',
       'Use the overlay variant only when the control sits on imagery or another authored on-image surface.',
+      'A badge sits over the top end corner, outside the target bounds, and mirrors in right-to-left layouts.',
     ],
     interactionStates: <String>[
       'idle',

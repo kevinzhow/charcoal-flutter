@@ -35,16 +35,14 @@ final class _AgentOverlayControlsExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Anchored context', style: theme.style(CharcoalTextRole.headingS)),
-        SizedBox(height: space.sm),
-        Text(_status, style: theme.style(CharcoalTextRole.captionMedium)),
-        SizedBox(height: space.xl),
+        const CharcoalText('Anchored context', role: CharcoalTextRole.headingS),
+        const CharcoalGap(CharcoalSpace.sm),
+        CharcoalText(_status, role: CharcoalTextRole.captionMedium),
+        const CharcoalGap(CharcoalSpace.xl),
         const Align(
           alignment: AlignmentDirectional.centerStart,
           child: CharcoalBalloon(
@@ -53,11 +51,11 @@ final class _AgentOverlayControlsExampleState
             child: Text('Drafts remain private until you publish.'),
           ),
         ),
-        SizedBox(height: space.xl),
-        Wrap(
+        const CharcoalGap(CharcoalSpace.xl),
+        CharcoalWrap(
           crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: space.lg,
-          runSpacing: space.lg,
+          spacing: CharcoalSpace.lg,
+          runSpacing: CharcoalSpace.lg,
           children: <Widget>[
             CharcoalTooltip(
               message: 'Copies a shareable link',

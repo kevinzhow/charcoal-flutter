@@ -28,8 +28,6 @@ final class _BloomCommentsPageState extends State<_BloomCommentsPage> {
     final state = widget.viewModel.state;
     final post = state.data.post(widget.postId);
     final comments = state.data.commentsFor(widget.postId);
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       key: const ValueKey<String>('agent-social-comments-page'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,29 +35,23 @@ final class _BloomCommentsPageState extends State<_BloomCommentsPage> {
         Expanded(
           child: ListView(
             controller: _scrollController,
-            padding: EdgeInsets.fromLTRB(
-              space.lg,
-              space.md,
-              space.lg,
-              space.lg,
-            ),
+            padding: _bloomPageInset.resolve(context),
             children: <Widget>[
               _BloomCommentPostContext(post: post, state: state),
-              SizedBox(height: space.lg),
+              const CharcoalGap(CharcoalSpace.lg),
               Row(
                 children: <Widget>[
                   const Expanded(
                     child: _BloomSectionTitle(title: 'Recent comments'),
                   ),
-                  Text(
+                  CharcoalText(
                     '${post.comments} total',
-                    style: theme
-                        .style(CharcoalTextRole.caption)
-                        .copyWith(color: theme.colors.textSecondary),
+                    role: CharcoalTextRole.caption,
+                    tone: CharcoalTextTone.secondary,
                   ),
                 ],
               ),
-              SizedBox(height: space.md),
+              const CharcoalGap(CharcoalSpace.md),
               if (comments.isEmpty)
                 const _BloomEmptyState(
                   description: 'Share the first thoughtful response.',
@@ -73,7 +65,8 @@ final class _BloomCommentsPageState extends State<_BloomCommentsPage> {
                   index++
                 ) ...<Widget>[
                   _BloomCommentRow(comment: comments[index], state: state),
-                  if (index + 1 < comments.length) SizedBox(height: space.md),
+                  if (index + 1 < comments.length)
+                    const CharcoalGap(CharcoalSpace.md),
                 ],
             ],
           ),
@@ -96,9 +89,8 @@ final class _BloomCommentsPageState extends State<_BloomCommentsPage> {
       if (!mounted || !_scrollController.hasClients) return;
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: CharcoalTheme.of(context)
-            .duration(context, const Duration(milliseconds: 220)),
-        curve: CharcoalTheme.of(context).motion.curve,
+        duration: CharcoalMotion.standard.resolve(context),
+        curve: CharcoalMotion.curveOf(context),
       );
     });
   }
@@ -112,31 +104,31 @@ final class _BloomCommentPostContext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     final author = _bloomAuthor(state.data, post.creatorId);
     return _BloomSurface(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _BloomAvatar(initials: author.initials, size: 36, tone: author.tone),
-          SizedBox(width: space.sm),
+          _BloomAvatar(
+            initials: author.initials,
+            size: CharcoalAvatarSize.small,
+            tone: author.tone,
+          ),
+          const CharcoalGap(CharcoalSpace.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                CharcoalText(
                   author.name,
-                  style: theme
-                      .style(CharcoalTextRole.captionMediumBold)
-                      .copyWith(color: theme.colors.text),
+                  role: CharcoalTextRole.captionMediumBold,
+                  tone: CharcoalTextTone.primary,
                 ),
-                SizedBox(height: space.xs),
-                Text(
+                const CharcoalGap(CharcoalSpace.xs),
+                CharcoalText(
                   post.copy,
-                  style: theme
-                      .style(CharcoalTextRole.captionMedium)
-                      .copyWith(color: theme.colors.text),
+                  role: CharcoalTextRole.captionMedium,
+                  tone: CharcoalTextTone.primary,
                 ),
               ],
             ),
@@ -155,15 +147,17 @@ final class _BloomCommentRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     final author = _bloomAuthor(state.data, comment.authorId);
     return Row(
       key: ValueKey<String>(comment.id),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _BloomAvatar(initials: author.initials, size: 34, tone: author.tone),
-        SizedBox(width: space.sm),
+        _BloomAvatar(
+          initials: author.initials,
+          size: CharcoalAvatarSize.small,
+          tone: author.tone,
+        ),
+        const CharcoalGap(CharcoalSpace.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,28 +165,25 @@ final class _BloomCommentRow extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text(
+                    child: CharcoalText(
                       author.name,
-                      style: theme
-                          .style(CharcoalTextRole.captionMediumBold)
-                          .copyWith(color: theme.colors.text),
+                      role: CharcoalTextRole.captionMediumBold,
+                      tone: CharcoalTextTone.primary,
                     ),
                   ),
-                  SizedBox(width: space.sm),
-                  Text(
+                  const CharcoalGap(CharcoalSpace.sm),
+                  CharcoalText(
                     comment.time,
-                    style: theme
-                        .style(CharcoalTextRole.caption)
-                        .copyWith(color: theme.colors.textTertiary),
+                    role: CharcoalTextRole.caption,
+                    tone: CharcoalTextTone.tertiary,
                   ),
                 ],
               ),
-              SizedBox(height: space.xs),
-              Text(
+              const CharcoalGap(CharcoalSpace.xs),
+              CharcoalText(
                 comment.text,
-                style: theme
-                    .style(CharcoalTextRole.captionMedium)
-                    .copyWith(color: theme.colors.text),
+                role: CharcoalTextRole.captionMedium,
+                tone: CharcoalTextTone.primary,
               ),
             ],
           ),

@@ -45,6 +45,8 @@ class CharcoalSizeScale {
     required this.pageInsetWide,
     required this.sidebarInset,
     required this.infoLabelWidthExtraWide,
+    required this.avatarXl,
+    required this.messageBubbleMaxWidth,
   });
 
   /// Inline icons: chevrons, button leading icons, field affordances.
@@ -158,6 +160,12 @@ class CharcoalSizeScale {
   /// Extra-wide label column of a key/value block.
   final double infoLabelWidthExtraWide;
 
+  /// Extra-large avatar (profile header).
+  final double avatarXl;
+
+  /// Widest a chat message bubble grows before its text wraps.
+  final double messageBubbleMaxWidth;
+
   /// A copy with the given fields replaced.
   CharcoalSizeScale copyWith({
     double? iconSm,
@@ -197,6 +205,8 @@ class CharcoalSizeScale {
     double? pageInsetWide,
     double? sidebarInset,
     double? infoLabelWidthExtraWide,
+    double? avatarXl,
+    double? messageBubbleMaxWidth,
   }) => CharcoalSizeScale(
     iconSm: iconSm ?? this.iconSm,
     iconMd: iconMd ?? this.iconMd,
@@ -235,6 +245,8 @@ class CharcoalSizeScale {
     pageInsetWide: pageInsetWide ?? this.pageInsetWide,
     sidebarInset: sidebarInset ?? this.sidebarInset,
     infoLabelWidthExtraWide: infoLabelWidthExtraWide ?? this.infoLabelWidthExtraWide,
+    avatarXl: avatarXl ?? this.avatarXl,
+    messageBubbleMaxWidth: messageBubbleMaxWidth ?? this.messageBubbleMaxWidth,
   );
 
   /// Every field by name, for tests and diagnostics.
@@ -276,6 +288,8 @@ class CharcoalSizeScale {
     'pageInsetWide': pageInsetWide,
     'sidebarInset': sidebarInset,
     'infoLabelWidthExtraWide': infoLabelWidthExtraWide,
+    'avatarXl': avatarXl,
+    'messageBubbleMaxWidth': messageBubbleMaxWidth,
   };
 
   /// Inverse of [toMap].
@@ -317,6 +331,8 @@ class CharcoalSizeScale {
     pageInsetWide: map['pageInsetWide']! as double,
     sidebarInset: map['sidebarInset']! as double,
     infoLabelWidthExtraWide: map['infoLabelWidthExtraWide']! as double,
+    avatarXl: map['avatarXl']! as double,
+    messageBubbleMaxWidth: map['messageBubbleMaxWidth']! as double,
   );
 
   @override
@@ -359,7 +375,9 @@ class CharcoalSizeScale {
           other.sidebarBreakpoint == sidebarBreakpoint &&
           other.pageInsetWide == pageInsetWide &&
           other.sidebarInset == sidebarInset &&
-          other.infoLabelWidthExtraWide == infoLabelWidthExtraWide;
+          other.infoLabelWidthExtraWide == infoLabelWidthExtraWide &&
+          other.avatarXl == avatarXl &&
+          other.messageBubbleMaxWidth == messageBubbleMaxWidth;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
@@ -400,5 +418,7 @@ class CharcoalSizeScale {
     pageInsetWide,
     sidebarInset,
     infoLabelWidthExtraWide,
+    avatarXl,
+    messageBubbleMaxWidth,
   ]);
 }

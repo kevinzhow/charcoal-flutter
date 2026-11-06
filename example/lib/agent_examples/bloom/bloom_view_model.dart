@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../simulated_latency.dart';
 import 'bloom_model.dart';
 import 'bloom_repository.dart';
 
@@ -210,7 +211,7 @@ final class BloomViewModel extends ChangeNotifier {
     if (!state.canPublish || _publishing) return false;
     _publishing = true;
     _notify();
-    await Future<void>.delayed(const Duration(milliseconds: 320));
+    await simulateRequest(SimulatedLatency.publish);
     if (_disposed) return false;
     _repository.publish(
       altText: _composerAltText.trim(),
@@ -262,14 +263,14 @@ final class BloomViewModel extends ChangeNotifier {
     if (normalized.isEmpty) return;
     final messageId = _repository.queueMessage(conversationId, normalized);
     _notify();
-    await Future<void>.delayed(const Duration(milliseconds: 420));
+    await simulateRequest(SimulatedLatency.send);
     if (_disposed) return;
     _repository.markMessageSent(conversationId, messageId);
     _notify();
   }
 
   Future<void> retryMessage(String conversationId, String messageId) async {
-    await Future<void>.delayed(const Duration(milliseconds: 320));
+    await simulateRequest(SimulatedLatency.publish);
     if (_disposed) return;
     _repository.markMessageSent(conversationId, messageId);
     _notify();
@@ -286,7 +287,7 @@ final class BloomViewModel extends ChangeNotifier {
       ..clear()
       ..add(BloomRoute(BloomRouteKind.conversation, id: conversation.id));
     _notify();
-    await Future<void>.delayed(const Duration(milliseconds: 420));
+    await simulateRequest(SimulatedLatency.send);
     if (_disposed) return;
     _repository.markMessageSent(conversation.id, messageId);
     _notify();

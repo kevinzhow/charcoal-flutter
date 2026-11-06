@@ -7,60 +7,43 @@ final class _BloomTopicTile extends StatelessWidget {
   final BloomTopic topic;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return CharcoalClickable(
-      onPressed: onPressed,
-      semanticLabel: 'Open ${topic.label} collection',
-      builder: (context, states) => AnimatedContainer(
-        duration: CharcoalTheme.of(context)
-            .duration(context, CharcoalTheme.of(context).motion.fast),
-        padding: EdgeInsets.all(space.md),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: states.contains(WidgetState.hovered)
-                ? theme.colors.border
-                : theme.colors.borderSubtle,
+  Widget build(BuildContext context) => CharcoalClickable(
+    onPressed: onPressed,
+    semanticLabel: 'Open ${topic.label} collection',
+    builder: (context, states) => CharcoalCard(
+      padding: const CharcoalInset.all(CharcoalSpace.md),
+      raised: true,
+      states: states,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CharcoalText(
+                  topic.label,
+                  role: CharcoalTextRole.captionMediumBold,
+                  tone: CharcoalTextTone.primary,
+                ),
+                const CharcoalGap(CharcoalSpace.xs),
+                CharcoalText(
+                  topic.description,
+                  role: CharcoalTextRole.caption,
+                  tone: CharcoalTextTone.secondary,
+                ),
+              ],
+            ),
           ),
-          borderRadius: BorderRadius.circular(theme.radius.md),
-          color: states.contains(WidgetState.pressed)
-              ? theme.colors.fillSecondaryPress
-              : theme.colors.background,
-        ),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    topic.label,
-                    style: theme
-                        .style(CharcoalTextRole.captionMediumBold)
-                        .copyWith(color: theme.colors.text),
-                  ),
-                  SizedBox(height: space.xs),
-                  Text(
-                    topic.description,
-                    style: theme
-                        .style(CharcoalTextRole.caption)
-                        .copyWith(color: theme.colors.textSecondary),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: space.sm),
-            CharcoalIcon(
-              CharcoalIcons.chevronRight,
-              color: theme.colors.iconSecondary,
-              size: 16,
-            ),
-          ],
-        ),
+          const CharcoalGap(CharcoalSpace.sm),
+          const CharcoalIconView(
+            CharcoalIcons.chevronRight,
+            size: CharcoalIconSize.sm,
+            tone: CharcoalIconTone.secondary,
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
 
 final class _BloomCreatorTile extends StatelessWidget {
@@ -77,67 +60,59 @@ final class _BloomCreatorTile extends StatelessWidget {
   final VoidCallback onOpen;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return _BloomSurface(
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: CharcoalClickable(
-              onPressed: onOpen,
-              semanticLabel: 'Open ${creator.name} profile',
-              builder: (context, states) => AnimatedOpacity(
-                duration: CharcoalTheme.of(context)
-                    .duration(context, CharcoalTheme.of(context).motion.fast),
-                opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
-                child: Row(
-                  children: <Widget>[
-                    _BloomAvatar(
-                      initials: creator.initials,
-                      tone: creator.tone,
-                      size: 42,
+  Widget build(BuildContext context) => _BloomSurface(
+    child: Row(
+      children: <Widget>[
+        Expanded(
+          child: CharcoalClickable(
+            onPressed: onOpen,
+            semanticLabel: 'Open ${creator.name} profile',
+            builder: (context, states) => CharcoalPressFeedback(
+              states: states,
+              child: Row(
+                children: <Widget>[
+                  _BloomAvatar(
+                    initials: creator.initials,
+                    tone: creator.tone,
+                    size: CharcoalAvatarSize.regular,
+                  ),
+                  const CharcoalGap(CharcoalSpace.sm),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        CharcoalText(
+                          creator.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          role: CharcoalTextRole.captionMediumBold,
+                          tone: CharcoalTextTone.primary,
+                        ),
+                        CharcoalText(
+                          creator.handle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          role: CharcoalTextRole.caption,
+                          tone: CharcoalTextTone.secondary,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: space.sm),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            creator.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme
-                                .style(CharcoalTextRole.captionMediumBold)
-                                .copyWith(color: theme.colors.text),
-                          ),
-                          Text(
-                            creator.handle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme
-                                .style(CharcoalTextRole.caption)
-                                .copyWith(color: theme.colors.textSecondary),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-          SizedBox(width: space.sm),
-          CharcoalButton(
-            onPressed: onFollow,
-            selected: followed,
-            size: CharcoalButtonSize.small,
-            child: Text(followed ? 'Following' : 'Follow'),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        const CharcoalGap(CharcoalSpace.sm),
+        CharcoalButton(
+          onPressed: onFollow,
+          selected: followed,
+          size: CharcoalButtonSize.small,
+          child: Text(followed ? 'Following' : 'Follow'),
+        ),
+      ],
+    ),
+  );
 }
 
 final class _BloomConversationTile extends StatelessWidget {
@@ -153,80 +128,62 @@ final class _BloomConversationTile extends StatelessWidget {
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return CharcoalClickable(
-      onPressed: onPressed,
-      semanticLabel:
-          '${creator.name}, ${conversation.unread ? 'unread, ' : ''}${conversation.preview}',
-      builder: (context, states) => AnimatedContainer(
-        duration: CharcoalTheme.of(context)
-            .duration(context, CharcoalTheme.of(context).motion.fast),
-        padding: EdgeInsets.all(space.md),
-        decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSubtle),
-          borderRadius: BorderRadius.circular(theme.radius.md),
-          color: states.contains(WidgetState.pressed)
-              ? theme.colors.fillSecondaryPress
-              : conversation.unread
-              ? theme.colors.surfaceSecondary
-              : theme.colors.background,
-        ),
-        child: Row(
-          children: <Widget>[
-            _BloomAvatar(
-              initials: creator.initials,
-              tone: creator.tone,
-              size: 44,
-            ),
-            SizedBox(width: space.sm),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          creator.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme
-                              .style(CharcoalTextRole.captionMediumBold)
-                              .copyWith(color: theme.colors.text),
-                        ),
+  Widget build(BuildContext context) => CharcoalClickable(
+    onPressed: onPressed,
+    semanticLabel:
+        '${creator.name}, ${conversation.unread ? 'unread, ' : ''}${conversation.preview}',
+    // An unread conversation is highlighted among the raised cards.
+    builder: (context, states) => CharcoalCard(
+      highlighted: conversation.unread,
+      padding: const CharcoalInset.all(CharcoalSpace.md),
+      raised: true,
+      states: states,
+      child: Row(
+        children: <Widget>[
+          _BloomAvatar(
+            initials: creator.initials,
+            tone: creator.tone,
+            size: CharcoalAvatarSize.regular,
+          ),
+          const CharcoalGap(CharcoalSpace.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: CharcoalText(
+                        creator.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        role: CharcoalTextRole.captionMediumBold,
+                        tone: CharcoalTextTone.primary,
                       ),
-                      Text(
-                        conversation.time,
-                        style: theme
-                            .style(CharcoalTextRole.caption)
-                            .copyWith(color: theme.colors.textTertiary),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: space.xs),
-                  Text(
-                    conversation.preview,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme
-                        .style(CharcoalTextRole.caption)
-                        .copyWith(
-                          color: theme.colors.textSecondary,
-                          fontWeight: conversation.unread
-                              ? FontWeight.w700
-                              : FontWeight.w400,
-                        ),
-                  ),
-                ],
-              ),
+                    ),
+                    CharcoalText(
+                      conversation.time,
+                      role: CharcoalTextRole.caption,
+                      tone: CharcoalTextTone.tertiary,
+                    ),
+                  ],
+                ),
+                const CharcoalGap(CharcoalSpace.xs),
+                CharcoalText(
+                  conversation.preview,
+                  bold: conversation.unread,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  role: CharcoalTextRole.caption,
+                  tone: CharcoalTextTone.secondary,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
 
 final class _BloomNotificationTile extends StatelessWidget {
@@ -239,60 +196,43 @@ final class _BloomNotificationTile extends StatelessWidget {
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return CharcoalClickable(
-      onPressed: onPressed,
-      semanticLabel:
-          '${notification.unread ? 'Unread. ' : ''}${notification.description}',
-      builder: (context, states) => AnimatedContainer(
-        duration: CharcoalTheme.of(context)
-            .duration(context, CharcoalTheme.of(context).motion.fast),
-        padding: EdgeInsets.all(space.md),
-        decoration: BoxDecoration(
-          border: Border.all(color: theme.colors.borderSubtle),
-          borderRadius: BorderRadius.circular(theme.radius.md),
-          color: states.contains(WidgetState.pressed)
-              ? theme.colors.fillSecondaryPress
-              : notification.unread
-              ? theme.colors.surfaceSecondary
-              : theme.colors.background,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CharcoalIcon(
-              notification.kind == BloomNotificationKind.likedPost
-                  ? CharcoalIcons.heart
-                  : CharcoalIcons.personAdd,
-              color: theme.colors.iconSecondary,
-              size: 20,
+  Widget build(BuildContext context) => CharcoalClickable(
+    onPressed: onPressed,
+    semanticLabel:
+        '${notification.unread ? 'Unread. ' : ''}${notification.description}',
+    // An unread notification is highlighted among the raised cards.
+    builder: (context, states) => CharcoalCard(
+      highlighted: notification.unread,
+      padding: const CharcoalInset.all(CharcoalSpace.md),
+      raised: true,
+      states: states,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          CharcoalIconView(
+            notification.kind == BloomNotificationKind.likedPost
+                ? CharcoalIcons.heart
+                : CharcoalIcons.personAdd,
+            size: CharcoalIconSize.md,
+            tone: CharcoalIconTone.secondary,
+          ),
+          const CharcoalGap(CharcoalSpace.sm),
+          Expanded(
+            child: CharcoalText(
+              notification.description,
+              bold: notification.unread,
+              role: CharcoalTextRole.caption,
+              tone: CharcoalTextTone.primary,
             ),
-            SizedBox(width: space.sm),
-            Expanded(
-              child: Text(
-                notification.description,
-                style: theme
-                    .style(CharcoalTextRole.caption)
-                    .copyWith(
-                      color: theme.colors.text,
-                      fontWeight: notification.unread
-                          ? FontWeight.w700
-                          : FontWeight.w400,
-                    ),
-              ),
-            ),
-            SizedBox(width: space.sm),
-            Text(
-              notification.time,
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(color: theme.colors.textTertiary),
-            ),
-          ],
-        ),
+          ),
+          const CharcoalGap(CharcoalSpace.sm),
+          CharcoalText(
+            notification.time,
+            role: CharcoalTextRole.caption,
+            tone: CharcoalTextTone.tertiary,
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }

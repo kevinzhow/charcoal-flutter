@@ -55,20 +55,18 @@ final class _AgentMultiSelectExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Prepare download', style: theme.style(CharcoalTextRole.headingS)),
-        SizedBox(height: space.xl),
+        const CharcoalText('Prepare download', role: CharcoalTextRole.headingS),
+        const CharcoalGap(CharcoalSpace.xl),
         const CharcoalFieldLabel(
           label: 'Export contents',
           required: true,
           requiredText: 'Required',
         ),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.sm),
         Semantics(
           container: true,
           explicitChildNodes: true,
@@ -84,28 +82,26 @@ final class _AgentMultiSelectExampleState
                       _setSelected(_options[index].value, selected: selected),
                   selected: _selected.contains(_options[index].value),
                 ),
-                if (index != _options.length - 1) SizedBox(height: space.lg),
+                if (index != _options.length - 1)
+                  const CharcoalGap(CharcoalSpace.lg),
               ],
             ],
           ),
         ),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.sm),
         Semantics(
           liveRegion: _invalid || _result != null,
-          child: Text(
+          child: CharcoalText(
             _invalid
                 ? 'Select at least one content type.'
                 : _result ?? _selectionSummary,
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(
-                  color: _invalid
-                      ? theme.colors.textNegative
-                      : theme.colors.textSecondary,
-                ),
+            role: CharcoalTextRole.captionMedium,
+            tone: _invalid
+                ? CharcoalTextTone.negative
+                : CharcoalTextTone.secondary,
           ),
         ),
-        SizedBox(height: space.xl),
+        const CharcoalGap(CharcoalSpace.xl),
         CharcoalButton(
           fullWidth: true,
           onPressed: _prepareExport,

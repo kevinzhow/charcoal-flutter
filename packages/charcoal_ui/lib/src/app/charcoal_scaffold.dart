@@ -13,6 +13,15 @@ abstract interface class CharcoalContextualHeight {
   double heightFor(BuildContext context);
 }
 
+/// The colour behind a [CharcoalScaffold]'s content.
+enum CharcoalPageBackground {
+  /// `colors.background`, the default page surface.
+  primary,
+
+  /// `colors.backgroundSecondary`: a grey page on which raised cards stand out (a feed).
+  secondary,
+}
+
 /// Coordinates a page's navigation, content, system insets, and keyboard.
 ///
 /// The background always fills the window, including system-bar regions. By
@@ -27,6 +36,7 @@ final class CharcoalScaffold extends StatelessWidget {
     required this.body,
     this.navigationBar,
     this.bottomBar,
+    this.background = CharcoalPageBackground.primary,
     this.backgroundColor,
     this.systemOverlayStyle,
     this.bodySafeArea = true,
@@ -44,7 +54,11 @@ final class CharcoalScaffold extends StatelessWidget {
   /// The controls placed below the body and above the keyboard or bottom inset.
   final Widget? bottomBar;
 
-  /// The full-window background, including space behind system bars.
+  /// The full-window background as a page role, including space behind system bars.
+  final CharcoalPageBackground background;
+
+  /// A background colour that overrides [background]. For the library's own use; application
+  /// code names a [background] instead.
   final Color? backgroundColor;
 
   /// The system-bar appearance override for this page.
@@ -67,7 +81,12 @@ final class CharcoalScaffold extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     const transparent = CharcoalColorRoles.transparent;
     final media = MediaQuery.of(context);
-    final background = backgroundColor ?? theme.colors.background;
+    final background =
+        backgroundColor ??
+        switch (this.background) {
+          CharcoalPageBackground.primary => theme.colors.background,
+          CharcoalPageBackground.secondary => theme.colors.backgroundSecondary,
+        };
     final darkBackground =
         background.computeLuminance() < theme.metrics.scaffold.darkLuminanceThreshold;
     final style =

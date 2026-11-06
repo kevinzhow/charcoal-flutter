@@ -13,55 +13,44 @@ final class _BloomStoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final creator = viewModel.state.data.creator(creatorId);
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       key: const ValueKey<String>('agent-social-story-page'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(space.lg, space.sm, space.lg, space.sm),
+        CharcoalPadding(
+          padding: const CharcoalInset.symmetric(
+            horizontal: CharcoalSpace.lg,
+            vertical: CharcoalSpace.sm,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Semantics(
-                label: 'Story 1 of 1',
-                child: ExcludeSemantics(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(theme.radius.pill),
-                    child: SizedBox(
-                      height: theme.borders.thick,
-                      child: ColoredBox(color: theme.colors.primary),
-                    ),
-                  ),
-                ),
+              const CharcoalProgressBar(
+                value: 1,
+                semanticLabel: 'Story 1 of 1',
               ),
-              SizedBox(height: space.sm),
-              Text(
+              const CharcoalGap(CharcoalSpace.sm),
+              CharcoalText(
                 'One moment from ${creator.location} · 1 of 1',
-                style: theme
-                    .style(CharcoalTextRole.caption)
-                    .copyWith(color: theme.colors.textSecondary),
+                role: CharcoalTextRole.caption,
+                tone: CharcoalTextTone.secondary,
               ),
             ],
           ),
         ),
         Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: space.lg),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(theme.radius.md),
-              child: LayoutBuilder(
-                builder: (context, constraints) => _BloomArtwork(
-                  altText: '${creator.name} shared an abstract color study.',
-                  height: constraints.maxHeight,
-                  tone: creator.tone,
-                ),
-              ),
+          child: CharcoalPadding(
+            padding: const CharcoalInset.symmetric(
+              horizontal: CharcoalSpace.lg,
+            ),
+            child: _BloomArtwork(
+              altText: '${creator.name} shared an abstract color study.',
+              rounded: true,
+              tone: creator.tone,
             ),
           ),
         ),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.sm),
         _BloomReplyBar(
           fieldKey: const ValueKey<String>('agent-social-story-reply-field'),
           fieldSemanticLabel: 'Reply to ${creator.name}',

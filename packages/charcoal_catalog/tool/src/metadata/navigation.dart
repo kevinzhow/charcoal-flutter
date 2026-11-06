@@ -86,6 +86,7 @@ const Map<String, ComponentMetadata> navigationMetadata = <String, ComponentMeta
     responsiveBehavior: <String>[
       'Shrinks above the software keyboard by default.',
       'Background fills the window; content and bars consume safe insets once.',
+      'background: CharcoalPageBackground.secondary gives a grey page on which raised cards stand out, such as a feed.',
     ],
     interactionStates: <String>[
       'keyboard hidden',
@@ -100,14 +101,16 @@ const Map<String, ComponentMetadata> navigationMetadata = <String, ComponentMeta
     ],
     tokenRoles: <String>[
       'colors.background',
+      'colors.backgroundSecondary',
     ],
     relatedComponents: <String>[
       'CharcoalApp',
       'CharcoalNavigationBar',
       'CharcoalTextField',
       'CharcoalTextArea',
+      'CharcoalBottomBar',
     ],
-    companionDeclarations: <String>['configureCharcoalSystemUi'],
+    companionDeclarations: <String>['configureCharcoalSystemUi', 'CharcoalPageBackground'],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'scaffold-editor',
@@ -333,7 +336,8 @@ const Map<String, ComponentMetadata> navigationMetadata = <String, ComponentMeta
       'Keyboard focus reveals overlay navigation before focus enters its buttons, so a focused control never becomes visually hidden.',
     ],
     responsiveBehavior: <String>[
-      'The parent supplies a bounded height; small shows one full page and indicators, while medium defaults to a partial neighbor and overlay navigation.',
+      'A bounded parent sets the height; inside a scrolling column the carousel is metrics.carousel.defaultHeight tall. Small shows one full page and indicators, while medium defaults to a partial neighbor and overlay navigation.',
+      'Application code names the gap between slides with spacing (a CharcoalSpace step); gap in logical pixels is for the library.',
       'Touch and trackpad users swipe the viewport without depending on hover; pointer hover and focus-within reveal desktop navigation.',
       'A long indicator row scrolls horizontally instead of overflowing compact constraints, but keep carousel sequences intentionally short.',
       'Slides, chevrons, and horizontal arrow keys follow ambient LTR or RTL direction.',

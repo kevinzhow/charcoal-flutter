@@ -31,8 +31,6 @@ final class _BloomComposerPageState extends State<_BloomComposerPage> {
   @override
   Widget build(BuildContext context) {
     final state = widget.viewModel.state;
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -45,40 +43,36 @@ final class _BloomComposerPageState extends State<_BloomComposerPage> {
               _BloomAvatar(
                 initials: 'MA',
                 tone: state.data.profile.tone,
-                size: 42,
+                size: CharcoalAvatarSize.regular,
               ),
-              SizedBox(width: space.sm),
+              const CharcoalGap(CharcoalSpace.sm),
               Expanded(
-                child: Text(
+                child: CharcoalText(
                   'Share one thing you noticed. A visual can speak on its own.',
-                  style: theme
-                      .style(CharcoalTextRole.captionMedium)
-                      .copyWith(color: theme.colors.textSecondary),
+                  role: CharcoalTextRole.captionMedium,
+                  tone: CharcoalTextTone.secondary,
                 ),
               ),
             ],
           ),
           if (state.hasSavedDraft) ...<Widget>[
-            SizedBox(height: space.sm),
-            Text(
+            const CharcoalGap(CharcoalSpace.sm),
+            CharcoalText(
               'Saved draft restored',
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(
-                    color: theme.colors.textInfo,
-                    fontWeight: FontWeight.w700,
-                  ),
+              bold: true,
+              role: CharcoalTextRole.caption,
+              tone: CharcoalTextTone.info,
             ),
           ],
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           const _BloomSectionTitle(title: 'Artwork'),
-          SizedBox(height: space.sm),
+          const CharcoalGap(CharcoalSpace.sm),
           _BloomMediaPicker(
             onPressed: widget.viewModel.changeComposerArtwork,
             tone: state.composerTone,
           ),
           if (state.composerTone != null) ...<Widget>[
-            SizedBox(height: space.md),
+            const CharcoalGap(CharcoalSpace.md),
             CharcoalTextField(
               controller: _altTextController,
               label: 'Image description',
@@ -89,7 +83,7 @@ final class _BloomComposerPageState extends State<_BloomComposerPage> {
               showLabel: true,
             ),
           ],
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           CharcoalTextArea(
             key: const ValueKey<String>('agent-social-post-field'),
             assistiveText: 'Optional when an artwork is selected.',
@@ -102,9 +96,9 @@ final class _BloomComposerPageState extends State<_BloomComposerPage> {
             showCount: true,
             showLabel: true,
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           const _BloomSectionTitle(title: 'Audience'),
-          SizedBox(height: space.sm),
+          const CharcoalGap(CharcoalSpace.sm),
           CharcoalSegmentedControl<BloomAudience>(
             fullWidth: true,
             onChanged: widget.viewModel.changeAudience,
@@ -121,25 +115,24 @@ final class _BloomComposerPageState extends State<_BloomComposerPage> {
             semanticLabel: 'Post audience',
             value: state.audience,
           ),
-          SizedBox(height: space.md),
+          const CharcoalGap(CharcoalSpace.md),
           _BloomSurface(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CharcoalIcon(
+                const CharcoalIconView(
                   CharcoalIcons.infoCircle,
-                  color: theme.colors.iconSecondary,
-                  size: 18,
+                  size: CharcoalIconSize.sm,
+                  tone: CharcoalIconTone.secondary,
                 ),
-                SizedBox(width: space.sm),
+                const CharcoalGap(CharcoalSpace.sm),
                 Expanded(
-                  child: Text(
+                  child: CharcoalText(
                     state.audience == BloomAudience.circle
                         ? 'Only people you follow can see and reply.'
                         : 'Anyone on Bloom can discover and reply.',
-                    style: theme
-                        .style(CharcoalTextRole.caption)
-                        .copyWith(color: theme.colors.textSecondary),
+                    role: CharcoalTextRole.caption,
+                    tone: CharcoalTextTone.secondary,
                   ),
                 ),
               ],
@@ -159,50 +152,37 @@ final class _BloomMediaPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     if (tone == null) {
       return CharcoalClickable(
         key: const ValueKey<String>('agent-social-add-artwork'),
         onPressed: onPressed,
         semanticLabel: 'Choose sample artwork',
-        builder: (context, states) => AnimatedContainer(
-          duration: CharcoalTheme.of(context)
-              .duration(context, CharcoalTheme.of(context).motion.fast),
-          height: 156,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: states.contains(WidgetState.hovered)
-                  ? theme.colors.border
-                  : theme.colors.borderSubtle,
+        builder: (context, states) => CharcoalCard(
+          padding: const CharcoalInset.symmetric(vertical: CharcoalSpace.xxl),
+          raised: true,
+          states: states,
+          child: const Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CharcoalIconView(
+                  CharcoalIcons.imageAdd,
+                  tone: CharcoalIconTone.secondary,
+                ),
+                CharcoalGap(CharcoalSpace.sm),
+                CharcoalText(
+                  'Choose sample artwork',
+                  role: CharcoalTextRole.captionMediumBold,
+                  tone: CharcoalTextTone.primary,
+                ),
+                CharcoalGap(CharcoalSpace.xs),
+                CharcoalText(
+                  'This simulation includes four visual studies.',
+                  role: CharcoalTextRole.caption,
+                  tone: CharcoalTextTone.secondary,
+                ),
+              ],
             ),
-            borderRadius: BorderRadius.circular(theme.radius.md),
-            color: states.contains(WidgetState.pressed)
-                ? theme.colors.fillSecondaryPress
-                : theme.colors.background,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CharcoalIcon(
-                CharcoalIcons.imageAdd,
-                color: theme.colors.iconSecondary,
-              ),
-              SizedBox(height: space.sm),
-              Text(
-                'Choose sample artwork',
-                style: theme
-                    .style(CharcoalTextRole.captionMediumBold)
-                    .copyWith(color: theme.colors.text),
-              ),
-              SizedBox(height: space.xs),
-              Text(
-                'This simulation includes four visual studies.',
-                style: theme
-                    .style(CharcoalTextRole.caption)
-                    .copyWith(color: theme.colors.textSecondary),
-              ),
-            ],
           ),
         ),
       );
@@ -210,15 +190,12 @@ final class _BloomMediaPicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(theme.radius.md),
-          child: _BloomArtwork(
-            altText: 'Selected sample artwork',
-            height: 200,
-            tone: tone!,
-          ),
+        _BloomArtwork(
+          altText: 'Selected sample artwork',
+          rounded: true,
+          tone: tone!,
         ),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.sm),
         CharcoalButton(
           fullWidth: true,
           leading: const CharcoalIcon(CharcoalIcons.imageReplace),

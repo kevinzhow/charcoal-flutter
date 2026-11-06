@@ -18,7 +18,19 @@ final class CharcoalLoadingSpinner extends StatefulWidget {
     super.key,
   }) : assert(size == null || size > 0),
        assert(padding == null || padding >= 0),
-       assert(semanticLabel != '');
+       assert(semanticLabel != ''),
+       _inline = false;
+
+  /// A `metrics.spinner.inlineSize` spinner with no surface or padding, to sit beside a line of
+  /// small text such as a "Sending…" delivery status.
+  const CharcoalLoadingSpinner.inline({this.semanticLabel = 'Loading', super.key})
+    : assert(semanticLabel != ''),
+      color = null,
+      once = false,
+      padding = 0,
+      size = null,
+      transparent = true,
+      _inline = true;
 
   final Color? color;
   final bool once;
@@ -26,6 +38,7 @@ final class CharcoalLoadingSpinner extends StatefulWidget {
   final String semanticLabel;
   final double? size;
   final bool transparent;
+  final bool _inline;
 
   @override
   State<CharcoalLoadingSpinner> createState() => _CharcoalLoadingSpinnerState();
@@ -81,7 +94,9 @@ final class _CharcoalLoadingSpinnerState extends State<CharcoalLoadingSpinner>
   @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
-    final size = widget.size ?? theme.sizes.controlLg;
+    final size = widget._inline
+        ? theme.metrics.spinner.inlineSize
+        : widget.size ?? theme.sizes.controlLg;
     final padding = widget.padding ?? theme.space.lg;
     return Semantics(
       container: true,

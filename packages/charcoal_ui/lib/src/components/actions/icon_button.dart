@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../foundation/charcoal_clickable.dart';
 import '../../foundation/interaction_state.dart';
+import '../status/count_badge.dart';
 import 'control_support.dart';
 
 /// Surface a [CharcoalIconButton] sits on.
@@ -32,12 +33,16 @@ enum CharcoalIconButtonSize {
 /// whose selected or unselected state is exposed through semantics, painted in its pressed colours
 /// while selected. Pass [semanticLabel] (and update it when a toggle changes) so the action has an
 /// accessible name.
+///
+/// A [badge] draws a small count over the button's top end corner, as on a notification bell;
+/// it is decorative, so include the count in [semanticLabel].
 final class CharcoalIconButton extends StatelessWidget {
   /// Creates an icon button showing [icon].
   const CharcoalIconButton({
     required this.icon,
     required this.onPressed,
     this.autofocus = false,
+    this.badge,
     this.focusNode,
     this.semanticLabel,
     this.selected,
@@ -55,6 +60,9 @@ final class CharcoalIconButton extends StatelessWidget {
 
   /// Whether to take focus when first built.
   final bool autofocus;
+
+  /// A short count drawn over the top end corner; null shows none. Excluded from semantics.
+  final String? badge;
 
   /// Focus node to use instead of an internal one.
   final FocusNode? focusNode;
@@ -84,7 +92,7 @@ final class CharcoalIconButton extends StatelessWidget {
       CharcoalIconButtonSize.small => (theme.sizes.controlSm, metrics.regularIconSize),
       CharcoalIconButtonSize.medium => (theme.sizes.controlMd, metrics.regularIconSize),
     };
-    return MergeSemantics(
+    final button = MergeSemantics(
       child: Semantics(
         selected: selected,
         child: CharcoalClickable(
@@ -149,6 +157,19 @@ final class CharcoalIconButton extends StatelessWidget {
           },
         ),
       ),
+    );
+    final label = badge;
+    if (label == null) return button;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: <Widget>[
+        button,
+        PositionedDirectional(
+          end: metrics.badgeOffsetEnd,
+          top: metrics.badgeOffsetTop,
+          child: ExcludeSemantics(child: CharcoalCountBadge(label: label)),
+        ),
+      ],
     );
   }
 }

@@ -12,6 +12,7 @@ class CharcoalCarouselMetrics {
     required this.scrollDuration,
     required this.mediumViewportFraction,
     required this.navigationZoneWidth,
+    required this.defaultHeight,
   });
 
   /// Fade of the previous/next zones.
@@ -26,17 +27,22 @@ class CharcoalCarouselMetrics {
   /// Width of each navigation zone.
   final double navigationZoneWidth;
 
+  /// Height of a carousel whose parent leaves the height unbounded.
+  final double defaultHeight;
+
   /// A copy with the given fields replaced.
   CharcoalCarouselMetrics copyWith({
     Duration? navigationFadeDuration,
     Duration? scrollDuration,
     double? mediumViewportFraction,
     double? navigationZoneWidth,
+    double? defaultHeight,
   }) => CharcoalCarouselMetrics(
     navigationFadeDuration: navigationFadeDuration ?? this.navigationFadeDuration,
     scrollDuration: scrollDuration ?? this.scrollDuration,
     mediumViewportFraction: mediumViewportFraction ?? this.mediumViewportFraction,
     navigationZoneWidth: navigationZoneWidth ?? this.navigationZoneWidth,
+    defaultHeight: defaultHeight ?? this.defaultHeight,
   );
 
   /// Every field by name, for tests and diagnostics.
@@ -45,6 +51,7 @@ class CharcoalCarouselMetrics {
     'scrollDuration': scrollDuration,
     'mediumViewportFraction': mediumViewportFraction,
     'navigationZoneWidth': navigationZoneWidth,
+    'defaultHeight': defaultHeight,
   };
 
   /// Inverse of [toMap].
@@ -53,6 +60,7 @@ class CharcoalCarouselMetrics {
     scrollDuration: map['scrollDuration']! as Duration,
     mediumViewportFraction: map['mediumViewportFraction']! as double,
     navigationZoneWidth: map['navigationZoneWidth']! as double,
+    defaultHeight: map['defaultHeight']! as double,
   );
 
   @override
@@ -62,7 +70,8 @@ class CharcoalCarouselMetrics {
           other.navigationFadeDuration == navigationFadeDuration &&
           other.scrollDuration == scrollDuration &&
           other.mediumViewportFraction == mediumViewportFraction &&
-          other.navigationZoneWidth == navigationZoneWidth;
+          other.navigationZoneWidth == navigationZoneWidth &&
+          other.defaultHeight == defaultHeight;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
@@ -70,5 +79,6 @@ class CharcoalCarouselMetrics {
     scrollDuration,
     mediumViewportFraction,
     navigationZoneWidth,
+    defaultHeight,
   ]);
 }

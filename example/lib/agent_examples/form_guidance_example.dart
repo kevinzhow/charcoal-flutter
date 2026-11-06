@@ -32,28 +32,26 @@ final class _AgentFormGuidanceExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Public profile', style: theme.style(CharcoalTextRole.headingS)),
-        SizedBox(height: space.xl),
+        const CharcoalText('Public profile', role: CharcoalTextRole.headingS),
+        const CharcoalGap(CharcoalSpace.xl),
         const CharcoalFieldLabel(
           label: 'Portfolio URL',
           required: true,
           requiredText: 'Required',
           subLabel: Text('Public'),
         ),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.sm),
         CharcoalTextField(
           controller: _controller,
           label: 'Portfolio URL',
           placeholder: 'https://example.com/your-name',
           required: true,
         ),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.sm),
         CharcoalHintText(
           action: CharcoalButton(
             onPressed: _applyExample,
@@ -68,14 +66,13 @@ final class _AgentFormGuidanceExampleState
           child: const Text('Add a complete URL including https://.'),
         ),
         if (_status case final status?) ...<Widget>[
-          SizedBox(height: space.sm),
+          const CharcoalGap(CharcoalSpace.sm),
           Semantics(
             liveRegion: true,
-            child: Text(
+            child: CharcoalText(
               status,
-              style: theme
-                  .style(CharcoalTextRole.captionMedium)
-                  .copyWith(color: theme.colors.textSecondary),
+              role: CharcoalTextRole.captionMedium,
+              tone: CharcoalTextTone.secondary,
             ),
           ),
         ],

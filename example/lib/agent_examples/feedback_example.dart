@@ -7,10 +7,7 @@ final class AgentFeedbackExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gap = CharcoalTheme.of(context).space.sm;
-    return Wrap(
-      spacing: gap,
-      runSpacing: gap,
+    return CharcoalWrap(
       children: <Widget>[
         CharcoalButton(
           onPressed: () =>

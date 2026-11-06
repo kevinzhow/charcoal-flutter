@@ -38,44 +38,33 @@ final class _BloomReplyBarState extends State<_BloomReplyBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: theme.colors.borderSubtle)),
-        color: theme.colors.background,
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(space.sm),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: CharcoalTextField(
-                key: widget.fieldKey,
-                controller: _controller,
-                label: widget.fieldSemanticLabel,
-                onChanged: (value) => setState(() => _draft = value),
-                onSubmitted: (_) => _send(),
-                placeholder: widget.placeholder,
-                prefix: widget.prefix,
-                textInputAction: TextInputAction.send,
-              ),
-            ),
-            SizedBox(width: space.sm),
-            CharcoalIconButton(
-              key: widget.sendKey,
-              icon: const CharcoalIcon(CharcoalIcons.send),
-              onPressed: _draft.trim().isEmpty ? null : _send,
-              semanticLabel: widget.sendSemanticLabel,
-              size: CharcoalIconButtonSize.medium,
-            ),
-          ],
+  Widget build(BuildContext context) => CharcoalBottomBar(
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: CharcoalTextField(
+            key: widget.fieldKey,
+            controller: _controller,
+            label: widget.fieldSemanticLabel,
+            onChanged: (value) => setState(() => _draft = value),
+            onSubmitted: (_) => _send(),
+            placeholder: widget.placeholder,
+            prefix: widget.prefix,
+            textInputAction: TextInputAction.send,
+          ),
         ),
-      ),
-    );
-  }
+        const CharcoalGap(CharcoalSpace.sm),
+        CharcoalIconButton(
+          key: widget.sendKey,
+          icon: const CharcoalIcon(CharcoalIcons.send),
+          onPressed: _draft.trim().isEmpty ? null : _send,
+          semanticLabel: widget.sendSemanticLabel,
+          size: CharcoalIconButtonSize.medium,
+        ),
+      ],
+    ),
+  );
 
   void _send() {
     final text = _draft.trim();

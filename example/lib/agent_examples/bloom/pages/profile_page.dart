@@ -18,8 +18,6 @@ final class _BloomProfilePage extends StatelessWidget {
     final visiblePosts = state.profileTab == BloomProfileTab.posts
         ? ownPosts
         : savedPosts;
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -27,33 +25,34 @@ final class _BloomProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Center(
-            child: _BloomAvatar(initials: 'MA', tone: profile.tone, size: 72),
+            child: _BloomAvatar(
+              initials: 'MA',
+              tone: profile.tone,
+              size: CharcoalAvatarSize.extraLarge,
+            ),
           ),
-          SizedBox(height: space.sm),
-          Text(
+          const CharcoalGap(CharcoalSpace.sm),
+          CharcoalText(
             profile.name,
             textAlign: TextAlign.center,
-            style: theme
-                .style(CharcoalTextRole.headingXxs)
-                .copyWith(color: theme.colors.text),
+            role: CharcoalTextRole.headingXxs,
+            tone: CharcoalTextTone.primary,
           ),
-          SizedBox(height: space.xs),
-          Text(
+          const CharcoalGap(CharcoalSpace.xs),
+          CharcoalText(
             '${profile.handle} · ${profile.location}',
             textAlign: TextAlign.center,
-            style: theme
-                .style(CharcoalTextRole.caption)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.caption,
+            tone: CharcoalTextTone.secondary,
           ),
-          SizedBox(height: space.md),
-          Text(
+          const CharcoalGap(CharcoalSpace.md),
+          CharcoalText(
             profile.bio.isEmpty ? 'No bio yet.' : profile.bio,
             textAlign: TextAlign.center,
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.captionMedium,
+            tone: CharcoalTextTone.secondary,
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           _BloomSurface(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -67,7 +66,7 @@ final class _BloomProfilePage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           CharcoalSegmentedControl<BloomProfileTab>(
             fullWidth: true,
             onChanged: viewModel.changeProfileTab,
@@ -84,7 +83,7 @@ final class _BloomProfilePage extends StatelessWidget {
             semanticLabel: 'Profile content',
             value: state.profileTab,
           ),
-          SizedBox(height: space.md),
+          const CharcoalGap(CharcoalSpace.md),
           if (visiblePosts.isEmpty &&
               state.profileTab == BloomProfileTab.saved) ...<Widget>[
             const _BloomEmptyState(
@@ -93,7 +92,7 @@ final class _BloomProfilePage extends StatelessWidget {
               icon: CharcoalIcons.bookmark,
               title: 'Nothing saved yet',
             ),
-            SizedBox(height: space.sm),
+            const CharcoalGap(CharcoalSpace.sm),
             CharcoalButton(
               fullWidth: true,
               onPressed: viewModel.exploreFromProfile,
@@ -115,8 +114,7 @@ final class _BloomArtworkGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final gap = theme.space.sm;
+    final gap = CharcoalSpace.sm.resolve(context);
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -129,19 +127,12 @@ final class _BloomArtworkGrid extends StatelessWidget {
       itemBuilder: (context, index) => CharcoalClickable(
         onPressed: () => onOpen(posts[index].id),
         semanticLabel: 'Open post: ${posts[index].copy}',
-        builder: (context, states) => AnimatedOpacity(
-          duration: CharcoalTheme.of(context)
-              .duration(context, CharcoalTheme.of(context).motion.fast),
-          opacity: states.contains(WidgetState.pressed) ? 0.64 : 1,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(theme.radius.md),
-            child: LayoutBuilder(
-              builder: (context, constraints) => _BloomArtwork(
-                altText: posts[index].altText,
-                height: constraints.maxHeight,
-                tone: posts[index].tone,
-              ),
-            ),
+        builder: (context, states) => CharcoalPressFeedback(
+          states: states,
+          child: _BloomArtwork(
+            altText: posts[index].altText,
+            rounded: true,
+            tone: posts[index].tone,
           ),
         ),
       ),
@@ -183,8 +174,6 @@ final class _BloomProfileEditorPageState
   Widget build(BuildContext context) {
     final state = widget.viewModel.state;
     final invalid = state.profileDraftName.trim().isEmpty;
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -195,10 +184,10 @@ final class _BloomProfileEditorPageState
             child: _BloomAvatar(
               initials: 'MA',
               tone: state.profileDraftTone,
-              size: 72,
+              size: CharcoalAvatarSize.extraLarge,
             ),
           ),
-          SizedBox(height: space.sm),
+          const CharcoalGap(CharcoalSpace.sm),
           Center(
             child: CharcoalButton(
               onPressed: widget.viewModel.changeProfileTone,
@@ -206,7 +195,7 @@ final class _BloomProfileEditorPageState
               child: const Text('Change avatar color'),
             ),
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           CharcoalTextField(
             assistiveText: invalid ? 'Enter a display name.' : null,
             controller: _nameController,
@@ -218,7 +207,7 @@ final class _BloomProfileEditorPageState
             showCount: true,
             showLabel: true,
           ),
-          SizedBox(height: space.md),
+          const CharcoalGap(CharcoalSpace.md),
           CharcoalTextArea(
             assistiveText: 'Tell people what you notice or make.',
             controller: _bioController,
@@ -231,13 +220,12 @@ final class _BloomProfileEditorPageState
             showLabel: true,
           ),
           if (state.profileDirty) ...<Widget>[
-            SizedBox(height: space.md),
-            Text(
+            const CharcoalGap(CharcoalSpace.md),
+            CharcoalText(
               'Unsaved changes',
               textAlign: TextAlign.center,
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(color: theme.colors.textSecondary),
+              role: CharcoalTextRole.caption,
+              tone: CharcoalTextTone.secondary,
             ),
           ],
         ],

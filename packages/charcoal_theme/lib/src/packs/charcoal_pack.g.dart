@@ -177,6 +177,8 @@ const CharcoalThemePack charcoalLightPack = CharcoalThemePack(
     pageInsetWide: 48,
     sidebarInset: 20,
     infoLabelWidthExtraWide: 128,
+    avatarXl: 72,
+    messageBubbleMaxWidth: 260,
   ),
   motion: CharcoalMotionScale(
     fast: Duration(milliseconds: 120),
@@ -389,6 +391,8 @@ const CharcoalThemePack charcoalDarkPack = CharcoalThemePack(
     pageInsetWide: 48,
     sidebarInset: 20,
     infoLabelWidthExtraWide: 128,
+    avatarXl: 72,
+    messageBubbleMaxWidth: 260,
   ),
   motion: CharcoalMotionScale(
     fast: Duration(milliseconds: 120),

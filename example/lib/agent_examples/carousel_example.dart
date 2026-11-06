@@ -35,55 +35,43 @@ final class _AgentCarouselExampleState extends State<AgentCarouselExample> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    final colors = <Color>[
-      theme.colors.surfaceSecondary,
-      theme.colors.neutral,
-      theme.colors.surfaceTertiary,
-      theme.colors.fillSecondary,
-    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Featured guides', style: theme.style(CharcoalTextRole.headingS)),
-        SizedBox(height: space.sm),
+        const CharcoalText('Featured guides', role: CharcoalTextRole.headingS),
+        const CharcoalGap(CharcoalSpace.sm),
         Semantics(
           liveRegion: true,
-          child: Text(
+          child: CharcoalText(
             'Guide ${_currentPage + 1} of ${_guides.length}: '
             '${_guides[_currentPage].title}',
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.captionMedium,
+            tone: CharcoalTextTone.secondary,
           ),
         ),
-        SizedBox(height: space.xl),
+        const CharcoalGap(CharcoalSpace.xl),
         LayoutBuilder(
           builder: (context, constraints) {
             final compact = constraints.maxWidth < 480;
-            return SizedBox(
-              height: 200,
-              child: CharcoalCarousel(
-                gap: compact ? 0 : space.sm,
-                onPageChanged: (page) => setState(() => _currentPage = page),
-                semanticLabel: 'Featured guides',
-                semanticLabelBuilder: (index, itemCount) =>
-                    'Guide ${index + 1} of $itemCount: ${_guides[index].title}',
-                showIndicators: true,
-                size: compact
-                    ? CharcoalCarouselSize.small
-                    : CharcoalCarouselSize.medium,
-                children: <Widget>[
-                  for (var index = 0; index < _guides.length; index++)
-                    _GuideSlide(
-                      color: colors[index],
-                      description: _guides[index].description,
-                      title: _guides[index].title,
-                    ),
-                ],
-              ),
+            // In a scrolling column the carousel takes its default height from the theme.
+            return CharcoalCarousel(
+              onPageChanged: (page) => setState(() => _currentPage = page),
+              semanticLabel: 'Featured guides',
+              semanticLabelBuilder: (index, itemCount) =>
+                  'Guide ${index + 1} of $itemCount: ${_guides[index].title}',
+              showIndicators: true,
+              size: compact
+                  ? CharcoalCarouselSize.small
+                  : CharcoalCarouselSize.medium,
+              spacing: compact ? null : CharcoalSpace.sm,
+              children: <Widget>[
+                for (final guide in _guides)
+                  _GuideSlide(
+                    description: guide.description,
+                    title: guide.title,
+                  ),
+              ],
             );
           },
         ),
@@ -93,44 +81,27 @@ final class _AgentCarouselExampleState extends State<AgentCarouselExample> {
 }
 
 final class _GuideSlide extends StatelessWidget {
-  const _GuideSlide({
-    required this.color,
-    required this.description,
-    required this.title,
-  });
+  const _GuideSlide({required this.description, required this.title});
 
-  final Color color;
   final String description;
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.radius.md),
-        color: color,
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(space.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(title, style: theme.style(CharcoalTextRole.bodyLargeBold)),
-            SizedBox(height: space.sm),
-            Text(
-              description,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: theme
-                  .style(CharcoalTextRole.captionMedium)
-                  .copyWith(color: theme.colors.textSecondary),
-            ),
-          ],
+  Widget build(BuildContext context) => CharcoalCard(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CharcoalText(title, role: CharcoalTextRole.bodyLargeBold),
+        const CharcoalGap(CharcoalSpace.sm),
+        CharcoalText(
+          description,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+          role: CharcoalTextRole.captionMedium,
+          tone: CharcoalTextTone.secondary,
         ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
 }
