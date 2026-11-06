@@ -4,7 +4,7 @@ import 'index.dart';
 const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata>{
   'CharcoalCard': ComponentMetadata(
     category: 'Layout',
-    summary: 'A filled surface that groups related content such as stats or a settings block; the library owns its fill, radius and border.',
+    summary: 'A surface that groups related content such as stats, a settings block or a feed post: filled, outlined, or raised from a grey page; the library owns its fill, radius, border and interaction states.',
     keywords: <String>[
       'card',
       'surface',
@@ -15,6 +15,8 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
     useWhen: <String>[
       'Related content needs one visible grouping that stands apart from the page background.',
       'A stat, summary or settings block should read as a single unit.',
+      'A post or tile stands on a grey page (CharcoalScaffold with CharcoalPageBackground.secondary); use raised, and highlighted for a new or unread item among them.',
+      'One whole card is a single action; pass the states of the enclosing CharcoalClickable to states.',
     ],
     avoidWhen: <String>[
       'A divided list of repeated rows is clearer; use CharcoalList.',
@@ -22,7 +24,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
     ],
     accessibility: <String>[
       'A card adds no semantics of its own; give the content inside a heading or label so the group is announced.',
-      'Interactive content keeps its own focus and semantics; do not make the whole card a hidden button.',
+      'Interactive content keeps its own focus and semantics; a whole-card action is a CharcoalClickable with a semanticLabel whose states the card paints, never an unlabelled gesture.',
     ],
     responsiveBehavior: <String>[
       'The card fills the width its parent gives it; choose columns in the parent, not a fixed card width.',
@@ -30,14 +32,23 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
     ],
     interactionStates: <String>[
       'static',
+      'hovered',
+      'pressed',
+      'focused',
     ],
     feedbackResponsibilities: <String>[
-      'Owns the surface fill, corner radius, outline option and inner padding.',
+      'Owns the surface fill, corner radius, outline and raised options, inner padding, and the hover, press and focus visuals for the states it is given.',
       'The caller owns the content, its hierarchy, and any action it exposes.',
     ],
     tokenRoles: <String>[
+      'colors.backgroundSecondary',
       'colors.surfaceSecondary',
+      'colors.background',
       'colors.borderSubtle',
+      'colors.border',
+      'colors.borderFocus',
+      'colors.hoverOverlay',
+      'colors.pressOverlay',
       'radius.md',
       'space.lg',
     ],
@@ -53,6 +64,12 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
         title: 'Grouped actions on a card',
         description: 'Wraps action tiles in a padded card inside a section.',
         sourcePath: 'example/lib/agent_examples/layout_example.dart',
+      ),
+      ExampleMetadata(
+        id: 'card-whole-surface-action',
+        title: 'A raised card as one action',
+        description: 'Paints hover, press and focus of a CharcoalClickable on a raised card.',
+        sourcePath: 'example/lib/agent_examples/clickable_example.dart',
       ),
     ],
   ),
@@ -496,7 +513,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
   ),
   'CharcoalAvatar': ComponentMetadata(
     category: 'Layout',
-    summary: 'A square or circular avatar showing the first letter of a name or address.',
+    summary: 'A square or circular avatar showing the first letter of a name or address, or given initials, on a neutral or toned fill.',
     keywords: <String>[
       'avatar',
       'initial',
@@ -507,6 +524,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
     useWhen: <String>[
       'A list row, account tile or comment needs a compact identity mark without a photo.',
       'Only a name or email is known.',
+      'People or accounts should be told apart at a glance; give each a CharcoalTone and two-letter initials.',
     ],
     avoidWhen: <String>[
       'A real photo must be shown; use an image widget inside the owning component.',
@@ -516,19 +534,25 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       'The letter is decorative; the row or tile must expose the full name as its label.',
     ],
     responsiveBehavior: <String>[
-      'Three sizes (CharcoalAvatarSize); the glyph scales with text.',
+      'Four sizes (CharcoalAvatarSize, extraLarge for a profile header); the glyph scales with text.',
     ],
     interactionStates: <String>[
       'static',
     ],
     feedbackResponsibilities: <String>[
-      'Owns letter extraction, size classes, shape and colour.',
-      'The caller owns the identity string.',
+      'Owns letter extraction, size classes, shape and colour, including the solid fill and on-colour of each tone.',
+      'The caller owns the identity string, optional initials and the tone chosen for the person.',
     ],
     tokenRoles: <String>[
-      'colors.fillSecondary',
-      'colors.text',
-      'radius.sm',
+      'colors.surfaceTertiary',
+      'colors.textSecondary',
+      'colors.primary',
+      'colors.negative',
+      'colors.notice',
+      'colors.positive',
+      'sizes.avatarXl',
+      'radius.md',
+      'radius.pill',
     ],
     relatedComponents: <String>[
       'CharcoalListRow',
@@ -536,6 +560,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
     ],
     companionDeclarations: <String>[
       'CharcoalAvatarSize',
+      'CharcoalTone',
     ],
     examples: <ExampleMetadata>[
       ExampleMetadata(
@@ -543,6 +568,12 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
         title: 'Circular avatar in a row',
         description: 'Members listed with circular avatars.',
         sourcePath: 'example/lib/agent_examples/layout_example.dart',
+      ),
+      ExampleMetadata(
+        id: 'avatar-toned-initials',
+        title: 'Toned avatar with initials',
+        description: 'An author header with a toned two-letter avatar.',
+        sourcePath: 'example/lib/agent_examples/social_content_example.dart',
       ),
     ],
   ),
@@ -807,6 +838,220 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
         title: 'Copyable value',
         description: 'A selectable member count.',
         sourcePath: 'example/lib/agent_examples/layout_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalPlaceholderArtwork': ComponentMetadata(
+    category: 'Layout',
+    summary: 'Abstract placeholder artwork drawn from the pack colours for a post, product, story or cover that has no image yet.',
+    keywords: <String>[
+      'placeholder image',
+      'artwork',
+      'cover',
+      'media placeholder',
+      'demo image',
+    ],
+    useWhen: <String>[
+      'A post, product or story needs visible media and no image exists yet, as in a simulation or an empty draft.',
+      'Several items need distinct but stable artwork; give each its own seed.',
+    ],
+    avoidWhen: <String>[
+      'A real image is available; show the image.',
+      'The area is loading; use CharcoalLoadingState or a skeleton instead of decorative art.',
+    ],
+    accessibility: <String>[
+      'The artwork is announced as an image named semanticLabel; describe what it stands for.',
+      'It is not interactive; wrap it in CharcoalClickable with CharcoalPressFeedback when tapping opens the item.',
+    ],
+    responsiveBehavior: <String>[
+      'Fills a bounded parent (a grid tile, an Expanded story area); in a scrolling column it takes metrics.artwork.height.',
+      'The composition is anchored to the start and end corners and mirrors in right-to-left layouts.',
+    ],
+    interactionStates: <String>[
+      'static',
+      'rounded',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the gradient, shapes, colours, default height and optional corner clip.',
+      'The caller owns the seed, the description and the surrounding card or tile.',
+    ],
+    tokenRoles: <String>[
+      'colors.primary',
+      'colors.negative',
+      'colors.notice',
+      'colors.positive',
+      'radius.md',
+    ],
+    relatedComponents: <String>[
+      'CharcoalCard',
+      'CharcoalPressFeedback',
+      'CharcoalCarousel',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'placeholder-artwork-post',
+        title: 'Post media without an image',
+        description: 'Fills the media slot of a raised post card with seeded placeholder artwork.',
+        sourcePath: 'example/lib/agent_examples/social_content_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalMessageBubble': ComponentMetadata(
+    category: 'Layout',
+    summary: 'One message of a conversation: primary-filled when the current person sent it, outlined when it was received.',
+    keywords: <String>[
+      'chat',
+      'message',
+      'bubble',
+      'conversation',
+      'direct message',
+    ],
+    useWhen: <String>[
+      'A conversation shows messages from the current person and from others.',
+    ],
+    avoidWhen: <String>[
+      'The text is a comment or a post in a feed; use a card with CharcoalText.',
+      'The message is system feedback; use CharcoalBanner or a toast.',
+    ],
+    accessibility: <String>[
+      'The text is read as is; put the sender name and delivery status next to the bubble as text so they are announced.',
+    ],
+    responsiveBehavior: <String>[
+      'Grows with its text up to sizes.messageBubbleMaxWidth, then wraps; the caller aligns it to the end (outgoing) or start (incoming).',
+    ],
+    interactionStates: <String>[
+      'incoming',
+      'outgoing',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the fill, outline, radius, padding, text role and maximum width.',
+      'The caller owns alignment, sender names, timestamps and delivery status.',
+    ],
+    tokenRoles: <String>[
+      'colors.primary',
+      'colors.textOnPrimary',
+      'colors.background',
+      'colors.borderSubtle',
+      'radius.md',
+      'space.sm',
+    ],
+    relatedComponents: <String>[
+      'CharcoalBottomBar',
+      'CharcoalLoadingSpinner',
+      'CharcoalText',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'message-bubble-conversation',
+        title: 'A short conversation',
+        description: 'Aligns incoming and outgoing bubbles above a reply bar.',
+        sourcePath: 'example/lib/agent_examples/social_content_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalProgressBar': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A thin bar filled to a fraction: story progress, an upload, a quota.',
+    keywords: <String>[
+      'progress',
+      'progress bar',
+      'story progress',
+      'upload progress',
+      'quota bar',
+    ],
+    useWhen: <String>[
+      'The share of a known whole is complete and a thin bar is enough to show it.',
+    ],
+    avoidWhen: <String>[
+      'The duration is unknown; use CharcoalLoadingSpinner or CharcoalLoadingState.',
+      'A quota needs a label and a figure on a card; use CharcoalMeter.',
+    ],
+    accessibility: <String>[
+      'With semanticLabel the bar announces its label and percentage; without one it is decorative.',
+    ],
+    responsiveBehavior: <String>[
+      'Fills the width its parent gives it; the value is clamped to 0..1.',
+    ],
+    interactionStates: <String>[
+      'empty',
+      'partial',
+      'full',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the track height, colours and corner radius.',
+      'The caller owns the value and the label.',
+    ],
+    tokenRoles: <String>[
+      'sizes.meterTrack',
+      'colors.surfaceTertiary',
+      'colors.primary',
+      'radius.xs',
+    ],
+    relatedComponents: <String>[
+      'CharcoalMeter',
+      'CharcoalLoadingSpinner',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'progress-bar-story',
+        title: 'Story progress',
+        description: 'Shows how far through a set of stories the viewer is.',
+        sourcePath: 'example/lib/agent_examples/social_content_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalBottomBar': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A page-coloured bar with a top rule pinned under scrolling content, for a reply composer or a page action.',
+    keywords: <String>[
+      'bottom bar',
+      'reply bar',
+      'composer bar',
+      'footer',
+      'action bar',
+    ],
+    useWhen: <String>[
+      'A conversation, comment thread or story needs a reply field pinned below the content.',
+      'A grey page needs one pinned bottom surface that reads as separate from the content.',
+    ],
+    avoidWhen: <String>[
+      'The bar switches top-level destinations; use CharcoalTabBar.',
+      'A dialog needs actions; use the dialog or modal actions.',
+    ],
+    accessibility: <String>[
+      'Adds no semantics; the field and buttons inside keep their own labels.',
+    ],
+    responsiveBehavior: <String>[
+      'Fills the width; as CharcoalScaffold.bottomBar it stays above the keyboard and the bottom inset.',
+    ],
+    interactionStates: <String>[
+      'static',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the fill, the top rule and the padding.',
+      'The caller owns the field, the actions and what sending does.',
+    ],
+    tokenRoles: <String>[
+      'colors.background',
+      'colors.borderSubtle',
+      'borders.hairline',
+      'space.sm',
+    ],
+    relatedComponents: <String>[
+      'CharcoalScaffold',
+      'CharcoalTextField',
+      'CharcoalMessageBubble',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'bottom-bar-reply',
+        title: 'Reply bar under a conversation',
+        description: 'Pins a reply action under the message list.',
+        sourcePath: 'example/lib/agent_examples/social_content_example.dart',
       ),
     ],
   ),

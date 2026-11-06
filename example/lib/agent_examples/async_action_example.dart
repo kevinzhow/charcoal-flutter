@@ -1,7 +1,11 @@
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
+import 'simulated_latency.dart';
+
 /// A bounded asynchronous action with blocking progress and a durable result.
+///
+/// The request is simulated (`simulateRequest`); an application awaits its own service there.
 final class AgentAsyncActionExample extends StatefulWidget {
   const AgentAsyncActionExample({super.key});
 
@@ -23,7 +27,7 @@ final class _AgentAsyncActionExampleState
       _pendingPublished = published;
       _saving = true;
     });
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    await simulateRequest(SimulatedLatency.save);
     if (!mounted) return;
     setState(() {
       _published = published;
@@ -34,60 +38,51 @@ final class _AgentAsyncActionExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text('Publishing', style: theme.style(CharcoalTextRole.headingS)),
-        SizedBox(height: space.sm),
+        const CharcoalText('Publishing', role: CharcoalTextRole.headingS),
+        const CharcoalGap(CharcoalSpace.sm),
         Semantics(
           liveRegion: true,
-          child: Text(
+          child: CharcoalText(
             _status,
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.captionMedium,
+            tone: CharcoalTextTone.secondary,
           ),
         ),
-        SizedBox(height: space.xl),
+        const CharcoalGap(CharcoalSpace.xl),
         CharcoalSpinnerOverlay(
           semanticLabel: _pendingPublished
               ? 'Publishing draft'
               : 'Returning draft to private',
           visible: _saving,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(theme.radius.md),
-              color: theme.colors.surfaceSecondary,
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(space.xl),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    _published ? 'Published' : 'Private draft',
-                    style: theme.style(CharcoalTextRole.bodyLargeBold),
+          child: CharcoalCard(
+            padding: const CharcoalInset.all(CharcoalSpace.xl),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CharcoalText(
+                  _published ? 'Published' : 'Private draft',
+                  role: CharcoalTextRole.bodyLargeBold,
+                ),
+                const CharcoalGap(CharcoalSpace.lg),
+                CharcoalSwitchingButton(
+                  isOn: _published,
+                  offButton: CharcoalButton(
+                    onPressed: () => _setPublished(true),
+                    semanticLabel: 'Publish draft',
+                    variant: CharcoalButtonVariant.primary,
+                    child: const Text('Publish'),
                   ),
-                  SizedBox(height: space.lg),
-                  CharcoalSwitchingButton(
-                    isOn: _published,
-                    offButton: CharcoalButton(
-                      onPressed: () => _setPublished(true),
-                      semanticLabel: 'Publish draft',
-                      variant: CharcoalButtonVariant.primary,
-                      child: const Text('Publish'),
-                    ),
-                    onButton: CharcoalButton(
-                      onPressed: () => _setPublished(false),
-                      semanticLabel: 'Return published item to draft',
-                      child: const Text('Unpublish'),
-                    ),
+                  onButton: CharcoalButton(
+                    onPressed: () => _setPublished(false),
+                    semanticLabel: 'Return published item to draft',
+                    child: const Text('Unpublish'),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

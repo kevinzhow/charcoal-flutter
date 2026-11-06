@@ -60,7 +60,7 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       ExampleMetadata(
         id: 'typography-semantic-and-numeric',
         title: 'Semantic hierarchy with a numeric component label',
-        description: 'Keeps page hierarchy on semantic theme styles while a reviewed component label uses the numeric scale.',
+        description: 'Theme demonstration (it scopes a pack and reads the theme on purpose; applications use CharcoalApp.themeMode and text roles): keeps page hierarchy on semantic text roles while a reviewed component label uses the numeric scale.',
         sourcePath: 'example/lib/agent_examples/theme_typography_example.dart',
       ),
     ],
@@ -119,8 +119,7 @@ const Map<String, ComponentMetadata> themeMetadata = <String, ComponentMetadata>
       ExampleMetadata(
         id: 'text-ellipsis-project-title',
         title: 'Scaled multiline project title',
-        description:
-            'Limits a long localized title to two lines while retaining its complete spoken form.',
+        description: 'Limits a long localized title to two lines while retaining its complete spoken form. Part of a theme demonstration that reads the theme on purpose for the title style.',
         sourcePath: 'example/lib/agent_examples/theme_typography_example.dart',
       ),
     ],

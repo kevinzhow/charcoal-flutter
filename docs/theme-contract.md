@@ -28,7 +28,7 @@ packages/charcoal_theme/
   lib/src/build/                   buildCharcoalThemeData, buildCharcoalTextTheme, buildCharcoalButtonStyle
   test/contract_test.dart          shape, packs, extremePack, CharcoalTheme, hygiene
   test/role_audit_test.dart        proves section 8 covers every read in charcoal_ui and targets exist
-  test/frozen_names.txt            the 370 frozen names
+  test/frozen_names.txt            the frozen names
 ```
 
 Rules: values (colours, numbers, durations) exist only in `src/packs/`; `src/contract/` holds types and docs, no values (one exception: the constant `CharcoalColorRoles.transparent`).
@@ -43,12 +43,12 @@ is the single import for libraries and tests (applications do not use the theme 
 | spacing | `CharcoalSpaceScale` | `theme.space.<step>` | 8 |
 | radii | `CharcoalRadiusScale` | `theme.radius.<step>` | 7 |
 | line widths | `CharcoalBorderScale` | `theme.borders.<name>` | 4 |
-| sizes | `CharcoalSizeScale` | `theme.sizes.<name>` | 36 |
+| sizes | `CharcoalSizeScale` | `theme.sizes.<name>` | 38 |
 | motion | `CharcoalMotionScale` | `theme.motion.<name>` | 8 |
 | elevation | `CharcoalElevationScale` | `theme.elevation.<name>` | 2 |
 | typography | `CharcoalTypeScale` + `CharcoalTextRole` + `CharcoalTextSpec` | `theme.style(role)`, `theme.typography.<role>` | 27 roles + 7 |
 | tones | `CharcoalTone` + `CharcoalToneColors` | `theme.tone(tone)` | 5 (resolved from colour roles, not stored) |
-| metrics | `CharcoalMetrics` + `Charcoal<Family>Metrics` | `theme.metrics.<family>.<field>` | 29 families, 127 fields |
+| metrics | `CharcoalMetrics` + `Charcoal<Family>Metrics` | `theme.metrics.<family>.<field>` | 30 families, 141 fields |
 
 ## 2. Colour roles
 
@@ -225,6 +225,8 @@ is the single import for libraries and tests (applications do not use the theme 
 | `sizes.pageInsetWide` | 48 | literal | Horizontal page padding in the sidebar layout. |
 | `sizes.sidebarInset` | 20 | literal | Padding of the sidebar header. |
 | `sizes.infoLabelWidthExtraWide` | 128 | literal | Extra-wide label column of a key/value block. |
+| `sizes.avatarXl` | 72 | literal | Extra-large avatar (profile header). |
+| `sizes.messageBubbleMaxWidth` | 260 | literal | Widest a chat message bubble grows before its text wraps. |
 
 ## 3.5 Elevation
 
@@ -315,6 +317,8 @@ Icon-button hit areas and glyph sizes.
 | `metrics.iconButton.extraSmallSize` | double | 20 | `icon_button:extraSmallSize` | Edge of the extra-small icon button. |
 | `metrics.iconButton.smallIconSize` | double | 16 | `icon_button:smallIconSize` | Glyph size of the small icon button. |
 | `metrics.iconButton.regularIconSize` | double | 24 | `icon_button:regularIconSize` | Glyph size of the regular icon button. |
+| `metrics.iconButton.badgeOffsetEnd` | double | -2 | new (agent examples) | Count badge position from the button end edge (negative: outside). |
+| `metrics.iconButton.badgeOffsetTop` | double | -2 | new (agent examples) | Count badge position from the button top edge (negative: outside). |
 
 ### 7.3 `metrics.switchToggle` (CharcoalSwitchMetrics)
 
@@ -435,6 +439,7 @@ Loading spinner and its overlay.
 | --- | --- | --- | --- | --- |
 | `metrics.spinner.rotationDuration` | Duration | 1000 ms | `loading_spinner:animationDuration` | One revolution. |
 | `metrics.spinner.shadowBlur` | double | 8 | `loading_spinner:shadowBlur` | Blur radius of the floating shadow. |
+| `metrics.spinner.inlineSize` | double | 8 | new (agent examples) | Edge of the inline spinner beside a line of small text. |
 
 ### 7.15 `metrics.modal` (CharcoalModalMetrics)
 
@@ -510,6 +515,7 @@ Carousel.
 | `metrics.carousel.scrollDuration` | Duration | 300 ms | `carousel:scrollDuration` | Animated page change. |
 | `metrics.carousel.mediumViewportFraction` | double | 0.75 | `carousel:mediumViewportFraction` | Viewport fraction of the medium size. |
 | `metrics.carousel.navigationZoneWidth` | double | 72 | `carousel:navigationZoneWidth` | Width of each navigation zone. |
+| `metrics.carousel.defaultHeight` | double | 200 | new (agent examples) | Height of a carousel whose parent leaves the height unbounded. |
 
 ### 7.20 `metrics.pagination` (CharcoalPaginationMetrics)
 
@@ -561,6 +567,7 @@ Shared interaction behaviour.
 | --- | --- | --- | --- | --- |
 | `metrics.clickable.keyboardActivationDuration` | Duration | 100 ms | `clickable:keyboardActivationDuration` | How long a key activation shows the pressed state. |
 | `metrics.clickable.disabledOpacity` | double | 0.32 | `interaction_state.dart:6` | Opacity of a disabled control. |
+| `metrics.clickable.pressedOpacity` | double | 0.64 | new (agent examples) | Opacity of content while it is pressed (`CharcoalPressFeedback`). |
 
 ### 7.25 `metrics.popup` (CharcoalPopupMetrics)
 
@@ -625,6 +632,21 @@ Scaffold and system chrome.
 | Field | Type | Value | Replaces | Meaning |
 | --- | --- | --- | --- | --- |
 | `metrics.scaffold.darkLuminanceThreshold` | double | 0.179 | `charcoal_scaffold.dart:63` | Background luminance below which system icons turn light. |
+
+### 7.30 `metrics.artwork` (CharcoalArtworkMetrics)
+
+| Field | Type | Value | Source | Meaning |
+| --- | --- | --- | --- | --- |
+| `metrics.artwork.height` | double | 174 | new (agent examples) | Height of placeholder artwork whose parent leaves the height unbounded (a feed post). |
+| `metrics.artwork.discDiameter` | double | 148 | new (agent examples) | Diameter of the disc in the lower start corner. |
+| `metrics.artwork.discOffsetStart` | double | -28 | new (agent examples) | Disc position from the start edge (negative: partly outside). |
+| `metrics.artwork.discOffsetBottom` | double | -48 | new (agent examples) | Disc position from the bottom edge (negative: partly outside). |
+| `metrics.artwork.tileEdge` | double | 78 | new (agent examples) | Edge of the tilted tile in the upper end corner. |
+| `metrics.artwork.tileOffsetEnd` | double | 30 | new (agent examples) | Tile position from the end edge. |
+| `metrics.artwork.tileOffsetTop` | double | 28 | new (agent examples) | Tile position from the top edge. |
+| `metrics.artwork.tileAngle` | double | -0.28 | new (agent examples) | Rotation of the tile, in radians. |
+| `metrics.artwork.tileTint` | double | 0.24 | new (agent examples) | How much of the gradient's end colour tints the tile (0: pure accent); keeps the tile a blend of two pack colours. |
+
 
 ## 8. Role audit (historical: every read in the pre-Material `charcoal_ui` at `de89016`)
 

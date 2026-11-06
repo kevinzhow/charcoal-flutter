@@ -71,10 +71,21 @@ contract, a new parameter or a new component, reviewed with the extreme-theme te
 override. An application should also keep an extreme-theme test of its own that mounts its pages under
 `extremePack`: it is the end-to-end proof that pages did not bypass the library.
 
-The Showcase (`example/`) is the library's demo and reads the theme directly; code under `example/`
-that stands in for application code (the Agent Ready examples) is being brought to the consumer
-rules, and the new composition examples (`layout_example.dart`, `status_example.dart`,
-`form_section_example.dart`, `admin_example.dart`) already follow them.
+The Showcase pages (`example/lib/showcase/`) are the library's demo and read the theme directly.
+The Agent Ready examples under `example/lib/agent_examples/` stand in for application code (agents
+read them through the catalog, the CLI and MCP), so they follow R1-R7 and R9, and
+`example/test/consumer_rules_test.dart` runs the consumer rule set over every file there in
+`flutter test`. It has two explicit lists:
+
+- exemptions, one file and rule set each, with a reason: `theme_typography_example.dart` (R1, R2; a
+  theme demonstration that scopes a pack with `Theme(buildCharcoalThemeData(..))`, as its doc comment
+  and catalog entry say) and `simulated_latency.dart` (R6; the simulations' stand-in for network
+  latency, not a visual value). An exemption that is no longer needed fails the test;
+- pending files written before the rules applied (the Nook, Lumen and Daylight simulations, the
+  gallery page and the preview helpers). The list may only shrink: a listed file that passes must be
+  removed, and any new file is checked from the start.
+
+R8 does not apply: the Showcase package is the library's own demo and depends on it by path.
 
 ## Other checks
 

@@ -25,40 +25,42 @@ final class _AgentScaffoldExampleState extends State<AgentScaffoldExample> {
   Widget build(BuildContext context) => CharcoalScaffold(
     navigationBar: const CharcoalNavigationBar(title: Text('Edit profile')),
     body: SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: AutofillGroup(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            CharcoalTextField(
-              controller: _name,
-              label: 'Display name',
-              showLabel: true,
-              autofillHints: const [AutofillHints.name],
-              onChanged: (_) => setState(() => _saved = false),
-            ),
-            const SizedBox(height: 24),
-            CharcoalTextArea(
-              controller: _bio,
-              label: 'About you',
-              showLabel: true,
-              showCount: true,
-              maxLength: 200,
-              onChanged: (_) => setState(() => _saved = false),
-            ),
-            if (_saved) ...[
-              const SizedBox(height: 24),
-              Semantics(
-                liveRegion: true,
-                child: const Text('Saved for this session.'),
+      child: CharcoalPadding.all(
+        CharcoalSpace.xl,
+        child: AutofillGroup(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CharcoalTextField(
+                controller: _name,
+                label: 'Display name',
+                showLabel: true,
+                autofillHints: const [AutofillHints.name],
+                onChanged: (_) => setState(() => _saved = false),
               ),
+              const CharcoalGap(CharcoalSpace.xl),
+              CharcoalTextArea(
+                controller: _bio,
+                label: 'About you',
+                showLabel: true,
+                showCount: true,
+                maxLength: 200,
+                onChanged: (_) => setState(() => _saved = false),
+              ),
+              if (_saved) ...[
+                const CharcoalGap(CharcoalSpace.xl),
+                Semantics(
+                  liveRegion: true,
+                  child: const Text('Saved for this session.'),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     ),
-    bottomBar: Padding(
-      padding: const EdgeInsets.all(16),
+    bottomBar: CharcoalPadding.all(
+      CharcoalSpace.lg,
       child: CharcoalButton(
         onPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();

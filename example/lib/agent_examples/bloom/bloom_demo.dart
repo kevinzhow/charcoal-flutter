@@ -168,7 +168,7 @@ final class _BloomDemoState extends State<BloomDemo> {
     };
   }
 
-  Widget _buildNavigationBar(
+  PreferredSizeWidget _buildNavigationBar(
     BuildContext context,
     BloomViewState state, {
     required BloomDestination destination,
@@ -265,7 +265,7 @@ final class _BloomDemoState extends State<BloomDemo> {
                   : 'Create a post',
               size: CharcoalIconButtonSize.small,
             ),
-            SizedBox(width: CharcoalTheme.of(context).space.xs),
+            const CharcoalGap(CharcoalSpace.xs),
             _BloomNotificationButton(
               onPressed: _viewModel.openNotifications,
               unreadCount: state.unreadNotificationCount,
@@ -331,7 +331,6 @@ final class _BloomDemoState extends State<BloomDemo> {
             'Keep the thought for later or discard it permanently.',
           ),
           context: context,
-          maxWidth: 360,
           style: CharcoalModalStyle.bottomSheet,
           title: 'Leave this post?',
           useRootNavigator: false,
@@ -384,7 +383,6 @@ final class _BloomDemoState extends State<BloomDemo> {
             'Choose what should happen to your profile changes.',
           ),
           context: context,
-          maxWidth: 360,
           style: CharcoalModalStyle.bottomSheet,
           title: 'Unsaved profile changes',
           useRootNavigator: false,
@@ -439,11 +437,8 @@ final class _BloomModalMessage extends StatelessWidget {
   final String message;
 
   @override
-  Widget build(BuildContext context) {
-    final space = CharcoalTheme.of(context).space;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: space.md),
-      child: CharcoalTypography(child: Text(message)),
-    );
-  }
+  Widget build(BuildContext context) => CharcoalPadding(
+    padding: const CharcoalInset.symmetric(horizontal: CharcoalSpace.md),
+    child: CharcoalTypography(child: Text(message)),
+  );
 }

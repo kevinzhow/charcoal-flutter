@@ -3,6 +3,7 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/agent_examples/admin_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/form_section_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/layout_example.dart';
+import 'package:charcoal_ui_showcase/agent_examples/social_content_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/status_example.dart';
 import 'package:flutter/material.dart' show Material, MaterialType;
 import 'package:flutter/widgets.dart';
@@ -57,6 +58,16 @@ void main() {
         expect(find.text('Import paused'), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
+      testWidgets('social content example builds at $label', (tester) async {
+        await show(
+          tester,
+          const AgentSocialContentExample(),
+          size: size,
+          textScale: scale,
+        );
+        expect(find.text('Yes, two left.'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
       testWidgets('form example builds at $label', (tester) async {
         await show(
           tester,
@@ -82,6 +93,18 @@ void main() {
     await tester.pump();
     expect(find.text('Could not load jobs.'), findsOneWidget);
     expect(find.text('No jobs yet'), findsNothing);
+  });
+
+  testWidgets('social content example opens the author and sends a reply', (
+    tester,
+  ) async {
+    await show(tester, const AgentSocialContentExample(), size: sizes.last);
+    await tester.tap(find.bySemanticsLabel('Open Aki Kondo profile'));
+    await tester.pump();
+    expect(find.text('Aki Kondo opened'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Send saved reply'));
+    await tester.pump();
+    expect(find.text('I will take one.'), findsOneWidget);
   });
 
   testWidgets('form example flags an empty required name', (tester) async {

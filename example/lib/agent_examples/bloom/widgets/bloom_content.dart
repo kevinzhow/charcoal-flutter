@@ -1,12 +1,15 @@
 part of '../bloom.dart';
 
-Widget _bloomPagePadding(BuildContext context, Widget child) {
-  final space = CharcoalTheme.of(context).space;
-  return Padding(
-    padding: EdgeInsets.fromLTRB(space.lg, space.md, space.lg, space.lg),
-    child: child,
-  );
-}
+/// The inset of every Bloom page body.
+const _bloomPageInset = CharcoalInset.only(
+  left: CharcoalSpace.lg,
+  top: CharcoalSpace.md,
+  right: CharcoalSpace.lg,
+  bottom: CharcoalSpace.lg,
+);
+
+Widget _bloomPagePadding(BuildContext context, Widget child) =>
+    CharcoalPadding(padding: _bloomPageInset, child: child);
 
 ({String handle, String initials, String name, int tone}) _bloomAuthor(
   BloomData data,
@@ -29,27 +32,19 @@ Widget _bloomPagePadding(BuildContext context, Widget child) {
   );
 }
 
+/// A Bloom card: a raised card on the grey feed page.
 final class _BloomSurface extends StatelessWidget {
-  const _BloomSurface({required this.child, this.padding});
+  const _BloomSurface({
+    required this.child,
+    this.padding = const CharcoalInset.all(CharcoalSpace.md),
+  });
 
   final Widget child;
-  final EdgeInsetsGeometry? padding;
+  final CharcoalInset padding;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.borderSubtle),
-        borderRadius: BorderRadius.circular(theme.radius.md),
-        color: theme.colors.background,
-      ),
-      child: Padding(
-        padding: padding ?? EdgeInsets.all(theme.space.md),
-        child: child,
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      CharcoalCard(padding: padding, raised: true, child: child);
 }
 
 final class _BloomSectionTitle extends StatelessWidget {
@@ -58,16 +53,20 @@ final class _BloomSectionTitle extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return Text(
-      title,
-      style: theme
-          .style(CharcoalTextRole.captionMediumBold)
-          .copyWith(color: theme.colors.text),
-    );
-  }
+  Widget build(BuildContext context) => CharcoalText(
+    title,
+    role: CharcoalTextRole.captionMediumBold,
+    tone: CharcoalTextTone.primary,
+  );
 }
+
+/// The person's colour in the data model (an index) as a tone of the theme.
+CharcoalTone _bloomTone(int tone) => switch (tone % 4) {
+  0 => CharcoalTone.info,
+  1 => CharcoalTone.negative,
+  2 => CharcoalTone.notice,
+  _ => CharcoalTone.positive,
+};
 
 final class _BloomAvatar extends StatelessWidget {
   const _BloomAvatar({
@@ -77,127 +76,35 @@ final class _BloomAvatar extends StatelessWidget {
   });
 
   final String initials;
-  final double size;
+  final CharcoalAvatarSize size;
   final int tone;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final background = switch (tone % 4) {
-      0 => theme.colors.primary,
-      1 => theme.colors.negative,
-      2 => theme.colors.notice,
-      _ => theme.colors.positive,
-    };
-    final foreground = switch (tone % 4) {
-      0 => theme.colors.textOnPrimary,
-      1 => theme.colors.textOnNegative,
-      2 => theme.colors.text,
-      _ => theme.colors.textOnPositive,
-    };
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.radius.pill),
-        color: background,
-      ),
-      child: SizedBox.square(
-        dimension: size,
-        child: Center(
-          child: Text(
-            initials,
-            style: theme
-                .style(CharcoalTextRole.caption)
-                .copyWith(color: foreground, fontWeight: FontWeight.w700),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => CharcoalAvatar(
+    initials,
+    circular: true,
+    initials: initials,
+    size: size,
+    tone: _bloomTone(tone),
+  );
 }
 
 final class _BloomArtwork extends StatelessWidget {
   const _BloomArtwork({
     required this.altText,
-    required this.height,
     required this.tone,
+    this.rounded = false,
   });
 
   final String altText;
-  final double height;
+  final bool rounded;
   final int tone;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final palette = switch (tone % 4) {
-      0 => (theme.colors.primary, theme.colors.negative, theme.colors.notice),
-      1 => (
-        theme.colors.negative,
-        theme.colors.positive,
-        theme.colors.background,
-      ),
-      2 => (theme.colors.notice, theme.colors.primary, theme.colors.negative),
-      _ => (theme.colors.positive, theme.colors.negative, theme.colors.neutral),
-    };
-    return Semantics(
-      image: true,
-      label: altText,
-      child: ExcludeSemantics(
-        child: SizedBox(
-          height: height,
-          child: ClipRect(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[palette.$1, palette.$2],
-                ),
-              ),
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    bottom: -48,
-                    left: -28,
-                    child: _BloomDecorativeCircle(color: palette.$3, size: 148),
-                  ),
-                  Positioned(
-                    right: 30,
-                    top: 28,
-                    child: Transform.rotate(
-                      angle: -0.28,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(theme.radius.md),
-                          color: palette.$3.withValues(alpha: 0.76),
-                        ),
-                        child: const SizedBox.square(dimension: 78),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-final class _BloomDecorativeCircle extends StatelessWidget {
-  const _BloomDecorativeCircle({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) => DecoratedBox(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(999),
-      color: color,
-    ),
-    child: SizedBox.square(dimension: size),
+  Widget build(BuildContext context) => CharcoalPlaceholderArtwork(
+    rounded: rounded,
+    seed: tone,
+    semanticLabel: altText,
   );
 }
 
@@ -213,100 +120,26 @@ final class _BloomEmptyState extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return _BloomSurface(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CharcoalIcon(icon, color: theme.colors.iconSecondary),
-          SizedBox(height: space.sm),
-          Text(
-            title,
-            style: theme
-                .style(CharcoalTextRole.captionMediumBold)
-                .copyWith(color: theme.colors.text),
-          ),
-          SizedBox(height: space.xs),
-          Text(
-            description,
-            style: theme
-                .style(CharcoalTextRole.caption)
-                .copyWith(color: theme.colors.textSecondary),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-final class _BloomCountBadge extends StatelessWidget {
-  const _BloomCountBadge({required this.count});
-
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.radius.pill),
-        color: theme.colors.primary,
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: theme.space.sm,
-          vertical: theme.space.xs,
+  Widget build(BuildContext context) => _BloomSurface(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        CharcoalIconView(icon, tone: CharcoalIconTone.secondary),
+        const CharcoalGap(CharcoalSpace.sm),
+        CharcoalText(
+          title,
+          role: CharcoalTextRole.captionMediumBold,
+          tone: CharcoalTextTone.primary,
         ),
-        child: Text(
-          '$count unread',
-          style: theme
-              .style(CharcoalTextRole.caption)
-              .copyWith(
-                color: theme.colors.textOnPrimary,
-                fontWeight: FontWeight.w700,
-              ),
+        const CharcoalGap(CharcoalSpace.xs),
+        CharcoalText(
+          description,
+          role: CharcoalTextRole.caption,
+          tone: CharcoalTextTone.secondary,
         ),
-      ),
-    );
-  }
-}
-
-final class _BloomCompactBadge extends StatelessWidget {
-  const _BloomCompactBadge({required this.count});
-
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colors.background),
-        borderRadius: BorderRadius.circular(theme.radius.pill),
-        color: theme.colors.negative,
-      ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 16, minWidth: 16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Center(
-            child: Text(
-              '$count',
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(
-                    color: theme.colors.textOnNegative,
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                  ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
 }
 
 final class _BloomMetric extends StatelessWidget {
@@ -316,52 +149,34 @@ final class _BloomMetric extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return Column(
-      children: <Widget>[
-        Text(
-          value,
-          style: theme
-              .style(CharcoalTextRole.captionMediumBold)
-              .copyWith(color: theme.colors.text),
-        ),
-        SizedBox(height: theme.space.xs),
-        Text(
-          label,
-          style: theme
-              .style(CharcoalTextRole.caption)
-              .copyWith(color: theme.colors.textSecondary),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Column(
+    children: <Widget>[
+      CharcoalText(
+        value,
+        role: CharcoalTextRole.captionMediumBold,
+        tone: CharcoalTextTone.primary,
+      ),
+      const CharcoalGap(CharcoalSpace.xs),
+      CharcoalText(
+        label,
+        role: CharcoalTextRole.caption,
+        tone: CharcoalTextTone.secondary,
+      ),
+    ],
+  );
 }
 
+/// Bloom's mark: a square avatar in the brand tone.
 final class _BloomBrandMark extends StatelessWidget {
   const _BloomBrandMark();
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(theme.radius.md),
-        color: theme.colors.negative,
-      ),
-      child: SizedBox.square(
-        dimension: theme.sizes.controlSm,
-        child: Center(
-          child: Text(
-            'B',
-            style: theme
-                .style(CharcoalTextRole.captionMediumBold)
-                .copyWith(color: theme.colors.textOnNegative),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => const CharcoalAvatar(
+    'Bloom',
+    initials: 'B',
+    size: CharcoalAvatarSize.small,
+    tone: CharcoalTone.negative,
+  );
 }
 
 final class _BloomNotificationButton extends StatelessWidget {
@@ -374,25 +189,13 @@ final class _BloomNotificationButton extends StatelessWidget {
   final int unreadCount;
 
   @override
-  Widget build(BuildContext context) => Stack(
-    clipBehavior: Clip.none,
-    children: <Widget>[
-      CharcoalIconButton(
-        icon: const CharcoalIcon(CharcoalIcons.bell),
-        onPressed: onPressed,
-        semanticLabel: unreadCount > 0
-            ? 'Notifications, $unreadCount unread'
-            : 'Notifications',
-        size: CharcoalIconButtonSize.small,
-      ),
-      if (unreadCount > 0)
-        PositionedDirectional(
-          end: -2,
-          top: -2,
-          child: ExcludeSemantics(
-            child: _BloomCompactBadge(count: unreadCount),
-          ),
-        ),
-    ],
+  Widget build(BuildContext context) => CharcoalIconButton(
+    badge: unreadCount > 0 ? '$unreadCount' : null,
+    icon: const CharcoalIcon(CharcoalIcons.bell),
+    onPressed: onPressed,
+    semanticLabel: unreadCount > 0
+        ? 'Notifications, $unreadCount unread'
+        : 'Notifications',
+    size: CharcoalIconButtonSize.small,
   );
 }

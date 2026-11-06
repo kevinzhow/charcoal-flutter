@@ -128,6 +128,29 @@ void main() {
       expect(padded.height, closeTo(10 + 2 * pack.space.xs, 1e-9));
     });
 
+    testWidgets('a gap in a Row is horizontal', (tester) async {
+      await pumpCharcoal(
+        tester,
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: 10, height: 10),
+              CharcoalGap(CharcoalSpace.md, key: ValueKey('gap')),
+              SizedBox(width: 10, height: 10),
+            ],
+          ),
+        ),
+        pack: pack,
+        size: const Size(800, 600),
+      );
+      expect(
+        tester.getSize(find.byKey(const ValueKey('gap'))).width,
+        closeTo(pack.space.md, 1e-9),
+      );
+    });
+
     testWidgets('ambient text and icon defaults follow the pack', (tester) async {
       late BuildContext inner;
       // Without pumpCharcoal's Material wrapper, which sets its own text style.

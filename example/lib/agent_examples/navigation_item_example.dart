@@ -27,66 +27,67 @@ final class _AgentNavigationItemExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
-    return SizedBox(
-      height: 320,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final content = ColoredBox(
-            color: theme.colors.fillSecondary,
-            child: Center(
-              child: Text(
-                'Current destination: ${_destination.name}',
-                style: theme.style(CharcoalTextRole.bodyLargeBold),
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final content = CharcoalCard(
+          padding: const CharcoalInset.symmetric(
+            horizontal: CharcoalSpace.lg,
+            vertical: CharcoalSpace.xxxl,
+          ),
+          child: Center(
+            child: CharcoalText(
+              'Current destination: ${_destination.name}',
+              role: CharcoalTextRole.bodyLargeBold,
             ),
+          ),
+        );
+        if (constraints.maxWidth < 600) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              content,
+              CharcoalTabBar<_NavigationDestination>(
+                items: const <CharcoalTabItem<_NavigationDestination>>[
+                  CharcoalTabItem<_NavigationDestination>(
+                    icon: CharcoalIcon(CharcoalIcons.home),
+                    label: 'Home',
+                    value: _NavigationDestination.home,
+                  ),
+                  CharcoalTabItem<_NavigationDestination>(
+                    icon: CharcoalIcon(CharcoalIcons.compass),
+                    label: 'Discover',
+                    value: _NavigationDestination.discover,
+                  ),
+                  CharcoalTabItem<_NavigationDestination>(
+                    badge: '3',
+                    icon: CharcoalIcon(CharcoalIcons.message),
+                    label: 'Messages',
+                    semanticLabel: 'Messages, 3 unread',
+                    value: _NavigationDestination.messages,
+                  ),
+                ],
+                onChanged: _select,
+                semanticLabel: 'Primary destinations',
+                value: _destination,
+              ),
+            ],
           );
-          if (constraints.maxWidth < 600) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(child: content),
-                CharcoalTabBar<_NavigationDestination>(
-                  items: const <CharcoalTabItem<_NavigationDestination>>[
-                    CharcoalTabItem<_NavigationDestination>(
-                      icon: CharcoalIcon(CharcoalIcons.home),
-                      label: 'Home',
-                      value: _NavigationDestination.home,
-                    ),
-                    CharcoalTabItem<_NavigationDestination>(
-                      icon: CharcoalIcon(CharcoalIcons.compass),
-                      label: 'Discover',
-                      value: _NavigationDestination.discover,
-                    ),
-                    CharcoalTabItem<_NavigationDestination>(
-                      badge: '3',
-                      icon: CharcoalIcon(CharcoalIcons.message),
-                      label: 'Messages',
-                      semanticLabel: 'Messages, 3 unread',
-                      value: _NavigationDestination.messages,
-                    ),
-                  ],
-                  onChanged: _select,
-                  semanticLabel: 'Primary destinations',
-                  value: _destination,
-                ),
-              ],
-            );
-          }
+        }
 
-          return Row(
+        // The destination list takes a third of the width; the content takes the rest.
+        return IntrinsicHeight(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              SizedBox(
-                width: 240,
+              Expanded(
                 child: Semantics(
                   container: true,
                   explicitChildNodes: true,
                   label: 'Primary destinations',
                   role: SemanticsRole.navigation,
-                  child: Padding(
-                    padding: EdgeInsets.all(space.sm),
+                  child: CharcoalPadding.all(
+                    CharcoalSpace.sm,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -96,7 +97,7 @@ final class _AgentNavigationItemExampleState
                           selected: _destination == _NavigationDestination.home,
                           child: const Text('Home'),
                         ),
-                        SizedBox(height: space.sm),
+                        const CharcoalGap(CharcoalSpace.sm),
                         CharcoalNavigationItem(
                           leading: const CharcoalIcon(CharcoalIcons.compass),
                           onPressed: () =>
@@ -105,7 +106,7 @@ final class _AgentNavigationItemExampleState
                               _destination == _NavigationDestination.discover,
                           child: const Text('Discover'),
                         ),
-                        SizedBox(height: space.sm),
+                        const CharcoalGap(CharcoalSpace.sm),
                         CharcoalNavigationItem(
                           leading: const CharcoalIcon(CharcoalIcons.message),
                           onPressed: () =>
@@ -121,12 +122,12 @@ final class _AgentNavigationItemExampleState
                   ),
                 ),
               ),
-              SizedBox(width: space.xl),
-              Expanded(child: content),
+              const CharcoalGap(CharcoalSpace.xl),
+              Expanded(flex: 2, child: content),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

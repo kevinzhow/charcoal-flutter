@@ -20,25 +20,23 @@ final class _AgentSelectionControlsExampleState
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(
+        const CharcoalText(
           'Publishing preferences',
-          style: theme.style(CharcoalTextRole.headingS),
+          role: CharcoalTextRole.headingS,
         ),
-        SizedBox(height: space.lg),
+        const CharcoalGap(CharcoalSpace.lg),
         CharcoalCheckbox(
           value: _saveDrafts,
           onChanged: (value) => setState(() => _saveDrafts = value),
           label: const Text('Save drafts automatically'),
         ),
-        SizedBox(height: space.xl),
-        Text('Audience', style: theme.style(CharcoalTextRole.bodyLargeBold)),
-        SizedBox(height: space.sm),
+        const CharcoalGap(CharcoalSpace.xl),
+        const CharcoalText('Audience', role: CharcoalTextRole.bodyLargeBold),
+        const CharcoalGap(CharcoalSpace.sm),
         Semantics(
           container: true,
           explicitChildNodes: true,
@@ -52,14 +50,14 @@ final class _AgentSelectionControlsExampleState
                 onChanged: (value) => setState(() => _audience = value),
                 label: const Text('Everyone'),
               ),
-              SizedBox(height: space.lg),
+              const CharcoalGap(CharcoalSpace.lg),
               CharcoalRadio<_Audience>(
                 value: _Audience.followers,
                 groupValue: _audience,
                 onChanged: (value) => setState(() => _audience = value),
                 label: const Text('Followers'),
               ),
-              SizedBox(height: space.lg),
+              const CharcoalGap(CharcoalSpace.lg),
               CharcoalRadio<_Audience>(
                 value: _Audience.private,
                 groupValue: _audience,
@@ -69,7 +67,7 @@ final class _AgentSelectionControlsExampleState
             ],
           ),
         ),
-        SizedBox(height: space.xl),
+        const CharcoalGap(CharcoalSpace.xl),
         CharcoalSwitch(
           value: _releaseNotifications,
           onChanged: (value) => setState(() => _releaseNotifications = value),

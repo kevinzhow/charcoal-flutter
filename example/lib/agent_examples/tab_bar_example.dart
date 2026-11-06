@@ -22,13 +22,12 @@ final class _AgentTabBarExampleState extends State<AgentTabBarExample> {
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: <Widget>[
-      SizedBox(
-        height: CharcoalTheme.of(context).space.xxxl,
+      CharcoalPadding(
+        padding: const CharcoalInset.symmetric(vertical: CharcoalSpace.lg),
         child: Center(
-          child: Text(
+          child: CharcoalText(
             'Current destination: ${destination.name}',
-            style: CharcoalTheme.of(context)
-                .style(CharcoalTextRole.captionMedium),
+            role: CharcoalTextRole.captionMedium,
           ),
         ),
       ),

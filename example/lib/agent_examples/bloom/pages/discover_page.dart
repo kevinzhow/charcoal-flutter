@@ -29,8 +29,6 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
   @override
   Widget build(BuildContext context) {
     final state = widget.viewModel.state;
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     final query = state.discoverQuery.trim().toLowerCase();
     final matchingTopics = state.data.topics
         .where((topic) {
@@ -53,13 +51,12 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
         key: const ValueKey<String>('agent-social-discover-page'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
+          CharcoalText(
             'Find an idea, then follow it into real work and people.',
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.captionMedium,
+            tone: CharcoalTextTone.secondary,
           ),
-          SizedBox(height: space.md),
+          const CharcoalGap(CharcoalSpace.md),
           CharcoalTextField(
             key: const ValueKey<String>('agent-social-discover-search'),
             controller: _searchController,
@@ -67,10 +64,10 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
             placeholder: 'Search topics and creators',
             prefix: const CharcoalIcon(CharcoalIcons.search),
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           if (query.isEmpty) ...<Widget>[
             const _BloomSectionTitle(title: 'Explore topics'),
-            SizedBox(height: space.sm),
+            const CharcoalGap(CharcoalSpace.sm),
             for (
               var index = 0;
               index < state.data.topics.length;
@@ -82,19 +79,19 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
                 topic: state.data.topics[index],
               ),
               if (index + 1 < state.data.topics.length)
-                SizedBox(height: space.sm),
+                const CharcoalGap(CharcoalSpace.sm),
             ],
-            SizedBox(height: space.lg),
+            const CharcoalGap(CharcoalSpace.lg),
             const _BloomSectionTitle(title: 'Creators to know'),
-            SizedBox(height: space.sm),
-            _creatorResults(state, state.data.creators, space),
+            const CharcoalGap(CharcoalSpace.sm),
+            _creatorResults(state, state.data.creators),
           ] else if (!hasResults) ...<Widget>[
             _BloomEmptyState(
               description:
                   'No topics or creators match “${state.discoverQuery.trim()}”. Try a broader word.',
               title: 'Nothing found yet',
             ),
-            SizedBox(height: space.sm),
+            const CharcoalGap(CharcoalSpace.sm),
             CharcoalButton(
               fullWidth: true,
               onPressed: () {
@@ -104,16 +101,15 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
               child: const Text('Clear search'),
             ),
           ] else ...<Widget>[
-            Text(
+            CharcoalText(
               '${matchingTopics.length + matchingCreators.length} results for “${state.discoverQuery.trim()}”',
-              style: theme
-                  .style(CharcoalTextRole.caption)
-                  .copyWith(color: theme.colors.textSecondary),
+              role: CharcoalTextRole.caption,
+              tone: CharcoalTextTone.secondary,
             ),
             if (matchingTopics.isNotEmpty) ...<Widget>[
-              SizedBox(height: space.md),
+              const CharcoalGap(CharcoalSpace.md),
               const _BloomSectionTitle(title: 'Topics'),
-              SizedBox(height: space.sm),
+              const CharcoalGap(CharcoalSpace.sm),
               for (
                 var index = 0;
                 index < matchingTopics.length;
@@ -125,14 +121,14 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
                   topic: matchingTopics[index],
                 ),
                 if (index + 1 < matchingTopics.length)
-                  SizedBox(height: space.sm),
+                  const CharcoalGap(CharcoalSpace.sm),
               ],
             ],
             if (matchingCreators.isNotEmpty) ...<Widget>[
-              SizedBox(height: space.lg),
+              const CharcoalGap(CharcoalSpace.lg),
               const _BloomSectionTitle(title: 'Creators'),
-              SizedBox(height: space.sm),
-              _creatorResults(state, matchingCreators, space),
+              const CharcoalGap(CharcoalSpace.sm),
+              _creatorResults(state, matchingCreators),
             ],
           ],
         ],
@@ -143,7 +139,6 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
   Widget _creatorResults(
     BloomViewState state,
     List<BloomCreator> creators,
-    CharcoalSpaceScale space,
   ) => Column(
     children: <Widget>[
       for (var index = 0; index < creators.length; index++) ...<Widget>[
@@ -153,7 +148,7 @@ final class _BloomDiscoverPageState extends State<_BloomDiscoverPage> {
           onFollow: () => widget.viewModel.toggleFollow(creators[index].id),
           onOpen: () => widget.viewModel.openCreator(creators[index].id),
         ),
-        if (index + 1 < creators.length) SizedBox(height: space.sm),
+        if (index + 1 < creators.length) const CharcoalGap(CharcoalSpace.sm),
       ],
     ],
   );
@@ -176,28 +171,24 @@ final class _BloomTopicPage extends StatelessWidget {
     final posts = state.data.posts
         .where((post) => post.topicId == topic.id)
         .toList(growable: false);
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
         key: const ValueKey<String>('agent-social-topic-page'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
+          CharcoalText(
             topic.description,
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.captionMedium,
+            tone: CharcoalTextTone.secondary,
           ),
-          SizedBox(height: space.xs),
-          Text(
+          const CharcoalGap(CharcoalSpace.xs),
+          CharcoalText(
             '${posts.length} ${posts.length == 1 ? 'post' : 'posts'} in this collection',
-            style: theme
-                .style(CharcoalTextRole.caption)
-                .copyWith(color: theme.colors.textTertiary),
+            role: CharcoalTextRole.caption,
+            tone: CharcoalTextTone.tertiary,
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           for (var index = 0; index < posts.length; index++) ...<Widget>[
             _BloomPostCard(
               onComment: () => viewModel.openComments(posts[index].id),
@@ -213,7 +204,7 @@ final class _BloomTopicPage extends StatelessWidget {
               showFollow: posts[index].creatorId != 'mina',
               state: state,
             ),
-            if (index + 1 < posts.length) SizedBox(height: space.lg),
+            if (index + 1 < posts.length) const CharcoalGap(CharcoalSpace.lg),
           ],
         ],
       ),
@@ -239,8 +230,6 @@ final class _BloomCreatorPage extends StatelessWidget {
     final posts = state.data.posts
         .where((post) => post.creatorId == creator.id)
         .toList(growable: false);
-    final theme = CharcoalTheme.of(context);
-    final space = theme.space;
     return _bloomPagePadding(
       context,
       Column(
@@ -250,35 +239,32 @@ final class _BloomCreatorPage extends StatelessWidget {
           Center(
             child: _BloomAvatar(
               initials: creator.initials,
-              size: 72,
+              size: CharcoalAvatarSize.extraLarge,
               tone: creator.tone,
             ),
           ),
-          SizedBox(height: space.sm),
-          Text(
+          const CharcoalGap(CharcoalSpace.sm),
+          CharcoalText(
             creator.handle,
             textAlign: TextAlign.center,
-            style: theme
-                .style(CharcoalTextRole.caption)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.caption,
+            tone: CharcoalTextTone.secondary,
           ),
-          SizedBox(height: space.xs),
-          Text(
+          const CharcoalGap(CharcoalSpace.xs),
+          CharcoalText(
             creator.location,
             textAlign: TextAlign.center,
-            style: theme
-                .style(CharcoalTextRole.caption)
-                .copyWith(color: theme.colors.textTertiary),
+            role: CharcoalTextRole.caption,
+            tone: CharcoalTextTone.tertiary,
           ),
-          SizedBox(height: space.md),
-          Text(
+          const CharcoalGap(CharcoalSpace.md),
+          CharcoalText(
             creator.bio,
             textAlign: TextAlign.center,
-            style: theme
-                .style(CharcoalTextRole.captionMedium)
-                .copyWith(color: theme.colors.textSecondary),
+            role: CharcoalTextRole.captionMedium,
+            tone: CharcoalTextTone.secondary,
           ),
-          SizedBox(height: space.md),
+          const CharcoalGap(CharcoalSpace.md),
           Row(
             children: <Widget>[
               Expanded(
@@ -292,7 +278,7 @@ final class _BloomCreatorPage extends StatelessWidget {
                   child: Text(followed ? 'Following' : 'Follow'),
                 ),
               ),
-              SizedBox(width: space.sm),
+              const CharcoalGap(CharcoalSpace.sm),
               Expanded(
                 child: CharcoalButton(
                   fullWidth: true,
@@ -304,7 +290,7 @@ final class _BloomCreatorPage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           _BloomSurface(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -317,9 +303,9 @@ final class _BloomCreatorPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: space.lg),
+          const CharcoalGap(CharcoalSpace.lg),
           const _BloomSectionTitle(title: 'Recent work'),
-          SizedBox(height: space.sm),
+          const CharcoalGap(CharcoalSpace.sm),
           if (posts.isEmpty)
             const _BloomEmptyState(
               description: 'New work from this creator will appear here.',
@@ -339,7 +325,7 @@ final class _BloomCreatorPage extends StatelessWidget {
                 post: posts[index],
                 state: state,
               ),
-              if (index + 1 < posts.length) SizedBox(height: space.lg),
+              if (index + 1 < posts.length) const CharcoalGap(CharcoalSpace.lg),
             ],
         ],
       ),

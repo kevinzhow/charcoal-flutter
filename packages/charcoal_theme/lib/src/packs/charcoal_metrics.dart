@@ -15,6 +15,8 @@ const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
     extraSmallSize: 20,
     smallIconSize: 16,
     regularIconSize: 24,
+    badgeOffsetEnd: -2,
+    badgeOffsetTop: -2,
   ),
   switchToggle: CharcoalSwitchMetrics(
     trackWidth: 51,
@@ -75,6 +77,7 @@ const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
   spinner: CharcoalSpinnerMetrics(
     rotationDuration: Duration(seconds: 1),
     shadowBlur: 8,
+    inlineSize: 8,
   ),
   modal: CharcoalModalMetrics(
     initialScale: 1.05,
@@ -125,6 +128,7 @@ const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
     scrollDuration: Duration(milliseconds: 300),
     mediumViewportFraction: 0.75,
     navigationZoneWidth: 72,
+    defaultHeight: 200,
   ),
   pagination: CharcoalPaginationMetrics(
     cornerRadius: 20,
@@ -151,6 +155,7 @@ const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
   clickable: CharcoalClickableMetrics(
     keyboardActivationDuration: Duration(milliseconds: 100),
     disabledOpacity: 0.32,
+    pressedOpacity: 0.64,
   ),
   popup: CharcoalPopupMetrics(
     seamOverlap: 0.5,
@@ -190,5 +195,16 @@ const CharcoalMetrics charcoalMetrics = CharcoalMetrics(
   ),
   scaffold: CharcoalScaffoldMetrics(
     darkLuminanceThreshold: 0.179,
+  ),
+  artwork: CharcoalArtworkMetrics(
+    height: 174,
+    discDiameter: 148,
+    discOffsetStart: -28,
+    discOffsetBottom: -48,
+    tileEdge: 78,
+    tileOffsetEnd: 30,
+    tileOffsetTop: 28,
+    tileAngle: -0.28,
+    tileTint: 0.24,
   ),
 );

@@ -272,6 +272,7 @@ const Map<String, ComponentMetadata> overlaysMetadata = <String, ComponentMetada
       'The indicator has no text geometry and does not grow with text scaling; the surrounding composition owns compact placement.',
       'When animations are disabled, it becomes a stable midpoint frame instead of repeating motion.',
       'Transparent removes the surface fill but retains the source shadow contract.',
+      'CharcoalLoadingSpinner.inline is the metrics.spinner.inlineSize circle with no surface or padding, to sit beside a line of small text such as a delivery status.',
     ],
     interactionStates: <String>[
       'repeating',

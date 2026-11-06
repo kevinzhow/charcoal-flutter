@@ -68,8 +68,19 @@ class CharcoalGap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final extent = step.resolve(context);
-    // Without an explicit axis the gap follows the nearest enclosing flex, like Flutter's Spacer.
-    final axis = _axis ?? context.findAncestorWidgetOfExactType<Flex>()?.direction ?? Axis.vertical;
+    // Without an explicit axis the gap follows the nearest enclosing flex (a Row, a Column or any
+    // other Flex), like Flutter's Spacer.
+    var axis = _axis;
+    if (axis == null) {
+      context.visitAncestorElements((element) {
+        final widget = element.widget;
+        if (widget is Flex) {
+          axis = widget.direction;
+          return false;
+        }
+        return true;
+      });
+    }
     return axis == Axis.horizontal ? SizedBox(width: extent) : SizedBox(height: extent);
   }
 }

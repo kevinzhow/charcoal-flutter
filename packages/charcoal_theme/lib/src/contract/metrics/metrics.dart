@@ -3,6 +3,7 @@
 
 import 'package:flutter/foundation.dart' show immutable;
 
+import 'artwork.dart';
 import 'balloon.dart';
 import 'button.dart';
 import 'carousel.dart';
@@ -33,6 +34,7 @@ import 'text_field.dart';
 import 'toast.dart';
 import 'tooltip.dart';
 
+export 'artwork.dart';
 export 'balloon.dart';
 export 'button.dart';
 export 'carousel.dart';
@@ -100,6 +102,7 @@ class CharcoalMetrics {
     required this.selectionToolbar,
     required this.pageRoute,
     required this.scaffold,
+    required this.artwork,
   });
 
   /// Geometry of the pill button beyond the shared control heights.
@@ -189,6 +192,9 @@ class CharcoalMetrics {
   /// Scaffold and system chrome.
   final CharcoalScaffoldMetrics scaffold;
 
+  /// Placeholder artwork for content without an image.
+  final CharcoalArtworkMetrics artwork;
+
   /// A copy with the given families replaced.
   CharcoalMetrics copyWith({
     CharcoalButtonMetrics? button,
@@ -220,6 +226,7 @@ class CharcoalMetrics {
     CharcoalSelectionToolbarMetrics? selectionToolbar,
     CharcoalPageRouteMetrics? pageRoute,
     CharcoalScaffoldMetrics? scaffold,
+    CharcoalArtworkMetrics? artwork,
   }) => CharcoalMetrics(
     button: button ?? this.button,
     iconButton: iconButton ?? this.iconButton,
@@ -250,6 +257,7 @@ class CharcoalMetrics {
     selectionToolbar: selectionToolbar ?? this.selectionToolbar,
     pageRoute: pageRoute ?? this.pageRoute,
     scaffold: scaffold ?? this.scaffold,
+    artwork: artwork ?? this.artwork,
   );
 
   /// Every family by name, each as its own field map.
@@ -283,6 +291,7 @@ class CharcoalMetrics {
     'selectionToolbar': selectionToolbar.toMap(),
     'pageRoute': pageRoute.toMap(),
     'scaffold': scaffold.toMap(),
+    'artwork': artwork.toMap(),
   };
 
   /// Inverse of [toMap].
@@ -316,6 +325,7 @@ class CharcoalMetrics {
     selectionToolbar: CharcoalSelectionToolbarMetrics.fromMap(map['selectionToolbar']!),
     pageRoute: CharcoalPageRouteMetrics.fromMap(map['pageRoute']!),
     scaffold: CharcoalScaffoldMetrics.fromMap(map['scaffold']!),
+    artwork: CharcoalArtworkMetrics.fromMap(map['artwork']!),
   );
 
   @override
@@ -350,7 +360,8 @@ class CharcoalMetrics {
           other.textEditing == textEditing &&
           other.selectionToolbar == selectionToolbar &&
           other.pageRoute == pageRoute &&
-          other.scaffold == scaffold;
+          other.scaffold == scaffold &&
+          other.artwork == artwork;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
@@ -383,5 +394,6 @@ class CharcoalMetrics {
     selectionToolbar,
     pageRoute,
     scaffold,
+    artwork,
   ]);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../foundation/layout.dart';
 import 'card.dart';
+import 'progress_bar.dart';
 
 /// A labelled progress meter on a card, such as a quota report.
 ///
@@ -52,19 +53,7 @@ final class CharcoalMeter extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: theme.space.sm),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(theme.radius.xs),
-              child: Container(
-                height: theme.sizes.meterTrack,
-                color: theme.colors.surfaceTertiary,
-                alignment: AlignmentDirectional.centerStart,
-                child: FractionallySizedBox(
-                  widthFactor: clamped,
-                  heightFactor: 1,
-                  child: ColoredBox(color: theme.colors.primary),
-                ),
-              ),
-            ),
+            CharcoalProgressBar(value: clamped),
           ],
         ),
       ),

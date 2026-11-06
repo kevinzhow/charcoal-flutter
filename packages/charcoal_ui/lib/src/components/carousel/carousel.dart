@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../foundation/charcoal_clickable.dart';
 import '../../foundation/interaction_state.dart';
+import '../../foundation/layout.dart';
 import '../actions/icon_button.dart';
 
 /// The layout behavior of a [CharcoalCarousel].
@@ -23,7 +24,8 @@ typedef CharcoalCarouselSemanticLabelBuilder = String Function(int index, int it
 
 /// A horizontally paged Charcoal V2 carousel.
 ///
-/// The carousel must receive a bounded height from its parent. Small carousels
+/// Inside a parent that leaves the height unbounded (a scrolling column) the carousel is
+/// `metrics.carousel.defaultHeight` tall; a bounded parent sets the height. Small carousels
 /// default to full-page slides and indicators; medium carousels default to a
 /// partial next-slide preview and overlay navigation buttons.
 ///
@@ -47,11 +49,13 @@ final class CharcoalCarousel extends StatefulWidget {
     this.showIndicators,
     this.showNavigationButtons,
     this.size = CharcoalCarouselSize.medium,
+    this.spacing,
     this.nextSemanticLabel = 'Next',
     this.viewportFraction,
     super.key,
   }) : assert(initialPage >= 0),
        assert(gap == null || gap >= 0),
+       assert(gap == null || spacing == null, 'Pass either gap or spacing, not both'),
        assert(viewportFraction == null || (viewportFraction > 0 && viewportFraction <= 1));
 
   /// The ordered slides. At least one slide is required.
@@ -72,8 +76,12 @@ final class CharcoalCarousel extends StatefulWidget {
   /// An optional externally owned focus node.
   final FocusNode? focusNode;
 
-  /// The non-negative logical-pixel gap between slides.
+  /// The non-negative logical-pixel gap between slides. For the library's own use; application
+  /// code names a [spacing] step instead.
   final double? gap;
+
+  /// The gap between slides as a spacing step; exclusive with [gap]. None when both are null.
+  final CharcoalSpace? spacing;
 
   /// The zero-based initial page used by the internal controller.
   final int initialPage;
@@ -263,7 +271,7 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
             ? 1
             : theme.metrics.carousel.mediumViewportFraction);
     _ensureInternalController(viewportFraction);
-    final gap = widget.gap ?? 0;
+    final gap = widget.gap ?? widget.spacing?.of(theme.space) ?? 0;
     final halfGap = gap / 2;
     final showIndicators = widget.showIndicators ?? widget.size == CharcoalCarouselSize.small;
     final showNavigation =
@@ -335,39 +343,44 @@ final class _CharcoalCarouselState extends State<CharcoalCarousel> {
       ),
     );
 
+    final carousel = Focus(
+      canRequestFocus: false,
+      onFocusChange: _handleFocusWithinChanged,
+      onKeyEvent: _handleKeyEvent,
+      child: FocusableActionDetector(
+        autofocus: widget.autofocus,
+        focusNode: _focusNode,
+        onShowFocusHighlight: (visible) => setState(() => _focusVisible = visible),
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _hovered = true),
+          onExit: (_) => setState(() => _hovered = false),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(child: viewport),
+              if (showIndicators)
+                SizedBox(
+                  height: theme.sizes.controlMd,
+                  child: _CarouselIndicators(
+                    currentPage: _currentPage,
+                    itemCount: widget.children.length,
+                    onSelected: _animateTo,
+                    semanticLabelBuilder: widget.semanticLabelBuilder,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
     return Semantics(
       container: true,
       explicitChildNodes: true,
       label: widget.semanticLabel,
-      child: Focus(
-        canRequestFocus: false,
-        onFocusChange: _handleFocusWithinChanged,
-        onKeyEvent: _handleKeyEvent,
-        child: FocusableActionDetector(
-          autofocus: widget.autofocus,
-          focusNode: _focusNode,
-          onShowFocusHighlight: (visible) => setState(() => _focusVisible = visible),
-          child: MouseRegion(
-            onEnter: (_) => setState(() => _hovered = true),
-            onExit: (_) => setState(() => _hovered = false),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(child: viewport),
-                if (showIndicators)
-                  SizedBox(
-                    height: theme.sizes.controlMd,
-                    child: _CarouselIndicators(
-                      currentPage: _currentPage,
-                      itemCount: widget.children.length,
-                      onSelected: _animateTo,
-                      semanticLabelBuilder: widget.semanticLabelBuilder,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) => constraints.hasBoundedHeight
+            ? carousel
+            : SizedBox(height: theme.metrics.carousel.defaultHeight, child: carousel),
       ),
     );
   }

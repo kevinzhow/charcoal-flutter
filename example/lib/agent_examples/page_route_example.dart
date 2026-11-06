@@ -20,32 +20,22 @@ final class _AccountDetailPage extends StatelessWidget {
   const _AccountDetailPage();
 
   @override
-  Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    return ColoredBox(
-      color: theme.colors.background,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            CharcoalNavigationBar(
-              leading: CharcoalIconButton(
-                icon: const CharcoalIcon(CharcoalIcons.chevronLeft),
-                onPressed: () => Navigator.of(context).pop(),
-                semanticLabel: 'Back to account',
-                size: CharcoalIconButtonSize.small,
-              ),
-              title: const Text('Account details'),
-            ),
-            Padding(
-              padding: EdgeInsets.all(theme.space.xl),
-              child: const Text(
-                'Your profile and security settings are up to date.',
-              ),
-            ),
-          ],
-        ),
+  Widget build(BuildContext context) => CharcoalScaffold(
+    navigationBar: CharcoalNavigationBar(
+      leading: CharcoalIconButton(
+        icon: const CharcoalIcon(CharcoalIcons.chevronLeft),
+        onPressed: () => Navigator.of(context).pop(),
+        semanticLabel: 'Back to account',
+        size: CharcoalIconButtonSize.small,
       ),
-    );
-  }
+      title: const Text('Account details'),
+    ),
+    body: const Align(
+      alignment: AlignmentDirectional.topStart,
+      child: CharcoalPadding(
+        padding: CharcoalInset.all(CharcoalSpace.xl),
+        child: Text('Your profile and security settings are up to date.'),
+      ),
+    ),
+  );
 }
