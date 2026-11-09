@@ -151,6 +151,25 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('the default picker opens on a value outside its year span', (tester) async {
+      // The platform picker asserts when the initial date lies outside its range; the range is
+      // widened to the stored value instead.
+      for (final stored in <DateTime>[DateTime(2001, 2, 3, 4, 5), DateTime(2099, 6, 7, 8, 9)]) {
+        await pumpCharcoal(
+          tester,
+          Center(
+            child: CharcoalDateTimeField(label: 'Expires', value: stored, onChanged: (_) {}),
+          ),
+        );
+        await tester.tap(find.text(CharcoalDateTimeMode.dateTime.format(stored)));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        expect(find.text('OK'), findsOneWidget);
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
+      }
+    });
+
     testWidgets('a null onChanged disables it', (tester) async {
       var opened = 0;
       await pumpCharcoal(
