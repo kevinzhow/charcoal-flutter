@@ -55,14 +55,27 @@ enum CharcoalDateTimeMode {
   };
 }
 
-Future<DateTime?> _pickDate(BuildContext context, DateTime? current) async {
+/// Opens the platform date picker on [current] (today when null).
+///
+/// The picker spans [_pickerYearSpan] years either side of today, widened to the day of [current]
+/// when that lies outside: the platform picker rejects an initial date outside its range, and a
+/// stored value can be older or further ahead than the span.
+Future<DateTime?> _showDatePicker(BuildContext context, DateTime? current) {
   final now = DateTime.now();
-  final date = await showDatePicker(
+  final initial = current ?? now;
+  final first = DateTime(now.year - _pickerYearSpan);
+  final last = DateTime(now.year + _pickerYearSpan);
+  final initialDay = DateTime(initial.year, initial.month, initial.day);
+  return showDatePicker(
     context: context,
-    initialDate: current ?? now,
-    firstDate: DateTime(now.year - _pickerYearSpan),
-    lastDate: DateTime(now.year + _pickerYearSpan),
+    initialDate: initial,
+    firstDate: initialDay.isBefore(first) ? initialDay : first,
+    lastDate: initialDay.isAfter(last) ? initialDay : last,
   );
+}
+
+Future<DateTime?> _pickDate(BuildContext context, DateTime? current) async {
+  final date = await _showDatePicker(context, current);
   return date == null ? null : DateTime(date.year, date.month, date.day);
 }
 
@@ -73,17 +86,11 @@ Future<DateTime?> _pickTime(BuildContext context, DateTime? current) async {
 }
 
 Future<DateTime?> _pickDateAndTime(BuildContext context, DateTime? current) async {
-  final now = DateTime.now();
-  final date = await showDatePicker(
-    context: context,
-    initialDate: current ?? now,
-    firstDate: DateTime(now.year - _pickerYearSpan),
-    lastDate: DateTime(now.year + _pickerYearSpan),
-  );
+  final date = await _showDatePicker(context, current);
   if (date == null || !context.mounted) return null;
   final time = await showTimePicker(
     context: context,
-    initialTime: TimeOfDay.fromDateTime(current ?? now),
+    initialTime: TimeOfDay.fromDateTime(current ?? DateTime.now()),
   );
   if (time == null) return null;
   return DateTime(date.year, date.month, date.day, time.hour, time.minute);

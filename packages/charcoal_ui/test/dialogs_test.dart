@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/material.dart';
@@ -371,6 +373,60 @@ void main() {
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
       expect(result, isNull);
+    });
+
+    testWidgets('form with onSubmit stays open and keeps the input when submitting fails', (
+      tester,
+    ) async {
+      Map<String, String>? result;
+      var closed = false;
+      final submitted = <Map<String, String>>[];
+      var pending = Completer<void>();
+      await pumpOpener(tester, (context) async {
+        result = await showCharcoalFormDialog(
+          context,
+          title: 'New key',
+          fields: const [CharcoalFormDialogField(key: 'name', label: 'Name', required: true)],
+          submittingLabel: 'Saving…',
+          errorMessage: (error) => 'Failed: $error',
+          onSubmit: (values) {
+            submitted.add(values);
+            return pending.future;
+          },
+        );
+        closed = true;
+      });
+      await openIt(tester);
+
+      await tester.enterText(find.byType(EditableText), ' Alice ');
+      await tester.tap(find.text('Save'));
+      await tester.pump();
+      expect(submitted, [
+        {'name': 'Alice'},
+      ]);
+      // While the request runs, the dialog cannot be submitted again or dismissed.
+      expect(find.text('Saving…'), findsOneWidget);
+      await tester.tap(find.text('Saving…'));
+      await tester.tap(find.text('Cancel'));
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.tapAt(const Offset(4, 4));
+      await tester.pump();
+      expect(submitted, hasLength(1));
+      expect(closed, isFalse);
+
+      pending.completeError('offline');
+      await tester.pumpAndSettle();
+      expect(closed, isFalse);
+      expect(find.text('Failed: offline'), findsOneWidget);
+      expect(find.text('Save'), findsOneWidget);
+      expect(tester.widget<EditableText>(find.byType(EditableText)).controller.text, ' Alice ');
+
+      pending = Completer<void>()..complete();
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+      expect(closed, isTrue);
+      expect(result, <String, String>{'name': 'Alice'});
+      expect(submitted, hasLength(2));
     });
 
     testWidgets('form survives the keyboard and a short window', (tester) async {
