@@ -1,11 +1,10 @@
-import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/semantics.dart' show SemanticsValidationResult;
 import 'package:flutter/widgets.dart';
 
 import '../../foundation/charcoal_clickable.dart';
-import '../../foundation/interaction_state.dart';
 import '../../foundation/layout.dart';
 import '../actions/control_support.dart';
+import 'radio_indicator.dart';
 
 /// A controlled radio option.
 ///
@@ -58,9 +57,6 @@ final class CharcoalRadio<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = CharcoalTheme.of(context);
-    final colors = theme.colors;
-    final metrics = theme.metrics.radio;
     return MergeSemantics(
       child: CharcoalClickable(
         autofocus: autofocus,
@@ -75,49 +71,10 @@ final class CharcoalRadio<T> extends StatelessWidget {
             ? SemanticsValidationResult.invalid
             : SemanticsValidationResult.none,
         builder: (context, states) {
-          final focused = states.contains(WidgetState.focused);
-          final duration = theme.duration(context, theme.motion.standard);
-          final background = _selected
-              ? resolveCharcoalStateColor(
-                  states,
-                  normal: colors.primary,
-                  hovered: colors.primaryHover,
-                  pressed: colors.primaryPress,
-                )
-              : resolveCharcoalStateColor(
-                  states,
-                  normal: colors.surface,
-                  hovered: colors.surfaceHover,
-                  pressed: colors.surfacePress,
-                );
-          final indicator = AnimatedContainer(
-            duration: duration,
-            curve: theme.motion.curve,
-            width: metrics.controlSize,
-            height: metrics.controlSize,
-            decoration: BoxDecoration(
-              border: _selected
-                  ? null
-                  : Border.all(color: colors.border, width: theme.borders.thick),
-              borderRadius: BorderRadius.circular(theme.radius.pill),
-              boxShadow: charcoalHaloShadow(
-                theme,
-                visible: focused || invalid,
-                color: invalid ? colors.borderNegative : colors.focusRing,
-              ),
-              color: background,
-            ),
-            child: Center(
-              child: AnimatedContainer(
-                duration: duration,
-                width: _selected ? metrics.dotSize : 0,
-                height: _selected ? metrics.dotSize : 0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(theme.radius.pill),
-                  color: colors.iconOnPrimary,
-                ),
-              ),
-            ),
+          final indicator = CharcoalRadioIndicator(
+            selected: _selected,
+            states: states,
+            invalid: invalid,
           );
           return CharcoalDisabledFade(
             disabled: states.contains(WidgetState.disabled),

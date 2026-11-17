@@ -48,7 +48,8 @@ Public components, by family (the Catalog is the authoritative list):
 - App and navigation: `CharcoalApp`, `CharcoalPageRoute`, `CharcoalScaffold`, `CharcoalNavigationBar`,
   `CharcoalTabBar`, `CharcoalNavigationItem`, `CharcoalPagination`, `CharcoalCarousel`
 - Actions and selection: `CharcoalButton`, `CharcoalLinkButton`, `CharcoalSwitchingButton`,
-  `CharcoalIconButton`, `CharcoalCheckbox`, `CharcoalRadio`, `CharcoalSwitch`, `CharcoalSlider`,
+  `CharcoalIconButton`, `CharcoalCheckbox`, `CharcoalRadio`, `CharcoalRadioCards`, `CharcoalSwitch`,
+  `CharcoalSlider`,
   `CharcoalMultiSelect`, `CharcoalSegmentedControl`, `CharcoalTagItem`
 - Fields and forms: `CharcoalTextField`, `CharcoalTextArea`, `CharcoalDropdown`,
   `CharcoalSearchField`, `CharcoalDateTimeField`, `CharcoalSwitchField`, `CharcoalFormSection`,

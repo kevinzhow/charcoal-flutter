@@ -304,7 +304,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, read-only settings with Edit, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -353,7 +353,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, read-only settings with Edit, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -433,7 +433,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, read-only settings with Edit, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],

@@ -193,6 +193,69 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       ),
     ],
   ),
+  'CharcoalRadioCards': ComponentMetadata(
+    category: 'Forms',
+    summary: 'A single choice among a few options that each need a sentence, as stacked cards with a radio indicator, a title, a description and an optional trailing widget.',
+    keywords: <String>[
+      'radio cards',
+      'choice cards',
+      'radio group',
+      'single choice',
+      'option list',
+    ],
+    useWhen: <String>[
+      'Each option needs a title and a line of explanation (what choosing it means, an identifier, a status).',
+      'There are few options (about two to six) and seeing them all at once beats opening a dropdown.',
+    ],
+    avoidWhen: <String>[
+      'Two or three short options without explanations; use CharcoalSegmentedControl.',
+      'Many options or a long list; use CharcoalDropdown.',
+      'Several options may be chosen; use CharcoalCheckbox rows or CharcoalMultiSelect.',
+    ],
+    accessibility: <String>[
+      'Each card is one radio node (checked, in a mutually exclusive group) whose label is the title and description.',
+      'The group is one tab stop; arrow keys move the choice and skip disabled options, Space or Enter chooses the focused option.',
+      'Frame it with CharcoalFormField so the group has a visible label and required or optional marker.',
+    ],
+    responsiveBehavior: <String>[
+      'Cards fill the width; titles and descriptions wrap, and the indicator stays on the first title line.',
+    ],
+    interactionStates: <String>[
+      'chosen',
+      'unchosen',
+      'hovered',
+      'pressed',
+      'focused',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the card surface, indicator, keyboard model and semantics.',
+      'The caller owns the value, the options and what a disabled option means.',
+    ],
+    tokenRoles: <String>[
+      'colors.borderSubtle',
+      'colors.borderFocus',
+      'colors.textTertiary',
+      'radius.md',
+      'space.md',
+      'space.sm',
+    ],
+    relatedComponents: <String>[
+      'CharcoalRadio',
+      'CharcoalSegmentedControl',
+      'CharcoalDropdown',
+      'CharcoalFormField',
+    ],
+    companionDeclarations: <String>['CharcoalRadioCardOption'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
   'CharcoalCheckbox': ComponentMetadata(
     category: 'Forms',
     summary: 'Toggles one independent boolean choice in a controlled form or checklist.',

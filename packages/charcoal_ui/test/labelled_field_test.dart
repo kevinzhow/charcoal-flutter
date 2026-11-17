@@ -39,6 +39,15 @@ Map<String, Widget> _controls() {
           CharcoalCheckbox(value: value == 'iOS', onChanged: noop, label: Text(value)),
       ],
     ),
+    'radio cards': CharcoalRadioCards<String>(
+      key: const Key('control'),
+      value: 'server',
+      onChanged: noop,
+      options: const [
+        CharcoalRadioCardOption(value: 'server', title: 'Server only'),
+        CharcoalRadioCardOption(value: 'client', title: 'Client visible'),
+      ],
+    ),
     'segmented control': CharcoalSegmentedControl<String>(
       key: const Key('control'),
       value: 'server',

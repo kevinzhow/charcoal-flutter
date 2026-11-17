@@ -10,7 +10,7 @@ import 'field_support.dart';
 /// file picker); the shell supplies label, required or optional marker, spacing and assistive text.
 ///
 /// It is the one labelled-field wrapper for every control: a switch, a radio or checkbox group (a
-/// `Column` of `CharcoalRadio` or `CharcoalCheckbox`) or a segmented control framed by
+/// `Column` of `CharcoalRadio` or `CharcoalCheckbox`), a segmented control or radio cards framed by
 /// it get the same label row, marker, help and error geometry as a `CharcoalTextField` with a
 /// visible label.
 class CharcoalFormField extends StatelessWidget {

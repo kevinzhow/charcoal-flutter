@@ -75,3 +75,32 @@ Widget charcoalDataTablePreview() => CharcoalSectionCard(
     ),
   ],
 );
+
+@CharcoalComponentPreview(name: 'Radio cards', size: Size(480, 320))
+Widget charcoalRadioCardsPreview() => CharcoalFormField(
+  label: 'Default value',
+  required: true,
+  child: CharcoalRadioCards<String>(
+    value: 'none',
+    onChanged: (_) {},
+    options: const <CharcoalRadioCardOption<String>>[
+      CharcoalRadioCardOption(
+        value: 'none',
+        title: 'Not set (recommended)',
+        description: 'Keep the current routing',
+      ),
+      CharcoalRadioCardOption(
+        value: 'large',
+        title: 'Whisper large-v3',
+        description: 'x3k9wq1v7plm2a',
+        trailing: CharcoalChip('Live', tone: CharcoalTone.positive),
+      ),
+      CharcoalRadioCardOption(
+        value: 'old',
+        title: 'Old cluster',
+        description: 'Stopped',
+        enabled: false,
+      ),
+    ],
+  ),
+);

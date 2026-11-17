@@ -22,6 +22,28 @@ final class _AgentAdminSectionsExampleState
     extends State<AgentAdminSectionsExample> {
   bool _enabled = true;
   bool _deleted = false;
+  String _default = 'none';
+  static const _endpoints = <CharcoalRadioCardOption<String>>[
+    CharcoalRadioCardOption(
+      value: 'none',
+      title: 'Not set (recommended)',
+      description:
+          'Keep the current endpoint: members to VIP, others to standard.',
+    ),
+    CharcoalRadioCardOption(
+      value: 'x3k9wq',
+      title: 'Whisper large-v3',
+      description: 'x3k9wq',
+      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),
+    ),
+    CharcoalRadioCardOption(
+      value: '9fj3l1',
+      title: 'Old cluster',
+      description: '9fj3l1 · stopped',
+      enabled: false,
+      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),
+    ),
+  ];
   final Map<String, (String, String)> _members = <String, (String, String)>{
     'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),
     'u2': ('ren.qa@example.com', 'No nickname'),
@@ -42,6 +64,37 @@ final class _AgentAdminSectionsExampleState
       danger: true,
     );
     if (confirmed && mounted) setState(() => _deleted = true);
+  }
+
+  Future<void> _editSettings() async {
+    var draft = _default;
+    final saved = await showCharcoalModal<bool>(
+      context: context,
+      title: 'Edit settings',
+      actions: <Widget>[
+        Builder(
+          builder: (context) => CharcoalButton(
+            variant: CharcoalButtonVariant.primary,
+            fullWidth: true,
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Save'),
+          ),
+        ),
+      ],
+      child: StatefulBuilder(
+        builder: (context, setDraft) => CharcoalFormField(
+          label: 'Default value',
+          required: true,
+          assistiveText: 'Used when no rule matches or the kill switch is off.',
+          child: CharcoalRadioCards<String>(
+            value: draft,
+            options: _endpoints,
+            onChanged: (value) => setDraft(() => draft = value),
+          ),
+        ),
+      ),
+    );
+    if ((saved ?? false) && mounted) setState(() => _default = draft);
   }
 
   @override
@@ -71,13 +124,18 @@ final class _AgentAdminSectionsExampleState
               size: CharcoalButtonSize.small,
               leading: const CharcoalIcon(CharcoalIcons.pen),
               semanticLabel: 'Edit settings',
-              onPressed: () {},
+              onPressed: _editSettings,
               child: const Text('Edit'),
             ),
           ],
-          children: const <Widget>[
+          children: <Widget>[
             CharcoalInfoRows(<(String, String)>[
-              ('Default value', 'Not set: keep the current endpoint'),
+              (
+                'Default value',
+                _endpoints
+                    .firstWhere((option) => option.value == _default)
+                    .title,
+              ),
               ('Value type', 'String'),
               ('Visibility', 'Server only'),
             ]),

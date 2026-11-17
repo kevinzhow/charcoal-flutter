@@ -3,8 +3,8 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 
-/// Scenes for the page-section parts of the admin redesign (section card, danger zone, data
-/// table), at a regular and a compact width.
+/// Scenes for the parts of the admin redesign (section card, danger zone, data table, radio
+/// cards), at a regular and a compact width.
 final sectionsScenes = <CharcoalScene>[
   for (final (name, size) in const <(String, Size)>[
     ('sections-regular', Size(1100, 900)),
@@ -112,6 +112,35 @@ class _Sections extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+              const CharcoalGap(CharcoalSpace.lg),
+              CharcoalFormField(
+                label: 'Default value',
+                required: true,
+                child: CharcoalRadioCards<String>(
+                  value: 'none',
+                  onChanged: (_) {},
+                  options: const <CharcoalRadioCardOption<String>>[
+                    CharcoalRadioCardOption(
+                      value: 'none',
+                      title: 'Not set (recommended)',
+                      description: 'Keep the current routing',
+                    ),
+                    CharcoalRadioCardOption(
+                      value: 'large',
+                      title: 'Whisper large-v3',
+                      description: 'x3k9wq1v7plm2a',
+                      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),
+                    ),
+                    CharcoalRadioCardOption(
+                      value: 'old',
+                      title: 'Old cluster',
+                      description: 'Stopped: choosing it means not set',
+                      enabled: false,
+                      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),
+                    ),
+                  ],
+                ),
               ),
               const CharcoalGap(CharcoalSpace.lg),
               CharcoalDangerZone(

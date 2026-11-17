@@ -143,6 +143,23 @@ void main() {
     );
   });
 
+  testWidgets('admin sections example edits the default with radio cards', (
+    tester,
+  ) async {
+    await show(tester, const AgentAdminSectionsExample(), size: sizes.last);
+    expect(find.text('Not set (recommended)'), findsOneWidget);
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Whisper large-v3'));
+    await tester.pump();
+    await tester.tap(find.text('Old cluster'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Whisper large-v3'), findsOneWidget);
+    expect(find.text('Not set (recommended)'), findsNothing);
+  });
+
   testWidgets('admin sections example removes the checked members', (
     tester,
   ) async {

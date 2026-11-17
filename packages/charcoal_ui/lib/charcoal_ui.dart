@@ -73,6 +73,7 @@ export 'src/components/overlays/tooltip.dart';
 export 'src/components/selection/checkbox.dart';
 export 'src/components/selection/multi_select.dart';
 export 'src/components/selection/radio.dart';
+export 'src/components/selection/radio_cards.dart';
 export 'src/components/selection/segmented_control.dart';
 export 'src/components/selection/selection_box.dart';
 export 'src/components/selection/slider.dart';
