@@ -130,6 +130,30 @@ final class _LayoutPageState extends State<LayoutPage> {
             ),
           ),
           const ShowcaseCard(
+            description: 'An identifier the reader needs elsewhere: selectable monospace text and a copy button that confirms with a toast. In a narrow cell the text shortens; the button still copies all of it.',
+            eyebrow: 'COPYABLE TEXT',
+            title: 'CopyableText',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CharcoalCopyableText(
+                  text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',
+                  copyLabel: 'Copy ID',
+                  copiedMessage: 'ID copied',
+                ),
+                CharcoalGap(CharcoalSpace.md),
+                SizedBox(
+                  width: 180,
+                  child: CharcoalCopyableText(
+                    text: 'b1f6c2d4-7a3e-4c1b-9e2f-1a2b3c4d5e6f',
+                    copyLabel: 'Copy user ID',
+                    copiedMessage: 'User ID copied',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const ShowcaseCard(
             description: 'Columns that line up across rows under a header, row heights from the list row heights, a selection column with a mixed "select all" box, and a trailing action per row. Narrow tables drop their optional columns.',
             eyebrow: 'DATA TABLE',
             title: 'DataTable',

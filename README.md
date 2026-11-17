@@ -59,7 +59,7 @@ Public components, by family (the Catalog is the authoritative list):
 - Layout and content: `CharcoalCard`, `CharcoalSectionCard`, `CharcoalDangerZone`, `CharcoalList`,
   `CharcoalListRow`, `CharcoalDataTable`, `CharcoalDisclosure`, `CharcoalSectionHeader`,
   `CharcoalAvatar`, `CharcoalBadge`, `CharcoalChip`, `CharcoalStatusDot`, `CharcoalText`,
-  `CharcoalIconView`, `CharcoalCodeBlock`, `CharcoalGrid`, `CharcoalSelectable`, and the spacing helpers `CharcoalGap`, `CharcoalInset`,
+  `CharcoalIconView`, `CharcoalCodeBlock`, `CharcoalCopyableText`, `CharcoalGrid`, `CharcoalSelectable`, and the spacing helpers `CharcoalGap`, `CharcoalInset`,
   `CharcoalPadding`, `CharcoalWrap`
 - Admin console (`admin.dart`): `CharcoalAdminShell`, `CharcoalSidebar`, `CharcoalPage`,
   `CharcoalStatCard`, `CharcoalMeter`, `CharcoalInfoRows`, `CharcoalBatchBar`

@@ -111,3 +111,10 @@ Widget charcoalDisclosurePreview() => const CharcoalDisclosure(
   summary: 'Visibility: server only · Enabled after creation · No description',
   child: CharcoalTextField(label: 'Description', showLabel: true, optionalText: '(optional)'),
 );
+
+@CharcoalComponentPreview(name: 'Copyable text', size: Size(480, 120))
+Widget charcoalCopyableTextPreview() => const CharcoalCopyableText(
+  text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',
+  copyLabel: 'Copy ID',
+  copiedMessage: 'ID copied',
+);

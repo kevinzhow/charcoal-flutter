@@ -304,7 +304,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -353,7 +353,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -433,7 +433,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -489,7 +489,58 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalCopyableText': ComponentMetadata(
+    category: 'Content',
+    summary: 'An identifier the reader needs elsewhere (a record ID, a key): selectable monospace caption text and a copy button that confirms with a toast.',
+    keywords: <String>[
+      'copy',
+      'clipboard',
+      'identifier',
+      'id',
+      'uuid',
+      'monospace',
+    ],
+    useWhen: <String>[
+      'A page header or a table cell shows an ID that people paste into other tools.',
+    ],
+    avoidWhen: <String>[
+      'A secret or a long multi-line value; use CharcoalCodeBlock with its own actions.',
+      'Text that nobody copies; use CharcoalText.',
+    ],
+    accessibility: <String>[
+      'Pass a localized copyLabel naming what is copied ("Copy user ID") and a copiedMessage for the toast.',
+      'The text stays selectable for people who copy by hand.',
+    ],
+    responsiveBehavior: <String>[
+      'In a narrow space the text ends with an ellipsis; the button still copies the whole value.',
+    ],
+    interactionStates: <String>[
+      'idle',
+      'copied',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the clipboard write and the confirming toast.',
+      'The caller owns the value and the localized labels.',
+    ],
+    tokenRoles: <String>[
+      'space.xxs',
+    ],
+    relatedComponents: <String>[
+      'CharcoalText',
+      'CharcoalCodeBlock',
+      'CharcoalSelectable',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],

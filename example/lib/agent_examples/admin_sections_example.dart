@@ -220,7 +220,11 @@ final class _AgentAdminSectionsExampleState
                           ),
                         ],
                       ),
-                      CharcoalText(id, role: CharcoalTextRole.captionMono),
+                      CharcoalCopyableText(
+                        text: id,
+                        copyLabel: 'Copy user ID',
+                        copiedMessage: 'User ID copied',
+                      ),
                     ],
                     action: CharcoalIconButton(
                       icon: const CharcoalIcon(CharcoalIcons.x),

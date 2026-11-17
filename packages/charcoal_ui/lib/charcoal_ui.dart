@@ -84,6 +84,7 @@ export 'src/components/status/chip.dart';
 export 'src/components/status/status_dot.dart';
 export 'src/components/status/tag_item.dart';
 export 'src/components/text/charcoal_text.dart';
+export 'src/components/text/copyable_text.dart';
 export 'src/components/text/selection_toolbar.dart';
 export 'src/components/text/text_editing.dart';
 export 'src/components/text/text_ellipsis.dart';
