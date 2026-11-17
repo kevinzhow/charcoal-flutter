@@ -125,9 +125,6 @@ class _DialogScene extends StatelessWidget {
       ),
       CharcoalButton(fullWidth: true, onPressed: () {}, child: const Text('Cancel')),
     ],
-    child: const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Text('This removes every key of the project and cannot be undone.'),
-    ),
+    child: const Text('This removes every key of the project and cannot be undone.'),
   );
 }

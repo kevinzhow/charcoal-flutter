@@ -35,7 +35,6 @@ Future<bool> showCharcoalConfirm(
         title: title,
         showCloseButton: true,
         onDismiss: () => Navigator.of(dialogContext).maybePop(false),
-        contentPadding: EdgeInsets.symmetric(horizontal: theme.metrics.modal.actionPadding),
         actions: <Widget>[
           CharcoalButton(
             variant: danger ? CharcoalButtonVariant.danger : CharcoalButtonVariant.primary,

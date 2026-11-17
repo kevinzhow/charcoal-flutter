@@ -41,12 +41,6 @@ Future<T?> showCharcoalChoiceDialog<T>(
       title: title,
       showCloseButton: true,
       onDismiss: () => Navigator.of(dialogContext).maybePop(),
-      contentPadding: EdgeInsets.fromLTRB(
-        theme.metrics.modal.actionPadding,
-        0,
-        theme.metrics.modal.actionPadding,
-        theme.metrics.modal.actionPadding,
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,

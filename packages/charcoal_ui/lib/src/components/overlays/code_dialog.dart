@@ -51,7 +51,6 @@ Future<bool> showCharcoalCodeDialog(
         maxWidth: theme.sizes.dialogWideMaxWidth,
         showCloseButton: true,
         onDismiss: () => Navigator.of(dialogContext).maybePop(false),
-        contentPadding: EdgeInsets.symmetric(horizontal: theme.metrics.modal.actionPadding),
         actions: <Widget>[
           if (primaryLabel != null) ...<Widget>[
             CharcoalButton(

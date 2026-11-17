@@ -247,9 +247,6 @@ class _FormDialogState extends State<_FormDialog> {
         title: widget.title,
         showCloseButton: !_submitting,
         onDismiss: _submitting ? null : () => Navigator.of(context).maybePop(),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: theme.metrics.modal.actionPadding,
-        ),
         actions: <Widget>[
           CharcoalButton(
             variant: CharcoalButtonVariant.primary,

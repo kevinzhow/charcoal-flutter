@@ -3236,7 +3236,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalDialog",
           "kind": "constructor",
-          "signature": "CharcoalDialog({required this.child, this.actions = const <Widget>[], this.closeIcon, this.closeLabel = 'Close', this.contentPadding = EdgeInsets.zero, this.maxWidth, this.onDismiss, this.showCloseButton = false, this.size = CharcoalDialogSize.medium, this.style = CharcoalModalStyle.center, this.title, super.key})",
+          "signature": "CharcoalDialog({required this.child, this.actions = const <Widget>[], this.closeIcon, this.closeLabel = 'Close', this.contentPadding, this.maxWidth, this.onDismiss, this.showCloseButton = false, this.size = CharcoalDialogSize.medium, this.style = CharcoalModalStyle.center, this.title, super.key})",
           "parameters": [
             {
               "name": "child",
@@ -3266,10 +3266,9 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "contentPadding",
-              "type": "EdgeInsetsGeometry",
+              "type": "EdgeInsetsGeometry?",
               "required": false,
-              "named": true,
-              "defaultValue": "EdgeInsets.zero"
+              "named": true
             },
             {
               "name": "maxWidth",
@@ -3376,7 +3375,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "showCharcoalModal",
           "kind": "function",
-          "signature": "Future<T?> showCharcoalModal<T>({required BuildContext context, required Widget child, List<Widget> actions = const <Widget>[], bool barrierDismissible = true, Widget? closeIcon, Duration? duration, double? maxWidth, CharcoalDialogSize size = CharcoalDialogSize.medium, CharcoalModalStyle style = CharcoalModalStyle.center, String? title, bool useRootNavigator = true})",
+          "signature": "Future<T?> showCharcoalModal<T>({required BuildContext context, required Widget child, List<Widget> actions = const <Widget>[], bool barrierDismissible = true, Widget? closeIcon, EdgeInsetsGeometry? contentPadding, Duration? duration, double? maxWidth, CharcoalDialogSize size = CharcoalDialogSize.medium, CharcoalModalStyle style = CharcoalModalStyle.center, String? title, bool useRootNavigator = true})",
           "parameters": [
             {
               "name": "context",
@@ -3407,6 +3406,12 @@ const String generatedCatalogJson = r'''{
             {
               "name": "closeIcon",
               "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "contentPadding",
+              "type": "EdgeInsetsGeometry?",
               "required": false,
               "named": true
             },
