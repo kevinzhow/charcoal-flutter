@@ -146,6 +146,44 @@ void main() {
     expect(card.bottom - caption.bottom, theme.space.lg);
   });
 
+  testWidgets('without a title there is no header: the body starts at the top inset', (
+    tester,
+  ) async {
+    for (final (width, step) in [(1000.0, CharcoalSpace.xl), (600.0, CharcoalSpace.lg)]) {
+      final theme = await _mount(
+        tester,
+        CharcoalSectionCard(children: [_block('a'), _block('b')]),
+        width: width,
+      );
+      final inset = step.of(theme.space);
+      final card = _rect(tester, find.byType(CharcoalSectionCard));
+      final a = _rect(tester, find.byKey(const Key('a')));
+      final b = _rect(tester, find.byKey(const Key('b')));
+      expect(a.top, theme.space.lg, reason: '$width');
+      expect((a.left, a.right), (inset, width - inset), reason: '$width');
+      expect(b.top - a.bottom, theme.space.md);
+      expect(card.bottom - b.bottom, theme.space.lg);
+      expect(find.byType(CharcoalDivider), findsNothing);
+    }
+
+    await _mount(tester, CharcoalSectionCard(flush: true, children: [_block('table')]));
+    final table = _rect(tester, find.byKey(const Key('table')));
+    final card = _rect(tester, find.byType(CharcoalSectionCard));
+    expect(table, Offset.zero & card.size, reason: 'a flush body fills the card');
+    expect(find.byType(CharcoalDivider), findsNothing);
+  });
+
+  testWidgets('a caption or actions without a title are refused', (tester) async {
+    for (final card in [
+      CharcoalSectionCard(caption: 'Why', children: [_block('a')]),
+      CharcoalSectionCard(actions: [_block('action')], children: [_block('a')]),
+      const CharcoalSectionCard(children: []),
+    ]) {
+      await pumpCharcoal(tester, card);
+      expect(tester.takeException(), isAssertionError);
+    }
+  });
+
   testWidgets('danger zone: negative action that reports presses, disabled without a callback', (
     tester,
   ) async {

@@ -6,7 +6,7 @@ import 'preview_support.dart';
 
 // Previews for the page-section parts of the admin redesign.
 
-@CharcoalComponentPreview(name: 'Section card · Danger zone', size: Size(640, 520))
+@CharcoalComponentPreview(name: 'Section card · Danger zone', size: Size(640, 620))
 Widget charcoalSectionCardPreview() => Column(
   crossAxisAlignment: CrossAxisAlignment.stretch,
   mainAxisSize: MainAxisSize.min,
@@ -28,6 +28,10 @@ Widget charcoalSectionCardPreview() => Column(
         CharcoalText('Staff → Whisper large-v3'),
         CharcoalText('Beta testers, 30% → Turbo'),
       ],
+    ),
+    const CharcoalGap(CharcoalSpace.lg),
+    const CharcoalSectionCard(
+      children: <Widget>[CharcoalText('Without a title the card starts with its body.')],
     ),
     const CharcoalGap(CharcoalSpace.lg),
     CharcoalDangerZone(

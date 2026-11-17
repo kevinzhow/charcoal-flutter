@@ -249,7 +249,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
   ),
   'CharcoalSectionCard': ComponentMetadata(
     category: 'Layout',
-    summary: 'One titled section of a page on a raised card: title, optional caption and the section\'s own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.',
+    summary: 'One section of a page on a raised card: an optional title with a caption and the section\'s own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.',
     keywords: <String>[
       'section card',
       'card',
@@ -262,6 +262,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       'A detail or settings page is split into titled sections, each with its own actions (Edit, Add) in its header.',
       'A table or list should sit on a card under a title; pass flush: true and a CharcoalDataTable or CharcoalList.',
       'A switch with its explanation stands alone as a section; pass the switch as an action and no children.',
+      'A list page holds its table on a card with no heading; leave out the title and the body starts at the card top (put a toolbar row, if any, first in the body).',
     ],
     avoidWhen: <String>[
       'A group of form fields inside a dialog or a long form; use CharcoalFormSection.',
@@ -269,12 +270,12 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       'A clickable summary tile; use CharcoalCard with CharcoalClickable.',
     ],
     accessibility: <String>[
-      'The title is exposed as a heading.',
+      'The title is exposed as a heading; a card without a title adds no heading.',
       'Name each action for the section it belongs to when several sections have the same action label.',
     ],
     responsiveBehavior: <String>[
       'Header and body share one horizontal inset: space.xl, or space.lg on a card narrower than sizes.sidebarBreakpoint; a CharcoalDataTable in a flush card uses the same inset for its first and last cells.',
-      'The actions take at most half the header width and wrap; the caption wraps under the title.',
+      'The actions take at most half the header width and wrap; the caption wraps under the title. The caption and actions sit in the header, so they need a title (asserted).',
     ],
     interactionStates: <String>[
       'static',

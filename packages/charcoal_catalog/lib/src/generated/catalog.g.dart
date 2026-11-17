@@ -9025,7 +9025,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalSectionCard",
       "category": "Layout",
-      "summary": "One titled section of a page on a raised card: title, optional caption and the section's own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.",
+      "summary": "One section of a page on a raised card: an optional title with a caption and the section's own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_card.dart",
       "documentationLevel": "curated",
@@ -9040,7 +9040,8 @@ const String generatedCatalogJson = r'''{
       "useWhen": [
         "A detail or settings page is split into titled sections, each with its own actions (Edit, Add) in its header.",
         "A table or list should sit on a card under a title; pass flush: true and a CharcoalDataTable or CharcoalList.",
-        "A switch with its explanation stands alone as a section; pass the switch as an action and no children."
+        "A switch with its explanation stands alone as a section; pass the switch as an action and no children.",
+        "A list page holds its table on a card with no heading; leave out the title and the body starts at the card top (put a toolbar row, if any, first in the body)."
       ],
       "avoidWhen": [
         "A group of form fields inside a dialog or a long form; use CharcoalFormSection.",
@@ -9048,12 +9049,12 @@ const String generatedCatalogJson = r'''{
         "A clickable summary tile; use CharcoalCard with CharcoalClickable."
       ],
       "accessibility": [
-        "The title is exposed as a heading.",
+        "The title is exposed as a heading; a card without a title adds no heading.",
         "Name each action for the section it belongs to when several sections have the same action label."
       ],
       "responsiveBehavior": [
         "Header and body share one horizontal inset: space.xl, or space.lg on a card narrower than sizes.sidebarBreakpoint; a CharcoalDataTable in a flush card uses the same inset for its first and last cells.",
-        "The actions take at most half the header width and wrap; the caption wraps under the title."
+        "The actions take at most half the header width and wrap; the caption wraps under the title. The caption and actions sit in the header, so they need a title (asserted)."
       ],
       "interactionStates": [
         "static"
@@ -9082,18 +9083,18 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalSectionCard",
           "kind": "constructor",
-          "signature": "CharcoalSectionCard({required this.title, required this.children, this.actions = const <Widget>[], this.caption, this.dividers = false, this.flush = false, super.key})",
+          "signature": "CharcoalSectionCard({required this.children, this.title, this.actions = const <Widget>[], this.caption, this.dividers = false, this.flush = false, super.key})",
           "parameters": [
-            {
-              "name": "title",
-              "type": "String",
-              "required": true,
-              "named": true
-            },
             {
               "name": "children",
               "type": "List<Widget>",
               "required": true,
+              "named": true
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
               "named": true
             },
             {

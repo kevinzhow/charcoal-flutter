@@ -7,8 +7,12 @@ import '../text/text_tone.dart';
 import 'divider.dart';
 import 'section_inset.dart';
 
-/// One titled section of a page on a raised card: a header with the [title], an optional
-/// [caption] and the section's own [actions], above a body of [children].
+/// One section of a page on a raised card: a header with the [title], an optional [caption] and
+/// the section's own [actions], above a body of [children].
+///
+/// Without a [title] there is no header and no hairline: the body starts at the card's top inset
+/// (at the top edge when [flush]), such as a list page whose card holds only its table. The
+/// [caption] and [actions] belong to the header, so they need a [title].
 ///
 /// The header and the body share one horizontal inset, `space.xl` (`space.lg` on a card narrower
 /// than `sizes.sidebarBreakpoint`), and a hairline separates them. The [actions] sit at the end
@@ -33,10 +37,10 @@ import 'section_inset.dart';
 /// )
 /// ```
 final class CharcoalSectionCard extends StatelessWidget {
-  /// Creates a section titled [title] around [children].
+  /// Creates a section around [children], titled [title] when it is given.
   const CharcoalSectionCard({
-    required this.title,
     required this.children,
+    this.title,
     this.actions = const <Widget>[],
     this.caption,
     this.dividers = false,
@@ -44,8 +48,8 @@ final class CharcoalSectionCard extends StatelessWidget {
     super.key,
   });
 
-  /// The section heading.
-  final String title;
+  /// The section heading; null leaves the card without a header.
+  final String? title;
 
   /// The body content, top to bottom; empty for a header-only card.
   final List<Widget> children;
@@ -64,6 +68,11 @@ final class CharcoalSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(
+      title != null || (caption == null && actions.isEmpty),
+      'The caption and the actions sit in the header, which needs a title.',
+    );
+    assert(title != null || children.isNotEmpty, 'A card without a title needs children.');
     final theme = CharcoalTheme.of(context);
     final colors = theme.colors;
     final space = theme.space;
@@ -87,17 +96,19 @@ final class CharcoalSectionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: inset, vertical: space.lg),
-                    child: _SectionHeader(
-                      title: title,
-                      caption: caption,
-                      actions: actions,
-                      width: constraints.maxWidth - inset * 2,
+                  if (title case final title?) ...<Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: inset, vertical: space.lg),
+                      child: _SectionHeader(
+                        title: title,
+                        caption: caption,
+                        actions: actions,
+                        width: constraints.maxWidth - inset * 2,
+                      ),
                     ),
-                  ),
-                  if (children.isNotEmpty) ...<Widget>[
-                    const CharcoalDivider(),
+                    if (children.isNotEmpty) const CharcoalDivider(),
+                  ],
+                  if (children.isNotEmpty)
                     Padding(
                       padding: flush
                           ? EdgeInsets.zero
@@ -113,7 +124,6 @@ final class CharcoalSectionCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ],
                 ],
               );
             },

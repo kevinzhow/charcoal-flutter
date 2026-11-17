@@ -160,7 +160,7 @@ final class _LayoutPageState extends State<LayoutPage> {
             child: _TableDemo(),
           ),
           ShowcaseCard(
-            description: 'One titled section of a page: caption under the title, the section\'s own actions at the end, a body with optional dividers. A flush body lets a list or table reach the card edges. The danger zone closes a detail page.',
+            description: 'One section of a page: caption under the title, the section\'s own actions at the end, a body with optional dividers. A flush body lets a list or table reach the card edges; a card without a title starts with its body, as on a list page. The danger zone closes a detail page.',
             eyebrow: 'SECTION CARD · DANGER ZONE',
             title: 'SectionCard',
             child: Column(
@@ -185,7 +185,6 @@ final class _LayoutPageState extends State<LayoutPage> {
                 ),
                 const CharcoalGap(CharcoalSpace.lg),
                 CharcoalSectionCard(
-                  title: 'Members',
                   flush: true,
                   children: <Widget>[
                     CharcoalList(
