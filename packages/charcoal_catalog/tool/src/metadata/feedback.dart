@@ -56,9 +56,70 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
       ),
     ],
   ),
+  'CharcoalModeBar': ComponentMetadata(
+    category: 'Feedback',
+    summary: 'A full-width bar across the top edge of the app that marks a special mode: tone icon, bold title, optional message and trailing actions such as the way out, on the tone\'s solid fill.',
+    keywords: <String>[
+      'mode bar',
+      'super user',
+      'break-glass',
+      'impersonation',
+      'environment bar',
+      'caution bar',
+    ],
+    useWhen: <String>[
+      'The whole app is in a special mode the user must not forget, such as acting as a shared super user or as another account; put the bar above the page and offer the exit as an action.',
+      'A sign-in card belongs to that mode; put a title-only bar first in a flush, untitled CharcoalSectionCard as its head.',
+      'The page under the bar should read as the same mode; give the CharcoalScaffold background: CharcoalPageBackground.notice.',
+    ],
+    avoidWhen: <String>[
+      'A message about the content of one page or form; use CharcoalBanner.',
+      'Transient confirmation; use CharcoalToast or CharcoalSnackBar.',
+    ],
+    accessibility: <String>[
+      'The bar is one container whose label is the title; the message and the actions are read and focused inside it.',
+      'The icon is decorative; the title must name the mode in words.',
+    ],
+    responsiveBehavior: <String>[
+      'Spans its parent edge to edge with no radius; the horizontal inset is space.xl, or space.lg below sizes.sidebarBreakpoint, like a section card.',
+      'On a narrow bar the message wraps under the title; the actions stay at the end.',
+    ],
+    interactionStates: <String>[
+      'static',
+      'with actions',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the fill, the colours on it, the icon, the insets and the layout.',
+      'The caller owns entering and leaving the mode and the action results.',
+    ],
+    tokenRoles: <String>[
+      'colors.notice',
+      'colors.textOnNotice',
+      'colors.iconOnNotice',
+      'colors.noticeSurface',
+      'space.xl',
+      'space.lg',
+      'space.md',
+      'sizes.rowMinHeightCompact',
+    ],
+    relatedComponents: <String>[
+      'CharcoalBanner',
+      'CharcoalScaffold',
+      'CharcoalSectionCard',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'mode-bar-super-user',
+        title: 'Super-user mode',
+        description: 'A sign-in card headed by a title-only mode bar; in the mode, a notice page under a full-width bar whose action leaves the mode.',
+        sourcePath: 'example/lib/agent_examples/mode_bar_example.dart',
+      ),
+    ],
+  ),
   'CharcoalEmptyState': ComponentMetadata(
     category: 'Feedback',
-    summary: 'A centred empty state: a muted icon, a message and optional actions.',
+    summary: 'A centred empty state: a muted icon, an optional title, a message, optional actions and optional numbered steps that explain how the place fills up.',
     keywords: <String>[
       'empty',
       'no results',
@@ -68,21 +129,24 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
     useWhen: <String>[
       'A list, search or page region has no content and should say why and what to do next.',
       'A first-run screen needs one clear next step.',
+      'A new feature starts empty and two or three numbered steps (CharcoalEmptyStateStep) explain how to put it to use.',
     ],
     avoidWhen: <String>[
       'The region failed to load; use CharcoalErrorState.',
       'Content is loading; use CharcoalLoadingState.',
     ],
     accessibility: <String>[
-      'The message is the spoken content; the icon is decorative.',
+      'The title is a heading; the message and the steps are the spoken content; the icon is decorative.',
       'Actions keep their own labels and focus order.',
     ],
     responsiveBehavior: <String>[
       'It centres within the space it is given and wraps the message on narrow widths.',
+      'Steps sit in a centred row, each sizes.fieldWidthCompact wide, and stack where the row does not fit.',
     ],
     interactionStates: <String>[
       'static',
       'with action',
+      'with steps',
     ],
     feedbackResponsibilities: <String>[
       'Owns icon, message layout and spacing.',
@@ -96,14 +160,21 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
     relatedComponents: <String>[
       'CharcoalErrorState',
       'CharcoalLoadingState',
+      'CharcoalSectionCard',
     ],
-    companionDeclarations: <String>[],
+    companionDeclarations: <String>['CharcoalEmptyStateStep'],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'empty-state',
         title: 'Empty region',
         description: 'A folder icon and a no-jobs message.',
         sourcePath: 'example/lib/agent_examples/status_example.dart',
+      ),
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A members section that turns into an empty state with a title and numbered steps when the last member is removed.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
   ),

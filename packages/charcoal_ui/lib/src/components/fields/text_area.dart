@@ -34,6 +34,7 @@ final class CharcoalTextArea extends StatefulWidget {
     this.onChanged,
     this.placeholder,
     this.readOnly = false,
+    this.optionalText,
     this.required = false,
     this.requiredText = '*Required',
     this.rows,
@@ -42,7 +43,8 @@ final class CharcoalTextArea extends StatefulWidget {
     this.subLabel,
     super.key,
   }) : assert(maxLength == null || maxLength > 0),
-       assert(rows == null || rows > 0);
+       assert(rows == null || rows > 0),
+       assert(!required || optionalText == null, 'A field is required or optional, not both');
 
   /// Helper text below the area; announced as the hint when [invalid].
   final String? assistiveText;
@@ -94,6 +96,10 @@ final class CharcoalTextArea extends StatefulWidget {
 
   /// Whether the text is selectable but not editable.
   final bool readOnly;
+
+  /// The marker of an optional field after the visible label, such as "(optional)"; pass the
+  /// localized string. Exclusive with [required].
+  final String? optionalText;
 
   /// Whether the area is required.
   final bool required;
@@ -313,6 +319,7 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
           assistiveText: assistiveText,
           invalid: widget.invalid,
           label: widget.label,
+          optionalText: widget.optionalText,
           required: widget.required,
           requiredText: widget.requiredText,
           showLabel: widget.showLabel,

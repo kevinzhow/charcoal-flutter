@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import '../../foundation/charcoal_clickable.dart';
 import '../../foundation/layout.dart';
 import '../text/text_tone.dart';
+import 'row_surface.dart';
 import 'selectable.dart';
 
 /// The minimum height of a [CharcoalListRow].
@@ -144,13 +145,7 @@ final class CharcoalListRow extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     final colors = theme.colors;
     final space = theme.space;
-    final base = selected ? theme.tone(CharcoalTone.info).surface : colors.background;
-    final overlay = states.contains(WidgetState.pressed)
-        ? colors.pressOverlay
-        : states.contains(WidgetState.hovered)
-        ? colors.hoverOverlay
-        : null;
-    final background = overlay == null ? base : Color.alphaBlend(overlay, base);
+    final background = charcoalRowFill(theme, states, selected: selected);
     final minHeight = switch (height) {
       CharcoalListRowHeight.compact => theme.sizes.rowMinHeightCompact,
       CharcoalListRowHeight.regular => theme.sizes.rowMinHeight,

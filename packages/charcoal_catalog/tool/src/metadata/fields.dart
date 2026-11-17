@@ -4,7 +4,7 @@ import 'index.dart';
 const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata>{
   'CharcoalFieldLabel': ComponentMetadata(
     category: 'Forms',
-    summary: 'Composes visible field naming, required copy, and trailing metadata without owning input semantics.',
+    summary: 'Composes visible field naming, required or optional copy, and trailing metadata without owning input semantics.',
     keywords: <String>[
       'character count',
       'field label',
@@ -14,7 +14,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       'visible label',
     ],
     useWhen: <String>[
-      'A custom form composition needs a visible label plus localized required copy or trailing metadata such as a character count.',
+      'A custom form composition needs a visible label plus localized required or optional copy (requiredText, optionalText) or trailing metadata such as a character count.',
       'The associated control already exposes its own semantic label, required state, validation, and value.',
     ],
     avoidWhen: <String>[
@@ -87,6 +87,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       'Pair invalid with assistiveText; the field exposes both the invalid result and correction as input semantics.',
       'Set required only when the value is mandatory; the same state is exposed visually and to assistive technology.',
       'Provide localized requiredText when the visible required marker includes copy.',
+      'While an input method composes (charcoalIsComposing), Enter, Escape and the arrow keys go to the input method: they do not reach a dialog, list or shortcut above the field. Guard any key handler of your own with charcoalIsComposing.',
     ],
     responsiveBehavior: <String>[
       'The field expands to the width supplied by its parent.',
@@ -95,12 +96,14 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
     interactionStates: <String>[
       'empty',
       'editing',
+      'composing',
       'focused',
       'invalid',
       'disabled',
     ],
     feedbackResponsibilities: <String>[
       'Owns focus, validation presentation, platform selection gestures, handles, magnifier and localized editing menus.',
+      'On macOS, re-attaches the input method to the focused field after the window is resized.',
       'The caller owns validation timing, submission progress, persistence, and recovery.',
     ],
     tokenRoles: <String>[
@@ -115,7 +118,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       'CharcoalFieldLabel',
       'CharcoalHintText',
     ],
-    companionDeclarations: <String>[],
+    companionDeclarations: <String>['charcoalIsComposing'],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'text-field-validation',
@@ -190,6 +193,69 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       ),
     ],
   ),
+  'CharcoalRadioCards': ComponentMetadata(
+    category: 'Forms',
+    summary: 'A single choice among a few options that each need a sentence, as stacked cards with a radio indicator, a title, a description and an optional trailing widget.',
+    keywords: <String>[
+      'radio cards',
+      'choice cards',
+      'radio group',
+      'single choice',
+      'option list',
+    ],
+    useWhen: <String>[
+      'Each option needs a title and a line of explanation (what choosing it means, an identifier, a status).',
+      'There are few options (about two to six) and seeing them all at once beats opening a dropdown.',
+    ],
+    avoidWhen: <String>[
+      'Two or three short options without explanations; use CharcoalSegmentedControl.',
+      'Many options or a long list; use CharcoalDropdown.',
+      'Several options may be chosen; use CharcoalCheckbox rows or CharcoalMultiSelect.',
+    ],
+    accessibility: <String>[
+      'Each card is one radio node (checked, in a mutually exclusive group) whose label is the title and description.',
+      'The group is one tab stop; arrow keys move the choice and skip disabled options, Space or Enter chooses the focused option.',
+      'Frame it with CharcoalFormField so the group has a visible label and required or optional marker.',
+    ],
+    responsiveBehavior: <String>[
+      'Cards fill the width; titles and descriptions wrap, and the indicator stays on the first title line.',
+    ],
+    interactionStates: <String>[
+      'chosen',
+      'unchosen',
+      'hovered',
+      'pressed',
+      'focused',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the card surface, indicator, keyboard model and semantics.',
+      'The caller owns the value, the options and what a disabled option means.',
+    ],
+    tokenRoles: <String>[
+      'colors.borderSubtle',
+      'colors.borderFocus',
+      'colors.textTertiary',
+      'radius.md',
+      'space.md',
+      'space.sm',
+    ],
+    relatedComponents: <String>[
+      'CharcoalRadio',
+      'CharcoalSegmentedControl',
+      'CharcoalDropdown',
+      'CharcoalFormField',
+    ],
+    companionDeclarations: <String>['CharcoalRadioCardOption'],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
   'CharcoalCheckbox': ComponentMetadata(
     category: 'Forms',
     summary: 'Toggles one independent boolean choice in a controlled form or checklist.',
@@ -203,6 +269,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
     useWhen: <String>[
       'One or more independent choices may each be turned on or off.',
       'A form needs an explicit acknowledgement or optional inclusion choice.',
+      'A "select all" box stands over a partial selection: pass mixed: true (with value false).',
     ],
     avoidWhen: <String>[
       'Exactly one option in a group may be selected; use CharcoalRadio.',

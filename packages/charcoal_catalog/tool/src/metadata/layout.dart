@@ -247,6 +247,305 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ),
     ],
   ),
+  'CharcoalSectionCard': ComponentMetadata(
+    category: 'Layout',
+    summary: 'One section of a page on a raised card: an optional title with a caption and the section\'s own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.',
+    keywords: <String>[
+      'section card',
+      'card',
+      'section',
+      'panel',
+      'settings group',
+      'detail page',
+    ],
+    useWhen: <String>[
+      'A detail or settings page is split into titled sections, each with its own actions (Edit, Add) in its header.',
+      'A table or list should sit on a card under a title; pass flush: true and a CharcoalDataTable or CharcoalList.',
+      'A switch with its explanation stands alone as a section; pass the switch as an action and no children.',
+      'A list page holds its table on a card with no heading; leave out the title and the body starts at the card top (put a toolbar row, if any, first in the body).',
+    ],
+    avoidWhen: <String>[
+      'A group of form fields inside a dialog or a long form; use CharcoalFormSection.',
+      'A heading without a surface; use CharcoalSectionHeader.',
+      'A clickable summary tile; use CharcoalCard with CharcoalClickable.',
+    ],
+    accessibility: <String>[
+      'The title is exposed as a heading; a card without a title adds no heading.',
+      'Name each action for the section it belongs to when several sections have the same action label.',
+    ],
+    responsiveBehavior: <String>[
+      'Header and body share one horizontal inset: space.xl, or space.lg on a card narrower than sizes.sidebarBreakpoint; a CharcoalDataTable in a flush card uses the same inset for its first and last cells.',
+      'The actions take at most half the header width and wrap; the caption wraps under the title. The caption and actions sit in the header, so they need a title (asserted).',
+    ],
+    interactionStates: <String>[
+      'static',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the surface, header layout, insets, dividers and clipping of flush content under the outline.',
+      'The caller owns the section content, the actions and the spacing between cards (CharcoalGap(CharcoalSpace.lg)).',
+    ],
+    tokenRoles: <String>[
+      'colors.background',
+      'colors.borderSubtle',
+      'radius.md',
+      'borders.hairline',
+      'space.xl',
+      'space.lg',
+      'space.md',
+      'sizes.sidebarBreakpoint',
+    ],
+    relatedComponents: <String>[
+      'CharcoalDangerZone',
+      'CharcoalCard',
+      'CharcoalSectionHeader',
+      'CharcoalFormSection',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalDangerZone': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A section card for one irreversible action, such as deleting the record a page shows: title, what is lost, and a negative-toned button.',
+    keywords: <String>[
+      'danger zone',
+      'delete',
+      'destructive',
+      'irreversible',
+      'remove',
+    ],
+    useWhen: <String>[
+      'A detail page offers deleting or resetting its record; put the danger zone last on the page.',
+    ],
+    avoidWhen: <String>[
+      'A row action in a list or table; use the row action slot.',
+      'A reversible action such as pausing; use a switch or a normal button.',
+    ],
+    accessibility: <String>[
+      'The description says what is lost; confirm with showCharcoalConfirm before acting.',
+    ],
+    responsiveBehavior: <String>[
+      'Same header layout as CharcoalSectionCard; the description wraps under the title.',
+    ],
+    interactionStates: <String>[
+      'enabled',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the card, the negative tone and the delete icon of the action.',
+      'The caller owns confirmation, the deletion and what happens after it.',
+    ],
+    tokenRoles: <String>[
+      'colors.textNegative',
+      'colors.borderSubtle',
+    ],
+    relatedComponents: <String>[
+      'CharcoalSectionCard',
+      'CharcoalButton',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalDataTable': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A table of records under a header row: columns that line up across rows (flex shares or fit to content), list row heights, an optional selection column with a select-all box, and a trailing action per row.',
+    keywords: <String>[
+      'table',
+      'data table',
+      'columns',
+      'rows',
+      'selection',
+      'bulk',
+      'checkbox',
+      'admin list',
+    ],
+    useWhen: <String>[
+      'Records are compared across the same fields (name, type, status, date), so values must line up in columns.',
+      'Rows are checked for a bulk action; own the ids in one Set and pass CharcoalTableSelection.',
+      'A list page or a detail section shows records in a flush CharcoalSectionCard.',
+    ],
+    avoidWhen: <String>[
+      'Each record is one or two lines without comparable fields; use CharcoalList with CharcoalListRow.',
+      'Key and value pairs of one record; use CharcoalInfoRows.',
+    ],
+    accessibility: <String>[
+      'Exposed as a table with rows and cells. In a row with onPressed, the first cell is the button assistive technology reads, so put the record name in the first column.',
+      'Pass a localized selectAllLabel, and a selectRowLabel that names the record of each row so two row boxes never read the same; the header box is announced as mixed while only some rows are checked.',
+      'Give each row action its own semantic label naming the record.',
+    ],
+    responsiveBehavior: <String>[
+      'Columns with hideWhenNarrow are left out when the table is narrower than sizes.sidebarBreakpoint.',
+      'The first and last cells use the CharcoalSectionCard inset, so the table lines up with the title of the flush card it sits in.',
+      'rowHeight is a minimum; rows grow with content and text scale, and flex columns wrap their text.',
+    ],
+    interactionStates: <String>[
+      'static',
+      'hovered',
+      'pressed',
+      'focused',
+      'selected',
+      'checked',
+      'mixed',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the column layout, header, row surface (hover, press, focus, selected), selection boxes and select-all logic.',
+      'The caller owns the rows, the checked ids, the batch actions and navigation from onPressed.',
+    ],
+    tokenRoles: <String>[
+      'colors.background',
+      'colors.borderSubtle',
+      'colors.borderFocus',
+      'colors.hoverOverlay',
+      'colors.pressOverlay',
+      'colors.textTertiary',
+      'colors.iconTertiary',
+      'sizes.sidebarBreakpoint',
+      'space.xl',
+      'space.md',
+      'space.sm',
+    ],
+    relatedComponents: <String>[
+      'CharcoalSectionCard',
+      'CharcoalList',
+      'CharcoalListRow',
+      'CharcoalCheckbox',
+      'CharcoalBatchBar',
+    ],
+    companionDeclarations: <String>[
+      'CharcoalTableColumn',
+      'CharcoalTableRow',
+      'CharcoalTableSelection',
+      'CharcoalColumnAlign',
+    ],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalDisclosure': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A collapsible group for rarely used content: one line with a chevron, a title and a summary of the hidden values; pressing it shows the content.',
+    keywords: <String>[
+      'disclosure',
+      'more options',
+      'advanced',
+      'collapsible',
+      'expandable',
+      'accordion',
+    ],
+    useWhen: <String>[
+      'A form has optional fields most people leave at their defaults; fold them under "More options" and summarise the defaults in the line.',
+    ],
+    avoidWhen: <String>[
+      'Required fields; keep them visible.',
+      'Navigation between sections of a page; use separate CharcoalSectionCard sections or tabs.',
+    ],
+    accessibility: <String>[
+      'The line is a button announced as expanded or collapsed; its label is the title and the summary.',
+      'Collapsed content keeps its state but cannot take focus.',
+    ],
+    responsiveBehavior: <String>[
+      'The summary stays on the title line and ends with an ellipsis when it does not fit.',
+      'Opening and closing animate the height unless the platform asks for reduced motion.',
+    ],
+    interactionStates: <String>[
+      'collapsed',
+      'expanded',
+      'hovered',
+      'focused',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the expanded state, the line, the chevron and the animation.',
+      'The caller owns the content and keeps the summary in step with the hidden values.',
+    ],
+    tokenRoles: <String>[
+      'colors.textSecondary',
+      'colors.textTertiary',
+      'space.md',
+      'space.xs',
+    ],
+    relatedComponents: <String>[
+      'CharcoalFormField',
+      'CharcoalSectionCard',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalCopyableText': ComponentMetadata(
+    category: 'Content',
+    summary: 'An identifier the reader needs elsewhere (a record ID, a key): selectable monospace caption text and a copy button that confirms with a toast.',
+    keywords: <String>[
+      'copy',
+      'clipboard',
+      'identifier',
+      'id',
+      'uuid',
+      'monospace',
+    ],
+    useWhen: <String>[
+      'A page header or a table cell shows an ID that people paste into other tools.',
+    ],
+    avoidWhen: <String>[
+      'A secret or a long multi-line value; use CharcoalCodeBlock with its own actions.',
+      'Text that nobody copies; use CharcoalText.',
+    ],
+    accessibility: <String>[
+      'Pass a localized copyLabel naming what is copied ("Copy user ID") and a copiedMessage for the toast.',
+      'The text stays selectable for people who copy by hand.',
+    ],
+    responsiveBehavior: <String>[
+      'In a narrow space the text ends with an ellipsis; the button still copies the whole value.',
+    ],
+    interactionStates: <String>[
+      'idle',
+      'copied',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the clipboard write and the confirming toast.',
+      'The caller owns the value and the localized labels.',
+    ],
+    tokenRoles: <String>[
+      'space.xxs',
+    ],
+    relatedComponents: <String>[
+      'CharcoalText',
+      'CharcoalCodeBlock',
+      'CharcoalSelectable',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table with copyable IDs, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
   'CharcoalDivider': ComponentMetadata(
     category: 'Layout',
     summary: 'A hairline rule across the width it is given.',

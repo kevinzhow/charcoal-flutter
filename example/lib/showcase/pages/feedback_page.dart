@@ -204,9 +204,73 @@ final class FeedbackPage extends StatelessWidget {
                     ),
                   ],
                 ),
+                CharcoalEmptyState(
+                  icon: CharcoalIcons.persons,
+                  title: 'No segments yet',
+                  message:
+                      'Flag rules target a segment, such as "Beta testers".',
+                  actions: <Widget>[
+                    CharcoalButton(
+                      onPressed: showcaseNoop,
+                      size: CharcoalButtonSize.small,
+                      variant: CharcoalButtonVariant.primary,
+                      child: const Text('New segment'),
+                    ),
+                  ],
+                  steps: const <CharcoalEmptyStateStep>[
+                    CharcoalEmptyStateStep(
+                      title: 'Create and name it',
+                      description: 'Only a name is needed; the rest can wait.',
+                    ),
+                    CharcoalEmptyStateStep(
+                      title: 'Choose who matches',
+                      description:
+                          'Add members, or match by platform and app version.',
+                    ),
+                    CharcoalEmptyStateStep(
+                      title: 'Use it in a flag',
+                      description: 'Pick it when you add a rule to a flag.',
+                    ),
+                  ],
+                ),
                 const CharcoalErrorState(
                   message: 'Could not load the list.',
                   onRetry: showcaseNoop,
+                ),
+              ],
+            ),
+          ),
+          ShowcaseCard(
+            description: 'A full-width bar across the top edge that marks a special mode, with the way out at its end, over a page in the notice surface. Alone with a title it heads a card of the mode.',
+            eyebrow: 'MODE BAR',
+            title: 'ModeBar',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CharcoalModeBar(
+                  title: 'Super-user mode',
+                  message: 'Every action here is recorded as the super user.',
+                  actions: <Widget>[
+                    CharcoalButton(
+                      size: CharcoalButtonSize.small,
+                      leading: const CharcoalIcon(CharcoalIcons.logout),
+                      onPressed: showcaseNoop,
+                      child: const Text('Exit super user'),
+                    ),
+                  ],
+                ),
+                const CharcoalGap(CharcoalSpace.lg),
+                const CharcoalSectionCard(
+                  flush: true,
+                  children: <Widget>[
+                    CharcoalModeBar(title: 'Super user (break-glass)'),
+                    CharcoalPadding(
+                      padding: CharcoalInset.all(CharcoalSpace.xl),
+                      child: CharcoalText(
+                        'Sign in with the shared credentials of this deployment.',
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

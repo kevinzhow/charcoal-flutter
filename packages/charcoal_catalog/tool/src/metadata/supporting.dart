@@ -31,7 +31,7 @@ const Map<String, ComponentMetadata> supportingMetadata = <String, ComponentMeta
       'obscured',
     ],
     feedbackResponsibilities: <String>[
-      'Owns text editing behaviour.',
+      'Owns text editing behaviour, including leaving Enter, Escape and the arrow keys to a composing input method and the macOS input-method refresh after a resize.',
       'The owning field owns decoration, label, validation and counter.',
     ],
     tokenRoles: <String>[

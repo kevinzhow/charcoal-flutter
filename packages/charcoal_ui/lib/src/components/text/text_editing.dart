@@ -6,12 +6,39 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'selection_toolbar.dart';
+import 'text_input_refresh.dart';
+
+/// Whether an input method is composing in [value], such as the marked text of a Chinese or
+/// Japanese input method.
+///
+/// While it is, Enter, Escape and the arrow keys belong to the input method: they confirm the
+/// composition, cancel it or pick a candidate. A key handler above a text input must leave them
+/// alone, or the key submits a form, closes a dialog or moves a list instead. Charcoal's own text
+/// inputs already pass these keys on; use this to guard an application's own handlers.
+bool charcoalIsComposing(TextEditingValue value) =>
+    value.composing.isValid && !value.composing.isCollapsed;
+
+/// The keys an input method owns while it composes.
+final _inputMethodKeys = <LogicalKeyboardKey>{
+  LogicalKeyboardKey.enter,
+  LogicalKeyboardKey.numpadEnter,
+  LogicalKeyboardKey.escape,
+  LogicalKeyboardKey.arrowUp,
+  LogicalKeyboardKey.arrowDown,
+  LogicalKeyboardKey.arrowLeft,
+  LogicalKeyboardKey.arrowRight,
+};
 
 /// Shared editing behaviour for single-line and multiline Charcoal fields.
 ///
 /// Flutter owns gesture recognition, IME, selection geometry, clipboard policy and undo; this
 /// widget supplies the Charcoal selection handles, magnifier and editing menu, with every colour
 /// and measure read from the active pack. Fields place it inside their own decoration.
+///
+/// While an input method composes ([charcoalIsComposing]), Enter, Escape and the arrow keys skip
+/// every handler above the editor and go to the platform, so a dialog's Escape or a list's arrow
+/// keys cannot take them from the input method. On macOS the editor also holds
+/// [CharcoalTextInputRefresh], which re-attaches the input method after the window is resized.
 final class CharcoalEditableText extends StatefulWidget {
   /// Creates the editable text of a field.
   const CharcoalEditableText({
@@ -111,6 +138,23 @@ final class _CharcoalEditableTextState extends State<CharcoalEditableText>
   bool _showHandles = false;
   _CharcoalSelectionControls? _controls;
 
+  @override
+  void initState() {
+    super.initState();
+    CharcoalTextInputRefresh.retain();
+  }
+
+  @override
+  void dispose() {
+    CharcoalTextInputRefresh.release();
+    super.dispose();
+  }
+
+  KeyEventResult _leaveComposingKeys(FocusNode node, KeyEvent event) =>
+      charcoalIsComposing(widget.controller.value) && _inputMethodKeys.contains(event.logicalKey)
+      ? KeyEventResult.skipRemainingHandlers
+      : KeyEventResult.ignored;
+
   // The controls object is compared by identity on every rebuild; keep one per metrics value so a
   // rebuild during a selection does not tear down the handles and the menu.
   _CharcoalSelectionControls _controlsFor(CharcoalTextEditingMetrics metrics) {
@@ -157,7 +201,7 @@ final class _CharcoalEditableTextState extends State<CharcoalEditableText>
     final apple =
         defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS;
-    return _gestures.buildGestureDetector(
+    final editor = _gestures.buildGestureDetector(
       behavior: HitTestBehavior.translucent,
       child: EditableText(
         key: editableTextKey,
@@ -196,6 +240,15 @@ final class _CharcoalEditableTextState extends State<CharcoalEditableText>
           magnifierBuilder: _buildMagnifier,
         ),
       ),
+    );
+    // The editor's focus node is the child of this one, so a key the editor leaves unhandled
+    // reaches this handler before any ancestor's shortcuts.
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      includeSemantics: false,
+      onKeyEvent: _leaveComposingKeys,
+      child: editor,
     );
   }
 }

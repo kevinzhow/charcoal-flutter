@@ -228,8 +228,123 @@ final class _FieldsPageState extends State<FieldsPage> {
               ],
             ),
           ),
+          const ShowcaseCard(
+            description:
+                'CharcoalFormField frames any control with the label row, the required or '
+                'optional marker, help and error of a text field: here a segmented control, a '
+                'radio group and a checkbox group (a Column of radios or checkboxes).',
+            eyebrow: 'FORM FIELD',
+            title: 'Required · optional · any control',
+            child: _LabelledControls(),
+          ),
+          const ShowcaseCard(
+            description:
+                'Rarely used fields fold away under one line that summarises their current '
+                'values, so the form stays short and the defaults stay visible.',
+            eyebrow: 'DISCLOSURE',
+            title: 'More options',
+            child: CharcoalDisclosure(
+              title: 'More options',
+              summary: 'Visibility: server only · Enabled after creation · No description',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  CharcoalTextField(
+                    label: 'Description',
+                    showLabel: true,
+                    optionalText: '(optional)',
+                    placeholder: 'One sentence about what this flag controls',
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     ],
   );
+}
+
+class _LabelledControls extends StatefulWidget {
+  const _LabelledControls();
+
+  @override
+  State<_LabelledControls> createState() => _LabelledControlsState();
+}
+
+class _LabelledControlsState extends State<_LabelledControls> {
+  String _type = 'bool';
+  String _visibility = 'server';
+  final Set<String> _platforms = <String>{'iOS'};
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        CharcoalFormField(
+          label: 'Value type',
+          required: true,
+          requiredText: '*Required',
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: CharcoalSegmentedControl<String>(
+              value: _type,
+              onChanged: (value) => setState(() => _type = value),
+              segments: const <CharcoalSegment<String>>[
+                CharcoalSegment(value: 'bool', child: Text('Boolean')),
+                CharcoalSegment(value: 'string', child: Text('String')),
+                CharcoalSegment(value: 'json', child: Text('JSON')),
+              ],
+            ),
+          ),
+        ),
+        const CharcoalGap(CharcoalSpace.lg),
+        CharcoalFormField(
+          label: 'Visibility',
+          optionalText: '(optional, server only by default)',
+          assistiveText: 'Client-visible flags are sent to the apps.',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (final (value, label) in const <(String, String)>[
+                ('server', 'Server only'),
+                ('client', 'Client visible'),
+              ])
+                CharcoalRadio<String>(
+                  value: value,
+                  groupValue: _visibility,
+                  onChanged: (value) => setState(() => _visibility = value),
+                  label: Text(label),
+                ),
+            ],
+          ),
+        ),
+        const CharcoalGap(CharcoalSpace.lg),
+        CharcoalFormField(
+          label: 'Platforms',
+          optionalText: '(optional)',
+          invalid: _platforms.isEmpty,
+          assistiveText: _platforms.isEmpty
+              ? 'Pick at least one platform.'
+              : null,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (final platform in const <String>['iOS', 'Android'])
+                CharcoalCheckbox(
+                  value: _platforms.contains(platform),
+                  onChanged: (checked) => setState(
+                    () => checked
+                        ? _platforms.add(platform)
+                        : _platforms.remove(platform),
+                  ),
+                  label: Text(platform),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }

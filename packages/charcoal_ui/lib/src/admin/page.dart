@@ -2,6 +2,7 @@ import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
+import '../app/charcoal_scaffold.dart';
 import '../components/actions/icon_button.dart';
 import '../components/feedback/spinner_overlay.dart';
 import '../components/text/charcoal_text.dart';
@@ -28,9 +29,10 @@ enum CharcoalPageWidth {
 /// [CharcoalAdminShell] owns only the navigation chrome.
 ///
 /// In the standard layout the page starts with an optional back link ([onBack], [backLabel]), the
-/// [title] and [subtitle], and the [actions] at the far end. In the compact layout (the shell shows
-/// its bottom bar) the title moves into a top bar with a back button and [compactTrailing], and the
-/// [actions] wrap above the content. Which layout applies follows the enclosing shell unless
+/// [title], the [subtitle] and a wrapping [meta] row (chips, a `CharcoalCopyableText` ID), with
+/// the [actions] at the far end, aligned with the top of the title block. In the compact layout
+/// (the shell shows its bottom bar) the title moves into a top bar with a back button and
+/// [compactTrailing], and the [meta] row and the [actions] wrap above the content. Which layout applies follows the enclosing shell unless
 /// [compact] says otherwise, and a page outside a shell goes compact below
 /// `sizes.sidebarBreakpoint`.
 ///
@@ -54,6 +56,7 @@ final class CharcoalPage extends StatelessWidget {
     required this.title,
     required this.child,
     this.actions = const <Widget>[],
+    this.background = CharcoalPageBackground.primary,
     this.backLabel = 'Back',
     this.banner,
     this.busy = false,
@@ -62,6 +65,7 @@ final class CharcoalPage extends StatelessWidget {
     this.compactTrailing,
     this.header,
     this.maxWidth = CharcoalPageWidth.standard,
+    this.meta = const <Widget>[],
     this.onBack,
     this.scrollable = true,
     this.showBack,
@@ -98,11 +102,19 @@ final class CharcoalPage extends StatelessWidget {
   /// button), e.g. a `CharcoalChip` naming the active region.
   final Widget? compactTrailing;
 
+  /// The colour behind the page, such as [CharcoalPageBackground.notice] for a special mode under a
+  /// `CharcoalModeBar`.
+  final CharcoalPageBackground background;
+
   /// Content pinned between the title block and [child].
   final Widget? header;
 
   /// How wide the content column may grow.
   final CharcoalPageWidth maxWidth;
+
+  /// Facts about the record the page shows, in a wrapping row under the subtitle: status or type
+  /// chips and a `CharcoalCopyableText` with its ID.
+  final List<Widget> meta;
 
   /// Replaces the default pop of the back affordance, for a page that reports a result back.
   final VoidCallback? onBack;
@@ -145,14 +157,21 @@ final class CharcoalPage extends StatelessWidget {
           _StandardHeader(
             title: title,
             subtitle: subtitle,
+            meta: meta,
             actions: actions,
             backLabel: canPop ? backLabel : null,
             onBack: back,
           ),
           SizedBox(height: space.xl),
-        ] else if (actions.isNotEmpty) ...<Widget>[
-          Wrap(spacing: space.sm, runSpacing: space.sm, children: actions),
-          SizedBox(height: space.xl),
+        ] else ...<Widget>[
+          if (meta.isNotEmpty) ...<Widget>[
+            _MetaRow(meta: meta),
+            SizedBox(height: actions.isEmpty ? space.xl : space.md),
+          ],
+          if (actions.isNotEmpty) ...<Widget>[
+            Wrap(spacing: space.sm, runSpacing: space.sm, children: actions),
+            SizedBox(height: space.xl),
+          ],
         ],
         if (header != null) ...<Widget>[header!, SizedBox(height: space.xl)],
         banner ?? child,
@@ -187,7 +206,7 @@ final class CharcoalPage extends StatelessWidget {
       dimBackground: true,
       semanticLabel: busyLabel,
       child: ColoredBox(
-        color: theme.colors.background,
+        color: background.colorIn(theme),
         child: Column(
           children: <Widget>[
             if (compact)
@@ -212,10 +231,11 @@ final class CharcoalPage extends StatelessWidget {
   }
 }
 
-/// The standard-width header: back link, page title, subtitle, actions.
+/// The standard-width header: back link, page title, subtitle, meta row, actions.
 class _StandardHeader extends StatelessWidget {
   const _StandardHeader({
     required this.title,
+    required this.meta,
     required this.actions,
     required this.onBack,
     this.backLabel,
@@ -224,6 +244,7 @@ class _StandardHeader extends StatelessWidget {
 
   final String title;
   final String? subtitle;
+  final List<Widget> meta;
   final List<Widget> actions;
   final String? backLabel;
   final VoidCallback onBack;
@@ -232,7 +253,7 @@ class _StandardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final space = CharcoalTheme.of(context).space;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
           child: Column(
@@ -256,6 +277,11 @@ class _StandardHeader extends StatelessWidget {
                     tone: CharcoalTextTone.tertiary,
                   ),
                 ),
+              if (meta.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: space.sm),
+                  child: _MetaRow(meta: meta),
+                ),
             ],
           ),
         ),
@@ -269,6 +295,24 @@ class _StandardHeader extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// The wrapping row of facts under a page title.
+class _MetaRow extends StatelessWidget {
+  const _MetaRow({required this.meta});
+
+  final List<Widget> meta;
+
+  @override
+  Widget build(BuildContext context) {
+    final space = CharcoalTheme.of(context).space;
+    return Wrap(
+      spacing: space.sm,
+      runSpacing: space.xs,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: meta,
     );
   }
 }

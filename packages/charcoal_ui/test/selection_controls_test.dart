@@ -1,5 +1,6 @@
 import 'dart:ui' show CheckedState, Tristate;
 
+import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart' show SemanticsValidationResult;
@@ -52,6 +53,32 @@ void main() {
 
       await pumpLoose(tester, CharcoalCheckbox(key: key, value: true, onChanged: (_) {}));
       expect(_decorationOf(tester, find.byKey(key)).color, theme.colors.primary);
+    });
+
+    testWidgets('mixed is filled with a dash, announced as mixed, and requests true', (
+      tester,
+    ) async {
+      bool? next;
+      await pumpLoose(
+        tester,
+        CharcoalCheckbox(
+          key: key,
+          value: false,
+          mixed: true,
+          semanticLabel: 'Select all',
+          onChanged: (v) => next = v,
+        ),
+      );
+      final theme = CharcoalTheme.of(tester.element(find.byKey(key)));
+      expect(_decorationOf(tester, find.byKey(key)).color, theme.colors.primary);
+      expect(
+        tester.widget<CharcoalIcon>(find.byType(CharcoalIcon)).icon,
+        CharcoalIcons.subtract,
+      );
+      final node = tester.getSemantics(find.byKey(key));
+      expect(node.flagsCollection.isChecked, CheckedState.mixed);
+      await tester.tap(find.byKey(key));
+      expect(next, isTrue);
     });
 
     testWidgets('invalid is exposed through semantics and a negative halo', (tester) async {

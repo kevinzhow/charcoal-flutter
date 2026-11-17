@@ -1,8 +1,10 @@
 import 'package:charcoal_ui/admin.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/agent_examples/admin_example.dart';
+import 'package:charcoal_ui_showcase/agent_examples/admin_sections_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/form_section_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/layout_example.dart';
+import 'package:charcoal_ui_showcase/agent_examples/mode_bar_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/social_content_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/status_example.dart';
 import 'package:flutter/material.dart' show Material, MaterialType;
@@ -46,6 +48,30 @@ void main() {
           textScale: scale,
         );
         expect(find.text('Alice Chen'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+      testWidgets('mode bar example builds at $label', (tester) async {
+        await show(
+          tester,
+          const SizedBox(height: 900, child: AgentModeBarExample()),
+          size: size,
+          textScale: scale,
+        );
+        await tester.ensureVisible(find.text('Enter super-user mode'));
+        await tester.pump();
+        await tester.tap(find.text('Enter super-user mode'));
+        await tester.pump();
+        expect(find.text('Exit super user'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+      testWidgets('admin sections example builds at $label', (tester) async {
+        await show(
+          tester,
+          const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+          size: size,
+          textScale: scale,
+        );
+        expect(find.text('Kill switch'), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
       testWidgets('status example builds at $label', (tester) async {
@@ -115,6 +141,89 @@ void main() {
     expect(find.text('Enter a project name.'), findsOneWidget);
   });
 
+  testWidgets('admin sections example confirms before deleting', (
+    tester,
+  ) async {
+    await show(
+      tester,
+      const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+      size: sizes.last,
+    );
+    await tester.ensureVisible(find.text('Delete').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Deleted.'), findsOneWidget);
+    await tester.ensureVisible(find.byType(CharcoalSwitch));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(CharcoalSwitch));
+    await tester.pump();
+    expect(
+      find.textContaining('Off: everyone gets the default value.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('admin sections example edits the default with radio cards', (
+    tester,
+  ) async {
+    await show(
+      tester,
+      const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+      size: sizes.last,
+    );
+    expect(find.text('Not set (recommended)'), findsOneWidget);
+    await tester.tap(find.text('Edit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Whisper large-v3'));
+    await tester.pump();
+    await tester.tap(find.text('Old cluster'));
+    await tester.pump();
+    expect(find.text('Value type: String'), findsOneWidget);
+    await tester.tap(find.text('More options'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('JSON'));
+    await tester.pump();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Whisper large-v3'), findsOneWidget);
+    expect(find.text('Not set (recommended)'), findsNothing);
+    expect(
+      find.text('JSON'),
+      findsNWidgets(2),
+      reason: 'the meta chip and the settings row',
+    );
+  });
+
+  testWidgets('admin sections example removes the checked members', (
+    tester,
+  ) async {
+    await show(
+      tester,
+      const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+      size: sizes.last,
+    );
+    expect(find.text('Remove selected'), findsNothing);
+    await tester.tap(find.bySemanticsLabel('Select all'));
+    await tester.pump();
+    expect(find.text('3 selected'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Select Lin Xiaoyu'));
+    await tester.pump();
+    expect(find.text('2 selected'), findsOneWidget);
+    await tester.tap(find.text('Remove selected'));
+    await tester.pump();
+    expect(find.text('Lin Xiaoyu'), findsOneWidget);
+    expect(find.text('Aoi Tanaka'), findsNothing);
+    await tester.tap(find.bySemanticsLabel('Remove Lin Xiaoyu'));
+    await tester.pump();
+    expect(find.text('Lin Xiaoyu'), findsNothing);
+    expect(find.text('No members'), findsOneWidget);
+    expect(find.text('1 Find the user'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'admin example switches shell layout by width and keeps the selected page',
     (tester) async {
@@ -139,4 +248,21 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('mode bar example enters and leaves the mode', (tester) async {
+    await show(
+      tester,
+      const SizedBox(height: 900, child: AgentModeBarExample()),
+      size: sizes.last,
+    );
+    expect(find.byType(CharcoalModeBar), findsOneWidget);
+    expect(find.text('Super user (break-glass)'), findsOneWidget);
+    await tester.tap(find.text('Enter super-user mode'));
+    await tester.pump();
+    expect(find.bySemanticsLabel('Super-user mode'), findsOneWidget);
+    expect(find.text('Grant the admin role'), findsOneWidget);
+    await tester.tap(find.text('Exit super user'));
+    await tester.pump();
+    expect(find.text('Enter super-user mode'), findsOneWidget);
+  });
 }

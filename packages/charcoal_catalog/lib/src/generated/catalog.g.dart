@@ -5,9 +5,9 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 84,
-    "curatedComponents": 84,
-    "componentsWithExamples": 78,
+    "publicComponents": 91,
+    "curatedComponents": 91,
+    "componentsWithExamples": 85,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 128
@@ -2485,7 +2485,8 @@ const String generatedCatalogJson = r'''{
       ],
       "useWhen": [
         "One or more independent choices may each be turned on or off.",
-        "A form needs an explicit acknowledgement or optional inclusion choice."
+        "A form needs an explicit acknowledgement or optional inclusion choice.",
+        "A \"select all\" box stands over a partial selection: pass mixed: true (with value false)."
       ],
       "avoidWhen": [
         "Exactly one option in a group may be selected; use CharcoalRadio.",
@@ -2531,7 +2532,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalCheckbox",
           "kind": "constructor",
-          "signature": "CharcoalCheckbox({required this.value, required this.onChanged, this.autofocus = false, this.focusNode, this.invalid = false, this.label, this.rounded = false, this.semanticLabel, this.statesController, super.key})",
+          "signature": "CharcoalCheckbox({required this.value, required this.onChanged, this.autofocus = false, this.focusNode, this.invalid = false, this.label, this.mixed = false, this.rounded = false, this.semanticLabel, this.statesController, super.key})",
           "parameters": [
             {
               "name": "value",
@@ -2570,6 +2571,13 @@ const String generatedCatalogJson = r'''{
               "type": "Widget?",
               "required": false,
               "named": true
+            },
+            {
+              "name": "mixed",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
             },
             {
               "name": "rounded",
@@ -2766,7 +2774,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalClickable",
           "kind": "constructor",
-          "signature": "CharcoalClickable({required this.builder, required this.onPressed, this.autofocus = false, this.checked, this.expanded, this.focusNode, this.inMutuallyExclusiveGroup = false, this.keyboardActivationEnabled = true, this.onFocusChange, this.onKeyEvent, this.semanticButton = true, this.semanticHint, this.semanticLabel, this.semanticRole, this.semanticValue, this.selected = false, this.statesController, this.toggled, this.validationResult = SemanticsValidationResult.none, super.key})",
+          "signature": "CharcoalClickable({required this.builder, required this.onPressed, this.autofocus = false, this.checked, this.expanded, this.focusNode, this.inMutuallyExclusiveGroup = false, this.keyboardActivationEnabled = true, this.mixed = false, this.onFocusChange, this.onKeyEvent, this.semanticButton = true, this.semanticHint, this.semanticLabel, this.semanticRole, this.semanticValue, this.selected = false, this.statesController, this.toggled, this.validationResult = SemanticsValidationResult.none, super.key})",
           "parameters": [
             {
               "name": "builder",
@@ -2818,6 +2826,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "true"
+            },
+            {
+              "name": "mixed",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
             },
             {
               "name": "onFocusChange",
@@ -3055,6 +3070,454 @@ const String generatedCatalogJson = r'''{
           "description": "A two-line selectable code block.",
           "sourcePath": "example/lib/agent_examples/status_example.dart",
           "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalCopyableText",
+      "category": "Content",
+      "summary": "An identifier the reader needs elsewhere (a record ID, a key): selectable monospace caption text and a copy button that confirms with a toast.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/text/copyable_text.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "copy",
+        "clipboard",
+        "identifier",
+        "id",
+        "uuid",
+        "monospace"
+      ],
+      "useWhen": [
+        "A page header or a table cell shows an ID that people paste into other tools."
+      ],
+      "avoidWhen": [
+        "A secret or a long multi-line value; use CharcoalCodeBlock with its own actions.",
+        "Text that nobody copies; use CharcoalText."
+      ],
+      "accessibility": [
+        "Pass a localized copyLabel naming what is copied (\"Copy user ID\") and a copiedMessage for the toast.",
+        "The text stays selectable for people who copy by hand."
+      ],
+      "responsiveBehavior": [
+        "In a narrow space the text ends with an ellipsis; the button still copies the whole value."
+      ],
+      "interactionStates": [
+        "idle",
+        "copied"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the clipboard write and the confirming toast.",
+        "The caller owns the value and the localized labels."
+      ],
+      "tokenRoles": [
+        "space.xxs"
+      ],
+      "relatedComponents": [
+        "CharcoalText",
+        "CharcoalCodeBlock",
+        "CharcoalSelectable"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalCopyableText",
+          "kind": "constructor",
+          "signature": "CharcoalCopyableText({required this.text, required this.copyLabel, required this.copiedMessage, super.key})",
+          "parameters": [
+            {
+              "name": "text",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "copyLabel",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "copiedMessage",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, settings edited with radio cards and \"More options\", a selectable members table with copyable IDs, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalDangerZone",
+      "category": "Layout",
+      "summary": "A section card for one irreversible action, such as deleting the record a page shows: title, what is lost, and a negative-toned button.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_card.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "danger zone",
+        "delete",
+        "destructive",
+        "irreversible",
+        "remove"
+      ],
+      "useWhen": [
+        "A detail page offers deleting or resetting its record; put the danger zone last on the page."
+      ],
+      "avoidWhen": [
+        "A row action in a list or table; use the row action slot.",
+        "A reversible action such as pausing; use a switch or a normal button."
+      ],
+      "accessibility": [
+        "The description says what is lost; confirm with showCharcoalConfirm before acting."
+      ],
+      "responsiveBehavior": [
+        "Same header layout as CharcoalSectionCard; the description wraps under the title."
+      ],
+      "interactionStates": [
+        "enabled",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the card, the negative tone and the delete icon of the action.",
+        "The caller owns confirmation, the deletion and what happens after it."
+      ],
+      "tokenRoles": [
+        "colors.textNegative",
+        "colors.borderSubtle"
+      ],
+      "relatedComponents": [
+        "CharcoalSectionCard",
+        "CharcoalButton"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalDangerZone",
+          "kind": "constructor",
+          "signature": "CharcoalDangerZone({required this.title, required this.description, required this.actionLabel, required this.onPressed, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actionLabel",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, settings edited with radio cards and \"More options\", a selectable members table with copyable IDs, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalDataTable",
+      "category": "Layout",
+      "summary": "A table of records under a header row: columns that line up across rows (flex shares or fit to content), list row heights, an optional selection column with a select-all box, and a trailing action per row.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/data_table.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "table",
+        "data table",
+        "columns",
+        "rows",
+        "selection",
+        "bulk",
+        "checkbox",
+        "admin list"
+      ],
+      "useWhen": [
+        "Records are compared across the same fields (name, type, status, date), so values must line up in columns.",
+        "Rows are checked for a bulk action; own the ids in one Set and pass CharcoalTableSelection.",
+        "A list page or a detail section shows records in a flush CharcoalSectionCard."
+      ],
+      "avoidWhen": [
+        "Each record is one or two lines without comparable fields; use CharcoalList with CharcoalListRow.",
+        "Key and value pairs of one record; use CharcoalInfoRows."
+      ],
+      "accessibility": [
+        "Exposed as a table with rows and cells. In a row with onPressed, the first cell is the button assistive technology reads, so put the record name in the first column.",
+        "Pass a localized selectAllLabel, and a selectRowLabel that names the record of each row so two row boxes never read the same; the header box is announced as mixed while only some rows are checked.",
+        "Give each row action its own semantic label naming the record."
+      ],
+      "responsiveBehavior": [
+        "Columns with hideWhenNarrow are left out when the table is narrower than sizes.sidebarBreakpoint.",
+        "The first and last cells use the CharcoalSectionCard inset, so the table lines up with the title of the flush card it sits in.",
+        "rowHeight is a minimum; rows grow with content and text scale, and flex columns wrap their text."
+      ],
+      "interactionStates": [
+        "static",
+        "hovered",
+        "pressed",
+        "focused",
+        "selected",
+        "checked",
+        "mixed"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the column layout, header, row surface (hover, press, focus, selected), selection boxes and select-all logic.",
+        "The caller owns the rows, the checked ids, the batch actions and navigation from onPressed."
+      ],
+      "tokenRoles": [
+        "colors.background",
+        "colors.borderSubtle",
+        "colors.borderFocus",
+        "colors.hoverOverlay",
+        "colors.pressOverlay",
+        "colors.textTertiary",
+        "colors.iconTertiary",
+        "sizes.sidebarBreakpoint",
+        "space.xl",
+        "space.md",
+        "space.sm"
+      ],
+      "relatedComponents": [
+        "CharcoalSectionCard",
+        "CharcoalList",
+        "CharcoalListRow",
+        "CharcoalCheckbox",
+        "CharcoalBatchBar"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalDataTable",
+          "kind": "constructor",
+          "signature": "CharcoalDataTable({required this.columns, required this.rows, this.rowHeight = CharcoalListRowHeight.regular, this.selection, super.key})",
+          "parameters": [
+            {
+              "name": "columns",
+              "type": "List<CharcoalTableColumn>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "rows",
+              "type": "List<CharcoalTableRow<T>>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "rowHeight",
+              "type": "CharcoalListRowHeight",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalListRowHeight.regular"
+            },
+            {
+              "name": "selection",
+              "type": "CharcoalTableSelection<T>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalTableColumn",
+          "kind": "supportingType",
+          "signature": "CharcoalTableColumn({required this.label, this.flex = 1, this.align = CharcoalColumnAlign.start, this.hideWhenNarrow = false})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "flex",
+              "type": "int?",
+              "required": false,
+              "named": true,
+              "defaultValue": "1"
+            },
+            {
+              "name": "align",
+              "type": "CharcoalColumnAlign",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalColumnAlign.start"
+            },
+            {
+              "name": "hideWhenNarrow",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalTableColumn.fit",
+          "kind": "supportingType",
+          "signature": "CharcoalTableColumn.fit({required this.label, this.align = CharcoalColumnAlign.start, this.hideWhenNarrow = false})",
+          "parameters": [
+            {
+              "name": "label",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "align",
+              "type": "CharcoalColumnAlign",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalColumnAlign.start"
+            },
+            {
+              "name": "hideWhenNarrow",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalTableRow",
+          "kind": "supportingType",
+          "signature": "CharcoalTableRow({required this.id, required this.cells, this.action, this.onPressed, this.selected = false})",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "cells",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "action",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "selected",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalTableSelection",
+          "kind": "supportingType",
+          "signature": "CharcoalTableSelection({required this.selected, required this.onChanged, this.selectAllLabel = 'Select all', this.selectRowLabel})",
+          "parameters": [
+            {
+              "name": "selected",
+              "type": "Set<T>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<Set<T>>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "selectAllLabel",
+              "type": "String",
+              "required": false,
+              "named": true,
+              "defaultValue": "'Select all'"
+            },
+            {
+              "name": "selectRowLabel",
+              "type": "String Function(T id)?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalColumnAlign",
+          "kind": "enum",
+          "signature": "enum CharcoalColumnAlign { start, center, end }",
+          "parameters": [],
+          "enumValues": [
+            "start",
+            "center",
+            "end"
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, settings edited with radio cards and \"More options\", a selectable members table with copyable IDs, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -3490,6 +3953,107 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalDisclosure",
+      "category": "Layout",
+      "summary": "A collapsible group for rarely used content: one line with a chevron, a title and a summary of the hidden values; pressing it shows the content.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/disclosure.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "disclosure",
+        "more options",
+        "advanced",
+        "collapsible",
+        "expandable",
+        "accordion"
+      ],
+      "useWhen": [
+        "A form has optional fields most people leave at their defaults; fold them under \"More options\" and summarise the defaults in the line."
+      ],
+      "avoidWhen": [
+        "Required fields; keep them visible.",
+        "Navigation between sections of a page; use separate CharcoalSectionCard sections or tabs."
+      ],
+      "accessibility": [
+        "The line is a button announced as expanded or collapsed; its label is the title and the summary.",
+        "Collapsed content keeps its state but cannot take focus."
+      ],
+      "responsiveBehavior": [
+        "The summary stays on the title line and ends with an ellipsis when it does not fit.",
+        "Opening and closing animate the height unless the platform asks for reduced motion."
+      ],
+      "interactionStates": [
+        "collapsed",
+        "expanded",
+        "hovered",
+        "focused"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the expanded state, the line, the chevron and the animation.",
+        "The caller owns the content and keeps the summary in step with the hidden values."
+      ],
+      "tokenRoles": [
+        "colors.textSecondary",
+        "colors.textTertiary",
+        "space.md",
+        "space.xs"
+      ],
+      "relatedComponents": [
+        "CharcoalFormField",
+        "CharcoalSectionCard"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalDisclosure",
+          "kind": "constructor",
+          "signature": "CharcoalDisclosure({required this.title, required this.child, this.initiallyExpanded = false, this.summary, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "child",
+              "type": "Widget",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "initiallyExpanded",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "summary",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, settings edited with radio cards and \"More options\", a selectable members table with copyable IDs, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
       "name": "CharcoalDivider",
       "category": "Layout",
       "summary": "A hairline rule across the width it is given.",
@@ -3616,7 +4180,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalDropdown",
           "kind": "constructor",
-          "signature": "CharcoalDropdown({required this.options, required this.value, required this.onChanged, this.assistiveText, this.autofocus = false, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.placeholder, this.required = false, this.requiredText = '*Required', this.showLabel = false, this.subLabel, super.key})",
+          "signature": "CharcoalDropdown({required this.options, required this.value, required this.onChanged, this.assistiveText, this.autofocus = false, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.placeholder, this.optionalText, this.required = false, this.requiredText = '*Required', this.showLabel = false, this.subLabel, super.key})",
           "parameters": [
             {
               "name": "options",
@@ -3678,6 +4242,12 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "placeholder",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "optionalText",
               "type": "String?",
               "required": false,
               "named": true
@@ -3795,7 +4365,7 @@ const String generatedCatalogJson = r'''{
         "obscured"
       ],
       "feedbackResponsibilities": [
-        "Owns text editing behaviour.",
+        "Owns text editing behaviour, including leaving Enter, Escape and the arrow keys to a composing input method and the macOS input-method refresh after a resize.",
         "The owning field owns decoration, label, validation and counter."
       ],
       "tokenRoles": [
@@ -3953,7 +4523,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalEmptyState",
       "category": "Feedback",
-      "summary": "A centred empty state: a muted icon, a message and optional actions.",
+      "summary": "A centred empty state: a muted icon, an optional title, a message, optional actions and optional numbered steps that explain how the place fills up.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/empty_state.dart",
       "documentationLevel": "curated",
@@ -3965,22 +4535,25 @@ const String generatedCatalogJson = r'''{
       ],
       "useWhen": [
         "A list, search or page region has no content and should say why and what to do next.",
-        "A first-run screen needs one clear next step."
+        "A first-run screen needs one clear next step.",
+        "A new feature starts empty and two or three numbered steps (CharcoalEmptyStateStep) explain how to put it to use."
       ],
       "avoidWhen": [
         "The region failed to load; use CharcoalErrorState.",
         "Content is loading; use CharcoalLoadingState."
       ],
       "accessibility": [
-        "The message is the spoken content; the icon is decorative.",
+        "The title is a heading; the message and the steps are the spoken content; the icon is decorative.",
         "Actions keep their own labels and focus order."
       ],
       "responsiveBehavior": [
-        "It centres within the space it is given and wraps the message on narrow widths."
+        "It centres within the space it is given and wraps the message on narrow widths.",
+        "Steps sit in a centred row, each sizes.fieldWidthCompact wide, and stack where the row does not fit."
       ],
       "interactionStates": [
         "static",
-        "with action"
+        "with action",
+        "with steps"
       ],
       "feedbackResponsibilities": [
         "Owns icon, message layout and spacing.",
@@ -3993,13 +4566,14 @@ const String generatedCatalogJson = r'''{
       ],
       "relatedComponents": [
         "CharcoalErrorState",
-        "CharcoalLoadingState"
+        "CharcoalLoadingState",
+        "CharcoalSectionCard"
       ],
       "apis": [
         {
           "name": "CharcoalEmptyState",
           "kind": "constructor",
-          "signature": "CharcoalEmptyState({required this.message, this.actions = const <Widget>[], this.icon, super.key})",
+          "signature": "CharcoalEmptyState({required this.message, this.actions = const <Widget>[], this.icon, this.steps = const <CharcoalEmptyStateStep>[], this.title, super.key})",
           "parameters": [
             {
               "name": "message",
@@ -4021,8 +4595,41 @@ const String generatedCatalogJson = r'''{
               "named": true
             },
             {
+              "name": "steps",
+              "type": "List<CharcoalEmptyStateStep>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <CharcoalEmptyStateStep>[]"
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
               "name": "key",
               "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalEmptyStateStep",
+          "kind": "supportingType",
+          "signature": "CharcoalEmptyStateStep({required this.title, this.description})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "description",
+              "type": "String?",
               "required": false,
               "named": true
             }
@@ -4037,6 +4644,13 @@ const String generatedCatalogJson = r'''{
           "description": "A folder icon and a no-jobs message.",
           "sourcePath": "example/lib/agent_examples/status_example.dart",
           "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        },
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A members section that turns into an empty state with a title and numbered steps when the last member is removed.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -4227,7 +4841,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalFieldLabel",
       "category": "Forms",
-      "summary": "Composes visible field naming, required copy, and trailing metadata without owning input semantics.",
+      "summary": "Composes visible field naming, required or optional copy, and trailing metadata without owning input semantics.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/field_label.dart",
       "documentationLevel": "curated",
@@ -4240,7 +4854,7 @@ const String generatedCatalogJson = r'''{
         "visible label"
       ],
       "useWhen": [
-        "A custom form composition needs a visible label plus localized required copy or trailing metadata such as a character count.",
+        "A custom form composition needs a visible label plus localized required or optional copy (requiredText, optionalText) or trailing metadata such as a character count.",
         "The associated control already exposes its own semantic label, required state, validation, and value."
       ],
       "avoidWhen": [
@@ -4290,7 +4904,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalFieldLabel",
           "kind": "constructor",
-          "signature": "CharcoalFieldLabel({required this.label, this.bold = true, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
+          "signature": "CharcoalFieldLabel({required this.label, this.bold = true, this.optionalText, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
           "parameters": [
             {
               "name": "label",
@@ -4304,6 +4918,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "true"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",
@@ -4443,7 +5063,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalFormField",
       "category": "Forms",
-      "summary": "The styled shell around any control that needs a label, helper line, required or invalid state and an optional action.",
+      "summary": "The one labelled-field wrapper for any control: label row, required or optional marker, helper line, invalid state and an optional action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/form_field.dart",
       "documentationLevel": "curated",
@@ -4453,11 +5073,13 @@ const String generatedCatalogJson = r'''{
         "helper",
         "required",
         "invalid",
+        "optional",
         "shell"
       ],
       "useWhen": [
         "A control (text field, slider, dropdown) needs a visible label and assistive text.",
-        "A field has a required marker or an inline correction message."
+        "A switch, a radio or checkbox group (a Column of CharcoalRadio or CharcoalCheckbox) or a segmented control needs the label row, marker, help and error of a text field; there is no separate group widget.",
+        "A field has a required marker (requiredText), an optional marker (optionalText) or an inline correction message."
       ],
       "avoidWhen": [
         "The control already has its own label slot (CharcoalSwitchField, CharcoalSearchField).",
@@ -4465,7 +5087,8 @@ const String generatedCatalogJson = r'''{
       ],
       "accessibility": [
         "The label is associated with the child control; pass invalid and assistiveText so the error is announced.",
-        "Required is conveyed in words (requiredText) as well as by the marker."
+        "Required is conveyed in words (requiredText) as well as by the marker.",
+        "required and optionalText are exclusive; mark every field of a form as one or the other when both kinds appear."
       ],
       "responsiveBehavior": [
         "The label wraps on narrow widths and the helper line grows with text scale."
@@ -4473,10 +5096,11 @@ const String generatedCatalogJson = r'''{
       "interactionStates": [
         "idle",
         "invalid",
-        "required"
+        "required",
+        "optional"
       ],
       "feedbackResponsibilities": [
-        "Owns label, helper, required and invalid presentation.",
+        "Owns label, helper, required, optional and invalid presentation.",
         "The caller owns the control value, validation rule and submit."
       ],
       "tokenRoles": [
@@ -4493,7 +5117,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalFormField",
           "kind": "constructor",
-          "signature": "CharcoalFormField({required this.label, required this.child, this.action, this.assistiveText, this.invalid = false, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
+          "signature": "CharcoalFormField({required this.label, required this.child, this.action, this.assistiveText, this.invalid = false, this.optionalText, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
           "parameters": [
             {
               "name": "label",
@@ -4525,6 +5149,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",
@@ -6316,6 +6946,120 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalModeBar",
+      "category": "Feedback",
+      "summary": "A full-width bar across the top edge of the app that marks a special mode: tone icon, bold title, optional message and trailing actions such as the way out, on the tone's solid fill.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/mode_bar.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "mode bar",
+        "super user",
+        "break-glass",
+        "impersonation",
+        "environment bar",
+        "caution bar"
+      ],
+      "useWhen": [
+        "The whole app is in a special mode the user must not forget, such as acting as a shared super user or as another account; put the bar above the page and offer the exit as an action.",
+        "A sign-in card belongs to that mode; put a title-only bar first in a flush, untitled CharcoalSectionCard as its head.",
+        "The page under the bar should read as the same mode; give the CharcoalScaffold background: CharcoalPageBackground.notice."
+      ],
+      "avoidWhen": [
+        "A message about the content of one page or form; use CharcoalBanner.",
+        "Transient confirmation; use CharcoalToast or CharcoalSnackBar."
+      ],
+      "accessibility": [
+        "The bar is one container whose label is the title; the message and the actions are read and focused inside it.",
+        "The icon is decorative; the title must name the mode in words."
+      ],
+      "responsiveBehavior": [
+        "Spans its parent edge to edge with no radius; the horizontal inset is space.xl, or space.lg below sizes.sidebarBreakpoint, like a section card.",
+        "On a narrow bar the message wraps under the title; the actions stay at the end."
+      ],
+      "interactionStates": [
+        "static",
+        "with actions"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the fill, the colours on it, the icon, the insets and the layout.",
+        "The caller owns entering and leaving the mode and the action results."
+      ],
+      "tokenRoles": [
+        "colors.notice",
+        "colors.textOnNotice",
+        "colors.iconOnNotice",
+        "colors.noticeSurface",
+        "space.xl",
+        "space.lg",
+        "space.md",
+        "sizes.rowMinHeightCompact"
+      ],
+      "relatedComponents": [
+        "CharcoalBanner",
+        "CharcoalScaffold",
+        "CharcoalSectionCard"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalModeBar",
+          "kind": "constructor",
+          "signature": "CharcoalModeBar({required this.title, this.message, this.actions = const <Widget>[], this.icon = CharcoalIcons.warnTriangle, this.tone = CharcoalTone.notice, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "message",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalIcons.warnTriangle"
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTone.notice"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "mode-bar-super-user",
+          "title": "Super-user mode",
+          "description": "A sign-in card headed by a title-only mode bar; in the mode, a notice page under a full-width bar whose action leaves the mode.",
+          "sourcePath": "example/lib/agent_examples/mode_bar_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A break-glass super-user mode: its sign-in card is headed by a title-only mode bar; once in,\n/// the whole page sits on the notice surface under a full-width mode bar whose action leaves the\n/// mode.\nfinal class AgentModeBarExample extends StatefulWidget {\n  const AgentModeBarExample({super.key});\n\n  @override\n  State<AgentModeBarExample> createState() => _AgentModeBarExampleState();\n}\n\nfinal class _AgentModeBarExampleState extends State<AgentModeBarExample> {\n  bool _superUser = false;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalScaffold(\n      background: _superUser\n          ? CharcoalPageBackground.notice\n          : CharcoalPageBackground.secondary,\n      body: SingleChildScrollView(\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            if (_superUser)\n              CharcoalModeBar(\n                title: 'Super-user mode',\n                message: 'Every action here is recorded as the super user.',\n                actions: <Widget>[\n                  CharcoalButton(\n                    size: CharcoalButtonSize.small,\n                    leading: const CharcoalIcon(CharcoalIcons.logout),\n                    onPressed: () => setState(() => _superUser = false),\n                    child: const Text('Exit super user'),\n                  ),\n                ],\n              ),\n            CharcoalPadding.all(\n              CharcoalSpace.lg,\n              child: _superUser ? _grantCard() : _signInCard(),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n\n  Widget _signInCard() => CharcoalSectionCard(\n    flush: true,\n    children: <Widget>[\n      const CharcoalModeBar(title: 'Super user (break-glass)'),\n      CharcoalPadding.all(\n        CharcoalSpace.xl,\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalText(\n              'Sign in with the shared credentials of this deployment. '\n              'This mode only grants or revokes the admin role.',\n              tone: CharcoalTextTone.secondary,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalButton(\n              variant: CharcoalButtonVariant.primary,\n              onPressed: () => setState(() => _superUser = true),\n              child: const Text('Enter super-user mode'),\n            ),\n          ],\n        ),\n      ),\n    ],\n  );\n\n  Widget _grantCard() => const CharcoalSectionCard(\n    title: 'Grant the admin role',\n    caption: 'Find a user by e-mail, user ID or phone number',\n    children: <Widget>[\n      CharcoalText('No user selected yet.', tone: CharcoalTextTone.secondary),\n    ],\n  );\n}\n"
+        }
+      ]
+    },
+    {
       "name": "CharcoalMultiSelect",
       "category": "Forms",
       "summary": "Toggles one option in a visibly named, parent-controlled multi-selection group.",
@@ -6996,7 +7740,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalPage",
       "category": "Admin",
-      "summary": "The chrome and content column of one admin page: back link, title, subtitle, actions, optional banner and a busy overlay.",
+      "summary": "The chrome and content column of one admin page: back link, title, subtitle, a meta row (chips, copyable ID), actions level with the title, optional banner and a busy overlay.",
       "import": "package:charcoal_ui/admin.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/admin/page.dart",
       "documentationLevel": "curated",
@@ -7009,7 +7753,8 @@ const String generatedCatalogJson = r'''{
       ],
       "useWhen": [
         "An admin destination needs a titled page with actions and a width-limited content column.",
-        "A busy action should block the page and announce progress."
+        "A busy action should block the page and announce progress.",
+        "A detail page shows facts about its record under the title: pass chips and a CharcoalCopyableText ID as meta."
       ],
       "avoidWhen": [
         "A mobile app page with a navigation bar; use CharcoalScaffold and CharcoalNavigationBar."
@@ -7018,7 +7763,8 @@ const String generatedCatalogJson = r'''{
         "The title is a heading; busyLabel is announced while busy; the back control is labelled with backLabel."
       ],
       "responsiveBehavior": [
-        "maxWidth chooses standard, wide or full; compact mode moves actions to the title row end."
+        "maxWidth chooses standard, wide or full. The actions sit at the end of the header, aligned with its top; meta wraps under the subtitle.",
+        "In compact mode the title moves into the top bar and the meta row and the actions wrap above the content."
       ],
       "interactionStates": [
         "idle",
@@ -7035,13 +7781,15 @@ const String generatedCatalogJson = r'''{
       "relatedComponents": [
         "CharcoalAdminShell",
         "CharcoalSectionHeader",
+        "CharcoalSectionCard",
+        "CharcoalCopyableText",
         "CharcoalBanner"
       ],
       "apis": [
         {
           "name": "CharcoalPage",
           "kind": "constructor",
-          "signature": "CharcoalPage({required this.title, required this.child, this.actions = const <Widget>[], this.backLabel = 'Back', this.banner, this.busy = false, this.busyLabel = 'Loading', this.compact, this.compactTrailing, this.header, this.maxWidth = CharcoalPageWidth.standard, this.onBack, this.scrollable = true, this.showBack, this.subtitle, super.key})",
+          "signature": "CharcoalPage({required this.title, required this.child, this.actions = const <Widget>[], this.background = CharcoalPageBackground.primary, this.backLabel = 'Back', this.banner, this.busy = false, this.busyLabel = 'Loading', this.compact, this.compactTrailing, this.header, this.maxWidth = CharcoalPageWidth.standard, this.meta = const <Widget>[], this.onBack, this.scrollable = true, this.showBack, this.subtitle, super.key})",
           "parameters": [
             {
               "name": "title",
@@ -7061,6 +7809,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "background",
+              "type": "CharcoalPageBackground",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPageBackground.primary"
             },
             {
               "name": "backLabel",
@@ -7115,6 +7870,13 @@ const String generatedCatalogJson = r'''{
               "defaultValue": "CharcoalPageWidth.standard"
             },
             {
+              "name": "meta",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
               "name": "onBack",
               "type": "VoidCallback?",
               "required": false,
@@ -7167,6 +7929,13 @@ const String generatedCatalogJson = r'''{
           "description": "A titled page with a brand header, stat card and meter.",
           "sourcePath": "example/lib/agent_examples/admin_example.dart",
           "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// An admin console frame: sidebar shell, a page with stat cards, a quota meter, an info table\n/// and a batch bar.\n///\n/// The shell chooses sidebar or bottom bar from the width it is given; one state owner (`_section`)\n/// updates both navigations in the same frame.\nfinal class AgentAdminExample extends StatefulWidget {\n  const AgentAdminExample({super.key});\n\n  @override\n  State<AgentAdminExample> createState() => _AgentAdminExampleState();\n}\n\nfinal class _AgentAdminExampleState extends State<AgentAdminExample> {\n  String _section = 'overview';\n  bool _selecting = false;\n  int _selected = 0;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalAdminShell(\n      sidebar: CharcoalSidebar(\n        brand: const CharcoalSidebarBrand(mark: 'M', title: 'Console'),\n        children: <Widget>[\n          CharcoalSidebarGroup(\n            children: <Widget>[\n              for (final entry in const <(String, String)>[\n                ('overview', 'Overview'),\n                ('keys', 'Keys'),\n              ])\n                CharcoalNavigationItem(\n                  variant: CharcoalNavigationItemVariant.sidebar,\n                  selected: _section == entry.$1,\n                  onPressed: () => setState(() => _section = entry.$1),\n                  child: Text(entry.$2),\n                ),\n            ],\n          ),\n        ],\n      ),\n      bottomBar: CharcoalTabBar<String>(\n        value: _section,\n        onChanged: (value) => setState(() => _section = value),\n        items: const <CharcoalTabItem<String>>[\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.home),\n            label: 'Overview',\n            value: 'overview',\n          ),\n          CharcoalTabItem<String>(\n            icon: CharcoalIcon(CharcoalIcons.lock),\n            label: 'Keys',\n            value: 'keys',\n          ),\n        ],\n      ),\n      body: CharcoalPage(\n        title: _section == 'overview' ? 'Overview' : 'Keys',\n        subtitle: 'Last 30 days',\n        header: const Row(\n          children: <Widget>[\n            CharcoalBrandMark('M'),\n            CharcoalGap(CharcoalSpace.sm),\n            CharcoalText('Acme Console', role: CharcoalTextRole.sectionTitle),\n          ],\n        ),\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalStatCard(\n              label: 'Requests',\n              value: '1.2M',\n              status: 'Up 12%',\n              statusTone: CharcoalTone.positive,\n              footnote: 'Compared with the previous period',\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalMeter(\n              label: 'Monthly quota',\n              value: '72 of 100 GB',\n              fraction: 0.72,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            const CharcoalInfoRows(<(String, String)>[\n              ('Plan', 'Team'),\n              ('Region', 'ap-northeast-1'),\n            ]),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalBatchBar(\n              selectionMode: _selecting,\n              selectedCount: _selected,\n              restLabel: 'Keys',\n              onToggleMode: () => setState(() {\n                _selecting = !_selecting;\n                _selected = 0;\n              }),\n              onDelete: () => setState(() {\n                _selecting = false;\n                _selected = 0;\n              }),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n}\n"
+        },
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A detail page with a back link, chips and a copyable ID in its meta row, and section cards for its content.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -7930,6 +8699,146 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalRadioCards",
+      "category": "Forms",
+      "summary": "A single choice among a few options that each need a sentence, as stacked cards with a radio indicator, a title, a description and an optional trailing widget.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/selection/radio_cards.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "radio cards",
+        "choice cards",
+        "radio group",
+        "single choice",
+        "option list"
+      ],
+      "useWhen": [
+        "Each option needs a title and a line of explanation (what choosing it means, an identifier, a status).",
+        "There are few options (about two to six) and seeing them all at once beats opening a dropdown."
+      ],
+      "avoidWhen": [
+        "Two or three short options without explanations; use CharcoalSegmentedControl.",
+        "Many options or a long list; use CharcoalDropdown.",
+        "Several options may be chosen; use CharcoalCheckbox rows or CharcoalMultiSelect."
+      ],
+      "accessibility": [
+        "Each card is one radio node (checked, in a mutually exclusive group) whose label is the title and description.",
+        "The group is one tab stop; arrow keys move the choice and skip disabled options, Space or Enter chooses the focused option.",
+        "Frame it with CharcoalFormField so the group has a visible label and required or optional marker."
+      ],
+      "responsiveBehavior": [
+        "Cards fill the width; titles and descriptions wrap, and the indicator stays on the first title line."
+      ],
+      "interactionStates": [
+        "chosen",
+        "unchosen",
+        "hovered",
+        "pressed",
+        "focused",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the card surface, indicator, keyboard model and semantics.",
+        "The caller owns the value, the options and what a disabled option means."
+      ],
+      "tokenRoles": [
+        "colors.borderSubtle",
+        "colors.borderFocus",
+        "colors.textTertiary",
+        "radius.md",
+        "space.md",
+        "space.sm"
+      ],
+      "relatedComponents": [
+        "CharcoalRadio",
+        "CharcoalSegmentedControl",
+        "CharcoalDropdown",
+        "CharcoalFormField"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalRadioCards",
+          "kind": "constructor",
+          "signature": "CharcoalRadioCards({required this.value, required this.options, this.onChanged, super.key})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "T?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "options",
+              "type": "List<CharcoalRadioCardOption<T>>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onChanged",
+              "type": "ValueChanged<T>?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "CharcoalRadioCardOption",
+          "kind": "supportingType",
+          "signature": "CharcoalRadioCardOption({required this.value, required this.title, this.description, this.enabled = true, this.trailing})",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "T",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "description",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "enabled",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "true"
+            },
+            {
+              "name": "trailing",
+              "type": "Widget?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, settings edited with radio cards and \"More options\", a selectable members table with copyable IDs, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
       "name": "CharcoalScaffold",
       "category": "Layout",
       "summary": "Coordinates page navigation, full-bleed backgrounds, safe areas, and keyboard avoidance.",
@@ -7957,7 +8866,8 @@ const String generatedCatalogJson = r'''{
       "responsiveBehavior": [
         "Shrinks above the software keyboard by default.",
         "Background fills the window; content and bars consume safe insets once.",
-        "background: CharcoalPageBackground.secondary gives a grey page on which raised cards stand out, such as a feed."
+        "background: CharcoalPageBackground.secondary gives a grey page on which raised cards stand out, such as a feed.",
+        "background: CharcoalPageBackground.notice gives a pale notice page for a special mode under a CharcoalModeBar."
       ],
       "interactionStates": [
         "keyboard hidden",
@@ -8072,11 +8982,12 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalPageBackground",
           "kind": "enum",
-          "signature": "enum CharcoalPageBackground { primary, secondary }",
+          "signature": "enum CharcoalPageBackground { primary, secondary, notice }",
           "parameters": [],
           "enumValues": [
             "primary",
-            "secondary"
+            "secondary",
+            "notice"
           ]
         }
       ],
@@ -8231,6 +9142,128 @@ const String generatedCatalogJson = r'''{
           "description": "A search field with clear in a form section.",
           "sourcePath": "example/lib/agent_examples/form_section_example.dart",
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalSectionCard",
+      "category": "Layout",
+      "summary": "One section of a page on a raised card: an optional title with a caption and the section's own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_card.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "section card",
+        "card",
+        "section",
+        "panel",
+        "settings group",
+        "detail page"
+      ],
+      "useWhen": [
+        "A detail or settings page is split into titled sections, each with its own actions (Edit, Add) in its header.",
+        "A table or list should sit on a card under a title; pass flush: true and a CharcoalDataTable or CharcoalList.",
+        "A switch with its explanation stands alone as a section; pass the switch as an action and no children.",
+        "A list page holds its table on a card with no heading; leave out the title and the body starts at the card top (put a toolbar row, if any, first in the body)."
+      ],
+      "avoidWhen": [
+        "A group of form fields inside a dialog or a long form; use CharcoalFormSection.",
+        "A heading without a surface; use CharcoalSectionHeader.",
+        "A clickable summary tile; use CharcoalCard with CharcoalClickable."
+      ],
+      "accessibility": [
+        "The title is exposed as a heading; a card without a title adds no heading.",
+        "Name each action for the section it belongs to when several sections have the same action label."
+      ],
+      "responsiveBehavior": [
+        "Header and body share one horizontal inset: space.xl, or space.lg on a card narrower than sizes.sidebarBreakpoint; a CharcoalDataTable in a flush card uses the same inset for its first and last cells.",
+        "The actions take at most half the header width and wrap; the caption wraps under the title. The caption and actions sit in the header, so they need a title (asserted)."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the surface, header layout, insets, dividers and clipping of flush content under the outline.",
+        "The caller owns the section content, the actions and the spacing between cards (CharcoalGap(CharcoalSpace.lg))."
+      ],
+      "tokenRoles": [
+        "colors.background",
+        "colors.borderSubtle",
+        "radius.md",
+        "borders.hairline",
+        "space.xl",
+        "space.lg",
+        "space.md",
+        "sizes.sidebarBreakpoint"
+      ],
+      "relatedComponents": [
+        "CharcoalDangerZone",
+        "CharcoalCard",
+        "CharcoalSectionHeader",
+        "CharcoalFormSection"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalSectionCard",
+          "kind": "constructor",
+          "signature": "CharcoalSectionCard({required this.children, this.title, this.actions = const <Widget>[], this.caption, this.dividers = false, this.flush = false, super.key})",
+          "parameters": [
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "title",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "caption",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dividers",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "flush",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, settings edited with radio cards and \"More options\", a selectable members table with copyable IDs, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the\n/// page action level with the title, then section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit dialog (radio cards, rare fields under \"More options\"),\n/// the members in a selectable table with a batch\n/// action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour. The table's checked ids live\n/// in one set that the header box, the row boxes and the batch action read in the same frame.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n  String _default = 'none';\n  String _type = 'String';\n  static const _endpoints = <CharcoalRadioCardOption<String>>[\n    CharcoalRadioCardOption(\n      value: 'none',\n      title: 'Not set (recommended)',\n      description:\n          'Keep the current endpoint: members to VIP, others to standard.',\n    ),\n    CharcoalRadioCardOption(\n      value: 'x3k9wq',\n      title: 'Whisper large-v3',\n      description: 'x3k9wq',\n      trailing: CharcoalChip('Live', tone: CharcoalTone.positive),\n    ),\n    CharcoalRadioCardOption(\n      value: '9fj3l1',\n      title: 'Old cluster',\n      description: '9fj3l1 · stopped',\n      enabled: false,\n      trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),\n    ),\n  ];\n  final Map<String, (String, String)> _members = <String, (String, String)>{\n    'u1': ('Lin Xiaoyu', 'xiaoyu.lin@example.com'),\n    'u2': ('ren.qa@example.com', 'No nickname'),\n    'u3': ('Aoi Tanaka', 'aoi@example.com'),\n  };\n  Set<String> _checked = <String>{};\n\n  void _remove(Set<String> ids) => setState(() {\n    _members.removeWhere((id, _) => ids.contains(id));\n    _checked = _checked.difference(ids);\n  });\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  Future<void> _editSettings() async {\n    var draft = _default;\n    var type = _type;\n    final saved = await showCharcoalModal<bool>(\n      context: context,\n      title: 'Edit settings',\n      actions: <Widget>[\n        Builder(\n          builder: (context) => CharcoalButton(\n            variant: CharcoalButtonVariant.primary,\n            fullWidth: true,\n            onPressed: () => Navigator.of(context).pop(true),\n            child: const Text('Save'),\n          ),\n        ),\n      ],\n      child: StatefulBuilder(\n        builder: (context, setDraft) => Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Default value',\n              required: true,\n              assistiveText:\n                  'Used when no rule matches or the kill switch is off.',\n              child: CharcoalRadioCards<String>(\n                value: draft,\n                options: _endpoints,\n                onChanged: (value) => setDraft(() => draft = value),\n              ),\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalDisclosure(\n              title: 'More options',\n              summary: 'Value type: $type',\n              child: CharcoalFormField(\n                label: 'Value type',\n                optionalText: '(changing it resets the default)',\n                child: Align(\n                  alignment: AlignmentDirectional.centerStart,\n                  child: CharcoalSegmentedControl<String>(\n                    value: type,\n                    onChanged: (value) => setDraft(() => type = value),\n                    segments: const <CharcoalSegment<String>>[\n                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),\n                      CharcoalSegment(value: 'String', child: Text('String')),\n                      CharcoalSegment(value: 'JSON', child: Text('JSON')),\n                    ],\n                  ),\n                ),\n              ),\n            ),\n          ],\n        ),\n      ),\n    );\n    if ((saved ?? false) && mounted) {\n      setState(() {\n        _default = draft;\n        _type = type;\n      });\n    }\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalPage(\n      title: 'transcribe.runpod_endpoint',\n      subtitle: 'Which RunPod endpoint new transcriptions use',\n      showBack: true,\n      backLabel: 'Feature flags',\n      maxWidth: CharcoalPageWidth.wide,\n      meta: <Widget>[\n        CharcoalChip(_type),\n        const CharcoalChip('Server only'),\n        const CharcoalCopyableText(\n          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',\n          copyLabel: 'Copy flag ID',\n          copiedMessage: 'Flag ID copied',\n        ),\n      ],\n      actions: <Widget>[\n        CharcoalButton(\n          size: CharcoalButtonSize.small,\n          leading: const CharcoalIcon(CharcoalIcons.history),\n          onPressed: () {},\n          child: const Text('Audit log'),\n        ),\n      ],\n      child: _sections(),\n    );\n  }\n\n  Widget _sections() {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: _editSettings,\n              child: const Text('Edit'),\n            ),\n          ],\n          children: <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              (\n                'Default value',\n                _endpoints\n                    .firstWhere((option) => option.value == _default)\n                    .title,\n              ),\n              ('Value type', _type),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Members',\n          caption: _checked.isEmpty\n              ? 'Added by hand; they match whatever the rules say.'\n              : '${_checked.length} selected',\n          actions: <Widget>[\n            if (_checked.isNotEmpty)\n              CharcoalButton(\n                size: CharcoalButtonSize.small,\n                labelTone: CharcoalTextTone.negative,\n                leading: const CharcoalIcon(CharcoalIcons.delete),\n                onPressed: () => _remove(_checked),\n                child: const Text('Remove selected'),\n              ),\n          ],\n          flush: _members.isNotEmpty,\n          children: <Widget>[\n            if (_members.isEmpty)\n              const CharcoalEmptyState(\n                icon: CharcoalIcons.persons,\n                title: 'No members',\n                message: 'Members always match, whatever the conditions say.',\n                steps: <CharcoalEmptyStateStep>[\n                  CharcoalEmptyStateStep(\n                    title: 'Find the user',\n                    description: 'Search by email, phone or user ID.',\n                  ),\n                  CharcoalEmptyStateStep(\n                    title: 'Add them',\n                    description: 'Paste several IDs to add them at once.',\n                  ),\n                ],\n              )\n            else\n              CharcoalDataTable<String>(\n                columns: const <CharcoalTableColumn>[\n                  CharcoalTableColumn(label: 'User', flex: 2),\n                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),\n                ],\n                selection: CharcoalTableSelection<String>(\n                  selected: _checked,\n                  onChanged: (next) => setState(() => _checked = next),\n                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',\n                ),\n                rows: <CharcoalTableRow<String>>[\n                  for (final MapEntry(key: id, value: (name, detail))\n                      in _members.entries)\n                    CharcoalTableRow<String>(\n                      id: id,\n                      cells: <Widget>[\n                        Column(\n                          crossAxisAlignment: CrossAxisAlignment.start,\n                          children: <Widget>[\n                            CharcoalText(name, bold: true),\n                            CharcoalText(\n                              detail,\n                              role: CharcoalTextRole.caption,\n                              tone: CharcoalTextTone.secondary,\n                            ),\n                          ],\n                        ),\n                        CharcoalCopyableText(\n                          text: id,\n                          copyLabel: 'Copy user ID',\n                          copiedMessage: 'User ID copied',\n                        ),\n                      ],\n                      action: CharcoalIconButton(\n                        icon: const CharcoalIcon(CharcoalIcons.x),\n                        semanticLabel: 'Remove $name',\n                        size: CharcoalIconButtonSize.small,\n                        onPressed: () => _remove(<String>{id}),\n                      ),\n                    ),\n                ],\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -10507,7 +11540,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTextArea",
           "kind": "constructor",
-          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
+          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.optionalText, this.required = false, this.requiredText = '*Required', this.rows, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -10617,6 +11650,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",
@@ -10877,7 +11916,8 @@ const String generatedCatalogJson = r'''{
         "Use a meaningful label and keep it visible for forms that need persistent context.",
         "Pair invalid with assistiveText; the field exposes both the invalid result and correction as input semantics.",
         "Set required only when the value is mandatory; the same state is exposed visually and to assistive technology.",
-        "Provide localized requiredText when the visible required marker includes copy."
+        "Provide localized requiredText when the visible required marker includes copy.",
+        "While an input method composes (charcoalIsComposing), Enter, Escape and the arrow keys go to the input method: they do not reach a dialog, list or shortcut above the field. Guard any key handler of your own with charcoalIsComposing."
       ],
       "responsiveBehavior": [
         "The field expands to the width supplied by its parent.",
@@ -10886,12 +11926,14 @@ const String generatedCatalogJson = r'''{
       "interactionStates": [
         "empty",
         "editing",
+        "composing",
         "focused",
         "invalid",
         "disabled"
       ],
       "feedbackResponsibilities": [
         "Owns focus, validation presentation, platform selection gestures, handles, magnifier and localized editing menus.",
+        "On macOS, re-attaches the input method to the focused field after the window is resized.",
         "The caller owns validation timing, submission progress, persistence, and recovery."
       ],
       "tokenRoles": [
@@ -10910,7 +11952,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTextField",
           "kind": "constructor",
-          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
+          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.optionalText, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -11047,6 +12089,12 @@ const String generatedCatalogJson = r'''{
               "defaultValue": "false"
             },
             {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
               "name": "required",
               "type": "bool",
               "required": false,
@@ -11097,6 +12145,20 @@ const String generatedCatalogJson = r'''{
               "type": "Key?",
               "required": false,
               "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "charcoalIsComposing",
+          "kind": "function",
+          "signature": "bool charcoalIsComposing(TextEditingValue value)",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "TextEditingValue",
+              "required": true,
+              "named": false
             }
           ],
           "enumValues": []

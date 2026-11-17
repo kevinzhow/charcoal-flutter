@@ -1,27 +1,32 @@
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
-/// Label, required marker and trailing content shared by Charcoal form fields.
+/// Label, required or optional marker and trailing content shared by Charcoal form fields.
 ///
 /// This widget owns the visible label row only. The associated form control remains responsible
 /// for exposing its label, required state, validation and value through semantics. At compact
 /// widths or large text sizes, metadata moves onto additional lines instead of being clipped.
 final class CharcoalFieldLabel extends StatelessWidget {
-  /// Shows [label], an optional required marker and an optional [subLabel].
+  /// Shows [label], a required or an optional marker and an optional [subLabel].
   const CharcoalFieldLabel({
     required this.label,
     this.bold = true,
+    this.optionalText,
     this.required = false,
     this.requiredText = '*Required',
     this.subLabel,
     super.key,
-  });
+  }) : assert(!required || optionalText == null, 'A field is required or optional, not both');
 
   /// The label text.
   final String label;
 
   /// Whether the label uses the bold weight.
   final bool bold;
+
+  /// The marker of an optional field after the label, such as "(optional)" or "(optional,
+  /// defaults to server only)"; pass the localized string. Exclusive with [required].
+  final String? optionalText;
 
   /// Whether to show [requiredText] after the label.
   final bool required;
@@ -60,6 +65,8 @@ final class CharcoalFieldLabel extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: requiredStyle,
           ),
+        if (optionalText case final optional?)
+          Text(optional, maxLines: maxLines, overflow: TextOverflow.ellipsis, style: subLabelStyle),
       ],
     );
 

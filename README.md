@@ -48,16 +48,19 @@ Public components, by family (the Catalog is the authoritative list):
 - App and navigation: `CharcoalApp`, `CharcoalPageRoute`, `CharcoalScaffold`, `CharcoalNavigationBar`,
   `CharcoalTabBar`, `CharcoalNavigationItem`, `CharcoalPagination`, `CharcoalCarousel`
 - Actions and selection: `CharcoalButton`, `CharcoalLinkButton`, `CharcoalSwitchingButton`,
-  `CharcoalIconButton`, `CharcoalCheckbox`, `CharcoalRadio`, `CharcoalSwitch`, `CharcoalSlider`,
+  `CharcoalIconButton`, `CharcoalCheckbox`, `CharcoalRadio`, `CharcoalRadioCards`, `CharcoalSwitch`,
+  `CharcoalSlider`,
   `CharcoalMultiSelect`, `CharcoalSegmentedControl`, `CharcoalTagItem`
 - Fields and forms: `CharcoalTextField`, `CharcoalTextArea`, `CharcoalDropdown`,
   `CharcoalSearchField`, `CharcoalDateTimeField`, `CharcoalSwitchField`, `CharcoalFormSection`,
   `CharcoalFormField`, `CharcoalFieldLabel`, `CharcoalHintText`
 - Overlays and feedback: modal, dialog, confirm, form, code and choice dialogs, toast, snackbar,
-  tooltip, balloon, `CharcoalBanner`, empty, loading and error states, `CharcoalLoadingSpinner`
-- Layout and content: `CharcoalCard`, `CharcoalList`, `CharcoalListRow`, `CharcoalSectionHeader`,
+  tooltip, balloon, `CharcoalBanner`, `CharcoalModeBar`, empty, loading and error states,
+  `CharcoalLoadingSpinner`
+- Layout and content: `CharcoalCard`, `CharcoalSectionCard`, `CharcoalDangerZone`, `CharcoalList`,
+  `CharcoalListRow`, `CharcoalDataTable`, `CharcoalDisclosure`, `CharcoalSectionHeader`,
   `CharcoalAvatar`, `CharcoalBadge`, `CharcoalChip`, `CharcoalStatusDot`, `CharcoalText`,
-  `CharcoalIconView`, `CharcoalCodeBlock`, `CharcoalGrid`, `CharcoalSelectable`, and the spacing helpers `CharcoalGap`, `CharcoalInset`,
+  `CharcoalIconView`, `CharcoalCodeBlock`, `CharcoalCopyableText`, `CharcoalGrid`, `CharcoalSelectable`, and the spacing helpers `CharcoalGap`, `CharcoalInset`,
   `CharcoalPadding`, `CharcoalWrap`
 - Admin console (`admin.dart`): `CharcoalAdminShell`, `CharcoalSidebar`, `CharcoalPage`,
   `CharcoalStatCard`, `CharcoalMeter`, `CharcoalInfoRows`, `CharcoalBatchBar`

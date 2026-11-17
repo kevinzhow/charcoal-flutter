@@ -31,7 +31,7 @@ buttons. No upstream runtime code is embedded in the Flutter package.
 | --- | --- | --- |
 | Typography | Charcoal SwiftUI | Numeric 10/12/14/16/20 styles and Dynamic Type behavior. |
 | Buttons, links, switching buttons | Charcoal SwiftUI; UIKit where needed | Default, primary, overlay, navigation, small/medium, disabled, and custom primary behavior. |
-| Text field | Charcoal SwiftUI | Label, placeholder, count, invalid ring, assistive text, disabled state, and scaling. |
+| Text field | Charcoal SwiftUI; Raft Flutter for input methods | Label, placeholder, count, invalid ring, assistive text, disabled state, and scaling. Input-method behaviour (macOS refresh after a resize, Enter/Escape/arrows left to a composing input method) is ported from Raft Flutter's `RaftTextInputRefresh` and composer guards. |
 | Switch | Charcoal SwiftUI | Native geometry and label-before-control layout. |
 | Spinner and hint | Charcoal SwiftUI | Surface, typography, spacing, animation, visibility, and action composition. |
 | Tooltip and balloon | Charcoal SwiftUI | Shape, arrow, positioning priority, dismissal, anchor tracking, and motion. |
@@ -46,6 +46,7 @@ buttons. No upstream runtime code is embedded in the Flutter package.
 | Clickable, field ring, overlay tracker, popup path | Flutter primitive | Shared input, accessibility, painting, and positioning infrastructure. |
 | Navigation bar, tab bar, navigation item, and text ellipsis | Flutter composition | Platform-neutral components built from the same foundations and interaction rules. |
 | Card, list, list row, section header, info rows, stat card, meter, avatar, badge, chip, status dot, banner, empty/loading/error states, code block | Flutter composition | Admin and content surfaces with no pixiv counterpart. Their geometry and tones are theme metrics and roles like every other family; they are checked against the Showcase, not against an upstream source. |
+| Section card, danger zone, data table, radio cards, disclosure, copyable text, empty-state steps, page meta row, mode bar | Flutter composition; the approved admin-console redesign and super-user mockups | Same rule as the row above. Geometry follows the mockups' token values (card and table insets `space.xl`/`space.lg` by width, row heights from the list row heights, `radius.md` cards); no new theme role. |
 | Admin shell, sidebar, page frame, batch bar | Flutter composition | Console frame in `package:charcoal_ui/admin.dart`; the shell follows the width it is given. |
 
 Components in the second source group are not branded differently in their public names. They are

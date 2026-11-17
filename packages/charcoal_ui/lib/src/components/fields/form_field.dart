@@ -7,7 +7,12 @@ import 'field_support.dart';
 ///
 /// Use it for controls that have no label of their own, for example a secret field with a "pick a
 /// file" button: the application supplies the control and the action (and any plugin such as a
-/// file picker); the shell supplies label, required marker, spacing and assistive text.
+/// file picker); the shell supplies label, required or optional marker, spacing and assistive text.
+///
+/// It is the one labelled-field wrapper for every control: a switch, a radio or checkbox group (a
+/// `Column` of `CharcoalRadio` or `CharcoalCheckbox`), a segmented control or radio cards framed by
+/// it get the same label row, marker, help and error geometry as a `CharcoalTextField` with a
+/// visible label.
 class CharcoalFormField extends StatelessWidget {
   /// Frames [child] with a label and optional assistive text and [action].
   const CharcoalFormField({
@@ -16,11 +21,12 @@ class CharcoalFormField extends StatelessWidget {
     this.action,
     this.assistiveText,
     this.invalid = false,
+    this.optionalText,
     this.required = false,
     this.requiredText = '*Required',
     this.subLabel,
     super.key,
-  });
+  }) : assert(!required || optionalText == null, 'A field is required or optional, not both');
 
   /// The label above the control.
   final String label;
@@ -36,6 +42,10 @@ class CharcoalFormField extends StatelessWidget {
 
   /// Whether the content is invalid.
   final bool invalid;
+
+  /// The marker of an optional field after the label, such as "(optional)"; pass the localized
+  /// string. Exclusive with [required].
+  final String? optionalText;
 
   /// Whether to show the required marker.
   final bool required;
@@ -55,6 +65,7 @@ class CharcoalFormField extends StatelessWidget {
         assistiveText: assistiveText,
         invalid: invalid,
         label: label,
+        optionalText: optionalText,
         required: required,
         requiredText: requiredText,
         showLabel: true,

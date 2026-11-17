@@ -16,6 +16,7 @@ final class _SelectionPageState extends State<SelectionPage> {
   bool _showNotifications = true;
   String _privacy = 'public';
   String _range = 'week';
+  String _endpoint = 'none';
   double _volume = 0.4;
 
   @override
@@ -123,6 +124,35 @@ final class _SelectionPageState extends State<SelectionPage> {
                   label: Text('Disabled'),
                   onChanged: null,
                   value: 'disabled',
+                ),
+              ],
+            ),
+          ),
+          ShowcaseCard(
+            description: 'A single choice among a few options that each need a sentence: title, description and an optional trailing chip. Arrow keys move the choice and skip the disabled option, which stays readable.',
+            eyebrow: 'RADIO CARDS',
+            title: 'Radio cards',
+            child: CharcoalRadioCards<String>(
+              value: _endpoint,
+              onChanged: (value) => setState(() => _endpoint = value),
+              options: const <CharcoalRadioCardOption<String>>[
+                CharcoalRadioCardOption(
+                  value: 'none',
+                  title: 'Not set (recommended)',
+                  description: 'Keep the current routing: members to VIP, others to standard.',
+                ),
+                CharcoalRadioCardOption(
+                  value: 'large',
+                  title: 'Whisper large-v3',
+                  description: 'x3k9wq1v7plm2a',
+                  trailing: CharcoalChip('Live', tone: CharcoalTone.positive),
+                ),
+                CharcoalRadioCardOption(
+                  value: 'old',
+                  title: 'Old cluster',
+                  description: 'Stopped: choosing it means not set, with a warning in the log.',
+                  enabled: false,
+                  trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),
                 ),
               ],
             ),

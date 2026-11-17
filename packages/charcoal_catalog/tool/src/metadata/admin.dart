@@ -243,7 +243,7 @@ const Map<String, ComponentMetadata> adminMetadata = <String, ComponentMetadata>
   ),
   'CharcoalPage': ComponentMetadata(
     category: 'Admin',
-    summary: 'The chrome and content column of one admin page: back link, title, subtitle, actions, optional banner and a busy overlay.',
+    summary: 'The chrome and content column of one admin page: back link, title, subtitle, a meta row (chips, copyable ID), actions level with the title, optional banner and a busy overlay.',
     keywords: <String>[
       'page',
       'admin page',
@@ -254,6 +254,7 @@ const Map<String, ComponentMetadata> adminMetadata = <String, ComponentMetadata>
     useWhen: <String>[
       'An admin destination needs a titled page with actions and a width-limited content column.',
       'A busy action should block the page and announce progress.',
+      'A detail page shows facts about its record under the title: pass chips and a CharcoalCopyableText ID as meta.',
     ],
     avoidWhen: <String>[
       'A mobile app page with a navigation bar; use CharcoalScaffold and CharcoalNavigationBar.',
@@ -262,7 +263,8 @@ const Map<String, ComponentMetadata> adminMetadata = <String, ComponentMetadata>
       'The title is a heading; busyLabel is announced while busy; the back control is labelled with backLabel.',
     ],
     responsiveBehavior: <String>[
-      'maxWidth chooses standard, wide or full; compact mode moves actions to the title row end.',
+      'maxWidth chooses standard, wide or full. The actions sit at the end of the header, aligned with its top; meta wraps under the subtitle.',
+      'In compact mode the title moves into the top bar and the meta row and the actions wrap above the content.',
     ],
     interactionStates: <String>[
       'idle',
@@ -279,6 +281,8 @@ const Map<String, ComponentMetadata> adminMetadata = <String, ComponentMetadata>
     relatedComponents: <String>[
       'CharcoalAdminShell',
       'CharcoalSectionHeader',
+      'CharcoalSectionCard',
+      'CharcoalCopyableText',
       'CharcoalBanner',
     ],
     companionDeclarations: <String>[
@@ -290,6 +294,12 @@ const Map<String, ComponentMetadata> adminMetadata = <String, ComponentMetadata>
         title: 'Overview page',
         description: 'A titled page with a brand header, stat card and meter.',
         sourcePath: 'example/lib/agent_examples/admin_example.dart',
+      ),
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A detail page with a back link, chips and a copyable ID in its meta row, and section cards for its content.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
   ),

@@ -7,7 +7,7 @@ import 'preview_support.dart';
 // CharcoalApp in both brightnesses; the legacy previews next to this file stay until the legacy
 // components are removed.
 
-@CharcoalComponentPreview(name: 'Field label · Metadata', size: Size(420, 180))
+@CharcoalComponentPreview(name: 'Field label · Metadata', size: Size(420, 240))
 Widget charcoalNextFieldLabelPreview() => const Column(
   mainAxisSize: MainAxisSize.min,
   children: <Widget>[
@@ -19,6 +19,8 @@ Widget charcoalNextFieldLabelPreview() => const Column(
       requiredText: 'Required',
       subLabel: Text('0/500'),
     ),
+    CharcoalGap(CharcoalSpace.lg),
+    CharcoalFieldLabel(label: 'Visibility', optionalText: '(optional, server only by default)'),
   ],
 );
 
@@ -56,19 +58,35 @@ Widget charcoalNextHintTextPreview() => const CharcoalHintText(
   child: Text('Changes are saved automatically.'),
 );
 
-@CharcoalComponentPreview(name: 'Form section', size: Size(420, 560))
-Widget charcoalNextFormGuidancePreview() => const CharcoalFormSection(
+@CharcoalComponentPreview(name: 'Form section', size: Size(420, 680))
+Widget charcoalNextFormGuidancePreview() => CharcoalFormSection(
   caption: 'Credentials are stored encrypted',
   title: 'Signing key',
   children: <Widget>[
-    CharcoalFormField(
+    const CharcoalFormField(
       action: Text('Choose file…'),
       assistiveText: 'PEM or JSON, up to 64 KiB',
       label: 'Private key',
       required: true,
       child: CharcoalTextArea(rows: 3),
     ),
-    CharcoalSwitchField(label: 'Notify followers', value: true, onChanged: null),
+    const CharcoalSwitchField(label: 'Notify followers', value: true, onChanged: null),
+    CharcoalFormField(
+      label: 'Visibility',
+      optionalText: '(optional)',
+      assistiveText: 'Client-visible flags are sent to the apps.',
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: CharcoalSegmentedControl<String>(
+          value: 'server',
+          onChanged: (_) {},
+          segments: const <CharcoalSegment<String>>[
+            CharcoalSegment(value: 'server', child: Text('Server only')),
+            CharcoalSegment(value: 'client', child: Text('Client visible')),
+          ],
+        ),
+      ),
+    ),
   ],
 );
 
