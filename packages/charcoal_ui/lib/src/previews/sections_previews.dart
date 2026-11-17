@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../../charcoal_ui.dart';
 import 'preview_support.dart';
 
-// Previews for the page-section parts of the admin redesign: section card and danger zone.
+// Previews for the page-section parts of the admin redesign.
 
 @CharcoalComponentPreview(name: 'Section card · Danger zone', size: Size(640, 520))
 Widget charcoalSectionCardPreview() => Column(
@@ -35,6 +35,43 @@ Widget charcoalSectionCardPreview() => Column(
       description: 'Its 2 rules are deleted too and cannot be restored.',
       actionLabel: 'Delete',
       onPressed: () {},
+    ),
+  ],
+);
+
+@CharcoalComponentPreview(name: 'Data table · Selection', size: Size(720, 360))
+Widget charcoalDataTablePreview() => CharcoalSectionCard(
+  title: 'Members',
+  flush: true,
+  children: <Widget>[
+    CharcoalDataTable<String>(
+      columns: const <CharcoalTableColumn>[
+        CharcoalTableColumn(label: 'User', flex: 2),
+        CharcoalTableColumn(label: 'Note', hideWhenNarrow: true),
+        CharcoalTableColumn.fit(label: 'Joined', align: CharcoalColumnAlign.end),
+      ],
+      selection: CharcoalTableSelection<String>(selected: const <String>{'lin'}, onChanged: (_) {}),
+      rows: <CharcoalTableRow<String>>[
+        for (final (id, name) in const <(String, String)>[
+          ('lin', 'Lin Xiaoyu'),
+          ('aoi', 'Aoi Tanaka'),
+        ])
+          CharcoalTableRow<String>(
+            id: id,
+            onPressed: () {},
+            cells: <Widget>[
+              CharcoalText(name, bold: true),
+              const CharcoalText('Beta feedback'),
+              const CharcoalText('2026-11-12', role: CharcoalTextRole.caption),
+            ],
+            action: CharcoalIconButton(
+              icon: const CharcoalIcon(CharcoalIcons.x),
+              semanticLabel: 'Remove',
+              size: CharcoalIconButtonSize.small,
+              onPressed: () {},
+            ),
+          ),
+      ],
     ),
   ],
 );

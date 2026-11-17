@@ -3,8 +3,8 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 
-/// Scenes for the page-section parts of the admin redesign: section card and danger zone, at a
-/// regular and a compact width.
+/// Scenes for the page-section parts of the admin redesign (section card, danger zone, data
+/// table), at a regular and a compact width.
 final sectionsScenes = <CharcoalScene>[
   for (final (name, size) in const <(String, Size)>[
     ('sections-regular', Size(1100, 900)),
@@ -65,6 +65,50 @@ class _Sections extends StatelessWidget {
                         onPressed: noop,
                       ),
                       const CharcoalListRow(title: 'Bob', selected: true),
+                    ],
+                  ),
+                ],
+              ),
+              const CharcoalGap(CharcoalSpace.lg),
+              CharcoalSectionCard(
+                title: 'Users',
+                flush: true,
+                children: <Widget>[
+                  CharcoalDataTable<String>(
+                    columns: const <CharcoalTableColumn>[
+                      CharcoalTableColumn(label: 'User', flex: 2),
+                      CharcoalTableColumn(label: 'Note', hideWhenNarrow: true),
+                      CharcoalTableColumn.fit(label: 'Joined', align: CharcoalColumnAlign.end),
+                    ],
+                    selection: CharcoalTableSelection<String>(
+                      selected: const <String>{'alice'},
+                      onChanged: (_) {},
+                    ),
+                    rows: <CharcoalTableRow<String>>[
+                      CharcoalTableRow<String>(
+                        id: 'alice',
+                        cells: const <Widget>[
+                          CharcoalText('Alice', bold: true),
+                          CharcoalText('Beta feedback'),
+                          CharcoalText('2026-11-12', role: CharcoalTextRole.caption),
+                        ],
+                        onPressed: noop,
+                      ),
+                      CharcoalTableRow<String>(
+                        id: 'bob',
+                        selected: true,
+                        cells: const <Widget>[
+                          CharcoalText('Bob', bold: true),
+                          CharcoalText('QA'),
+                          CharcoalText('2026-11-12', role: CharcoalTextRole.caption),
+                        ],
+                        action: CharcoalIconButton(
+                          icon: const CharcoalIcon(CharcoalIcons.x),
+                          semanticLabel: 'Remove',
+                          size: CharcoalIconButtonSize.small,
+                          onPressed: noop,
+                        ),
+                      ),
                     ],
                   ),
                 ],

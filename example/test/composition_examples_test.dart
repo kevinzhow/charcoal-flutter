@@ -143,6 +143,27 @@ void main() {
     );
   });
 
+  testWidgets('admin sections example removes the checked members', (
+    tester,
+  ) async {
+    await show(tester, const AgentAdminSectionsExample(), size: sizes.last);
+    expect(find.text('Remove selected'), findsNothing);
+    await tester.tap(find.bySemanticsLabel('Select all'));
+    await tester.pump();
+    expect(find.text('3 selected'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Select row').first);
+    await tester.pump();
+    expect(find.text('2 selected'), findsOneWidget);
+    await tester.tap(find.text('Remove selected'));
+    await tester.pump();
+    expect(find.text('Lin Xiaoyu'), findsOneWidget);
+    expect(find.text('Aoi Tanaka'), findsNothing);
+    await tester.tap(find.bySemanticsLabel('Remove Lin Xiaoyu'));
+    await tester.pump();
+    expect(find.text('Lin Xiaoyu'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'admin example switches shell layout by width and keeps the selected page',
     (tester) async {

@@ -39,6 +39,7 @@ export 'src/components/layout/action_tile.dart';
 export 'src/components/layout/avatar.dart';
 export 'src/components/layout/bottom_bar.dart';
 export 'src/components/layout/card.dart';
+export 'src/components/layout/data_table.dart';
 export 'src/components/layout/divider.dart';
 export 'src/components/layout/field_box.dart';
 export 'src/components/layout/grid.dart';

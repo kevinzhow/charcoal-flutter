@@ -14,7 +14,8 @@ import '../actions/control_support.dart';
 /// pointer, keyboard and assistive-technology activation. The whole control, label included, is
 /// the tap target. [invalid] is reflected visually (negative halo) and through input validation
 /// semantics. With [rounded] the indicator is a circle ringed in the inner-focus colour, for use
-/// over imagery.
+/// over imagery. [mixed] shows a dash instead of the check, for a "select all" box over a partial
+/// selection; it is announced as mixed.
 final class CharcoalCheckbox extends StatelessWidget {
   /// Creates a checkbox.
   const CharcoalCheckbox({
@@ -24,11 +25,12 @@ final class CharcoalCheckbox extends StatelessWidget {
     this.focusNode,
     this.invalid = false,
     this.label,
+    this.mixed = false,
     this.rounded = false,
     this.semanticLabel,
     this.statesController,
     super.key,
-  });
+  }) : assert(!mixed || !value, 'A mixed checkbox is not checked');
 
   /// Whether the box is checked.
   final bool value;
@@ -48,6 +50,10 @@ final class CharcoalCheckbox extends StatelessWidget {
   /// A label after the box.
   final Widget? label;
 
+  /// Whether the box stands for a partial selection: filled like a checked box, with a dash.
+  /// [value] must be false; activation requests true.
+  final bool mixed;
+
   /// Whether the indicator is a circle instead of a rounded square.
   final bool rounded;
 
@@ -62,10 +68,12 @@ final class CharcoalCheckbox extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     final colors = theme.colors;
     final metrics = theme.metrics.checkbox;
+    final filled = value || mixed;
     return MergeSemantics(
       child: CharcoalClickable(
         autofocus: autofocus,
         checked: value,
+        mixed: mixed,
         focusNode: focusNode,
         onPressed: onChanged == null ? null : () => onChanged!(!value),
         semanticButton: false,
@@ -76,7 +84,7 @@ final class CharcoalCheckbox extends StatelessWidget {
             : SemanticsValidationResult.none,
         builder: (context, states) {
           final focused = states.contains(WidgetState.focused);
-          final background = value
+          final background = filled
               ? resolveCharcoalStateColor(
                   states,
                   normal: colors.primary,
@@ -99,7 +107,7 @@ final class CharcoalCheckbox extends StatelessWidget {
             decoration: BoxDecoration(
               border: rounded
                   ? Border.all(color: CharcoalColorRoles.transparent, width: theme.borders.thick)
-                  : value
+                  : filled
                   ? null
                   : Border.all(color: colors.border, width: theme.borders.thick),
               borderRadius: BorderRadius.circular(
@@ -113,10 +121,10 @@ final class CharcoalCheckbox extends StatelessWidget {
               ),
               color: background,
             ),
-            child: value
+            child: filled
                 ? Center(
                     child: CharcoalIcon(
-                      CharcoalIcons.check,
+                      mixed ? CharcoalIcons.subtract : CharcoalIcons.check,
                       color: colors.iconOnPrimary,
                       size: metrics.checkSize,
                     ),

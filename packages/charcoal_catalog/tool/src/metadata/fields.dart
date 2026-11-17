@@ -206,6 +206,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
     useWhen: <String>[
       'One or more independent choices may each be turned on or off.',
       'A form needs an explicit acknowledgement or optional inclusion choice.',
+      'A "select all" box stands over a partial selection: pass mixed: true (with value false).',
     ],
     avoidWhen: <String>[
       'Exactly one option in a group may be selected; use CharcoalRadio.',

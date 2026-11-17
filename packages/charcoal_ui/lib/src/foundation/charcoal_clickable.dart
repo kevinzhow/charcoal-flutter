@@ -33,6 +33,7 @@ class CharcoalClickable extends StatefulWidget {
     this.focusNode,
     this.inMutuallyExclusiveGroup = false,
     this.keyboardActivationEnabled = true,
+    this.mixed = false,
     this.onFocusChange,
     this.onKeyEvent,
     this.semanticButton = true,
@@ -72,6 +73,9 @@ class CharcoalClickable extends StatefulWidget {
   ///
   /// Disable only when an owning composite implements and tests its full key map. Pointer and assistive-technology semantics stay available.
   final bool keyboardActivationEnabled;
+
+  /// Semantics: a checkbox in the mixed state; [checked] must not be true.
+  final bool mixed;
 
   /// Called when focus changes.
   final ValueChanged<bool>? onFocusChange;
@@ -216,6 +220,7 @@ class _CharcoalClickableState extends State<CharcoalClickable> {
           hint: widget.semanticHint,
           inMutuallyExclusiveGroup: widget.inMutuallyExclusiveGroup,
           label: widget.semanticLabel,
+          mixed: widget.mixed ? true : null,
           onCollapse: _enabled && widget.expanded == true ? _activate : null,
           onExpand: _enabled && widget.expanded == false ? _activate : null,
           onTap: _enabled ? _activate : null,

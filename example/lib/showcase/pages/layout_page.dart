@@ -129,6 +129,12 @@ final class _LayoutPageState extends State<LayoutPage> {
               ],
             ),
           ),
+          const ShowcaseCard(
+            description: 'Columns that line up across rows under a header, row heights from the list row heights, a selection column with a mixed "select all" box, and a trailing action per row. Narrow tables drop their optional columns.',
+            eyebrow: 'DATA TABLE',
+            title: 'DataTable',
+            child: _TableDemo(),
+          ),
           ShowcaseCard(
             description: 'One titled section of a page: caption under the title, the section\'s own actions at the end, a body with optional dividers. A flush body lets a list or table reach the card edges. The danger zone closes a detail page.',
             eyebrow: 'SECTION CARD · DANGER ZONE',
@@ -186,6 +192,68 @@ final class _LayoutPageState extends State<LayoutPage> {
               ],
             ),
           ),
+        ],
+      ),
+    ],
+  );
+}
+
+final class _TableDemo extends StatefulWidget {
+  const _TableDemo();
+
+  @override
+  State<_TableDemo> createState() => _TableDemoState();
+}
+
+final class _TableDemoState extends State<_TableDemo> {
+  static const _users = <(String, String, String)>[
+    ('lin', 'Lin Xiaoyu', 'Beta feedback'),
+    ('ren', 'ren.qa@example.com', 'QA'),
+    ('aoi', 'Aoi Tanaka', '—'),
+  ];
+  Set<String> _selected = <String>{'lin'};
+  String? _open;
+
+  @override
+  Widget build(BuildContext context) => CharcoalSectionCard(
+    title: 'Members',
+    caption: '${_selected.length} selected',
+    flush: true,
+    children: <Widget>[
+      CharcoalDataTable<String>(
+        columns: const <CharcoalTableColumn>[
+          CharcoalTableColumn(label: 'User', flex: 2),
+          CharcoalTableColumn(label: 'Note', hideWhenNarrow: true),
+          CharcoalTableColumn.fit(
+            label: 'Joined',
+            align: CharcoalColumnAlign.end,
+          ),
+        ],
+        selection: CharcoalTableSelection<String>(
+          selected: _selected,
+          onChanged: (next) => setState(() => _selected = next),
+        ),
+        rows: <CharcoalTableRow<String>>[
+          for (final (id, name, note) in _users)
+            CharcoalTableRow<String>(
+              id: id,
+              selected: _open == id,
+              onPressed: () => setState(() => _open = id),
+              cells: <Widget>[
+                CharcoalText(name, bold: true),
+                CharcoalText(note),
+                const CharcoalText(
+                  '2026-11-12',
+                  role: CharcoalTextRole.caption,
+                ),
+              ],
+              action: CharcoalIconButton(
+                icon: const CharcoalIcon(CharcoalIcons.x),
+                semanticLabel: 'Remove $name',
+                size: CharcoalIconButtonSize.small,
+                onPressed: showcaseNoop,
+              ),
+            ),
         ],
       ),
     ],
