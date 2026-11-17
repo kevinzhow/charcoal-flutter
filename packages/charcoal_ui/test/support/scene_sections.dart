@@ -1,11 +1,45 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:charcoal_ui/admin.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 
-/// Scenes for the parts of the admin redesign (section card, danger zone, data table, radio
-/// cards, disclosure, copyable text), at a regular and a compact width.
+/// Scenes for the parts of the admin redesign (page header meta, section card, danger zone, data
+/// table, radio cards, disclosure, copyable text), at a regular and a compact width.
 final sectionsScenes = <CharcoalScene>[
+  for (final (name, size) in const <(String, Size)>[
+    ('sections-page', Size(1100, 500)),
+    ('sections-page-compact', Size(420, 600)),
+  ])
+    CharcoalScene(
+      name: name,
+      size: size,
+      build: (context) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(disableAnimations: true),
+        child: CharcoalPage(
+          title: 'transcribe.runpod_endpoint',
+          subtitle: 'Which RunPod endpoint new transcriptions use',
+          showBack: true,
+          meta: const <Widget>[
+            CharcoalChip('String'),
+            CharcoalChip('Server only', tone: CharcoalTone.info),
+            CharcoalCopyableText(
+              text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',
+              copyLabel: 'Copy ID',
+              copiedMessage: 'ID copied',
+            ),
+          ],
+          actions: <Widget>[
+            CharcoalButton(
+              size: CharcoalButtonSize.small,
+              onPressed: () {},
+              child: const Text('Audit log'),
+            ),
+          ],
+          child: const CharcoalText('Body'),
+        ),
+      ),
+    ),
   for (final (name, size) in const <(String, Size)>[
     ('sections-regular', Size(1100, 900)),
     ('sections-compact', Size(420, 1100)),

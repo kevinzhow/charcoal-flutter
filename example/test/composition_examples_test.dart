@@ -52,7 +52,7 @@ void main() {
       testWidgets('admin sections example builds at $label', (tester) async {
         await show(
           tester,
-          const AgentAdminSectionsExample(),
+          const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
           size: size,
           textScale: scale,
         );
@@ -129,12 +129,20 @@ void main() {
   testWidgets('admin sections example confirms before deleting', (
     tester,
   ) async {
-    await show(tester, const AgentAdminSectionsExample(), size: sizes.last);
+    await show(
+      tester,
+      const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+      size: sizes.last,
+    );
+    await tester.ensureVisible(find.text('Delete').first);
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Delete').first);
     await tester.pumpAndSettle();
     await tester.tap(find.text('Delete').last);
     await tester.pumpAndSettle();
     expect(find.text('Deleted.'), findsOneWidget);
+    await tester.ensureVisible(find.byType(CharcoalSwitch));
+    await tester.pumpAndSettle();
     await tester.tap(find.byType(CharcoalSwitch));
     await tester.pump();
     expect(
@@ -146,7 +154,11 @@ void main() {
   testWidgets('admin sections example edits the default with radio cards', (
     tester,
   ) async {
-    await show(tester, const AgentAdminSectionsExample(), size: sizes.last);
+    await show(
+      tester,
+      const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+      size: sizes.last,
+    );
     expect(find.text('Not set (recommended)'), findsOneWidget);
     await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
@@ -163,13 +175,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Whisper large-v3'), findsOneWidget);
     expect(find.text('Not set (recommended)'), findsNothing);
-    expect(find.text('JSON'), findsOneWidget);
+    expect(
+      find.text('JSON'),
+      findsNWidgets(2),
+      reason: 'the meta chip and the settings row',
+    );
   });
 
   testWidgets('admin sections example removes the checked members', (
     tester,
   ) async {
-    await show(tester, const AgentAdminSectionsExample(), size: sizes.last);
+    await show(
+      tester,
+      const SizedBox(height: 2400, child: AgentAdminSectionsExample()),
+      size: sizes.last,
+    );
     expect(find.text('Remove selected'), findsNothing);
     await tester.tap(find.bySemanticsLabel('Select all'));
     await tester.pump();

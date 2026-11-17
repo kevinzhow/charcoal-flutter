@@ -3,7 +3,8 @@ import 'package:charcoal_ui/admin.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
-/// A feature-flag detail page built from section cards: the kill switch with its consequence, the
+/// A feature-flag detail page: a page header with chips and a copyable ID in its meta row and the
+/// page action level with the title, then section cards: the kill switch with its consequence, the
 /// settings as read-only rows with an Edit dialog (radio cards, rare fields under "More options"),
 /// the members in a selectable table with a batch
 /// action, and the danger zone last.
@@ -134,6 +135,34 @@ final class _AgentAdminSectionsExampleState
 
   @override
   Widget build(BuildContext context) {
+    return CharcoalPage(
+      title: 'transcribe.runpod_endpoint',
+      subtitle: 'Which RunPod endpoint new transcriptions use',
+      showBack: true,
+      backLabel: 'Feature flags',
+      maxWidth: CharcoalPageWidth.wide,
+      meta: <Widget>[
+        CharcoalChip(_type),
+        const CharcoalChip('Server only'),
+        const CharcoalCopyableText(
+          text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',
+          copyLabel: 'Copy flag ID',
+          copiedMessage: 'Flag ID copied',
+        ),
+      ],
+      actions: <Widget>[
+        CharcoalButton(
+          size: CharcoalButtonSize.small,
+          leading: const CharcoalIcon(CharcoalIcons.history),
+          onPressed: () {},
+          child: const Text('Audit log'),
+        ),
+      ],
+      child: _sections(),
+    );
+  }
+
+  Widget _sections() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[

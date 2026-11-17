@@ -25,7 +25,7 @@ final class PageFramePage extends StatelessWidget {
         ShowcaseCatalogGrid(
           children: <Widget>[
             ShowcaseCard(
-              description: 'Standard layout (wide enough for the sidebar shell): back link, page title, subtitle and actions, then the content column. Narrower pages switch to the compact layout by themselves.',
+              description: 'Standard layout (wide enough for the sidebar shell): back link, page title, subtitle, a meta row (chips, copyable ID) and actions level with the top of the header, then the content column. Narrower pages switch to the compact layout by themselves.',
               eyebrow: 'CHARCOAL PAGE',
               title: 'Standard',
               child: _Frame(
@@ -34,6 +34,14 @@ final class PageFramePage extends StatelessWidget {
                   showBack: true,
                   title: 'Users',
                   subtitle: 'Accounts and quotas',
+                  meta: const <Widget>[
+                    CharcoalChip('Workspace'),
+                    CharcoalCopyableText(
+                      text: '6B1E2A70-4C3D-4F9A',
+                      copyLabel: 'Copy ID',
+                      copiedMessage: 'ID copied',
+                    ),
+                  ],
                   actions: <Widget>[
                     CharcoalButton(
                       onPressed: showcaseNoop,

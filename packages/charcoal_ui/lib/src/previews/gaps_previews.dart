@@ -33,6 +33,10 @@ Widget charcoalPagePreview() => Builder(
     child: CharcoalPage(
       title: 'Users',
       subtitle: 'Accounts and quotas',
+      meta: const <Widget>[
+        CharcoalChip('Workspace'),
+        CharcoalCopyableText(text: '6B1E2A70', copyLabel: 'Copy ID', copiedMessage: 'ID copied'),
+      ],
       showBack: true,
       actions: <Widget>[CharcoalButton(onPressed: () {}, child: const Text('Invite'))],
       child: CharcoalList(
