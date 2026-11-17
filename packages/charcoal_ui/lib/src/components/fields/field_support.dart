@@ -20,12 +20,13 @@ class CharcoalFieldFrame extends StatelessWidget {
     this.assistiveText,
     this.invalid = false,
     this.label = '',
+    this.optionalText,
     this.required = false,
     this.requiredText = '*Required',
     this.showLabel = false,
     this.subLabel,
     super.key,
-  });
+  }) : assert(!required || optionalText == null, 'A field is required or optional, not both');
 
   /// The control itself.
   final Widget field;
@@ -38,6 +39,9 @@ class CharcoalFieldFrame extends StatelessWidget {
 
   /// Label text.
   final String label;
+
+  /// The optional-field marker after the label; exclusive with [required].
+  final String? optionalText;
 
   /// Whether to show the required marker.
   final bool required;
@@ -63,6 +67,7 @@ class CharcoalFieldFrame extends StatelessWidget {
         if (showLabel) ...<Widget>[
           CharcoalFieldLabel(
             label: label,
+            optionalText: optionalText,
             required: required,
             requiredText: requiredText,
             subLabel: subLabel,

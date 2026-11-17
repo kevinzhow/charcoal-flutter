@@ -3616,7 +3616,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalDropdown",
           "kind": "constructor",
-          "signature": "CharcoalDropdown({required this.options, required this.value, required this.onChanged, this.assistiveText, this.autofocus = false, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.placeholder, this.required = false, this.requiredText = '*Required', this.showLabel = false, this.subLabel, super.key})",
+          "signature": "CharcoalDropdown({required this.options, required this.value, required this.onChanged, this.assistiveText, this.autofocus = false, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.placeholder, this.optionalText, this.required = false, this.requiredText = '*Required', this.showLabel = false, this.subLabel, super.key})",
           "parameters": [
             {
               "name": "options",
@@ -3678,6 +3678,12 @@ const String generatedCatalogJson = r'''{
             },
             {
               "name": "placeholder",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "optionalText",
               "type": "String?",
               "required": false,
               "named": true
@@ -4227,7 +4233,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalFieldLabel",
       "category": "Forms",
-      "summary": "Composes visible field naming, required copy, and trailing metadata without owning input semantics.",
+      "summary": "Composes visible field naming, required or optional copy, and trailing metadata without owning input semantics.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/field_label.dart",
       "documentationLevel": "curated",
@@ -4240,7 +4246,7 @@ const String generatedCatalogJson = r'''{
         "visible label"
       ],
       "useWhen": [
-        "A custom form composition needs a visible label plus localized required copy or trailing metadata such as a character count.",
+        "A custom form composition needs a visible label plus localized required or optional copy (requiredText, optionalText) or trailing metadata such as a character count.",
         "The associated control already exposes its own semantic label, required state, validation, and value."
       ],
       "avoidWhen": [
@@ -4290,7 +4296,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalFieldLabel",
           "kind": "constructor",
-          "signature": "CharcoalFieldLabel({required this.label, this.bold = true, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
+          "signature": "CharcoalFieldLabel({required this.label, this.bold = true, this.optionalText, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
           "parameters": [
             {
               "name": "label",
@@ -4304,6 +4310,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "true"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",
@@ -4443,7 +4455,7 @@ const String generatedCatalogJson = r'''{
     {
       "name": "CharcoalFormField",
       "category": "Forms",
-      "summary": "The styled shell around any control that needs a label, helper line, required or invalid state and an optional action.",
+      "summary": "The one labelled-field wrapper for any control: label row, required or optional marker, helper line, invalid state and an optional action.",
       "import": "package:charcoal_ui/charcoal_ui.dart",
       "sourcePath": "packages/charcoal_ui/lib/src/components/fields/form_field.dart",
       "documentationLevel": "curated",
@@ -4453,11 +4465,13 @@ const String generatedCatalogJson = r'''{
         "helper",
         "required",
         "invalid",
+        "optional",
         "shell"
       ],
       "useWhen": [
         "A control (text field, slider, dropdown) needs a visible label and assistive text.",
-        "A field has a required marker or an inline correction message."
+        "A switch, a radio or checkbox group (a Column of CharcoalRadio or CharcoalCheckbox) or a segmented control needs the label row, marker, help and error of a text field; there is no separate group widget.",
+        "A field has a required marker (requiredText), an optional marker (optionalText) or an inline correction message."
       ],
       "avoidWhen": [
         "The control already has its own label slot (CharcoalSwitchField, CharcoalSearchField).",
@@ -4465,7 +4479,8 @@ const String generatedCatalogJson = r'''{
       ],
       "accessibility": [
         "The label is associated with the child control; pass invalid and assistiveText so the error is announced.",
-        "Required is conveyed in words (requiredText) as well as by the marker."
+        "Required is conveyed in words (requiredText) as well as by the marker.",
+        "required and optionalText are exclusive; mark every field of a form as one or the other when both kinds appear."
       ],
       "responsiveBehavior": [
         "The label wraps on narrow widths and the helper line grows with text scale."
@@ -4473,10 +4488,11 @@ const String generatedCatalogJson = r'''{
       "interactionStates": [
         "idle",
         "invalid",
-        "required"
+        "required",
+        "optional"
       ],
       "feedbackResponsibilities": [
-        "Owns label, helper, required and invalid presentation.",
+        "Owns label, helper, required, optional and invalid presentation.",
         "The caller owns the control value, validation rule and submit."
       ],
       "tokenRoles": [
@@ -4493,7 +4509,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalFormField",
           "kind": "constructor",
-          "signature": "CharcoalFormField({required this.label, required this.child, this.action, this.assistiveText, this.invalid = false, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
+          "signature": "CharcoalFormField({required this.label, required this.child, this.action, this.assistiveText, this.invalid = false, this.optionalText, this.required = false, this.requiredText = '*Required', this.subLabel, super.key})",
           "parameters": [
             {
               "name": "label",
@@ -4525,6 +4541,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",
@@ -10507,7 +10529,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTextArea",
           "kind": "constructor",
-          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.rows, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
+          "signature": "CharcoalTextArea({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.label = '', this.maxLength, this.onChanged, this.placeholder, this.readOnly = false, this.optionalText, this.required = false, this.requiredText = '*Required', this.rows, this.showCount = false, this.showLabel = false, this.subLabel, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -10617,6 +10639,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",
@@ -10913,7 +10941,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalTextField",
           "kind": "constructor",
-          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
+          "signature": "CharcoalTextField({this.assistiveText, this.autofocus = false, this.autofillHints, this.contextMenuBuilder = buildCharcoalTextContextMenu, this.enableInteractiveSelection = true, this.inputFormatters, this.scrollPadding, this.undoController, this.controller, this.disabled = false, this.focusNode, this.invalid = false, this.keyboardType, this.label = '', this.maxLength, this.obscureText = false, this.onChanged, this.onSubmitted, this.placeholder, this.prefix, this.readOnly = false, this.optionalText, this.required = false, this.requiredText = '*Required', this.showCount = false, this.showLabel = false, this.subLabel, this.suffix, this.textInputAction, super.key})",
           "parameters": [
             {
               "name": "assistiveText",
@@ -11048,6 +11076,12 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "false"
+            },
+            {
+              "name": "optionalText",
+              "type": "String?",
+              "required": false,
+              "named": true
             },
             {
               "name": "required",

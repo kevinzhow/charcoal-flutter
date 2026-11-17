@@ -53,18 +53,20 @@ const Map<String, ComponentMetadata> formsMetadata = <String, ComponentMetadata>
   ),
   'CharcoalFormField': ComponentMetadata(
     category: 'Forms',
-    summary: 'The styled shell around any control that needs a label, helper line, required or invalid state and an optional action.',
+    summary: 'The one labelled-field wrapper for any control: label row, required or optional marker, helper line, invalid state and an optional action.',
     keywords: <String>[
       'form field',
       'label',
       'helper',
       'required',
       'invalid',
+      'optional',
       'shell',
     ],
     useWhen: <String>[
       'A control (text field, slider, dropdown) needs a visible label and assistive text.',
-      'A field has a required marker or an inline correction message.',
+      'A switch, a radio or checkbox group (a Column of CharcoalRadio or CharcoalCheckbox) or a segmented control needs the label row, marker, help and error of a text field; there is no separate group widget.',
+      'A field has a required marker (requiredText), an optional marker (optionalText) or an inline correction message.',
     ],
     avoidWhen: <String>[
       'The control already has its own label slot (CharcoalSwitchField, CharcoalSearchField).',
@@ -73,6 +75,7 @@ const Map<String, ComponentMetadata> formsMetadata = <String, ComponentMetadata>
     accessibility: <String>[
       'The label is associated with the child control; pass invalid and assistiveText so the error is announced.',
       'Required is conveyed in words (requiredText) as well as by the marker.',
+      'required and optionalText are exclusive; mark every field of a form as one or the other when both kinds appear.',
     ],
     responsiveBehavior: <String>[
       'The label wraps on narrow widths and the helper line grows with text scale.',
@@ -81,9 +84,10 @@ const Map<String, ComponentMetadata> formsMetadata = <String, ComponentMetadata>
       'idle',
       'invalid',
       'required',
+      'optional',
     ],
     feedbackResponsibilities: <String>[
-      'Owns label, helper, required and invalid presentation.',
+      'Owns label, helper, required, optional and invalid presentation.',
       'The caller owns the control value, validation rule and submit.',
     ],
     tokenRoles: <String>[

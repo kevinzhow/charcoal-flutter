@@ -4,7 +4,7 @@ import 'index.dart';
 const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata>{
   'CharcoalFieldLabel': ComponentMetadata(
     category: 'Forms',
-    summary: 'Composes visible field naming, required copy, and trailing metadata without owning input semantics.',
+    summary: 'Composes visible field naming, required or optional copy, and trailing metadata without owning input semantics.',
     keywords: <String>[
       'character count',
       'field label',
@@ -14,7 +14,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       'visible label',
     ],
     useWhen: <String>[
-      'A custom form composition needs a visible label plus localized required copy or trailing metadata such as a character count.',
+      'A custom form composition needs a visible label plus localized required or optional copy (requiredText, optionalText) or trailing metadata such as a character count.',
       'The associated control already exposes its own semantic label, required state, validation, and value.',
     ],
     avoidWhen: <String>[

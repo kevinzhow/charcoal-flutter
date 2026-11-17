@@ -51,12 +51,13 @@ final class CharcoalDropdown<T> extends StatefulWidget {
     this.invalid = false,
     this.label = '',
     this.placeholder,
+    this.optionalText,
     this.required = false,
     this.requiredText = '*Required',
     this.showLabel = false,
     this.subLabel,
     super.key,
-  });
+  }) : assert(!required || optionalText == null, 'A field is required or optional, not both');
 
   /// The choices, in order; must not be empty.
   final List<CharcoalDropdownOption<T>> options;
@@ -87,6 +88,10 @@ final class CharcoalDropdown<T> extends StatefulWidget {
 
   /// Text shown while nothing is selected.
   final String? placeholder;
+
+  /// The marker of an optional field after the visible label, such as "(optional)"; pass the
+  /// localized string. Exclusive with [required].
+  final String? optionalText;
 
   /// Whether a selection is required.
   final bool required;
@@ -461,6 +466,7 @@ final class _CharcoalDropdownState<T> extends State<CharcoalDropdown<T>> {
         assistiveText: assistiveText,
         invalid: widget.invalid,
         label: widget.label,
+        optionalText: widget.optionalText,
         required: widget.required,
         requiredText: widget.requiredText,
         showLabel: widget.showLabel,
