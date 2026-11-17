@@ -443,9 +443,9 @@ final class _Layout {
     for (var i = 0; i < columns.length; i++)
       dataIndex(i): switch (columns[i].flex) {
         final flex? => FlexColumnWidth(flex.toDouble()),
-        null => const IntrinsicColumnWidth(),
+        null => const _FitColumnWidth(),
       },
-    if (trailing) count - 1: const IntrinsicColumnWidth(),
+    if (trailing) count - 1: const _FitColumnWidth(),
   };
 
   /// One cell of table column [index]: the edge insets, the gap before it, and [child] placed by
@@ -488,4 +488,24 @@ final class _Layout {
       ),
     );
   }
+}
+
+/// A column as wide as its widest cell, rounded up to a whole pixel, plus one pixel of room.
+///
+/// A cell can lay out a fraction of a pixel wider than it measures: after a font change, Flutter's
+/// `RenderParagraph` lays its text out with the new font but still reports the intrinsic widths it
+/// measured with the old one. An exact fit then overflows a `Row` cell, such as a switch beside a
+/// chip. The measured width can be a whole number already, so rounding up alone leaves no room.
+final class _FitColumnWidth extends TableColumnWidth {
+  const _FitColumnWidth();
+
+  static const _intrinsic = IntrinsicColumnWidth();
+
+  @override
+  double minIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) =>
+      _intrinsic.minIntrinsicWidth(cells, containerWidth);
+
+  @override
+  double maxIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) =>
+      _intrinsic.maxIntrinsicWidth(cells, containerWidth).ceilToDouble() + 1;
 }

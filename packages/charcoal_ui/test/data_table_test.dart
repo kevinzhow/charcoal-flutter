@@ -3,6 +3,7 @@ import 'dart:ui' show CheckedState;
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,6 +28,40 @@ CharcoalTableRow<String> _row(
   action: action,
   selected: selected,
 );
+
+/// Measures [child] at a whole number of pixels and lays it out 0.0003 px wider, as a paragraph
+/// does after a font change: Flutter's `RenderParagraph.systemFontsDidChange` re-lays out the text
+/// with the new font but keeps the intrinsic widths measured with the old one (the console's chip
+/// measured 36 and laid out at 36.000275).
+final class _StaleWidth extends SingleChildRenderObjectWidget {
+  const _StaleWidth({required Widget super.child});
+
+  @override
+  RenderObject createRenderObject(BuildContext context) => _RenderStaleWidth();
+}
+
+final class _RenderStaleWidth extends RenderProxyBox {
+  double get _measured => super.computeMaxIntrinsicWidth(double.infinity).floorToDouble();
+
+  @override
+  double computeMinIntrinsicWidth(double height) => _measured;
+
+  @override
+  double computeMaxIntrinsicWidth(double height) => _measured;
+
+  @override
+  Size computeDryLayout(BoxConstraints constraints) => _size(constraints);
+
+  @override
+  void performLayout() {
+    child!.layout(constraints.loosen(), parentUsesSize: true);
+    size = _size(constraints);
+  }
+
+  Size _size(BoxConstraints constraints) => constraints.constrain(
+    Size(_measured + 0.0003, child!.getDryLayout(constraints.loosen()).height),
+  );
+}
 
 Future<CharcoalTheme> _mount(
   WidgetTester tester,
@@ -106,7 +141,45 @@ void main() {
     final theme = CharcoalTheme.of(tester.element(find.byType(Table)));
     expect(_left(tester, 'x'), _left(tester, 'Name'));
     expect(_left(tester, 'y'), _left(tester, 'Name'));
-    expect(_left(tester, 'Name') - _right(tester, 'paused for now'), theme.space.xl);
+    // The column is rounded up to a whole pixel plus one, so the gap is the column gap plus one to
+    // two pixels.
+    final gap = _left(tester, 'Name') - _right(tester, 'paused for now');
+    expect(gap, greaterThanOrEqualTo(theme.space.xl + 1));
+    expect(gap, lessThan(theme.space.xl + 2));
+    expect(tester.getSize(find.byType(Table)).width, 1000);
+    expect(_left(tester, 'Name') % 1, 0, reason: 'the fit column ends on a whole pixel');
+  });
+
+  testWidgets('a fit column holds content measured a fraction of a pixel short', (tester) async {
+    // The RunPod status cell: a switch and a chip side by side. With the chip measured at a whole
+    // pixel and laid out 0.0003 px wider, an exact or rounded-up fit column overflowed the Row.
+    await _mount(
+      tester,
+      CharcoalDataTable<String>(
+        columns: const [
+          CharcoalTableColumn(label: 'Name'),
+          CharcoalTableColumn.fit(label: '状态'),
+        ],
+        rows: [
+          for (final (id, label) in [('a', '启用中'), ('b', '已停用')])
+            CharcoalTableRow(
+              id: id,
+              cells: [
+                Text(id),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CharcoalSwitch(value: id == 'a', semanticLabel: id, onChanged: (_) {}),
+                    const CharcoalGap(CharcoalSpace.sm),
+                    _StaleWidth(child: CharcoalChip(label, tone: CharcoalTone.positive)),
+                  ],
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   for (final (height, size) in [
