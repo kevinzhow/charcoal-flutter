@@ -11,8 +11,8 @@ void main() {
 
     expect(File(catalogJsonPath(root)).readAsStringSync(), generated.json);
     expect(File(catalogDartPath(root)).readAsStringSync(), generated.dartSource);
-    expect(generated.catalog.coverage.curatedComponents, 90);
-    expect(generated.catalog.coverage.componentsWithExamples, 84);
+    expect(generated.catalog.coverage.curatedComponents, 91);
+    expect(generated.catalog.coverage.componentsWithExamples, 85);
     expect(generated.catalog.coverage.curatedPatterns, 6);
     expect(generated.catalog.coverage.publicTokens, 502);
 

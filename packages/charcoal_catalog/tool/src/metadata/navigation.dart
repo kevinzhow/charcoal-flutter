@@ -87,6 +87,7 @@ const Map<String, ComponentMetadata> navigationMetadata = <String, ComponentMeta
       'Shrinks above the software keyboard by default.',
       'Background fills the window; content and bars consume safe insets once.',
       'background: CharcoalPageBackground.secondary gives a grey page on which raised cards stand out, such as a feed.',
+      'background: CharcoalPageBackground.notice gives a pale notice page for a special mode under a CharcoalModeBar.',
     ],
     interactionStates: <String>[
       'keyboard hidden',

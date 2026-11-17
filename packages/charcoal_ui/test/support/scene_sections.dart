@@ -5,8 +5,8 @@ import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 
 /// Scenes for the parts of the admin redesign (page header meta, section card, danger zone, data
-/// table, radio cards, disclosure, copyable text, empty state with steps), at a regular and a
-/// compact width.
+/// table, radio cards, disclosure, copyable text, empty state with steps, mode bar), at a regular
+/// and a compact width.
 final sectionsScenes = <CharcoalScene>[
   for (final (name, size) in const <(String, Size)>[
     ('sections-page', Size(1100, 500)),
@@ -38,6 +38,48 @@ final sectionsScenes = <CharcoalScene>[
             ),
           ],
           child: const CharcoalText('Body'),
+        ),
+      ),
+    ),
+  for (final (name, size) in const <(String, Size)>[
+    ('sections-mode-bar', Size(1100, 300)),
+    ('sections-mode-bar-compact', Size(420, 400)),
+  ])
+    CharcoalScene(
+      name: name,
+      size: size,
+      build: (context) => CharcoalScaffold(
+        background: CharcoalPageBackground.notice,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CharcoalModeBar(
+                title: 'Super-user mode',
+                message: 'Every action here is recorded as the super user in the audit log.',
+                actions: <Widget>[
+                  CharcoalButton(
+                    size: CharcoalButtonSize.small,
+                    onPressed: () {},
+                    child: const Text('Exit super user'),
+                  ),
+                ],
+              ),
+              const CharcoalPadding(
+                padding: CharcoalInset.all(CharcoalSpace.lg),
+                child: CharcoalSectionCard(
+                  flush: true,
+                  children: <Widget>[
+                    CharcoalModeBar(title: 'Super user (break-glass)'),
+                    CharcoalPadding(
+                      padding: CharcoalInset.all(CharcoalSpace.lg),
+                      child: CharcoalText('Sign in with the shared credentials.'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ),

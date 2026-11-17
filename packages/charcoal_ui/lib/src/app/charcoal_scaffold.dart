@@ -20,6 +20,9 @@ enum CharcoalPageBackground {
 
   /// `colors.backgroundSecondary`: a grey page on which raised cards stand out (a feed).
   secondary,
+
+  /// `colors.noticeSurface`: a pale notice page for a special mode, under a `CharcoalModeBar`.
+  notice,
 }
 
 /// Coordinates a page's navigation, content, system insets, and keyboard.
@@ -86,6 +89,7 @@ final class CharcoalScaffold extends StatelessWidget {
         switch (this.background) {
           CharcoalPageBackground.primary => theme.colors.background,
           CharcoalPageBackground.secondary => theme.colors.backgroundSecondary,
+          CharcoalPageBackground.notice => theme.colors.noticeSurface,
         };
     final darkBackground =
         background.computeLuminance() < theme.metrics.scaffold.darkLuminanceThreshold;

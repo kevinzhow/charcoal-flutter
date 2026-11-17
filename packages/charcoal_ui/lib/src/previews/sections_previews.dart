@@ -149,3 +149,38 @@ Widget charcoalEmptyStateStepsPreview() => CharcoalSectionCard(
     ),
   ],
 );
+
+@CharcoalComponentPreview(name: 'Mode bar · Super user', size: Size(1000, 360))
+Widget charcoalModeBarPreview() => CharcoalScaffold(
+  background: CharcoalPageBackground.notice,
+  body: Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      CharcoalModeBar(
+        title: 'Super-user mode',
+        message: 'Every action here is recorded as the super user in the audit log.',
+        actions: <Widget>[
+          CharcoalButton(
+            size: CharcoalButtonSize.small,
+            leading: const CharcoalIcon(CharcoalIcons.logout),
+            onPressed: () {},
+            child: const Text('Exit super user'),
+          ),
+        ],
+      ),
+      CharcoalPadding.all(
+        CharcoalSpace.xl,
+        child: CharcoalSectionCard(
+          flush: true,
+          children: <Widget>[
+            const CharcoalModeBar(title: 'Super user (break-glass)'),
+            CharcoalPadding.all(
+              CharcoalSpace.xl,
+              child: const CharcoalText('The sign-in card of the mode starts with the same bar.'),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+);

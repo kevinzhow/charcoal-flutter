@@ -55,7 +55,8 @@ Public components, by family (the Catalog is the authoritative list):
   `CharcoalSearchField`, `CharcoalDateTimeField`, `CharcoalSwitchField`, `CharcoalFormSection`,
   `CharcoalFormField`, `CharcoalFieldLabel`, `CharcoalHintText`
 - Overlays and feedback: modal, dialog, confirm, form, code and choice dialogs, toast, snackbar,
-  tooltip, balloon, `CharcoalBanner`, empty, loading and error states, `CharcoalLoadingSpinner`
+  tooltip, balloon, `CharcoalBanner`, `CharcoalModeBar`, empty, loading and error states,
+  `CharcoalLoadingSpinner`
 - Layout and content: `CharcoalCard`, `CharcoalSectionCard`, `CharcoalDangerZone`, `CharcoalList`,
   `CharcoalListRow`, `CharcoalDataTable`, `CharcoalDisclosure`, `CharcoalSectionHeader`,
   `CharcoalAvatar`, `CharcoalBadge`, `CharcoalChip`, `CharcoalStatusDot`, `CharcoalText`,

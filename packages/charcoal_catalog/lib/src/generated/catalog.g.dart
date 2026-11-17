@@ -5,9 +5,9 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 90,
-    "curatedComponents": 90,
-    "componentsWithExamples": 84,
+    "publicComponents": 91,
+    "curatedComponents": 91,
+    "componentsWithExamples": 85,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 128
@@ -6946,6 +6946,120 @@ const String generatedCatalogJson = r'''{
       ]
     },
     {
+      "name": "CharcoalModeBar",
+      "category": "Feedback",
+      "summary": "A full-width bar across the top edge of the app that marks a special mode: tone icon, bold title, optional message and trailing actions such as the way out, on the tone's solid fill.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/feedback/mode_bar.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "mode bar",
+        "super user",
+        "break-glass",
+        "impersonation",
+        "environment bar",
+        "caution bar"
+      ],
+      "useWhen": [
+        "The whole app is in a special mode the user must not forget, such as acting as a shared super user or as another account; put the bar above the page and offer the exit as an action.",
+        "A sign-in card belongs to that mode; put a title-only bar first in a flush, untitled CharcoalSectionCard as its head.",
+        "The page under the bar should read as the same mode; give the CharcoalScaffold background: CharcoalPageBackground.notice."
+      ],
+      "avoidWhen": [
+        "A message about the content of one page or form; use CharcoalBanner.",
+        "Transient confirmation; use CharcoalToast or CharcoalSnackBar."
+      ],
+      "accessibility": [
+        "The bar is one container whose label is the title; the message and the actions are read and focused inside it.",
+        "The icon is decorative; the title must name the mode in words."
+      ],
+      "responsiveBehavior": [
+        "Spans its parent edge to edge with no radius; the horizontal inset is space.xl, or space.lg below sizes.sidebarBreakpoint, like a section card.",
+        "On a narrow bar the message wraps under the title; the actions stay at the end."
+      ],
+      "interactionStates": [
+        "static",
+        "with actions"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the fill, the colours on it, the icon, the insets and the layout.",
+        "The caller owns entering and leaving the mode and the action results."
+      ],
+      "tokenRoles": [
+        "colors.notice",
+        "colors.textOnNotice",
+        "colors.iconOnNotice",
+        "colors.noticeSurface",
+        "space.xl",
+        "space.lg",
+        "space.md",
+        "sizes.rowMinHeightCompact"
+      ],
+      "relatedComponents": [
+        "CharcoalBanner",
+        "CharcoalScaffold",
+        "CharcoalSectionCard"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalModeBar",
+          "kind": "constructor",
+          "signature": "CharcoalModeBar({required this.title, this.message, this.actions = const <Widget>[], this.icon = CharcoalIcons.warnTriangle, this.tone = CharcoalTone.notice, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "message",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "icon",
+              "type": "CharcoalIconData",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalIcons.warnTriangle"
+            },
+            {
+              "name": "tone",
+              "type": "CharcoalTone",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalTone.notice"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "mode-bar-super-user",
+          "title": "Super-user mode",
+          "description": "A sign-in card headed by a title-only mode bar; in the mode, a notice page under a full-width bar whose action leaves the mode.",
+          "sourcePath": "example/lib/agent_examples/mode_bar_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A break-glass super-user mode: its sign-in card is headed by a title-only mode bar; once in,\n/// the whole page sits on the notice surface under a full-width mode bar whose action leaves the\n/// mode.\nfinal class AgentModeBarExample extends StatefulWidget {\n  const AgentModeBarExample({super.key});\n\n  @override\n  State<AgentModeBarExample> createState() => _AgentModeBarExampleState();\n}\n\nfinal class _AgentModeBarExampleState extends State<AgentModeBarExample> {\n  bool _superUser = false;\n\n  @override\n  Widget build(BuildContext context) {\n    return CharcoalScaffold(\n      background: _superUser\n          ? CharcoalPageBackground.notice\n          : CharcoalPageBackground.secondary,\n      body: SingleChildScrollView(\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            if (_superUser)\n              CharcoalModeBar(\n                title: 'Super-user mode',\n                message: 'Every action here is recorded as the super user.',\n                actions: <Widget>[\n                  CharcoalButton(\n                    size: CharcoalButtonSize.small,\n                    leading: const CharcoalIcon(CharcoalIcons.logout),\n                    onPressed: () => setState(() => _superUser = false),\n                    child: const Text('Exit super user'),\n                  ),\n                ],\n              ),\n            CharcoalPadding.all(\n              CharcoalSpace.lg,\n              child: _superUser ? _grantCard() : _signInCard(),\n            ),\n          ],\n        ),\n      ),\n    );\n  }\n\n  Widget _signInCard() => CharcoalSectionCard(\n    flush: true,\n    children: <Widget>[\n      const CharcoalModeBar(title: 'Super user (break-glass)'),\n      CharcoalPadding.all(\n        CharcoalSpace.xl,\n        child: Column(\n          crossAxisAlignment: CrossAxisAlignment.stretch,\n          children: <Widget>[\n            const CharcoalText(\n              'Sign in with the shared credentials of this deployment. '\n              'This mode only grants or revokes the admin role.',\n              tone: CharcoalTextTone.secondary,\n            ),\n            const CharcoalGap(CharcoalSpace.lg),\n            CharcoalButton(\n              variant: CharcoalButtonVariant.primary,\n              onPressed: () => setState(() => _superUser = true),\n              child: const Text('Enter super-user mode'),\n            ),\n          ],\n        ),\n      ),\n    ],\n  );\n\n  Widget _grantCard() => const CharcoalSectionCard(\n    title: 'Grant the admin role',\n    caption: 'Find a user by e-mail, user ID or phone number',\n    children: <Widget>[\n      CharcoalText('No user selected yet.', tone: CharcoalTextTone.secondary),\n    ],\n  );\n}\n"
+        }
+      ]
+    },
+    {
       "name": "CharcoalMultiSelect",
       "category": "Forms",
       "summary": "Toggles one option in a visibly named, parent-controlled multi-selection group.",
@@ -8745,7 +8859,8 @@ const String generatedCatalogJson = r'''{
       "responsiveBehavior": [
         "Shrinks above the software keyboard by default.",
         "Background fills the window; content and bars consume safe insets once.",
-        "background: CharcoalPageBackground.secondary gives a grey page on which raised cards stand out, such as a feed."
+        "background: CharcoalPageBackground.secondary gives a grey page on which raised cards stand out, such as a feed.",
+        "background: CharcoalPageBackground.notice gives a pale notice page for a special mode under a CharcoalModeBar."
       ],
       "interactionStates": [
         "keyboard hidden",
@@ -8860,11 +8975,12 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalPageBackground",
           "kind": "enum",
-          "signature": "enum CharcoalPageBackground { primary, secondary }",
+          "signature": "enum CharcoalPageBackground { primary, secondary, notice }",
           "parameters": [],
           "enumValues": [
             "primary",
-            "secondary"
+            "secondary",
+            "notice"
           ]
         }
       ],

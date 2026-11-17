@@ -56,6 +56,67 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
       ),
     ],
   ),
+  'CharcoalModeBar': ComponentMetadata(
+    category: 'Feedback',
+    summary: 'A full-width bar across the top edge of the app that marks a special mode: tone icon, bold title, optional message and trailing actions such as the way out, on the tone\'s solid fill.',
+    keywords: <String>[
+      'mode bar',
+      'super user',
+      'break-glass',
+      'impersonation',
+      'environment bar',
+      'caution bar',
+    ],
+    useWhen: <String>[
+      'The whole app is in a special mode the user must not forget, such as acting as a shared super user or as another account; put the bar above the page and offer the exit as an action.',
+      'A sign-in card belongs to that mode; put a title-only bar first in a flush, untitled CharcoalSectionCard as its head.',
+      'The page under the bar should read as the same mode; give the CharcoalScaffold background: CharcoalPageBackground.notice.',
+    ],
+    avoidWhen: <String>[
+      'A message about the content of one page or form; use CharcoalBanner.',
+      'Transient confirmation; use CharcoalToast or CharcoalSnackBar.',
+    ],
+    accessibility: <String>[
+      'The bar is one container whose label is the title; the message and the actions are read and focused inside it.',
+      'The icon is decorative; the title must name the mode in words.',
+    ],
+    responsiveBehavior: <String>[
+      'Spans its parent edge to edge with no radius; the horizontal inset is space.xl, or space.lg below sizes.sidebarBreakpoint, like a section card.',
+      'On a narrow bar the message wraps under the title; the actions stay at the end.',
+    ],
+    interactionStates: <String>[
+      'static',
+      'with actions',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the fill, the colours on it, the icon, the insets and the layout.',
+      'The caller owns entering and leaving the mode and the action results.',
+    ],
+    tokenRoles: <String>[
+      'colors.notice',
+      'colors.textOnNotice',
+      'colors.iconOnNotice',
+      'colors.noticeSurface',
+      'space.xl',
+      'space.lg',
+      'space.md',
+      'sizes.rowMinHeightCompact',
+    ],
+    relatedComponents: <String>[
+      'CharcoalBanner',
+      'CharcoalScaffold',
+      'CharcoalSectionCard',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'mode-bar-super-user',
+        title: 'Super-user mode',
+        description: 'A sign-in card headed by a title-only mode bar; in the mode, a notice page under a full-width bar whose action leaves the mode.',
+        sourcePath: 'example/lib/agent_examples/mode_bar_example.dart',
+      ),
+    ],
+  ),
   'CharcoalEmptyState': ComponentMetadata(
     category: 'Feedback',
     summary: 'A centred empty state: a muted icon, an optional title, a message, optional actions and optional numbered steps that explain how the place fills up.',

@@ -4,6 +4,7 @@ import 'package:charcoal_ui_showcase/agent_examples/admin_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/admin_sections_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/form_section_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/layout_example.dart';
+import 'package:charcoal_ui_showcase/agent_examples/mode_bar_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/social_content_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/status_example.dart';
 import 'package:flutter/material.dart' show Material, MaterialType;
@@ -47,6 +48,20 @@ void main() {
           textScale: scale,
         );
         expect(find.text('Alice Chen'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+      testWidgets('mode bar example builds at $label', (tester) async {
+        await show(
+          tester,
+          const SizedBox(height: 900, child: AgentModeBarExample()),
+          size: size,
+          textScale: scale,
+        );
+        await tester.ensureVisible(find.text('Enter super-user mode'));
+        await tester.pump();
+        await tester.tap(find.text('Enter super-user mode'));
+        await tester.pump();
+        expect(find.text('Exit super user'), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
       testWidgets('admin sections example builds at $label', (tester) async {
@@ -233,4 +248,21 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('mode bar example enters and leaves the mode', (tester) async {
+    await show(
+      tester,
+      const SizedBox(height: 900, child: AgentModeBarExample()),
+      size: sizes.last,
+    );
+    expect(find.byType(CharcoalModeBar), findsOneWidget);
+    expect(find.text('Super user (break-glass)'), findsOneWidget);
+    await tester.tap(find.text('Enter super-user mode'));
+    await tester.pump();
+    expect(find.bySemanticsLabel('Super-user mode'), findsOneWidget);
+    expect(find.text('Grant the admin role'), findsOneWidget);
+    await tester.tap(find.text('Exit super user'));
+    await tester.pump();
+    expect(find.text('Enter super-user mode'), findsOneWidget);
+  });
 }

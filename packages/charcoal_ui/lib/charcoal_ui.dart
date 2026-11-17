@@ -22,6 +22,7 @@ export 'src/components/feedback/empty_state.dart';
 export 'src/components/feedback/error_state.dart';
 export 'src/components/feedback/loading_spinner.dart';
 export 'src/components/feedback/loading_state.dart';
+export 'src/components/feedback/mode_bar.dart';
 export 'src/components/feedback/spinner_overlay.dart';
 export 'src/components/fields/date_time_field.dart';
 export 'src/components/fields/dropdown.dart';

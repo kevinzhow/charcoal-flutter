@@ -1,6 +1,8 @@
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
+import '../status/tone_fill.dart';
+
 /// The size of a [CharcoalAvatar].
 enum CharcoalAvatarSize {
   /// `sizes.avatarSm`.
@@ -59,14 +61,12 @@ final class CharcoalAvatar extends StatelessWidget {
       CharcoalAvatarSize.extraLarge => (theme.sizes.avatarXl, CharcoalTextRole.headingL),
     };
     final colors = theme.colors;
-    final (fill, letter) = switch (tone) {
-      null => (colors.surfaceTertiary, colors.textSecondary),
-      CharcoalTone.info => (colors.primary, colors.textOnPrimary),
-      CharcoalTone.negative => (colors.negative, colors.textOnNegative),
-      CharcoalTone.positive => (colors.positive, colors.textOnPositive),
-      CharcoalTone.notice => (colors.notice, colors.textOnNotice),
-      CharcoalTone.neutral => (colors.neutral, colors.textOnPrimary),
+    final toned = switch (tone) {
+      final tone? => charcoalToneFill(colors, tone),
+      null => null,
     };
+    final fill = toned?.fill ?? colors.surfaceTertiary;
+    final letter = toned?.text ?? colors.textSecondary;
     final trimmed = source.trim();
     final initial = initials ?? (trimmed.isEmpty ? '?' : trimmed.characters.first.toUpperCase());
     return Semantics(
