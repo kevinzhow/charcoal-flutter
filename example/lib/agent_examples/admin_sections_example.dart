@@ -4,7 +4,8 @@ import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/widgets.dart';
 
 /// A feature-flag detail page built from section cards: the kill switch with its consequence, the
-/// settings as read-only rows with an Edit action, the members in a selectable table with a batch
+/// settings as read-only rows with an Edit dialog (radio cards, rare fields under "More options"),
+/// the members in a selectable table with a batch
 /// action, and the danger zone last.
 ///
 /// Every section owns its actions in its own header; the page stacks the cards with
@@ -23,6 +24,7 @@ final class _AgentAdminSectionsExampleState
   bool _enabled = true;
   bool _deleted = false;
   String _default = 'none';
+  String _type = 'String';
   static const _endpoints = <CharcoalRadioCardOption<String>>[
     CharcoalRadioCardOption(
       value: 'none',
@@ -68,6 +70,7 @@ final class _AgentAdminSectionsExampleState
 
   Future<void> _editSettings() async {
     var draft = _default;
+    var type = _type;
     final saved = await showCharcoalModal<bool>(
       context: context,
       title: 'Edit settings',
@@ -82,19 +85,51 @@ final class _AgentAdminSectionsExampleState
         ),
       ],
       child: StatefulBuilder(
-        builder: (context, setDraft) => CharcoalFormField(
-          label: 'Default value',
-          required: true,
-          assistiveText: 'Used when no rule matches or the kill switch is off.',
-          child: CharcoalRadioCards<String>(
-            value: draft,
-            options: _endpoints,
-            onChanged: (value) => setDraft(() => draft = value),
-          ),
+        builder: (context, setDraft) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            CharcoalFormField(
+              label: 'Default value',
+              required: true,
+              assistiveText:
+                  'Used when no rule matches or the kill switch is off.',
+              child: CharcoalRadioCards<String>(
+                value: draft,
+                options: _endpoints,
+                onChanged: (value) => setDraft(() => draft = value),
+              ),
+            ),
+            const CharcoalGap(CharcoalSpace.lg),
+            CharcoalDisclosure(
+              title: 'More options',
+              summary: 'Value type: $type',
+              child: CharcoalFormField(
+                label: 'Value type',
+                optionalText: '(changing it resets the default)',
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: CharcoalSegmentedControl<String>(
+                    value: type,
+                    onChanged: (value) => setDraft(() => type = value),
+                    segments: const <CharcoalSegment<String>>[
+                      CharcoalSegment(value: 'Boolean', child: Text('Boolean')),
+                      CharcoalSegment(value: 'String', child: Text('String')),
+                      CharcoalSegment(value: 'JSON', child: Text('JSON')),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
-    if ((saved ?? false) && mounted) setState(() => _default = draft);
+    if ((saved ?? false) && mounted) {
+      setState(() {
+        _default = draft;
+        _type = type;
+      });
+    }
   }
 
   @override
@@ -136,7 +171,7 @@ final class _AgentAdminSectionsExampleState
                     .firstWhere((option) => option.value == _default)
                     .title,
               ),
-              ('Value type', 'String'),
+              ('Value type', _type),
               ('Visibility', 'Server only'),
             ]),
           ],

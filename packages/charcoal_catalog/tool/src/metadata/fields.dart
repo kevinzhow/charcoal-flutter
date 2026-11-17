@@ -251,7 +251,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],

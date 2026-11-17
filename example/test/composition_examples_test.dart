@@ -154,10 +154,16 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('Old cluster'));
     await tester.pump();
+    expect(find.text('Value type: String'), findsOneWidget);
+    await tester.tap(find.text('More options'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('JSON'));
+    await tester.pump();
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(find.text('Whisper large-v3'), findsOneWidget);
     expect(find.text('Not set (recommended)'), findsNothing);
+    expect(find.text('JSON'), findsOneWidget);
   });
 
   testWidgets('admin sections example removes the checked members', (

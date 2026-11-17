@@ -104,3 +104,10 @@ Widget charcoalRadioCardsPreview() => CharcoalFormField(
     ],
   ),
 );
+
+@CharcoalComponentPreview(name: 'Disclosure · More options', size: Size(480, 240))
+Widget charcoalDisclosurePreview() => const CharcoalDisclosure(
+  title: 'More options',
+  summary: 'Visibility: server only · Enabled after creation · No description',
+  child: CharcoalTextField(label: 'Description', showLabel: true, optionalText: '(optional)'),
+);

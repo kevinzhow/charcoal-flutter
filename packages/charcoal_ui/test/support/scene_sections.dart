@@ -4,7 +4,7 @@ import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 
 /// Scenes for the parts of the admin redesign (section card, danger zone, data table, radio
-/// cards), at a regular and a compact width.
+/// cards, disclosure), at a regular and a compact width.
 final sectionsScenes = <CharcoalScene>[
   for (final (name, size) in const <(String, Size)>[
     ('sections-regular', Size(1100, 900)),
@@ -140,6 +140,22 @@ class _Sections extends StatelessWidget {
                       trailing: CharcoalChip('Stopped', tone: CharcoalTone.notice),
                     ),
                   ],
+                ),
+              ),
+              const CharcoalGap(CharcoalSpace.lg),
+              const CharcoalDisclosure(
+                title: 'More options',
+                summary: 'Visibility: server only · Enabled after creation · No description',
+                child: CharcoalText('Hidden fields'),
+              ),
+              const CharcoalGap(CharcoalSpace.lg),
+              const CharcoalDisclosure(
+                title: 'Advanced',
+                initiallyExpanded: true,
+                child: CharcoalTextField(
+                  label: 'Description',
+                  showLabel: true,
+                  optionalText: '(optional)',
                 ),
               ),
               const CharcoalGap(CharcoalSpace.lg),

@@ -304,7 +304,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -353,7 +353,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
@@ -433,7 +433,63 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ExampleMetadata(
         id: 'admin-sections',
         title: 'Detail page in section cards',
-        description: 'A feature-flag detail page: kill switch, settings edited with radio cards, a selectable members table, danger zone.',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalDisclosure': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A collapsible group for rarely used content: one line with a chevron, a title and a summary of the hidden values; pressing it shows the content.',
+    keywords: <String>[
+      'disclosure',
+      'more options',
+      'advanced',
+      'collapsible',
+      'expandable',
+      'accordion',
+    ],
+    useWhen: <String>[
+      'A form has optional fields most people leave at their defaults; fold them under "More options" and summarise the defaults in the line.',
+    ],
+    avoidWhen: <String>[
+      'Required fields; keep them visible.',
+      'Navigation between sections of a page; use separate CharcoalSectionCard sections or tabs.',
+    ],
+    accessibility: <String>[
+      'The line is a button announced as expanded or collapsed; its label is the title and the summary.',
+      'Collapsed content keeps its state but cannot take focus.',
+    ],
+    responsiveBehavior: <String>[
+      'The summary stays on the title line and ends with an ellipsis when it does not fit.',
+      'Opening and closing animate the height unless the platform asks for reduced motion.',
+    ],
+    interactionStates: <String>[
+      'collapsed',
+      'expanded',
+      'hovered',
+      'focused',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the expanded state, the line, the chevron and the animation.',
+      'The caller owns the content and keeps the summary in step with the hidden values.',
+    ],
+    tokenRoles: <String>[
+      'colors.textSecondary',
+      'colors.textTertiary',
+      'space.md',
+      'space.xs',
+    ],
+    relatedComponents: <String>[
+      'CharcoalFormField',
+      'CharcoalSectionCard',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, settings edited with radio cards and "More options", a selectable members table, danger zone.',
         sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],

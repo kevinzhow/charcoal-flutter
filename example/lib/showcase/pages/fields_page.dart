@@ -237,6 +237,28 @@ final class _FieldsPageState extends State<FieldsPage> {
             title: 'Required · optional · any control',
             child: _LabelledControls(),
           ),
+          const ShowcaseCard(
+            description:
+                'Rarely used fields fold away under one line that summarises their current '
+                'values, so the form stays short and the defaults stay visible.',
+            eyebrow: 'DISCLOSURE',
+            title: 'More options',
+            child: CharcoalDisclosure(
+              title: 'More options',
+              summary: 'Visibility: server only · Enabled after creation · No description',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  CharcoalTextField(
+                    label: 'Description',
+                    showLabel: true,
+                    optionalText: '(optional)',
+                    placeholder: 'One sentence about what this flag controls',
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     ],
