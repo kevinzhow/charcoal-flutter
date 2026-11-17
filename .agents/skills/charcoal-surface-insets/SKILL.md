@@ -15,6 +15,8 @@ consumer page shows content touching a surface edge, fix the default in the libr
   the component's content padding defaults to zero and only some callers pad.
 - A library-internal caller (confirm, form, choice, code dialog) passing the same padding by hand
   is the tell: "default zero, every caller pads".
+- The last row of a dialog without actions sits on the bottom edge: the bottom inset lived in the
+  action block only. Without actions the body must take that bottom inset (safe area on a sheet).
 
 ## Fix procedure
 
@@ -26,8 +28,8 @@ consumer page shows content touching a surface edge, fix the default in the libr
 2. Make the default come from the component's theme metrics (here `metrics.modal.actionPadding`),
    never a literal. Keep the parameter nullable: null = the default, `EdgeInsets.zero` = explicit
    full-bleed opt-out. Pass the parameter through every convenience API (`showCharcoalModal`).
-3. Delete library-internal padding that equals the new default. Keep intentional differences
-   (`showCharcoalChoiceDialog` keeps its bottom inset because it has no actions).
+3. Delete library-internal padding that equals the new default (confirm, form, code and choice
+   dialogs all matched it). Keep a value only where it differs on purpose.
 4. Remove the hand padding from previews, the Showcase, and test scenes.
 5. Test geometry, not pixels: content and the first action share left and right edges, and both sit
    `inset` from the surface. Cover the direct widget, every `show*` helper, both modal styles, and
@@ -60,6 +62,6 @@ dialog before and after.
 
 | Component | Content inset | Status |
 | --- | --- | --- |
-| `CharcoalDialog` / `showCharcoalModal` (center and bottom sheet) | `metrics.modal.actionPadding` left/right | fixed: was zero |
+| `CharcoalDialog` / `showCharcoalModal` (center and bottom sheet) | `metrics.modal.actionPadding` left/right; bottom too when there are no actions | fixed: was zero |
 | `CharcoalCard` | `CharcoalInset.all(lg)` default | ok |
 | `CharcoalBottomBar`, toast, snack bar, balloon, tooltip, dropdown menu, message bubble | component-owned | ok |

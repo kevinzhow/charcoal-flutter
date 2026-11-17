@@ -35,7 +35,8 @@ enum CharcoalModalStyle {
 /// The surface is a Material page-coloured card with a centred [title], a scrolling [child], and
 /// full-width [actions] stacked underneath. The body is inset left and right by the same
 /// `metrics.modal.actionPadding` as the actions, so a label, a field and the buttons under it share
-/// one left and one right edge without the caller padding anything. The title and the actions stay in place while the body
+/// one left and one right edge without the caller padding anything; without actions the body also
+/// keeps their bottom inset. The title and the actions stay in place while the body
 /// scrolls, so a long form or a short window never pushes the buttons out of reach. The dialog
 /// insets itself by the on-screen keyboard and the safe area. A close button appears when
 /// [showCloseButton] is true and [onDismiss] is set.
@@ -85,8 +86,9 @@ final class CharcoalDialog extends StatelessWidget {
   /// Padding around [child].
   ///
   /// Null (the default) insets the body left and right by `metrics.modal.actionPadding`, the same
-  /// inset as [actions], with no extra space above or below. Pass [EdgeInsets.zero] only for
-  /// full-bleed content; pass another value only where the body needs space above or below too.
+  /// inset as [actions]. Without actions the body also takes the bottom inset the actions would
+  /// have had (`actionPadding`, or the safe area on a bottom sheet), so the last row never sits on
+  /// the edge. Pass [EdgeInsets.zero] only for full-bleed content.
   final EdgeInsetsGeometry? contentPadding;
 
   /// Overrides the width of [size].
@@ -162,7 +164,13 @@ final class CharcoalDialog extends StatelessWidget {
                 Flexible(
                   child: SingleChildScrollView(
                     padding:
-                        contentPadding ?? EdgeInsets.symmetric(horizontal: modal.actionPadding),
+                        contentPadding ??
+                        EdgeInsets.fromLTRB(
+                          modal.actionPadding,
+                          0,
+                          modal.actionPadding,
+                          actions.isEmpty ? bottomActionPadding : 0,
+                        ),
                     child: child,
                   ),
                 ),

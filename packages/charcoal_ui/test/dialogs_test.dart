@@ -365,6 +365,40 @@ void main() {
       );
     });
 
+    testWidgets('without actions the body keeps the actions bottom inset (center)', (
+      tester,
+    ) async {
+      await pumpOpener(tester, (context) async {
+        await showCharcoalModal<void>(
+          context: context,
+          title: 'Accounts',
+          child: Builder(builder: form),
+        );
+      }, size: const Size(800, 700));
+      await openIt(tester);
+      final surface = dialogSurface(tester);
+      final content = tester.getRect(find.byKey(field));
+      final inset = modalInset(tester);
+      expect(content.left - surface.left, moreOrLessEquals(inset));
+      expect(surface.bottom - content.bottom, moreOrLessEquals(inset));
+    });
+
+    testWidgets('without actions a bottom sheet body clears the home indicator', (tester) async {
+      tester.view.padding = const FakeViewPadding(bottom: 50);
+      addTearDown(tester.view.resetPadding);
+      await pumpOpener(tester, (context) async {
+        await showCharcoalModal<void>(
+          context: context,
+          style: CharcoalModalStyle.bottomSheet,
+          child: Builder(builder: form),
+        );
+      }, size: const Size(400, 700));
+      await openIt(tester);
+      final content = tester.getRect(find.byKey(field));
+      expect(700 - content.bottom, greaterThanOrEqualTo(50));
+      expect(content.left - dialogSurface(tester).left, moreOrLessEquals(modalInset(tester)));
+    });
+
     testWidgets('EdgeInsets.zero opts out for full-bleed content', (tester) async {
       await pumpOpener(tester, (context) async {
         await showCharcoalModal<void>(
