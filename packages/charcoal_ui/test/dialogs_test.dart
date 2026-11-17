@@ -32,6 +32,27 @@ Future<void> openIt(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+/// The dialog's card surface.
+Rect dialogSurface(WidgetTester tester) => tester.getRect(
+  find.descendant(
+    of: find.byType(CharcoalDialog),
+    matching: find.byWidgetPredicate((w) => w is Material && w.type == MaterialType.card),
+  ),
+);
+
+/// `metrics.modal.actionPadding` of the theme the dialog is shown under.
+double modalInset(WidgetTester tester) =>
+    CharcoalTheme.of(tester.element(find.byType(CharcoalDialog))).metrics.modal.actionPadding;
+
+/// Expects [content] and [action] to share the left and right edge, inset from [surface] by [inset].
+void expectSharedEdges(Rect content, Rect action, Rect surface, double inset) {
+  expect(inset, greaterThan(0));
+  expect(content.left, moreOrLessEquals(action.left));
+  expect(content.right, moreOrLessEquals(action.right));
+  expect(content.left - surface.left, moreOrLessEquals(inset));
+  expect(surface.right - content.right, moreOrLessEquals(inset));
+}
+
 void main() {
   const pack = charcoalLightPack;
 
@@ -271,6 +292,135 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
       expect(find.text('Body'), findsNothing);
+    });
+  });
+
+  group('content inset', () {
+    const body = Key('body');
+    const field = Key('field');
+
+    Widget form(BuildContext context) => Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(key: body, height: 8),
+        CharcoalTextField(key: field, label: 'Name', showLabel: true),
+      ],
+    );
+
+    List<Widget> buttons(BuildContext context) => [
+      CharcoalButton(
+        key: const Key('save'),
+        variant: CharcoalButtonVariant.primary,
+        fullWidth: true,
+        onPressed: () {},
+        child: const Text('Save'),
+      ),
+      CharcoalButton(fullWidth: true, onPressed: () {}, child: const Text('Cancel')),
+    ];
+
+    for (final style in CharcoalModalStyle.values) {
+      testWidgets('a direct CharcoalDialog insets its body like its actions (${style.name})', (
+        tester,
+      ) async {
+        await pumpOpener(tester, (context) async {
+          await showCharcoalDialog<void>(
+            context: context,
+            style: style,
+            builder: (dialogContext) => CharcoalDialog(
+              style: style,
+              title: 'New segment',
+              actions: buttons(dialogContext),
+              child: form(dialogContext),
+            ),
+          );
+        }, size: const Size(800, 700));
+        await openIt(tester);
+
+        final surface = dialogSurface(tester);
+        final action = tester.getRect(find.byKey(const Key('save')));
+        final inset = modalInset(tester);
+        expectSharedEdges(tester.getRect(find.byKey(body)), action, surface, inset);
+        expectSharedEdges(tester.getRect(find.byKey(field)), action, surface, inset);
+        // The field label (Kevin's "名称") starts on the action edge too.
+        expect(tester.getRect(find.text('Name').first).left, moreOrLessEquals(action.left));
+      });
+    }
+
+    testWidgets('showCharcoalModal gets the same default inset', (tester) async {
+      await pumpOpener(tester, (context) async {
+        await showCharcoalModal<void>(
+          context: context,
+          title: 'New segment',
+          actions: buttons(context),
+          child: Builder(builder: form),
+        );
+      }, size: const Size(800, 700));
+      await openIt(tester);
+      expectSharedEdges(
+        tester.getRect(find.byKey(field)),
+        tester.getRect(find.byKey(const Key('save'))),
+        dialogSurface(tester),
+        modalInset(tester),
+      );
+    });
+
+    testWidgets('EdgeInsets.zero opts out for full-bleed content', (tester) async {
+      await pumpOpener(tester, (context) async {
+        await showCharcoalModal<void>(
+          context: context,
+          contentPadding: EdgeInsets.zero,
+          actions: buttons(context),
+          child: Builder(builder: form),
+        );
+      }, size: const Size(800, 700));
+      await openIt(tester);
+      final surface = dialogSurface(tester);
+      final content = tester.getRect(find.byKey(body));
+      expect(content.left, moreOrLessEquals(surface.left));
+      expect(content.right, moreOrLessEquals(surface.right));
+    });
+
+    testWidgets('form, confirm and code dialogs keep their content on the action edges', (
+      tester,
+    ) async {
+      await pumpOpener(tester, (context) async {
+        await showCharcoalFormDialog(
+          context,
+          title: 'New key',
+          fields: [CharcoalFormDialogField(key: 'name', label: 'Name')],
+        );
+      }, size: const Size(800, 700));
+      await openIt(tester);
+      expectSharedEdges(
+        tester.getRect(find.byType(CharcoalTextField)),
+        tester.getRect(find.widgetWithText(CharcoalButton, 'Save')),
+        dialogSurface(tester),
+        modalInset(tester),
+      );
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      await pumpOpener(tester, (context) async {
+        await showCharcoalConfirm(context, title: 'Delete key', message: 'Apps stop working.');
+      }, size: const Size(800, 700));
+      await openIt(tester);
+      final surface = dialogSurface(tester);
+      final confirm = tester.getRect(find.widgetWithText(CharcoalButton, 'Confirm'));
+      final message = tester.getRect(find.text('Apps stop working.'));
+      expect(message.left - surface.left, moreOrLessEquals(modalInset(tester)));
+      expect(message.left, moreOrLessEquals(confirm.left));
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      await pumpOpener(tester, (context) async {
+        await showCharcoalCodeDialog(context, title: 'Log', code: 'INFO start');
+      }, size: const Size(1000, 700));
+      await openIt(tester);
+      final codeSurface = dialogSurface(tester);
+      final code = tester.getRect(find.byType(CharcoalCodeBlock));
+      expect(code.left - codeSurface.left, moreOrLessEquals(modalInset(tester)));
+      expect(codeSurface.right - code.right, moreOrLessEquals(modalInset(tester)));
     });
   });
 

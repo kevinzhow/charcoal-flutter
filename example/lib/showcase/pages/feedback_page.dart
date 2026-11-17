@@ -365,7 +365,6 @@ void _showDialog(
     style: style,
     builder: (dialogContext) => CharcoalDialog(
       closeIcon: const CharcoalIcon(CharcoalIcons.x),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
       onDismiss: () => Navigator.of(dialogContext).pop(),
       showCloseButton: true,
       size: size,

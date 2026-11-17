@@ -45,6 +45,9 @@ Future<T?> showCharcoalDialog<T>({
 
 /// Convenience API that constructs the correctly paired route and [CharcoalDialog] surface.
 ///
+/// [child] is inset left and right like [actions] (see [CharcoalDialog.contentPadding]); pass
+/// `contentPadding: EdgeInsets.zero` only for full-bleed content.
+///
 /// ```dart
 /// final saved = await showCharcoalModal<bool>(
 ///   context: context,
@@ -61,6 +64,7 @@ Future<T?> showCharcoalModal<T>({
   List<Widget> actions = const <Widget>[],
   bool barrierDismissible = true,
   Widget? closeIcon,
+  EdgeInsetsGeometry? contentPadding,
   Duration? duration,
   double? maxWidth,
   CharcoalDialogSize size = CharcoalDialogSize.medium,
@@ -76,6 +80,7 @@ Future<T?> showCharcoalModal<T>({
   builder: (dialogContext) => CharcoalDialog(
     actions: actions,
     closeIcon: closeIcon,
+    contentPadding: contentPadding,
     maxWidth: maxWidth,
     onDismiss: barrierDismissible ? () => Navigator.of(dialogContext).maybePop() : null,
     showCloseButton: barrierDismissible,
