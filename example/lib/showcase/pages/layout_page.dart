@@ -129,6 +129,63 @@ final class _LayoutPageState extends State<LayoutPage> {
               ],
             ),
           ),
+          ShowcaseCard(
+            description: 'One titled section of a page: caption under the title, the section\'s own actions at the end, a body with optional dividers. A flush body lets a list or table reach the card edges. The danger zone closes a detail page.',
+            eyebrow: 'SECTION CARD · DANGER ZONE',
+            title: 'SectionCard',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CharcoalSectionCard(
+                  title: 'Settings',
+                  caption: 'Read-only until you edit them',
+                  actions: <Widget>[
+                    CharcoalButton(
+                      size: CharcoalButtonSize.small,
+                      leading: const CharcoalIcon(CharcoalIcons.pen),
+                      onPressed: showcaseNoop,
+                      child: const Text('Edit'),
+                    ),
+                  ],
+                  dividers: true,
+                  children: const <Widget>[
+                    CharcoalText('Default value: not set'),
+                    CharcoalText('Visibility: server only'),
+                  ],
+                ),
+                const CharcoalGap(CharcoalSpace.lg),
+                CharcoalSectionCard(
+                  title: 'Members',
+                  flush: true,
+                  children: <Widget>[
+                    CharcoalList(
+                      topBorder: false,
+                      children: <Widget>[
+                        CharcoalListRow(
+                          title: 'Alice',
+                          subtitle: 'alice@example.com',
+                          onPressed: showcaseNoop,
+                        ),
+                        CharcoalListRow(
+                          title: 'Bob',
+                          subtitle: 'bob@example.com',
+                          onPressed: showcaseNoop,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const CharcoalGap(CharcoalSpace.lg),
+                CharcoalDangerZone(
+                  title: 'Delete flag',
+                  description:
+                      'Its 2 rules are deleted too and cannot be restored.',
+                  actionLabel: 'Delete',
+                  onPressed: showcaseNoop,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     ],

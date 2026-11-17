@@ -6,6 +6,7 @@ import 'scene_fields.dart';
 import 'scene_gaps.dart';
 import 'scene_navigation.dart';
 import 'scene_overlays.dart';
+import 'scene_sections.dart';
 import 'scene_shell.dart';
 
 /// Every scene the extreme-theme and layout-audit tests mount. One entry per component family
@@ -18,4 +19,5 @@ final charcoalScenes = <CharcoalScene>[
   ...navigationScenes,
   ...gapsScenes,
   ...contentScenes,
+  ...sectionsScenes,
 ];

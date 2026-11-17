@@ -247,6 +247,117 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
       ),
     ],
   ),
+  'CharcoalSectionCard': ComponentMetadata(
+    category: 'Layout',
+    summary: 'One titled section of a page on a raised card: title, optional caption and the section\'s own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.',
+    keywords: <String>[
+      'section card',
+      'card',
+      'section',
+      'panel',
+      'settings group',
+      'detail page',
+    ],
+    useWhen: <String>[
+      'A detail or settings page is split into titled sections, each with its own actions (Edit, Add) in its header.',
+      'A table or list should sit on a card under a title; pass flush: true and a CharcoalDataTable or CharcoalList.',
+      'A switch with its explanation stands alone as a section; pass the switch as an action and no children.',
+    ],
+    avoidWhen: <String>[
+      'A group of form fields inside a dialog or a long form; use CharcoalFormSection.',
+      'A heading without a surface; use CharcoalSectionHeader.',
+      'A clickable summary tile; use CharcoalCard with CharcoalClickable.',
+    ],
+    accessibility: <String>[
+      'The title is exposed as a heading.',
+      'Name each action for the section it belongs to when several sections have the same action label.',
+    ],
+    responsiveBehavior: <String>[
+      'Header and body share one horizontal inset: space.xl, or space.lg on a card narrower than sizes.sidebarBreakpoint; a CharcoalDataTable in a flush card uses the same inset for its first and last cells.',
+      'The actions take at most half the header width and wrap; the caption wraps under the title.',
+    ],
+    interactionStates: <String>[
+      'static',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the surface, header layout, insets, dividers and clipping of flush content under the outline.',
+      'The caller owns the section content, the actions and the spacing between cards (CharcoalGap(CharcoalSpace.lg)).',
+    ],
+    tokenRoles: <String>[
+      'colors.background',
+      'colors.borderSubtle',
+      'radius.md',
+      'borders.hairline',
+      'space.xl',
+      'space.lg',
+      'space.md',
+      'sizes.sidebarBreakpoint',
+    ],
+    relatedComponents: <String>[
+      'CharcoalDangerZone',
+      'CharcoalCard',
+      'CharcoalSectionHeader',
+      'CharcoalFormSection',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, read-only settings with Edit, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
+  'CharcoalDangerZone': ComponentMetadata(
+    category: 'Layout',
+    summary: 'A section card for one irreversible action, such as deleting the record a page shows: title, what is lost, and a negative-toned button.',
+    keywords: <String>[
+      'danger zone',
+      'delete',
+      'destructive',
+      'irreversible',
+      'remove',
+    ],
+    useWhen: <String>[
+      'A detail page offers deleting or resetting its record; put the danger zone last on the page.',
+    ],
+    avoidWhen: <String>[
+      'A row action in a list or table; use the row action slot.',
+      'A reversible action such as pausing; use a switch or a normal button.',
+    ],
+    accessibility: <String>[
+      'The description says what is lost; confirm with showCharcoalConfirm before acting.',
+    ],
+    responsiveBehavior: <String>[
+      'Same header layout as CharcoalSectionCard; the description wraps under the title.',
+    ],
+    interactionStates: <String>[
+      'enabled',
+      'disabled',
+    ],
+    feedbackResponsibilities: <String>[
+      'Owns the card, the negative tone and the delete icon of the action.',
+      'The caller owns confirmation, the deletion and what happens after it.',
+    ],
+    tokenRoles: <String>[
+      'colors.textNegative',
+      'colors.borderSubtle',
+    ],
+    relatedComponents: <String>[
+      'CharcoalSectionCard',
+      'CharcoalButton',
+    ],
+    companionDeclarations: <String>[],
+    examples: <ExampleMetadata>[
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A feature-flag detail page: kill switch, read-only settings with Edit, danger zone.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
+      ),
+    ],
+  ),
   'CharcoalDivider': ComponentMetadata(
     category: 'Layout',
     summary: 'A hairline rule across the width it is given.',

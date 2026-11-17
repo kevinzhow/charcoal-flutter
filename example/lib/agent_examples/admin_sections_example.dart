@@ -1,0 +1,83 @@
+import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:charcoal_ui/admin.dart';
+import 'package:charcoal_ui/charcoal_ui.dart';
+import 'package:flutter/widgets.dart';
+
+/// A feature-flag detail page built from section cards: the kill switch with its consequence, the
+/// settings as read-only rows with an Edit action, and the danger zone last.
+///
+/// Every section owns its actions in its own header; the page stacks the cards with
+/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour.
+final class AgentAdminSectionsExample extends StatefulWidget {
+  const AgentAdminSectionsExample({super.key});
+
+  @override
+  State<AgentAdminSectionsExample> createState() =>
+      _AgentAdminSectionsExampleState();
+}
+
+final class _AgentAdminSectionsExampleState
+    extends State<AgentAdminSectionsExample> {
+  bool _enabled = true;
+  bool _deleted = false;
+
+  Future<void> _delete() async {
+    final confirmed = await showCharcoalConfirm(
+      context,
+      title: 'Delete flag?',
+      message: 'Its 2 rules are deleted too. This cannot be undone.',
+      danger: true,
+    );
+    if (confirmed && mounted) setState(() => _deleted = true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        CharcoalSectionCard(
+          title: 'Kill switch',
+          caption: _enabled
+              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'
+              : 'Off: everyone gets the default value. Rules are paused, not deleted.',
+          actions: <Widget>[
+            CharcoalSwitch(
+              value: _enabled,
+              semanticLabel: 'Kill switch',
+              onChanged: (value) => setState(() => _enabled = value),
+            ),
+          ],
+          children: const <Widget>[],
+        ),
+        const CharcoalGap(CharcoalSpace.lg),
+        CharcoalSectionCard(
+          title: 'Settings',
+          actions: <Widget>[
+            CharcoalButton(
+              size: CharcoalButtonSize.small,
+              leading: const CharcoalIcon(CharcoalIcons.pen),
+              semanticLabel: 'Edit settings',
+              onPressed: () {},
+              child: const Text('Edit'),
+            ),
+          ],
+          children: const <Widget>[
+            CharcoalInfoRows(<(String, String)>[
+              ('Default value', 'Not set: keep the current endpoint'),
+              ('Value type', 'String'),
+              ('Visibility', 'Server only'),
+            ]),
+          ],
+        ),
+        const CharcoalGap(CharcoalSpace.lg),
+        CharcoalDangerZone(
+          title: 'Delete flag',
+          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',
+          actionLabel: 'Delete',
+          onPressed: _deleted ? null : _delete,
+        ),
+      ],
+    );
+  }
+}

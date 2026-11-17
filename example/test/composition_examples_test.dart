@@ -1,6 +1,7 @@
 import 'package:charcoal_ui/admin.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:charcoal_ui_showcase/agent_examples/admin_example.dart';
+import 'package:charcoal_ui_showcase/agent_examples/admin_sections_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/form_section_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/layout_example.dart';
 import 'package:charcoal_ui_showcase/agent_examples/social_content_example.dart';
@@ -46,6 +47,16 @@ void main() {
           textScale: scale,
         );
         expect(find.text('Alice Chen'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+      testWidgets('admin sections example builds at $label', (tester) async {
+        await show(
+          tester,
+          const AgentAdminSectionsExample(),
+          size: size,
+          textScale: scale,
+        );
+        expect(find.text('Kill switch'), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
       testWidgets('status example builds at $label', (tester) async {
@@ -113,6 +124,23 @@ void main() {
     await tester.enterText(find.byType(EditableText).first, '');
     await tester.pump();
     expect(find.text('Enter a project name.'), findsOneWidget);
+  });
+
+  testWidgets('admin sections example confirms before deleting', (
+    tester,
+  ) async {
+    await show(tester, const AgentAdminSectionsExample(), size: sizes.last);
+    await tester.tap(find.text('Delete').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Deleted.'), findsOneWidget);
+    await tester.tap(find.byType(CharcoalSwitch));
+    await tester.pump();
+    expect(
+      find.textContaining('Off: everyone gets the default value.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets(

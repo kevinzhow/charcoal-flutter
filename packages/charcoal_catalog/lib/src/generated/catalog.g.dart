@@ -5,9 +5,9 @@ const String generatedCatalogJson = r'''{
   "libraryName": "charcoal_ui",
   "libraryVersion": "0.1.0",
   "coverage": {
-    "publicComponents": 84,
-    "curatedComponents": 84,
-    "componentsWithExamples": 78,
+    "publicComponents": 86,
+    "curatedComponents": 86,
+    "componentsWithExamples": 80,
     "curatedPatterns": 6,
     "publicTokens": 502,
     "semanticTokens": 128
@@ -3055,6 +3055,99 @@ const String generatedCatalogJson = r'''{
           "description": "A two-line selectable code block.",
           "sourcePath": "example/lib/agent_examples/status_example.dart",
           "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// Status and state surfaces for one job: banner, chips, badge, status dot, a log excerpt and\n/// the three page-region states.\n///\n/// Meaning is expressed with `CharcoalTone`; the example never names a colour.\nfinal class AgentStatusExample extends StatefulWidget {\n  const AgentStatusExample({super.key});\n\n  @override\n  State<AgentStatusExample> createState() => _AgentStatusExampleState();\n}\n\nenum _Region { ready, loading, empty, failed }\n\nfinal class _AgentStatusExampleState extends State<AgentStatusExample> {\n  _Region _region = _Region.ready;\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        const CharcoalBanner(\n          tone: CharcoalTone.notice,\n          title: 'Import paused',\n          message: 'Two files need a decision before the import can continue.',\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            CharcoalStatusDot(CharcoalTone.positive),\n            CharcoalChip('Synced', tone: CharcoalTone.positive),\n            CharcoalChip('Retrying', tone: CharcoalTone.notice),\n            CharcoalChip(\n              'job-4821',\n              tone: CharcoalTone.neutral,\n              monospace: true,\n            ),\n            CharcoalBadge('3', tone: CharcoalBadgeTone.negative),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        const CharcoalCodeBlock(\n          'retry 2/3 after 4s\\nupload chunk 17 of 24',\n          selectable: true,\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalWrap(\n          spacing: CharcoalSpace.sm,\n          runSpacing: CharcoalSpace.sm,\n          children: <Widget>[\n            for (final region in _Region.values)\n              CharcoalButton(\n                variant: region == _region\n                    ? CharcoalButtonVariant.primary\n                    : CharcoalButtonVariant.normal,\n                onPressed: () => setState(() => _region = region),\n                child: Text(region.name),\n              ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        switch (_region) {\n          _Region.ready => const CharcoalText('Everything is up to date.'),\n          _Region.loading => const CharcoalLoadingState(\n            semanticLabel: 'Loading jobs',\n          ),\n          _Region.empty => const CharcoalEmptyState(\n            icon: CharcoalIcons.folder,\n            message: 'No jobs yet',\n          ),\n          _Region.failed => CharcoalErrorState(\n            message: 'Could not load jobs.',\n            onRetry: () => setState(() => _region = _Region.ready),\n          ),\n        },\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalDangerZone",
+      "category": "Layout",
+      "summary": "A section card for one irreversible action, such as deleting the record a page shows: title, what is lost, and a negative-toned button.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_card.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "danger zone",
+        "delete",
+        "destructive",
+        "irreversible",
+        "remove"
+      ],
+      "useWhen": [
+        "A detail page offers deleting or resetting its record; put the danger zone last on the page."
+      ],
+      "avoidWhen": [
+        "A row action in a list or table; use the row action slot.",
+        "A reversible action such as pausing; use a switch or a normal button."
+      ],
+      "accessibility": [
+        "The description says what is lost; confirm with showCharcoalConfirm before acting."
+      ],
+      "responsiveBehavior": [
+        "Same header layout as CharcoalSectionCard; the description wraps under the title."
+      ],
+      "interactionStates": [
+        "enabled",
+        "disabled"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the card, the negative tone and the delete icon of the action.",
+        "The caller owns confirmation, the deletion and what happens after it."
+      ],
+      "tokenRoles": [
+        "colors.textNegative",
+        "colors.borderSubtle"
+      ],
+      "relatedComponents": [
+        "CharcoalSectionCard",
+        "CharcoalButton"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalDangerZone",
+          "kind": "constructor",
+          "signature": "CharcoalDangerZone({required this.title, required this.description, required this.actionLabel, required this.onPressed, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "description",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actionLabel",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "onPressed",
+              "type": "VoidCallback?",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, read-only settings with Edit, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page built from section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: () {},\n              child: const Text('Edit'),\n            ),\n          ],\n          children: const <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              ('Default value', 'Not set: keep the current endpoint'),\n              ('Value type', 'String'),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },
@@ -8253,6 +8346,127 @@ const String generatedCatalogJson = r'''{
           "description": "A search field with clear in a form section.",
           "sourcePath": "example/lib/agent_examples/form_section_example.dart",
           "source": "import 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A project settings form built from Charcoal form components.\n///\n/// `CharcoalFormSection` and `CharcoalFormField` own label, helper, required and invalid\n/// presentation; the screen owns the values and the validation rule.\nfinal class AgentFormSectionExample extends StatefulWidget {\n  const AgentFormSectionExample({super.key});\n\n  @override\n  State<AgentFormSectionExample> createState() =>\n      _AgentFormSectionExampleState();\n}\n\nfinal class _AgentFormSectionExampleState\n    extends State<AgentFormSectionExample> {\n  final TextEditingController _name = TextEditingController(\n    text: 'Moonlit Garden',\n  );\n  final TextEditingController _search = TextEditingController();\n  bool _public = false;\n  double _quality = 0.6;\n  DateTime? _publishAt;\n\n  bool get _nameInvalid => _name.text.trim().isEmpty;\n\n  @override\n  void dispose() {\n    _name.dispose();\n    _search.dispose();\n    super.dispose();\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      mainAxisSize: MainAxisSize.min,\n      children: <Widget>[\n        CharcoalFormSection(\n          title: 'Project',\n          caption: 'Shown to everyone who can open the project.',\n          children: <Widget>[\n            CharcoalFormField(\n              label: 'Name',\n              required: true,\n              invalid: _nameInvalid,\n              assistiveText: _nameInvalid ? 'Enter a project name.' : null,\n              child: CharcoalTextField(\n                controller: _name,\n                invalid: _nameInvalid,\n                onChanged: (_) => setState(() {}),\n              ),\n            ),\n            CharcoalSwitchField(\n              label: 'Public project',\n              hint: 'Anyone with the link can view it.',\n              value: _public,\n              onChanged: (value) => setState(() => _public = value),\n            ),\n            CharcoalDateTimeField(\n              label: 'Publish at',\n              value: _publishAt,\n              onChanged: (value) => setState(() => _publishAt = value),\n            ),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.xl),\n        CharcoalFormSection(\n          title: 'Export',\n          children: <Widget>[\n            CharcoalSearchField(\n              controller: _search,\n              label: 'Find a preset',\n              onClear: _search.clear,\n            ),\n            CharcoalFormField(\n              label: 'Quality',\n              child: CharcoalSlider(\n                value: _quality,\n                semanticLabel: 'Export quality',\n                onChanged: (value) => setState(() => _quality = value),\n              ),\n            ),\n          ],\n        ),\n      ],\n    );\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "CharcoalSectionCard",
+      "category": "Layout",
+      "summary": "One titled section of a page on a raised card: title, optional caption and the section's own actions in the header, a body of children with optional dividers, and a flush mode for tables and lists.",
+      "import": "package:charcoal_ui/charcoal_ui.dart",
+      "sourcePath": "packages/charcoal_ui/lib/src/components/layout/section_card.dart",
+      "documentationLevel": "curated",
+      "keywords": [
+        "section card",
+        "card",
+        "section",
+        "panel",
+        "settings group",
+        "detail page"
+      ],
+      "useWhen": [
+        "A detail or settings page is split into titled sections, each with its own actions (Edit, Add) in its header.",
+        "A table or list should sit on a card under a title; pass flush: true and a CharcoalDataTable or CharcoalList.",
+        "A switch with its explanation stands alone as a section; pass the switch as an action and no children."
+      ],
+      "avoidWhen": [
+        "A group of form fields inside a dialog or a long form; use CharcoalFormSection.",
+        "A heading without a surface; use CharcoalSectionHeader.",
+        "A clickable summary tile; use CharcoalCard with CharcoalClickable."
+      ],
+      "accessibility": [
+        "The title is exposed as a heading.",
+        "Name each action for the section it belongs to when several sections have the same action label."
+      ],
+      "responsiveBehavior": [
+        "Header and body share one horizontal inset: space.xl, or space.lg on a card narrower than sizes.sidebarBreakpoint; a CharcoalDataTable in a flush card uses the same inset for its first and last cells.",
+        "The actions take at most half the header width and wrap; the caption wraps under the title."
+      ],
+      "interactionStates": [
+        "static"
+      ],
+      "feedbackResponsibilities": [
+        "Owns the surface, header layout, insets, dividers and clipping of flush content under the outline.",
+        "The caller owns the section content, the actions and the spacing between cards (CharcoalGap(CharcoalSpace.lg))."
+      ],
+      "tokenRoles": [
+        "colors.background",
+        "colors.borderSubtle",
+        "radius.md",
+        "borders.hairline",
+        "space.xl",
+        "space.lg",
+        "space.md",
+        "sizes.sidebarBreakpoint"
+      ],
+      "relatedComponents": [
+        "CharcoalDangerZone",
+        "CharcoalCard",
+        "CharcoalSectionHeader",
+        "CharcoalFormSection"
+      ],
+      "apis": [
+        {
+          "name": "CharcoalSectionCard",
+          "kind": "constructor",
+          "signature": "CharcoalSectionCard({required this.title, required this.children, this.actions = const <Widget>[], this.caption, this.dividers = false, this.flush = false, super.key})",
+          "parameters": [
+            {
+              "name": "title",
+              "type": "String",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "children",
+              "type": "List<Widget>",
+              "required": true,
+              "named": true
+            },
+            {
+              "name": "actions",
+              "type": "List<Widget>",
+              "required": false,
+              "named": true,
+              "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "caption",
+              "type": "String?",
+              "required": false,
+              "named": true
+            },
+            {
+              "name": "dividers",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "flush",
+              "type": "bool",
+              "required": false,
+              "named": true,
+              "defaultValue": "false"
+            },
+            {
+              "name": "key",
+              "type": "Key?",
+              "required": false,
+              "named": true
+            }
+          ],
+          "enumValues": []
+        }
+      ],
+      "examples": [
+        {
+          "id": "admin-sections",
+          "title": "Detail page in section cards",
+          "description": "A feature-flag detail page: kill switch, read-only settings with Edit, danger zone.",
+          "sourcePath": "example/lib/agent_examples/admin_sections_example.dart",
+          "source": "import 'package:charcoal_icons/charcoal_icons.dart';\nimport 'package:charcoal_ui/admin.dart';\nimport 'package:charcoal_ui/charcoal_ui.dart';\nimport 'package:flutter/widgets.dart';\n\n/// A feature-flag detail page built from section cards: the kill switch with its consequence, the\n/// settings as read-only rows with an Edit action, and the danger zone last.\n///\n/// Every section owns its actions in its own header; the page stacks the cards with\n/// `CharcoalGap(CharcoalSpace.lg)` and never sets a size or a colour.\nfinal class AgentAdminSectionsExample extends StatefulWidget {\n  const AgentAdminSectionsExample({super.key});\n\n  @override\n  State<AgentAdminSectionsExample> createState() =>\n      _AgentAdminSectionsExampleState();\n}\n\nfinal class _AgentAdminSectionsExampleState\n    extends State<AgentAdminSectionsExample> {\n  bool _enabled = true;\n  bool _deleted = false;\n\n  Future<void> _delete() async {\n    final confirmed = await showCharcoalConfirm(\n      context,\n      title: 'Delete flag?',\n      message: 'Its 2 rules are deleted too. This cannot be undone.',\n      danger: true,\n    );\n    if (confirmed && mounted) setState(() => _deleted = true);\n  }\n\n  @override\n  Widget build(BuildContext context) {\n    return Column(\n      crossAxisAlignment: CrossAxisAlignment.stretch,\n      children: <Widget>[\n        CharcoalSectionCard(\n          title: 'Kill switch',\n          caption: _enabled\n              ? 'On: rules below decide the value. Turning it off serves the default to everyone.'\n              : 'Off: everyone gets the default value. Rules are paused, not deleted.',\n          actions: <Widget>[\n            CharcoalSwitch(\n              value: _enabled,\n              semanticLabel: 'Kill switch',\n              onChanged: (value) => setState(() => _enabled = value),\n            ),\n          ],\n          children: const <Widget>[],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalSectionCard(\n          title: 'Settings',\n          actions: <Widget>[\n            CharcoalButton(\n              size: CharcoalButtonSize.small,\n              leading: const CharcoalIcon(CharcoalIcons.pen),\n              semanticLabel: 'Edit settings',\n              onPressed: () {},\n              child: const Text('Edit'),\n            ),\n          ],\n          children: const <Widget>[\n            CharcoalInfoRows(<(String, String)>[\n              ('Default value', 'Not set: keep the current endpoint'),\n              ('Value type', 'String'),\n              ('Visibility', 'Server only'),\n            ]),\n          ],\n        ),\n        const CharcoalGap(CharcoalSpace.lg),\n        CharcoalDangerZone(\n          title: 'Delete flag',\n          description: _deleted ? 'Deleted.' : 'Its 2 rules are deleted too. To pause the flag, turn off the kill switch.',\n          actionLabel: 'Delete',\n          onPressed: _deleted ? null : _delete,\n        ),\n      ],\n    );\n  }\n}\n"
         }
       ]
     },

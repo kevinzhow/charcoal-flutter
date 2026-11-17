@@ -47,6 +47,7 @@ export 'src/components/layout/list_row.dart';
 export 'src/components/layout/message_bubble.dart';
 export 'src/components/layout/placeholder_artwork.dart';
 export 'src/components/layout/progress_bar.dart';
+export 'src/components/layout/section_card.dart';
 export 'src/components/layout/section_header.dart';
 export 'src/components/layout/selectable.dart';
 export 'src/components/navigation/navigation_bar.dart';
