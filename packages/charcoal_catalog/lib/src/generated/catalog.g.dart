@@ -3795,7 +3795,7 @@ const String generatedCatalogJson = r'''{
         "obscured"
       ],
       "feedbackResponsibilities": [
-        "Owns text editing behaviour.",
+        "Owns text editing behaviour, including leaving Enter, Escape and the arrow keys to a composing input method and the macOS input-method refresh after a resize.",
         "The owning field owns decoration, label, validation and counter."
       ],
       "tokenRoles": [
@@ -10877,7 +10877,8 @@ const String generatedCatalogJson = r'''{
         "Use a meaningful label and keep it visible for forms that need persistent context.",
         "Pair invalid with assistiveText; the field exposes both the invalid result and correction as input semantics.",
         "Set required only when the value is mandatory; the same state is exposed visually and to assistive technology.",
-        "Provide localized requiredText when the visible required marker includes copy."
+        "Provide localized requiredText when the visible required marker includes copy.",
+        "While an input method composes (charcoalIsComposing), Enter, Escape and the arrow keys go to the input method: they do not reach a dialog, list or shortcut above the field. Guard any key handler of your own with charcoalIsComposing."
       ],
       "responsiveBehavior": [
         "The field expands to the width supplied by its parent.",
@@ -10886,12 +10887,14 @@ const String generatedCatalogJson = r'''{
       "interactionStates": [
         "empty",
         "editing",
+        "composing",
         "focused",
         "invalid",
         "disabled"
       ],
       "feedbackResponsibilities": [
         "Owns focus, validation presentation, platform selection gestures, handles, magnifier and localized editing menus.",
+        "On macOS, re-attaches the input method to the focused field after the window is resized.",
         "The caller owns validation timing, submission progress, persistence, and recovery."
       ],
       "tokenRoles": [
@@ -11097,6 +11100,20 @@ const String generatedCatalogJson = r'''{
               "type": "Key?",
               "required": false,
               "named": true
+            }
+          ],
+          "enumValues": []
+        },
+        {
+          "name": "charcoalIsComposing",
+          "kind": "function",
+          "signature": "bool charcoalIsComposing(TextEditingValue value)",
+          "parameters": [
+            {
+              "name": "value",
+              "type": "TextEditingValue",
+              "required": true,
+              "named": false
             }
           ],
           "enumValues": []

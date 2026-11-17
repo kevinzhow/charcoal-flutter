@@ -31,7 +31,7 @@ buttons. No upstream runtime code is embedded in the Flutter package.
 | --- | --- | --- |
 | Typography | Charcoal SwiftUI | Numeric 10/12/14/16/20 styles and Dynamic Type behavior. |
 | Buttons, links, switching buttons | Charcoal SwiftUI; UIKit where needed | Default, primary, overlay, navigation, small/medium, disabled, and custom primary behavior. |
-| Text field | Charcoal SwiftUI | Label, placeholder, count, invalid ring, assistive text, disabled state, and scaling. |
+| Text field | Charcoal SwiftUI; Raft Flutter for input methods | Label, placeholder, count, invalid ring, assistive text, disabled state, and scaling. Input-method behaviour (macOS refresh after a resize, Enter/Escape/arrows left to a composing input method) is ported from Raft Flutter's `RaftTextInputRefresh` and composer guards. |
 | Switch | Charcoal SwiftUI | Native geometry and label-before-control layout. |
 | Spinner and hint | Charcoal SwiftUI | Surface, typography, spacing, animation, visibility, and action composition. |
 | Tooltip and balloon | Charcoal SwiftUI | Shape, arrow, positioning priority, dismissal, anchor tracking, and motion. |

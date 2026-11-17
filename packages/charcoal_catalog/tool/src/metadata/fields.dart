@@ -87,6 +87,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       'Pair invalid with assistiveText; the field exposes both the invalid result and correction as input semantics.',
       'Set required only when the value is mandatory; the same state is exposed visually and to assistive technology.',
       'Provide localized requiredText when the visible required marker includes copy.',
+      'While an input method composes (charcoalIsComposing), Enter, Escape and the arrow keys go to the input method: they do not reach a dialog, list or shortcut above the field. Guard any key handler of your own with charcoalIsComposing.',
     ],
     responsiveBehavior: <String>[
       'The field expands to the width supplied by its parent.',
@@ -95,12 +96,14 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
     interactionStates: <String>[
       'empty',
       'editing',
+      'composing',
       'focused',
       'invalid',
       'disabled',
     ],
     feedbackResponsibilities: <String>[
       'Owns focus, validation presentation, platform selection gestures, handles, magnifier and localized editing menus.',
+      'On macOS, re-attaches the input method to the focused field after the window is resized.',
       'The caller owns validation timing, submission progress, persistence, and recovery.',
     ],
     tokenRoles: <String>[
@@ -115,7 +118,7 @@ const Map<String, ComponentMetadata> fieldsMetadata = <String, ComponentMetadata
       'CharcoalFieldLabel',
       'CharcoalHintText',
     ],
-    companionDeclarations: <String>[],
+    companionDeclarations: <String>['charcoalIsComposing'],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'text-field-validation',
