@@ -2,6 +2,7 @@ import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/widgets.dart';
 
+import '../app/charcoal_scaffold.dart';
 import '../components/actions/icon_button.dart';
 import '../components/feedback/spinner_overlay.dart';
 import '../components/text/charcoal_text.dart';
@@ -55,6 +56,7 @@ final class CharcoalPage extends StatelessWidget {
     required this.title,
     required this.child,
     this.actions = const <Widget>[],
+    this.background = CharcoalPageBackground.primary,
     this.backLabel = 'Back',
     this.banner,
     this.busy = false,
@@ -99,6 +101,10 @@ final class CharcoalPage extends StatelessWidget {
   /// A widget at the end of the compact top bar, shown on a root page only (when there is no back
   /// button), e.g. a `CharcoalChip` naming the active region.
   final Widget? compactTrailing;
+
+  /// The colour behind the page, such as [CharcoalPageBackground.notice] for a special mode under a
+  /// `CharcoalModeBar`.
+  final CharcoalPageBackground background;
 
   /// Content pinned between the title block and [child].
   final Widget? header;
@@ -200,7 +206,7 @@ final class CharcoalPage extends StatelessWidget {
       dimBackground: true,
       semanticLabel: busyLabel,
       child: ColoredBox(
-        color: theme.colors.background,
+        color: background.colorIn(theme),
         child: Column(
           children: <Widget>[
             if (compact)

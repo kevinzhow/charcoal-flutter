@@ -22,7 +22,14 @@ enum CharcoalPageBackground {
   secondary,
 
   /// `colors.noticeSurface`: a pale notice page for a special mode, under a `CharcoalModeBar`.
-  notice,
+  notice;
+
+  /// The colour this background paints in [theme].
+  Color colorIn(CharcoalTheme theme) => switch (this) {
+    primary => theme.colors.background,
+    secondary => theme.colors.backgroundSecondary,
+    notice => theme.colors.noticeSurface,
+  };
 }
 
 /// Coordinates a page's navigation, content, system insets, and keyboard.
@@ -84,13 +91,7 @@ final class CharcoalScaffold extends StatelessWidget {
     final theme = CharcoalTheme.of(context);
     const transparent = CharcoalColorRoles.transparent;
     final media = MediaQuery.of(context);
-    final background =
-        backgroundColor ??
-        switch (this.background) {
-          CharcoalPageBackground.primary => theme.colors.background,
-          CharcoalPageBackground.secondary => theme.colors.backgroundSecondary,
-          CharcoalPageBackground.notice => theme.colors.noticeSurface,
-        };
+    final background = backgroundColor ?? this.background.colorIn(theme);
     final darkBackground =
         background.computeLuminance() < theme.metrics.scaffold.darkLuminanceThreshold;
     final style =

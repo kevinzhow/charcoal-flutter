@@ -7789,7 +7789,7 @@ const String generatedCatalogJson = r'''{
         {
           "name": "CharcoalPage",
           "kind": "constructor",
-          "signature": "CharcoalPage({required this.title, required this.child, this.actions = const <Widget>[], this.backLabel = 'Back', this.banner, this.busy = false, this.busyLabel = 'Loading', this.compact, this.compactTrailing, this.header, this.maxWidth = CharcoalPageWidth.standard, this.meta = const <Widget>[], this.onBack, this.scrollable = true, this.showBack, this.subtitle, super.key})",
+          "signature": "CharcoalPage({required this.title, required this.child, this.actions = const <Widget>[], this.background = CharcoalPageBackground.primary, this.backLabel = 'Back', this.banner, this.busy = false, this.busyLabel = 'Loading', this.compact, this.compactTrailing, this.header, this.maxWidth = CharcoalPageWidth.standard, this.meta = const <Widget>[], this.onBack, this.scrollable = true, this.showBack, this.subtitle, super.key})",
           "parameters": [
             {
               "name": "title",
@@ -7809,6 +7809,13 @@ const String generatedCatalogJson = r'''{
               "required": false,
               "named": true,
               "defaultValue": "const <Widget>[]"
+            },
+            {
+              "name": "background",
+              "type": "CharcoalPageBackground",
+              "required": false,
+              "named": true,
+              "defaultValue": "CharcoalPageBackground.primary"
             },
             {
               "name": "backLabel",

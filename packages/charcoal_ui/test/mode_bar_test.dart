@@ -1,4 +1,5 @@
 import 'package:charcoal_icons/charcoal_icons.dart';
+import 'package:charcoal_ui/admin.dart';
 import 'package:charcoal_ui/charcoal_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -174,6 +175,35 @@ void main() {
       find.descendant(of: find.byType(CharcoalScaffold), matching: find.byType(ColoredBox)).first,
     );
     expect(page.color, theme.colors.noticeSurface);
+  });
+
+  testWidgets('a CharcoalPage under the bar paints the notice background, not its own', (
+    tester,
+  ) async {
+    await pumpCharcoal(
+      tester,
+      Column(
+        children: [
+          _bar(),
+          const Expanded(
+            child: CharcoalPage(
+              title: 'Grant console-admin',
+              background: CharcoalPageBackground.notice,
+              child: SizedBox(height: 40),
+            ),
+          ),
+        ],
+      ),
+      size: const Size(1200, 600),
+    );
+    final theme = CharcoalTheme.of(tester.element(find.byType(CharcoalModeBar)));
+    final fills = tester
+        .widgetList<ColoredBox>(
+          find.descendant(of: find.byType(CharcoalPage), matching: find.byType(ColoredBox)),
+        )
+        .map((box) => box.color);
+    expect(fills, contains(theme.colors.noticeSurface));
+    expect(fills, isNot(contains(theme.colors.background)));
   });
 }
 
