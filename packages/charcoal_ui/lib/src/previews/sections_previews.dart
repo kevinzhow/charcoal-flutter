@@ -118,3 +118,27 @@ Widget charcoalCopyableTextPreview() => const CharcoalCopyableText(
   copyLabel: 'Copy ID',
   copiedMessage: 'ID copied',
 );
+
+@CharcoalComponentPreview(name: 'Empty state · Steps', size: Size(760, 420))
+Widget charcoalEmptyStateStepsPreview() => CharcoalSectionCard(
+  title: 'Segments',
+  children: <Widget>[
+    CharcoalEmptyState(
+      icon: CharcoalIcons.persons,
+      title: 'No segments yet',
+      message: 'Flag rules target a segment, such as "Beta testers".',
+      actions: <Widget>[
+        CharcoalButton(
+          variant: CharcoalButtonVariant.primary,
+          onPressed: () {},
+          child: const Text('New segment'),
+        ),
+      ],
+      steps: const <CharcoalEmptyStateStep>[
+        CharcoalEmptyStateStep(title: 'Create and name it', description: 'Only a name is needed'),
+        CharcoalEmptyStateStep(title: 'Choose who matches', description: 'Members or conditions'),
+        CharcoalEmptyStateStep(title: 'Use it in a flag', description: 'Pick it in a new rule'),
+      ],
+    ),
+  ],
+);

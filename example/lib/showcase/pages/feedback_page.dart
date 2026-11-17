@@ -204,6 +204,35 @@ final class FeedbackPage extends StatelessWidget {
                     ),
                   ],
                 ),
+                CharcoalEmptyState(
+                  icon: CharcoalIcons.persons,
+                  title: 'No segments yet',
+                  message:
+                      'Flag rules target a segment, such as "Beta testers".',
+                  actions: <Widget>[
+                    CharcoalButton(
+                      onPressed: showcaseNoop,
+                      size: CharcoalButtonSize.small,
+                      variant: CharcoalButtonVariant.primary,
+                      child: const Text('New segment'),
+                    ),
+                  ],
+                  steps: const <CharcoalEmptyStateStep>[
+                    CharcoalEmptyStateStep(
+                      title: 'Create and name it',
+                      description: 'Only a name is needed; the rest can wait.',
+                    ),
+                    CharcoalEmptyStateStep(
+                      title: 'Choose who matches',
+                      description:
+                          'Add members, or match by platform and app version.',
+                    ),
+                    CharcoalEmptyStateStep(
+                      title: 'Use it in a flag',
+                      description: 'Pick it when you add a rule to a flag.',
+                    ),
+                  ],
+                ),
                 const CharcoalErrorState(
                   message: 'Could not load the list.',
                   onRetry: showcaseNoop,

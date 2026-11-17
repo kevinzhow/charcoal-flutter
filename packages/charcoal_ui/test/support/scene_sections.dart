@@ -5,7 +5,8 @@ import 'package:charcoal_ui/testing.dart';
 import 'package:flutter/widgets.dart';
 
 /// Scenes for the parts of the admin redesign (page header meta, section card, danger zone, data
-/// table, radio cards, disclosure, copyable text), at a regular and a compact width.
+/// table, radio cards, disclosure, copyable text, empty state with steps), at a regular and a
+/// compact width.
 final sectionsScenes = <CharcoalScene>[
   for (final (name, size) in const <(String, Size)>[
     ('sections-page', Size(1100, 500)),
@@ -197,6 +198,25 @@ class _Sections extends StatelessWidget {
                 text: 'FC055F80-20D8-4DAB-90ED-E62C534D433D',
                 copyLabel: 'Copy ID',
                 copiedMessage: 'ID copied',
+              ),
+              const CharcoalGap(CharcoalSpace.lg),
+              CharcoalSectionCard(
+                title: 'Segments',
+                children: <Widget>[
+                  CharcoalEmptyState(
+                    icon: CharcoalIcons.persons,
+                    title: 'No segments yet',
+                    message: 'Flag rules target a segment.',
+                    actions: <Widget>[
+                      CharcoalButton(onPressed: noop, child: const Text('New segment')),
+                    ],
+                    steps: const <CharcoalEmptyStateStep>[
+                      CharcoalEmptyStateStep(title: 'Create', description: 'A name is enough'),
+                      CharcoalEmptyStateStep(title: 'Match', description: 'Members or conditions'),
+                      CharcoalEmptyStateStep(title: 'Use'),
+                    ],
+                  ),
+                ],
               ),
               const CharcoalGap(CharcoalSpace.lg),
               CharcoalDangerZone(

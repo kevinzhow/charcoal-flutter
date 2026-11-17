@@ -58,7 +58,7 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
   ),
   'CharcoalEmptyState': ComponentMetadata(
     category: 'Feedback',
-    summary: 'A centred empty state: a muted icon, a message and optional actions.',
+    summary: 'A centred empty state: a muted icon, an optional title, a message, optional actions and optional numbered steps that explain how the place fills up.',
     keywords: <String>[
       'empty',
       'no results',
@@ -68,21 +68,24 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
     useWhen: <String>[
       'A list, search or page region has no content and should say why and what to do next.',
       'A first-run screen needs one clear next step.',
+      'A new feature starts empty and two or three numbered steps (CharcoalEmptyStateStep) explain how to put it to use.',
     ],
     avoidWhen: <String>[
       'The region failed to load; use CharcoalErrorState.',
       'Content is loading; use CharcoalLoadingState.',
     ],
     accessibility: <String>[
-      'The message is the spoken content; the icon is decorative.',
+      'The title is a heading; the message and the steps are the spoken content; the icon is decorative.',
       'Actions keep their own labels and focus order.',
     ],
     responsiveBehavior: <String>[
       'It centres within the space it is given and wraps the message on narrow widths.',
+      'Steps sit in a centred row, each sizes.fieldWidthCompact wide, and stack where the row does not fit.',
     ],
     interactionStates: <String>[
       'static',
       'with action',
+      'with steps',
     ],
     feedbackResponsibilities: <String>[
       'Owns icon, message layout and spacing.',
@@ -96,14 +99,21 @@ const Map<String, ComponentMetadata> feedbackMetadata = <String, ComponentMetada
     relatedComponents: <String>[
       'CharcoalErrorState',
       'CharcoalLoadingState',
+      'CharcoalSectionCard',
     ],
-    companionDeclarations: <String>[],
+    companionDeclarations: <String>['CharcoalEmptyStateStep'],
     examples: <ExampleMetadata>[
       ExampleMetadata(
         id: 'empty-state',
         title: 'Empty region',
         description: 'A folder icon and a no-jobs message.',
         sourcePath: 'example/lib/agent_examples/status_example.dart',
+      ),
+      ExampleMetadata(
+        id: 'admin-sections',
+        title: 'Detail page in section cards',
+        description: 'A members section that turns into an empty state with a title and numbered steps when the last member is removed.',
+        sourcePath: 'example/lib/agent_examples/admin_sections_example.dart',
       ),
     ],
   ),

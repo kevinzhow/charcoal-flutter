@@ -221,49 +221,66 @@ final class _AgentAdminSectionsExampleState
                 child: const Text('Remove selected'),
               ),
           ],
-          flush: true,
+          flush: _members.isNotEmpty,
           children: <Widget>[
-            CharcoalDataTable<String>(
-              columns: const <CharcoalTableColumn>[
-                CharcoalTableColumn(label: 'User', flex: 2),
-                CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),
-              ],
-              selection: CharcoalTableSelection<String>(
-                selected: _checked,
-                onChanged: (next) => setState(() => _checked = next),
-              ),
-              rows: <CharcoalTableRow<String>>[
-                for (final MapEntry(key: id, value: (name, detail))
-                    in _members.entries)
-                  CharcoalTableRow<String>(
-                    id: id,
-                    cells: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          CharcoalText(name, bold: true),
-                          CharcoalText(
-                            detail,
-                            role: CharcoalTextRole.caption,
-                            tone: CharcoalTextTone.secondary,
-                          ),
-                        ],
-                      ),
-                      CharcoalCopyableText(
-                        text: id,
-                        copyLabel: 'Copy user ID',
-                        copiedMessage: 'User ID copied',
-                      ),
-                    ],
-                    action: CharcoalIconButton(
-                      icon: const CharcoalIcon(CharcoalIcons.x),
-                      semanticLabel: 'Remove $name',
-                      size: CharcoalIconButtonSize.small,
-                      onPressed: () => _remove(<String>{id}),
-                    ),
+            if (_members.isEmpty)
+              const CharcoalEmptyState(
+                icon: CharcoalIcons.persons,
+                title: 'No members',
+                message: 'Members always match, whatever the conditions say.',
+                steps: <CharcoalEmptyStateStep>[
+                  CharcoalEmptyStateStep(
+                    title: 'Find the user',
+                    description: 'Search by email, phone or user ID.',
                   ),
-              ],
-            ),
+                  CharcoalEmptyStateStep(
+                    title: 'Add them',
+                    description: 'Paste several IDs to add them at once.',
+                  ),
+                ],
+              )
+            else
+              CharcoalDataTable<String>(
+                columns: const <CharcoalTableColumn>[
+                  CharcoalTableColumn(label: 'User', flex: 2),
+                  CharcoalTableColumn(label: 'User ID', hideWhenNarrow: true),
+                ],
+                selection: CharcoalTableSelection<String>(
+                  selected: _checked,
+                  onChanged: (next) => setState(() => _checked = next),
+                ),
+                rows: <CharcoalTableRow<String>>[
+                  for (final MapEntry(key: id, value: (name, detail))
+                      in _members.entries)
+                    CharcoalTableRow<String>(
+                      id: id,
+                      cells: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            CharcoalText(name, bold: true),
+                            CharcoalText(
+                              detail,
+                              role: CharcoalTextRole.caption,
+                              tone: CharcoalTextTone.secondary,
+                            ),
+                          ],
+                        ),
+                        CharcoalCopyableText(
+                          text: id,
+                          copyLabel: 'Copy user ID',
+                          copiedMessage: 'User ID copied',
+                        ),
+                      ],
+                      action: CharcoalIconButton(
+                        icon: const CharcoalIcon(CharcoalIcons.x),
+                        semanticLabel: 'Remove $name',
+                        size: CharcoalIconButtonSize.small,
+                        onPressed: () => _remove(<String>{id}),
+                      ),
+                    ),
+                ],
+              ),
           ],
         ),
         const CharcoalGap(CharcoalSpace.lg),

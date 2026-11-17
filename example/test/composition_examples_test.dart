@@ -204,6 +204,8 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Remove Lin Xiaoyu'));
     await tester.pump();
     expect(find.text('Lin Xiaoyu'), findsNothing);
+    expect(find.text('No members'), findsOneWidget);
+    expect(find.text('1 Find the user'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
