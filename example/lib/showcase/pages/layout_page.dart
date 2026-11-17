@@ -256,6 +256,8 @@ final class _TableDemoState extends State<_TableDemo> {
         selection: CharcoalTableSelection<String>(
           selected: _selected,
           onChanged: (next) => setState(() => _selected = next),
+          selectRowLabel: (id) =>
+              'Select ${_users.firstWhere((user) => user.$1 == id).$2}',
         ),
         rows: <CharcoalTableRow<String>>[
           for (final (id, name, note) in _users)

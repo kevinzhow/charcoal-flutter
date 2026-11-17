@@ -382,7 +382,7 @@ const Map<String, ComponentMetadata> layoutMetadata = <String, ComponentMetadata
     ],
     accessibility: <String>[
       'Exposed as a table with rows and cells. In a row with onPressed, the first cell is the button assistive technology reads, so put the record name in the first column.',
-      'Pass localized selectAllLabel and selectRowLabel; the header box is announced as mixed while only some rows are checked.',
+      'Pass a localized selectAllLabel, and a selectRowLabel that names the record of each row so two row boxes never read the same; the header box is announced as mixed while only some rows are checked.',
       'Give each row action its own semantic label naming the record.',
     ],
     responsiveBehavior: <String>[

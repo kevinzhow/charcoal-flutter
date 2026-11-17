@@ -348,6 +348,41 @@ void main() {
       expect(reports.single, {'other'}, reason: 'ids of rows not shown are kept');
     });
 
+    testWidgets('each row box names its row; without a label it names the position', (
+      tester,
+    ) async {
+      Future<List<String>> rowLabels(CharcoalTableSelection<String> selection) async {
+        await _mount(
+          tester,
+          CharcoalDataTable<String>(
+            columns: _columns,
+            rows: [_row('a'), _row('b')],
+            selection: selection,
+          ),
+        );
+        return [
+          for (final box
+              in tester.widgetList<CharcoalCheckbox>(find.byType(CharcoalCheckbox)).skip(1))
+            tester.getSemantics(find.byWidget(box)).label,
+        ];
+      }
+
+      expect(
+        await rowLabels(
+          CharcoalTableSelection<String>(
+            selected: const {},
+            onChanged: (_) {},
+            selectRowLabel: (id) => 'Select name-$id',
+          ),
+        ),
+        ['Select name-a', 'Select name-b'],
+      );
+      expect(
+        await rowLabels(CharcoalTableSelection<String>(selected: const {}, onChanged: (_) {})),
+        ['Select row 1', 'Select row 2'],
+      );
+    });
+
     testWidgets('the selection boxes sit before the first column, closer than a column gap', (
       tester,
     ) async {

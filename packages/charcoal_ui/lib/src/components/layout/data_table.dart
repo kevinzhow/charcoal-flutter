@@ -93,7 +93,7 @@ final class CharcoalTableSelection<T> {
     required this.selected,
     required this.onChanged,
     this.selectAllLabel = 'Select all',
-    this.selectRowLabel = 'Select row',
+    this.selectRowLabel,
   });
 
   /// The ids of the checked rows; ids of rows not shown are kept.
@@ -105,8 +105,10 @@ final class CharcoalTableSelection<T> {
   /// The spoken label of the header box; pass the localized string.
   final String selectAllLabel;
 
-  /// The spoken label of each row box; pass the localized string.
-  final String selectRowLabel;
+  /// The spoken label of the box of the row [id]; name the record, such as `'Select Lin Xiaoyu'`.
+  ///
+  /// Null reads "Select row 1", "Select row 2" and so on, by position.
+  final String Function(T id)? selectRowLabel;
 }
 
 /// A table of records with a header row: columns that line up across rows, a row height from the
@@ -239,7 +241,7 @@ final class _CharcoalDataTableState<T> extends State<CharcoalDataTable<T>> {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: <TableRow>[
             _header(layout),
-            for (final row in widget.rows) _row(layout, row, shown),
+            for (final (index, row) in widget.rows.indexed) _row(layout, row, index, shown),
           ],
         );
       },
@@ -290,7 +292,7 @@ final class _CharcoalDataTableState<T> extends State<CharcoalDataTable<T>> {
     );
   }
 
-  TableRow _row(_Layout layout, CharcoalTableRow<T> row, List<int> shown) {
+  TableRow _row(_Layout layout, CharcoalTableRow<T> row, int index, List<int> shown) {
     final theme = layout.theme;
     final colors = theme.colors;
     final selection = widget.selection;
@@ -338,7 +340,7 @@ final class _CharcoalDataTableState<T> extends State<CharcoalDataTable<T>> {
             minHeight: minHeight,
             child: CharcoalCheckbox(
               value: selection.selected.contains(row.id),
-              semanticLabel: selection.selectRowLabel,
+              semanticLabel: selection.selectRowLabel?.call(row.id) ?? 'Select row ${index + 1}',
               onChanged: (checked) => selection.onChanged(
                 checked
                     ? selection.selected.union(<T>{row.id})

@@ -248,6 +248,7 @@ final class _AgentAdminSectionsExampleState
                 selection: CharcoalTableSelection<String>(
                   selected: _checked,
                   onChanged: (next) => setState(() => _checked = next),
+                  selectRowLabel: (id) => 'Select ${_members[id]!.$1}',
                 ),
                 rows: <CharcoalTableRow<String>>[
                   for (final MapEntry(key: id, value: (name, detail))

@@ -39,6 +39,8 @@ Widget charcoalSectionCardPreview() => Column(
   ],
 );
 
+const _previewMembers = <String, String>{'lin': 'Lin Xiaoyu', 'aoi': 'Aoi Tanaka'};
+
 @CharcoalComponentPreview(name: 'Data table · Selection', size: Size(720, 360))
 Widget charcoalDataTablePreview() => CharcoalSectionCard(
   title: 'Members',
@@ -50,12 +52,13 @@ Widget charcoalDataTablePreview() => CharcoalSectionCard(
         CharcoalTableColumn(label: 'Note', hideWhenNarrow: true),
         CharcoalTableColumn.fit(label: 'Joined', align: CharcoalColumnAlign.end),
       ],
-      selection: CharcoalTableSelection<String>(selected: const <String>{'lin'}, onChanged: (_) {}),
+      selection: CharcoalTableSelection<String>(
+        selected: const <String>{'lin'},
+        onChanged: (_) {},
+        selectRowLabel: (id) => 'Select ${_previewMembers[id]}',
+      ),
       rows: <CharcoalTableRow<String>>[
-        for (final (id, name) in const <(String, String)>[
-          ('lin', 'Lin Xiaoyu'),
-          ('aoi', 'Aoi Tanaka'),
-        ])
+        for (final MapEntry(key: id, value: name) in _previewMembers.entries)
           CharcoalTableRow<String>(
             id: id,
             onPressed: () {},

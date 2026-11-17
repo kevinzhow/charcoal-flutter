@@ -194,7 +194,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Select all'));
     await tester.pump();
     expect(find.text('3 selected'), findsOneWidget);
-    await tester.tap(find.bySemanticsLabel('Select row').first);
+    await tester.tap(find.bySemanticsLabel('Select Lin Xiaoyu'));
     await tester.pump();
     expect(find.text('2 selected'), findsOneWidget);
     await tester.tap(find.text('Remove selected'));
