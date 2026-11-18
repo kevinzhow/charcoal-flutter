@@ -269,11 +269,15 @@ final class _CharcoalTextAreaState extends State<CharcoalTextArea> {
                     children: <Widget>[
                       if (_controller.text.isEmpty && widget.placeholder != null)
                         IgnorePointer(
-                          child: Text(
-                            widget.placeholder!,
-                            maxLines: rows,
-                            overflow: TextOverflow.clip,
-                            style: textStyle.copyWith(color: colors.textPlaceholder),
+                          child: ExcludeSemantics(
+                            // A labeled field already has an accessible name.
+                            excluding: widget.label.isNotEmpty,
+                            child: Text(
+                              widget.placeholder!,
+                              maxLines: rows,
+                              overflow: TextOverflow.clip,
+                              style: textStyle.copyWith(color: colors.textPlaceholder),
+                            ),
                           ),
                         ),
                       editable,
