@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show Material, MaterialType, TextField;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -130,18 +131,22 @@ final class CharcoalEditableText extends StatefulWidget {
   State<CharcoalEditableText> createState() => _CharcoalEditableTextState();
 }
 
-final class _CharcoalEditableTextState extends State<CharcoalEditableText>
-    implements TextSelectionGestureDetectorBuilderDelegate {
-  @override
-  final editableTextKey = GlobalKey<EditableTextState>();
-  late final _gestures = TextSelectionGestureDetectorBuilder(delegate: this);
-  bool _showHandles = false;
+final class _CharcoalEditableTextState extends State<CharcoalEditableText> {
+  late bool _canRequestFocus = widget.focusNode.canRequestFocus;
   _CharcoalSelectionControls? _controls;
 
   @override
   void initState() {
     super.initState();
     CharcoalTextInputRefresh.retain();
+  }
+
+  @override
+  void didUpdateWidget(CharcoalEditableText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.focusNode != widget.focusNode) {
+      _canRequestFocus = widget.focusNode.canRequestFocus;
+    }
   }
 
   @override
@@ -164,58 +169,41 @@ final class _CharcoalEditableTextState extends State<CharcoalEditableText>
   }
 
   @override
-  bool get forcePressEnabled => defaultTargetPlatform == TargetPlatform.iOS;
-
-  @override
-  bool get selectionEnabled => widget.enableInteractiveSelection;
-
-  void _selectionChanged(TextSelection selection, SelectionChangedCause? cause) {
-    final show =
-        _gestures.shouldShowSelectionToolbar &&
-        _gestures.shouldShowSelectionHandles &&
-        cause != SelectionChangedCause.keyboard &&
-        !(widget.readOnly && selection.isCollapsed) &&
-        widget.controller.text.isNotEmpty;
-    if (_showHandles != show) setState(() => _showHandles = show);
-    if (cause == SelectionChangedCause.longPress) {
-      editableTextKey.currentState?.bringIntoView(selection.extent);
-    }
-    if (cause == SelectionChangedCause.drag &&
-        (defaultTargetPlatform == TargetPlatform.macOS ||
-            defaultTargetPlatform == TargetPlatform.windows ||
-            defaultTargetPlatform == TargetPlatform.linux)) {
-      editableTextKey.currentState?.hideToolbar();
-    }
-  }
-
-  void _handleSelectionHandleTapped() {
-    if (widget.controller.selection.isCollapsed) {
-      editableTextKey.currentState?.toggleToolbar();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = CharcoalTheme.of(context);
     final metrics = theme.metrics.textEditing;
+    final focusNode = widget.focusNode;
+    // TextField writes this value to the node. ExcludeFocus may temporarily mask the node's
+    // own setting while a field is disabled.
+    if (focusNode.ancestors.every((ancestor) => ancestor.descendantsAreFocusable)) {
+      _canRequestFocus = focusNode.canRequestFocus;
+    }
     final apple =
         defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS;
-    final editor = _gestures.buildGestureDetector(
-      behavior: HitTestBehavior.translucent,
-      child: EditableText(
-        key: editableTextKey,
+    final style = widget.style;
+    final editor = DefaultSelectionStyle(
+      selectionColor: widget.selectionColor ?? CharcoalColorRoles.transparent,
+      child: TextField(
+        decoration: null,
         controller: widget.controller,
-        focusNode: widget.focusNode,
-        style: widget.style,
+        focusNode: focusNode,
+        canRequestFocus: _canRequestFocus,
+        style: style.fontSize == null
+            ? style
+            : style.copyWith(
+                inherit: false,
+                textBaseline: style.textBaseline ?? TextBaseline.alphabetic,
+              ),
         cursorColor: theme.colors.primary,
-        backgroundCursorColor: theme.colors.background,
-        selectionColor: widget.selectionColor,
         keyboardAppearance: theme.brightness,
         autofocus: widget.autofocus,
         readOnly: widget.readOnly,
         obscureText: widget.obscureText,
-        keyboardType: widget.keyboardType,
+        autocorrect: widget.obscureText ? false : null,
+        enableSuggestions: !widget.obscureText,
+        keyboardType:
+            widget.keyboardType ?? _autofillKeyboardType(widget.autofillHints, widget.maxLines),
         textInputAction: widget.textInputAction,
         inputFormatters: widget.inputFormatters,
         onChanged: widget.onChanged,
@@ -226,16 +214,11 @@ final class _CharcoalEditableTextState extends State<CharcoalEditableText>
         undoController: widget.undoController,
         restorationId: widget.restorationId,
         scrollPadding: widget.scrollPadding ?? EdgeInsets.all(metrics.scrollPadding),
-        enableInteractiveSelection: selectionEnabled,
-        rendererIgnoresPointer: true,
+        enableInteractiveSelection: widget.enableInteractiveSelection,
         cursorRadius: apple ? Radius.circular(metrics.cursorRadius) : null,
         cursorOpacityAnimates: defaultTargetPlatform == TargetPlatform.iOS,
-        paintCursorAboveText: apple,
-        selectionControls: selectionEnabled ? _controlsFor(metrics) : null,
-        contextMenuBuilder: selectionEnabled ? widget.contextMenuBuilder : null,
-        onSelectionChanged: _selectionChanged,
-        showSelectionHandles: _showHandles,
-        onSelectionHandleTapped: _handleSelectionHandleTapped,
+        selectionControls: widget.enableInteractiveSelection ? _controlsFor(metrics) : null,
+        contextMenuBuilder: widget.enableInteractiveSelection ? widget.contextMenuBuilder : null,
         magnifierConfiguration: const TextMagnifierConfiguration(
           magnifierBuilder: _buildMagnifier,
         ),
@@ -248,9 +231,107 @@ final class _CharcoalEditableTextState extends State<CharcoalEditableText>
       skipTraversal: true,
       includeSemantics: false,
       onKeyEvent: _leaveComposingKeys,
-      child: editor,
+      child: Material.maybeOf(context) == null
+          ? Material(type: MaterialType.transparency, child: editor)
+          : editor,
     );
   }
+}
+
+// TextField defaults by line count. Preserve EditableText's keyboard inference for autofill.
+TextInputType? _autofillKeyboardType(Iterable<String>? hints, int maxLines) {
+  if (hints == null || hints.isEmpty) return null;
+  final hint = hints.first;
+  if (!kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS)) {
+    final appleType = switch (hint) {
+      AutofillHints.addressCity ||
+      AutofillHints.addressCityAndState ||
+      AutofillHints.addressState ||
+      AutofillHints.countryName ||
+      AutofillHints.familyName ||
+      AutofillHints.fullStreetAddress ||
+      AutofillHints.givenName ||
+      AutofillHints.jobTitle ||
+      AutofillHints.location ||
+      AutofillHints.middleName ||
+      AutofillHints.name ||
+      AutofillHints.namePrefix ||
+      AutofillHints.nameSuffix ||
+      AutofillHints.nickname ||
+      AutofillHints.postalCode ||
+      AutofillHints.streetAddressLine1 ||
+      AutofillHints.streetAddressLine2 ||
+      AutofillHints.sublocality ||
+      AutofillHints.telephoneNumber => TextInputType.name,
+      AutofillHints.creditCardNumber || AutofillHints.oneTimeCode => TextInputType.number,
+      AutofillHints.email => TextInputType.emailAddress,
+      AutofillHints.url => TextInputType.url,
+      AutofillHints.newPassword ||
+      AutofillHints.newUsername ||
+      AutofillHints.organizationName ||
+      AutofillHints.password ||
+      AutofillHints.username => TextInputType.text,
+      _ => null,
+    };
+    if (appleType != null) return appleType;
+  }
+  if (maxLines != 1) return null;
+  return switch (hint) {
+    AutofillHints.addressCity ||
+    AutofillHints.addressCityAndState ||
+    AutofillHints.addressState ||
+    AutofillHints.fullStreetAddress ||
+    AutofillHints.location ||
+    AutofillHints.postalAddress ||
+    AutofillHints.postalAddressExtended ||
+    AutofillHints.streetAddressLevel1 ||
+    AutofillHints.streetAddressLevel2 ||
+    AutofillHints.streetAddressLevel3 ||
+    AutofillHints.streetAddressLevel4 ||
+    AutofillHints.streetAddressLine1 ||
+    AutofillHints.streetAddressLine2 ||
+    AutofillHints.streetAddressLine3 ||
+    AutofillHints.sublocality => TextInputType.streetAddress,
+    AutofillHints.birthday ||
+    AutofillHints.birthdayDay ||
+    AutofillHints.birthdayMonth ||
+    AutofillHints.birthdayYear ||
+    AutofillHints.creditCardExpirationDate ||
+    AutofillHints.creditCardExpirationDay ||
+    AutofillHints.creditCardExpirationMonth ||
+    AutofillHints.creditCardExpirationYear => TextInputType.datetime,
+    AutofillHints.countryCode ||
+    AutofillHints.creditCardNumber ||
+    AutofillHints.creditCardSecurityCode ||
+    AutofillHints.postalAddressExtendedPostalCode ||
+    AutofillHints.postalCode => TextInputType.number,
+    AutofillHints.creditCardFamilyName ||
+    AutofillHints.creditCardGivenName ||
+    AutofillHints.creditCardMiddleName ||
+    AutofillHints.creditCardName ||
+    AutofillHints.familyName ||
+    AutofillHints.givenName ||
+    AutofillHints.middleInitial ||
+    AutofillHints.middleName ||
+    AutofillHints.name ||
+    AutofillHints.namePrefix ||
+    AutofillHints.nameSuffix => TextInputType.name,
+    AutofillHints.email => TextInputType.emailAddress,
+    AutofillHints.impp || AutofillHints.url => TextInputType.url,
+    AutofillHints.telephoneNumber ||
+    AutofillHints.telephoneNumberAreaCode ||
+    AutofillHints.telephoneNumberCountryCode ||
+    AutofillHints.telephoneNumberDevice ||
+    AutofillHints.telephoneNumberExtension ||
+    AutofillHints.telephoneNumberLocal ||
+    AutofillHints.telephoneNumberLocalPrefix ||
+    AutofillHints.telephoneNumberLocalSuffix ||
+    AutofillHints.telephoneNumberNational => TextInputType.phone,
+    AutofillHints.transactionAmount => const TextInputType.numberWithOptions(decimal: true),
+    _ => null,
+  };
 }
 
 final class _CharcoalSelectionControls extends TextSelectionControls

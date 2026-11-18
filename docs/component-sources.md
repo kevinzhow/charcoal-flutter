@@ -141,9 +141,9 @@ Icons V2, while applications may inject product-specific artwork.
 ## Platform behavior contract
 
 Visual source parity does not imply platform editing or window behavior parity.
-The shared text editor composes Flutter's Widgets-layer selection gesture builder,
-EditableText and RawMagnifier with Charcoal handles and a localized toolbar. A
-stable handle callback preserves the selection overlay across focus rebuilds.
+The shared editor uses an undecorated Material `TextField`. Flutter manages text
+editing and selection gestures. Charcoal supplies the field decoration, magnifier,
+selection handles, and localized toolbar.
 Supported iOS fields use the system context menu. Character counters and length
 limits both use grapheme clusters.
 

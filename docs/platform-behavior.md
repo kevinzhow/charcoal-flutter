@@ -1,11 +1,8 @@
 # Platform behavior
 
-`charcoal_ui` is hosted by Material (`CharcoalApp` wraps `MaterialApp`) and takes editing and
-platform behavior from Flutter's Widgets/services layer: the shared text editor is built on
-`EditableText`, page routes and system-bar handling are Charcoal's own, and Material widgets are
-wrapped only where they supply the behavior (dialog routes, date and time pickers, `Slider`,
-selectable code text). Cupertino is never imported by the library. Visual source parity alone is
-not an acceptance test for these capabilities.
+`CharcoalApp` wraps `MaterialApp`. Flutter's Material `TextField` manages text editing and
+platform input. Charcoal supplies the field decoration and selection UI, and owns page routes
+and system-bar handling.
 
 ## Ownership
 
@@ -16,7 +13,7 @@ not an acceptance test for these capabilities.
 | Safe areas | `CharcoalScaffold` | Full-window background; safe navigation, content and bottom controls. Descendants receive consumed insets so nested SafeAreas do not double-pad. |
 | Keyboard avoidance | `CharcoalScaffold`, `CharcoalDialog` | Shrink content above the keyboard, keep bottom actions reachable, and remove consumed viewInsets. Scrollable form bodies remain an application responsibility. |
 | Full-bleed content | Page | Set `bodySafeArea: false`. Protect interactive controls with SafeArea. `extendBodyBehindNavigationBar` exposes the covered top extent through the body's MediaQuery padding for scrollable content. |
-| Selection gestures | Shared internal editor | Flutter's `TextSelectionGestureDetectorBuilder` owns platform taps, long presses, floating cursor, double/triple taps and pointer dragging. |
+| Selection gestures | Flutter `TextField` | Supplies platform taps, long presses, floating cursor, double and triple taps, and pointer dragging. |
 | Selection UI | Shared internal editor | Charcoal handles and magnifier; native iOS editing menu where supported, localized Charcoal toolbar (`CharcoalSelectionToolbar`) elsewhere. Flutter determines permitted clipboard actions, including password/read-only restrictions. |
 | Editing extensions | Field / area API | `contextMenuBuilder`, `enableInteractiveSelection`, `autofillHints`, `inputFormatters`, `scrollPadding`, and `undoController`. Pass null to disable the menu. |
 | Character count | Field / area | Grapheme clusters, matching Flutter's length limiter for emoji and combining sequences. |
@@ -44,6 +41,19 @@ ones the application passes in `localizationsDelegates`, so any supported locale
 framework's editing labels (the default is English). Custom menu items should carry their own
 labels.
 Clipboard permissions on Web and system menu availability remain platform-owned.
+
+## Input method composition
+
+`CharcoalSearchField.onChanged` emits the final query after composition ends, including when
+the IME commits by changing only the composing range. Programmatic text assignments outside
+composition leave `onChanged` silent. The Clear button stays in place and disables during
+composition. When enabled, it invokes `onClear`, whose caller owns the clear operation.
+
+Code that assigns `controller.text` or `controller.value`, calls `controller.clear()`, or handles
+Enter, Escape, or arrow keys above the field owns its composition check. At the point of the
+action, use `charcoalIsComposing(controller.value)` to defer writes or leave the key to the input
+method. For asynchronous work such as file imports or server hydration, check after the await
+and before writing to the controller.
 
 ## macOS host
 

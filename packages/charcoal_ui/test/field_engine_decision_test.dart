@@ -5,14 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'support/harness.dart';
 
-/// Records why Charcoal keeps its own editable text (`CharcoalEditableText` + Charcoal toolbar)
-/// instead of wrapping Material's `TextField`.
-///
-/// The decision criterion (batch 2B) is whether a Material `TextField`, configured only through
-/// the theme's `InputDecorationTheme` (what `buildCharcoalThemeData` installs), reproduces the
-/// baseline geometry: the 8px horizontal / 10px vertical padding, the external 4px focus ring and
-/// the counter inside the field. Each assertion below is one measured difference; if a Material
-/// release ever closes them, the wrap option can be revisited.
 void main() {
   final pack = charcoalLightPack;
   const key = ValueKey<String>('field');

@@ -22,6 +22,8 @@ void main() {
     '/src/components/overlays/dialog.dart',
     '/src/components/overlays/modal.dart',
     '/src/components/overlays/code_block.dart',
+    // Shared text editing uses an undecorated TextField for platform input and selection.
+    '/src/components/text/text_editing.dart',
     // The only fields file that wraps Material pickers.
     '/src/components/fields/date_time_field.dart',
   ];

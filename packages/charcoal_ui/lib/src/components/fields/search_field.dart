@@ -1,15 +1,18 @@
+import 'dart:async';
+
 import 'package:charcoal_icons/charcoal_icons.dart';
 import 'package:charcoal_theme/charcoal_theme.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../foundation/charcoal_clickable.dart';
+import '../text/text_editing.dart';
 import 'text_field.dart';
 
 /// A text field with a search icon and a clear affordance.
 ///
-/// The clear button appears while there is text and [onClear] is set; it calls [onClear] (the
-/// caller decides whether that also empties the controller).
+/// The clear button appears while there is text and [onClear] is set. It is disabled during
+/// composition. The caller decides whether [onClear] empties the controller.
 class CharcoalSearchField extends StatefulWidget {
   /// A search field over [controller].
   const CharcoalSearchField({
@@ -48,7 +51,7 @@ class CharcoalSearchField extends StatefulWidget {
   /// The accessible label.
   final String label;
 
-  /// Called when the query changes.
+  /// Reports user edits after any active input method composition finishes.
   final ValueChanged<String>? onChanged;
 
   /// Called by the clear button; null hides the button.
@@ -65,31 +68,78 @@ class CharcoalSearchField extends StatefulWidget {
 }
 
 class _CharcoalSearchFieldState extends State<CharcoalSearchField> {
+  late TextEditingValue _previousValue;
+  int _queryRevision = 0;
+
+  bool get _isComposing => charcoalIsComposing(widget.controller.value);
+
+  bool get _canClear =>
+      !widget.disabled &&
+      widget.onClear != null &&
+      widget.controller.text.isNotEmpty &&
+      !_isComposing;
+
   @override
   void initState() {
     super.initState();
-    // The clear affordance depends on the text, so listen rather than relying on every caller to
-    // rebuild from onChanged.
-    widget.controller.addListener(_onText);
+    _previousValue = widget.controller.value;
+    widget.controller.addListener(_onEditingValueChanged);
   }
 
   @override
   void didUpdateWidget(CharcoalSearchField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller.removeListener(_onText);
-      widget.controller.addListener(_onText);
+      oldWidget.controller.removeListener(_onEditingValueChanged);
+      _previousValue = widget.controller.value;
+      _queryRevision++;
+      widget.controller.addListener(_onEditingValueChanged);
     }
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(_onText);
+    widget.controller.removeListener(_onEditingValueChanged);
     super.dispose();
   }
 
-  void _onText() {
-    if (mounted) setState(() {});
+  void _onEditingValueChanged() {
+    final controller = widget.controller;
+    final previous = _previousValue;
+    final next = controller.value;
+    _previousValue = next;
+
+    final wasComposing = charcoalIsComposing(previous);
+    final isComposing = charcoalIsComposing(next);
+    if (previous.text != next.text || wasComposing != isComposing) {
+      _queryRevision++;
+    }
+    if (previous.text.isEmpty != next.text.isEmpty || wasComposing != isComposing) {
+      setState(() {});
+    }
+    if (wasComposing && !isComposing && previous.text == next.text) {
+      // Flutter reads back the text after notifying controller listeners. Let that finish
+      // before calling onChanged, which may itself write to the controller.
+      final revision = _queryRevision;
+      scheduleMicrotask(() {
+        if (mounted &&
+            identical(controller, widget.controller) &&
+            revision == _queryRevision &&
+            controller.text == next.text &&
+            !_isComposing) {
+          widget.onChanged?.call(next.text);
+        }
+      });
+    }
+  }
+
+  void _onQueryChanged(String query) {
+    if (!_isComposing) widget.onChanged?.call(query);
+  }
+
+  void _clear() {
+    // A pending tap can activate before the composing update rebuilds the button.
+    if (_canClear) widget.onClear?.call();
   }
 
   @override
@@ -104,22 +154,24 @@ class _CharcoalSearchFieldState extends State<CharcoalSearchField> {
       focusNode: widget.focusNode,
       keyboardType: TextInputType.text,
       label: widget.label,
-      onChanged: widget.onChanged,
+      onChanged: _onQueryChanged,
       onSubmitted: widget.onSubmitted,
       placeholder: widget.placeholder,
       prefix: CharcoalIcon(widget.icon, size: iconSize),
       suffix: showClear
-          ? CharcoalClickable(
-              onPressed: widget.onClear,
-              semanticLabel: widget.clearLabel,
-              builder: (context, states) => CharcoalIcon(
-                CharcoalIcons.x,
-                size: iconSize,
-                color: states.contains(WidgetState.pressed)
-                    ? theme.colors.iconTertiaryPress
-                    : states.contains(WidgetState.hovered)
-                    ? theme.colors.iconTertiaryHover
-                    : theme.colors.iconTertiary,
+          ? TextFieldTapRegion(
+              child: CharcoalClickable(
+                onPressed: _canClear ? _clear : null,
+                semanticLabel: widget.clearLabel,
+                builder: (context, states) => CharcoalIcon(
+                  CharcoalIcons.x,
+                  size: iconSize,
+                  color: states.contains(WidgetState.pressed)
+                      ? theme.colors.iconTertiaryPress
+                      : states.contains(WidgetState.hovered)
+                      ? theme.colors.iconTertiaryHover
+                      : theme.colors.iconTertiary,
+                ),
               ),
             )
           : null,

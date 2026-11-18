@@ -8,7 +8,7 @@ import '../text/text_editing.dart';
 import 'field_ring.dart';
 import 'field_support.dart';
 
-/// A single-line Charcoal text field built on [EditableText].
+/// A single-line Charcoal text field.
 ///
 /// The field paints its own fill, an external focus ring (it never moves the box) and a
 /// grapheme-based counter. [invalid], [required] and an actionable [assistiveText] are reflected
@@ -269,11 +269,15 @@ final class _CharcoalTextFieldState extends State<CharcoalTextField> {
                     children: <Widget>[
                       if (_controller.text.isEmpty && widget.placeholder != null)
                         IgnorePointer(
-                          child: Text(
-                            widget.placeholder!,
-                            maxLines: 1,
-                            overflow: TextOverflow.clip,
-                            style: textStyle.copyWith(color: colors.textPlaceholder),
+                          child: ExcludeSemantics(
+                            // A labeled field already has an accessible name.
+                            excluding: widget.label.isNotEmpty,
+                            child: Text(
+                              widget.placeholder!,
+                              maxLines: 1,
+                              overflow: TextOverflow.clip,
+                              style: textStyle.copyWith(color: colors.textPlaceholder),
+                            ),
                           ),
                         ),
                       editable,
